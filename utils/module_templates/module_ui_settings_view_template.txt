@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>{{ module_class }}SettingsView</class>
+ <widget class="QWidget" name="{{ module_class }}SettingsView">
+  <property name="styleSheet">
+   <string notr="true">font: 12pt &quot;Roboto&quot;;</string>
+  </property>
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>711</width>
+    <height>333</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   {% for input in inputs -%}
+   <item>
+    <layout class="QHBoxLayout" name="{{input.name}}_horizontalLayout">
+     <item>
+      <widget class="QLabel" name="{{input.name}}_label">
+       <property name="text">
+        <string>{{input.name}}</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLineEdit" name="{{input.name}}_lineedit"/>
+     </item>
+    </layout>
+   </item>
+   {%- endfor %}
+   <item>
+    <spacer name="verticalSpacer">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>20</width>
+       <height>40</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+  </layout>
+ </widget>
+ <resources>
+  <include location="../../../../scinodes_poc/src/main/python/ui/themes/themes.qrc"/>
+ </resources>
+ <connections/>
+ </ui>

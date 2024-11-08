@@ -1,0 +1,45 @@
+# -*- coding: utf-8 -*-
+
+################################################################################
+## Form generated from reading UI file 'Ui_{{ app_class }}View.ui'
+##
+## Created by: Qt User Interface Compiler version 5.15.2
+##
+## WARNING! All changes made in this file will be lost when recompiling UI file!
+################################################################################
+
+from PySide2.QtCore import *
+from PySide2.QtGui import *
+from PySide2.QtWidgets import *
+
+
+class Ui_{{ app_class }}View(object):
+    def setupUi(self, {{ app_class }}View):
+        if not {{ app_class }}View.objectName():
+            {{ app_class }}View.setObjectName(u"{{ app_class }}View")
+        {{ app_class }}View.resize(415, 224)
+        self.layoutWidget = QWidget({{ app_class }}View)
+        self.layoutWidget.setObjectName(u"layoutWidget")
+        self.layoutWidget.setGeometry(QRect(10, 10, 248, 46))
+        self.gridLayout_2 = QGridLayout(self.layoutWidget)
+        self.gridLayout_2.setObjectName(u"gridLayout_2")
+        self.gridLayout_2.setContentsMargins(0, 0, 0, 0)
+        self.label_8 = QLabel(self.layoutWidget)
+        self.label_8.setObjectName(u"label_8")
+        font = QFont()
+        font.setBold(True)
+        font.setWeight(75)
+        self.label_8.setFont(font)
+
+        self.gridLayout_2.addWidget(self.label_8, 0, 0, 1, 2)
+
+        self.retranslateUi({{ app_class }}View)
+
+        QMetaObject.connectSlotsByName({{ app_class }}View)
+    # setupUi
+
+    def retranslateUi(self, {{ app_class }}View):
+        {{ app_class }}View.setWindowTitle(QCoreApplication.translate("{{ app_class }}View", u"Form", None))
+        self.label_8.setText(QCoreApplication.translate("{{ app_class }}View", u"{{ app_class }} 0.0.0", None))
+    # retranslateUi
+

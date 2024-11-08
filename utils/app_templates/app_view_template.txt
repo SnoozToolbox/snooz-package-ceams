@@ -1,0 +1,24 @@
+"""
+@ CIUSSS DU NORD-DE-L'ILE-DE-MONTREAL – 2024
+See the file LICENCE for full license details.
+"""
+DEBUG = False
+from qtpy import QtWidgets
+from {{ package_name }}.{{ app_class }}.Ui_{{ app_class }}View import Ui_{{ app_class }}View
+
+class {{ app_class }}View(Ui_{{ app_class }}View, QtWidgets.QWidget):
+    """
+    """
+    def __init__(self, managers, params, **kwargs):
+        super().__init__(**kwargs)
+        self._managers = managers
+        self._params = params
+
+        # init UI
+        self.setupUi(self)
+
+    def close_app(self):
+        pass
+
+    def is_dirty(self):
+        return False

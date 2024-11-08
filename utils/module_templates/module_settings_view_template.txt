@@ -1,0 +1,67 @@
+"""
+@ CIUSSS DU NORD-DE-L'ILE-DE-MONTREAL – 2024
+See the file LICENCE for full license details.
+
+    Settings viewer of the {{ module_class }} plugin
+"""
+
+from qtpy import QtWidgets
+
+from {{ package_name }}.{{ module_class }}.Ui_{{ module_class }}SettingsView import Ui_{{ module_class }}SettingsView
+from commons.BaseSettingsView import BaseSettingsView
+
+class {{ module_class }}SettingsView(BaseSettingsView, Ui_{{ module_class }}SettingsView, QtWidgets.QWidget):
+    """
+        {{ module_class }}View set the {{ module_class }} settings
+    """
+    def __init__(self, parent_node, pub_sub_manager, **kwargs):
+        super().__init__(**kwargs)
+        self._parent_node = parent_node
+        self._pub_sub_manager = pub_sub_manager
+
+        # init UI
+        self.setupUi(self)
+
+        # Subscribe to the proper topics to send/get data from the node
+        {% for input in inputs -%}
+        self._{{ input.name }}_topic = f'{self._parent_node.identifier}.{{ input.name }}'
+        self._pub_sub_manager.subscribe(self, self._{{ input.name }}_topic)
+        {%endfor %}
+
+
+    def load_settings(self):
+        """ Called when the settingsView is opened by the user
+        Ask for the settings to the publisher to display on the SettingsView 
+        """
+        
+        {% for input in inputs -%}
+        self._pub_sub_manager.publish(self, self._{{ input.name }}_topic, 'ping')
+        {%endfor %}
+
+    def on_apply_settings(self):
+        """ Called when the user clicks on "Run" or "Save workspace"
+        """
+        
+        # Send the settings to the publisher for inputs to {{ module_class }}
+        {% for input in inputs -%}
+        self._pub_sub_manager.publish(self, self._{{ input.name }}_topic, str(self.{{ input.name }}_lineedit.text()))
+        {%endfor %}
+
+    def on_topic_update(self, topic, message, sender):
+        pass
+
+    def on_topic_response(self, topic, message, sender):
+        """ Called by the publisher to init settings in the SettingsView 
+        """
+
+        {% for input in inputs -%}
+        if topic == self._{{ input.name }}_topic:
+            self.{{ input.name }}_lineedit.setText(message)
+        {%endfor %}
+
+   # Called when the user delete an instance of the plugin
+    def __del__(self):
+        if self._pub_sub_manager is not None:
+            {% for input in inputs -%}
+            self._pub_sub_manager.unsubscribe(self, self._{{ input.name }}_topic)
+            {%endfor %}

@@ -1,0 +1,12 @@
+{   
+    "item_name": "{{ app_class }}",
+    "item_type": "app",
+    "item_api_version": "1.0.0",
+    "dependencies": [
+    ],
+    "app_params":{
+        "app_label":"{{ app_label }}",
+        "app_category":"{{ app_category }}",
+        "custom_endpoints": ["{{ app_class }}_endpoint"]
+    }
+}

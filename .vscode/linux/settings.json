@@ -1,0 +1,15 @@
+{
+    "editor.rulers": [80],
+    "workbench.colorCustomizations": {
+        "editorRuler.foreground": "#434552"
+    },
+    "qtForPython.rcc.options": [
+        "-o",
+        "${workspaceFolder}${pathSeparator}${relativeFileDirname}${pathSeparator}${fileBasenameNoExtension}.py"
+    ],
+    "qtForPython.uic.options": [
+        "-o",
+        "${workspaceFolder}${pathSeparator}${relativeFileDirname}${pathSeparator}${fileBasenameNoExtension}.py"
+      ],
+    "qtForPython.uic.liveExecution": false
+}

@@ -1,0 +1,245 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>EEGViewerView</class>
+ <widget class="QWidget" name="EEGViewerView">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>772</width>
+    <height>496</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout_2" stretch="0,1">
+   <property name="spacing">
+    <number>7</number>
+   </property>
+   <property name="leftMargin">
+    <number>0</number>
+   </property>
+   <property name="topMargin">
+    <number>0</number>
+   </property>
+   <property name="rightMargin">
+    <number>0</number>
+   </property>
+   <property name="bottomMargin">
+    <number>0</number>
+   </property>
+   <item>
+    <widget class="QWidget" name="nav_buttons_widget" native="true">
+     <layout class="QHBoxLayout" name="horizontalLayout">
+      <property name="leftMargin">
+       <number>0</number>
+      </property>
+      <property name="topMargin">
+       <number>0</number>
+      </property>
+      <property name="rightMargin">
+       <number>0</number>
+      </property>
+      <property name="bottomMargin">
+       <number>0</number>
+      </property>
+      <item>
+       <widget class="QPushButton" name="open_file_pushButton">
+        <property name="text">
+         <string>Open file</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="save_file_pushButton">
+        <property name="text">
+         <string>Save file</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="close_file_pushButton">
+        <property name="text">
+         <string>Close file</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <spacer name="horizontalSpacer">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>40</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item>
+       <widget class="QPushButton" name="event_pushButton">
+        <property name="text">
+         <string>Events editor</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="channels_pushButton">
+        <property name="text">
+         <string>Channels selection</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="hypnogram_pushButton">
+        <property name="text">
+         <string>Hypnogram</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="oxymeter_pushButton">
+        <property name="text">
+         <string>Oxymeter</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
+    <layout class="QVBoxLayout" name="main_layout">
+     <property name="spacing">
+      <number>0</number>
+     </property>
+    </layout>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections>
+  <connection>
+   <sender>event_pushButton</sender>
+   <signal>clicked()</signal>
+   <receiver>EEGViewerView</receiver>
+   <slot>events_clicked()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>46</x>
+     <y>13</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>385</x>
+     <y>247</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>channels_pushButton</sender>
+   <signal>clicked()</signal>
+   <receiver>EEGViewerView</receiver>
+   <slot>channels_clicked()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>146</x>
+     <y>13</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>385</x>
+     <y>247</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>hypnogram_pushButton</sender>
+   <signal>clicked()</signal>
+   <receiver>EEGViewerView</receiver>
+   <slot>hypnogram_clicked()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>246</x>
+     <y>13</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>385</x>
+     <y>247</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>oxymeter_pushButton</sender>
+   <signal>clicked()</signal>
+   <receiver>EEGViewerView</receiver>
+   <slot>oxymeter_clicked()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>346</x>
+     <y>13</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>385</x>
+     <y>247</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>open_file_pushButton</sender>
+   <signal>clicked()</signal>
+   <receiver>EEGViewerView</receiver>
+   <slot>open_file()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>37</x>
+     <y>11</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>385</x>
+     <y>247</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>save_file_pushButton</sender>
+   <signal>clicked()</signal>
+   <receiver>EEGViewerView</receiver>
+   <slot>save_file()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>119</x>
+     <y>11</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>385</x>
+     <y>247</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>close_file_pushButton</sender>
+   <signal>clicked()</signal>
+   <receiver>EEGViewerView</receiver>
+   <slot>close_file()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>201</x>
+     <y>11</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>385</x>
+     <y>247</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+ <slots>
+  <slot>events_clicked()</slot>
+  <slot>channels_clicked()</slot>
+  <slot>hypnogram_clicked()</slot>
+  <slot>oxymeter_clicked()</slot>
+  <slot>open_file()</slot>
+  <slot>save_file()</slot>
+  <slot>close_file()</slot>
+ </slots>
+</ui>

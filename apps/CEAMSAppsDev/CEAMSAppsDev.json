@@ -1,0 +1,30 @@
+{
+    "package_name": "CEAMSAppsDev",
+    "package_version": "0.0.0",
+    "package_api_version": "1.0.0",
+    "package_author": "",
+    "package_url": "",
+    "package_description": "Developement package, do not include in the release of Snooz",
+    "items": [
+        {
+            "item_name": "EEGViewer",
+            "item_type": "app",
+            "item_version": "0.0.0",
+            "item_hooks": [
+                {
+                    "endpoint_name": "menu_endpoint",
+                    "parameters": {
+                        "menu_category": "Viewers",
+                        "menu_label": "EEG Viewer"
+                    }
+                },
+                {
+                    "endpoint_name": "file_menu_endpoint",
+                    "parameters": {
+                        "app_label": "EEG Viewer"
+                    }
+                }
+            ]
+        }
+    ]
+}

@@ -1,0 +1,9 @@
+"""
+@ CIUSSS DU NORD-DE-L'ILE-DE-MONTREAL – 2024
+See the file LICENCE for full license details.
+"""
+from .{{ module_class }} import {{ module_class }}
+from .{{ module_class }}SettingsView import {{ module_class }}SettingsView
+from .{{ module_class }}ResultsView import {{ module_class }}ResultsView
+from .Ui_{{ module_class }}ResultsView import Ui_{{ module_class }}ResultsView
+from .Ui_{{ module_class }}SettingsView import Ui_{{ module_class }}SettingsView

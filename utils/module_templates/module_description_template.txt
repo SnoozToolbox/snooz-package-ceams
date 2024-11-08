@@ -1,0 +1,40 @@
+{   
+    "item_name": "{{ module_class }}",
+    "item_type": "module",
+    "item_api_version": "1.0.0",
+    "dependencies": [
+    ],
+    "module_params":{
+        "cls":"{{ module_class }}",
+        "name":"{{ module_class }}",
+        "metadata":{},
+        "file_location":null,
+        "module":"{{ package_name }}.{{ module_class }}",
+        "module_label": "{{ module_label }}",
+        "module_category":"{{ module_category }}",
+        "module_author":"",
+        "module_url":"",
+        "module_description":"",
+        "module_options":{},
+        "inputs": {
+            {% for input in inputs -%}
+            "{{ input.name }}": {
+                "name": "{{input.name}}",
+                "value": "",
+                "connections": {},
+                "sub_plugs": {}
+            }{% if not loop.last %},{% endif %}
+            {%- endfor %}
+        },
+        "outputs": {
+            {% for output in outputs -%}
+            "{{ output.name }}": {
+                "name": "{{output.name}}",
+                "value": "",
+                "connections": {},
+                "sub_plugs": {}
+            }{% if not loop.last %},{% endif %}
+            {%- endfor %}
+        }
+    }
+}
