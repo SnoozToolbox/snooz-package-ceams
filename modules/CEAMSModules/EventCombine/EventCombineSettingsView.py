@@ -79,7 +79,7 @@ class EventCombineSettingsView( BaseSettingsView,  Ui_EventCombineSettingsView, 
 
     
     # Called when the use check/uncheck channel_wise checkbox
-    def on_chan_wise_checkbox(self,int):
+    def on_chan_wise_checkbox(self):
         if not self.chan_wise_checkBox.isChecked():
             behavior = 'append'
             self.behavior_comboBox.clear()
