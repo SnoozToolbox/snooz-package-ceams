@@ -119,7 +119,7 @@
         {
             "item_name": "DetectArtifacts",
             "item_type": "tool",
-            "item_version": "0.18.0",
+            "item_version": "0.19.0",
             "item_hooks": [
                 {
                     "endpoint_name": "menu_endpoint",
@@ -161,7 +161,7 @@
         {
             "item_name": "SlowWaveDetection",
             "item_type": "tool",
-            "item_version": "0.18.0",
+            "item_version": "0.19.0",
             "item_hooks": [
                 {
                     "endpoint_name": "menu_endpoint",
@@ -189,7 +189,7 @@
         {
             "item_name": "SpindleDetectionMartin",
             "item_type": "tool",
-            "item_version": "1.8.0",
+            "item_version": "1.9.0",
             "item_hooks": [
                 {
                     "endpoint_name": "menu_endpoint",
@@ -231,7 +231,7 @@
         {
             "item_name": "PowerSpectralAnalysis",
             "item_type": "tool",
-            "item_version": "0.18.0",
+            "item_version": "0.19.0",
             "item_hooks": [
                 {
                     "endpoint_name": "menu_endpoint",
