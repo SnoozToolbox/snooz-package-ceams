@@ -324,7 +324,7 @@ class DetectionsCohortReviewSettingsView(BaseSettingsView, Ui_DetectionsCohortRe
         # Read the csv file and convert the content into a Data Frame
         data_df = pd.read_csv(fileName, delimiter=item_sep, \
             decimal=decimal_sep, header=0, usecols=self.labels_to_extract, dtype=str)
-
+        data_df = data_df.dropna(how='all')
         # Save the data loaded
         if self.data_df.empty:
             self.data_df=data_df

@@ -242,7 +242,8 @@ class PSACohortReview(SciNode):
     def read_PSA_filename(self, filenames):
         for filename in filenames:
             # Read the csv file and convert the content into a Data Frame
-            PSA_df = pd.read_csv(filename, delimiter='\t', header=0, encoding='utf-8')
+            PSA_df = pd.read_csv(filename, delimiter='\t', header=0, encoding='utf-8',dtype={'filename': str})
+            PSA_df = PSA_df.dropna(how='all')
             PSA_df.reset_index(drop=True, inplace=True)
             self.PSA_df = pd.concat([self.PSA_df, PSA_df])
             self.PSA_df.reset_index(drop=True, inplace=True)
