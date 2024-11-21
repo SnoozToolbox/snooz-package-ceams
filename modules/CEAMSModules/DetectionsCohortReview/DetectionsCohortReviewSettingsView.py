@@ -323,7 +323,7 @@ class DetectionsCohortReviewSettingsView(BaseSettingsView, Ui_DetectionsCohortRe
         """
         # Read the csv file and convert the content into a Data Frame
         data_df = pd.read_csv(fileName, delimiter=item_sep, \
-            decimal=decimal_sep, header=0, usecols=self.labels_to_extract)
+            decimal=decimal_sep, header=0, usecols=self.labels_to_extract, dtype=str)
 
         # Save the data loaded
         if self.data_df.empty:
@@ -345,6 +345,7 @@ class DetectionsCohortReviewSettingsView(BaseSettingsView, Ui_DetectionsCohortRe
         # Fill the model with all the subjects and theirs channels states
         #   channels states are taken from self.subject_chans_label if available otherwise they are checked
         # Items are added into QListWidjet for the cohort channel list
+        
         self.create_model_subject_chan()
         self.select_first_subject()
 

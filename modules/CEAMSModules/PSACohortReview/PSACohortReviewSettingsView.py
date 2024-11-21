@@ -323,7 +323,7 @@ class PSACohortReviewSettingsView(BaseSettingsView, Ui_PSACohortReviewSettingsVi
         """
         # Read the csv file and convert the content into a Data Frame
         PSA_df = pd.read_csv(fileName, delimiter=item_sep, \
-            decimal=decimal_sep, header=0, usecols=self.labels_to_extract)
+            decimal=decimal_sep, header=0, usecols=self.labels_to_extract, dtype=str)
 
         # Save the data loaded
         if self.PSA_df.empty:
