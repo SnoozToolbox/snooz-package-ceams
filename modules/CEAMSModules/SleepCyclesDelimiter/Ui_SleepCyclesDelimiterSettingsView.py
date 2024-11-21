@@ -109,6 +109,7 @@ class Ui_SleepCyclesDelimiterSettingsView(object):
         self.checkBox_incl_last.setSizePolicy(sizePolicy1)
         self.checkBox_incl_last.setMinimumSize(QSize(0, 0))
         self.checkBox_incl_last.setMaximumSize(QSize(16777215, 16777215))
+        self.checkBox_incl_last.setChecked(True)
 
         self.verticalLayout_2.addWidget(self.checkBox_incl_last)
 
@@ -116,6 +117,7 @@ class Ui_SleepCyclesDelimiterSettingsView(object):
         self.checkBox_incl_all.setObjectName(u"checkBox_incl_all")
         sizePolicy1.setHeightForWidth(self.checkBox_incl_all.sizePolicy().hasHeightForWidth())
         self.checkBox_incl_all.setSizePolicy(sizePolicy1)
+        self.checkBox_incl_all.setChecked(True)
 
         self.verticalLayout_2.addWidget(self.checkBox_incl_all)
 
@@ -134,7 +136,7 @@ class Ui_SleepCyclesDelimiterSettingsView(object):
         self.radioButton_Min = QRadioButton(self.layoutWidget)
         self.radioButton_Min.setObjectName(u"radioButton_Min")
         self.radioButton_Min.setMaximumSize(QSize(16777215, 18))
-        self.radioButton_Min.setChecked(True)
+        self.radioButton_Min.setChecked(False)
 
         self.verticalLayout.addWidget(self.radioButton_Min)
 
@@ -142,12 +144,14 @@ class Ui_SleepCyclesDelimiterSettingsView(object):
         self.radioButton_Floyd.setObjectName(u"radioButton_Floyd")
         self.radioButton_Floyd.setMinimumSize(QSize(160, 0))
         self.radioButton_Floyd.setMaximumSize(QSize(350, 18))
+        self.radioButton_Floyd.setChecked(False)
 
         self.verticalLayout.addWidget(self.radioButton_Floyd)
 
         self.radioButton_Aesch = QRadioButton(self.layoutWidget)
         self.radioButton_Aesch.setObjectName(u"radioButton_Aesch")
         self.radioButton_Aesch.setMaximumSize(QSize(16777215, 18))
+        self.radioButton_Aesch.setChecked(True)
 
         self.verticalLayout.addWidget(self.radioButton_Aesch)
 

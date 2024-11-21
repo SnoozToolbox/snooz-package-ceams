@@ -212,6 +212,9 @@ p, li { white-space: pre-wrap; }
              <property name="text">
               <string>Include incomplete ending</string>
              </property>
+             <property name="checked">
+              <bool>true</bool>
+             </property>
             </widget>
            </item>
            <item>
@@ -227,6 +230,9 @@ p, li { white-space: pre-wrap; }
              </property>
              <property name="text">
               <string>Include all</string>
+             </property>
+             <property name="checked">
+              <bool>true</bool>
              </property>
             </widget>
            </item>
@@ -265,7 +271,7 @@ p, li { white-space: pre-wrap; }
               <string>Minimum Criteria</string>
              </property>
              <property name="checked">
-              <bool>true</bool>
+              <bool>false</bool>
              </property>
             </widget>
            </item>
@@ -286,6 +292,9 @@ p, li { white-space: pre-wrap; }
              <property name="text">
               <string>Feinberg et Floyd 1979</string>
              </property>
+             <property name="checked">
+              <bool>false</bool>
+             </property>
             </widget>
            </item>
            <item>
@@ -298,6 +307,9 @@ p, li { white-space: pre-wrap; }
              </property>
              <property name="text">
               <string>Aeschbach 1993</string>
+             </property>
+             <property name="checked">
+              <bool>true</bool>
              </property>
             </widget>
            </item>
@@ -649,7 +661,7 @@ p, li { white-space: pre-wrap; }
  </widget>
  <resources>
   <include location="SleepCycleDelimiter_rs.qrc"/>
-  <include location="../../../../scinodes_poc/src/main/python/ui/themes/themes.qrc"/>
+  <include location="../../../../snooz-toolbox-ceams/src/main/python/ui/themes/themes.qrc"/>
  </resources>
  <connections>
   <connection>
