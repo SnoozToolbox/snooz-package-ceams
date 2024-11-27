@@ -259,7 +259,7 @@
         {
             "item_name": "CompareEventsFromPSG",
             "item_type": "tool",
-            "item_version": "0.10.0",
+            "item_version": "0.11.0",
             "item_hooks": [
                 {
                     "endpoint_name": "menu_endpoint",
