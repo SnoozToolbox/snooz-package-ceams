@@ -3,8 +3,8 @@
     OutputFilesStep
     Step to select the path and name of the spindle events details.
 """
-from CEAMSTools.SpindleDetectionMartin.OutputFilesStep.Ui_OutputFilesStep import Ui_OutputFilesStep
-from CEAMSTools.SpindleDetectionMartin.SpindleDetectorSelStep.SpindleDetectorSelStep import SpindleDetectorSelStep
+from CEAMSTools.SpindleDetectionA7.OutputFilesStep.Ui_OutputFilesStep import Ui_OutputFilesStep
+from CEAMSTools.SpindleDetectionA7.SpindleDetectorSelStep.SpindleDetectorSelStep import SpindleDetectorSelStep
 from commons.BaseStepView import BaseStepView
 from flowpipe.ActivationState import ActivationState
 from widgets.WarningDialog import WarningDialog

@@ -15,6 +15,7 @@ import xml.etree.ElementTree as ET
 from flowpipe import SciNode, InputPlug, OutputPlug
 from commons.NodeInputException import NodeInputException
 from commons.NodeRuntimeException import NodeRuntimeException
+
 from CEAMSModules.EventReader import manage_events
 from CEAMSModules.PSGReader import commons
 
