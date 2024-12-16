@@ -33,31 +33,34 @@ class {{ module_class }}SettingsView(BaseSettingsView, Ui_{{ module_class }}Sett
         """ Called when the settingsView is opened by the user
         Ask for the settings to the publisher to display on the SettingsView 
         """
-        
         {% for input in inputs -%}
         self._pub_sub_manager.publish(self, self._{{ input.name }}_topic, 'ping')
         {%endfor %}
 
+
     def on_apply_settings(self):
         """ Called when the user clicks on "Run" or "Save workspace"
         """
-        
         # Send the settings to the publisher for inputs to {{ module_class }}
         {% for input in inputs -%}
         self._pub_sub_manager.publish(self, self._{{ input.name }}_topic, str(self.{{ input.name }}_lineedit.text()))
         {%endfor %}
 
+
     def on_topic_update(self, topic, message, sender):
+        """ Only used in a custom step of a tool, you can ignore it.
+        """
         pass
+
 
     def on_topic_response(self, topic, message, sender):
         """ Called by the publisher to init settings in the SettingsView 
         """
-
         {% for input in inputs -%}
         if topic == self._{{ input.name }}_topic:
             self.{{ input.name }}_lineedit.setText(message)
         {%endfor %}
+
 
    # Called when the user delete an instance of the plugin
     def __del__(self):

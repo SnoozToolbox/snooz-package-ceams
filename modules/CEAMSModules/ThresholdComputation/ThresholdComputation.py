@@ -179,10 +179,12 @@ class ThresholdComputation(SciNode):
             # Accumulate samples for each channel and each cycle
             elif int(threshold_scope)>0:
                 if threshold_scope=='1':
-                    # Find in which sleep cycle the current signal_model is included
-                    idx_start = cycle_df[round(cycle_df.start_sec,2)<=round(signal_model.start_time,2)].index
-                    idx_stop = cycle_df[(round(cycle_df.start_sec+cycle_df.duration_sec,2)) >= round(signal_model.start_time+signal_model.duration,2)].index
-                    idx_include_signal = idx_start.intersection(idx_stop).tolist()
+                    # Find which sleep cycles start before the current signal_model starts
+                    (idx_start,) = np.where(signal_model.start_time-cycle_df.start_sec>=-0.1) # -0.1 to support non interger sampling rate in Stellate
+                    # Find which sleep cycles end after the current signal_model ends
+                    (idx_stop,) = np.where((cycle_df.start_sec+cycle_df.duration_sec)-(signal_model.start_time+signal_model.duration)>=-0.1) # -0.1 to support non interger sampling rate in Stellate
+                    # Find intersection between idx_start and idx_stop
+                    idx_include_signal = np.intersect1d(idx_start,idx_stop).tolist()
                 else:
                     idx_include_signal=[0]
                 if len(idx_include_signal)==1:
@@ -243,10 +245,12 @@ class ThresholdComputation(SciNode):
             for i, signal_model in enumerate(signals):
                 # Find in which sleep cycle the current signal_model is included
                 if threshold_scope=='1':
-                    # Find in which sleep cycle the current signal_model is included
-                    idx_start = cycle_df[round(cycle_df.start_sec,2)<=round(signal_model.start_time,2)].index
-                    idx_stop = cycle_df[(round(cycle_df.start_sec+cycle_df.duration_sec,2)) >= round(signal_model.start_time+signal_model.duration,2)].index
-                    idx_include_signal = idx_start.intersection(idx_stop).tolist()
+                    # Find which sleep cycles start before the current signal_model starts
+                    (idx_start,) = np.where(signal_model.start_time-cycle_df.start_sec>=-0.1) # -0.1 to support non interger sampling rate in Stellate
+                    # Find which sleep cycles end after the current signal_model ends
+                    (idx_stop,) = np.where((cycle_df.start_sec+cycle_df.duration_sec)-(signal_model.start_time+signal_model.duration)>=-0.1) # -0.1 to support non interger sampling rate in Stellate
+                    # Find intersection between idx_start and idx_stop
+                    idx_include_signal = np.intersect1d(idx_start,idx_stop).tolist()
                 else:
                     idx_include_signal=[0]
                 if len(idx_include_signal)==1:

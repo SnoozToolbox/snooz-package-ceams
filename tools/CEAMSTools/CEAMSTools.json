@@ -37,7 +37,7 @@
         {
             "item_name": "ConvertXMLCompumedics",
             "item_type": "tool",
-            "item_version": "0.6.0",
+            "item_version": "0.7.0",
             "item_hooks": [
                 {
                     "endpoint_name": "menu_endpoint",
@@ -89,7 +89,8 @@
                     }
                 }
             ]
-        },        {
+        },
+        {
             "item_name": "EditAnnotations",
             "item_type": "tool",
             "item_version": "0.3.1",
@@ -102,7 +103,8 @@
                     }
                 }
             ]
-        },        {
+        },
+        {
             "item_name": "ExtractAnnotation",
             "item_type": "tool",
             "item_version": "0.7.0",
@@ -115,7 +117,7 @@
                     }
                 }
             ]
-        },        
+        },
         {
             "item_name": "DetectArtifacts",
             "item_type": "tool",
@@ -217,7 +219,7 @@
         {
             "item_name": "SleepCycleExport",
             "item_type": "tool",
-            "item_version": "0.9.1",
+            "item_version": "0.9.2",
             "item_hooks": [
                 {
                     "endpoint_name": "menu_endpoint",
@@ -308,6 +310,20 @@
                     "parameters": {
                         "menu_category": "3-Postprocessing",
                         "menu_label": "Slow Wave Images"
+                    }
+                }
+            ]
+        },
+        {
+            "item_name": "RenameFiles",
+            "item_type": "tool",
+            "item_version": "0.0.0",
+            "item_hooks": [
+                {
+                    "endpoint_name": "menu_endpoint",
+                    "parameters": {
+                        "menu_category": "1-Preprocessing",
+                        "menu_label": "Rename Files"
                     }
                 }
             ]

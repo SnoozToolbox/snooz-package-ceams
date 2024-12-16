@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>734</width>
+    <width>952</width>
     <height>812</height>
    </rect>
   </property>
@@ -53,7 +53,7 @@
            <property name="minimumSize">
             <size>
              <width>330</width>
-             <height>150</height>
+             <height>175</height>
             </size>
            </property>
            <property name="maximumSize">
@@ -94,7 +94,7 @@ p, li { white-space: pre-wrap; }
            <property name="minimumSize">
             <size>
              <width>330</width>
-             <height>150</height>
+             <height>175</height>
             </size>
            </property>
            <property name="maximumSize">
@@ -114,6 +114,9 @@ p, li { white-space: pre-wrap; }
            </property>
            <property name="lineWidth">
             <number>0</number>
+           </property>
+           <property name="readOnly">
+            <bool>true</bool>
            </property>
            <property name="html">
             <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
@@ -408,6 +411,9 @@ p, li { white-space: pre-wrap; }
            </item>
            <item>
             <widget class="QPlainTextEdit" name="plainTextEdit">
+             <property name="readOnly">
+              <bool>true</bool>
+             </property>
              <property name="plainText">
               <string>Check this option to indicate that the end of the REM period must be at the start of the following NREM period, eliminating this temporal &quot;gap&quot; between 2 cycles.</string>
              </property>
@@ -582,6 +588,9 @@ p, li { white-space: pre-wrap; }
              <property name="lineWidth">
               <number>0</number>
              </property>
+             <property name="readOnly">
+              <bool>true</bool>
+             </property>
              <property name="html">
               <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
@@ -647,7 +656,7 @@ p, li { white-space: pre-wrap; }
       <enum>Qt::Horizontal</enum>
      </property>
      <property name="sizeType">
-      <enum>QSizePolicy::MinimumExpanding</enum>
+      <enum>QSizePolicy::Minimum</enum>
      </property>
      <property name="sizeHint" stdset="0">
       <size>

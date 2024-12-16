@@ -49,7 +49,7 @@
   </layout>
  </widget>
  <resources>
-  <include location="../../../../scinodes_poc/src/main/python/ui/themes/themes.qrc"/>
+  <include location="../../../../snooz-toolbox/src/main/python/ui/themes/themes.qrc"/>
  </resources>
  <connections/>
  </ui>
