@@ -205,10 +205,6 @@ class Ui_RenameFileListSettingsView(object):
 
         self.horizontalLayout_2.addLayout(self.verticalLayout_4)
 
-        self.horizontalSpacer = QSpacerItem(287, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
-
-        self.horizontalLayout_2.addItem(self.horizontalSpacer)
-
 
         self.retranslateUi(RenameFileListSettingsView)
         self.checkBox_keep_all_char.clicked.connect(RenameFileListSettingsView.keep_all_char_slot)
