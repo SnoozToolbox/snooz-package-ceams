@@ -193,8 +193,7 @@ class EventReader(SciNode):
                 if int(channels_col_i) == 0:
                     channel = [list(new_chan.split("@@"))[1] if (isinstance(new_chan,str) and '@@' in new_chan) else [] for new_chan in name_data]
                 else:
-                    events_pre_process['channels'] = (events_pre_process['channels'].apply(literal_eval))
-                    channel = np.hstack(events_pre_process.iloc[:,[int(channels_col_i) - 1]].values).tolist()
+                    channel = events_pre_process.iloc[:,int(channels_col_i) - 1].apply(lambda x: self.convert_to_list(x)).tolist()
                 start_sec = []
                 if int(onset_col_i) == 0:
                     start_sec = [0 for i in range(n)]
@@ -279,6 +278,13 @@ class EventReader(SciNode):
                 'events': '',
                 'filename' : ''
             }
+
+
+    def convert_to_list(self, x):
+        try:
+            return literal_eval(x)
+        except:
+            return [x]
 
 
     # Function to convert elapsed time to seconds using pd.to_datetime

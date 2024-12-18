@@ -6,6 +6,7 @@ See the file LICENCE for full license details.
 """
     Settings viewer of the PSGReader plugin
 """
+import datetime
 import numpy as np
 import os
 import pandas as pd
@@ -13,7 +14,6 @@ from qtpy import QtWidgets
 from qtpy import QtCore
 from qtpy import QtGui
 from qtpy.QtCore import Qt
-from qtpy.QtWidgets import QProgressDialog
 import sys
 
 from . import commons
@@ -349,7 +349,7 @@ class PSGReaderSettingsView( BaseSettingsView,  Ui_PSGReaderSettingsView, QtWidg
 
             # Add a QProgressDialog to show the progression bar
             n_files = len(filenames)
-            progress = QProgressDialog("Loading files...", None, 0, n_files)
+            progress = QtWidgets.QProgressDialog("Loading files...", None, 0, n_files)
             progress.setWindowModality(Qt.ApplicationModal)
             progress.setMinimumDuration(0) # Settings a minimum time greater than 0 makes the UI update slower
             progress.show()
@@ -695,7 +695,7 @@ class PSGReaderSettingsView( BaseSettingsView,  Ui_PSGReaderSettingsView, QtWidg
 
             # Add a QProgressDialog to show the progression bar
             n_files = len(folders)
-            progress = QProgressDialog("Loading files...", None, 0, n_files)
+            progress = QtWidgets.QProgressDialog("Loading files...", None, 0, n_files)
             progress.setWindowModality(Qt.ApplicationModal)
             progress.setMinimumDuration(0) # Settings a minimum time greater than 0 makes the UI update slower
             progress.show()
@@ -858,9 +858,13 @@ class PSGReaderSettingsView( BaseSettingsView,  Ui_PSGReaderSettingsView, QtWidg
 
     # Called when the user click on the export button
     def export_slot(self):
+
+        # Get the current date as a string YYYYMMDD
+        current_date = datetime.datetime.now().strftime("%Y%m%d")
+
         filename, _ = QtWidgets.QFileDialog.getSaveFileName(\
             None, 'Export channels selection in a table format as',\
-                 'channel_selections.txt', filter="*.txt")
+                 f'Snooz-Channel_selections_log_table-{current_date}.txt', filter="*.txt")
         if filename is not None and filename:
             with open(filename, 'w') as tsv_file:
                 export_df = self.channels_table_model._data.loc[self.channels_table_model._data['Use'] == True]
@@ -875,17 +879,18 @@ class PSGReaderSettingsView( BaseSettingsView,  Ui_PSGReaderSettingsView, QtWidg
             if len(alias) > 0:
                 # Save the dictionnary alias in a text file
                 alias_filename, _ = QtWidgets.QFileDialog.getSaveFileName(\
-                    None, 'Save alias definition as text file to import later in Snooz',\
-                        'alias.txt', filter="*.txt")
+                    None, 'Save alias definition as text file to import later in an Input Files step in Snooz',\
+                         f'Snooz-Input_Files_Export-Alias-{current_date}.txt', filter="*.txt")
                 if alias_filename is not None and alias_filename:
                     with open(alias_filename, 'w') as txt_file:
                         # Write the dictionary converted to a string
                         txt_file.write(str(alias))
 
         # Save the dictionnary files in a text file
+        # Snooz_Input_Files_Selection_Export_{date}.tsv
         filename, _ = QtWidgets.QFileDialog.getSaveFileName(None, \
-            'Save files selection as text file to import later in Snooz',\
-                'files.txt', filter="*.txt")
+            'Save files selection as text file to import later in an Input Files step in Snooz',\
+                f'Snooz-Input_Files_Export-Files_Montages_Channels-{current_date}.txt', filter="*.txt")
         if filename is not None and filename:
             with open(filename, 'w') as txt_file:
                 # Write the dictionary converted to a string
@@ -894,11 +899,10 @@ class PSGReaderSettingsView( BaseSettingsView,  Ui_PSGReaderSettingsView, QtWidg
 
     # Called when the user click on the import button
     def import_slot(self):
-        
         # Open a file. Ask the user for a txt file
         alias_filename, _ = QtWidgets.QFileDialog.getOpenFileName(None, \
-            'Open alias definition if any', \
-                'alias.txt', filter="*.txt")
+            'Open alias definition if any (i.e. Previously exported from Snooz as Snooz-Input_Files_Export-Alias-date.txt)', \
+                f'Snooz-Alias.txt', filter="*.txt")
         if alias_filename is not None and alias_filename:
             with open(alias_filename, 'r') as txt_file:
                 alias = eval(txt_file.read())
@@ -906,12 +910,16 @@ class PSGReaderSettingsView( BaseSettingsView,  Ui_PSGReaderSettingsView, QtWidg
 
         # Open a file. Ask the user for a txt file
         filename, _ = QtWidgets.QFileDialog.getOpenFileName(None, \
-            'Open files selection if any', \
-                'files.txt', filter="*.txt")
+            'Open files selection (i.e. Previously exported from Snooz as Snooz-Input_Files_Export-Files_Montages_Channels-date.txt)', \
+                'Snooz-Files.txt\r', filter="*.txt")
         if filename is not None and filename:
+            # Display a loading dialog
+            self._open_loading_dialog()
             with open(filename, 'r') as txt_file:
                 files = eval(txt_file.read())
                 self.load_files_from_data(files)
+            # Close the loading dialog
+            self._close_loading_dialog()
 
 
     def file_selection_changed_slot(self):
@@ -972,7 +980,7 @@ class PSGReaderSettingsView( BaseSettingsView,  Ui_PSGReaderSettingsView, QtWidg
 
     def channels_select_all_slot(self):
         n_chans = self.channels_proxy_model.rowCount()
-        progress = QProgressDialog("Selecting all channels...", None, 0, n_chans)
+        progress = QtWidgets.QProgressDialog("Selecting all channels...", None, 0, n_chans)
         progress.setWindowModality(Qt.ApplicationModal)
         progress.setMinimumDuration(0) # Settings a minimum time greater than 0 makes the UI update slower
         progress.show()
@@ -989,7 +997,7 @@ class PSGReaderSettingsView( BaseSettingsView,  Ui_PSGReaderSettingsView, QtWidg
 
     def channels_unselect_all_slot(self):
         n_chans = self.channels_proxy_model.rowCount()
-        progress = QProgressDialog("Unselecting all channels...", None, 0, n_chans, self)
+        progress = QtWidgets.QProgressDialog("Unselecting all channels...", None, 0, n_chans, self)
         progress.setWindowModality(Qt.ApplicationModal)
         progress.setMinimumDuration(0)  # Settings a minimum time greater than 0 makes the UI update slower
         progress.show()
@@ -1629,3 +1637,16 @@ class PSGReaderSettingsView( BaseSettingsView,  Ui_PSGReaderSettingsView, QtWidg
             group_ori_text = editable_model.item(group_row,1).text()
             filename = None
         return filename, group_ori_text, name_ori_text
+
+    # Private functions
+    def _open_loading_dialog(self):
+        self._progress = QtWidgets.QMessageBox()
+        self._progress.setText("Loading ...\nPlease wait a moment.")
+        self._progress.setWindowTitle("Loading ... Please wait a moment.      ")
+        self._progress.setStandardButtons(QtWidgets.QMessageBox.NoButton)
+        self._progress.show()
+
+    def _close_loading_dialog(self):
+        if self._progress is not None:
+            self._progress.close()
+            self._progress = None

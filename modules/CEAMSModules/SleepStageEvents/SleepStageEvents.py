@@ -119,6 +119,7 @@ class SleepStageEvents(SciNode):
         InputPlug('in_cycle', self)  
         OutputPlug('sleep_stage_events', self)
         #self.columns = create_event_dataframe(None).columns
+        self.MAX_GAP_BWT_EVENTS = 0.1
 
 
     # The plugin subscribes to the publisher to receive the settings (messages) as input
@@ -199,7 +200,7 @@ class SleepStageEvents(SciNode):
 
         # Because of the non integer sampling rate 
         # we round all start and duration to 0.x precision
-        sleep_stages = sleep_stages.round(2)
+        #sleep_stages = sleep_stages.round(2) # It is now managed by looking at the difference higher than 0.1 s
 
         # Depending of how the input plugin are defined (tool, interface or node)
         # the type of the input can be integer, string or bool
@@ -352,47 +353,41 @@ class SleepStageEvents(SciNode):
 
         # Merge selected continuous events
         if merge_events == True:
-            # event_lst, bin_events = evt_df_to_bin(df_event, fs, event_label)
-            # we dont need precision but it needs to be the same precision as the signals start.
-            event_lst, bin_events = perf.evt_df_to_bin(events_df, fs=100) 
-            # with non integer sampling frequency, false splits can occur with high precision i.e. fs=100 Hz
-            # merge_events_lst is an array of [start_sec, duration_sec]
-            merge_events_lst = perf.bin_evt_to_lst_sec(bin_events, fs=100) 
-            if len(merge_events_lst) > 0:
-                # Compute the difference between consecutive events, so the difference 
-                # between the end of an event and the start of the next event
-                start_event = merge_events_lst[:,0]
-                end_event = start_event+merge_events_lst[:,1]
-                differences_bwt_events = end_event[0:-1]-start_event[1:]
-                # Add 1 for the first event, to keep the first event in the list
-                # differences_bwt_events = np.insert(differences_bwt_events, 0, 1)
+
+            # Compute the difference between consecutive events, so the difference 
+            # between the end of an event and the start of the next event
+            start_event = events_df.start_sec.values
+            duration_event = events_df.duration_sec.values
+
+            if len(start_event) > 0:
                 # If the difference is less than 0.1, merge the events
-                current_event = np.array(merge_events_lst[0])
-                events_lst_merge = np.empty([0])
-                for i_event, diff in zip(merge_events_lst[1:,:], differences_bwt_events):
-                    i_start, i_dur = i_event
+                current_event = np.array([start_event[0],duration_event[0]])
+                events_lst_merge = []
+                for i_start, i_dur in zip(start_event[1:],duration_event[1:]):
+                    # Calculate the gap between the current event and the next
+                    gap = i_start - (current_event[0] + current_event[1])
                     # if the difference is less than 0.1
                     # increase the duration of the current event by i_dur+abs(diff)
-                    if abs(diff) < 0.1:
-                        current_event[1] = current_event[1] + i_dur + abs(diff)
+                    if abs(gap) < self.MAX_GAP_BWT_EVENTS:
+                        current_event[1] = current_event[1] + i_dur + gap
                     else:
-                        events_lst_merge = np.vstack((events_lst_merge, current_event)) if events_lst_merge.size else np.array([current_event])
-                        current_event = np.array([i_start, i_dur])
-                # The last updated event is added
-                events_lst_merge = np.vstack((events_lst_merge, current_event)) if events_lst_merge.size else np.array([current_event])
-                merge_events_lst = events_lst_merge
+                        # Append the current event to the merged list and start a new event
+                        events_lst_merge.append(current_event)
+                        current_event = [i_start, i_dur]
+                # Append the last event
+                events_lst_merge.append(current_event)
                 
-            if len(new_event_name)>0:
-                event_name = new_event_name
-            else:
-                event_name = "merge_event"
-            events = [('stage', event_name, start_sec, duration_sec, "") \
-                for start_sec, duration_sec in merge_events_lst]
-            # Create a pandas events_df of events (each row is an event)
-            merge_df = create_event_dataframe(events)
-            merge_df = merge_df.sort_values(by=['start_sec'])
-            merge_df = merge_df.reset_index(drop=True)
-            events_df = merge_df
+                if len(new_event_name)>0:
+                    event_name = new_event_name
+                else:
+                    event_name = "merge_event"
+                events = [('stage', event_name, start_sec, duration_sec, "") \
+                    for start_sec, duration_sec in events_lst_merge]
+                # Create a pandas events_df of events (each row is an event)
+                merge_df = create_event_dataframe(events)
+                merge_df = merge_df.sort_values(by=['start_sec'])
+                merge_df = merge_df.reset_index(drop=True)
+                events_df = merge_df
 
         # It is important to make a copy otherwise other instance of events
         # will also be modified.

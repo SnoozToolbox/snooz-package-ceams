@@ -359,7 +359,7 @@
         {
             "item_name": "ThresholdComputation",
             "item_type": "module",
-            "item_version": "0.1.0",
+            "item_version": "0.2.0",
             "item_hooks": [
                 {
                     "endpoint_name": "module_endpoint",
@@ -443,7 +443,7 @@
         {
             "item_name": "EventCompare",
             "item_type": "module",
-            "item_version": "1.7.0",
+            "item_version": "1.8.0",
             "item_hooks": [
                 {
                     "endpoint_name": "module_endpoint",
@@ -527,7 +527,7 @@
         {
             "item_name": "SleepCyclesDelimiter",
             "item_type": "module",
-            "item_version": "0.5.0",
+            "item_version": "0.5.2",
             "item_hooks": [
                 {
                     "endpoint_name": "module_endpoint",
@@ -639,7 +639,7 @@
         {
             "item_name": "SleepStageEvents",
             "item_type": "module",
-            "item_version": "0.5.0",
+            "item_version": "0.6.0",
             "item_hooks": [
                 {
                     "endpoint_name": "module_endpoint",
@@ -667,7 +667,7 @@
         {
             "item_name": "PSACohortReview",
             "item_type": "module",
-            "item_version": "0.5.0",
+            "item_version": "0.6.0",
             "item_hooks": [
                 {
                     "endpoint_name": "module_endpoint",
@@ -807,7 +807,7 @@
         {
             "item_name": "DetectionsCohortReview",
             "item_type": "module",
-            "item_version": "1.0.0",
+            "item_version": "1.1.0",
             "item_hooks": [
                 {
                     "endpoint_name": "module_endpoint",
@@ -870,6 +870,20 @@
                     "parameters": {
                         "module_category": "Files I/O",
                         "module_label": "EDF Annotations Reader"
+                    }
+                }
+            ]
+        },
+        {
+            "item_name": "RenameFileList",
+            "item_type": "module",
+            "item_version": "0.0.0",
+            "item_hooks": [
+                {
+                    "endpoint_name": "module_endpoint",
+                    "parameters": {
+                        "module_category": "Files I/O",
+                        "module_label": "Rename File List"
                     }
                 }
             ]

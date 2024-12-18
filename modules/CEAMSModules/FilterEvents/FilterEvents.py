@@ -122,7 +122,7 @@ class FilterEvents(SciNode):
                     f"FilterEvents : sleep_stages is not connected and there is a sleep stage selection{stages_selection}")                
 
             # If there are no selection of evens neither sleep stage selection, the events_selected is empty
-            if group_selection=='' and name_selection=='':
+            if (group_selection=='' or group_selection==None) and (name_selection=='' or group_selection==None):
                 events_selected = pd.DataFrame(data=None,columns=['group','name','start_sec','duration_sec','channels'])
                 err_message = "WARNING: events are not selected"
                 self._log_manager.log(self.identifier, err_message)                

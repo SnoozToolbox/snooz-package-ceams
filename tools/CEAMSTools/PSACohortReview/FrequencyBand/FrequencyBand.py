@@ -90,6 +90,8 @@ class FrequencyBand(BaseStepView, Ui_FrequencyBand, QtWidgets.QWidget):
             # If empty, the constructor has already defined the data on the self.model_freq_band
             if (not message=='') and not ("Empty DataFrame" in message):
                 temp_df = pd.read_csv(StringIO(message), sep='\s+', index_col=0)
+                temp_df.dropna(how='all')
+                temp_df.reset_index(drop=True, inplace=True)
                 self.model_freq_band.define_data(temp_df)
                 self.model_freq_band.layoutChanged.emit()
             
@@ -100,7 +102,10 @@ class FrequencyBand(BaseStepView, Ui_FrequencyBand, QtWidgets.QWidget):
         for filename in self.filenames:
             PSA_df = pd.read_csv(filename, delimiter='\t', \
                 decimal='.', header=0, usecols=self.labels_to_extract)
-            self.tiny_freq_band = PSA_df.drop_duplicates()
+            PSA_df = PSA_df.dropna(how='all')
+            PSA_df = PSA_df.drop_duplicates()
+            PSA_df.reset_index(drop=True, inplace=True)
+            self.tiny_freq_band = PSA_df
             self.model_freq_band.low_limit = self.tiny_freq_band[self.labels_to_extract[0]].min()
             self.model_freq_band.high_limit = self.tiny_freq_band[self.labels_to_extract[1]].max()
             self.model_freq_band.layoutChanged.emit()
@@ -165,6 +170,8 @@ class FrequencyBand(BaseStepView, Ui_FrequencyBand, QtWidgets.QWidget):
             # Read the csv file and convert the content into a Data Frame
             # TODO add a try + error window
             cur_data = pd.read_csv(fileName, delimiter='\t')
+            cur_data = cur_data.dropna(how='all')
+            cur_data.reset_index(drop=True, inplace=True)
             self.model_freq_band.define_data(cur_data)                    
             self.model_freq_band.layoutChanged.emit()                        
 

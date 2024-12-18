@@ -18,7 +18,7 @@ class Ui_InputFiles(object):
     def setupUi(self, InputFiles):
         if not InputFiles.objectName():
             InputFiles.setObjectName(u"InputFiles")
-        InputFiles.resize(335, 353)
+        InputFiles.resize(877, 503)
         self.horizontalLayout_2 = QHBoxLayout(InputFiles)
         self.horizontalLayout_2.setObjectName(u"horizontalLayout_2")
         self.verticalLayout = QVBoxLayout()
@@ -56,10 +56,6 @@ class Ui_InputFiles(object):
 
 
         self.horizontalLayout_2.addLayout(self.verticalLayout)
-
-        self.horizontalSpacer = QSpacerItem(50, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
-
-        self.horizontalLayout_2.addItem(self.horizontalSpacer)
 
 
         self.retranslateUi(InputFiles)

@@ -116,10 +116,6 @@ class EventCompare(SciNode):
         OutputPlug('TP_events', self)
         OutputPlug('FNFP_events', self)
         
-        # Counter of sets of events if the plugin is called in a loop
-        self._event_set_i = 1
-        # List of filename used if the plugin is called in a loop
-        self._filenames = []
 
     def subscribe_topics(self):
         pass
@@ -295,51 +291,40 @@ class EventCompare(SciNode):
 
             # Create a pandas DataFrame from the dict "cur_perf_dict"
             if len(label)>0 :
-                column_name = label + '_' + i_chan + '_' + str(self._event_set_i)
+                column_name = label + '_' + i_chan 
                 print(label)
             else:
-                column_name = i_chan + '_' + str(self._event_set_i)
+                column_name = i_chan 
             perf_cur_df = pd.DataFrame.from_dict(cur_perf_dict, orient='index', \
                 columns = [column_name])
             perf_cur_df.index.name = f'Performance (samples based on fs={LOCAL_FS} Hz)' 
 
             # If the file already exist 
             if os.path.exists(filename):
-                # if it's not the first loop, append data
-                if filename in self._filenames:
-                    # Read the existing csv
-                    previous_df = pd.read_csv(filename, sep='\t',encoding='utf_8', keep_default_na=False)
-                    # Append new performance as column
-                    previous_df[column_name] = perf_cur_df.values.flatten()
-                    try :
-                        # Write the performance file
-                        previous_df.to_csv(path_or_buf = filename, sep='\t', \
-                            encoding="utf_8", header=True, index=False, index_label=False)
-                    except : 
-                        error_message = f"ERROR : Snooz can not write in the file {filename}."+\
-                            f"Check if the dive is accessible and the file is not already open."
-                        raise NodeRuntimeException(self.identifier, "EventCompare", error_message)
-                else:
+                # Read the existing csv
+                previous_df = pd.read_csv(filename, sep='\t',encoding='utf_8', keep_default_na=False)
+                # Append new performance as column
+                previous_df[column_name] = perf_cur_df.values.flatten()
+                try :
+                    # Write the performance file
+                    previous_df.to_csv(path_or_buf = filename, sep='\t', \
+                        encoding="utf_8", header=True, index=False, index_label=False)
+                except : 
+                    error_message = f"ERROR : Snooz can not write in the file {filename}."+\
+                        f"Check if the dive is accessible and the file is not already open."
+                    raise NodeRuntimeException(self.identifier, "EventCompare", error_message)
+            else:
+                if len(filename)>0:
                     try :
                         perf_cur_df.to_csv(path_or_buf = filename, sep='\t', encoding="utf_8")
                     except :
                         error_message = f"ERROR : Snooz can not write in the file {filename}."+\
                             f"Check if the dive is accessible and the file is not already open."
                         raise NodeRuntimeException(self.identifier, "EventCompare", error_message)                        
-            else:
-                if len(filename)>0:
-                    try:
-                        perf_cur_df.to_csv(path_or_buf = filename, sep='\t', encoding="utf_8")
-                    except:
-                        error_message = f"ERROR : Snooz can not write in the file {filename}."+\
-                            f"Check if the dive is accessible and the file is not already open."
-                        raise NodeRuntimeException(self.identifier, "EventCompare", error_message)                 
+                else:
+                    error_message = f"ERROR : The output filename is not defined."
+                    raise NodeRuntimeException(self.identifier, "EventCompare", error_message)                 
 
-            # To append data in the output file if there is another csv file or channel
-            self._filenames.append(filename)
-
-        # To mark the index of the file read
-        self._event_set_i += 1
 
         # Write the performance
         # If the file already exist 

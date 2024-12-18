@@ -228,7 +228,8 @@ class DetectionsCohortReview(SciNode):
     def read_filename_list(self, filenames):
         for filename in filenames:
             # Read the csv file and convert the content into a Data Frame
-            df_data = pd.read_csv(filename, delimiter='\t', header=0, encoding='utf-8')
+            df_data = pd.read_csv(filename, delimiter='\t', header=0, encoding='utf-8',dtype={'filename': str})
+            df_data = df_data.dropna(how='all')
             df_data.reset_index(drop=True, inplace=True)
             self.df_data = pd.concat([self.df_data, df_data])
             self.df_data.reset_index(drop=True, inplace=True)

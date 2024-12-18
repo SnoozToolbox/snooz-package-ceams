@@ -19,7 +19,7 @@ class Ui_SleepCyclesDelimiterSettingsView(object):
     def setupUi(self, SleepCyclesDelimiterSettingsView):
         if not SleepCyclesDelimiterSettingsView.objectName():
             SleepCyclesDelimiterSettingsView.setObjectName(u"SleepCyclesDelimiterSettingsView")
-        SleepCyclesDelimiterSettingsView.resize(734, 812)
+        SleepCyclesDelimiterSettingsView.resize(952, 812)
         SleepCyclesDelimiterSettingsView.setStyleSheet(u"font: 12pt \"Roboto\";")
         self.horizontalLayout_2 = QHBoxLayout(SleepCyclesDelimiterSettingsView)
         self.horizontalLayout_2.setObjectName(u"horizontalLayout_2")
@@ -49,7 +49,7 @@ class Ui_SleepCyclesDelimiterSettingsView(object):
         self.horizontalLayout_3.setSizeConstraint(QLayout.SetNoConstraint)
         self.textEdit = QTextEdit(self.layoutWidget)
         self.textEdit.setObjectName(u"textEdit")
-        self.textEdit.setMinimumSize(QSize(330, 150))
+        self.textEdit.setMinimumSize(QSize(330, 175))
         self.textEdit.setMaximumSize(QSize(16777215, 16777215))
         self.textEdit.setStyleSheet(u"")
         self.textEdit.setFrameShape(QFrame.HLine)
@@ -61,12 +61,13 @@ class Ui_SleepCyclesDelimiterSettingsView(object):
 
         self.textEdit_3 = QTextEdit(self.layoutWidget)
         self.textEdit_3.setObjectName(u"textEdit_3")
-        self.textEdit_3.setMinimumSize(QSize(330, 150))
+        self.textEdit_3.setMinimumSize(QSize(330, 175))
         self.textEdit_3.setMaximumSize(QSize(16777215, 16777215))
         self.textEdit_3.setStyleSheet(u"")
         self.textEdit_3.setFrameShape(QFrame.HLine)
         self.textEdit_3.setFrameShadow(QFrame.Plain)
         self.textEdit_3.setLineWidth(0)
+        self.textEdit_3.setReadOnly(True)
 
         self.horizontalLayout_3.addWidget(self.textEdit_3)
 
@@ -109,6 +110,7 @@ class Ui_SleepCyclesDelimiterSettingsView(object):
         self.checkBox_incl_last.setSizePolicy(sizePolicy1)
         self.checkBox_incl_last.setMinimumSize(QSize(0, 0))
         self.checkBox_incl_last.setMaximumSize(QSize(16777215, 16777215))
+        self.checkBox_incl_last.setChecked(True)
 
         self.verticalLayout_2.addWidget(self.checkBox_incl_last)
 
@@ -116,6 +118,7 @@ class Ui_SleepCyclesDelimiterSettingsView(object):
         self.checkBox_incl_all.setObjectName(u"checkBox_incl_all")
         sizePolicy1.setHeightForWidth(self.checkBox_incl_all.sizePolicy().hasHeightForWidth())
         self.checkBox_incl_all.setSizePolicy(sizePolicy1)
+        self.checkBox_incl_all.setChecked(True)
 
         self.verticalLayout_2.addWidget(self.checkBox_incl_all)
 
@@ -134,7 +137,7 @@ class Ui_SleepCyclesDelimiterSettingsView(object):
         self.radioButton_Min = QRadioButton(self.layoutWidget)
         self.radioButton_Min.setObjectName(u"radioButton_Min")
         self.radioButton_Min.setMaximumSize(QSize(16777215, 18))
-        self.radioButton_Min.setChecked(True)
+        self.radioButton_Min.setChecked(False)
 
         self.verticalLayout.addWidget(self.radioButton_Min)
 
@@ -142,12 +145,14 @@ class Ui_SleepCyclesDelimiterSettingsView(object):
         self.radioButton_Floyd.setObjectName(u"radioButton_Floyd")
         self.radioButton_Floyd.setMinimumSize(QSize(160, 0))
         self.radioButton_Floyd.setMaximumSize(QSize(350, 18))
+        self.radioButton_Floyd.setChecked(False)
 
         self.verticalLayout.addWidget(self.radioButton_Floyd)
 
         self.radioButton_Aesch = QRadioButton(self.layoutWidget)
         self.radioButton_Aesch.setObjectName(u"radioButton_Aesch")
         self.radioButton_Aesch.setMaximumSize(QSize(16777215, 18))
+        self.radioButton_Aesch.setChecked(True)
 
         self.verticalLayout.addWidget(self.radioButton_Aesch)
 
@@ -193,6 +198,7 @@ class Ui_SleepCyclesDelimiterSettingsView(object):
 
         self.plainTextEdit = QPlainTextEdit(self.layoutWidget)
         self.plainTextEdit.setObjectName(u"plainTextEdit")
+        self.plainTextEdit.setReadOnly(True)
 
         self.verticalLayout_5.addWidget(self.plainTextEdit)
 
@@ -270,6 +276,7 @@ class Ui_SleepCyclesDelimiterSettingsView(object):
         self.textEdit_4.setFrameShape(QFrame.HLine)
         self.textEdit_4.setFrameShadow(QFrame.Plain)
         self.textEdit_4.setLineWidth(0)
+        self.textEdit_4.setReadOnly(True)
 
         self.horizontalLayout.addWidget(self.textEdit_4)
 
@@ -303,7 +310,7 @@ class Ui_SleepCyclesDelimiterSettingsView(object):
 
         self.horizontalLayout_2.addWidget(self.splitter)
 
-        self.horizontalSpacer = QSpacerItem(40, 20, QSizePolicy.MinimumExpanding, QSizePolicy.Minimum)
+        self.horizontalSpacer = QSpacerItem(40, 20, QSizePolicy.Minimum, QSizePolicy.Minimum)
 
         self.horizontalLayout_2.addItem(self.horizontalSpacer)
 
