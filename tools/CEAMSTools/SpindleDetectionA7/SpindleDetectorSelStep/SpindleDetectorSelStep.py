@@ -9,8 +9,8 @@ See the file LICENCE for full license details.
 """
 from commons.BaseStepView import BaseStepView
 from flowpipe.ActivationState import ActivationState
-from CEAMSTools.SpindleDetectionMartin.Commons import ContextConstants
-from CEAMSTools.SpindleDetectionMartin.SpindleDetectorSelStep.Ui_SpindleDetectorSelStep import Ui_SpindleDetectorSelStep
+from CEAMSTools.SpindleDetectionA7.Commons import ContextConstants
+from CEAMSTools.SpindleDetectionA7.SpindleDetectorSelStep.Ui_SpindleDetectorSelStep import Ui_SpindleDetectorSelStep
 
 
 from qtpy import QtWidgets

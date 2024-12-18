@@ -9,6 +9,7 @@ from qtpy import QtWidgets
 
 from CEAMSModules.EDFAnnotationsReader.Ui_EDFAnnotationsReaderSettingsView import Ui_EDFAnnotationsReaderSettingsView
 from commons.BaseSettingsView import BaseSettingsView
+from widgets.WarningDialog import WarningDialog
 
 class EDFAnnotationsReaderSettingsView(BaseSettingsView, Ui_EDFAnnotationsReaderSettingsView, QtWidgets.QWidget):
     """
@@ -51,6 +52,11 @@ class EDFAnnotationsReaderSettingsView(BaseSettingsView, Ui_EDFAnnotationsReader
     def on_apply_settings(self):
         """ Called when the user clicks on "Run" or "Save workspace"
         """
+        # Open a warning message dialog when the length of self._psg_files and self._annot_files are different
+        n_annot_files = len(self._annot_files)
+        n_PSG_files = len(self._psg_files)
+        if not n_annot_files==n_PSG_files:
+            WarningDialog(f"The number of EDF+ annotations files ({n_annot_files}) is not matching PSG files ({n_PSG_files})")
         # Send the settings to the publisher for inputs to EDFAnnotationsReader
         self._pub_sub_manager.publish(self, self._annot_files_topic, str(self._annot_files))
         self._pub_sub_manager.publish(self, self._psg_files_topic, str(self._psg_files))
