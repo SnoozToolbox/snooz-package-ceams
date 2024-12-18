@@ -149,7 +149,7 @@
         {
             "item_name": "EventTemporalLink",
             "item_type": "module",
-            "item_version": "0.3.0",
+            "item_version": "0.3.1",
             "item_hooks": [
                 {
                     "endpoint_name": "module_endpoint",

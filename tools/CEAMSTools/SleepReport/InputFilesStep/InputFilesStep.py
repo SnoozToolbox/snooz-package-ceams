@@ -198,6 +198,7 @@ class InputFilesStep( BaseStepView,  Ui_InputFilesStep, QtWidgets.QWidget):
                 self._model.add_file(filename, id_data, events_data)
                 self.file_tableview.resizeColumnsToContents()
 
+
     def on_add_files(self):
         dlg = QtWidgets.QFileDialog()
         dlg.setFileMode(QtWidgets.QFileDialog.ExistingFiles)
@@ -257,17 +258,20 @@ class InputFilesStep( BaseStepView,  Ui_InputFilesStep, QtWidgets.QWidget):
 
         index = self.file_tableview.currentIndex()
         filename = index.data(3)
-        
+        # Extract the full filename
+        model = self.file_tableview.model()
+        full_filename = model.files[index.row()].full_filename
+
         # Remove event reports related to this file and update the context
         reports = self._context_manager[ContextConstants.context_event_report_list]
-        if filename in reports:
-            del reports[filename]
+        if full_filename in reports:
+            del reports[full_filename]
         self._context_manager[ContextConstants.context_event_report_list] = reports
 
         # Remove temporal links reports related to this file and update the context
         reports = self._context_manager[ContextConstants.context_temporal_links_report_list]
-        if filename in reports:
-            del reports[filename]
+        if full_filename in reports:
+            del reports[full_filename]
         self._context_manager[ContextConstants.context_temporal_links_report_list] = reports
 
         self._model.remove_file(index.row())

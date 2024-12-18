@@ -451,10 +451,10 @@ class EventTemporalLink(SciNode):
             "event2_group": events2.loc[0]['group'] if len(events2)>0 else None,
             "event2_name" : events2.loc[0]['name'] if len(events2)>0 else None,
         }
-        info_cur_report.append(["event1_class", "events 1 : the class of the events"])
+        info_cur_report.append(["event1_class", "events 1 : the class of the events (currently undefined)"])
         info_cur_report.append(["event1_group", "events 1 : the group of the events"])
         info_cur_report.append(["event1_name", "events 1 : the name of the events"])
-        info_cur_report.append(["event2_class", "events 2 : the class of the events"])
+        info_cur_report.append(["event2_class", "events 2 : the class of the events (currently undefined)"])
         info_cur_report.append(["event2_group", "events 2 : the group of the events"])
         info_cur_report.append(["event2_name", "events 2 : the name of the events"])
         return event_info_params, info_cur_report

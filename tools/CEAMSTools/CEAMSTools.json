@@ -149,7 +149,7 @@
         {
             "item_name": "SleepReport",
             "item_type": "tool",
-            "item_version": "0.10.1",
+            "item_version": "0.10.2",
             "item_hooks": [
                 {
                     "endpoint_name": "menu_endpoint",

@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
  <class>InputFilesStep</class>
  <widget class="QWidget" name="InputFilesStep">
@@ -10,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string />
+   <string/>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_7">
    <item>
@@ -97,7 +98,7 @@
        <item row="0" column="2">
         <widget class="QGroupBox" name="groupBox_5">
          <property name="styleSheet">
-          <string notr="true">font: 12pt "Roboto";</string>
+          <string notr="true">font: 12pt &quot;Roboto&quot;;</string>
          </property>
          <property name="title">
           <string>Sex</string>
@@ -154,7 +155,7 @@
        <item row="1" column="0">
         <widget class="QGroupBox" name="groupBox">
          <property name="styleSheet">
-          <string notr="true" />
+          <string notr="true"/>
          </property>
          <property name="title">
           <string>Dates</string>
@@ -208,7 +209,7 @@
                <string>Not defined</string>
               </property>
               <property name="suffix">
-               <string />
+               <string/>
               </property>
               <property name="minimum">
                <number>0</number>
@@ -265,7 +266,7 @@
        <item row="1" column="1">
         <widget class="QGroupBox" name="groupBox_3">
          <property name="styleSheet">
-          <string notr="true" />
+          <string notr="true"/>
          </property>
          <property name="title">
           <string>Measurements</string>
@@ -380,7 +381,7 @@
        <item row="1" column="2">
         <widget class="QGroupBox" name="groupBox_6">
          <property name="styleSheet">
-          <string notr="true" />
+          <string notr="true"/>
          </property>
          <property name="title">
           <string>Units</string>
@@ -466,7 +467,7 @@
           </font>
          </property>
          <property name="styleSheet">
-          <string notr="true" />
+          <string notr="true"/>
          </property>
          <property name="title">
           <string>Identification</string>
@@ -478,7 +479,7 @@
           <item>
            <layout class="QGridLayout" name="gridLayout_2">
             <item row="1" column="1">
-             <widget class="QLineEdit" name="id2_lineedit" />
+             <widget class="QLineEdit" name="id2_lineedit"/>
             </item>
             <item row="1" column="0">
              <widget class="QLabel" name="label_2">
@@ -488,7 +489,7 @@
              </widget>
             </item>
             <item row="0" column="1">
-             <widget class="QLineEdit" name="id1_lineedit" />
+             <widget class="QLineEdit" name="id1_lineedit"/>
             </item>
             <item row="0" column="0">
              <widget class="QLabel" name="label">
@@ -508,7 +509,7 @@
        <item row="0" column="1">
         <widget class="QGroupBox" name="groupBox_4">
          <property name="styleSheet">
-          <string notr="true" />
+          <string notr="true"/>
          </property>
          <property name="title">
           <string>Name</string>
@@ -524,7 +525,7 @@
              </widget>
             </item>
             <item row="0" column="1">
-             <widget class="QLineEdit" name="last_name_lineedit" />
+             <widget class="QLineEdit" name="last_name_lineedit"/>
             </item>
             <item row="1" column="0">
              <widget class="QLabel" name="label_4">
@@ -534,7 +535,7 @@
              </widget>
             </item>
             <item row="1" column="1">
-             <widget class="QLineEdit" name="first_name_lineedit" />
+             <widget class="QLineEdit" name="first_name_lineedit"/>
             </item>
            </layout>
           </item>
@@ -547,7 +548,9 @@
    </item>
   </layout>
  </widget>
- <resources><include location="../../../../../scinodes_poc/src/main/python/ui/themes/themes.qrc" /></resources>
+ <resources>
+  <include location="../../../../../snooz-toolbox-ceams/src/main/python/ui/themes/themes.qrc"/>
+ </resources>
  <connections>
   <connection>
    <sender>remove_pushbutton</sender>
