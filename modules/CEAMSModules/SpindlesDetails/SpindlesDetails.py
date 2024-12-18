@@ -654,16 +654,20 @@ class SpindlesDetails(SciNode):
         for stage in self.stage_stats_labels:
             # If selected
             if commons.sleep_stages_name[stage] in sleep_stage_sel:
+                
                 # Count the number of spindle for the current stage
                 spindle_cur_stage = spindle_cur_chan_df[spindle_cur_chan_df['stage']==int(commons.sleep_stages_name[stage])]
                 ss_count_cur_stage = len(spindle_cur_stage)
                 ss_count_total = ss_count_total + ss_count_cur_stage
-                ss_count[f'{label_stats}_{stage}_spindle_count'] = ss_count_cur_stage
-
+                if valid_dur[f'{label_stats}_{stage}_valid_min']>0:
+                    ss_count[f'{label_stats}_{stage}_spindle_count'] = ss_count_cur_stage
+                else:
+                    ss_count[f'{label_stats}_{stage}_spindle_count'] = np.nan
+                # Compute the density
                 if valid_dur[f'{label_stats}_{stage}_valid_min']>0:
                     density_min[f'{label_stats}_{stage}_density'] = ss_count_cur_stage/valid_dur[f'{label_stats}_{stage}_valid_min']
                 else:
-                    density_min[f'{label_stats}_{stage}_density'] = 0
+                    density_min[f'{label_stats}_{stage}_density'] = np.nan
 
                 if ss_count_cur_stage>0:
                     duration_s[f'{label_stats}_{stage}_spindle_sec'] = spindle_cur_stage['duration_sec'].sum()/ss_count_cur_stage
@@ -672,11 +676,11 @@ class SpindlesDetails(SciNode):
                     amp_pkpk_uV[f'{label_stats}_{stage}_amp_pkpk_uV'] = spindle_cur_stage['amp_pkpk_uV'].sum()/ss_count_cur_stage
                     amp_rms_uV[f'{label_stats}_{stage}_amp_rms_uV'] = spindle_cur_stage['amp_rms_uV'].sum()/ss_count_cur_stage
                 else:
-                    duration_s[f'{label_stats}_{stage}_spindle_sec'] = 0
-                    dom_freq_Hz[f'{label_stats}_{stage}_dom_freq_Hz'] = 0
-                    avg_freq_Hz[f'{label_stats}_{stage}_avg_freq_Hz'] = 0
-                    avg_freq_Hz[f'{label_stats}_{stage}_amp_pkpk_uV'] = 0
-                    amp_rms_uV[f'{label_stats}_{stage}_amp_rms_uV'] = 0
+                    duration_s[f'{label_stats}_{stage}_spindle_sec'] = np.NaN
+                    dom_freq_Hz[f'{label_stats}_{stage}_dom_freq_Hz'] = np.NaN
+                    avg_freq_Hz[f'{label_stats}_{stage}_avg_freq_Hz'] = np.NaN
+                    avg_freq_Hz[f'{label_stats}_{stage}_amp_pkpk_uV'] = np.NaN
+                    amp_rms_uV[f'{label_stats}_{stage}_amp_rms_uV'] = np.NaN
 
                 if len(duration_s_all)==0:
                     duration_s_all = spindle_cur_stage['duration_sec'].values
@@ -716,7 +720,7 @@ class SpindlesDetails(SciNode):
         if valid_dur[f'{label_stats}_valid_min']>0:
             density_min[f'{label_stats}_density'] = ss_count_total/valid_dur[f'{label_stats}_valid_min']
         else:
-            density_min[f'{label_stats}_density'] = 0
+            density_min[f'{label_stats}_density'] = np.NaN
         duration_s[f'{label_stats}_spindle_sec'] = np.mean(duration_s_all)
         dom_freq_Hz[f'{label_stats}_dom_freq_Hz'] = np.mean(dom_freq_Hz_all)
         avg_freq_Hz[f'{label_stats}_avg_freq_Hz'] = np.mean(avg_freq_Hz_all)
