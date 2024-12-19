@@ -74,6 +74,9 @@ class PSGReaderSettingsView( BaseSettingsView,  Ui_PSGReaderSettingsView, QtWidg
         # itemChanged is a signal in QStandardItemModel Class
         # Connect itemChanged to the slot on_item_changed allows to perform 
         self.files_model.itemChanged.connect(self.file_selection_changed_slot)
+        # Connect the custom signal to update the label
+        self.montages_table_model.dataChangedWithCheckState.connect(self.updateLabel_Montages)
+        self.channels_table_model.dataChangedWithCheckState.connect(self.updateLabel_Channels)
         
         # Subscribe to the proper topics to send/get data from the node
         self._files_topic = f'{self._parent_node.identifier}.files'
@@ -203,8 +206,13 @@ class PSGReaderSettingsView( BaseSettingsView,  Ui_PSGReaderSettingsView, QtWidg
             self.channels_tableview.resizeColumnsToContents() # Especially important for the check mark column or it will not appear properly
             self.on_montages_selection_changed()
 
+        # Update the number of files in the title
+        self.label_PSG.setText(f"PSG files ({self.files_model.rowCount()})")
         # Generate a signal to inform that self.files_model has been updated
-        self.model_updated_signal.emit()         
+        self.model_updated_signal.emit()   
+        # Generate signals to inform that Montage and Channel tables have been updated and the check state has changed
+        self.montages_table_model.dataChangedWithCheckState.emit(self.montages_table_model.checkedItemCount())
+        self.channels_table_model.dataChangedWithCheckState.emit(self.channels_table_model.checkedItemCount())      
 
 
     # Create an empty model based with the column Group-Name and Count
@@ -371,7 +379,9 @@ class PSGReaderSettingsView( BaseSettingsView,  Ui_PSGReaderSettingsView, QtWidg
 
             progress.setValue(n_files)
             progress.close()
-
+                        
+            # Update the number of files in the title
+            self.label_PSG.setText(f"PSG files ({self.files_model.rowCount()})")
             # Generate a signal to inform that self.files_model has been updated
             self.model_updated_signal.emit() 
 
@@ -722,6 +732,8 @@ class PSGReaderSettingsView( BaseSettingsView,  Ui_PSGReaderSettingsView, QtWidg
                             pass
             progress.setValue(n_files)
             progress.close()
+            # Update the number of files in the title
+            self.label_PSG.setText(f"PSG files ({self.files_model.rowCount()})")
             # Generate a signal to inform that self.files_model has been updated
             self.model_updated_signal.emit() 
 
@@ -757,8 +769,13 @@ class PSGReaderSettingsView( BaseSettingsView,  Ui_PSGReaderSettingsView, QtWidg
             self.files_model.removeRow(row)
             self.files_stages_model.removeRow(row)
 
+        # Update the number of files in the title
+        self.label_PSG.setText(f"PSG files ({self.files_model.rowCount()})")
         # Generate a signal to inform that self.files_model has been updated
         self.model_updated_signal.emit() 
+        # Generate signals to inform that Montage and Channel tables have been updated and the check state has changed
+        self.montages_table_model.dataChangedWithCheckState.emit(self.montages_table_model.checkedItemCount())
+        self.channels_table_model.dataChangedWithCheckState.emit(self.channels_table_model.checkedItemCount())
 
 
     def on_validate_settings(self):
@@ -967,6 +984,8 @@ class PSGReaderSettingsView( BaseSettingsView,  Ui_PSGReaderSettingsView, QtWidg
             self.montages_proxy_model.setData(self.montages_proxy_model.index(row,0), True)
         self.on_montages_selection_changed()
         self.montages_proxy_model.invalidate()
+        # Update the title label_Montages to add in the title the number of selected montages
+        self.label_Montages.setText(f"Montages ({self.montages_proxy_model.rowCount()})")
         self.montages_tableview.resizeColumnsToContents() # Especially important for the check mark column or it will not appear properly
 
 
@@ -975,6 +994,8 @@ class PSGReaderSettingsView( BaseSettingsView,  Ui_PSGReaderSettingsView, QtWidg
             self.montages_proxy_model.setData(self.montages_proxy_model.index(row,0), False)
         self.on_montages_selection_changed()
         self.montages_proxy_model.invalidate()
+        # Update the title label_Montages to add in the title the number of selected montages
+        self.label_Montages.setText(f"Montages (0)")
         self.montages_tableview.resizeColumnsToContents() # Especially important for the check mark column or it will not appear properly
 
 
@@ -1650,3 +1671,10 @@ class PSGReaderSettingsView( BaseSettingsView,  Ui_PSGReaderSettingsView, QtWidg
         if self._progress is not None:
             self._progress.close()
             self._progress = None
+
+
+    def updateLabel_Montages(self, count):
+        self.label_Montages.setText(f"Montages ({count})")
+
+    def updateLabel_Channels(self, count):
+        self.label_Channels.setText(f"Channels ({count})")

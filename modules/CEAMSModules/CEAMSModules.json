@@ -23,7 +23,7 @@
         {
             "item_name": "PSGReader",
             "item_type": "module",
-            "item_version": "0.12.0",
+            "item_version": "0.12.1",
             "item_hooks": [
                 {
                     "endpoint_name": "module_endpoint",

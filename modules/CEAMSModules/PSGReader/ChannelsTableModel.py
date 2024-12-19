@@ -9,6 +9,7 @@ See the file LICENCE for full license details.
 from qtpy import QtCore
 
 class ChannelsTableModel(QtCore.QAbstractTableModel):
+    dataChangedWithCheckState = QtCore.Signal(int)  # Custom signal with the count of checked items
     def __init__(self, data):
         super(ChannelsTableModel, self).__init__()
         self._data = data
@@ -26,6 +27,7 @@ class ChannelsTableModel(QtCore.QAbstractTableModel):
                 self._data.iat[index.row(),index.column()] = value
                 # Emit the signal dataChanged even when only the channel selection is changed
                 self.dataChanged.emit(index, index) 
+                self.dataChangedWithCheckState.emit(self.checkedItemCount())  # Emit the custom signal
                 return True
         return None
 
@@ -63,3 +65,7 @@ class ChannelsTableModel(QtCore.QAbstractTableModel):
     def get_data(self):
         """ return the Data """
         return self._data
+
+    def checkedItemCount(self):
+        # Return the number of self._data["Use"] == True
+        return sum(self._data["Use"])
