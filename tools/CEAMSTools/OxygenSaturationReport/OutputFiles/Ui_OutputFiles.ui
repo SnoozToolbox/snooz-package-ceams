@@ -330,7 +330,7 @@ The naming convention for picture is the PSG filename as prefix and 'oxygen_satu
   </layout>
  </widget>
  <resources>
-  <include location="../../../../../scinodes_poc/src/main/python/ui/themes/themes.qrc"/>
+  <include location="../../../../../snooz-toolbox/src/main/python/ui/themes/themes.qrc"/>
  </resources>
  <connections>
   <connection>

@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'c:\Users\sampo\Python\PycharmProjects\scinode\scinodes_poc\src\main\python\plugins\EventReader\Ui_EventReaderResultsView.ui'
+# Form implementation generated from reading ui file 'c:\Users\sampo\Python\PycharmProjects\scinode\snooz-toolbox\src\main\python\plugins\EventReader\Ui_EventReaderResultsView.ui'
 #
 # Created by: PyQt5 UI code generator 5.15.4
 #

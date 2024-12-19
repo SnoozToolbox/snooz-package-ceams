@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file '/home/cbrain/projects/scinodes_poc/src/main/python/plugins/TsvWriter/Ui_TsvWriterResultsView.ui'
+# Form implementation generated from reading ui file '/home/cbrain/projects/snooz-toolbox/src/main/python/plugins/TsvWriter/Ui_TsvWriterResultsView.ui'
 #
 # Created by: PyQt5 UI code generator 5.10.1
 #

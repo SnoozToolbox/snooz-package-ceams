@@ -565,7 +565,7 @@ A Sensitive and Specific Tool to Detect Sleep-Disordered Breathing in Surgical P
  </widget>
  <resources>
   <include location="desaturation_criteria.qrc"/>
-  <include location="../../../../../scinodes_poc/src/main/python/ui/themes/themes.qrc"/>
+  <include location="../../../../../snooz-toolbox/src/main/python/ui/themes/themes.qrc"/>
  </resources>
  <connections/>
  <buttongroups>

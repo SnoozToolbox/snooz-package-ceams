@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file '/media/DATADRIVE/gitRepos/ceams-carsm/CEAMS/scinodes_poc/src/main/python/plugins/AmplitudeVarDetector/Ui_AmplitudeVarDetectorSettingsView.ui'
+# Form implementation generated from reading ui file '/media/DATADRIVE/gitRepos/ceams-carsm/CEAMS/snooz-toolbox/src/main/python/plugins/AmplitudeVarDetector/Ui_AmplitudeVarDetectorSettingsView.ui'
 #
 # Created by: PyQt5 UI code generator 5.9.2
 #

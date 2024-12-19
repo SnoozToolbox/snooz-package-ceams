@@ -783,7 +783,7 @@ and the SW curve standard deviation in gray shaded area.</string>
   </layout>
  </widget>
  <resources>
-  <include location="../../../../../scinodes_poc/src/main/python/ui/themes/themes.qrc"/>
+  <include location="../../../../../snooz-toolbox/src/main/python/ui/themes/themes.qrc"/>
   <include location="sw_signal_curve.qrc"/>
  </resources>
  <connections>

@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file '/home/david/projects/scinodes_poc/src/main/python/plugins/Dictionary/Ui_DictionarySettingsView.ui'
+# Form implementation generated from reading ui file '/home/david/projects/snooz-toolbox/src/main/python/plugins/Dictionary/Ui_DictionarySettingsView.ui'
 #
 # Created by: PyQt5 UI code generator 5.12.3
 #

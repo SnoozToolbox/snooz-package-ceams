@@ -321,7 +321,7 @@ p, li { white-space: pre-wrap; }
  </widget>
  <resources>
   <include location="FlatlineStep_res.qrc"/>
-  <include location="../../../../../scinodes_poc/src/main/python/ui/themes/themes.qrc"/>
+  <include location="../../../../../snooz-toolbox/src/main/python/ui/themes/themes.qrc"/>
  </resources>
  <connections/>
  <slots>

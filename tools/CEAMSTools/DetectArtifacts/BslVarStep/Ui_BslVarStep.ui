@@ -336,7 +336,7 @@ It is also possible to deactivate this detector.</string>
  </widget>
  <resources>
   <include location="BSLVar_res.qrc"/>
-  <include location="../../../../../scinodes_poc/src/main/python/ui/themes/themes.qrc"/>
+  <include location="../../../../../snooz-toolbox/src/main/python/ui/themes/themes.qrc"/>
  </resources>
  <connections/>
  <slots>

@@ -607,7 +607,7 @@ for the set of algorithms that use a 3-component Gaussian Mixture Model (GMM).</
   </layout>
  </widget>
  <resources>
-  <include location="../../../../../scinodes_poc/src/main/python/ui/themes/themes.qrc"/>
+  <include location="../../../../../snooz-toolbox/src/main/python/ui/themes/themes.qrc"/>
  </resources>
  <connections>
   <connection>

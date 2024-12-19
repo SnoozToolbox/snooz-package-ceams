@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file '/home/cbrain/projects/scinodes_poc/src/main/python/plugins/SpectralDetector/Ui_SpectralDetectorResultsView.ui'
+# Form implementation generated from reading ui file '/home/cbrain/projects/snooz-toolbox/src/main/python/plugins/SpectralDetector/Ui_SpectralDetectorResultsView.ui'
 #
 # Created by: PyQt5 UI code generator 5.10.1
 #

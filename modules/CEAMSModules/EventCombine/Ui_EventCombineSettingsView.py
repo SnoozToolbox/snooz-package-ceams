@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'c:\Users\klacourse\Documents\NGosselin\gitRepos\ceamscarms\Stand_alone_apps\scinodes_poc\src\main\python\plugins\EventCombine\Ui_EventCombineSettingsView.ui'
+# Form implementation generated from reading ui file 'c:\Users\klacourse\Documents\NGosselin\gitRepos\ceamscarms\Stand_alone_apps\snooz-toolbox\src\main\python\plugins\EventCombine\Ui_EventCombineSettingsView.ui'
 #
 # Created by: PyQt5 UI code generator 5.15.4
 #

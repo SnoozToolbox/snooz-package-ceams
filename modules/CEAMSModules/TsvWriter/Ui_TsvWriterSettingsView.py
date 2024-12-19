@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'c:\Users\Dutil\Python\PycharmProjects\virtual_env\SYS818_venv\scinodes_poc\src\main\python\plugins\TsvWriter\Ui_TsvWriterSettingsView.ui'
+# Form implementation generated from reading ui file 'c:\Users\Dutil\Python\PycharmProjects\virtual_env\SYS818_venv\snooz-toolbox\src\main\python\plugins\TsvWriter\Ui_TsvWriterSettingsView.ui'
 #
 # Created by: PyQt5 UI code generator 5.15.4
 #

@@ -405,7 +405,7 @@ The columns of the file are as follows:
  </widget>
  <resources>
   <include location="intro_res_rc.qrc"/>
-  <include location="../../../../../scinodes_poc/src/main/python/ui/themes/themes.qrc"/>
+  <include location="../../../../../snooz-toolbox/src/main/python/ui/themes/themes.qrc"/>
  </resources>
  <connections/>
  <slots>
