@@ -210,9 +210,10 @@ class PSGReaderSettingsView( BaseSettingsView,  Ui_PSGReaderSettingsView, QtWidg
         self.label_PSG.setText(f"PSG files ({self.files_model.rowCount()})")
         # Generate a signal to inform that self.files_model has been updated
         self.model_updated_signal.emit()   
-        # Generate signals to inform that Montage and Channel tables have been updated and the check state has changed
-        self.montages_table_model.dataChangedWithCheckState.emit(self.montages_table_model.checkedItemCount())
-        self.channels_table_model.dataChangedWithCheckState.emit(self.channels_table_model.checkedItemCount())      
+        if self._options['file_selection_only']['value'] == "0":
+            # Generate signals to inform that Montage and Channel tables have been updated and the check state has changed
+            self.montages_table_model.dataChangedWithCheckState.emit(self.montages_table_model.checkedItemCount())
+            self.channels_table_model.dataChangedWithCheckState.emit(self.channels_table_model.checkedItemCount())      
 
 
     # Create an empty model based with the column Group-Name and Count
@@ -773,9 +774,10 @@ class PSGReaderSettingsView( BaseSettingsView,  Ui_PSGReaderSettingsView, QtWidg
         self.label_PSG.setText(f"PSG files ({self.files_model.rowCount()})")
         # Generate a signal to inform that self.files_model has been updated
         self.model_updated_signal.emit() 
-        # Generate signals to inform that Montage and Channel tables have been updated and the check state has changed
-        self.montages_table_model.dataChangedWithCheckState.emit(self.montages_table_model.checkedItemCount())
-        self.channels_table_model.dataChangedWithCheckState.emit(self.channels_table_model.checkedItemCount())
+        if self._options['file_selection_only']['value'] == "0":
+            # Generate signals to inform that Montage and Channel tables have been updated and the check state has changed
+            self.montages_table_model.dataChangedWithCheckState.emit(self.montages_table_model.checkedItemCount())
+            self.channels_table_model.dataChangedWithCheckState.emit(self.channels_table_model.checkedItemCount())
 
 
     def on_validate_settings(self):

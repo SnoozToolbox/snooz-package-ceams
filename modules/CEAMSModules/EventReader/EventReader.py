@@ -159,14 +159,17 @@ class EventReader(SciNode):
 
         if filename is not None:
 
-            # Import events into df
-            events_pre_process = pd.read_csv(filename, 
-                                                sep=delimiter, 
-                                                header=0,
-                                                engine='python',
-                                                encoding = encoding,
-                                                skiprows=nrows_header,
-                                                skip_blank_lines=True)      
+            try: 
+                # Import events into df
+                events_pre_process = pd.read_csv(filename, 
+                                                    sep=delimiter, 
+                                                    header=0,
+                                                    engine='python',
+                                                    encoding = encoding,
+                                                    skiprows=nrows_header,
+                                                    skip_blank_lines=True)      
+            except:
+                raise NodeRuntimeException(self.identifier, "filename", f"Problem with the file {filename}")
             
             if not eval(personalized_header):
                 n = len(events_pre_process)
