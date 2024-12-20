@@ -200,7 +200,7 @@ class EDFAnnotationsReader(SciNode):
         annot_df['group'] = annot_df['name'].str.contains('Sleep stage', case=False).fillna(False).apply(lambda x: 'stage' if x else 'EDF annotations')
 
         # commons.EDF_plus_stages is a dictionary where the keys are the EDF+ sleep stage name 
-        #   and the vlaues are the corresponding stage number
+        #   and the values are the corresponding stage number
         # rename the sleep stage to the corresponding stage number
         annot_df['name'] = annot_df['name'].replace(commons.EDF_plus_stages)
         annot_df['name'] = annot_df['name'].replace(commons.EDF_plus_stages_v1)
@@ -214,9 +214,11 @@ class EDFAnnotationsReader(SciNode):
         duration_sec = np.around(duration_sec, decimals=2)
         sleep_stage_ori.loc[:,'duration_sec']=duration_sec.astype(float)
         # Compute the unique list of sleep stage duration
-        unique_duration = np.unique(duration_sec)
+        # The last epoch is often shorter, we exlude it in the epoch length computation
+        unique_duration = np.unique(duration_sec[0:-1])
         
-        # Continuous sleep stages are grouped together
+        # Sometime Continuous sleep stages are grouped together
+        # We segment the data to create epochs
         if len(unique_duration) > 1:
             # drop the sleep stages from the annot_df
             annot_df = annot_df.drop(annot_df[(annot_df['group']=='stage')].index)
