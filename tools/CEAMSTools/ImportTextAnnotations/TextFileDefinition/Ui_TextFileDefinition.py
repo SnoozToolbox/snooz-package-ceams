@@ -380,7 +380,8 @@ class Ui_TextFileDefinition(object):
 #endif // QT_CONFIG(tooltip)
         self.delimiter_lineedit.setPlaceholderText(QCoreApplication.translate("TextFileDefinition", u"Insert delimiter(s)", None))
         self.label.setText(QCoreApplication.translate("TextFileDefinition", u"Number of rows to skip (reserved for the header)\n"
-"Do not include blank rows in the count.", None))
+"Do not include blank rows in the count\n"
+"Do not include the row with the column names in the count.", None))
 #if QT_CONFIG(tooltip)
         self.spinBox_nrows_hdr.setToolTip(QCoreApplication.translate("TextFileDefinition", u"Blank rows are skipped automatically, so do not include them in the row count to skip. This feature is important to prevent issues with files that end with blank rows.", None))
 #endif // QT_CONFIG(tooltip)

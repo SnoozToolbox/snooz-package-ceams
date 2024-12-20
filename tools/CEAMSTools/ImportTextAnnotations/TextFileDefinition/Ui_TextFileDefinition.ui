@@ -88,7 +88,8 @@
           <widget class="QLabel" name="label">
            <property name="text">
             <string>Number of rows to skip (reserved for the header)
-Do not include blank rows in the count.</string>
+Do not include blank rows in the count
+Do not include the row with the column names in the count.</string>
            </property>
           </widget>
          </item>
