@@ -660,7 +660,7 @@ class SleepCyclesDelimiter(SciNode):
         # For each additional cycle
         for remper_end in remper_end_lst:
             # nrem
-            cur_nrem_rem_df = sleep_stage_scored[sleep_stage_scored.start_sec>=remper_end]
+            cur_nrem_rem_df = sleep_stage_scored[round(sleep_stage_scored.start_sec)>=round(remper_end)]
             if not cur_nrem_rem_df.empty:
                 cur_nrem_rem_df.reset_index(drop=True,inplace=True)
                 #first_nrem_epoch_i = cur_nrem_rem_df[cur_nrem_rem_df['name']=='nrem'].first_valid_index() 
