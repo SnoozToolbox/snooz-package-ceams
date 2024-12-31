@@ -706,15 +706,24 @@ class PSGReaderSettingsView( BaseSettingsView,  Ui_PSGReaderSettingsView, QtWidg
 
             # Add a QProgressDialog to show the progression bar
             n_files = len(folders)
-            progress = QtWidgets.QProgressDialog("Loading files...", None, 0, n_files)
-            progress.setWindowModality(Qt.ApplicationModal)
-            progress.setMinimumDuration(0) # Settings a minimum time greater than 0 makes the UI update slower
-            progress.show()
+            if n_files > 1:
+                progress = QtWidgets.QProgressDialog("Loading files...", None, 0, n_files)
+                progress.setWindowModality(Qt.ApplicationModal)
+                progress.setMinimumDuration(0) # Settings a minimum time greater than 0 makes the UI update slower
+                progress.show()
             for i, folder in enumerate(folders):
-                progress.setValue(i)
                 filenames = self._psg_reader_manager.find_psg_within_folder(folder)
 
-                for filename in filenames:
+                if n_files > 1:
+                    progress.setValue(i)
+                else:
+                    progress = QtWidgets.QProgressDialog("Loading files...", None, 0, len(filenames))
+                    progress.setWindowModality(Qt.ApplicationModal)
+                    progress.setMinimumDuration(0) # Settings a minimum time greater than 0 makes the UI update slower
+                    progress.show()                    
+
+                for i_f, filename in enumerate(filenames):
+                    progress.setValue(i_f)
                     matches = self.files_model.findItems(os.path.basename(filename),QtCore.Qt.MatchExactly)
                     if len(matches) == 0:
                         if filename is not None:
@@ -731,7 +740,10 @@ class PSGReaderSettingsView( BaseSettingsView,  Ui_PSGReaderSettingsView, QtWidg
                             #TODO Log empty folders
                             # Couldnt find PSG file in folder:{folder}
                             pass
-            progress.setValue(n_files)
+            if n_files > 1:
+                progress.setValue(n_files)
+            else:
+                progress.setValue(len(filenames))
             progress.close()
             # Update the number of files in the title
             self.label_PSG.setText(f"PSG files ({self.files_model.rowCount()})")
