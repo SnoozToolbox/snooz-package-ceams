@@ -11,7 +11,7 @@ See the file LICENCE for full license details.
 from qtpy import QtWidgets
 
 from CEAMSTools.DetectArtifacts.FilterSignalsStep.Ui_FilterSignalsStep import Ui_FilterSignalsStep
-from CEAMSTools.DetectArtifacts.InputFilesStep.InputFilesStep import InputFilesStep
+from CEAMSTools.DetectArtifacts.InputFilesArtStep.InputFilesArtStep import InputFilesStep
 from commons.BaseStepView import BaseStepView
 import config
 from flowpipe.ActivationState import ActivationState
