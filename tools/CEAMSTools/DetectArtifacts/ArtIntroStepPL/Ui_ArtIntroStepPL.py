@@ -19,7 +19,7 @@ class Ui_ArtIntroStepPL(object):
     def setupUi(self, ArtIntroStepPL):
         if not ArtIntroStepPL.objectName():
             ArtIntroStepPL.setObjectName(u"ArtIntroStepPL")
-        ArtIntroStepPL.resize(1099, 778)
+        ArtIntroStepPL.resize(1099, 858)
         ArtIntroStepPL.setStyleSheet(u"font: 12pt \"Roboto\";")
         self.verticalLayout_7 = QVBoxLayout(ArtIntroStepPL)
         self.verticalLayout_7.setObjectName(u"verticalLayout_7")
@@ -39,7 +39,7 @@ class Ui_ArtIntroStepPL(object):
         sizePolicy.setHeightForWidth(self.label_2.sizePolicy().hasHeightForWidth())
         self.label_2.setSizePolicy(sizePolicy)
         self.label_2.setMinimumSize(QSize(0, 0))
-        self.label_2.setMaximumSize(QSize(16777215, 170))
+        self.label_2.setMaximumSize(QSize(16777215, 200))
         font = QFont()
         font.setFamily(u"Roboto")
         font.setPointSize(12)
@@ -81,7 +81,7 @@ class Ui_ArtIntroStepPL(object):
         self.scrollArea_2.setWidgetResizable(True)
         self.scrollAreaWidgetContents_2 = QWidget()
         self.scrollAreaWidgetContents_2.setObjectName(u"scrollAreaWidgetContents_2")
-        self.scrollAreaWidgetContents_2.setGeometry(QRect(0, 0, 1001, 180))
+        self.scrollAreaWidgetContents_2.setGeometry(QRect(0, 0, 1001, 195))
         self.verticalLayout_4 = QVBoxLayout(self.scrollAreaWidgetContents_2)
         self.verticalLayout_4.setObjectName(u"verticalLayout_4")
         self.label_3 = QLabel(self.scrollAreaWidgetContents_2)
@@ -123,7 +123,7 @@ class Ui_ArtIntroStepPL(object):
         self.scrollArea_3.setWidgetResizable(True)
         self.scrollAreaWidgetContents_3 = QWidget()
         self.scrollAreaWidgetContents_3.setObjectName(u"scrollAreaWidgetContents_3")
-        self.scrollAreaWidgetContents_3.setGeometry(QRect(0, 0, 1001, 319))
+        self.scrollAreaWidgetContents_3.setGeometry(QRect(0, 0, 1001, 351))
         self.verticalLayout_5 = QVBoxLayout(self.scrollAreaWidgetContents_3)
         self.verticalLayout_5.setObjectName(u"verticalLayout_5")
         self.label_7 = QLabel(self.scrollAreaWidgetContents_3)
@@ -133,7 +133,7 @@ class Ui_ArtIntroStepPL(object):
 
         self.verticalLayout_5.addWidget(self.label_7)
 
-        self.verticalSpacer_4 = QSpacerItem(20, 20, QSizePolicy.Minimum, QSizePolicy.MinimumExpanding)
+        self.verticalSpacer_4 = QSpacerItem(20, 20, QSizePolicy.Minimum, QSizePolicy.Expanding)
 
         self.verticalLayout_5.addItem(self.verticalSpacer_4)
 
