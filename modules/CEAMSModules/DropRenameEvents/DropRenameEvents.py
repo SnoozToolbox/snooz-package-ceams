@@ -27,6 +27,8 @@ class DropRenameEvents(SciNode):
     We also want to drop some events (events_to_drop_in). 
     Warning : the renamed events are added as new_events, so we need to drop the original (not renamed) events. 
     The output "events_to_drop_out" also include the original events that has been renamed.
+    Warning : if the renamed events also exists in the original events, they will be deleted by the PSgWriter, 
+    they must be added on the new_events. I.E. renaming the stage 4 to stage 3 will remove the original (valid) stage 3.
 
     Inputs:
         "events": pandas DataFrame columns=['group','name','start_sec','duration_sec','channels']
@@ -63,8 +65,6 @@ class DropRenameEvents(SciNode):
         OutputPlug('new_events',self)
         OutputPlug('events_to_drop_out',self)
         
-        # Init module variables
-        # self.this_is_an_example_you_can_delete_it = 0
         self._is_master = False 
     
 
@@ -109,12 +109,6 @@ class DropRenameEvents(SciNode):
         if not isinstance(events_to_rename, list):
             raise NodeInputException(self.identifier, "events_to_rename", \
                 f"DropRenameEvents this input is {type(events_to_rename)} and a list of tuple is expected.")      
-
-        # Raise NodeRuntimeException if there is a critical error during runtime. 
-        # This exception will stop and skip the current
-        # process but will not stop the followin iterations if a master node is not done.
-        # raise NodeRuntimeException(self.identifier, "files", \
-        #        f"Some file could not be open.")
 
         # It is possible to bypass the DropRenameEventsplugin by passing 
         # the input events directly to the output events
@@ -172,13 +166,24 @@ class DropRenameEvents(SciNode):
             if not ((group, name) in events_to_drop_out):
                 events_to_drop_out.append((group, name))
             
+        # Warning : if the renamed events also exists in the original events, they will be deleted by the PSgWriter, 
+        # they must be added on the new_events. I.E. renaming the stage 4 to stage 3 will remove the original (valid) stage 3.
+        # The module has to be used with the PSGWriter (not the tsvwriter)
+        if len(events_to_rename)>0:
+            # Find if the renamed events are also in the original events - Are there any stage 3 in the original events?
+            for group_ori, name_ori, group_new, name_new in events_to_rename: 
+                index_to_keep = events[(events['group']==group_new) & (events['name']==name_new)].index.to_list()
+                # Add those events to the new_events
+                if len(index_to_keep)>0:
+                    new_events_to_keep = events.loc[index_to_keep].copy()
+                    new_events = pd.concat([new_events, new_events_to_keep])
+            new_events.reset_index(inplace=True, drop=True)
+            new_events.sort_values('start_sec', axis=0, inplace=True, ignore_index='True')
+
         # Write to the cache to use the data in the resultTab
         cache = {}
         cache['events'] = new_events
         self._cache_manager.write_mem_cache(self.identifier, cache)
-
-        # Log message for the Logs tab
-        # self._log_manager.log(self.identifier, "This module does nothing.")
 
         return {
             'new_events': new_events,
