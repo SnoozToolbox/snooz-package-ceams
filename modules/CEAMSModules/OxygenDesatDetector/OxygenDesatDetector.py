@@ -817,7 +817,7 @@ class OxygenDesatDetector(SciNode):
                 if not desat_drop_reached_flag:
                     # previous bsl is available
                     if j > (parameters_oxy["max_slope_drop_sec"]*fs_chan):
-                        bsl_start = j-(parameters_oxy["max_slope_drop_sec"]*fs_chan)
+                        bsl_start = int(round(j-(parameters_oxy["max_slope_drop_sec"]*fs_chan)))
                     else:
                         bsl_start = 0
                     # Look for the max value to start the desaturation
