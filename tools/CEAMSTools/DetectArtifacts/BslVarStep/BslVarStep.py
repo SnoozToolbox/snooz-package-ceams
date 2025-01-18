@@ -11,6 +11,7 @@ from qtpy import QtWidgets
 from qtpy import QtCore
 from qtpy.QtGui import QRegExpValidator # To validate waht the user enters in the interface
 from qtpy.QtCore import QRegExp # To validate waht the user enters in the interface
+from PySide2.QtGui import QPixmap
 
 from CEAMSTools.DetectArtifacts.BslVarStep.Ui_BslVarStep import Ui_BslVarStep
 from CEAMSTools.DetectArtifacts.DetectorsStep.DetectorsStep import DetectorsStep
@@ -31,6 +32,8 @@ class BslVarStep( BaseStepView,  Ui_BslVarStep, QtWidgets.QWidget):
         # init UI
         self.setupUi(self)
         # Subscribe to the proper topics to send/get data from the node
+        pic_ref = QPixmap(u":/BSLVar/BSLVar.png")
+        self.label_7.setPixmap(pic_ref.copy())        
 
         # Events group 
         self._group_topic = f'{self._node_id_SpectralDet}.event_group'

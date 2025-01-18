@@ -11,6 +11,7 @@ from qtpy import QtWidgets
 from qtpy import QtCore
 from qtpy.QtGui import QRegExpValidator # To validate waht the user enters in the interface
 from qtpy.QtCore import QRegExp # To validate waht the user enters in the interface
+from PySide2.QtGui import QPixmap
 
 from CEAMSTools.DetectArtifacts.FlatlineStep.Ui_FlatlineStep import Ui_FlatlineStep
 from CEAMSTools.DetectArtifacts.DetectorsStep.DetectorsStep import DetectorsStep
@@ -31,6 +32,8 @@ class FlatlineStep( BaseStepView,  Ui_FlatlineStep, QtWidgets.QWidget):
 
         # init UI
         self.setupUi(self)
+        pic_ref = QPixmap(u":/flatline/flatlined.png")
+        self.label_2.setPixmap(pic_ref.copy())        
         # Subscribe to the proper topics to send/get data from the node
 
         # Events group 

@@ -38,7 +38,6 @@ class Ui_BslVarStep(object):
         self.horizontalLayout.setObjectName(u"horizontalLayout")
         self.label_7 = QLabel(self.scrollAreaWidgetContents)
         self.label_7.setObjectName(u"label_7")
-        self.label_7.setPixmap(QPixmap(u":/BSLVar/BSLVar.png"))
         self.label_7.setAlignment(Qt.AlignCenter)
 
         self.horizontalLayout.addWidget(self.label_7)

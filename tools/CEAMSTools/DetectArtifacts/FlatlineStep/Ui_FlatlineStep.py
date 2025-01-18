@@ -37,7 +37,6 @@ class Ui_FlatlineStep(object):
         self.horizontalLayout.setObjectName(u"horizontalLayout")
         self.label_2 = QLabel(self.scrollAreaWidgetContents)
         self.label_2.setObjectName(u"label_2")
-        self.label_2.setPixmap(QPixmap(u":/flatline/flatlined.png"))
 
         self.horizontalLayout.addWidget(self.label_2)
 

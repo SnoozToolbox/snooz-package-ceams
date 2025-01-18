@@ -43,9 +43,6 @@
          <property name="text">
           <string/>
          </property>
-         <property name="pixmap">
-          <pixmap resource="FlatlineStep_res.qrc">:/flatline/flatlined.png</pixmap>
-         </property>
         </widget>
        </item>
       </layout>
