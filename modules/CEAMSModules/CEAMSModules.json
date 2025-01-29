@@ -1,6 +1,6 @@
 {
     "package_name": "CEAMSModules",
-    "package_version": "6.11.0",
+    "package_version": "6.12.0",
     "package_author": "",
     "package_url": "",
     "package_description": "",
@@ -121,7 +121,7 @@
         {
             "item_name": "CsvReaderMaster",
             "item_type": "module",
-            "item_version": "1.4.0",
+            "item_version": "1.5.0",
             "item_hooks": [
                 {
                     "endpoint_name": "module_endpoint",

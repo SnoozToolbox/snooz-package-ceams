@@ -15,6 +15,7 @@ from qtpy import QtGui
 
 from commons.BaseStepView import BaseStepView
 from widgets.TableDialog import TableDialog
+from widgets.WarningDialog import WarningDialog
 
 from CEAMSTools.ConvertEDFbrowser.Commons import ContextConstants # Import the keys for the context
 from CEAMSTools.ConvertEDFbrowser.StadeSelection.Ui_StadeSelection import Ui_StadeSelection # UI
@@ -291,7 +292,12 @@ class StadeSelection( BaseStepView,  Ui_StadeSelection, QtWidgets.QWidget):
                 if len(file_item)==0:
                     # tree item : parent=file, child=name
                     item = self.reader_settings_view.create_file_item_tree(filename, True)
-                    checkable_model_outdated.appendRow(item)
+                    if isinstance(item,QtGui.QStandardItem):
+                        checkable_model_outdated.appendRow(item)
+                    else:
+                        # Clear the list of file, because at least one is corrupted
+                        checkable_model_outdated.clear()
+                        WarningDialog(f"The file {filename} cannot be read properly. Check the access. Please ensure the format is consistent throughout the file.")
                 # Otherwise -> nothing to do
             # remove the files from checkable_model_outdated
             if len(file_to_rem):

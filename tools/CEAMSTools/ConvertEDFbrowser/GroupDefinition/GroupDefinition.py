@@ -4,7 +4,7 @@
     The step to edit the group of the events to import from EDFbrowser
 """
 import ast
-from qtpy import QtWidgets, QtCore
+from qtpy import QtWidgets, QtCore, QtGui
 import os
 
 from commons.BaseStepView import BaseStepView
@@ -363,7 +363,11 @@ class GroupDefinition(BaseStepView, Ui_GroupDefinition, QtWidgets.QWidget):
                 if len(file_item)==0:
                     # tree item : parent=file, child=name (non editable), child=group (editable)
                     item = self.reader_settings_view.create_file_item_name_group_list(filename, self.event_group)
-                    editable_model_outdated.appendRow(item)
+                    if isinstance(item,QtGui.QStandardItem):
+                        editable_model_outdated.appendRow(item)
+                    else:
+                        # Clear the list of file, because at least one file is corrupted
+                        editable_model_outdated.clear()                    
                 # Otherwise -> nothing to do
             # remove the files from editable_model_outdated
             if len(file_to_rem):

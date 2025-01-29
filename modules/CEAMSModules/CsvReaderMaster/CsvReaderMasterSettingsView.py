@@ -257,7 +257,12 @@ class CsvReaderMasterSettingsView( BaseSettingsView,  Ui_CsvReaderMasterSettings
         for filename in files_lst:
             # tree item : parent=file, child=name
             item = self.create_file_item_tree(filename, True)
-            files_check_event_model.appendRow(item)
+            if isinstance(item,QtGui.QStandardItem):
+                files_check_event_model.appendRow(item)
+            else:
+                # Clear the list of file, because at least one file is corrupted
+                files_check_event_model.clear()
+                WarningDialog(f"The file {filename} cannot be read properly. Check the access. Please ensure the format is consistent throughout the file.")
         return files_check_event_model
 
 
@@ -270,15 +275,18 @@ class CsvReaderMasterSettingsView( BaseSettingsView,  Ui_CsvReaderMasterSettings
             events = pd.read_csv(filename, sep=file_separator, usecols=[self.event_name_spinbox.value()-1], \
                                 engine='python', header=0, encoding='utf_8', names=['name'])
         except:
-            WarningDialog(f"The file {filename} cannot be read properly. Check the access. Check that the separator is correct.")
+            return False            
            
-        # Get a list of unique groups
-        names = events['name'].unique().tolist()
-        # Strip the @@channel
-        names_strip = [list(new_name.split("@@"))[0] if (isinstance(new_name,str) and '@@' in new_name) else new_name for new_name in names]
-        names_strip = list(set(names_strip))
-        names_strip.sort()
-
+        try:
+            # Get a list of unique groups
+            names = events['name'].unique().tolist()
+            # Strip the @@channel
+            names_strip = [list(new_name.split("@@"))[0] if (isinstance(new_name,str) and '@@' in new_name) else new_name for new_name in names]
+            names_strip = list(set(names_strip))
+            names_strip.sort()
+        except:
+            return False     
+                
         # Form a tree of standardItem for the name of events 
         for name in names_strip:
             name_item = QtGui.QStandardItem(name)
@@ -301,7 +309,12 @@ class CsvReaderMasterSettingsView( BaseSettingsView,  Ui_CsvReaderMasterSettings
         for filename in files_lst:
             # tree item : parent=file, child=name (non editable), child=group (editable)
             item = self.create_file_item_name_group_list(filename, default_event_group)
-            files_editable_event_model.appendRow(item)
+            if isinstance(item, QtGui.QStandardItem):
+                files_editable_event_model.appendRow(item)
+            else:
+                # Clear the list of file, because at least one file is corrupted
+                files_editable_event_model.clear()
+                WarningDialog(f"The file {filename} cannot be read properly. Check the access. Please ensure the format is consistent throughout the file.")
         return files_editable_event_model
 
 
@@ -310,15 +323,21 @@ class CsvReaderMasterSettingsView( BaseSettingsView,  Ui_CsvReaderMasterSettings
         file_item = QtGui.QStandardItem(filename)
 
         file_separator = '\\t' if self.radioButton_tab.isChecked() else ','
-        events = pd.read_csv(filename, sep=file_separator, usecols=[self.event_name_spinbox.value()-1], \
-                            engine='python', header=0, encoding='utf_8', names=['name'])
-
-        # Get a list of unique groups
-        names = events['name'].unique().tolist()
-        # Strip the @@channel
-        names_strip = [list(new_name.split("@@"))[0] if (isinstance(new_name,str) and '@@' in new_name) else new_name for new_name in names]
-        names_strip = list(set(names_strip))
-        names_strip.sort()
+        try:
+            events = pd.read_csv(filename, sep=file_separator, usecols=[self.event_name_spinbox.value()-1], \
+                                engine='python', header=0, encoding='utf_8', names=['name'])
+        except:
+            return False            
+           
+        try:
+            # Get a list of unique groups
+            names = events['name'].unique().tolist()
+            # Strip the @@channel
+            names_strip = [list(new_name.split("@@"))[0] if (isinstance(new_name,str) and '@@' in new_name) else new_name for new_name in names]
+            names_strip = list(set(names_strip))
+            names_strip.sort()
+        except:
+            return False     
 
         # Form a tree of standardItem for the name of events 
         for name in names_strip:

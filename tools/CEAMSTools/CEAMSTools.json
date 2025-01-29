@@ -1,6 +1,6 @@
 {
     "package_name": "CEAMSTools",
-    "package_version": "6.11.0",
+    "package_version": "6.12.0",
     "package_author": "",
     "package_url": "",
     "package_description": "",
@@ -23,7 +23,7 @@
         {
             "item_name": "ConvertEDFbrowser",
             "item_type": "tool",
-            "item_version": "0.8.0",
+            "item_version": "0.9.0",
             "item_hooks": [
                 {
                     "endpoint_name": "menu_endpoint",
