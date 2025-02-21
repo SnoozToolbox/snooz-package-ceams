@@ -14,6 +14,7 @@ import pandas as pd
 
 import config
 from flowpipe import SciNode, InputPlug, OutputPlug
+from flowpipe.ActivationState import ActivationState
 from commons.NodeInputException import NodeInputException
 from commons.NodeRuntimeException import NodeRuntimeException
 from CEAMSModules.PSGReader.SignalModel import SignalModel
@@ -172,6 +173,13 @@ class SubtractSignals(SciNode):
         elif not isinstance(signals,list):
             raise NodeInputException(self.identifier, "signals", \
                 f"SubtractSignals input of wrong type. Expected: <class 'list'> received: {type(signals)}")     
+
+        # It is possible to bypass the filter by passing the input signals directly
+        # to the output signals without any modification
+        if self.activation_state == ActivationState.BYPASS:
+            return {
+                'signals': signals
+            }
 
         # When channels are not specified
         if channel=='':   
