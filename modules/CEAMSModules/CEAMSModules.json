@@ -443,7 +443,7 @@
         {
             "item_name": "EventCompare",
             "item_type": "module",
-            "item_version": "1.8.0",
+            "item_version": "1.9.0",
             "item_hooks": [
                 {
                     "endpoint_name": "module_endpoint",

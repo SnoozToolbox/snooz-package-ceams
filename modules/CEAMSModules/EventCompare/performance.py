@@ -146,9 +146,18 @@ def performance_by_event(df_event_gs, df_event_est, fs, overlap_thresh=0.2, \
     fp = int(sum(est_evt_match==0))
     
     if tp==0:
-        precision = 0
-        recall = 0
-        f1 = 0
+        if sum(gs_bin_events)==0:
+            recall = 1
+        else:
+            recall = 0
+        if sum(est_bin_events)==0:
+            precision = 1
+        else:
+            precision = 0
+        if precision==0 and recall==0:
+            f1 = 0
+        else:
+            f1 = round(2 * (precision * recall) / (precision + recall),ndigits=2)    
     else:
         # Performance metrics
         precision = round(tp/(tp+fp),ndigits=2)
@@ -405,10 +414,23 @@ def compute_performance_from_stats(fn, fp, tp, tn):
     Compute recall, precision, f1-score and kappa scores based on 
     False Negative (fn), False Positive (fp), True Positive (tp) and True Negative (tn). 
     """
+
     if tp==0:
         precision=0
         recall=0
         ppv=0
+
+    if tp==0:
+        if tn==0:
+            recall = 1
+        else:
+            recall = 0
+        if fp==0:
+            precision = 1
+            ppv = 1
+        else:
+            precision = 0
+            ppv = 0
     else:
         # Performance metrics
         precision = round(tp/(tp+fp),ndigits=2)
@@ -430,8 +452,14 @@ def compute_performance_from_stats(fn, fp, tp, tn):
     kappa = round(kappa,ndigits=2)
 
     if tn==0:
-        specificity = 0
-        npv = 0
+        if fp==0:
+            specificity = 1
+        else:
+            specificity = 0
+        if fn==0:
+            npv = 1
+        else:
+            npv = 0
     else:
         specificity = round(tn/(tn+fp),ndigits=2)
         npv = round(tn/(tn+fn),ndigits=2)
