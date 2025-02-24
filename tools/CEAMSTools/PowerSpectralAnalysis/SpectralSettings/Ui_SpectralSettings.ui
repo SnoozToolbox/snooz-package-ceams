@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>730</width>
-    <height>738</height>
+    <width>1139</width>
+    <height>775</height>
    </rect>
   </property>
   <property name="minimumSize">
@@ -139,7 +139,7 @@ Define the window length (s) used to perform each FFT (Fast Fourier Transform) a
          </property>
          <property name="minimumSize">
           <size>
-           <width>350</width>
+           <width>450</width>
            <height>0</height>
           </size>
          </property>
@@ -286,13 +286,13 @@ The last frequency analyzed is limited to FS/2.
        </property>
        <property name="minimumSize">
         <size>
-         <width>350</width>
+         <width>450</width>
          <height>0</height>
         </size>
        </property>
        <property name="maximumSize">
         <size>
-         <width>400</width>
+         <width>450</width>
          <height>16777215</height>
         </size>
        </property>
@@ -490,7 +490,7 @@ The last frequency analyzed is limited to FS/2.
          </property>
          <property name="minimumSize">
           <size>
-           <width>175</width>
+           <width>225</width>
            <height>0</height>
           </size>
          </property>
@@ -515,7 +515,7 @@ The last frequency analyzed is limited to FS/2.
          </property>
          <property name="minimumSize">
           <size>
-           <width>175</width>
+           <width>225</width>
            <height>0</height>
           </size>
          </property>

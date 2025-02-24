@@ -69,6 +69,8 @@ class SelectionStep( BaseStepView,  Ui_SelectionStep, QtWidgets.QWidget):
 
         # To activate the PSA on sleep stage or annotations branch
         self._pub_sub_manager.publish(self, self._node_id_SleepCycleDelimiter+".get_activation_state", None)
+        self.NREM_stages_and_periods_slot()
+        self.REM_stages_and_periods_slot()
 
 
     # Called when the user clic on RUN
@@ -178,6 +180,28 @@ class SelectionStep( BaseStepView,  Ui_SelectionStep, QtWidgets.QWidget):
         else:
             self._enable_widgets(False)
         self._context_manager[SelectionStep.context_PSA_annot_selection] = 1 if self.radioButton_annotations.isChecked() else 0
+
+
+    # Called when the user changes the stages or period selection
+    #  The NREM stages selection desables the NREM period exclusion
+    def NREM_stages_and_periods_slot(self):
+        nrem_stages_selection = self.nrem_checkBox.isChecked() or self.n2_checkBox.isChecked() or self.n3_checkBox.isChecked()
+        if nrem_stages_selection:
+            self.excl_nremp_checkBox.setChecked(False)
+            self.excl_nremp_checkBox.setEnabled(False)
+        else:
+            self.excl_nremp_checkBox.setEnabled(True)
+
+
+    # Called when the user changes the stages or period selection
+    #  The R stage selection desables the REM period exclusion
+    def REM_stages_and_periods_slot(self):
+        rem_stages_selection = self.r_checkBox.isChecked()
+        if rem_stages_selection:
+            self.excl_remp_checkBox.setChecked(False)
+            self.excl_remp_checkBox.setEnabled(False)
+        else:
+            self.excl_remp_checkBox.setEnabled(True)
 
 
     def _enable_widgets(self, bool_flag):

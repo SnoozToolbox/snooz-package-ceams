@@ -18,7 +18,7 @@ class Ui_SelectionStep(object):
     def setupUi(self, SelectionStep):
         if not SelectionStep.objectName():
             SelectionStep.setObjectName(u"SelectionStep")
-        SelectionStep.resize(907, 574)
+        SelectionStep.resize(1041, 787)
         self.verticalLayout_4 = QVBoxLayout(SelectionStep)
         self.verticalLayout_4.setObjectName(u"verticalLayout_4")
         self.label = QLabel(SelectionStep)
@@ -227,6 +227,12 @@ class Ui_SelectionStep(object):
         self.radioButton_annotations.clicked.connect(SelectionStep.update_section_selection_slot)
         self.radioButton_sleep.clicked.connect(SelectionStep.update_section_selection_slot)
         self.nrem_checkBox.clicked.connect(SelectionStep.NREM_checkbox_slot)
+        self.excl_nremp_checkBox.clicked.connect(SelectionStep.NREM_stages_and_periods_slot)
+        self.excl_remp_checkBox.clicked.connect(SelectionStep.REM_stages_and_periods_slot)
+        self.n2_checkBox.clicked.connect(SelectionStep.NREM_stages_and_periods_slot)
+        self.n3_checkBox.clicked.connect(SelectionStep.NREM_stages_and_periods_slot)
+        self.nrem_checkBox.clicked.connect(SelectionStep.NREM_stages_and_periods_slot)
+        self.r_checkBox.clicked.connect(SelectionStep.REM_stages_and_periods_slot)
 
         QMetaObject.connectSlotsByName(SelectionStep)
     # setupUi

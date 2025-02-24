@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>907</width>
-    <height>574</height>
+    <width>1041</width>
+    <height>787</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -518,9 +518,107 @@ The same idea can be applied for NREM periods.</string>
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>excl_nremp_checkBox</sender>
+   <signal>clicked()</signal>
+   <receiver>SelectionStep</receiver>
+   <slot>NREM_stages_and_periods_slot()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>187</x>
+     <y>635</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>520</x>
+     <y>393</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>excl_remp_checkBox</sender>
+   <signal>clicked()</signal>
+   <receiver>SelectionStep</receiver>
+   <slot>REM_stages_and_periods_slot()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>187</x>
+     <y>701</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>520</x>
+     <y>393</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>n2_checkBox</sender>
+   <signal>clicked()</signal>
+   <receiver>SelectionStep</receiver>
+   <slot>NREM_stages_and_periods_slot()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>421</x>
+     <y>247</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>520</x>
+     <y>393</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>n3_checkBox</sender>
+   <signal>clicked()</signal>
+   <receiver>SelectionStep</receiver>
+   <slot>NREM_stages_and_periods_slot()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>787</x>
+     <y>247</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>520</x>
+     <y>393</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>nrem_checkBox</sender>
+   <signal>clicked()</signal>
+   <receiver>SelectionStep</receiver>
+   <slot>NREM_stages_and_periods_slot()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>787</x>
+     <y>276</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>520</x>
+     <y>393</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>r_checkBox</sender>
+   <signal>clicked()</signal>
+   <receiver>SelectionStep</receiver>
+   <slot>REM_stages_and_periods_slot()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>421</x>
+     <y>276</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>520</x>
+     <y>393</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>update_section_selection_slot()</slot>
   <slot>NREM_checkbox_slot()</slot>
+  <slot>NREM_stages_and_periods_slot()</slot>
+  <slot>REM_stages_and_periods_slot()</slot>
  </slots>
 </ui>

@@ -18,7 +18,7 @@ class Ui_SpectralSettings(object):
     def setupUi(self, SpectralSettings):
         if not SpectralSettings.objectName():
             SpectralSettings.setObjectName(u"SpectralSettings")
-        SpectralSettings.resize(730, 738)
+        SpectralSettings.resize(1139, 775)
         SpectralSettings.setMinimumSize(QSize(0, 0))
         self.verticalLayout_2 = QVBoxLayout(SpectralSettings)
         self.verticalLayout_2.setObjectName(u"verticalLayout_2")
@@ -78,7 +78,7 @@ class Ui_SpectralSettings(object):
         self.label.setObjectName(u"label")
         sizePolicy.setHeightForWidth(self.label.sizePolicy().hasHeightForWidth())
         self.label.setSizePolicy(sizePolicy)
-        self.label.setMinimumSize(QSize(350, 0))
+        self.label.setMinimumSize(QSize(450, 0))
         self.label.setMaximumSize(QSize(500, 500))
 
         self.gridLayout.addWidget(self.label, 0, 0, 1, 1)
@@ -135,8 +135,8 @@ class Ui_SpectralSettings(object):
         self.label_8.setObjectName(u"label_8")
         sizePolicy.setHeightForWidth(self.label_8.sizePolicy().hasHeightForWidth())
         self.label_8.setSizePolicy(sizePolicy)
-        self.label_8.setMinimumSize(QSize(350, 0))
-        self.label_8.setMaximumSize(QSize(400, 16777215))
+        self.label_8.setMinimumSize(QSize(450, 0))
+        self.label_8.setMaximumSize(QSize(450, 16777215))
 
         self.gridLayout_2.addWidget(self.label_8, 0, 0, 1, 1)
 
@@ -215,7 +215,7 @@ class Ui_SpectralSettings(object):
         self.std_radioButton = QRadioButton(SpectralSettings)
         self.std_radioButton.setObjectName(u"std_radioButton")
         self.std_radioButton.setEnabled(True)
-        self.std_radioButton.setMinimumSize(QSize(175, 0))
+        self.std_radioButton.setMinimumSize(QSize(225, 0))
         self.std_radioButton.setMaximumSize(QSize(500, 16777215))
         self.std_radioButton.setChecked(True)
 
@@ -224,7 +224,7 @@ class Ui_SpectralSettings(object):
         self.RA_radioButton = QRadioButton(SpectralSettings)
         self.RA_radioButton.setObjectName(u"RA_radioButton")
         self.RA_radioButton.setEnabled(False)
-        self.RA_radioButton.setMinimumSize(QSize(175, 0))
+        self.RA_radioButton.setMinimumSize(QSize(225, 0))
 
         self.horizontalLayout_3.addWidget(self.RA_radioButton)
 

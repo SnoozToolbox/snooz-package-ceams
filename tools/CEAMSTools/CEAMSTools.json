@@ -233,7 +233,7 @@
         {
             "item_name": "PowerSpectralAnalysis",
             "item_type": "tool",
-            "item_version": "0.19.0",
+            "item_version": "0.19.1",
             "item_hooks": [
                 {
                     "endpoint_name": "menu_endpoint",
