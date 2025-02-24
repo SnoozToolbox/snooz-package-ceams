@@ -23,7 +23,7 @@
         {
             "item_name": "PSGReader",
             "item_type": "module",
-            "item_version": "0.12.1",
+            "item_version": "0.13.0",
             "item_hooks": [
                 {
                     "endpoint_name": "module_endpoint",
@@ -121,7 +121,7 @@
         {
             "item_name": "CsvReaderMaster",
             "item_type": "module",
-            "item_version": "1.5.0",
+            "item_version": "1.6.0",
             "item_hooks": [
                 {
                     "endpoint_name": "module_endpoint",
@@ -541,7 +541,7 @@
         {
             "item_name": "EventReader",
             "item_type": "module",
-            "item_version": "1.1.0",
+            "item_version": "1.2.0",
             "item_hooks": [
                 {
                     "endpoint_name": "module_endpoint",
@@ -863,7 +863,7 @@
         {
             "item_name": "EDFAnnotationsReader",
             "item_type": "module",
-            "item_version": "0.4.0",
+            "item_version": "0.5.0",
             "item_hooks": [
                 {
                     "endpoint_name": "module_endpoint",
