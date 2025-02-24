@@ -398,9 +398,14 @@ class PSGReaderManager:
                 List of events with a single channel in the column "channels"
 
         """
+        # Sort the events by start time
+        events1 = events1.sort_values(by=['start_sec'])
+        # Reset the index
+        events1 = events1.reset_index(drop=True)
+
         # Look for lists of channels with more than a single channel
         channels = events1['channels'].values
-        index_many_chans = [i for i, chan_lst in enumerate(channels) if len(chan_lst)>1]
+        index_many_chans = [i for i, chan_lst in enumerate(channels) if len(chan_lst)>1] # list of rows not index
         
         # Convert the list of a single channel into a string
         if len(index_many_chans)>0:
