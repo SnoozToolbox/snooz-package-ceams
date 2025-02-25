@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
  <class>OutputFileStep</class>
  <widget class="QWidget" name="OutputFileStep">
@@ -5,12 +6,15 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>726</width>
+    <width>1021</width>
     <height>642</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string />
+   <string/>
+  </property>
+  <property name="styleSheet">
+   <string>font: 12pt &quot;Roboto&quot;;</string>
   </property>
   <layout class="QHBoxLayout" name="horizontalLayout_3">
    <item>
@@ -149,7 +153,7 @@
           </size>
          </property>
          <property name="text">
-          <string> - Select "Total" to output the average through the whole recording.</string>
+          <string> - Select &quot;Total&quot; to output the average through the whole recording.</string>
          </property>
         </widget>
        </item>
@@ -169,7 +173,7 @@
           </size>
          </property>
          <property name="text">
-          <string> - Select "Distribution per sleep cycle" to output the average per sleep cycle, from sleep cycle 1 to 6.  The start point is the sleep onset.</string>
+          <string> - Select &quot;Distribution per sleep cycle&quot; to output the average power per sleep cycle,  based on the variables included in the input PSA file.</string>
          </property>
         </widget>
        </item>
@@ -182,7 +186,7 @@
           </size>
          </property>
          <property name="text">
-          <string> - Select "Distribution per hour" to output the average per real clock hour, from hour 1 to 12.  The start point is the sleep onset.</string>
+          <string> - Select &quot;Distribution per hour&quot; to output the average power for each real clock hour, based on the variables included in the input PSA file.</string>
          </property>
         </widget>
        </item>
@@ -221,7 +225,7 @@
        <item row="5" column="0" colspan="2">
         <widget class="QLabel" name="label_10">
          <property name="text">
-          <string> - Select "Distribution per annotation" to output the average per annotation. No cycle or hour information here.</string>
+          <string> - Select &quot;Distribution per annotation&quot; to output the average per annotation. No cycle or hour information here.</string>
          </property>
         </widget>
        </item>
@@ -261,10 +265,10 @@
           </size>
          </property>
          <property name="inputMask">
-          <string />
+          <string/>
          </property>
          <property name="text">
-          <string />
+          <string/>
          </property>
          <property name="placeholderText">
           <string>Choose a directory to save file ...</string>
@@ -305,8 +309,10 @@
     </layout>
    </item>
   </layout>
- <property name="styleSheet"><string>font: 12pt "Roboto";</string></property></widget>
- <resources><include location="../../../../../snooz-toolbox/src/main/python/ui/themes/themes.qrc" /></resources>
+ </widget>
+ <resources>
+  <include location="../../../../../snooz-toolbox/src/main/python/ui/themes/themes.qrc"/>
+ </resources>
  <connections>
   <connection>
    <sender>choose_pushButton</sender>

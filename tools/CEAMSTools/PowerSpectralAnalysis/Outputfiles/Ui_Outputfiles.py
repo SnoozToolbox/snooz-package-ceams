@@ -18,7 +18,7 @@ class Ui_Outputfiles(object):
     def setupUi(self, Outputfiles):
         if not Outputfiles.objectName():
             Outputfiles.setObjectName(u"Outputfiles")
-        Outputfiles.resize(920, 701)
+        Outputfiles.resize(1141, 786)
         self.verticalLayout_4 = QVBoxLayout(Outputfiles)
         self.verticalLayout_4.setObjectName(u"verticalLayout_4")
         self.label = QLabel(Outputfiles)
@@ -68,20 +68,20 @@ class Ui_Outputfiles(object):
 
         self.horizontalLayout.addWidget(self.total_checkBox)
 
-        self.plainTextEdit_tot = QPlainTextEdit(Outputfiles)
-        self.plainTextEdit_tot.setObjectName(u"plainTextEdit_tot")
+        self.textEdit_tot = QTextEdit(Outputfiles)
+        self.textEdit_tot.setObjectName(u"textEdit_tot")
         sizePolicy = QSizePolicy(QSizePolicy.Expanding, QSizePolicy.Minimum)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.plainTextEdit_tot.sizePolicy().hasHeightForWidth())
-        self.plainTextEdit_tot.setSizePolicy(sizePolicy)
-        self.plainTextEdit_tot.setMaximumSize(QSize(16777215, 16777215))
-        self.plainTextEdit_tot.setFrameShape(QFrame.HLine)
-        self.plainTextEdit_tot.setFrameShadow(QFrame.Plain)
-        self.plainTextEdit_tot.setLineWidth(0)
-        self.plainTextEdit_tot.setReadOnly(True)
+        sizePolicy.setHeightForWidth(self.textEdit_tot.sizePolicy().hasHeightForWidth())
+        self.textEdit_tot.setSizePolicy(sizePolicy)
+        self.textEdit_tot.setMaximumSize(QSize(16777215, 16777215))
+        self.textEdit_tot.setFrameShape(QFrame.HLine)
+        self.textEdit_tot.setFrameShadow(QFrame.Plain)
+        self.textEdit_tot.setLineWidth(0)
+        self.textEdit_tot.setReadOnly(True)
 
-        self.horizontalLayout.addWidget(self.plainTextEdit_tot)
+        self.horizontalLayout.addWidget(self.textEdit_tot)
 
 
         self.verticalLayout.addLayout(self.horizontalLayout)
@@ -100,21 +100,21 @@ class Ui_Outputfiles(object):
 
         self.horizontalLayout_3.addWidget(self.hour_checkBox)
 
-        self.plainTextEdit_hour = QPlainTextEdit(Outputfiles)
-        self.plainTextEdit_hour.setObjectName(u"plainTextEdit_hour")
+        self.textEdit_hour = QTextEdit(Outputfiles)
+        self.textEdit_hour.setObjectName(u"textEdit_hour")
         sizePolicy1 = QSizePolicy(QSizePolicy.Expanding, QSizePolicy.Maximum)
         sizePolicy1.setHorizontalStretch(0)
         sizePolicy1.setVerticalStretch(0)
-        sizePolicy1.setHeightForWidth(self.plainTextEdit_hour.sizePolicy().hasHeightForWidth())
-        self.plainTextEdit_hour.setSizePolicy(sizePolicy1)
-        self.plainTextEdit_hour.setMinimumSize(QSize(0, 0))
-        self.plainTextEdit_hour.setMaximumSize(QSize(16777215, 16777215))
-        self.plainTextEdit_hour.setFrameShape(QFrame.HLine)
-        self.plainTextEdit_hour.setFrameShadow(QFrame.Plain)
-        self.plainTextEdit_hour.setLineWidth(0)
-        self.plainTextEdit_hour.setReadOnly(True)
+        sizePolicy1.setHeightForWidth(self.textEdit_hour.sizePolicy().hasHeightForWidth())
+        self.textEdit_hour.setSizePolicy(sizePolicy1)
+        self.textEdit_hour.setMinimumSize(QSize(0, 0))
+        self.textEdit_hour.setMaximumSize(QSize(16777215, 16777215))
+        self.textEdit_hour.setFrameShape(QFrame.HLine)
+        self.textEdit_hour.setFrameShadow(QFrame.Plain)
+        self.textEdit_hour.setLineWidth(0)
+        self.textEdit_hour.setReadOnly(True)
 
-        self.horizontalLayout_3.addWidget(self.plainTextEdit_hour)
+        self.horizontalLayout_3.addWidget(self.textEdit_hour)
 
 
         self.verticalLayout.addLayout(self.horizontalLayout_3)
@@ -133,18 +133,18 @@ class Ui_Outputfiles(object):
 
         self.horizontalLayout_4.addWidget(self.cycle_checkBox)
 
-        self.plainTextEdit_cycle = QPlainTextEdit(Outputfiles)
-        self.plainTextEdit_cycle.setObjectName(u"plainTextEdit_cycle")
-        sizePolicy1.setHeightForWidth(self.plainTextEdit_cycle.sizePolicy().hasHeightForWidth())
-        self.plainTextEdit_cycle.setSizePolicy(sizePolicy1)
-        self.plainTextEdit_cycle.setMinimumSize(QSize(0, 0))
-        self.plainTextEdit_cycle.setMaximumSize(QSize(16777215, 16777215))
-        self.plainTextEdit_cycle.setFrameShape(QFrame.HLine)
-        self.plainTextEdit_cycle.setFrameShadow(QFrame.Plain)
-        self.plainTextEdit_cycle.setLineWidth(0)
-        self.plainTextEdit_cycle.setReadOnly(True)
+        self.textEdit_cycle = QTextEdit(Outputfiles)
+        self.textEdit_cycle.setObjectName(u"textEdit_cycle")
+        sizePolicy1.setHeightForWidth(self.textEdit_cycle.sizePolicy().hasHeightForWidth())
+        self.textEdit_cycle.setSizePolicy(sizePolicy1)
+        self.textEdit_cycle.setMinimumSize(QSize(0, 0))
+        self.textEdit_cycle.setMaximumSize(QSize(16777215, 16777215))
+        self.textEdit_cycle.setFrameShape(QFrame.HLine)
+        self.textEdit_cycle.setFrameShadow(QFrame.Plain)
+        self.textEdit_cycle.setLineWidth(0)
+        self.textEdit_cycle.setReadOnly(True)
 
-        self.horizontalLayout_4.addWidget(self.plainTextEdit_cycle)
+        self.horizontalLayout_4.addWidget(self.textEdit_cycle)
 
 
         self.verticalLayout.addLayout(self.horizontalLayout_4)
@@ -238,23 +238,44 @@ class Ui_Outputfiles(object):
         self.total_checkBox.setToolTip("")
 #endif // QT_CONFIG(tooltip)
         self.total_checkBox.setText(QCoreApplication.translate("Outputfiles", u"Total", None))
-        self.plainTextEdit_tot.setPlainText(QCoreApplication.translate("Outputfiles", u"To output the spectral power for the whole recording.\n"
-"   Warning : If \"Analyse power in sleep cycle only\" in the step \"4-Section Selection\" is checked, \n"
-"   the spectral power is computed on epochs included in a sleep cycle, so the gap between cycles are not analysed.\n"
-"   Otherwise all the recording is analysed, even before the sleep onset and after the last asleep epoch.", None))
+        self.textEdit_tot.setHtml(QCoreApplication.translate("Outputfiles", u"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
+"<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
+"p, li { white-space: pre-wrap; }\n"
+"</style></head><body style=\" font-family:'Roboto'; font-size:12pt; font-weight:400; font-style:normal;\">\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Check &quot;<span style=\" font-weight:600;\">Total</span>&quot; to output the avearge spectral power for the whole recording. <br />The average power includes only valid FFT windows (clean windows of selected stages or periods).</p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">   Warning : If &quot;Analyse power in sleep cycle"
+                        " only&quot; in the step &quot;4-Section Selection&quot; is checked, </p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">   the spectral power is computed on epochs included in a sleep cycle, so the gap between cycles are not analysed.</p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">   Otherwise all the recording is analysed, even before the sleep onset and after the last asleep epoch.</p></body></html>", None))
 #if QT_CONFIG(tooltip)
         self.hour_checkBox.setToolTip("")
 #endif // QT_CONFIG(tooltip)
         self.hour_checkBox.setText(QCoreApplication.translate("Outputfiles", u"Distribution per hour", None))
-        self.plainTextEdit_hour.setPlainText(QCoreApplication.translate("Outputfiles", u"To output the spectral power per real clock hour, from hour 1 to 12.  \n"
-"The start point is the sleep onset.\n"
-"The spectral power value is empty when the hour does not contain any data.", None))
+        self.textEdit_hour.setHtml(QCoreApplication.translate("Outputfiles", u"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
+"<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
+"p, li { white-space: pre-wrap; }\n"
+"</style></head><body style=\" font-family:'Roboto'; font-size:12pt; font-weight:400; font-style:normal;\">\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Check &quot;<span style=\" font-weight:600;\">Distribution per hour</span>&quot; to output the average spectral power for each real clock hour, starting from hour 1. <br />The average power includes only valid FFT windows (clean windows of selected stages or periods).</p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">The startin"
+                        "g point is sleep onset.</p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">The spectral power value will be empty if no data is available for a given hour <br />(e.g., if only N2 is selected and there are no N2 stages in the first hour, the reported power will be empty).</p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">The maximum clock hour included in the report is defined in the optional settings under &quot;<span style=\" font-weight:600;\">Hours and Cycles</span>&quot;.</p></body></html>", None))
 #if QT_CONFIG(tooltip)
         self.cycle_checkBox.setToolTip("")
 #endif // QT_CONFIG(tooltip)
         self.cycle_checkBox.setText(QCoreApplication.translate("Outputfiles", u"Distribution per sleep cycle", None))
-        self.plainTextEdit_cycle.setPlainText(QCoreApplication.translate("Outputfiles", u"To output the spectral power per sleep cycle, from sleep cycle 1 to 6.\n"
-"The spectral power value is empty when the cycle does not exist.", None))
+        self.textEdit_cycle.setHtml(QCoreApplication.translate("Outputfiles", u"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
+"<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
+"p, li { white-space: pre-wrap; }\n"
+"</style></head><body style=\" font-family:'Roboto'; font-size:12pt; font-weight:400; font-style:normal;\">\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Check &quot;<span style=\" font-weight:600;\">Distribution per sleep cycle</span>&quot; to output the average spectral power for each sleep cycle, starting from cycle 1. </p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">The average power includes only valid FFT windows (clean windows of selected stages or periods).</p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
+"<p s"
+                        "tyle=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">The spectral power value will be empty if the cycle does not exist.</p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">The maximum number of cycles included in the report is defined in the optional settings under &quot;<span style=\" font-weight:600;\">Hours and Cycles</span>&quot;.</p></body></html>", None))
 #if QT_CONFIG(tooltip)
         self.radioButton_annot.setToolTip(QCoreApplication.translate("Outputfiles", u"To enable the radio button go to the Section Selection Step.", None))
 #endif // QT_CONFIG(tooltip)

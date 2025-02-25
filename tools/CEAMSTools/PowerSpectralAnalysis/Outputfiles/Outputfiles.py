@@ -138,9 +138,9 @@ class Outputfiles(BaseStepView, Ui_Outputfiles, QtWidgets.QWidget):
         self.total_checkBox.setEnabled(not annot_label)
         self.hour_checkBox.setEnabled(not annot_label)
         self.cycle_checkBox.setEnabled(not annot_label)
-        self.plainTextEdit_tot.setEnabled(not annot_label)
-        self.plainTextEdit_hour.setEnabled(not annot_label)
-        self.plainTextEdit_cycle.setEnabled(not annot_label)
+        self.textEdit_tot.setEnabled(not annot_label)
+        self.textEdit_hour.setEnabled(not annot_label)
+        self.textEdit_cycle.setEnabled(not annot_label)
 
         self.radioButton_annot.setEnabled(True)
         self.radioButton_annot.setChecked(annot_label)

@@ -18,7 +18,7 @@ class Ui_OutputFileStep(object):
     def setupUi(self, OutputFileStep):
         if not OutputFileStep.objectName():
             OutputFileStep.setObjectName(u"OutputFileStep")
-        OutputFileStep.resize(726, 642)
+        OutputFileStep.resize(1021, 642)
         self.horizontalLayout_3 = QHBoxLayout(OutputFileStep)
         self.horizontalLayout_3.setObjectName(u"horizontalLayout_3")
         self.verticalLayout = QVBoxLayout()
@@ -176,8 +176,8 @@ class Ui_OutputFileStep(object):
         self.export_transpose_checkBox.setText(QCoreApplication.translate("OutputFileStep", u"Export transposed PSA file", None))
         self.label_5.setText(QCoreApplication.translate("OutputFileStep", u" - Select \"Total\" to output the average through the whole recording.", None))
         self.label_9.setText(QCoreApplication.translate("OutputFileStep", u"When the PSA activity is computed per frequency band and annotation : ", None))
-        self.label_7.setText(QCoreApplication.translate("OutputFileStep", u" - Select \"Distribution per sleep cycle\" to output the average per sleep cycle, from sleep cycle 1 to 6.  The start point is the sleep onset.", None))
-        self.label_6.setText(QCoreApplication.translate("OutputFileStep", u" - Select \"Distribution per hour\" to output the average per real clock hour, from hour 1 to 12.  The start point is the sleep onset.", None))
+        self.label_7.setText(QCoreApplication.translate("OutputFileStep", u" - Select \"Distribution per sleep cycle\" to output the average power per sleep cycle,  based on the variables included in the input PSA file.", None))
+        self.label_6.setText(QCoreApplication.translate("OutputFileStep", u" - Select \"Distribution per hour\" to output the average power for each real clock hour, based on the variables included in the input PSA file.", None))
         self.label.setText(QCoreApplication.translate("OutputFileStep", u"Activity variables exported in the transposed PSA file", None))
         self.label_4.setText(QCoreApplication.translate("OutputFileStep", u"When the PSA activity is computed per frequency band and sleep stage :", None))
         self.label_10.setText(QCoreApplication.translate("OutputFileStep", u" - Select \"Distribution per annotation\" to output the average per annotation. No cycle or hour information here.", None))
