@@ -37,15 +37,10 @@ class SpindleDetectorSelStep( BaseStepView,  Ui_SpindleDetectorSelStep, QtWidget
         self._node_id_FilterEvents_anal = "8bb37834-1a4d-4632-a729-d4f69234348c" # filter spindle event when we just analyze
         self._node_id_SleepStageEvent = "6323a842-eb2b-47cd-b444-d299d0d6f2df" # provide in which sleep stage we detect spindles
         self._node_id_DiscardEvents = "98cd55c4-2e21-42b1-abcb-21c89e76e677" # provide artefact/spindle to discard
-        # Special case for A4
-        self._node_id_PreciseEvents = "28e85302-3f3a-4f98-83d9-4c688ea363be" # provide length limit (test again after precision)
         # modules to bypass if we dont detect spindles
         self._node_id_FilterSignal = "fcf58c9f-1ad0-4bd5-bb47-228ac8b5ab91" 
         self._node_id_ResetSignalArtefact_NaN = "a91be608-8be8-4f87-92f7-d2f83a759d8c" 
-        self._node_id_MovingRMS = "232290f6-ff23-429c-93f1-a89c6883e339"
-        self._node_id_AmplitudeDet_a4 = "9f38f4fc-d407-462e-b961-17e9b977f4b5"
-        self._node_id_WindowsToSamples = "9c724288-9975-4502-8012-3ae04fb007ec"
-        self._node_id_ThresholdComputation = "ae29d9c1-d46a-452b-bae2-d2caee253e39"
+        self._node_id_SpindleDetA7 = "72b146ad-eca2-41b5-9994-87177883020e"
 
         # Subscribe to the publisher for each node you want to talk to
         self._stages_topic = f'{self._node_id_SleepStageEvent}.stages'
@@ -60,10 +55,6 @@ class SpindleDetectorSelStep( BaseStepView,  Ui_SpindleDetectorSelStep, QtWidget
         self._pub_sub_manager.subscribe(self, self._min_len_topic)        
         self._max_len_topic = f'{self._node_id_DiscardEvents}.max_len_sec'
         self._pub_sub_manager.subscribe(self, self._max_len_topic)
-        self._min_len_topic_a4 = f'{self._node_id_PreciseEvents}.min_len_sec'
-        self._pub_sub_manager.subscribe(self, self._min_len_topic_a4)        
-        self._max_len_topic_a4 = f'{self._node_id_PreciseEvents}.max_len_sec'
-        self._pub_sub_manager.subscribe(self, self._max_len_topic_a4)     
         self._spindle_param_gen_det_topic = f'{self._node_id_SpindleDetails_det}.spindle_gen_param'
         self._pub_sub_manager.subscribe(self, self._spindle_param_gen_det_topic)    
         self._spindle_param_gen_anal_topic = f'{self._node_id_SpindleDetails_anal}.spindle_gen_param'
@@ -89,11 +80,10 @@ class SpindleDetectorSelStep( BaseStepView,  Ui_SpindleDetectorSelStep, QtWidget
         self._pub_sub_manager.publish(self, self._max_len_topic, 'ping')
         self._pub_sub_manager.publish(self, self._spindle_param_gen_det_topic, 'ping')
         
-        self._pub_sub_manager.publish(self, self._node_id_AmplitudeDet_a4+".get_activation_state", None)
+        self._pub_sub_manager.publish(self, self._node_id_SpindleDetA7+".get_activation_state", None)
         self._pub_sub_manager.publish(self, self._node_id_SpindleDetails_det+".get_activation_state", None)
         self._pub_sub_manager.publish(self, self._node_id_SpindleDetails_anal+".get_activation_state", None)
         self._pub_sub_manager.publish(self, self._node_id_FilterEvents_anal+".get_activation_state", None)
-        self._pub_sub_manager.publish(self, self._node_id_ThresholdComputation+".get_activation_state", None)
         
     
     # Called when the user clic on RUN
@@ -124,19 +114,13 @@ class SpindleDetectorSelStep( BaseStepView,  Ui_SpindleDetectorSelStep, QtWidget
         self._pub_sub_manager.publish(self, self._exclude_nremp_topic, str(int(self.checkBox_excl_nremp.isChecked())))
         self._pub_sub_manager.publish(self, self._exclude_remp_topic, str(int(self.checkBox_excl_remp.isChecked())))
         self._pub_sub_manager.publish(self, self._in_cycle_topic, str(int(self.checkBox_only_cycles.isChecked())))
-        #self._context_manager[SpindleDetectorSelStep.context_in_cycle] = self.checkBox_only_cycles.isChecked()
         self._pub_sub_manager.publish(self, self._min_len_topic, self.min_length_lineEdit.text())
         self._pub_sub_manager.publish(self, self._max_len_topic, self.max_length_lineEdit.text())
-        self._pub_sub_manager.publish(self, self._min_len_topic_a4, self.min_length_lineEdit.text())
-        self._pub_sub_manager.publish(self, self._max_len_topic_a4, self.max_length_lineEdit.text())
         
         if self.radioButton_detect_spindle.isChecked():
             self._pub_sub_manager.publish(self, self._node_id_FilterSignal+".activation_state_change",ActivationState.ACTIVATED)
             self._pub_sub_manager.publish(self, self._node_id_ResetSignalArtefact_NaN+".activation_state_change",ActivationState.ACTIVATED)
-            self._pub_sub_manager.publish(self, self._node_id_MovingRMS+".activation_state_change",ActivationState.ACTIVATED)
-            self._pub_sub_manager.publish(self, self._node_id_WindowsToSamples+".activation_state_change", ActivationState.ACTIVATED)
-            self._pub_sub_manager.publish(self, self._node_id_AmplitudeDet_a4+".activation_state_change", ActivationState.ACTIVATED)
-            self._pub_sub_manager.publish(self, self._node_id_ThresholdComputation+".activation_state_change", ActivationState.ACTIVATED)
+            self._pub_sub_manager.publish(self, self._node_id_SpindleDetA7+".activation_state_change", ActivationState.ACTIVATED)
             
             self._pub_sub_manager.publish(self, self._node_id_SpindleDetails_anal+".activation_state_change", ActivationState.DEACTIVATED)
             self._pub_sub_manager.publish(self, self._node_id_SpindleDetails_det+".activation_state_change", ActivationState.ACTIVATED)
@@ -145,10 +129,7 @@ class SpindleDetectorSelStep( BaseStepView,  Ui_SpindleDetectorSelStep, QtWidget
         if self.radioButto_analyse_spindle.isChecked():
             self._pub_sub_manager.publish(self, self._node_id_FilterSignal+".activation_state_change", ActivationState.BYPASS)   
             self._pub_sub_manager.publish(self, self._node_id_ResetSignalArtefact_NaN+".activation_state_change", ActivationState.BYPASS)   
-            self._pub_sub_manager.publish(self, self._node_id_MovingRMS+".activation_state_change", ActivationState.BYPASS)
-            self._pub_sub_manager.publish(self, self._node_id_WindowsToSamples+".activation_state_change", ActivationState.BYPASS)
-            self._pub_sub_manager.publish(self, self._node_id_AmplitudeDet_a4+".activation_state_change", ActivationState.BYPASS)
-            self._pub_sub_manager.publish(self, self._node_id_ThresholdComputation+".activation_state_change", ActivationState.BYPASS)
+            self._pub_sub_manager.publish(self, self._node_id_SpindleDetA7+".activation_state_change", ActivationState.BYPASS)
                 
             self._pub_sub_manager.publish(self, self._node_id_SpindleDetails_det+".activation_state_change", ActivationState.DEACTIVATED)
             self._pub_sub_manager.publish(self, self._node_id_SpindleDetails_anal+".activation_state_change", ActivationState.ACTIVATED)
@@ -188,7 +169,7 @@ class SpindleDetectorSelStep( BaseStepView,  Ui_SpindleDetectorSelStep, QtWidget
         if topic == self._spindle_param_gen_det_topic:
             if not message=='':
                 self._spindle_det_param = eval(message)
-        if topic == self._node_id_AmplitudeDet_a4+".get_activation_state":
+        if topic == self._node_id_SpindleDetA7+".get_activation_state":
             if message == ActivationState.ACTIVATED:
                 self.radioButton_detect_spindle.setChecked(True)
                 self.radio_button_slot()
