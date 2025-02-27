@@ -220,7 +220,5 @@ class SpindleDetectorSelStep( BaseStepView,  Ui_SpindleDetectorSelStep, QtWidget
             self._pub_sub_manager.unsubscribe(self, self._in_cycle_topic)
             self._pub_sub_manager.unsubscribe(self, self._min_len_topic)
             self._pub_sub_manager.unsubscribe(self, self._max_len_topic)
-            self._pub_sub_manager.unsubscribe(self, self._min_len_topic_a4)
-            self._pub_sub_manager.unsubscribe(self, self._max_len_topic_a4)
             self._pub_sub_manager.unsubscribe(self, self._spindle_param_gen_det_topic)
             self._pub_sub_manager.unsubscribe(self, self._spindle_param_gen_anal_topic)

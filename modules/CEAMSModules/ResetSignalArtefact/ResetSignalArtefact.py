@@ -244,8 +244,9 @@ class ResetSignalArtefact(SciNode):
                                         if alpha_turkey>0.5:
                                             alpha_turkey=0.5                                        
                                         if signal_values=='0':
+                                            #print(f"evt_start={evt_start}")
                                             scaling_win = 1-(sci.windows.tukey(length_win, alpha=alpha_turkey))
-                                            start_slope_end = int(round(length_win-length_win/2*alpha_turkey))
+                                            start_slope_end = length_win-int(round(length_win/2*alpha_turkey))
                                             scaling_win[start_slope_end:] = np.zeros(int(round(length_win/2*alpha_turkey)))
                                             signals_out[sel].samples[start_i:] = signals_out[sel].samples[start_i:]*scaling_win
                                         elif signal_values == 'NaN':
