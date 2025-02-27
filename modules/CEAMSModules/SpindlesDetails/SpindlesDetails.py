@@ -321,6 +321,9 @@ class SpindlesDetails(SciNode):
             sel_spindle_param['thresh_rel_sigma_pow_z'] = spindle_sel_param['thresh_rel_sigma_pow_z']
             sel_spindle_param['thresh_sigma_cov_z'] = spindle_sel_param['thresh_sigma_cov_z']
             sel_spindle_param['thresh_sigma_cor_perc'] = spindle_sel_param['thresh_sigma_cor_perc']        
+        if 'sumo' in sel_spindle_param['spindle_event_name'].lower():
+            # SUMO does not require threshold parameters, so we simply accept it and do nothing
+            pass   
         else:
             raise NodeRuntimeException(self.identifier, "spindle_sel_param", \
                 f"SpindlesDetails The event label name for the spindles needs to include a4/a7 or martin/lacourse.") 

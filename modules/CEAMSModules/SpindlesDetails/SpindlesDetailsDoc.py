@@ -67,6 +67,11 @@ def _get_doc(N_CYCLE, spindle_event_name):
                 'thresh_sigma_cov_z' : 'Threshold (z-score) for the sigma covariance between the broad band (EEGbf) and the sigma (EEGs) signal (z(log10(cov(EEGbf, EEGs))))',
                 'thresh_sigma_cor_perc' : 'Threshold (percentile) for the sigma correlation between the broad band (EEGbf) and the sigma (EEGs) signal cov(EEGbf, EEGs)/(std(EEGbf)*std(EEGs))',
         }
+    elif ('sumo' in spindle_event_name.lower()):
+        algo_dict = \
+        {
+                'spindle_event_name' : 'Spindle event name (specific to the detection algorithm).',
+        }
     general_dict_2 = \
     {
             'artefact_group_name_list' : 'List of groups and names of the artifact excluded from the spindle detection',
