@@ -135,7 +135,7 @@
         {
             "item_name": "ResetSignalArtefact",
             "item_type": "module",
-            "item_version": "0.5.0",
+            "item_version": "0.6.0",
             "item_hooks": [
                 {
                     "endpoint_name": "module_endpoint",
