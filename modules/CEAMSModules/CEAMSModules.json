@@ -915,6 +915,20 @@
                     }
                 }
             ]
+        },
+        {
+            "item_name": "SignalStats",
+            "item_type": "module",
+            "item_version": "0.0.0",
+            "item_hooks": [
+                {
+                    "endpoint_name": "module_endpoint",
+                    "parameters": {
+                        "module_category": "Statistics",
+                        "module_label": "Signal Stats"
+                    }
+                }
+            ]
         }
     ]
 }
