@@ -327,6 +327,20 @@
                     }
                 }
             ]
+        },
+        {
+            "item_name": "SpindleDetectionSumo",
+            "item_type": "tool",
+            "item_version": "0.0.0",
+            "item_hooks": [
+                {
+                    "endpoint_name": "menu_endpoint",
+                    "parameters": {
+                        "menu_category": "2-Processing",
+                        "menu_label": "Spindle Detection SUMO"
+                    }
+                }
+            ]
         }
     ]
 }
