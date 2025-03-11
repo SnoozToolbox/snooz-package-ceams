@@ -72,12 +72,7 @@
         {
             "package_name": "CEAMSModules",
             "package_version": "6.12.0"
-        },
-        {
-            "package_name": "ValidateSnoozTools",
-            "package_version": "0.0.0",
-            "deleteable": false
-        }   
+        }
     ],
     "process_params": {
         "process_label": "Spindle Detection Sumo",
