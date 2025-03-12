@@ -1,7 +1,7 @@
 {
     "item_name": "SpindleDetectionA7",
     "item_type": "tool",
-    "item_api_version": "1.0.0",
+    "item_api_version": "2.0.0",
     "item_url": "",
     "item_author": "",
     "item_description": "",
@@ -76,12 +76,12 @@
     "dependencies": [
         {
             "package_name": "CEAMSTools",
-            "package_version": "6.12.0",
+            "package_version": "7.0.0",
             "deleteable": false
         },
         {
             "package_name": "CEAMSModules",
-            "package_version": "6.12.0"
+            "package_version": "7.0.0"
         }
     ],
     "process_params": {

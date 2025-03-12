@@ -1,7 +1,7 @@
 {
     "package_name": "CEAMSApps",
-    "package_version": "0.0.1",
-    "package_api_version": "1.0.0",
+    "package_version": "7.0.0",
+    "package_api_version": "2.0.0",
     "package_author": "",
     "package_url": "",
     "package_description": "",
@@ -9,7 +9,7 @@
         {
             "item_name": "Oximeter",
             "item_type": "app",
-            "item_version": "0.0.1",
+            "item_version": "2.0.0",
             "item_hooks": [
                 {
                     "endpoint_name": "menu_endpoint",
