@@ -72,12 +72,7 @@
         {
             "package_name": "CEAMSModules",
             "package_version": "6.12.0"
-        },
-        {
-            "package_name": "ValidateSnoozTools",
-            "package_version": "0.0.0",
-            "deleteable": false
-        }   
+        }
     ],
     "process_params": {
         "process_label": "Spindle Detection Sumo",
@@ -1217,11 +1212,7 @@
                     "spindle_sel_param": {
                         "name": "spindle_sel_param",
                         "value": {
-                            "spindle_name": "a7",
-                            "thresh_abs_sigma_pow_uv2": 1.25,
-                            "thresh_rel_sigma_pow_z": 1.6,
-                            "thresh_sigma_cov_z": 1.3,
-                            "thresh_sigma_cor_perc": 69.0
+                            "spindle_name": "sumo"
                         },
                         "sub_plugs": {},
                         "connections": {}
@@ -1332,11 +1323,7 @@
                     "spindle_sel_param": {
                         "name": "spindle_sel_param",
                         "value": {
-                            "spindle_name": "a7",
-                            "thresh_abs_sigma_pow_uv2": 1.25,
-                            "thresh_rel_sigma_pow_z": 1.6,
-                            "thresh_sigma_cov_z": 1.3,
-                            "thresh_sigma_cor_perc": 69.0
+                            "spindle_name": "sumo"
                         },
                         "sub_plugs": {},
                         "connections": {}
