@@ -1,151 +1,230 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file '/media/DATADRIVE/gitRepos/ceams-carsm/CEAMS/snooz-toolbox/src/main/python/plugins/AmplitudeVarDetector/Ui_AmplitudeVarDetectorSettingsView.ui'
-#
-# Created by: PyQt5 UI code generator 5.9.2
-#
-# WARNING! All changes made in this file will be lost!
+################################################################################
+## Form generated from reading UI file ''
+##
+## Created by: Qt User Interface Compiler version 6.8.2
+##
+## WARNING! All changes made in this file will be lost when recompiling UI file!
+################################################################################
 
-from qtpy import QtCore, QtGui, QtWidgets
+from PySide6.QtCore import (QCoreApplication, QDate, QDateTime, QLocale,
+    QMetaObject, QObject, QPoint, QRect,
+    QSize, QTime, QUrl, Qt)
+from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
+    QFont, QFontDatabase, QGradient, QIcon,
+    QImage, QKeySequence, QLinearGradient, QPainter,
+    QPalette, QPixmap, QRadialGradient, QTransform)
+from PySide6.QtWidgets import (QApplication, QComboBox, QGridLayout, QLabel,
+    QLineEdit, QSizePolicy, QSpacerItem, QVBoxLayout,
+    QWidget)
 
 class Ui_AmplitudeVarDetectorSettingsView(object):
     def setupUi(self, AmplitudeVarDetectorSettingsView):
-        AmplitudeVarDetectorSettingsView.setObjectName("AmplitudeVarDetectorSettingsView")
+        if not AmplitudeVarDetectorSettingsView.objectName():
+            AmplitudeVarDetectorSettingsView.setObjectName(u"AmplitudeVarDetectorSettingsView")
         AmplitudeVarDetectorSettingsView.resize(417, 273)
-        AmplitudeVarDetectorSettingsView.setToolTip("")
-        self.verticalLayout = QtWidgets.QVBoxLayout(AmplitudeVarDetectorSettingsView)
-        self.verticalLayout.setObjectName("verticalLayout")
-        self.label_5 = QtWidgets.QLabel(AmplitudeVarDetectorSettingsView)
-        font = QtGui.QFont()
+        self.verticalLayout = QVBoxLayout(AmplitudeVarDetectorSettingsView)
+        self.verticalLayout.setObjectName(u"verticalLayout")
+        self.label_5 = QLabel(AmplitudeVarDetectorSettingsView)
+        self.label_5.setObjectName(u"label_5")
+        font = QFont()
         font.setBold(True)
-        font.setWeight(75)
         self.label_5.setFont(font)
-        self.label_5.setLayoutDirection(QtCore.Qt.LeftToRight)
-        self.label_5.setAlignment(QtCore.Qt.AlignLeading|QtCore.Qt.AlignLeft|QtCore.Qt.AlignVCenter)
-        self.label_5.setObjectName("label_5")
+        self.label_5.setLayoutDirection(Qt.LeftToRight)
+        self.label_5.setAlignment(Qt.AlignLeading|Qt.AlignLeft|Qt.AlignVCenter)
+
         self.verticalLayout.addWidget(self.label_5)
-        self.gridLayout = QtWidgets.QGridLayout()
-        self.gridLayout.setObjectName("gridLayout")
-        self.label = QtWidgets.QLabel(AmplitudeVarDetectorSettingsView)
-        self.label.setLayoutDirection(QtCore.Qt.LeftToRight)
-        self.label.setAlignment(QtCore.Qt.AlignRight|QtCore.Qt.AlignTrailing|QtCore.Qt.AlignVCenter)
-        self.label.setObjectName("label")
+
+        self.gridLayout = QGridLayout()
+        self.gridLayout.setObjectName(u"gridLayout")
+        self.label = QLabel(AmplitudeVarDetectorSettingsView)
+        self.label.setObjectName(u"label")
+        self.label.setLayoutDirection(Qt.LeftToRight)
+        self.label.setAlignment(Qt.AlignRight|Qt.AlignTrailing|Qt.AlignVCenter)
+
         self.gridLayout.addWidget(self.label, 1, 0, 1, 1)
-        self.event_name_lineedit = QtWidgets.QLineEdit(AmplitudeVarDetectorSettingsView)
-        self.event_name_lineedit.setObjectName("event_name_lineedit")
+
+        self.event_name_lineedit = QLineEdit(AmplitudeVarDetectorSettingsView)
+        self.event_name_lineedit.setObjectName(u"event_name_lineedit")
+
         self.gridLayout.addWidget(self.event_name_lineedit, 1, 1, 1, 2)
-        self.label_2 = QtWidgets.QLabel(AmplitudeVarDetectorSettingsView)
-        self.label_2.setLayoutDirection(QtCore.Qt.LeftToRight)
-        self.label_2.setAlignment(QtCore.Qt.AlignRight|QtCore.Qt.AlignTrailing|QtCore.Qt.AlignVCenter)
-        self.label_2.setObjectName("label_2")
+
+        self.label_2 = QLabel(AmplitudeVarDetectorSettingsView)
+        self.label_2.setObjectName(u"label_2")
+        self.label_2.setLayoutDirection(Qt.LeftToRight)
+        self.label_2.setAlignment(Qt.AlignRight|Qt.AlignTrailing|Qt.AlignVCenter)
+
         self.gridLayout.addWidget(self.label_2, 2, 0, 1, 1)
-        self.win_length_lineedit = QtWidgets.QLineEdit(AmplitudeVarDetectorSettingsView)
-        self.win_length_lineedit.setText("")
-        self.win_length_lineedit.setObjectName("win_length_lineedit")
+
+        self.win_length_lineedit = QLineEdit(AmplitudeVarDetectorSettingsView)
+        self.win_length_lineedit.setObjectName(u"win_length_lineedit")
+
         self.gridLayout.addWidget(self.win_length_lineedit, 2, 1, 1, 2)
-        self.label_3 = QtWidgets.QLabel(AmplitudeVarDetectorSettingsView)
-        self.label_3.setLayoutDirection(QtCore.Qt.LeftToRight)
-        self.label_3.setAlignment(QtCore.Qt.AlignRight|QtCore.Qt.AlignTrailing|QtCore.Qt.AlignVCenter)
-        self.label_3.setObjectName("label_3")
+
+        self.label_3 = QLabel(AmplitudeVarDetectorSettingsView)
+        self.label_3.setObjectName(u"label_3")
+        self.label_3.setLayoutDirection(Qt.LeftToRight)
+        self.label_3.setAlignment(Qt.AlignRight|Qt.AlignTrailing|Qt.AlignVCenter)
+
         self.gridLayout.addWidget(self.label_3, 3, 0, 1, 1)
-        self.win_step_lineedit = QtWidgets.QLineEdit(AmplitudeVarDetectorSettingsView)
-        self.win_step_lineedit.setObjectName("win_step_lineedit")
+
+        self.win_step_lineedit = QLineEdit(AmplitudeVarDetectorSettingsView)
+        self.win_step_lineedit.setObjectName(u"win_step_lineedit")
+
         self.gridLayout.addWidget(self.win_step_lineedit, 3, 1, 1, 2)
-        self.label_6 = QtWidgets.QLabel(AmplitudeVarDetectorSettingsView)
-        self.label_6.setLayoutDirection(QtCore.Qt.LeftToRight)
-        self.label_6.setAlignment(QtCore.Qt.AlignRight|QtCore.Qt.AlignTrailing|QtCore.Qt.AlignVCenter)
-        self.label_6.setObjectName("label_6")
+
+        self.label_6 = QLabel(AmplitudeVarDetectorSettingsView)
+        self.label_6.setObjectName(u"label_6")
+        self.label_6.setLayoutDirection(Qt.LeftToRight)
+        self.label_6.setAlignment(Qt.AlignRight|Qt.AlignTrailing|Qt.AlignVCenter)
+
         self.gridLayout.addWidget(self.label_6, 4, 0, 1, 1)
-        self.baseline_win_len_lineedit = QtWidgets.QLineEdit(AmplitudeVarDetectorSettingsView)
-        self.baseline_win_len_lineedit.setText("")
-        self.baseline_win_len_lineedit.setObjectName("baseline_win_len_lineedit")
+
+        self.baseline_win_len_lineedit = QLineEdit(AmplitudeVarDetectorSettingsView)
+        self.baseline_win_len_lineedit.setObjectName(u"baseline_win_len_lineedit")
+
         self.gridLayout.addWidget(self.baseline_win_len_lineedit, 4, 1, 1, 2)
-        self.label_4 = QtWidgets.QLabel(AmplitudeVarDetectorSettingsView)
-        self.label_4.setAlignment(QtCore.Qt.AlignRight|QtCore.Qt.AlignTrailing|QtCore.Qt.AlignVCenter)
-        self.label_4.setObjectName("label_4")
+
+        self.label_4 = QLabel(AmplitudeVarDetectorSettingsView)
+        self.label_4.setObjectName(u"label_4")
+        self.label_4.setAlignment(Qt.AlignRight|Qt.AlignTrailing|Qt.AlignVCenter)
+
         self.gridLayout.addWidget(self.label_4, 5, 0, 1, 1)
-        self.pad_lineEdit = QtWidgets.QLineEdit(AmplitudeVarDetectorSettingsView)
-        self.pad_lineEdit.setObjectName("pad_lineEdit")
+
+        self.pad_lineEdit = QLineEdit(AmplitudeVarDetectorSettingsView)
+        self.pad_lineEdit.setObjectName(u"pad_lineEdit")
+
         self.gridLayout.addWidget(self.pad_lineEdit, 5, 1, 1, 2)
-        self.label_7 = QtWidgets.QLabel(AmplitudeVarDetectorSettingsView)
-        self.label_7.setLayoutDirection(QtCore.Qt.LeftToRight)
-        self.label_7.setAlignment(QtCore.Qt.AlignRight|QtCore.Qt.AlignTrailing|QtCore.Qt.AlignVCenter)
-        self.label_7.setObjectName("label_7")
+
+        self.label_7 = QLabel(AmplitudeVarDetectorSettingsView)
+        self.label_7.setObjectName(u"label_7")
+        self.label_7.setLayoutDirection(Qt.LeftToRight)
+        self.label_7.setAlignment(Qt.AlignRight|Qt.AlignTrailing|Qt.AlignVCenter)
+
         self.gridLayout.addWidget(self.label_7, 6, 0, 1, 1)
-        self.tresholdval_lineedit = QtWidgets.QLineEdit(AmplitudeVarDetectorSettingsView)
-        self.tresholdval_lineedit.setText("")
-        self.tresholdval_lineedit.setObjectName("tresholdval_lineedit")
+
+        self.tresholdval_lineedit = QLineEdit(AmplitudeVarDetectorSettingsView)
+        self.tresholdval_lineedit.setObjectName(u"tresholdval_lineedit")
+
         self.gridLayout.addWidget(self.tresholdval_lineedit, 6, 1, 1, 2)
-        self.label_8 = QtWidgets.QLabel(AmplitudeVarDetectorSettingsView)
-        self.label_8.setLayoutDirection(QtCore.Qt.LeftToRight)
-        self.label_8.setAlignment(QtCore.Qt.AlignRight|QtCore.Qt.AlignTrailing|QtCore.Qt.AlignVCenter)
-        self.label_8.setObjectName("label_8")
+
+        self.label_8 = QLabel(AmplitudeVarDetectorSettingsView)
+        self.label_8.setObjectName(u"label_8")
+        self.label_8.setLayoutDirection(Qt.LeftToRight)
+        self.label_8.setAlignment(Qt.AlignRight|Qt.AlignTrailing|Qt.AlignVCenter)
+
         self.gridLayout.addWidget(self.label_8, 7, 0, 1, 1)
-        self.threshBeha_comboBox = QtWidgets.QComboBox(AmplitudeVarDetectorSettingsView)
-        self.threshBeha_comboBox.setObjectName("threshBeha_comboBox")
+
+        self.threshBeha_comboBox = QComboBox(AmplitudeVarDetectorSettingsView)
         self.threshBeha_comboBox.addItem("")
         self.threshBeha_comboBox.addItem("")
+        self.threshBeha_comboBox.setObjectName(u"threshBeha_comboBox")
+
         self.gridLayout.addWidget(self.threshBeha_comboBox, 7, 1, 1, 1)
-        self.threshUnit_comboBox = QtWidgets.QComboBox(AmplitudeVarDetectorSettingsView)
-        self.threshUnit_comboBox.setObjectName("threshUnit_comboBox")
+
+        self.threshUnit_comboBox = QComboBox(AmplitudeVarDetectorSettingsView)
         self.threshUnit_comboBox.addItem("")
         self.threshUnit_comboBox.addItem("")
         self.threshUnit_comboBox.addItem("")
         self.threshUnit_comboBox.addItem("")
+        self.threshUnit_comboBox.setObjectName(u"threshUnit_comboBox")
+
         self.gridLayout.addWidget(self.threshUnit_comboBox, 7, 2, 1, 1)
-        self.label_9 = QtWidgets.QLabel(AmplitudeVarDetectorSettingsView)
-        self.label_9.setLayoutDirection(QtCore.Qt.LeftToRight)
-        self.label_9.setAlignment(QtCore.Qt.AlignRight|QtCore.Qt.AlignTrailing|QtCore.Qt.AlignVCenter)
-        self.label_9.setObjectName("label_9")
+
+        self.label_9 = QLabel(AmplitudeVarDetectorSettingsView)
+        self.label_9.setObjectName(u"label_9")
+        self.label_9.setLayoutDirection(Qt.LeftToRight)
+        self.label_9.setAlignment(Qt.AlignRight|Qt.AlignTrailing|Qt.AlignVCenter)
+
         self.gridLayout.addWidget(self.label_9, 8, 0, 1, 1)
-        self.chan_det_info_lineedit = QtWidgets.QLineEdit(AmplitudeVarDetectorSettingsView)
-        self.chan_det_info_lineedit.setText("")
-        self.chan_det_info_lineedit.setObjectName("chan_det_info_lineedit")
+
+        self.chan_det_info_lineedit = QLineEdit(AmplitudeVarDetectorSettingsView)
+        self.chan_det_info_lineedit.setObjectName(u"chan_det_info_lineedit")
+
         self.gridLayout.addWidget(self.chan_det_info_lineedit, 8, 1, 1, 2)
-        self.label_10 = QtWidgets.QLabel(AmplitudeVarDetectorSettingsView)
-        self.label_10.setAlignment(QtCore.Qt.AlignRight|QtCore.Qt.AlignTrailing|QtCore.Qt.AlignVCenter)
-        self.label_10.setObjectName("label_10")
+
+        self.label_10 = QLabel(AmplitudeVarDetectorSettingsView)
+        self.label_10.setObjectName(u"label_10")
+        self.label_10.setAlignment(Qt.AlignRight|Qt.AlignTrailing|Qt.AlignVCenter)
+
         self.gridLayout.addWidget(self.label_10, 0, 0, 1, 1)
-        self.group_lineedit = QtWidgets.QLineEdit(AmplitudeVarDetectorSettingsView)
-        self.group_lineedit.setObjectName("group_lineedit")
+
+        self.group_lineedit = QLineEdit(AmplitudeVarDetectorSettingsView)
+        self.group_lineedit.setObjectName(u"group_lineedit")
+
         self.gridLayout.addWidget(self.group_lineedit, 0, 1, 1, 2)
+
+
         self.verticalLayout.addLayout(self.gridLayout)
-        spacerItem = QtWidgets.QSpacerItem(336, 11, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
-        self.verticalLayout.addItem(spacerItem)
+
+        self.verticalSpacer = QSpacerItem(336, 11, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
+
+        self.verticalLayout.addItem(self.verticalSpacer)
+
 
         self.retranslateUi(AmplitudeVarDetectorSettingsView)
-        QtCore.QMetaObject.connectSlotsByName(AmplitudeVarDetectorSettingsView)
+
+        QMetaObject.connectSlotsByName(AmplitudeVarDetectorSettingsView)
+    # setupUi
 
     def retranslateUi(self, AmplitudeVarDetectorSettingsView):
-        _translate = QtCore.QCoreApplication.translate
-        AmplitudeVarDetectorSettingsView.setWindowTitle(_translate("AmplitudeVarDetectorSettingsView", "Form"))
-        self.label_5.setText(_translate("AmplitudeVarDetectorSettingsView", "Amplitude Detector settings"))
-        self.label.setText(_translate("AmplitudeVarDetectorSettingsView", "Event name"))
-        self.label_2.setText(_translate("AmplitudeVarDetectorSettingsView", "Window length (s)"))
-        self.win_length_lineedit.setToolTip(_translate("AmplitudeVarDetectorSettingsView", "The window length (in second) used to compute the amplitude variation."))
-        self.label_3.setText(_translate("AmplitudeVarDetectorSettingsView", "Window step (s)"))
-        self.win_step_lineedit.setToolTip(_translate("AmplitudeVarDetectorSettingsView", "The window step (in seconds) between two amplitude variation calculations."))
-        self.label_6.setText(_translate("AmplitudeVarDetectorSettingsView", "Baseline window length (s)"))
-        self.baseline_win_len_lineedit.setToolTip(_translate("AmplitudeVarDetectorSettingsView", "Optional"))
-        self.label_4.setText(_translate("AmplitudeVarDetectorSettingsView", "Pad length (s)"))
-        self.pad_lineEdit.setToolTip(_translate("AmplitudeVarDetectorSettingsView", "Padding event added to both the beginning and  the end of the originally detected event."))
-        self.label_7.setText(_translate("AmplitudeVarDetectorSettingsView", "Threshold value"))
-        self.label_8.setToolTip(_translate("AmplitudeVarDetectorSettingsView", "Select behavior: artefact when above/below the threshold."))
-        self.label_8.setText(_translate("AmplitudeVarDetectorSettingsView", "Threshold behavior"))
-        self.threshBeha_comboBox.setToolTip(_translate("AmplitudeVarDetectorSettingsView", "Select behavior: artefact when above/below the threshold."))
-        self.threshBeha_comboBox.setItemText(0, _translate("AmplitudeVarDetectorSettingsView", "Above"))
-        self.threshBeha_comboBox.setItemText(1, _translate("AmplitudeVarDetectorSettingsView", "Below"))
-        self.threshUnit_comboBox.setToolTip(_translate("AmplitudeVarDetectorSettingsView", "Select threshold unit : \n"
-"-fixed (as µV²),\n"
+        AmplitudeVarDetectorSettingsView.setWindowTitle(QCoreApplication.translate("AmplitudeVarDetectorSettingsView", u"Form", None))
+#if QT_CONFIG(tooltip)
+        AmplitudeVarDetectorSettingsView.setToolTip("")
+#endif // QT_CONFIG(tooltip)
+        self.label_5.setText(QCoreApplication.translate("AmplitudeVarDetectorSettingsView", u"Amplitude Detector settings", None))
+        self.label.setText(QCoreApplication.translate("AmplitudeVarDetectorSettingsView", u"Event name", None))
+        self.label_2.setText(QCoreApplication.translate("AmplitudeVarDetectorSettingsView", u"Window length (s)", None))
+#if QT_CONFIG(tooltip)
+        self.win_length_lineedit.setToolTip(QCoreApplication.translate("AmplitudeVarDetectorSettingsView", u"The window length (in second) used to compute the amplitude variation.", None))
+#endif // QT_CONFIG(tooltip)
+        self.win_length_lineedit.setText("")
+        self.label_3.setText(QCoreApplication.translate("AmplitudeVarDetectorSettingsView", u"Window step (s)", None))
+#if QT_CONFIG(tooltip)
+        self.win_step_lineedit.setToolTip(QCoreApplication.translate("AmplitudeVarDetectorSettingsView", u"The window step (in seconds) between two amplitude variation calculations.", None))
+#endif // QT_CONFIG(tooltip)
+        self.label_6.setText(QCoreApplication.translate("AmplitudeVarDetectorSettingsView", u"Baseline window length (s)", None))
+#if QT_CONFIG(tooltip)
+        self.baseline_win_len_lineedit.setToolTip(QCoreApplication.translate("AmplitudeVarDetectorSettingsView", u"Optional", None))
+#endif // QT_CONFIG(tooltip)
+        self.baseline_win_len_lineedit.setText("")
+        self.label_4.setText(QCoreApplication.translate("AmplitudeVarDetectorSettingsView", u"Pad length (s)", None))
+#if QT_CONFIG(tooltip)
+        self.pad_lineEdit.setToolTip(QCoreApplication.translate("AmplitudeVarDetectorSettingsView", u"Padding event added to both the beginning and  the end of the originally detected event.", None))
+#endif // QT_CONFIG(tooltip)
+        self.label_7.setText(QCoreApplication.translate("AmplitudeVarDetectorSettingsView", u"Threshold value", None))
+        self.tresholdval_lineedit.setText("")
+#if QT_CONFIG(tooltip)
+        self.label_8.setToolTip(QCoreApplication.translate("AmplitudeVarDetectorSettingsView", u"Select behavior: artefact when above/below the threshold.", None))
+#endif // QT_CONFIG(tooltip)
+        self.label_8.setText(QCoreApplication.translate("AmplitudeVarDetectorSettingsView", u"Threshold behavior", None))
+        self.threshBeha_comboBox.setItemText(0, QCoreApplication.translate("AmplitudeVarDetectorSettingsView", u"Above", None))
+        self.threshBeha_comboBox.setItemText(1, QCoreApplication.translate("AmplitudeVarDetectorSettingsView", u"Below", None))
+
+#if QT_CONFIG(tooltip)
+        self.threshBeha_comboBox.setToolTip(QCoreApplication.translate("AmplitudeVarDetectorSettingsView", u"Select behavior: artefact when above/below the threshold.", None))
+#endif // QT_CONFIG(tooltip)
+        self.threshUnit_comboBox.setItemText(0, QCoreApplication.translate("AmplitudeVarDetectorSettingsView", u"fixed", None))
+        self.threshUnit_comboBox.setItemText(1, QCoreApplication.translate("AmplitudeVarDetectorSettingsView", u"x BSL median", None))
+        self.threshUnit_comboBox.setItemText(2, QCoreApplication.translate("AmplitudeVarDetectorSettingsView", u"x BSL STD", None))
+        self.threshUnit_comboBox.setItemText(3, QCoreApplication.translate("AmplitudeVarDetectorSettingsView", u"x BSL STD (log10)", None))
+
+#if QT_CONFIG(tooltip)
+        self.threshUnit_comboBox.setToolTip(QCoreApplication.translate("AmplitudeVarDetectorSettingsView", u"Select threshold unit : \n"
+"-fixed (as \u00b5V\u00b2),\n"
 "-x times the baseline median or\n"
 "-x times the baseline standard deviation or\n"
-"-x times the baseline standard deviation on data log10 transformed."))
-        self.threshUnit_comboBox.setItemText(0, _translate("AmplitudeVarDetectorSettingsView", "fixed"))
-        self.threshUnit_comboBox.setItemText(1, _translate("AmplitudeVarDetectorSettingsView", "x BSL median"))
-        self.threshUnit_comboBox.setItemText(2, _translate("AmplitudeVarDetectorSettingsView", "x BSL STD"))
-        self.threshUnit_comboBox.setItemText(3, _translate("AmplitudeVarDetectorSettingsView", "x BSL STD (log10)"))
-        self.label_9.setToolTip(_translate("AmplitudeVarDetectorSettingsView", "Select behavior: artefact when above/below the threshold."))
-        self.label_9.setText(_translate("AmplitudeVarDetectorSettingsView", "Channel to exit detection info"))
-        self.chan_det_info_lineedit.setToolTip(_translate("AmplitudeVarDetectorSettingsView", "Channel label to see detection info (debug purpose only)"))
-        self.label_10.setText(_translate("AmplitudeVarDetectorSettingsView", "Event group"))
+"-x times the baseline standard deviation on data log10 transformed.", None))
+#endif // QT_CONFIG(tooltip)
+#if QT_CONFIG(tooltip)
+        self.label_9.setToolTip(QCoreApplication.translate("AmplitudeVarDetectorSettingsView", u"Select behavior: artefact when above/below the threshold.", None))
+#endif // QT_CONFIG(tooltip)
+        self.label_9.setText(QCoreApplication.translate("AmplitudeVarDetectorSettingsView", u"Channel to exit detection info", None))
+#if QT_CONFIG(tooltip)
+        self.chan_det_info_lineedit.setToolTip(QCoreApplication.translate("AmplitudeVarDetectorSettingsView", u"Channel label to see detection info (debug purpose only)", None))
+#endif // QT_CONFIG(tooltip)
+        self.chan_det_info_lineedit.setText("")
+        self.label_10.setText(QCoreApplication.translate("AmplitudeVarDetectorSettingsView", u"Event group", None))
+    # retranslateUi
 

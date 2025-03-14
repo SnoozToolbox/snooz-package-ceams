@@ -8,8 +8,8 @@ See the file LICENCE for full license details.
 """
 
 from qtpy import QtWidgets
-from qtpy.QtCore import QRegExp
-from qtpy.QtGui import QRegExpValidator
+from qtpy.QtCore import QRegularExpression 
+from qtpy.QtGui import QRegularExpressionValidator 
 
 from CEAMSTools.DetectArtifacts.FilterSignalsStep.FilterSignalsStep import FilterSignalsStep
 from CEAMSTools.DetectArtifacts.DetectorsStep.Ui_DetectorsStep import Ui_DetectorsStep
@@ -35,10 +35,10 @@ class DetectorsStep( BaseStepView,  Ui_DetectorsStep, QtWidgets.QWidget):
         self.setupUi(self)
 
         # Set input validators
-        # Create a QRegExpValidator with the desired regular expression
+        # Create a QRegularExpressionValidator with the desired regular expression
         # Regular expression for alphanumeric, space, dash, and latin1 (ISO/CEI 8859-1) characters
-        regex = QRegExp(r'^[a-zA-Z0-9ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖ×ØÙÚÛÜÝÞßàáâãäåæçèéêëìíîïðñòóôõö÷øùúûüýþÿ\s-_]*$')
-        validator = QRegExpValidator(regex)
+        regex = QRegularExpression(r'^[a-zA-Z0-9ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖ×ØÙÚÛÜÝÞßàáâãäåæçèéêëìíîïðñòóôõö÷øùúûüýþÿ\s-_]*$')
+        validator = QRegularExpressionValidator(regex)
 
         self.stages_sel = '1,2,3,5'
 

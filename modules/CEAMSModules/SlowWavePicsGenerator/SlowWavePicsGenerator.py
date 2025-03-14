@@ -532,7 +532,7 @@ class SlowWavePicsGenerator(SciNode):
         """""
         from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
         from matplotlib.figure import Figure
-        from PySide2.QtWidgets import QDialog, QVBoxLayout
+        from PySide6.QtWidgets import QDialog, QVBoxLayout
 
 
         dialog = QDialog()

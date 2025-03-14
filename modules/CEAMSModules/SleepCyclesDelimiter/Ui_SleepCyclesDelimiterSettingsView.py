@@ -1,17 +1,25 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file 'Ui_SleepCyclesDelimiterSettingsView.ui'
+## Form generated from reading UI file ''
 ##
-## Created by: Qt User Interface Compiler version 5.15.2
+## Created by: Qt User Interface Compiler version 6.8.2
 ##
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
 
-from PySide2.QtCore import *
-from PySide2.QtGui import *
-from PySide2.QtWidgets import *
-
+from PySide6.QtCore import (QCoreApplication, QDate, QDateTime, QLocale,
+    QMetaObject, QObject, QPoint, QRect,
+    QSize, QTime, QUrl, Qt)
+from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
+    QFont, QFontDatabase, QGradient, QIcon,
+    QImage, QKeySequence, QLinearGradient, QPainter,
+    QPalette, QPixmap, QRadialGradient, QTransform)
+from PySide6.QtWidgets import (QApplication, QCheckBox, QFormLayout, QFrame,
+    QGridLayout, QHBoxLayout, QLabel, QLayout,
+    QLineEdit, QPlainTextEdit, QRadioButton, QSizePolicy,
+    QSpacerItem, QSplitter, QTextBrowser, QTextEdit,
+    QVBoxLayout, QWidget)
 from . import SleepCycleDelimiter_rs
 import themes_rc
 
@@ -35,11 +43,10 @@ class Ui_SleepCyclesDelimiterSettingsView(object):
         self.label_2 = QLabel(self.layoutWidget)
         self.label_2.setObjectName(u"label_2")
         font = QFont()
-        font.setFamily(u"Roboto")
+        font.setFamilies([u"Roboto"])
         font.setPointSize(12)
         font.setBold(False)
         font.setItalic(False)
-        font.setWeight(50)
         self.label_2.setFont(font)
 
         self.verticalLayout_3.addWidget(self.label_2)
@@ -76,7 +83,7 @@ class Ui_SleepCyclesDelimiterSettingsView(object):
 
         self.label = QLabel(self.layoutWidget)
         self.label.setObjectName(u"label")
-        sizePolicy = QSizePolicy(QSizePolicy.Expanding, QSizePolicy.Preferred)
+        sizePolicy = QSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Preferred)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.label.sizePolicy().hasHeightForWidth())
@@ -94,7 +101,7 @@ class Ui_SleepCyclesDelimiterSettingsView(object):
         self.verticalLayout_2.setObjectName(u"verticalLayout_2")
         self.checkBox_incl_SOREMP = QCheckBox(self.layoutWidget)
         self.checkBox_incl_SOREMP.setObjectName(u"checkBox_incl_SOREMP")
-        sizePolicy1 = QSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
+        sizePolicy1 = QSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
         sizePolicy1.setHorizontalStretch(0)
         sizePolicy1.setVerticalStretch(0)
         sizePolicy1.setHeightForWidth(self.checkBox_incl_SOREMP.sizePolicy().hasHeightForWidth())
@@ -211,7 +218,7 @@ class Ui_SleepCyclesDelimiterSettingsView(object):
         self.formLayout.setObjectName(u"formLayout")
         self.label_9 = QLabel(self.layoutWidget)
         self.label_9.setObjectName(u"label_9")
-        sizePolicy2 = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Expanding)
+        sizePolicy2 = QSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Expanding)
         sizePolicy2.setHorizontalStretch(0)
         sizePolicy2.setVerticalStretch(0)
         sizePolicy2.setHeightForWidth(self.label_9.sizePolicy().hasHeightForWidth())
@@ -310,7 +317,7 @@ class Ui_SleepCyclesDelimiterSettingsView(object):
 
         self.horizontalLayout_2.addWidget(self.splitter)
 
-        self.horizontalSpacer = QSpacerItem(40, 20, QSizePolicy.Minimum, QSizePolicy.Minimum)
+        self.horizontalSpacer = QSpacerItem(40, 20, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Minimum)
 
         self.horizontalLayout_2.addItem(self.horizontalSpacer)
 

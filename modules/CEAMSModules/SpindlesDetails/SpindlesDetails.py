@@ -865,7 +865,7 @@ class SpindlesDetails(SciNode):
         """""
         from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
         from matplotlib.figure import Figure
-        from PySide2.QtWidgets import QDialog, QVBoxLayout
+        from PySide6.QtWidgets import QDialog, QVBoxLayout
 
         # Extract and define the new extracted channel_cur
         signal_cur = SignalsFromEvents.extract_events_from_signal(SignalsFromEvents, signals_cur_chan[signal_sel], ss_start, ss_dur)
@@ -893,7 +893,7 @@ class SpindlesDetails(SciNode):
         """""
         from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
         from matplotlib.figure import Figure
-        from PySide2.QtWidgets import QDialog, QVBoxLayout
+        from PySide6.QtWidgets import QDialog, QVBoxLayout
         dialog = QDialog()
         fig = Figure(figsize=(5, 4), dpi=100)
         canvas = FigureCanvas(fig)

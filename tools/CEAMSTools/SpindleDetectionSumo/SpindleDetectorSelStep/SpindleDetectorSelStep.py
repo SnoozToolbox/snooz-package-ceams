@@ -14,8 +14,8 @@ from .Ui_SpindleDetectorSelStep import Ui_SpindleDetectorSelStep
 
 
 from qtpy import QtWidgets
-from qtpy.QtCore import QRegExp
-from qtpy.QtGui import QRegExpValidator
+from qtpy.QtCore import QRegularExpression
+from qtpy.QtGui import QRegularExpressionValidator
 
 class SpindleDetectorSelStep( BaseStepView,  Ui_SpindleDetectorSelStep, QtWidgets.QWidget):
     """
@@ -35,10 +35,10 @@ class SpindleDetectorSelStep( BaseStepView,  Ui_SpindleDetectorSelStep, QtWidget
 
         # added
         # Set input validators
-        # Create a QRegExpValidator with the desired regular expression
+        # Create a QRegularExpressionValidator with the desired regular expression
         # Regular expression for alphanumeric, space, dash, and latin1 (ISO/CEI 8859-1) characters
-        regex = QRegExp(r'^[a-zA-Z0-9ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖ×ØÙÚÛÜÝÞßàáâãäåæçèéêëìíîïðñòóôõö÷øùúûüýþÿ\s-_]*$')
-        validator = QRegExpValidator(regex)
+        regex = QRegularExpression(r'^[a-zA-Z0-9ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖ×ØÙÚÛÜÝÞßàáâãäåæçèéêëìíîïðñòóôõö÷øùúûüýþÿ\s-_]*$')
+        validator = QRegularExpressionValidator(regex)
 
         # added
         # Set the validator for the QLineEdit

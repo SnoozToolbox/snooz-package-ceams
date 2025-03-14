@@ -6,7 +6,7 @@ DEBUG = False
 from scipy import signal, fft
 import numpy as np
 
-from PySide2.QtWidgets import QMessageBox
+from PySide6.QtWidgets import QMessageBox
 from qtpy import QtWidgets
 from qtpy.QtWidgets import QFrame
 
