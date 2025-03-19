@@ -100,7 +100,9 @@ class SpindlesDetails(SciNode):
                     'thresh_abs_sigma_pow_uv2' : 1.25
                     'thresh_rel_sigma_pow_z' : 1.6
                     'thresh_sigma_cov_z' : 1.3
-                    'thresh_sigma_cor_perc' : 69               
+                    'thresh_sigma_cor_perc' : 69  
+                -> SUMO    
+                    'spindle_name' : sumo             
             }"
         "report_constants": dict
             Constants used in the report (N_HOURS, N_CYCLES)   
@@ -133,7 +135,7 @@ class SpindlesDetails(SciNode):
         InputPlug('export_spindles',self)
 
         # Init module variables
-        self.stage_stats_labels = ['N1', 'N2', 'N3', 'R']
+        self.stage_stats_labels = ['N1', 'N2', 'N3', 'NREM', 'R']
 
         # A master module allows the process to be reexcuted multiple time.
         self._is_master = False 
@@ -214,7 +216,9 @@ class SpindlesDetails(SciNode):
                         'thresh_abs_sigma_pow_uv2' : 1.25
                         'thresh_rel_sigma_pow_z' : 1.6
                         'thresh_sigma_cov_z' : 1.3
-                        'thresh_sigma_cor_perc' : 69               
+                        'thresh_sigma_cor_perc' : 69  
+                    -> SUMO 
+                        'spindle_name' : sumo             
                 }"
             "report_constants": dict
                 Constants used in the report (N_HOURS, N_CYCLES)   
@@ -321,7 +325,7 @@ class SpindlesDetails(SciNode):
             sel_spindle_param['thresh_rel_sigma_pow_z'] = spindle_sel_param['thresh_rel_sigma_pow_z']
             sel_spindle_param['thresh_sigma_cov_z'] = spindle_sel_param['thresh_sigma_cov_z']
             sel_spindle_param['thresh_sigma_cor_perc'] = spindle_sel_param['thresh_sigma_cor_perc']        
-        if 'sumo' in sel_spindle_param['spindle_event_name'].lower():
+        elif 'sumo' in sel_spindle_param['spindle_event_name'].lower():
             # SUMO does not require threshold parameters, so we simply accept it and do nothing
             pass   
         else:
@@ -656,12 +660,17 @@ class SpindlesDetails(SciNode):
         amp_rms_uV_all = []
         for stage in self.stage_stats_labels:
             # If selected
-            if commons.sleep_stages_name[stage] in sleep_stage_sel:
+            if commons.sleep_stages_name[stage] in sleep_stage_sel or (isinstance(commons.sleep_stages_name[stage], list) and all(item in sleep_stage_sel for item in commons.sleep_stages_name[stage])): 
+                
                 
                 # Count the number of spindle for the current stage
-                spindle_cur_stage = spindle_cur_chan_df[spindle_cur_chan_df['stage']==int(commons.sleep_stages_name[stage])]
+                spindle_cur_stage = spindle_cur_chan_df[spindle_cur_chan_df['stage'].isin(list(map(int, commons.sleep_stages_name[stage])))]
+
                 ss_count_cur_stage = len(spindle_cur_stage)
-                ss_count_total = ss_count_total + ss_count_cur_stage
+
+                if len(commons.sleep_stages_name[stage]) == 1:  # condition added to avoid summation for group of stages (ex: for NREM)
+                    ss_count_total = ss_count_total + ss_count_cur_stage
+
                 if valid_dur[f'{label_stats}_{stage}_valid_min']>0:
                     ss_count[f'{label_stats}_{stage}_spindle_count'] = ss_count_cur_stage
                 else:
@@ -688,27 +697,32 @@ class SpindlesDetails(SciNode):
                 if len(duration_s_all)==0:
                     duration_s_all = spindle_cur_stage['duration_sec'].values
                 else:
-                    duration_s_all = np.concatenate((duration_s_all,spindle_cur_stage['duration_sec'].values), axis=0)
+                    if len(commons.sleep_stages_name[stage]) == 1: # condition added to avoid concatenation for group of stages
+                        duration_s_all = np.concatenate((duration_s_all,spindle_cur_stage['duration_sec'].values), axis=0)
 
                 if len(dom_freq_Hz_all)==0:
                     dom_freq_Hz_all = spindle_cur_stage['dom_freq_Hz'].values
                 else:
-                    dom_freq_Hz_all = np.concatenate((dom_freq_Hz_all,spindle_cur_stage['dom_freq_Hz'].values), axis=0)
+                    if len(commons.sleep_stages_name[stage]) == 1: 
+                        dom_freq_Hz_all = np.concatenate((dom_freq_Hz_all,spindle_cur_stage['dom_freq_Hz'].values), axis=0)
 
                 if len(avg_freq_Hz_all)==0:
                     avg_freq_Hz_all = spindle_cur_stage['avg_freq_Hz'].values
                 else:
-                    avg_freq_Hz_all = np.concatenate((avg_freq_Hz_all,spindle_cur_stage['avg_freq_Hz'].values), axis=0)
+                    if len(commons.sleep_stages_name[stage]) == 1:
+                        avg_freq_Hz_all = np.concatenate((avg_freq_Hz_all,spindle_cur_stage['avg_freq_Hz'].values), axis=0)
 
                 if len(amp_pkpk_uV_all)==0:
                     amp_pkpk_uV_all = spindle_cur_stage['amp_pkpk_uV'].values
                 else:
-                    amp_pkpk_uV_all = np.concatenate((amp_pkpk_uV_all,spindle_cur_stage['amp_pkpk_uV'].values), axis=0)
+                    if len(commons.sleep_stages_name[stage]) == 1: 
+                        amp_pkpk_uV_all = np.concatenate((amp_pkpk_uV_all,spindle_cur_stage['amp_pkpk_uV'].values), axis=0)
 
                 if len(amp_rms_uV_all)==0:
                     amp_rms_uV_all = spindle_cur_stage['amp_rms_uV'].values
                 else:
-                    amp_rms_uV_all = np.concatenate((amp_rms_uV_all,spindle_cur_stage['amp_rms_uV'].values), axis=0)
+                    if len(commons.sleep_stages_name[stage]) == 1: 
+                        amp_rms_uV_all = np.concatenate((amp_rms_uV_all,spindle_cur_stage['amp_rms_uV'].values), axis=0)
             else:
                 ss_count[f'{label_stats}_{stage}_spindle_count'] = np.NaN
                 density_min[f'{label_stats}_{stage}_density'] = np.NaN
@@ -729,6 +743,7 @@ class SpindlesDetails(SciNode):
         avg_freq_Hz[f'{label_stats}_avg_freq_Hz'] = np.mean(avg_freq_Hz_all)
         amp_pkpk_uV[f'{label_stats}_amp_pkpk_uV'] = np.mean(amp_pkpk_uV_all)
         amp_rms_uV[f'{label_stats}_amp_rms_uV'] = np.mean(amp_rms_uV_all)
+
 
         spindle_stats = ss_count | density_min | duration_s | dom_freq_Hz | avg_freq_Hz | amp_pkpk_uV | amp_rms_uV
         return spindle_stats
@@ -779,10 +794,16 @@ class SpindlesDetails(SciNode):
         valid_dur = {}
         valid_dur_sec = 0
         invalid_dur_sec = 0
+
+        # Added to manage NREM
+        sleep_stages_name['NREM'] = ['2', '3']
+
         for stage in stage_stats_labels:
             inv_dur_sec_cur_stage = 0
-            if sleep_stages_name[stage] in sleep_stage_sel:
-                stage_sel = stage_label_in_cycle==int(sleep_stages_name[stage])
+            if sleep_stages_name[stage] in sleep_stage_sel or (isinstance(sleep_stages_name[stage], list) and all(item in sleep_stage_sel for item in sleep_stages_name[stage])):  
+                
+                stage_sel = np.isin(stage_label_in_cycle, list(map(int, sleep_stages_name[stage])))
+
                 stage_start_cur = stage_start_in_cycle[stage_sel]
                 stage_dur_cur = stage_dur_in_cycle[stage_sel]
                 stage_end_cur = stage_end_in_cycle[stage_sel]
@@ -819,9 +840,12 @@ class SpindlesDetails(SciNode):
                     i_stage = i_stage +1 
                 # Compute the valid duration for the current stage
                 valid_dur[f'{label_stats}_{stage}_valid_min'] = (stage_dur_cur.sum()-inv_dur_sec_cur_stage)/60
+
                 # Compute the total valid duration
-                valid_dur_sec = valid_dur_sec + (stage_dur_cur.sum()-inv_dur_sec_cur_stage)
-                invalid_dur_sec = invalid_dur_sec + inv_dur_sec_cur_stage
+                if len(sleep_stages_name[stage]) == 1:  # condition added to avoid summation for group of stages (ex: for NREM)
+                    valid_dur_sec = valid_dur_sec + (stage_dur_cur.sum()-inv_dur_sec_cur_stage)
+                    invalid_dur_sec = invalid_dur_sec + inv_dur_sec_cur_stage
+
             else:
                 valid_dur[f'{label_stats}_{stage}_valid_min'] = 0
         # for now does not match with Gaetan, just add valid time
