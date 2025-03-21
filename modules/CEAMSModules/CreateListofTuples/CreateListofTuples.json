@@ -1,0 +1,41 @@
+{   
+    "item_name": "CreateListofTuples",
+    "item_type": "module",
+    "item_api_version": "1.0.0",
+    "dependencies": [
+    ],
+    "module_params":{
+        "cls":"CreateListofTuples",
+        "name":"CreateListofTuples",
+        "metadata":{},
+        "file_location":null,
+        "module":"CEAMSModules.CreateListofTuples",
+        "module_label": "Create List of Tuples",
+        "module_category":"Parameters",
+        "module_author":"",
+        "module_url":"",
+        "module_description":"",
+        "module_options":{},
+        "inputs": {
+            "events": {
+                "name": "events",
+                "value": "",
+                "connections": {},
+                "sub_plugs": {}
+            },"group": {
+                "name": "group",
+                "value": "",
+                "connections": {},
+                "sub_plugs": {}
+            }
+        },
+        "outputs": {
+            "events_to_remove": {
+                "name": "events_to_remove",
+                "value": "",
+                "connections": {},
+                "sub_plugs": {}
+            }
+        }
+    }
+}

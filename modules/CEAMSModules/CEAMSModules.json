@@ -943,6 +943,62 @@
                     }
                 }
             ]
+        },
+        {
+            "item_name": "YasaSleepStaging",
+            "item_type": "module",
+            "item_version": "1.0.0",
+            "item_hooks": [
+                {
+                    "endpoint_name": "module_endpoint",
+                    "parameters": {
+                        "module_category": "Signal Processing",
+                        "module_label": "Score Sleep Stages YASA"
+                    }
+                }
+            ]
+        },
+        {
+            "item_name": "ResultSummary",
+            "item_type": "module",
+            "item_version": "0.0.0",
+            "item_hooks": [
+                {
+                    "endpoint_name": "module_endpoint",
+                    "parameters": {
+                        "module_category": "Statistics",
+                        "module_label": "Result Summary"
+                    }
+                }
+            ]
+        },
+        {
+            "item_name": "CreateDict",
+            "item_type": "module",
+            "item_version": "0.0.0",
+            "item_hooks": [
+                {
+                    "endpoint_name": "module_endpoint",
+                    "parameters": {
+                        "module_category": "Parameters",
+                        "module_label": "Create Dictionary"
+                    }
+                }
+            ]
+        },
+        {
+            "item_name": "CreateListofTuples",
+            "item_type": "module",
+            "item_version": "0.0.0",
+            "item_hooks": [
+                {
+                    "endpoint_name": "module_endpoint",
+                    "parameters": {
+                        "module_category": "Parameters",
+                        "module_label": "Create List of Tuples"
+                    }
+                }
+            ]
         }
     ]
 }

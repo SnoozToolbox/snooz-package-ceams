@@ -1,0 +1,51 @@
+{   
+    "item_name": "ResultSummary",
+    "item_type": "module",
+    "item_api_version": "1.0.0",
+    "dependencies": [
+    ],
+    "module_params":{
+        "cls":"ResultSummary",
+        "name":"ResultSummary",
+        "metadata":{},
+        "file_location":null,
+        "module":"CEAMSModules.ResultSummary",
+        "module_label": "Result Summary",
+        "module_category":"Statistics",
+        "module_author":"",
+        "module_url":"",
+        "module_description":"",
+        "module_options":{},
+        "inputs": {
+            "ResultsDataframe": {
+                "name": "ResultsDataframe",
+                "value": "",
+                "connections": {},
+                "sub_plugs": {}
+            },"Additional": {
+                "name": "Additional",
+                "value": "",
+                "connections": {},
+                "sub_plugs": {}
+            },"SavedDestination": {
+                "name": "SavedDestination",
+                "value": "",
+                "connections": {},
+                "sub_plugs": {}
+            },"Checkbox": {
+                "name": "Checkbox",
+                "value": "",
+                "connections": {},
+                "sub_plugs": {}
+            }
+        },
+        "outputs": {
+            "ExportResults": {
+                "name": "ExportResults",
+                "value": "",
+                "connections": {},
+                "sub_plugs": {}
+            }
+        }
+    }
+}

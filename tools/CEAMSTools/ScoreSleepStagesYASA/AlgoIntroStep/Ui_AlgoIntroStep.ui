@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>AlgoIntroStep</class>
+ <widget class="QWidget" name="AlgoIntroStep">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1099</width>
+    <height>858</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">font: 12pt &quot;Roboto&quot;;background-color: rgb(255, 255, 255);</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout_7">
+   <item>
+    <widget class="QSplitter" name="splitter_2">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <widget class="QWidget" name="verticalLayoutWidget">
+      <layout class="QVBoxLayout" name="verticalLayout">
+       <item>
+        <widget class="QFrame" name="frame">
+         <property name="maximumSize">
+          <size>
+           <width>16777213</width>
+           <height>16777215</height>
+          </size>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">background-color: rgb(255, 255, 255);</string>
+         </property>
+         <property name="frameShape">
+          <enum>QFrame::NoFrame</enum>
+         </property>
+         <property name="frameShadow">
+          <enum>QFrame::Plain</enum>
+         </property>
+         <property name="lineWidth">
+          <number>0</number>
+         </property>
+         <layout class="QVBoxLayout" name="verticalLayout_2">
+          <item>
+           <widget class="QLabel" name="label">
+            <property name="styleSheet">
+             <string notr="true">background-color: rgb(255, 255, 255);</string>
+            </property>
+            <property name="lineWidth">
+             <number>0</number>
+            </property>
+            <property name="text">
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Score Sleep Stages YASA&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="label_2">
+            <property name="styleSheet">
+             <string notr="true">background-color: rgb(255, 255, 255);</string>
+            </property>
+            <property name="lineWidth">
+             <number>0</number>
+            </property>
+            <property name="text">
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;justify&quot;&gt;This tool detects &lt;span style=&quot; font-weight:600;&quot;&gt;sleep stages&lt;/span&gt; from PSG files. &lt;/p&gt;&lt;p align=&quot;justify&quot;&gt;Detection is performed on the entire recording with 30 second epochs corresponding to each sleep stage.&lt;br/&gt;The tool can detect sleep stages based on only one EEG electrode, prefered centreal ones (C3, C4). &lt;/p&gt;&lt;p align=&quot;justify&quot;&gt;To enhance the perforamance of the algorithm, you can use one EOG and one EMG channel that can increase&lt;br/&gt;classification accuracy.&lt;br/&gt;Referrence: &lt;a href=&quot;https://raphaelvallat.com/yasa/&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;https://raphaelvallat.com/yasa/&lt;br/&gt;&lt;/span&gt;&lt;/a&gt;&lt;br/&gt;Additionaly, in Snooz you can select 4 high-priority EEG channels as input, allowing the tool to determine &lt;br/&gt;the result with the highest confidence for each channel.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="QFrame" name="frame_2">
+         <property name="styleSheet">
+          <string notr="true">background-color: rgb(255, 255, 255);</string>
+         </property>
+         <property name="frameShape">
+          <enum>QFrame::NoFrame</enum>
+         </property>
+         <property name="frameShadow">
+          <enum>QFrame::Plain</enum>
+         </property>
+         <property name="lineWidth">
+          <number>0</number>
+         </property>
+         <layout class="QVBoxLayout" name="verticalLayout_3">
+          <item>
+           <widget class="QLabel" name="label_3">
+            <property name="styleSheet">
+             <string notr="true">background-color: rgb(255, 255, 255);</string>
+            </property>
+            <property name="lineWidth">
+             <number>0</number>
+            </property>
+            <property name="text">
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Algorithm Details&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QScrollArea" name="scrollArea">
+            <property name="styleSheet">
+             <string notr="true">background-color: rgb(255, 255, 255);</string>
+            </property>
+            <property name="frameShape">
+             <enum>QFrame::NoFrame</enum>
+            </property>
+            <property name="frameShadow">
+             <enum>QFrame::Sunken</enum>
+            </property>
+            <property name="widgetResizable">
+             <bool>true</bool>
+            </property>
+            <widget class="QWidget" name="scrollAreaWidgetContents">
+             <property name="geometry">
+              <rect>
+               <x>0</x>
+               <y>0</y>
+               <width>1451</width>
+               <height>346</height>
+              </rect>
+             </property>
+             <layout class="QHBoxLayout" name="horizontalLayout">
+              <item>
+               <widget class="QLabel" name="label_4">
+                <property name="styleSheet">
+                 <string notr="true">background-color: rgb(255, 255, 255);</string>
+                </property>
+                <property name="lineWidth">
+                 <number>0</number>
+                </property>
+                <property name="text">
+                 <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;The sleep staging algorithm, YASA, is an open-source tool that has been trained,&lt;br/&gt;using over 30,000 hours of polysomnographic (PSG) sleep data across diverse populations. &lt;/p&gt;&lt;p&gt;-&amp;gt;&lt;span style=&quot; font-weight:600;&quot;&gt; Data processing:&lt;/span&gt; The algorithm uses a central EEG channel, along with EOG, and EMG channels.&lt;br/&gt;These signals are downsampled to 100 Hz and bandpassed-filtered between 0.4 Hz and 30 Hz. &lt;/p&gt;&lt;p&gt;-&amp;gt; &lt;span style=&quot; font-weight:600;&quot;&gt;Feature Extraction:&lt;/span&gt; The algorithm extracts a set of time and frequency domain features from the EEG signal, and optionaly from the EOG and EMG signals.&lt;br/&gt;These features are calculated for each 30-second epoch of raw data. &lt;/p&gt;&lt;p&gt;-&amp;gt; &lt;span style=&quot; font-weight:600;&quot;&gt;Smoothing and Normalization:&lt;/span&gt; The algorithm uses a smoothing approach across all the aformentioned features to incorporate contextual infromation.&lt;br/&gt;All the smoothed features are then z-scored across each night. &lt;/p&gt;&lt;p&gt;-&amp;gt; &lt;span style=&quot; font-weight:600;&quot;&gt;Machine Learning Classification:&lt;/span&gt; A lightGBM classifier, a tree-based gradient-boosting classifier, is used. &lt;/p&gt;&lt;p&gt;-&amp;gt; &lt;span style=&quot; font-weight:600;&quot;&gt;Performance Evaluation:&lt;/span&gt; The algorithm's performance is evaluated using standardized guidelines,&lt;br/&gt;including accuracy, Cohen's kappa, Matthews correlation coefficient, confusion matrices, and F1-scores. &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="QFrame" name="frame_3">
+         <property name="styleSheet">
+          <string notr="true">background-color: rgb(255, 255, 255);</string>
+         </property>
+         <property name="frameShape">
+          <enum>QFrame::NoFrame</enum>
+         </property>
+         <property name="frameShadow">
+          <enum>QFrame::Plain</enum>
+         </property>
+         <property name="lineWidth">
+          <number>0</number>
+         </property>
+         <layout class="QVBoxLayout" name="verticalLayout_4">
+          <item>
+           <widget class="QLabel" name="label_5">
+            <property name="styleSheet">
+             <string notr="true">background-color: rgb(255, 255, 255);</string>
+            </property>
+            <property name="lineWidth">
+             <number>0</number>
+            </property>
+            <property name="text">
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Output&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="label_6">
+            <property name="styleSheet">
+             <string notr="true">background-color: rgb(255, 255, 255);</string>
+            </property>
+            <property name="text">
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;The YASA sleep scoring tool is compatible with different input files including, EDF, NATUS, and STS. &lt;/p&gt;&lt;p&gt;The output of the automatic scoring algorithm is an accessory file that saves the predicted sleep stages.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources>
+  <include location="intro_res_rc.qrc"/>
+  <include location="../../../../../snooz-toolbox/src/main/python/ui/themes/themes.qrc"/>
+ </resources>
+ <connections/>
+ <slots>
+  <slot>on_choose()</slot>
+  <slot>on_input_format_changed()</slot>
+ </slots>
+</ui>
