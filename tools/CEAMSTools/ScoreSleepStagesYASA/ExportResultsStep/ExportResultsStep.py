@@ -69,7 +69,7 @@ class ExportResultsStep( BaseStepView,  Ui_ExportResultsStep, QtWidgets.QWidget)
 
         self.lineEdit.setPlaceholderText(QCoreApplication.translate("OutputFiles", u"Select a folder where the exported files are supposed to be saved", None))
         # Connect the browse push button to the browse_slot function
-        #self.pushButton.clicked.connect(ExportResultsStep.browse_slot)
+        self.pushButton.clicked.connect(self.browse_slot)
 
     def on_checkBox_2_changed(self):
         """Handle the state change of checkBox_2"""
