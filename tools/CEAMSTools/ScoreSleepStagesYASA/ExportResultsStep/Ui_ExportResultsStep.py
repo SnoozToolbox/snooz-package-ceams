@@ -3,7 +3,7 @@
 ################################################################################
 ## Form generated from reading UI file 'Ui_ExportResultsStep.ui'
 ##
-## Created by: Qt User Interface Compiler version 6.8.2
+## Created by: Qt User Interface Compiler version 5.15.2
 ##
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
@@ -11,22 +11,23 @@
 from PySide2.QtCore import *
 from PySide2.QtGui import *
 from PySide2.QtWidgets import *
+
 import themes_rc
 
 class Ui_ExportResultsStep(object):
     def setupUi(self, ExportResultsStep):
         if not ExportResultsStep.objectName():
             ExportResultsStep.setObjectName(u"ExportResultsStep")
-        ExportResultsStep.resize(943, 659)
+        ExportResultsStep.resize(1006, 689)
         ExportResultsStep.setStyleSheet(u"font: 12pt \"Roboto\";background-color: rgb(255, 255, 255);")
-        self.verticalLayout_10 = QVBoxLayout(ExportResultsStep)
-        self.verticalLayout_10.setObjectName(u"verticalLayout_10")
+        self.verticalLayout_2 = QVBoxLayout(ExportResultsStep)
+        self.verticalLayout_2.setObjectName(u"verticalLayout_2")
         self.verticalLayout = QVBoxLayout()
         self.verticalLayout.setObjectName(u"verticalLayout")
         self.frame = QFrame(ExportResultsStep)
         self.frame.setObjectName(u"frame")
         self.frame.setStyleSheet(u"background-color: rgb(255, 255, 255);")
-        self.frame.setFrameShape(QFrame.Shape.NoFrame)
+        self.frame.setFrameShape(QFrame.NoFrame)
         self.verticalLayout_4 = QVBoxLayout(self.frame)
         self.verticalLayout_4.setObjectName(u"verticalLayout_4")
         self.label = QLabel(self.frame)
@@ -38,13 +39,13 @@ class Ui_ExportResultsStep(object):
 
         self.frame_7 = QFrame(self.frame)
         self.frame_7.setObjectName(u"frame_7")
-        sizePolicy = QSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Fixed)
+        sizePolicy = QSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.frame_7.sizePolicy().hasHeightForWidth())
         self.frame_7.setSizePolicy(sizePolicy)
         self.frame_7.setStyleSheet(u"background-color: rgb(255, 255, 255);")
-        self.frame_7.setFrameShape(QFrame.Shape.NoFrame)
+        self.frame_7.setFrameShape(QFrame.NoFrame)
         self.frame_7.setLineWidth(0)
         self.verticalLayout_6 = QVBoxLayout(self.frame_7)
         self.verticalLayout_6.setObjectName(u"verticalLayout_6")
@@ -62,7 +63,7 @@ class Ui_ExportResultsStep(object):
         self.frame_4 = QFrame(self.frame)
         self.frame_4.setObjectName(u"frame_4")
         self.frame_4.setStyleSheet(u"background-color: rgb(255, 255, 255);")
-        self.frame_4.setFrameShape(QFrame.Shape.NoFrame)
+        self.frame_4.setFrameShape(QFrame.NoFrame)
         self.horizontalLayout_3 = QHBoxLayout(self.frame_4)
         self.horizontalLayout_3.setObjectName(u"horizontalLayout_3")
         self.label_2 = QLabel(self.frame_4)
@@ -71,7 +72,7 @@ class Ui_ExportResultsStep(object):
 
         self.horizontalLayout_3.addWidget(self.label_2)
 
-        self.horizontalSpacer = QSpacerItem(40, 20, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
+        self.horizontalSpacer = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
 
         self.horizontalLayout_3.addItem(self.horizontalSpacer)
 
@@ -83,17 +84,18 @@ class Ui_ExportResultsStep(object):
 
         self.verticalLayout_4.addWidget(self.frame_4)
 
-        self.verticalSpacer_2 = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
+        self.verticalSpacer_2 = QSpacerItem(20, 40, QSizePolicy.Fixed, QSizePolicy.Minimum)
 
         self.verticalLayout_4.addItem(self.verticalSpacer_2)
 
         self.checkBox = QCheckBox(self.frame)
         self.checkBox.setObjectName(u"checkBox")
         font = QFont()
-        font.setFamilies([u"Roboto"])
+        font.setFamily(u"Roboto")
         font.setPointSize(12)
         font.setBold(False)
         font.setItalic(False)
+        font.setWeight(50)
         self.checkBox.setFont(font)
         self.checkBox.setStyleSheet(u"background-color: rgb(255, 255, 255);")
 
@@ -102,7 +104,7 @@ class Ui_ExportResultsStep(object):
         self.frame_3 = QFrame(self.frame)
         self.frame_3.setObjectName(u"frame_3")
         self.frame_3.setStyleSheet(u"background-color: rgb(255, 255, 255);")
-        self.frame_3.setFrameShape(QFrame.Shape.NoFrame)
+        self.frame_3.setFrameShape(QFrame.NoFrame)
         self.frame_3.setLineWidth(0)
         self.horizontalLayout_2 = QHBoxLayout(self.frame_3)
         self.horizontalLayout_2.setObjectName(u"horizontalLayout_2")
@@ -118,10 +120,14 @@ class Ui_ExportResultsStep(object):
 
         self.verticalLayout.addWidget(self.frame)
 
+        self.verticalSpacer_3 = QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Fixed)
+
+        self.verticalLayout.addItem(self.verticalSpacer_3)
+
         self.frame_5 = QFrame(ExportResultsStep)
         self.frame_5.setObjectName(u"frame_5")
         self.frame_5.setStyleSheet(u"background-color: rgb(255, 255, 255);")
-        self.frame_5.setFrameShape(QFrame.Shape.NoFrame)
+        self.frame_5.setFrameShape(QFrame.NoFrame)
         self.verticalLayout_3 = QVBoxLayout(self.frame_5)
         self.verticalLayout_3.setObjectName(u"verticalLayout_3")
         self.checkBox_2 = QCheckBox(self.frame_5)
@@ -132,7 +138,7 @@ class Ui_ExportResultsStep(object):
 
         self.frame_9 = QFrame(self.frame_5)
         self.frame_9.setObjectName(u"frame_9")
-        self.frame_9.setFrameShape(QFrame.Shape.NoFrame)
+        self.frame_9.setFrameShape(QFrame.NoFrame)
         self.frame_9.setLineWidth(0)
         self.verticalLayout_5 = QVBoxLayout(self.frame_9)
         self.verticalLayout_5.setObjectName(u"verticalLayout_5")
@@ -147,7 +153,7 @@ class Ui_ExportResultsStep(object):
 
         self.frame_6 = QFrame(self.frame_5)
         self.frame_6.setObjectName(u"frame_6")
-        self.frame_6.setFrameShape(QFrame.Shape.NoFrame)
+        self.frame_6.setFrameShape(QFrame.NoFrame)
         self.frame_6.setLineWidth(0)
         self.horizontalLayout_4 = QHBoxLayout(self.frame_6)
         self.horizontalLayout_4.setObjectName(u"horizontalLayout_4")
@@ -166,7 +172,7 @@ class Ui_ExportResultsStep(object):
 
         self.frame_8 = QFrame(self.frame_5)
         self.frame_8.setObjectName(u"frame_8")
-        self.frame_8.setFrameShape(QFrame.Shape.NoFrame)
+        self.frame_8.setFrameShape(QFrame.NoFrame)
         self.frame_8.setLineWidth(0)
         self.horizontalLayout_6 = QHBoxLayout(self.frame_8)
         self.horizontalLayout_6.setObjectName(u"horizontalLayout_6")
@@ -179,19 +185,19 @@ class Ui_ExportResultsStep(object):
 
         self.verticalLayout_3.addWidget(self.frame_8)
 
-        self.verticalSpacer = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
-
-        self.verticalLayout_3.addItem(self.verticalSpacer)
-
 
         self.verticalLayout.addWidget(self.frame_5)
 
 
-        self.verticalLayout_10.addLayout(self.verticalLayout)
+        self.verticalLayout_2.addLayout(self.verticalLayout)
+
+        self.verticalSpacer = QSpacerItem(20, 107, QSizePolicy.Minimum, QSizePolicy.Expanding)
+
+        self.verticalLayout_2.addItem(self.verticalSpacer)
 
 
         self.retranslateUi(ExportResultsStep)
-        self.pushButton.clicked.connect(ExportResultsStep.browse_slot) # Connect the browse button to the browse_slot function
+
         QMetaObject.connectSlotsByName(ExportResultsStep)
     # setupUi
 

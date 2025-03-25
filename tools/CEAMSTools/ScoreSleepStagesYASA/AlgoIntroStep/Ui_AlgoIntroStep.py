@@ -12,14 +12,14 @@ from PySide2.QtCore import *
 from PySide2.QtGui import *
 from PySide2.QtWidgets import *
 
-#import intro_res_rc_rc
+from . import intro_res_rc
 import themes_rc
 
 class Ui_AlgoIntroStep(object):
     def setupUi(self, AlgoIntroStep):
         if not AlgoIntroStep.objectName():
             AlgoIntroStep.setObjectName(u"AlgoIntroStep")
-        AlgoIntroStep.resize(1099, 858)
+        AlgoIntroStep.resize(1099, 700)
         AlgoIntroStep.setStyleSheet(u"font: 12pt \"Roboto\";background-color: rgb(255, 255, 255);")
         self.verticalLayout_7 = QVBoxLayout(AlgoIntroStep)
         self.verticalLayout_7.setObjectName(u"verticalLayout_7")
@@ -59,6 +59,11 @@ class Ui_AlgoIntroStep(object):
 
         self.frame_2 = QFrame(self.verticalLayoutWidget)
         self.frame_2.setObjectName(u"frame_2")
+        sizePolicy = QSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.frame_2.sizePolicy().hasHeightForWidth())
+        self.frame_2.setSizePolicy(sizePolicy)
         self.frame_2.setStyleSheet(u"background-color: rgb(255, 255, 255);")
         self.frame_2.setFrameShape(QFrame.NoFrame)
         self.frame_2.setFrameShadow(QFrame.Plain)
@@ -80,13 +85,18 @@ class Ui_AlgoIntroStep(object):
         self.scrollArea.setWidgetResizable(True)
         self.scrollAreaWidgetContents = QWidget()
         self.scrollAreaWidgetContents.setObjectName(u"scrollAreaWidgetContents")
-        self.scrollAreaWidgetContents.setGeometry(QRect(0, 0, 1451, 346))
+        self.scrollAreaWidgetContents.setGeometry(QRect(0, 0, 1161, 287))
         self.horizontalLayout = QHBoxLayout(self.scrollAreaWidgetContents)
         self.horizontalLayout.setObjectName(u"horizontalLayout")
         self.label_4 = QLabel(self.scrollAreaWidgetContents)
         self.label_4.setObjectName(u"label_4")
+        sizePolicy.setHeightForWidth(self.label_4.sizePolicy().hasHeightForWidth())
+        self.label_4.setSizePolicy(sizePolicy)
+        self.label_4.setFocusPolicy(Qt.NoFocus)
+        self.label_4.setContextMenuPolicy(Qt.NoContextMenu)
         self.label_4.setStyleSheet(u"background-color: rgb(255, 255, 255);")
         self.label_4.setLineWidth(0)
+        self.label_4.setAlignment(Qt.AlignLeading|Qt.AlignLeft|Qt.AlignTop)
 
         self.horizontalLayout.addWidget(self.label_4)
 
@@ -115,8 +125,13 @@ class Ui_AlgoIntroStep(object):
         self.label_6 = QLabel(self.frame_3)
         self.label_6.setObjectName(u"label_6")
         self.label_6.setStyleSheet(u"background-color: rgb(255, 255, 255);")
+        self.label_6.setAlignment(Qt.AlignLeading|Qt.AlignLeft|Qt.AlignTop)
 
         self.verticalLayout_4.addWidget(self.label_6)
+
+        self.verticalSpacer = QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Preferred)
+
+        self.verticalLayout_4.addItem(self.verticalSpacer)
 
 
         self.verticalLayout.addWidget(self.frame_3)

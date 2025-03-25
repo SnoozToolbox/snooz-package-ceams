@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1099</width>
-    <height>858</height>
+    <height>700</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -76,6 +76,12 @@
        </item>
        <item>
         <widget class="QFrame" name="frame_2">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
          <property name="styleSheet">
           <string notr="true">background-color: rgb(255, 255, 255);</string>
          </property>
@@ -121,13 +127,25 @@
               <rect>
                <x>0</x>
                <y>0</y>
-               <width>1451</width>
-               <height>346</height>
+               <width>1161</width>
+               <height>287</height>
               </rect>
              </property>
              <layout class="QHBoxLayout" name="horizontalLayout">
               <item>
                <widget class="QLabel" name="label_4">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="focusPolicy">
+                 <enum>Qt::NoFocus</enum>
+                </property>
+                <property name="contextMenuPolicy">
+                 <enum>Qt::NoContextMenu</enum>
+                </property>
                 <property name="styleSheet">
                  <string notr="true">background-color: rgb(255, 255, 255);</string>
                 </property>
@@ -136,6 +154,9 @@
                 </property>
                 <property name="text">
                  <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;The sleep staging algorithm, YASA, is an open-source tool that has been trained,&lt;br/&gt;using over 30,000 hours of polysomnographic (PSG) sleep data across diverse populations. &lt;/p&gt;&lt;p&gt;-&amp;gt;&lt;span style=&quot; font-weight:600;&quot;&gt; Data processing:&lt;/span&gt; The algorithm uses a central EEG channel, along with EOG, and EMG channels.&lt;br/&gt;These signals are downsampled to 100 Hz and bandpassed-filtered between 0.4 Hz and 30 Hz. &lt;/p&gt;&lt;p&gt;-&amp;gt; &lt;span style=&quot; font-weight:600;&quot;&gt;Feature Extraction:&lt;/span&gt; The algorithm extracts a set of time and frequency domain features from the EEG signal, and optionaly from the EOG and EMG signals.&lt;br/&gt;These features are calculated for each 30-second epoch of raw data. &lt;/p&gt;&lt;p&gt;-&amp;gt; &lt;span style=&quot; font-weight:600;&quot;&gt;Smoothing and Normalization:&lt;/span&gt; The algorithm uses a smoothing approach across all the aformentioned features to incorporate contextual infromation.&lt;br/&gt;All the smoothed features are then z-scored across each night. &lt;/p&gt;&lt;p&gt;-&amp;gt; &lt;span style=&quot; font-weight:600;&quot;&gt;Machine Learning Classification:&lt;/span&gt; A lightGBM classifier, a tree-based gradient-boosting classifier, is used. &lt;/p&gt;&lt;p&gt;-&amp;gt; &lt;span style=&quot; font-weight:600;&quot;&gt;Performance Evaluation:&lt;/span&gt; The algorithm's performance is evaluated using standardized guidelines,&lt;br/&gt;including accuracy, Cohen's kappa, Matthews correlation coefficient, confusion matrices, and F1-scores. &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                </property>
+                <property name="alignment">
+                 <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
                 </property>
                </widget>
               </item>
@@ -182,7 +203,26 @@
             <property name="text">
              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;The YASA sleep scoring tool is compatible with different input files including, EDF, NATUS, and STS. &lt;/p&gt;&lt;p&gt;The output of the automatic scoring algorithm is an accessory file that saves the predicted sleep stages.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
             </property>
+            <property name="alignment">
+             <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+            </property>
            </widget>
+          </item>
+          <item>
+           <spacer name="verticalSpacer">
+            <property name="orientation">
+             <enum>Qt::Vertical</enum>
+            </property>
+            <property name="sizeType">
+             <enum>QSizePolicy::Preferred</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>20</width>
+              <height>40</height>
+             </size>
+            </property>
+           </spacer>
           </item>
          </layout>
         </widget>
