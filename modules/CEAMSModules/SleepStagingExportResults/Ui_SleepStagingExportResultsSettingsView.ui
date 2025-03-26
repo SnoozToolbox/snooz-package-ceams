@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>ResultSummarySettingsView</class>
- <widget class="QWidget" name="ResultSummarySettingsView">
+ <class>SleepStagingExportResultsSettingsView</class>
+ <widget class="QWidget" name="SleepStagingExportResultsSettingsView">
   <property name="styleSheet">
    <string notr="true">font: 12pt &quot;Roboto&quot;;</string>
   </property>

@@ -39,12 +39,14 @@ class YasaSleepStagingResultsView(Ui_YasaSleepStagingResultsView, QtWidgets.QWid
         toolbar = NavigationToolbar(self.canvas, self)
         self.ACC = QtWidgets.QLabel()
         self.Confidence = QtWidgets.QLabel()
+        self.Kappa = QtWidgets.QLabel()
                 
         # set the layout
         self.result_layout.addWidget(toolbar)
         self.result_layout.addWidget(self.canvas)
         self.result_layout.addWidget(self.ACC)
         self.result_layout.addWidget(self.Confidence)
+        self.result_layout.addWidget(self.Kappa)
 
     def load_results(self):
 
@@ -58,9 +60,12 @@ class YasaSleepStagingResultsView(Ui_YasaSleepStagingResultsView, QtWidgets.QWid
             Accuracy = cache['Accuracy']
             # call avg_confidence
             AvgConfidence = cache['Avg_Confidence']
+            # call kappa
+            Kappa = cache['kappa']
             # Create a new label widget to display the accuracy
             self.ACC.setText(f"Accuracy: {Accuracy:.2f}%")
             self.Confidence.setText(f"Avg Confidence: {AvgConfidence:.2f}%")
+            self.Kappa.setText(f"Kappa: {Kappa:.2f}")
             ### Plot the hypnogram
             # Define the layout for the plots
             gs = gridspec.GridSpec(2, 2, height_ratios=[1, 1])  # Three equal-height plots

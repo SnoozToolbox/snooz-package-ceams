@@ -1,33 +1,36 @@
 """
-@ Valorisation Recherche HSCM, Societe en Commandite – 2025
+@ Valorisation Recherche HSCM, Société en Commandite – 2025
 See the file LICENCE for full license details.
 
     CreateListofTuples
-    TODO CLASS DESCRIPTION
+    A Flowpipe node that filters events based on group type and generates a list
+    of tuples marking events for removal. Primarily used for sleep stage event processing.
 """
 from flowpipe import SciNode, InputPlug, OutputPlug
 from commons.NodeInputException import NodeInputException
 from commons.NodeRuntimeException import NodeRuntimeException
+import pandas as pd
 
 DEBUG = False
 
 class CreateListofTuples(SciNode):
     """
-    TODO CLASS DESCRIPTION
+    Filters and transforms event data into a list of removable event tuples.
+    When group='stage', creates tuples of (group, name) for each stage event.
+    For other group types, returns an empty list.
 
     Parameters
     ----------
-        events: TODO TYPE
-            TODO DESCRIPTION
-        group: TODO TYPE
-            TODO DESCRIPTION
-        
+        events : pandas DataFrame
+            Dictionary containing event data with 'group' and 'name' keys.
+            Expected format: {'group': List[str], 'name': List[str]}
+        group: str
+            The group type to filter by (e.g., 'stage' for sleep stage events)
 
     Returns
     -------
-        events_to_remove: TODO TYPE
-            TODO DESCRIPTION
-        
+        events_to_remove: List[Tuple[str, str]]
+            List of (group, name) tuples for events matching the specified group
     """
     def __init__(self, **kwargs):
         """ Initialize module CreateListofTuples """
@@ -41,10 +44,6 @@ class CreateListofTuples(SciNode):
 
         # Output plugs
         OutputPlug('events_to_remove',self)
-        
-
-        # Init module variables
-        self.this_is_an_example_you_can_delete_it = 0
 
         # A master module allows the process to be reexcuted multiple time.
         # For exemple, this is useful when the process must be repeated over multiple
@@ -55,29 +54,37 @@ class CreateListofTuples(SciNode):
     
     def compute(self, events,group):
         """
-        TODO DESCRIPTION
+        Processes event data and generates removal tuples based on group type.
 
         Parameters
         ----------
-            events: TODO TYPE
-                TODO DESCRIPTION
-            group: TODO TYPE
-                TODO DESCRIPTION
-            
+            events: pandas DataFrame
+                Event data containing 'group' and 'name' lists
+            group: str
+                Target group type for filtering
 
         Returns
         -------
-            events_to_remove: TODO TYPE
-                TODO DESCRIPTION
-            
+            events_to_remove: List[Tuple[str, str]]
+                Filtered list of (group, name) tuples
 
         Raises
         ------
             NodeInputException
-                If any of the input parameters have invalid types or missing keys.
+                If inputs are invalid (missing keys, wrong types)
             NodeRuntimeException
-                If an error occurs during the execution of the function.
+                If processing fails
         """
+        if DEBUG: print('CreateListofTuples.compute')
+
+        # Input validation
+        if not isinstance(events, pd.DataFrame):
+            raise NodeInputException(self.identifier, "events", "Events must be a pandas DataFrame")
+        if not all(key in events for key in ['group', 'name']):
+            raise NodeInputException(self.identifier, "events", "Dictionary must contain 'group' and 'name' keys")
+        if not isinstance(group, str):
+            raise NodeInputException(self.identifier, "group", "Group must be a string")
+        
         if group == 'stage':
             events_to_remove = [(events['group'][i], events['name'][i]) for i, stage in enumerate(events['group']) if stage == 'stage']
         else:

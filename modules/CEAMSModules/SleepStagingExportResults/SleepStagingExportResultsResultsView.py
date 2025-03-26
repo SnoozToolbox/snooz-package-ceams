@@ -2,19 +2,19 @@
 @ CIUSSS DU NORD-DE-L'ILE-DE-MONTREAL – 2024
 See the file LICENCE for full license details.
 
-    Results viewer of the ResultSummary plugin
+    Results viewer of the SleepStagingExportResults plugin
 """
 
 from qtpy import QtWidgets
 
-from CEAMSModules.ResultSummary.Ui_ResultSummaryResultsView import Ui_ResultSummaryResultsView
+from CEAMSModules.SleepStagingExportResults.Ui_SleepStagingExportResultsResultsView import Ui_SleepStagingExportResultsResultsView
 
-class ResultSummaryResultsView(Ui_ResultSummaryResultsView, QtWidgets.QWidget):
+class SleepStagingExportResultsResultsView(Ui_SleepStagingExportResultsResultsView, QtWidgets.QWidget):
     """
-        ResultSummaryResultsView.
+        SleepStagingExportResultsResultsView.
     """
     def __init__(self, parent_node, cache_manager, pub_sub_manager, *args, **kwargs):
-        super(ResultSummaryResultsView, self).__init__(*args, **kwargs)
+        super(SleepStagingExportResultsResultsView, self).__init__(*args, **kwargs)
         self._parent_node = parent_node
         self._pub_sub_manager = pub_sub_manager
         self._cache_manager = cache_manager

@@ -1,9 +1,11 @@
 """
-@ Valorisation Recherche HSCM, Societe en Commandite – 2025
+@ Valorisation Recherche HSCM, Société en Commandite – 2025
 See the file LICENCE for full license details.
 
     CreateDict
-    TODO CLASS DESCRIPTION
+    A Flowpipe node that creates a dictionary from key-value pairs and outputs both
+    the dictionary and the original value. This is useful for data packaging and
+    transformation in processing pipelines.
 """
 from flowpipe import SciNode, InputPlug, OutputPlug
 from commons.NodeInputException import NodeInputException
@@ -13,22 +15,24 @@ DEBUG = False
 
 class CreateDict(SciNode):
     """
-    TODO CLASS DESCRIPTION
+    Transforms key-value inputs into a dictionary output while preserving the original value.
+    The dictionary is stringified for compatibility with downstream Flowpipe nodes.
 
     Parameters
     ----------
-        Key: TODO TYPE
-            TODO DESCRIPTION
-        Value: TODO TYPE
-            TODO DESCRIPTION
-        
-
+        Key: str
+            The key to be used in the output dictionary
+        Value: Any
+            The value to associate with the key in the dictionary
+            
     Returns
     -------
-        Dict: TODO TYPE
-            TODO DESCRIPTION
-        
+        Dict: str
+            String representation of the generated dictionary (for Flowpipe compatibility)
+        Value: Any
+            The original input value (passed through)
     """
+
     def __init__(self, **kwargs):
         """ Initialize module CreateDict """
         super().__init__(**kwargs)
@@ -42,10 +46,6 @@ class CreateDict(SciNode):
         # Output plugs
         OutputPlug('Dict',self)
         OutputPlug('Value',self)
-        
-
-        # Init module variables
-        self.this_is_an_example_you_can_delete_it = 0
 
         # A master module allows the process to be reexcuted multiple time.
         # For exemple, this is useful when the process must be repeated over multiple
@@ -56,30 +56,38 @@ class CreateDict(SciNode):
     
     def compute(self, Key,Value):
         """
-        TODO DESCRIPTION
+        Creates a dictionary from the input key-value pair and returns both
+        the dictionary and original value.
 
         Parameters
         ----------
-            Key: TODO TYPE
-                TODO DESCRIPTION
-            Value: TODO TYPE
-                TODO DESCRIPTION
-            
+            Key: str
+                The dictionary key to use
+            Value: Any
+                The value to associate with the key
 
         Returns
         -------
-            Dict: TODO TYPE
-                TODO DESCRIPTION
-            
+            Dict: str
+                Stringified version of the {Key: Value} dictionary
+            Value: Any
+                The original input value (passed through)
 
         Raises
         ------
             NodeInputException
-                If any of the input parameters have invalid types or missing keys.
+                If Key is not a string or if Value is None
             NodeRuntimeException
-                If an error occurs during the execution of the function.
+                If dictionary creation fails for any reason
         """
+
         if DEBUG: print('CreateDict.compute')
+        # Input validation
+        if not isinstance(Key, str) or not Key.strip():
+            raise NodeInputException(self.identifier, "Key", "Key must be a non-empty string")
+        if Value is None:
+            raise NodeInputException(self.identifier, "Value", "Value cannot be None")
+        
         Dictionary = {Key:Value}
 
         # Log message for the Logs tab

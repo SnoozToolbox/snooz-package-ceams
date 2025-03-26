@@ -1,9 +1,10 @@
 """
-@ CIUSSS DU NORD-DE-L'ILE-DE-MONTREAL – 2024
+@ Valorisation Recherche HSCM, Société en Commandite – 2025
 See the file LICENCE for full license details.
 
     YasaSleepStaging
-    This class performs automatic sleep scoring using the YasaSleepStaging package.
+    A module that performs automatic sleep stage scoring using YASA (Yet Another Spindle Algorithm).
+    This node processes EEG, EOG, and EMG signals to predict sleep stages according to standard AASM guidelines.
 """
 from flowpipe import SciNode, InputPlug, OutputPlug
 from commons.NodeInputException import NodeInputException
@@ -15,33 +16,40 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 from scipy.signal import resample
-from sklearn.metrics import classification_report, confusion_matrix
+from sklearn.metrics import classification_report, confusion_matrix, cohen_kappa_score
 
 DEBUG = False
 
 class YasaSleepStaging(SciNode):
     """
-    This class performs automatic sleep scoring using the YasaSleepStaging package.
+    Automatic sleep stage classification using YASA's machine learning model.
+    Handles both validation (against expert scores) and prediction modes.
 
     Parameters
     ----------
-        filename: TODO TYPE
-            TODO DESCRIPTION
-        signals: TODO TYPE
-            TODO DESCRIPTION
-        sleep_stages: TODO TYPE
-            TODO DESCRIPTION
-        events: TODO TYPE
-            TODO DESCRIPTION
-        
+        filename: str
+            Path to the input data file
+        signals_EEG: list
+            List of EEG signal objects (required)
+        signals_EOG: list
+            List of EOG signal objects (optional)
+        signals_EMG: list
+            List of EMG signal objects (optional)
+        sleep_stages: pd.DataFrame
+            Expert-scored sleep stages (required in validation mode)
+        events: pd.DataFrame
+            Original sleep events annotation
+        Checkbox: bool
+            Flag indicating validation mode (True) or prediction mode (False)
 
     Returns
     -------
-        results: TODO TYPE
-            TODO DESCRIPTION
-        write: TODO TYPE
-            TODO DESCRIPTION
-        
+        results: pd.DataFrame
+            Classification metrics (accuracy, kappa, confidence, F1 scores)
+        info: list
+            Contains [ground_truth_hypnogram, predicted_hypnogram, filename]
+        new_events: pd.DataFrame
+            Updated events with predicted sleep stages
     """
     def __init__(self, **kwargs):
         """ Initialize module YasaSleepStaging """
@@ -49,53 +57,61 @@ class YasaSleepStaging(SciNode):
         if DEBUG: print('YasaSleepStaging.__init__')
 
         # Input plugs
-        InputPlug('filename', self)
-        InputPlug('signals_EEG', self)
-        InputPlug('signals_EOG', self)
-        InputPlug('signals_EMG', self)
-        InputPlug('sleep_stages', self)
-        InputPlug('events', self)
-        InputPlug('Checkbox', self)
+        InputPlug('filename', self)          # Input file path
+        InputPlug('signals_EEG', self)       # EEG signals (required)
+        InputPlug('signals_EOG', self)       # EOG signals (optional)
+        InputPlug('signals_EMG', self)       # EMG signals (optional)
+        InputPlug('sleep_stages', self)      # Expert-scored stages (validation)
+        InputPlug('events', self)            # Sleep events annotation
+        InputPlug('Checkbox', self)          # Validation mode flag
 
         # Output plugs
-        OutputPlug('results', self)
-        OutputPlug('info', self)
-        OutputPlug('new_events', self)
+        OutputPlug('results', self)          # Classification metrics
+        OutputPlug('info', self)             # Hypnogram comparison data
+        OutputPlug('new_events', self)       # Updated events with predictions
 
-        self.is_done = False
-        self._is_master = False
+        # Processing state flags
+        self.is_done = False                 # Completion status
+        self._is_master = False              # Master module flag
     
-    def compute(self, filename,signals_EEG, signals_EOG, signals_EMG ,sleep_stages,events, Checkbox):
+    def compute(self, filename, signals_EEG, signals_EOG, signals_EMG , sleep_stages, events, Checkbox):
         """
-        TODO DESCRIPTION
+        Main processing method that performs sleep stage classification.
 
         Parameters
         ----------
-            filename: TODO TYPE
-                TODO DESCRIPTION
-            signals: TODO TYPE
-                TODO DESCRIPTION
-            sleep_stages: TODO TYPE
-                TODO DESCRIPTION
-            events: TODO TYPE
-                TODO DESCRIPTION
-            
+            filename: str
+                Path to the input data file
+            signals_EEG: list
+                EEG signal objects
+            signals_EOG: list
+                EOG signal objects
+            signals_EMG: list
+                EMG signal objects
+            sleep_stages: pd.DataFrame
+                Expert-scored stages (validation mode)
+            events: pd.DataFrame
+                Sleep events annotation
+            Checkbox: bool
+                Validation mode flag
 
         Returns
         -------
-            results: TODO TYPE
-                TODO DESCRIPTION
-            write: TODO TYPE
-                TODO DESCRIPTION
-            
+            results: pd.DataFrame
+                Classification metrics (accuracy, kappa, confidence, F1 scores)
+            info: list
+                Contains [ground_truth_hypnogram, predicted_hypnogram, filename]
+            new_events: pd.DataFrame
+                Updated events with predicted sleep stages
 
         Raises
         ------
             NodeInputException
-                If any of the input parameters have invalid types or missing keys.
+                If required inputs are missing or invalid
             NodeRuntimeException
-                If an error occurs during the execution of the function.
+                If processing fails at any stage
         """
+        
         # Split the data into EEG, EOG, and EMG signals
         signals = self.SplitData(signals_EEG, signals_EOG, signals_EMG)
         y_pred_list = []
@@ -161,12 +177,12 @@ class YasaSleepStaging(SciNode):
 
             # Calculate Accuracy
             Accuracy = 100 * (pd.Series(labels_new) == pd.Series(y_pred_new)).mean()
+            # Calculate Cohen's Kappa
+            kappa = cohen_kappa_score(labels_new, y_pred_new)
             report_dict = classification_report(labels_new, y_pred_new, output_dict=True)
 
             # Calculate F1 scores for each stage
             F1_scores = {stage: report_dict[stage]['f1-score']*100 if stage in report_dict else None for stage in ['WAKE', 'N1', 'N2', 'N3', 'REM']}
-
-            print(f"The overall agreement is {Accuracy:.2f}%")
 
             # Convert lists back to Hypnogram objects
             labels_new = yasa.Hypnogram(labels_new, freq="30s")
@@ -174,7 +190,7 @@ class YasaSleepStaging(SciNode):
 
             # Cache the results
             file_name = filename[:-4] # Extract the file name from the path
-            self.cache_signal(labels_new, y_pred_new, Accuracy, sls, Avg_Confidence, file_name)
+            self.cache_signal(labels_new, y_pred_new, Accuracy, sls, Avg_Confidence, file_name, kappa)
 
             # Log the results
             self._log_manager.log(self.identifier, "Hypnogram computed.")
@@ -182,7 +198,7 @@ class YasaSleepStaging(SciNode):
             filenamewe = os.path.basename(file_name)
             name_without_extension = os.path.splitext(filenamewe)[0]
             # Create a DataFrame for the classification report
-            df_Classification_report = pd.DataFrame({'Subject Name': [name_without_extension], 'Accuracy': [Accuracy], 'Average Confidence':[Avg_Confidence], **{f'F1-{stage}': [F1_scores[stage]] for stage in F1_scores}})
+            df_Classification_report = pd.DataFrame({'Subject Name': [name_without_extension], 'Accuracy': [Accuracy], 'kappa':[kappa],'Average Confidence':[Avg_Confidence], **{f'F1-{stage}': [F1_scores[stage]] for stage in F1_scores}})
         else:
             y_pred_new = list(y_pred.hypno)
             #NOTE Create a new events dataframe
@@ -333,7 +349,7 @@ class YasaSleepStaging(SciNode):
         else:
             return yasa.SleepStaging(raw, eeg_name=ch_names[0], eog_name=ch_names[1] if 'eog' in ch_types else None, emg_name=ch_names[1] if 'emg' in ch_types else None)
 
-    def cache_signal(self, labels_new, y_pred_new, Accuracy, sls, Avg_Confidence, file_name):
+    def cache_signal(self, labels_new, y_pred_new, Accuracy, sls, Avg_Confidence, file_name, kappa):
         """
         Cache the hypnogram.
 
@@ -358,7 +374,8 @@ class YasaSleepStaging(SciNode):
             'Accuracy': Accuracy,
             'sls': sls,
             'Avg_Confidence': Avg_Confidence,
-            'file_name': file_name
+            'file_name': file_name,
+            'kappa': kappa
         }
         self._cache_manager.write_mem_cache(self.identifier, cache)
 

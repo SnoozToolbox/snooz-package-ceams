@@ -1,9 +1,11 @@
 """
-@ CIUSSS DU NORD-DE-L'ILE-DE-MONTREAL – 2024
+@ Valorisation Recherche HSCM, Société en Commandite – 2025
 See the file LICENCE for full license details.
 
-    ResultSummary
-    TODO CLASS DESCRIPTION
+    SleepStagingExportResults
+    A Flowpipe node that handles the export and visualization of sleep staging results,
+    including saving metrics to TSV files and generating PDF reports with hypnograms
+    and confusion matrices.
 """
 from flowpipe import SciNode, InputPlug, OutputPlug
 from commons.NodeInputException import NodeInputException
@@ -24,89 +26,112 @@ import numpy as np
 
 DEBUG = False
 
-class ResultSummary(SciNode):
+class SleepStagingExportResults(SciNode):
     """
-    TODO CLASS DESCRIPTION
+    Processes and visualizes sleep staging results including:
+    - Saving performance metrics (accuracy, kappa, confidence) to TSV files
+    - Generating PDF reports with comparative hypnograms and confusion matrices
 
     Parameters
     ----------
-        ResultsDataframe: TODO TYPE
-            TODO DESCRIPTION
-        Additional: TODO TYPE
-            TODO DESCRIPTION
+        ResultsDataframe: pd.DataFrame
+            DataFrame containing sleep staging metrics (accuracy, kappa, confidence)
+        info: list
+            List containing [ground_truth_hypnogram, predicted_hypnogram, file_path]
+        SavedDestination: str
+            Directory path where results should be saved
+        Checkbox: bool
+            Flag indicating whether to save results (True) or skip (False)
 
     Returns
     -------
-        ExportResults: TODO TYPE
-            TODO DESCRIPTION
+        ExportResults: str or None
+            Path to the generated TSV file if saved, None otherwise
     """
     def __init__(self, **kwargs):
-        """ Initialize module ResultSummary """
+        """ Initialize module SleepStagingExportResults """
         super().__init__(**kwargs)
-        if DEBUG: print('ResultSummary.__init__')
+        if DEBUG: print('SleepStagingExportResults.__init__')
 
         # Input plugs
         InputPlug('ResultsDataframe', self)
-        InputPlug('Additional', self)
+        InputPlug('info', self)
         InputPlug('SavedDestination', self)
         InputPlug('Checkbox', self)
 
         # Output plugs
         OutputPlug('ExportResults', self)
+
+        # Initialize the figure and canvas for plotting
         self.figure = Figure()
         self.canvas = FigureCanvas(self.figure)
-        # A master module allows the process to be reexcuted multiple times.
-        # For example, this is useful when the process must be repeated over multiple
-        # files. When the master module is done, i.e., when all the files were processed,
-        # The compute function must set self.is_done = True
-        # There can only be 1 master module per process.
+
+        # A master module allows the process to be reexcuted multiple time.
         self._is_master = False
         self.AccuracyList = []
 
-    def compute(self, ResultsDataframe, Additional, SavedDestination, Checkbox):
+    def compute(self, ResultsDataframe, info, SavedDestination, Checkbox):
         """
-        TODO DESCRIPTION
+        Processes sleep staging results by:
+        1. Saving metrics to a cumulative TSV file when Checkbox is True
+        2. Generating visualization PDF with:
+           - Ground truth vs predicted hypnograms
+           - Normalized confusion matrix
+           - Accuracy/Kappa/Confidence metrics
 
         Parameters
         ----------
-            ResultsDataframe: TODO TYPE
-                TODO DESCRIPTION
-            Additional: TODO TYPE
-                TODO DESCRIPTION
+            ResultsDataframe: pd.DataFrame
+                Contains columns: ['Accuracy', 'Average Confidence', 'kappa']
+            info: list
+                [ground_truth_labels, predicted_labels, source_file_path]
+            SavedDestination: str
+                Valid directory path for output files
+            Checkbox: bool
+                Control whether to save results
 
         Returns
         -------
-            ExportResults: TODO TYPE
-                TODO DESCRIPTION
+            ExportResults: str or None
+                Path to the generated TSV file if saved, None otherwise
 
         Raises
         ------
             NodeInputException
-                If any of the input parameters have invalid types or missing keys.
+                If inputs are invalid (wrong types, missing data)
             NodeRuntimeException
-                If an error occurs during the execution of the function.
+                If file operations or visualizations fail
         """
-        if Checkbox:
-            # Define file path
-            export_results_file_path = '../snooz-package-ceams/modules/CEAMSModules/ResultSummary/ExportResults.xlsx' # You need to change this path to your own path
+        # Validate inputs
+        if not isinstance(ResultsDataframe, pd.DataFrame):
+            raise NodeInputException(self.identifier, "ResultsDataframe", "Input must be a pandas DataFrame")
+        if not isinstance(info, list) or len(info) != 3:
+            raise NodeInputException(self.identifier, "info", "Info must be a list of [ground_truth, predicted, file_path]")
+        if not os.path.isdir(SavedDestination):
+            raise NodeInputException(self.identifier, "SavedDestination", "Output directory does not exist")
+        
 
+        if Checkbox:
+            # Define file path (change extension to .tsv)
+            export_results_file_path = SavedDestination + 'YASA_sleep_staging_metrics_cohort_report.tsv'  # TSV file
             # Check if file exists, if not create it with headers
             if not os.path.exists(export_results_file_path):
-                pd.DataFrame().to_excel(export_results_file_path, index=False)
+                pd.DataFrame().to_csv(export_results_file_path, sep='\t', index=False)  # TSV creation
 
             # Load existing data
             try:
-                export_results_df = pd.read_excel(export_results_file_path)
-            except pd.errors.EmptyDataError:
+                export_results_df = pd.read_csv(export_results_file_path, sep='\t')  # Read TSV
+            except (pd.errors.EmptyDataError, FileNotFoundError):
                 export_results_df = pd.DataFrame()
 
             # Append new data
             export_results_df = pd.concat([export_results_df, ResultsDataframe], ignore_index=True)
 
-            # Save updated data back to excel file
-            export_results_df.to_excel(export_results_file_path, index=False)
+            # Save updated data back to TSV file
+            export_results_df.to_csv(export_results_file_path, sep='\t', index=False)  # Save as TSV
 
-            # Plot the hypnogram and confusion matrix and save to a PDF file
+
+            #NOTE: Plot the hypnogram and confusion matrix and save to a PDF file
             self.figure.clear() # reset the hold on
             self.figure.set_size_inches(15,4)
             ### Plot the hypnogram
@@ -118,7 +143,7 @@ class ResultSummary(SciNode):
             # Adjust the layout to make each subplot bigger
             gs.update(wspace=0.4, hspace=0.6)
             # First subplot - Hypnogram
-            labels_new = Additional[0]
+            labels_new = info[0]
             ax1 = self.figure.add_subplot(gs[0])
             ax1 = labels_new.plot_hypnogram(fill_color="gainsboro", ax=ax1)
             ax1.set_title('Expert Annotated Hypnogram')
@@ -127,7 +152,7 @@ class ResultSummary(SciNode):
             ax1.grid()
 
             # Second subplot - Estimated Hypnogram
-            y_pred_new = Additional[1]
+            y_pred_new = info[1]
             ax2 = self.figure.add_subplot(gs[2])
             ax2 = y_pred_new.plot_hypnogram(fill_color="blue", ax=ax2)
             ax2.set_title('Estimated Hypnogram')
@@ -160,12 +185,12 @@ class ResultSummary(SciNode):
             # Add accuracy and average confidence text next to the subplots
             ax4.text(0.5, 0.5, f"Accuracy: {ResultsDataframe['Accuracy'].iloc[0]:.2f}%", transform=ax4.transAxes, fontsize=12, verticalalignment='center', horizontalalignment='center')
             ax4.text(0.5, 0.3, f"Avg Confidence: {ResultsDataframe['Average Confidence'].iloc[0]:.2f}%", transform=ax4.transAxes, fontsize=12, verticalalignment='center', horizontalalignment='center')
-            
+            ax4.text(0.5, 0.1, f"Kappa: {ResultsDataframe['kappa'].iloc[0]:.2f}", transform=ax4.transAxes, fontsize=12, verticalalignment='center', horizontalalignment='center')
                                 # Adjust layout to add more space between subplots
             self.figure.tight_layout(pad=10.0)
 
                     # Save the figure to a PDF file
-            filename = os.path.basename(Additional[2])
+            filename = os.path.basename(info[2])
             name_without_extension = os.path.splitext(filename)[0]
             file_name = SavedDestination + name_without_extension
             if isinstance(file_name, str) and (len(file_name)>0):

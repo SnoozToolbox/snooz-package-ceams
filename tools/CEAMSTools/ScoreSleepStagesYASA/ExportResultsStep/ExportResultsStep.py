@@ -1,7 +1,11 @@
 #! /usr/bin/env python3
 """
-    InputFiles
-    Step to open files to detect spindles.
+@ Valorisation Recherche HSCM, Société en Commandite – 2025
+See the file LICENCE for full license details.
+"""
+
+"""
+    This step is used to export the results of the sleep staging algorithm.
 """
 
 from qtpy import QtWidgets, QtCore
@@ -20,9 +24,7 @@ class ExportResultsStep( BaseStepView,  Ui_ExportResultsStep, QtWidgets.QWidget)
     
 
     """
-        InputFilesStep
-        Class to send messages between step-by-step interface and plugins.
-        The goal is to inform PSGReader of the files to open and propagate the events included in the files.
+        ExportResultsStep describes the step to export the results of the sleep staging algorithm.
     """
     def __init__(self, **kwargs):
         super().__init__(**kwargs)

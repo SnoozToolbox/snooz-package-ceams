@@ -1,10 +1,10 @@
 """
-@ CIUSSS DU NORD-DE-L'ILE-DE-MONTREAL – 2023
+@ Valorisation Recherche HSCM, Société en Commandite – 2025
 See the file LICENCE for full license details.
 """
 
 """
-    Settings viewer of the Intro plugin
+    The itroduction step of the tool
 """
 
 from qtpy import QtWidgets
@@ -14,7 +14,7 @@ from commons.BaseStepView import BaseStepView
 
 class AlgoIntroStep( BaseStepView, Ui_AlgoIntroStep, QtWidgets.QWidget):
     """
-        AlgoIntroStep displays the a few examples of artifact and describes the tool.
+        AlgoIntroStep describes the tool and the details of the alogrithm.
     """
     def __init__(self, **kwargs):
         super().__init__(**kwargs)

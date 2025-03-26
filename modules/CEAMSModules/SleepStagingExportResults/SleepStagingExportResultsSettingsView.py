@@ -2,17 +2,17 @@
 @ CIUSSS DU NORD-DE-L'ILE-DE-MONTREAL – 2024
 See the file LICENCE for full license details.
 
-    Settings viewer of the ResultSummary plugin
+    Settings viewer of the SleepStagingExportResults plugin
 """
 
 from qtpy import QtWidgets
 
-from CEAMSModules.ResultSummary.Ui_ResultSummarySettingsView import Ui_ResultSummarySettingsView
+from CEAMSModules.SleepStagingExportResults.Ui_SleepStagingExportResultsSettingsView import Ui_SleepStagingExportResultsSettingsView
 from commons.BaseSettingsView import BaseSettingsView
 
-class ResultSummarySettingsView(BaseSettingsView, Ui_ResultSummarySettingsView, QtWidgets.QWidget):
+class SleepStagingExportResultsSettingsView(BaseSettingsView, Ui_SleepStagingExportResultsSettingsView, QtWidgets.QWidget):
     """
-        ResultSummaryView set the ResultSummary settings
+        SleepStagingExportResultsView set the SleepStagingExportResults settings
     """
     def __init__(self, parent_node, pub_sub_manager, **kwargs):
         super().__init__(**kwargs)
@@ -25,7 +25,7 @@ class ResultSummarySettingsView(BaseSettingsView, Ui_ResultSummarySettingsView, 
         # Subscribe to the proper topics to send/get data from the node
         self._ResultsDataframe_topic = f'{self._parent_node.identifier}.ResultsDataframe'
         self._pub_sub_manager.subscribe(self, self._ResultsDataframe_topic)
-        self._Additional_topic = f'{self._parent_node.identifier}.Additional'
+        self._Additional_topic = f'{self._parent_node.identifier}.info'
         self._pub_sub_manager.subscribe(self, self._Additional_topic)
         
 
@@ -42,7 +42,7 @@ class ResultSummarySettingsView(BaseSettingsView, Ui_ResultSummarySettingsView, 
     def on_apply_settings(self):
         """ Called when the user clicks on "Run" or "Save workspace"
         """
-        # Send the settings to the publisher for inputs to ResultSummary
+        # Send the settings to the publisher for inputs to SleepStagingExportResults
         self._pub_sub_manager.publish(self, self._ResultsDataframe_topic, str(self.ResultsDataframe_lineedit.text()))
         self._pub_sub_manager.publish(self, self._Additional_topic, str(self.Additional_lineedit.text()))
         

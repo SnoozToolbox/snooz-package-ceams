@@ -959,7 +959,7 @@
             ]
         },
         {
-            "item_name": "ResultSummary",
+            "item_name": "SleepStagingExportResults",
             "item_type": "module",
             "item_version": "0.0.0",
             "item_hooks": [
@@ -967,7 +967,7 @@
                     "endpoint_name": "module_endpoint",
                     "parameters": {
                         "module_category": "Statistics",
-                        "module_label": "Result Summary"
+                        "module_label": "Sleep Staging Export Results"
                     }
                 }
             ]

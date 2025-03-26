@@ -12,7 +12,6 @@ from PySide2.QtCore import *
 from PySide2.QtGui import *
 from PySide2.QtWidgets import *
 
-from . import intro_res_rc
 import themes_rc
 
 class Ui_AlgoIntroStep(object):

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file 'Ui_ResultSummarySettingsView.ui'
+## Form generated from reading UI file 'Ui_SleepStagingExportResultsSettingsView.ui'
 ##
 ## Created by: Qt User Interface Compiler version 5.15.2
 ##
@@ -14,22 +14,22 @@ from PySide2.QtWidgets import *
 
 import themes_rc
 
-class Ui_ResultSummarySettingsView(object):
-    def setupUi(self, ResultSummarySettingsView):
-        if not ResultSummarySettingsView.objectName():
-            ResultSummarySettingsView.setObjectName(u"ResultSummarySettingsView")
-        ResultSummarySettingsView.setStyleSheet(u"font: 12pt \"Roboto\";")
-        ResultSummarySettingsView.resize(711, 333)
-        self.verticalLayout = QVBoxLayout(ResultSummarySettingsView)
+class Ui_SleepStagingExportResultsSettingsView(object):
+    def setupUi(self, SleepStagingExportResultsSettingsView):
+        if not SleepStagingExportResultsSettingsView.objectName():
+            SleepStagingExportResultsSettingsView.setObjectName(u"SleepStagingExportResultsSettingsView")
+        SleepStagingExportResultsSettingsView.setStyleSheet(u"font: 12pt \"Roboto\";")
+        SleepStagingExportResultsSettingsView.resize(711, 333)
+        self.verticalLayout = QVBoxLayout(SleepStagingExportResultsSettingsView)
         self.verticalLayout.setObjectName(u"verticalLayout")
         self.ResultsDataframe_horizontalLayout = QHBoxLayout()
         self.ResultsDataframe_horizontalLayout.setObjectName(u"ResultsDataframe_horizontalLayout")
-        self.ResultsDataframe_label = QLabel(ResultSummarySettingsView)
+        self.ResultsDataframe_label = QLabel(SleepStagingExportResultsSettingsView)
         self.ResultsDataframe_label.setObjectName(u"ResultsDataframe_label")
 
         self.ResultsDataframe_horizontalLayout.addWidget(self.ResultsDataframe_label)
 
-        self.ResultsDataframe_lineedit = QLineEdit(ResultSummarySettingsView)
+        self.ResultsDataframe_lineedit = QLineEdit(SleepStagingExportResultsSettingsView)
         self.ResultsDataframe_lineedit.setObjectName(u"ResultsDataframe_lineedit")
 
         self.ResultsDataframe_horizontalLayout.addWidget(self.ResultsDataframe_lineedit)
@@ -39,12 +39,12 @@ class Ui_ResultSummarySettingsView(object):
 
         self.Additional_horizontalLayout = QHBoxLayout()
         self.Additional_horizontalLayout.setObjectName(u"Additional_horizontalLayout")
-        self.Additional_label = QLabel(ResultSummarySettingsView)
+        self.Additional_label = QLabel(SleepStagingExportResultsSettingsView)
         self.Additional_label.setObjectName(u"Additional_label")
 
         self.Additional_horizontalLayout.addWidget(self.Additional_label)
 
-        self.Additional_lineedit = QLineEdit(ResultSummarySettingsView)
+        self.Additional_lineedit = QLineEdit(SleepStagingExportResultsSettingsView)
         self.Additional_lineedit.setObjectName(u"Additional_lineedit")
 
         self.Additional_horizontalLayout.addWidget(self.Additional_lineedit)
@@ -57,14 +57,14 @@ class Ui_ResultSummarySettingsView(object):
         self.verticalLayout.addItem(self.verticalSpacer)
 
 
-        self.retranslateUi(ResultSummarySettingsView)
+        self.retranslateUi(SleepStagingExportResultsSettingsView)
 
-        QMetaObject.connectSlotsByName(ResultSummarySettingsView)
+        QMetaObject.connectSlotsByName(SleepStagingExportResultsSettingsView)
     # setupUi
 
-    def retranslateUi(self, ResultSummarySettingsView):
-        ResultSummarySettingsView.setWindowTitle(QCoreApplication.translate("ResultSummarySettingsView", u"Form", None))
-        self.ResultsDataframe_label.setText(QCoreApplication.translate("ResultSummarySettingsView", u"ResultsDataframe", None))
-        self.Additional_label.setText(QCoreApplication.translate("ResultSummarySettingsView", u"Additional", None))
+    def retranslateUi(self, SleepStagingExportResultsSettingsView):
+        SleepStagingExportResultsSettingsView.setWindowTitle(QCoreApplication.translate("SleepStagingExportResultsSettingsView", u"Form", None))
+        self.ResultsDataframe_label.setText(QCoreApplication.translate("SleepStagingExportResultsSettingsView", u"ResultsDataframe", None))
+        self.Additional_label.setText(QCoreApplication.translate("SleepStagingExportResultsSettingsView", u"Additional", None))
     # retranslateUi
 

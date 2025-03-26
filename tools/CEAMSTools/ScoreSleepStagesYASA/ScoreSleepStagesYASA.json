@@ -129,7 +129,7 @@
                         "sub_plugs": {},
                         "connections": {
                             "45e14f5d-5a72-4aaf-bf01-644c095979d6": [
-                                "Additional"
+                                "info"
                             ]
                         }
                     },
@@ -1023,12 +1023,12 @@
                 "pos_y": 443.0
             },
             {
-                "cls": "ResultSummary",
-                "name": "ResultSummary",
+                "cls": "SleepStagingExportResults",
+                "name": "SleepStagingExportResults",
                 "metadata": {},
                 "file_location": null,
-                "module": "CEAMSModules.ResultSummary",
-                "module_label": "Result Summary",
+                "module": "CEAMSModules.SleepStagingExportResults",
+                "module_label": "Sleep Staging Export Results",
                 "module_category": "Statistics",
                 "module_author": "",
                 "module_url": "",
@@ -1043,8 +1043,8 @@
                             "e58aa07b-4802-45f7-92c2-61f6f19b1818": "results"
                         }
                     },
-                    "Additional": {
-                        "name": "Additional",
+                    "info": {
+                        "name": "info",
                         "value": "",
                         "sub_plugs": {},
                         "connections": {
