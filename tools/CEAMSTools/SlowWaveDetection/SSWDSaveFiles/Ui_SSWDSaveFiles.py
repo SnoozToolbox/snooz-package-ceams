@@ -19,7 +19,7 @@ from PySide6.QtWidgets import (QApplication, QCheckBox, QFrame, QHBoxLayout,
     QLabel, QLineEdit, QPushButton, QSizePolicy,
     QSpacerItem, QTextEdit, QVBoxLayout, QWidget)
 import themes_rc
-import criteria_rc
+from . import criteria_rc
 
 class Ui_SSWDSaveFiles(object):
     def setupUi(self, SSWDSaveFiles):

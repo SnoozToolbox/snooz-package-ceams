@@ -572,7 +572,7 @@ class PSACohortReviewSettingsView(BaseSettingsView, Ui_PSACohortReviewSettingsVi
                 chan_item.setCheckState(cohort_state_list[i])
             else:
                 chan_item.setCheckState(Qt.Checked)
-            chan_item.setFlags(Qt.ItemIsEditable | Qt.ItemIsEnabled | Qt.ItemIsSelectable | Qt.ItemIsTristate | Qt.ItemIsUserCheckable)
+            chan_item.setFlags(Qt.ItemIsEditable | Qt.ItemIsEnabled | Qt.ItemIsSelectable | Qt.ItemIsAutoTristate | Qt.ItemIsUserCheckable)
             self.chan_cohort_listWidget.addItem(chan_item) 
  
 

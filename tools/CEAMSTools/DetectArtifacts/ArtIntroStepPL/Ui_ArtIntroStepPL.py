@@ -18,7 +18,7 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
 from PySide6.QtWidgets import (QApplication, QFrame, QLabel, QScrollArea,
     QSizePolicy, QSpacerItem, QSplitter, QVBoxLayout,
     QWidget)
-from . import intro_res_rc
+import intro_res_rc
 import themes_rc
 
 class Ui_ArtIntroStepPL(object):

@@ -288,7 +288,7 @@ class SelectStagesStep( BaseStepView,  Ui_SelectStagesStep, QtWidgets.QWidget):
             # If the user check/uncheck an event name, 
             #   look the other names and propagate to the group
             else:
-                item.setTristate(False)
+                item.setAutoTristate(False)
                 # Set the parent state depending of children
                 self.files_check_event_model = self.reader_settings_view.apply_state_to_parent_item(\
                     item, self.files_check_event_model)

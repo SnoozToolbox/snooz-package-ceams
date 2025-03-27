@@ -829,7 +829,7 @@ class InputFilesStep( BaseStepView,  Ui_InputFilesStep, QtWidgets.QWidget):
                 n_child = files_check_model.rowCount(view_index)
                 for i_c in range(n_child):
                     child_item = item.child(i_c)
-                    child_item.setTristate(False)
+                    child_item.setAutoTristate(False)
                     if child_item is not None:
                         child_item.setCheckState(item.checkState())
         return files_check_model

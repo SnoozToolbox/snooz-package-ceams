@@ -20,7 +20,7 @@ from PySide6.QtWidgets import (QApplication, QButtonGroup, QCheckBox, QComboBox,
     QLabel, QLineEdit, QRadioButton, QSizePolicy,
     QSpacerItem, QSpinBox, QVBoxLayout, QWidget)
 import themes_rc
-import sw_pic_rc
+from . import sw_pic_rc
 
 class Ui_SSWDCriterias(object):
     def setupUi(self, SSWDCriterias):
