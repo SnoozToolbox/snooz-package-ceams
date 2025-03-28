@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file ''
+## Form generated from reading UI file 'Ui_OutputFilesStep.ui'
 ##
 ## Created by: Qt User Interface Compiler version 6.8.2
 ##
@@ -24,7 +24,7 @@ class Ui_OutputFilesStep(object):
     def setupUi(self, OutputFilesStep):
         if not OutputFilesStep.objectName():
             OutputFilesStep.setObjectName(u"OutputFilesStep")
-        OutputFilesStep.resize(701, 757)
+        OutputFilesStep.resize(854, 757)
         self.verticalLayout_3 = QVBoxLayout(OutputFilesStep)
         self.verticalLayout_3.setObjectName(u"verticalLayout_3")
         self.verticalLayout = QVBoxLayout()
@@ -85,7 +85,7 @@ class Ui_OutputFilesStep(object):
 
         self.label = QLabel(OutputFilesStep)
         self.label.setObjectName(u"label")
-        self.label.setMaximumSize(QSize(16777215, 15))
+        self.label.setMaximumSize(QSize(16777215, 16777215))
         self.label.setFont(font)
 
         self.verticalLayout.addWidget(self.label)
@@ -111,7 +111,7 @@ class Ui_OutputFilesStep(object):
         self.textEdit.setObjectName(u"textEdit")
         self.textEdit.setMinimumSize(QSize(500, 0))
         self.textEdit.setMaximumSize(QSize(16777215, 125))
-        self.textEdit.setFrameShape(QFrame.HLine)
+        self.textEdit.setFrameShape(QFrame.Shape.HLine)
         self.textEdit.setLineWidth(0)
         self.textEdit.setReadOnly(True)
 
@@ -125,7 +125,7 @@ class Ui_OutputFilesStep(object):
         self.verticalLayout_2.setObjectName(u"verticalLayout_2")
         self.label_3 = QLabel(OutputFilesStep)
         self.label_3.setObjectName(u"label_3")
-        self.label_3.setMaximumSize(QSize(16777215, 15))
+        self.label_3.setMaximumSize(QSize(16777215, 16777215))
         self.label_3.setFont(font)
 
         self.verticalLayout_2.addWidget(self.label_3)
@@ -133,7 +133,7 @@ class Ui_OutputFilesStep(object):
         self.textEdit_2 = QTextEdit(OutputFilesStep)
         self.textEdit_2.setObjectName(u"textEdit_2")
         self.textEdit_2.setMaximumSize(QSize(16777215, 85))
-        self.textEdit_2.setFrameShape(QFrame.HLine)
+        self.textEdit_2.setFrameShape(QFrame.Shape.HLine)
         self.textEdit_2.setLineWidth(0)
         self.textEdit_2.setReadOnly(True)
 
@@ -144,7 +144,7 @@ class Ui_OutputFilesStep(object):
         self.label_4 = QLabel(OutputFilesStep)
         self.label_4.setObjectName(u"label_4")
         self.label_4.setMinimumSize(QSize(200, 0))
-        self.label_4.setMaximumSize(QSize(200, 16777215))
+        self.label_4.setMaximumSize(QSize(16777215, 16777215))
 
         self.horizontalLayout_2.addWidget(self.label_4)
 
@@ -215,24 +215,31 @@ class Ui_OutputFilesStep(object):
         self.label.setText(QCoreApplication.translate("OutputFilesStep", u"<html><head/><body><p><span style=\" font-weight:600;\">Performance evaluation</span></p></body></html>", None))
         self.label_2.setText(QCoreApplication.translate("OutputFilesStep", u"Jaccord index threshold", None))
         self.textEdit.setHtml(QCoreApplication.translate("OutputFilesStep", u"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
-"<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
+"<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset=\"utf-8\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
+"hr { height: 1px; border-width: 0; }\n"
+"li.unchecked::marker { content: \"\\2610\"; }\n"
+"li.checked::marker { content: \"\\2612\"; }\n"
 "</style></head><body style=\" font-family:'Roboto'; font-size:12pt; font-weight:400; font-style:normal;\">\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Note:</p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">    e represents the event from the expert</p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">    d represents the detection</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">    Jaccord index : (intersection between e and d) / (union of e and d)</p>\n"
-"<p style=\" margin-top:"
-                        "0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">    To considere a &quot;d&quot; as a True Positive, the jaccord index must exceed a certain threshold.</p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:"
+                        "0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">    Jaccord index : (intersection between e and d) / (union of e and d)</p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">    To considere a &quot;d&quot; as a True Positive, the jaccord index must exceed a certain threshold.</p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">    Only one &quot;d&quot; can match a &quot;e&quot;, the one with the highest Jaccord index.</p></body></html>", None))
         self.label_3.setText(QCoreApplication.translate("OutputFilesStep", u"<html><head/><body><p><span style=\" font-weight:600;\">Output file</span></p></body></html>", None))
         self.textEdit_2.setHtml(QCoreApplication.translate("OutputFilesStep", u"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
-"<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
+"<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset=\"utf-8\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
+"hr { height: 1px; border-width: 0; }\n"
+"li.unchecked::marker { content: \"\\2610\"; }\n"
+"li.checked::marker { content: \"\\2612\"; }\n"
 "</style></head><body style=\" font-family:'Roboto'; font-size:12pt; font-weight:400; font-style:normal;\">\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">The output performance file is written in the same directory as the PSG file.</p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">The performance at by-sample and by-event level are included.</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">The output file is named as the PSG file with an additional suffix and the extension .tsv.</p></body></html>", None))
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">The out"
+                        "put file is named as the PSG file with an additional suffix and the extension .tsv.</p></body></html>", None))
         self.label_4.setText(QCoreApplication.translate("OutputFilesStep", u"Suffix for the performance file", None))
         self.lineEdit_suffix.setPlaceholderText(QCoreApplication.translate("OutputFilesStep", u"_perf", None))
         self.label_title.setText(QCoreApplication.translate("OutputFilesStep", u"<html><head/><body><p><span style=\" font-weight:600;\">Additional output file</span></p></body></html>", None))

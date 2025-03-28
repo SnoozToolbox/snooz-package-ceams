@@ -399,7 +399,8 @@ class InputFilesStep( BaseStepView,  Ui_InputFilesStep, QtWidgets.QWidget):
 
     def on_add_folders(self):
         file_dialog = QtWidgets.QFileDialog()
-        file_dialog.setFileMode(QtWidgets.QFileDialog.DirectoryOnly)
+        file_dialog.setFileMode(QtWidgets.QFileDialog.Directory) 
+        file_dialog.setOption(QtWidgets.QFileDialog.ShowDirsOnly, True)
         # The native dialog does not support multiple folders selection in windows and macOS
             # Natus needs the option to select multiple folders
         file_dialog.setOption(QtWidgets.QFileDialog.DontUseNativeDialog, True)
