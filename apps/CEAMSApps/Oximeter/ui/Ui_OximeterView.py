@@ -19,7 +19,7 @@ from PySide6.QtWidgets import (QApplication, QComboBox, QFrame, QHBoxLayout,
     QLabel, QPushButton, QSizePolicy, QSpacerItem,
     QVBoxLayout, QWidget)
 
-from OximeterDrawArea import OximeterDrawArea
+from CEAMSApps.Oximeter.OximeterDrawArea import OximeterDrawArea
 
 class Ui_OximeterView(object):
     def setupUi(self, OximeterView):
