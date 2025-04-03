@@ -18,20 +18,19 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
 from PySide6.QtWidgets import (QApplication, QFrame, QHBoxLayout, QLabel,
     QScrollArea, QSizePolicy, QSpacerItem, QSplitter,
     QVBoxLayout, QWidget)
-# from . import intro_res_rc
 import themes_rc
 
 class Ui_AlgoIntroStep(object):
     def setupUi(self, AlgoIntroStep):
         if not AlgoIntroStep.objectName():
             AlgoIntroStep.setObjectName(u"AlgoIntroStep")
-        AlgoIntroStep.resize(1099, 700)
+        AlgoIntroStep.resize(1099, 846)
         AlgoIntroStep.setStyleSheet(u"font: 12pt \"Roboto\";background-color: rgb(255, 255, 255);")
         self.verticalLayout_7 = QVBoxLayout(AlgoIntroStep)
         self.verticalLayout_7.setObjectName(u"verticalLayout_7")
         self.splitter_2 = QSplitter(AlgoIntroStep)
         self.splitter_2.setObjectName(u"splitter_2")
-        self.splitter_2.setOrientation(Qt.Horizontal)
+        self.splitter_2.setOrientation(Qt.Orientation.Horizontal)
         self.verticalLayoutWidget = QWidget(self.splitter_2)
         self.verticalLayoutWidget.setObjectName(u"verticalLayoutWidget")
         self.verticalLayout = QVBoxLayout(self.verticalLayoutWidget)
@@ -41,8 +40,8 @@ class Ui_AlgoIntroStep(object):
         self.frame.setObjectName(u"frame")
         self.frame.setMaximumSize(QSize(16777213, 16777215))
         self.frame.setStyleSheet(u"background-color: rgb(255, 255, 255);")
-        self.frame.setFrameShape(QFrame.NoFrame)
-        self.frame.setFrameShadow(QFrame.Plain)
+        self.frame.setFrameShape(QFrame.Shape.NoFrame)
+        self.frame.setFrameShadow(QFrame.Shadow.Plain)
         self.frame.setLineWidth(0)
         self.verticalLayout_2 = QVBoxLayout(self.frame)
         self.verticalLayout_2.setObjectName(u"verticalLayout_2")
@@ -71,8 +70,8 @@ class Ui_AlgoIntroStep(object):
         sizePolicy.setHeightForWidth(self.frame_2.sizePolicy().hasHeightForWidth())
         self.frame_2.setSizePolicy(sizePolicy)
         self.frame_2.setStyleSheet(u"background-color: rgb(255, 255, 255);")
-        self.frame_2.setFrameShape(QFrame.NoFrame)
-        self.frame_2.setFrameShadow(QFrame.Plain)
+        self.frame_2.setFrameShape(QFrame.Shape.NoFrame)
+        self.frame_2.setFrameShadow(QFrame.Shadow.Plain)
         self.frame_2.setLineWidth(0)
         self.verticalLayout_3 = QVBoxLayout(self.frame_2)
         self.verticalLayout_3.setObjectName(u"verticalLayout_3")
@@ -86,23 +85,23 @@ class Ui_AlgoIntroStep(object):
         self.scrollArea = QScrollArea(self.frame_2)
         self.scrollArea.setObjectName(u"scrollArea")
         self.scrollArea.setStyleSheet(u"background-color: rgb(255, 255, 255);")
-        self.scrollArea.setFrameShape(QFrame.NoFrame)
-        self.scrollArea.setFrameShadow(QFrame.Sunken)
+        self.scrollArea.setFrameShape(QFrame.Shape.NoFrame)
+        self.scrollArea.setFrameShadow(QFrame.Shadow.Sunken)
         self.scrollArea.setWidgetResizable(True)
         self.scrollAreaWidgetContents = QWidget()
         self.scrollAreaWidgetContents.setObjectName(u"scrollAreaWidgetContents")
-        self.scrollAreaWidgetContents.setGeometry(QRect(0, 0, 1161, 287))
+        self.scrollAreaWidgetContents.setGeometry(QRect(0, 0, 1161, 477))
         self.horizontalLayout = QHBoxLayout(self.scrollAreaWidgetContents)
         self.horizontalLayout.setObjectName(u"horizontalLayout")
         self.label_4 = QLabel(self.scrollAreaWidgetContents)
         self.label_4.setObjectName(u"label_4")
         sizePolicy.setHeightForWidth(self.label_4.sizePolicy().hasHeightForWidth())
         self.label_4.setSizePolicy(sizePolicy)
-        self.label_4.setFocusPolicy(Qt.NoFocus)
-        self.label_4.setContextMenuPolicy(Qt.NoContextMenu)
+        self.label_4.setFocusPolicy(Qt.FocusPolicy.NoFocus)
+        self.label_4.setContextMenuPolicy(Qt.ContextMenuPolicy.NoContextMenu)
         self.label_4.setStyleSheet(u"background-color: rgb(255, 255, 255);")
         self.label_4.setLineWidth(0)
-        self.label_4.setAlignment(Qt.AlignLeading|Qt.AlignLeft|Qt.AlignTop)
+        self.label_4.setAlignment(Qt.AlignmentFlag.AlignLeading|Qt.AlignmentFlag.AlignLeft|Qt.AlignmentFlag.AlignTop)
 
         self.horizontalLayout.addWidget(self.label_4)
 
@@ -116,8 +115,8 @@ class Ui_AlgoIntroStep(object):
         self.frame_3 = QFrame(self.verticalLayoutWidget)
         self.frame_3.setObjectName(u"frame_3")
         self.frame_3.setStyleSheet(u"background-color: rgb(255, 255, 255);")
-        self.frame_3.setFrameShape(QFrame.NoFrame)
-        self.frame_3.setFrameShadow(QFrame.Plain)
+        self.frame_3.setFrameShape(QFrame.Shape.NoFrame)
+        self.frame_3.setFrameShadow(QFrame.Shadow.Plain)
         self.frame_3.setLineWidth(0)
         self.verticalLayout_4 = QVBoxLayout(self.frame_3)
         self.verticalLayout_4.setObjectName(u"verticalLayout_4")
@@ -131,7 +130,7 @@ class Ui_AlgoIntroStep(object):
         self.label_6 = QLabel(self.frame_3)
         self.label_6.setObjectName(u"label_6")
         self.label_6.setStyleSheet(u"background-color: rgb(255, 255, 255);")
-        self.label_6.setAlignment(Qt.AlignLeading|Qt.AlignLeft|Qt.AlignTop)
+        self.label_6.setAlignment(Qt.AlignmentFlag.AlignLeading|Qt.AlignmentFlag.AlignLeft|Qt.AlignmentFlag.AlignTop)
 
         self.verticalLayout_4.addWidget(self.label_6)
 
@@ -155,10 +154,10 @@ class Ui_AlgoIntroStep(object):
     def retranslateUi(self, AlgoIntroStep):
         AlgoIntroStep.setWindowTitle(QCoreApplication.translate("AlgoIntroStep", u"Form", None))
         self.label.setText(QCoreApplication.translate("AlgoIntroStep", u"<html><head/><body><p><span style=\" font-weight:600;\">Score Sleep Stages YASA</span></p></body></html>", None))
-        self.label_2.setText(QCoreApplication.translate("AlgoIntroStep", u"<html><head/><body><p align=\"justify\">This tool detects <span style=\" font-weight:600;\">sleep stages</span> from PSG files. </p><p align=\"justify\">Detection is performed on the entire recording with 30 second epochs corresponding to each sleep stage.<br/>The tool can detect sleep stages based on only one EEG electrode, prefered centreal ones (C3, C4). </p><p align=\"justify\">To enhance the perforamance of the algorithm, you can use one EOG and one EMG channel that can increase<br/>classification accuracy.<br/>Referrence: <a href=\"https://raphaelvallat.com/yasa/\"><span style=\" text-decoration: underline; color:#0000ff;\">https://raphaelvallat.com/yasa/<br/></span></a><br/>Additionaly, in Snooz you can select 4 high-priority EEG channels as input, allowing the tool to determine <br/>the result with the highest confidence for each channel.</p></body></html>", None))
+        self.label_2.setText(QCoreApplication.translate("AlgoIntroStep", u"<html><head/><body><p>This tool <span style=\" font-weight:700;\">classifies sleep stages</span> from PSG recordings using 30-second epochs.</p><p>Sleep stages can be classified based on a single EEG electrode, preferably central ones (C3, C4).<br/>Including one EOG and one EMG channel can improve classification accuracy.</p><p align=\"justify\"><span style=\" font-weight:700;\">In Snooz, you can select up to four high-priority EEG channels</span>, allowing the tool to determine the most confident classification for each.</p></body></html>", None))
         self.label_3.setText(QCoreApplication.translate("AlgoIntroStep", u"<html><head/><body><p><span style=\" font-weight:600;\">Algorithm Details</span></p></body></html>", None))
         self.label_4.setText(QCoreApplication.translate("AlgoIntroStep", u"<html><head/><body><p>The sleep staging algorithm, YASA, is an open-source tool that has been trained,<br/>using over 30,000 hours of polysomnographic (PSG) sleep data across diverse populations. </p><p>-&gt;<span style=\" font-weight:600;\"> Data processing:</span> The algorithm uses a central EEG channel, along with EOG, and EMG channels.<br/>These signals are downsampled to 100 Hz and bandpassed-filtered between 0.4 Hz and 30 Hz. </p><p>-&gt; <span style=\" font-weight:600;\">Feature Extraction:</span> The algorithm extracts a set of time and frequency domain features from the EEG signal, and optionaly from the EOG and EMG signals.<br/>These features are calculated for each 30-second epoch of raw data. </p><p>-&gt; <span style=\" font-weight:600;\">Smoothing and Normalization:</span> The algorithm uses a smoothing approach across all the aformentioned features to incorporate contextual infromation.<br/>All the smoothed features are then z-scored across each night. </p><p>-&gt; <span style=\" font-weight:600"
-                        ";\">Machine Learning Classification:</span> A lightGBM classifier, a tree-based gradient-boosting classifier, is used. </p><p>-&gt; <span style=\" font-weight:600;\">Performance Evaluation:</span> The algorithm's performance is evaluated using standardized guidelines,<br/>including accuracy, Cohen's kappa, Matthews correlation coefficient, confusion matrices, and F1-scores. </p></body></html>", None))
+                        ";\">Machine Learning Classification:</span> A lightGBM classifier, a tree-based gradient-boosting classifier, is used. </p><p>-&gt; <span style=\" font-weight:600;\">Performance Evaluation:</span> The algorithm's performance is evaluated using standardized guidelines,<br/>including accuracy, Cohen's kappa, Matthews correlation coefficient, confusion matrices, and F1-scores. </p><p><span style=\" text-decoration: underline;\">Reference</span>: <br/>Vallat, Raphael, and Matthew P. Walker. \u201cAn open-source, high-performance tool for automated sleep staging.\u201d Elife 10 (2021). <br/>doi: https://doi.org/10.7554/eLife.70092 (Documentation: <a href=\"https://raphaelvallat.com/yasa/\"><span style=\" text-decoration: underline; color:#0000ff;\">https://raphaelvallat.com/yasa/)<br/></span></a></p></body></html>", None))
         self.label_5.setText(QCoreApplication.translate("AlgoIntroStep", u"<html><head/><body><p><span style=\" font-weight:600;\">Output</span></p></body></html>", None))
         self.label_6.setText(QCoreApplication.translate("AlgoIntroStep", u"<html><head/><body><p>The YASA sleep scoring tool is compatible with different input files including, EDF, NATUS, and STS. </p><p>The output of the automatic scoring algorithm is an accessory file that saves the predicted sleep stages.</p></body></html>", None))
     # retranslateUi

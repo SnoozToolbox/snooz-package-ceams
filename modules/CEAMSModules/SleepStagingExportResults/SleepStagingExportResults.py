@@ -14,7 +14,7 @@ import pandas as pd
 import os
 
 import matplotlib
-matplotlib.use('Qt5Agg')
+matplotlib.use('QtAgg')
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT as NavigationToolbar
@@ -193,9 +193,7 @@ class SleepStagingExportResults(SciNode):
             filename = os.path.basename(info[2])
             name_without_extension = os.path.splitext(filename)[0]
             file_name = SavedDestination + name_without_extension
-            if isinstance(file_name, str) and (len(file_name)>0):
-                if not '.' in file_name:
-                    file_name = file_name + '.pdf'
+            file_name = file_name + '.pdf'
             self.figure.savefig(file_name, format='pdf')
 
             # refresh canvas

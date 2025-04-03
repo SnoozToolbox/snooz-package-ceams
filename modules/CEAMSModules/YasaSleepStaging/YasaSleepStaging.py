@@ -149,7 +149,7 @@ class YasaSleepStaging(SciNode):
         # If Checkbox is True, we are in validation mode, else we are in prediction mode
         if Checkbox:
                 
-                    # Mapping of sleep stages
+            # Mapping of sleep stages
             stage_mapping = {
                 '0': 'WAKE',
                 '1': 'N1',
