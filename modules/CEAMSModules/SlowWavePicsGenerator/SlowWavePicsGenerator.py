@@ -482,9 +482,6 @@ class SlowWavePicsGenerator(SciNode):
                     The samples of each spindle (filtered in sigma)
 
         """""
-        evt_start_times = event_cur_chan_df['start_sec'].to_numpy().astype(float)   # numpy array
-        evt_dur_times = event_cur_chan_df['duration_sec'].to_numpy().astype(float)  # numpy array
-
         # For each channel in channels if channels is a list
         if isinstance(channels, str):
             channels = [channels]
@@ -492,6 +489,10 @@ class SlowWavePicsGenerator(SciNode):
         # Extract signal from the list of events
         signals_evt_cur_chan = []
         for channel in channels:
+            # Extract the events for the current channel (important for ROIs)
+            sel_channel_event_cur_chan_df = event_cur_chan_df[event_cur_chan_df['channels']==channel]
+            evt_start_times = sel_channel_event_cur_chan_df['start_sec'].to_numpy().astype(float)   # numpy array
+            evt_dur_times = sel_channel_event_cur_chan_df['duration_sec'].to_numpy().astype(float)  # numpy array
             # Extract signals for the current channel as list of SignalModel
             if SignalModel.get_attribute(signals, None, 'channel', channel) is not None :
                 signals_cur_chan = SignalModel.get_attribute(signals, None, 'channel', channel).tolist()
@@ -530,7 +531,7 @@ class SlowWavePicsGenerator(SciNode):
             Debug function to open figure in a dialog. 
             This funciton display all the signals for the events included in event_cur_chan_df.
         """""
-        from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
+        from matplotlib.backends.backend_qtagg import FigureCanvasQTAgg as FigureCanvas
         from matplotlib.figure import Figure
         from PySide6.QtWidgets import QDialog, QVBoxLayout
 

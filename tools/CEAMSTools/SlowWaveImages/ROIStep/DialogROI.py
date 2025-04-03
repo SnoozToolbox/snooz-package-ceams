@@ -49,7 +49,7 @@ class DialogROI(QDialog, Ui_DialogAddChan):
         channel list (this slot is connected to the model_chan_roi_list).
         '''        
         # Saved the new state of the item modified
-        self.check_state_lst[item.row()]=item.checkState()
+        self.check_state_lst[item.row()]=int(item.checkState()==Qt.CheckState.Checked)
         if item.checkState()==Qt.Checked:
             self.label_checked_lst.append(item.text())
         else:
