@@ -194,7 +194,7 @@ class EventReader(SciNode):
                     name = [list(new_name.split("@@"))[0] if (isinstance(new_name,str) and '@@' in new_name) else new_name for new_name in name_data]
                 channel = [] 
                 if int(channels_col_i) == 0:
-                    channel = [list(new_chan.split("@@"))[1] if (isinstance(new_chan,str) and '@@' in new_chan) else [] for new_chan in name_data]
+                    channel = ["" for i in range(n)]
                 else:
                     channel = events_pre_process.iloc[:,int(channels_col_i) - 1].apply(lambda x: self.convert_to_list(x)).tolist()
                 start_sec = []
