@@ -86,9 +86,9 @@ class CreateListofTuples(SciNode):
             raise NodeInputException(self.identifier, "group", "Group must be a string")
         
         if group == 'stage':
-            events_to_remove = [(events['group'][i], events['name'][i]) for i, stage in enumerate(events['group']) if stage == 'stage']
+            events_to_remove = [(events['group'][i], events['name'][i]) for i, stage in enumerate(events['group'])]
         else:
-            events_to_remove = []
+            events_to_remove = [(events['group'][i], events['name'][i]) for i, stage in enumerate(events['group']) if stage != 'stage']
 
         # Log message for the Logs tab
         self._log_manager.log(self.identifier, "This module creates a list of tuples to remove unwanted events.")
