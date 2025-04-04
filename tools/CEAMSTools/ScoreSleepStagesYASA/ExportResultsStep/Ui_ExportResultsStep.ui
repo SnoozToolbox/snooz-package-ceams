@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1006</width>
-    <height>689</height>
+    <width>943</width>
+    <height>590</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -25,7 +25,7 @@
         <string notr="true">background-color: rgb(255, 255, 255);</string>
        </property>
        <property name="frameShape">
-        <enum>QFrame::NoFrame</enum>
+        <enum>QFrame::Shape::NoFrame</enum>
        </property>
        <layout class="QVBoxLayout" name="verticalLayout_4">
         <item>
@@ -53,26 +53,30 @@
            <string notr="true">background-color: rgb(255, 255, 255);</string>
           </property>
           <property name="frameShape">
-           <enum>QFrame::NoFrame</enum>
+           <enum>QFrame::Shape::NoFrame</enum>
           </property>
           <property name="lineWidth">
            <number>0</number>
           </property>
           <layout class="QVBoxLayout" name="verticalLayout_6">
            <item>
-            <widget class="QLabel" name="label_4">
-             <property name="sizePolicy">
-              <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-               <horstretch>0</horstretch>
-               <verstretch>0</verstretch>
-              </sizepolicy>
+            <widget class="QTextEdit" name="textEdit">
+             <property name="frameShape">
+              <enum>QFrame::Shape::NoFrame</enum>
              </property>
              <property name="lineWidth">
               <number>0</number>
              </property>
-             <property name="text">
-              <string>In this step, you can either apply a prediction or perform validation if you have expert-annotated sleep stage files.
-The sleep stage scoring from the YASA algorithm will then be exported.</string>
+             <property name="html">
+              <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;meta charset=&quot;utf-8&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+hr { height: 1px; border-width: 0; }
+li.unchecked::marker { content: &quot;\2610&quot;; }
+li.checked::marker { content: &quot;\2612&quot;; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Roboto'; font-size:12pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;In this step, you can either apply an automatic scoring or compare the results of the automatic scoring with expert scoring if you have expert-annotated sleep stage files.&lt;/p&gt;
+&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;The sleep stage scoring from the YASA algorithm will then be exported.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
              </property>
             </widget>
            </item>
@@ -85,7 +89,7 @@ The sleep stage scoring from the YASA algorithm will then be exported.</string>
            <string notr="true">background-color: rgb(255, 255, 255);</string>
           </property>
           <property name="frameShape">
-           <enum>QFrame::NoFrame</enum>
+           <enum>QFrame::Shape::NoFrame</enum>
           </property>
           <layout class="QHBoxLayout" name="horizontalLayout_3">
            <item>
@@ -94,12 +98,15 @@ The sleep stage scoring from the YASA algorithm will then be exported.</string>
               <number>0</number>
              </property>
              <property name="text">
-              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Define a name for the predicted sleep stages group name in the accessory file.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Define a label for the predicted sleep stages group label in the accessory file.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
              </property>
             </widget>
            </item>
            <item>
             <spacer name="horizontalSpacer">
+             <property name="orientation">
+              <enum>Qt::Orientation::Vertical</enum>
+             </property>
              <property name="sizeHint" stdset="0">
               <size>
                <width>40</width>
@@ -120,8 +127,8 @@ The sleep stage scoring from the YASA algorithm will then be exported.</string>
         </item>
         <item>
          <spacer name="verticalSpacer_2">
-          <property name="sizeType">
-           <enum>QSizePolicy::Fixed</enum>
+          <property name="orientation">
+           <enum>Qt::Orientation::Vertical</enum>
           </property>
           <property name="sizeHint" stdset="0">
            <size>
@@ -137,7 +144,6 @@ The sleep stage scoring from the YASA algorithm will then be exported.</string>
            <font>
             <family>Roboto</family>
             <pointsize>12</pointsize>
-            <weight>50</weight>
             <italic>false</italic>
             <bold>false</bold>
            </font>
@@ -156,7 +162,7 @@ The sleep stage scoring from the YASA algorithm will then be exported.</string>
            <string notr="true">background-color: rgb(255, 255, 255);</string>
           </property>
           <property name="frameShape">
-           <enum>QFrame::NoFrame</enum>
+           <enum>QFrame::Shape::NoFrame</enum>
           </property>
           <property name="lineWidth">
            <number>0</number>
@@ -168,7 +174,7 @@ The sleep stage scoring from the YASA algorithm will then be exported.</string>
               <number>0</number>
              </property>
              <property name="text">
-              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Be careful! Changing the group name &lt;span style=&quot; font-weight:700;&quot;&gt;'stage'&lt;/span&gt; to a different value may prevent Snooz from correctly identifying sleep stages&lt;br/&gt;in other tools.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Be careful! Changing the group label &lt;span style=&quot; font-weight:700;&quot;&gt;'stage'&lt;/span&gt; to a different value may prevent Snooz from correctly identifying sleep stages&lt;br/&gt;in other tools.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
              </property>
             </widget>
            </item>
@@ -181,10 +187,10 @@ The sleep stage scoring from the YASA algorithm will then be exported.</string>
      <item>
       <spacer name="verticalSpacer_3">
        <property name="orientation">
-        <enum>Qt::Vertical</enum>
+        <enum>Qt::Orientation::Vertical</enum>
        </property>
        <property name="sizeType">
-        <enum>QSizePolicy::Fixed</enum>
+        <enum>QSizePolicy::Policy::Fixed</enum>
        </property>
        <property name="sizeHint" stdset="0">
         <size>
@@ -200,7 +206,7 @@ The sleep stage scoring from the YASA algorithm will then be exported.</string>
         <string notr="true">background-color: rgb(255, 255, 255);</string>
        </property>
        <property name="frameShape">
-        <enum>QFrame::NoFrame</enum>
+        <enum>QFrame::Shape::NoFrame</enum>
        </property>
        <layout class="QVBoxLayout" name="verticalLayout_3">
         <item>
@@ -209,7 +215,6 @@ The sleep stage scoring from the YASA algorithm will then be exported.</string>
            <font>
             <family>Roboto</family>
             <pointsize>12</pointsize>
-            <weight>50</weight>
             <italic>false</italic>
             <bold>false</bold>
            </font>
@@ -222,12 +227,19 @@ The sleep stage scoring from the YASA algorithm will then be exported.</string>
         <item>
          <widget class="QFrame" name="frame_9">
           <property name="frameShape">
-           <enum>QFrame::NoFrame</enum>
+           <enum>QFrame::Shape::NoFrame</enum>
           </property>
           <property name="lineWidth">
            <number>0</number>
           </property>
           <layout class="QVBoxLayout" name="verticalLayout_5">
+           <item>
+            <widget class="QLabel" name="label_4">
+             <property name="text">
+              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;For proper tool functionality during validation, the gold standard group must be labeled as &lt;span style=&quot; font-weight:700;&quot;&gt;'stage'&lt;/span&gt;.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+             </property>
+            </widget>
+           </item>
            <item>
             <widget class="QLabel" name="label_5">
              <property name="lineWidth">
@@ -244,7 +256,7 @@ The sleep stage scoring from the YASA algorithm will then be exported.</string>
         <item>
          <widget class="QFrame" name="frame_6">
           <property name="frameShape">
-           <enum>QFrame::NoFrame</enum>
+           <enum>QFrame::Shape::NoFrame</enum>
           </property>
           <property name="lineWidth">
            <number>0</number>
@@ -270,7 +282,7 @@ The sleep stage scoring from the YASA algorithm will then be exported.</string>
         <item>
          <widget class="QFrame" name="frame_8">
           <property name="frameShape">
-           <enum>QFrame::NoFrame</enum>
+           <enum>QFrame::Shape::NoFrame</enum>
           </property>
           <property name="lineWidth">
            <number>0</number>
@@ -297,7 +309,7 @@ The sleep stage scoring from the YASA algorithm will then be exported.</string>
    <item>
     <spacer name="verticalSpacer">
      <property name="orientation">
-      <enum>Qt::Vertical</enum>
+      <enum>Qt::Orientation::Vertical</enum>
      </property>
      <property name="sizeHint" stdset="0">
       <size>

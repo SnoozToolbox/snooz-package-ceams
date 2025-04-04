@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file 'Ui_CreateListofTuplesResultsView.ui'
+## Form generated from reading UI file 'Ui_CreateListofGroupNameResultsView.ui'
 ##
 ## Created by: Qt User Interface Compiler version 6.8.2
 ##
@@ -18,13 +18,13 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
 from PySide6.QtWidgets import (QApplication, QSizePolicy, QVBoxLayout, QWidget)
 import themes_rc
 
-class Ui_CreateListofTuplesResultsView(object):
-    def setupUi(self, CreateListofTuplesResultsView):
-        if not CreateListofTuplesResultsView.objectName():
-            CreateListofTuplesResultsView.setObjectName(u"CreateListofTuplesResultsView")
-        CreateListofTuplesResultsView.setStyleSheet(u"font: 12pt \"Roboto\";")
-        CreateListofTuplesResultsView.resize(483, 360)
-        self.verticalLayout = QVBoxLayout(CreateListofTuplesResultsView)
+class Ui_CreateListofGroupNameResultsView(object):
+    def setupUi(self, CreateListofGroupNameResultsView):
+        if not CreateListofGroupNameResultsView.objectName():
+            CreateListofGroupNameResultsView.setObjectName(u"CreateListofGroupNameResultsView")
+        CreateListofGroupNameResultsView.setStyleSheet(u"font: 12pt \"Roboto\";")
+        CreateListofGroupNameResultsView.resize(483, 360)
+        self.verticalLayout = QVBoxLayout(CreateListofGroupNameResultsView)
         self.verticalLayout.setObjectName(u"verticalLayout")
         self.result_layout = QVBoxLayout()
         self.result_layout.setObjectName(u"result_layout")
@@ -32,12 +32,12 @@ class Ui_CreateListofTuplesResultsView(object):
         self.verticalLayout.addLayout(self.result_layout)
 
 
-        self.retranslateUi(CreateListofTuplesResultsView)
+        self.retranslateUi(CreateListofGroupNameResultsView)
 
-        QMetaObject.connectSlotsByName(CreateListofTuplesResultsView)
+        QMetaObject.connectSlotsByName(CreateListofGroupNameResultsView)
     # setupUi
 
-    def retranslateUi(self, CreateListofTuplesResultsView):
-        CreateListofTuplesResultsView.setWindowTitle(QCoreApplication.translate("CreateListofTuplesResultsView", u"Form", None))
+    def retranslateUi(self, CreateListofGroupNameResultsView):
+        CreateListofGroupNameResultsView.setWindowTitle(QCoreApplication.translate("CreateListofGroupNameResultsView", u"Form", None))
     # retranslateUi
 

@@ -2,17 +2,17 @@
 @ Valorisation Recherche HSCM, Societe en Commandite – 2025
 See the file LICENCE for full license details.
 
-    Settings viewer of the CreateListofTuples plugin
+    Settings viewer of the CreateListofGroupName plugin
 """
 
 from qtpy import QtWidgets
 
-from CEAMSModules.CreateListofTuples.Ui_CreateListofTuplesSettingsView import Ui_CreateListofTuplesSettingsView
+from CEAMSModules.CreateListofGroupName.Ui_CreateListofGroupNameSettingsView import Ui_CreateListofGroupNameSettingsView
 from commons.BaseSettingsView import BaseSettingsView
 
-class CreateListofTuplesSettingsView(BaseSettingsView, Ui_CreateListofTuplesSettingsView, QtWidgets.QWidget):
+class CreateListofGroupNameSettingsView(BaseSettingsView, Ui_CreateListofGroupNameSettingsView, QtWidgets.QWidget):
     """
-        CreateListofTuplesView set the CreateListofTuples settings
+        CreateListofGroupNameView set the CreateListofGroupName settings
     """
     def __init__(self, parent_node, pub_sub_manager, **kwargs):
         super().__init__(**kwargs)
@@ -42,7 +42,7 @@ class CreateListofTuplesSettingsView(BaseSettingsView, Ui_CreateListofTuplesSett
     def on_apply_settings(self):
         """ Called when the user clicks on "Run" or "Save workspace"
         """
-        # Send the settings to the publisher for inputs to CreateListofTuples
+        # Send the settings to the publisher for inputs to CreateListofGroupName
         self._pub_sub_manager.publish(self, self._events_topic, str(self.events_lineedit.text()))
         self._pub_sub_manager.publish(self, self._group_topic, str(self.group_lineedit.text()))
         

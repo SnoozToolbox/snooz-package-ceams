@@ -46,7 +46,7 @@ class ExportResultsStep( BaseStepView,  Ui_ExportResultsStep, QtWidgets.QWidget)
         self.on_checkBox_2_changed()
 
         # Center align text in lineEdit_2
-        self.lineEdit_2.setAlignment(Qt.AlignCenter)
+        #self.lineEdit_2.setAlignment(Qt.AlignCenter)
 
         # If necessary, init the context. The context is a memory space shared by 
         # all steps of a tool. It is used to share and notice other steps whenever
@@ -133,12 +133,12 @@ class ExportResultsStep( BaseStepView,  Ui_ExportResultsStep, QtWidgets.QWidget)
             WarningDialog(f"You need to define the output destination in step '3 - Export Results.")
             return False
         if self.lineEdit_2.text() == 'stage':
-            if WarningDialogWithButtons.show_warning(f"If you do not change the group name, the predicted sleep stages group name will be overwritten with 'stage'."):
+            if WarningDialogWithButtons.show_warning(f"If you do not change the group label, the predicted sleep stages group label will be overwritten with 'stage', which is the gold standard."):
                 return True
             else:
                 return False
         if self.lineEdit_2.text() == '':
-            WarningDialog(f"You need to define the group name in step '3 - Export Results.")
+            WarningDialog(f"You need to define the group label in step '3 - Export Results.")
             return False
         
         return True

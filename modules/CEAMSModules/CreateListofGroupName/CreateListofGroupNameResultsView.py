@@ -2,19 +2,19 @@
 @ Valorisation Recherche HSCM, Societe en Commandite – 2025
 See the file LICENCE for full license details.
 
-    Results viewer of the CreateListofTuples plugin
+    Results viewer of the CreateListofGroupName plugin
 """
 
 from qtpy import QtWidgets
 
-from CEAMSModules.CreateListofTuples.Ui_CreateListofTuplesResultsView import Ui_CreateListofTuplesResultsView
+from CEAMSModules.CreateListofGroupName.Ui_CreateListofGroupNameResultsView import Ui_CreateListofGroupNameResultsView
 
-class CreateListofTuplesResultsView(Ui_CreateListofTuplesResultsView, QtWidgets.QWidget):
+class CreateListofGroupNameResultsView(Ui_CreateListofGroupNameResultsView, QtWidgets.QWidget):
     """
-        CreateListofTuplesResultsView.
+        CreateListofGroupNameResultsView.
     """
     def __init__(self, parent_node, cache_manager, pub_sub_manager, *args, **kwargs):
-        super(CreateListofTuplesResultsView, self).__init__(*args, **kwargs)
+        super(CreateListofGroupNameResultsView, self).__init__(*args, **kwargs)
         self._parent_node = parent_node
         self._pub_sub_manager = pub_sub_manager
         self._cache_manager = cache_manager

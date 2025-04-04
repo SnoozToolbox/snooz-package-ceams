@@ -2,7 +2,7 @@
 @ Valorisation Recherche HSCM, Société en Commandite – 2025
 See the file LICENCE for full license details.
 
-    CreateListofTuples
+    CreateListofGroupName
     A Flowpipe node that filters events based on group type and generates a list
     of tuples marking events for removal. Primarily used for sleep stage event processing.
 """
@@ -13,29 +13,26 @@ import pandas as pd
 
 DEBUG = False
 
-class CreateListofTuples(SciNode):
+class CreateListofGroupName(SciNode):
     """
-    Filters and transforms event data into a list of removable event tuples.
-    When group='stage', creates tuples of (group, name) for each stage event.
-    For other group types, returns an empty list.
+    Creates a list of tuples that has two value of group and name: [(group0, name0), (group1, name1)]
 
     Parameters
     ----------
         events : pandas DataFrame
-            Dictionary containing event data with 'group' and 'name' keys.
-            Expected format: {'group': List[str], 'name': List[str]}
+            Pandas DataFrame columns=['group','name','start_sec','duration_sec','channels']
         group: str
             The group type to filter by (e.g., 'stage' for sleep stage events)
 
     Returns
     -------
-        events_to_remove: List[Tuple[str, str]]
+        group_name_list: List[Tuple(str, str)]
             List of (group, name) tuples for events matching the specified group
     """
     def __init__(self, **kwargs):
-        """ Initialize module CreateListofTuples """
+        """ Initialize module CreateListofGroupName """
         super().__init__(**kwargs)
-        if DEBUG: print('CreateListofTuples.__init__')
+        if DEBUG: print('CreateListofGroupName.__init__')
 
         # Input plugs
         InputPlug('events',self)
@@ -43,7 +40,7 @@ class CreateListofTuples(SciNode):
         
 
         # Output plugs
-        OutputPlug('events_to_remove',self)
+        OutputPlug('group_name_list',self)
 
         # A master module allows the process to be reexcuted multiple time.
         # For exemple, this is useful when the process must be repeated over multiple
@@ -65,7 +62,7 @@ class CreateListofTuples(SciNode):
 
         Returns
         -------
-            events_to_remove: List[Tuple[str, str]]
+            group_name_list: List[Tuple(str, str)]
                 Filtered list of (group, name) tuples
 
         Raises
@@ -75,7 +72,7 @@ class CreateListofTuples(SciNode):
             NodeRuntimeException
                 If processing fails
         """
-        if DEBUG: print('CreateListofTuples.compute')
+        if DEBUG: print('CreateListofGroupName.compute')
 
         # Input validation
         if not isinstance(events, pd.DataFrame):
@@ -86,13 +83,13 @@ class CreateListofTuples(SciNode):
             raise NodeInputException(self.identifier, "group", "Group must be a string")
         
         if group == 'stage':
-            events_to_remove = [(events['group'][i], events['name'][i]) for i, stage in enumerate(events['group']) if stage == 'stage']
+            group_name_list = [(events['group'][i], events['name'][i]) for i, stage in enumerate(events['group'])] # all events will be removed. the user prefers to overwrite the gold standard events.
         else:
-            events_to_remove = []
+            group_name_list = [(events['group'][i], events['name'][i]) for i, stage in enumerate(events['group']) if stage != 'stage'] #everyrhing except the gold standard will be removed.
 
         # Log message for the Logs tab
         self._log_manager.log(self.identifier, "This module creates a list of tuples to remove unwanted events.")
 
         return {
-            'events_to_remove': events_to_remove
+            'group_name_list': group_name_list
         }

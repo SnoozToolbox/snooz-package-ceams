@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>CreateListofTuplesSettingsView</class>
- <widget class="QWidget" name="CreateListofTuplesSettingsView">
+ <class>CreateListofGroupNameSettingsView</class>
+ <widget class="QWidget" name="CreateListofGroupNameSettingsView">
   <property name="styleSheet">
    <string notr="true">font: 12pt &quot;Roboto&quot;;</string>
   </property>

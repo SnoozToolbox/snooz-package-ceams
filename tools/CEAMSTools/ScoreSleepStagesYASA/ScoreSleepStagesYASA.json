@@ -254,7 +254,7 @@
                         "value": "",
                         "sub_plugs": {},
                         "connections": {
-                            "bcf76caa-7803-4b2f-a084-79c2fa23263d": "events_to_remove"
+                            "bcf76caa-7803-4b2f-a084-79c2fa23263d": "group_name_list"
                         }
                     },
                     "overwrite_events": {
@@ -973,12 +973,12 @@
                 "pos_y": 154.68749999999991
             },
             {
-                "cls": "CreateListofTuples",
-                "name": "CreateListofTuples",
+                "cls": "CreateListofGroupName",
+                "name": "CreateListofGroupName",
                 "metadata": {},
                 "file_location": null,
-                "module": "CEAMSModules.CreateListofTuples",
-                "module_label": "Create List of Tuples",
+                "module": "CEAMSModules.CreateListofGroupName",
+                "module_label": "Create List of Group Name",
                 "module_category": "Parameters",
                 "module_author": "",
                 "module_url": "",
@@ -1003,8 +1003,8 @@
                     }
                 },
                 "outputs": {
-                    "events_to_remove": {
-                        "name": "events_to_remove",
+                    "group_name_list": {
+                        "name": "group_name_list",
                         "value": "",
                         "sub_plugs": {},
                         "connections": {
