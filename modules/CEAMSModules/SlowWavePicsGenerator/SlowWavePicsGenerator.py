@@ -86,9 +86,6 @@ class SlowWavePicsGenerator(SciNode):
         # (we dont use the constructor because it is a Master node
         # so we cannot instance more than once)
         self._is_master = False 
-        self._file_counter = 0
-        self._montage_counter = 0
-        self._channels_found = False
 
         # We use the constructor of the PSGReaderManager
         # in order to initialize the readers 
@@ -201,8 +198,6 @@ class SlowWavePicsGenerator(SciNode):
             raise NodeInputException(self.identifier, "colors_param", \
                 f"SlowWavePicsGenerator : dict is expected for colors_param and it is {type(colors_param)}")
 
-        # For each file of files, read the signal via PSGReader
-        filenames = list(files.keys())
         # Dict to keep the average signal per channel
         signal_avg_per_chan = {} # the key is the channel label and the value is the average signal
         # the key is the group label and the value is the average signals or min/max valid index
@@ -212,21 +207,27 @@ class SlowWavePicsGenerator(SciNode):
         idx_max_cohort = {}
         n_cats = 1
         for file_name in files.keys():
-
             file_group_name = file_group[file_name]
             #--------------------------------------------------------------
             # Extract signals from the file
             #--------------------------------------------------------------
-            filename, montage_index, selected_channels = PSGReader.get_next(self, files, filenames)
+            if (not file_name==None) and ('montages' in files[file_name]):
+                montages = list(files[file_name]['montages'].keys())
+                for j in range(0, len(montages)):
+                    montage = montages[j]
+                    if files[file_name]['montages'][montage]['is_selected']:
+                        channels = files[file_name]['montages'][montage]['channels']
+                        selected_channels = [label for label in list(channels.keys()) if channels[label]['is_selected']]
+                        montage_index = files[file_name]['montages'][montage]['montage_index']
             # Check if the file exist
-            if(not os.path.isfile(filename)):
+            if(not os.path.isfile(file_name)):
                 raise NodeRuntimeException(self.identifier, "files", \
-                    f"SlowWavePicsGenerator file not found:{filename}")
+                    f"SlowWavePicsGenerator file not found:{file_name}")
             # Try to open the file
-            success = self._psg_reader_manager.open_file(filename)
+            success = self._psg_reader_manager.open_file(file_name)
             if not success:
                 raise NodeRuntimeException(self.identifier, "files", \
-                    f"SlowWavePicsGenerator could not read file:{filename}")
+                    f"SlowWavePicsGenerator could not read file:{file_name}")
             if selected_channels is not None:
                 signals = self._psg_reader_manager.get_signal_models(int(montage_index), selected_channels)
             # Close the file since the signals are saved
