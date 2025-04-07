@@ -751,7 +751,7 @@ class SpectralDetector(SciNode):
 
         # Because of the discontinuity, the signal can start with an offset (second section)
         #   if the event starts before the signal, we cut the signal
-        if (event_start < psd_start) and ((event_start + event_dur) > psd_start):
+        if (event_start <= psd_start) and ((event_start + event_dur) > psd_start):
             psd_start_sel_s = psd_start
         elif (event_start >= psd_start) and ((event_start + event_dur) <= psd_end):
             psd_start_sel_s = event_start
