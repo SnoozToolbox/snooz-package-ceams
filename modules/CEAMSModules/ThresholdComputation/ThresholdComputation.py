@@ -120,7 +120,6 @@ class ThresholdComputation(SciNode):
                  f"ThresholdComputation the type of this input is unexpected.")
 
         threshold_value = [] # To store threshold value
-        channel_lst = [] # To keep track of the channels
         samples_all_chan = {} # To accumulate the samples for each channel
 
         cycle_df = []
@@ -177,8 +176,15 @@ class ThresholdComputation(SciNode):
 
             # If a threshold is computed for each sleep cycle
             # Accumulate samples for each channel and each cycle
+            # Warning, it is possible to have no samples at all (depending of the sleep stages selection) for a specific cycle
+            #  so make sure to extract existing samples only
             elif int(threshold_scope)>0:
                 if threshold_scope=='1':
+                    # if signal_model.channel is not a key of samples_all_chan, add it
+                    # Every cycle must be defined in case we received no signals for a specific cycle
+                    if not signal_model.channel in samples_all_chan:
+                        samples_all_chan[signal_model.channel] =  [np.empty((0,)) for _ in range(len(cycle_df))]
+                        
                     # Find which sleep cycles start before the current signal_model starts
                     (idx_start,) = np.where(signal_model.start_time-cycle_df.start_sec>=-0.1) # -0.1 to support non interger sampling rate in Stellate
                     # Find which sleep cycles end after the current signal_model ends
@@ -189,14 +195,8 @@ class ThresholdComputation(SciNode):
                     idx_include_signal=[0]
                 if len(idx_include_signal)==1:
                     cycle_i = idx_include_signal[0]
-                    if not signal_model.channel in channel_lst:
-                        channel_lst.append(signal_model.channel)
-                        samples_all_chan[signal_model.channel] = [signal_model.samples]
-                    elif len(samples_all_chan[signal_model.channel])==cycle_i:
-                        samples_all_chan[signal_model.channel].append(signal_model.samples)
-                    else:
-                        samples_all_chan[signal_model.channel][cycle_i] = \
-                            np.concatenate((samples_all_chan[signal_model.channel][cycle_i],signal_model.samples))
+                    samples_all_chan[signal_model.channel][cycle_i] = \
+                        np.concatenate((samples_all_chan[signal_model.channel][cycle_i],signal_model.samples))
                 else:
                     if len(idx_include_signal)==0:
                         raise NodeRuntimeException(self.identifier, "cycle_events",\
@@ -230,15 +230,14 @@ class ThresholdComputation(SciNode):
                             f"ThresholdComputation this input is unexpected.")
                     threshold_all_chan[chan_label] = np.append(threshold_all_chan[chan_label],sample_value)        
 
-                # Cache only the data from the first channel
-                if channel_lst[0] == chan_label and i_cycle==0:
-                    cache = {}
-                    cache['channel_label'] = chan_label
-                    cache['sample'] = chan_samples
-                    cache['threshold_metric'] = threshold_metric
-                    cache['threshold_definition'] = threshold_definition
-                    cache['threshold_value'] = sample_value
-                    self._cache_manager.write_mem_cache(self.identifier, cache)
+                # Cache only the last channel
+                cache = {}
+                cache['channel_label'] = chan_label
+                cache['sample'] = chan_samples
+                cache['threshold_metric'] = threshold_metric
+                cache['threshold_definition'] = threshold_definition
+                cache['threshold_value'] = sample_value
+                self._cache_manager.write_mem_cache(self.identifier, cache)
 
             # Spread the channel threshold for each item of signals
             threshold_value = [] # Create an empty list to append thresholds
