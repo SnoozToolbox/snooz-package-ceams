@@ -303,6 +303,7 @@ class DetectorsStep( BaseStepView,  Ui_DetectorsStep, QtWidgets.QWidget):
             self._pub_sub_manager.publish(self, self._new_event_name_topic,  '')    
 
         # Stages
+        self.update_stages_slot()
         self._pub_sub_manager.publish(self, self._sleep_stage_topic, self.stages_sel)       
 
 
