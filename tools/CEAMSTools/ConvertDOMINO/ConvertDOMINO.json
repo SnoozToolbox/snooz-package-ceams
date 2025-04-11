@@ -1,8 +1,8 @@
 {
     "item_name": "ConvertDOMINO",
     "item_type": "tool",
-    "item_api_version": "1.0.0",
-    "item_url": "",
+    "item_api_version": "2.0.0",
+    "item_url": "https://snooz-toolbox-documentation.readthedocs.io/latest/user_guide/tools/Preprocessing/DominoScreen_Converter.html#convert-domino",
     "item_author": "Karine Lacourse",
     "item_description": "To convert the DOMINO ASCII accessory files (without stages) to Snooz accessory tsv file.",
     "tool_params": {
@@ -27,16 +27,15 @@
     "dependencies": [
         {
             "package_name": "CEAMSModules",
-            "package_version": "6.8.0"
+            "package_version": "7.0.0"
         },
         {
             "package_name": "CEAMSTools",
-            "package_version": "6.8.0",
+            "package_version": "7.0.0",
             "deleteable": false
         }
     ],
     "process_params": {
-        
         "subgraph_params": {},
         "nodes": [
             {

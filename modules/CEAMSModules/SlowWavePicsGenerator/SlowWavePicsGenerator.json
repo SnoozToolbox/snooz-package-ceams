@@ -1,7 +1,7 @@
 {
     "item_name": "SlowWavePicsGenerator",
     "item_type": "module",
-    "item_api_version": "1.0.0",
+    "item_api_version": "2.0.0",
     "item_url": "",
     "item_author": "CEAMS",
     "item_description": "",
@@ -20,45 +20,51 @@
                 "value": "",
                 "connections": {},
                 "sub_plugs": {}
-            },"file_group": {
+            },
+            "file_group": {
                 "name": "file_group",
                 "value": "",
                 "connections": {},
                 "sub_plugs": {}
-            },"sw_char_folder": {
+            },
+            "sw_char_folder": {
                 "name": "sw_char_folder",
                 "value": "",
                 "connections": {},
                 "sub_plugs": {}
-            },"sw_events_def": {
+            },
+            "sw_events_def": {
                 "name": "sw_events_def",
                 "value": "",
                 "connections": {},
                 "sub_plugs": {}
-            },"ROIs_def": {
+            },
+            "ROIs_def": {
                 "name": "ROIs_def",
                 "value": "",
                 "connections": {},
                 "sub_plugs": {}
-            },"chans_ROIs_sel": {
+            },
+            "chans_ROIs_sel": {
                 "name": "chans_ROIs_sel",
                 "value": "",
                 "connections": {},
                 "sub_plugs": {}
-            },"pics_param": {
+            },
+            "pics_param": {
                 "name": "pics_param",
-                "value":"",
+                "value": "",
                 "connections": {},
                 "sub_plugs": {}
-            },"colors_param": {
+            },
+            "colors_param": {
                 "name": "colors_param",
-                "value":"",
+                "value": "",
                 "connections": {},
                 "sub_plugs": {}
             }
         },
-        "outputs": {
-        },
+        "outputs": {},
         "module": "CEAMSModules.SlowWavePicsGenerator"
     }
 }

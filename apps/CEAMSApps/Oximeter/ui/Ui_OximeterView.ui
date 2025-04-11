@@ -165,7 +165,7 @@
   <customwidget>
    <class>OximeterDrawArea</class>
    <extends>QWidget</extends>
-   <header>widgets.OximeterDrawArea</header>
+   <header>OximeterDrawArea</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

@@ -109,7 +109,8 @@ class OutputFiles(BaseStepView, Ui_OutputFiles, QtWidgets.QWidget):
 
     def choose_slot(self):
         file_dialog = QtWidgets.QFileDialog()
-        file_dialog.setFileMode(QtWidgets.QFileDialog.DirectoryOnly)
+        file_dialog.setFileMode(QtWidgets.QFileDialog.Directory) 
+        file_dialog.setOption(QtWidgets.QFileDialog.ShowDirsOnly, True)
 
         if file_dialog.exec():
             folders = file_dialog.selectedFiles()

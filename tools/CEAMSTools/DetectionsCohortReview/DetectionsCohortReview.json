@@ -1,8 +1,8 @@
 {
     "item_name": "DetectionsCohortReview",
     "item_type": "tool",
-    "item_api_version": "1.0.0",
-    "item_url": "",
+    "item_api_version": "2.0.0",
+    "item_url": "https://snooz-toolbox-documentation.readthedocs.io/latest/user_guide/tools/Postprocessing/Detections_Cohort_Review.html#detections-cohort-review",
     "item_author": "Karine Lacourse",
     "item_description": "To clean and transpose the Spindle/Slow wave detector output.",
     "tool_params": {
@@ -34,16 +34,15 @@
     "dependencies": [
         {
             "package_name": "CEAMSModules",
-            "package_version": "6.10.0"
+            "package_version": "7.0.0"
         },
         {
             "package_name": "CEAMSTools",
-            "package_version": "6.10.0",
+            "package_version": "7.0.0",
             "deleteable": false
         }
     ],
     "process_params": {
-        
         "subgraph_params": {},
         "nodes": [
             {

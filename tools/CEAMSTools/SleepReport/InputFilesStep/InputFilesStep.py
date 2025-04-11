@@ -229,7 +229,8 @@ class InputFilesStep( BaseStepView,  Ui_InputFilesStep, QtWidgets.QWidget):
 
     def on_add_from_folder(self):
         file_dialog = QtWidgets.QFileDialog()
-        file_dialog.setFileMode(QtWidgets.QFileDialog.DirectoryOnly) # Allows the user to select only directories (folders).
+        file_dialog.setFileMode(QtWidgets.QFileDialog.Directory) 
+        file_dialog.setOption(QtWidgets.QFileDialog.ShowDirsOnly, True) # Allows the user to select only directories (folders).
         # The non native QFileDialog supports only local files.
             # So it is better to use the native dialog instead to see athena
         # The native dialog does not support multiple folders selection in windows and macOS

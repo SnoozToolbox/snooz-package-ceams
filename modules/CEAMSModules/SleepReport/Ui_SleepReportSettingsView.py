@@ -1,42 +1,65 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file '/home/david/projects/snooz-toolbox/src/main/python/plugins/SleepReport/Ui_SleepReportSettingsView.ui'
-#
-# Created by: PyQt5 UI code generator 5.12.3
-#
-# WARNING! All changes made in this file will be lost!
+################################################################################
+## Form generated from reading UI file ''
+##
+## Created by: Qt User Interface Compiler version 6.8.2
+##
+## WARNING! All changes made in this file will be lost when recompiling UI file!
+################################################################################
 
-
-from qtpy import QtCore, QtGui, QtWidgets
-
+from PySide6.QtCore import (QCoreApplication, QDate, QDateTime, QLocale,
+    QMetaObject, QObject, QPoint, QRect,
+    QSize, QTime, QUrl, Qt)
+from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
+    QFont, QFontDatabase, QGradient, QIcon,
+    QImage, QKeySequence, QLinearGradient, QPainter,
+    QPalette, QPixmap, QRadialGradient, QTransform)
+from PySide6.QtWidgets import (QApplication, QHBoxLayout, QLabel, QLineEdit,
+    QPushButton, QSizePolicy, QSpacerItem, QVBoxLayout,
+    QWidget)
 
 class Ui_SleepReportSettingsView(object):
     def setupUi(self, SleepReportSettingsView):
-        SleepReportSettingsView.setObjectName("SleepReportSettingsView")
+        if not SleepReportSettingsView.objectName():
+            SleepReportSettingsView.setObjectName(u"SleepReportSettingsView")
         SleepReportSettingsView.resize(415, 224)
-        self.verticalLayout = QtWidgets.QVBoxLayout(SleepReportSettingsView)
-        self.verticalLayout.setObjectName("verticalLayout")
-        self.horizontalLayout = QtWidgets.QHBoxLayout()
-        self.horizontalLayout.setObjectName("horizontalLayout")
-        self.label = QtWidgets.QLabel(SleepReportSettingsView)
-        self.label.setObjectName("label")
+        self.verticalLayout = QVBoxLayout(SleepReportSettingsView)
+        self.verticalLayout.setObjectName(u"verticalLayout")
+        self.horizontalLayout = QHBoxLayout()
+        self.horizontalLayout.setObjectName(u"horizontalLayout")
+        self.label = QLabel(SleepReportSettingsView)
+        self.label.setObjectName(u"label")
+
         self.horizontalLayout.addWidget(self.label)
-        self.output_file_lineedit = QtWidgets.QLineEdit(SleepReportSettingsView)
-        self.output_file_lineedit.setObjectName("output_file_lineedit")
+
+        self.output_file_lineedit = QLineEdit(SleepReportSettingsView)
+        self.output_file_lineedit.setObjectName(u"output_file_lineedit")
+
         self.horizontalLayout.addWidget(self.output_file_lineedit)
-        self.choose_file_pushbutton = QtWidgets.QPushButton(SleepReportSettingsView)
-        self.choose_file_pushbutton.setObjectName("choose_file_pushbutton")
+
+        self.choose_file_pushbutton = QPushButton(SleepReportSettingsView)
+        self.choose_file_pushbutton.setObjectName(u"choose_file_pushbutton")
+
         self.horizontalLayout.addWidget(self.choose_file_pushbutton)
+
+
         self.verticalLayout.addLayout(self.horizontalLayout)
-        spacerItem = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
-        self.verticalLayout.addItem(spacerItem)
+
+        self.verticalSpacer = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
+
+        self.verticalLayout.addItem(self.verticalSpacer)
+
 
         self.retranslateUi(SleepReportSettingsView)
         self.choose_file_pushbutton.clicked.connect(SleepReportSettingsView.on_choose_ouput_file)
-        QtCore.QMetaObject.connectSlotsByName(SleepReportSettingsView)
+
+        QMetaObject.connectSlotsByName(SleepReportSettingsView)
+    # setupUi
 
     def retranslateUi(self, SleepReportSettingsView):
-        _translate = QtCore.QCoreApplication.translate
-        SleepReportSettingsView.setWindowTitle(_translate("SleepReportSettingsView", "Form"))
-        self.label.setText(_translate("SleepReportSettingsView", "Output file"))
-        self.choose_file_pushbutton.setText(_translate("SleepReportSettingsView", "Choose file"))
+        SleepReportSettingsView.setWindowTitle(QCoreApplication.translate("SleepReportSettingsView", u"Form", None))
+        self.label.setText(QCoreApplication.translate("SleepReportSettingsView", u"Output file", None))
+        self.choose_file_pushbutton.setText(QCoreApplication.translate("SleepReportSettingsView", u"Choose file", None))
+    # retranslateUi
+

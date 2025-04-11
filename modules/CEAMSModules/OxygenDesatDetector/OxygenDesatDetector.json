@@ -1,7 +1,7 @@
 {
     "item_name": "OxygenDesatDetector",
     "item_type": "module",
-    "item_api_version": "1.0.0",
+    "item_api_version": "2.0.0",
     "item_url": "",
     "item_author": "",
     "item_description": "",
@@ -74,7 +74,7 @@
                 "value": "",
                 "connections": {},
                 "sub_plugs": {}
-            },            
+            },
             "report_constants": {
                 "name": "report_constants",
                 "value": {},

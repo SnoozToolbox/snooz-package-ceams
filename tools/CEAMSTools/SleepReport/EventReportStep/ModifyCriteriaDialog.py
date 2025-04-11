@@ -5,7 +5,7 @@ See the file LICENCE for full license details.
 """
     ModifyCriteriaDialog
 """
-
+from collections import OrderedDict
 from qtpy import QtWidgets, QtCore
 from CEAMSTools.SleepReport.Commons.EventItem import EventItem
 
@@ -15,8 +15,8 @@ class ModifyCriteriaDialog(QtWidgets.QDialog, Ui_ModifyCriteriaDialog):
     """
         ModifyCriteriaDialog
     """
-    on_ok_signal = QtCore.Signal(str, object, dict, object)
-    on_ok_to_all_signal = QtCore.Signal(str, object, dict, object)
+    on_ok_signal = QtCore.Signal(str, object, OrderedDict, object)
+    on_ok_to_all_signal = QtCore.Signal(str, object, OrderedDict, object)
 
     def __init__(self, event_tree_item, row, previous_name, **kwargs):
         super().__init__(**kwargs)

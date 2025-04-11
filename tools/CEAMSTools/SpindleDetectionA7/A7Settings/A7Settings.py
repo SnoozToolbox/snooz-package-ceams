@@ -7,8 +7,8 @@ See the file LICENCE for full license details.
     Config Page in the spindle detection interface to define A7 settings.
 """
 from qtpy import QtWidgets
-from qtpy.QtCore import QRegExp
-from qtpy.QtGui import QRegExpValidator
+from qtpy.QtCore import QRegularExpression
+from qtpy.QtGui import QRegularExpressionValidator
 
 from commons.BaseStepView import BaseStepView
 from flowpipe.ActivationState import ActivationState
@@ -28,10 +28,10 @@ class A7Settings( BaseStepView,  Ui_A7Settings, QtWidgets.QWidget):
         self.setupUi(self)
 
         # Set input validators
-        # Create a QRegExpValidator with the desired regular expression
+        # Create a QRegularExpressionValidator with the desired regular expression
         # Regular expression for alphanumeric, space, dash, and latin1 (ISO/CEI 8859-1) characters
-        regex = QRegExp(r'^[a-zA-Z0-9ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖ×ØÙÚÛÜÝÞßàáâãäåæçèéêëìíîïðñòóôõö÷øùúûüýþÿ\s-_]*$')
-        validator = QRegExpValidator(regex)
+        regex = QRegularExpression(r'^[a-zA-Z0-9ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖ×ØÙÚÛÜÝÞßàáâãäåæçèéêëìíîïðñòóôõö÷øùúûüýþÿ\s-_]*$')
+        validator = QRegularExpressionValidator(regex)
 
         # Set the validator for the QLineEdit
         self.name_lineEdit.setValidator(validator)

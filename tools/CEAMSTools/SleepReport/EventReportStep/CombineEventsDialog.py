@@ -58,7 +58,8 @@ class CombineEventsDialog(QtWidgets.QDialog, Ui_CombineEventsDialog):
         #count = 0
         events = []
         for item in self.events_treewidget.findItems("", QtCore.Qt.MatchContains | QtCore.Qt.MatchRecursive):
-            if item.checkState(0)==2:
+            print(f"group and name:{item.text(0)} and state:{item.checkState(0)}")
+            if item.checkState(0)==QtCore.Qt.CheckState.Checked:
                 if item.parent() is not None:
                     group_name = item.parent().text(0)
                     event_name = item.text(0)

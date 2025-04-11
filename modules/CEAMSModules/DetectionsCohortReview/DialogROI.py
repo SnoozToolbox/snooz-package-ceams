@@ -28,7 +28,8 @@ class DialogROI(QDialog, Ui_DialogAddChan):
     def create_roi_model( self, channel_lst ):
         """ Fill the roi model and its QListView.
         """
-        self.check_state_lst = np.zeros(len(channel_lst))
+        # Create an array with the unchecked state of each channel
+        self.check_state_lst = [Qt.Unchecked]*len(channel_lst)
         for channel_i in channel_lst:
             # Create an item with a caption
             item = QStandardItem(channel_i)

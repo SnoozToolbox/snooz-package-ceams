@@ -22,8 +22,8 @@ import traceback
 from qtpy import QtWidgets
 from qtpy import QtGui
 from qtpy import QtCore
-from qtpy.QtGui import QRegExpValidator # To validate what the user enters in the interface
-from qtpy.QtCore import QRegExp # To validate what the user enters in the interface
+from qtpy.QtGui import QRegularExpressionValidator # To validate what the user enters in the interface
+from qtpy.QtCore import QRegularExpression  # To validate what the user enters in the interface
 from qtpy.QtWidgets import QMessageBox
 
 from CEAMSModules.FilterSignal.Ui_FilterSignalSettingsView import Ui_FilterSignalSettingsView

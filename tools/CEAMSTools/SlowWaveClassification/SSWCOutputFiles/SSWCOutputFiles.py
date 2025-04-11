@@ -35,7 +35,8 @@ class SSWCOutputFiles( BaseStepView,  Ui_SSWCOutputFiles, QtWidgets.QWidget):
     # Called when user push "Choose" button
     def on_choose(self):
         file_dialog = QtWidgets.QFileDialog()
-        file_dialog.setFileMode(QtWidgets.QFileDialog.DirectoryOnly)
+        file_dialog.setFileMode(QtWidgets.QFileDialog.Directory) 
+        file_dialog.setOption(QtWidgets.QFileDialog.ShowDirsOnly, True)
         folder_name = file_dialog.getExistingDirectory()
         if folder_name != '':
             if folder_name[-1] != '/':

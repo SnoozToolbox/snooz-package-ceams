@@ -1,17 +1,24 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file 'Ui_BslVarStep.ui'
+## Form generated from reading UI file ''
 ##
-## Created by: Qt User Interface Compiler version 5.15.2
+## Created by: Qt User Interface Compiler version 6.8.2
 ##
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
 
-from PySide2.QtCore import *
-from PySide2.QtGui import *
-from PySide2.QtWidgets import *
-
+from PySide6.QtCore import (QCoreApplication, QDate, QDateTime, QLocale,
+    QMetaObject, QObject, QPoint, QRect,
+    QSize, QTime, QUrl, Qt)
+from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
+    QFont, QFontDatabase, QGradient, QIcon,
+    QImage, QKeySequence, QLinearGradient, QPainter,
+    QPalette, QPixmap, QRadialGradient, QTransform)
+from PySide6.QtWidgets import (QApplication, QFormLayout, QFrame, QHBoxLayout,
+    QLabel, QLineEdit, QPlainTextEdit, QScrollArea,
+    QSizePolicy, QSpacerItem, QTextEdit, QVBoxLayout,
+    QWidget)
 from . import BSLVar_res
 import themes_rc
 
@@ -25,7 +32,7 @@ class Ui_BslVarStep(object):
         self.verticalLayout_2.setObjectName(u"verticalLayout_2")
         self.scrollArea = QScrollArea(BslVarStep)
         self.scrollArea.setObjectName(u"scrollArea")
-        sizePolicy = QSizePolicy(QSizePolicy.Expanding, QSizePolicy.Preferred)
+        sizePolicy = QSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Preferred)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.scrollArea.sizePolicy().hasHeightForWidth())
@@ -52,11 +59,10 @@ class Ui_BslVarStep(object):
         self.label_6 = QLabel(BslVarStep)
         self.label_6.setObjectName(u"label_6")
         font = QFont()
-        font.setFamily(u"Roboto")
+        font.setFamilies([u"Roboto"])
         font.setPointSize(12)
         font.setBold(False)
         font.setItalic(False)
-        font.setWeight(50)
         self.label_6.setFont(font)
 
         self.verticalLayout_4.addWidget(self.label_6)
@@ -117,7 +123,7 @@ class Ui_BslVarStep(object):
 
         self.horizontalLayout_3.addLayout(self.verticalLayout)
 
-        self.horizontalSpacer_2 = QSpacerItem(13, 13, QSizePolicy.Expanding, QSizePolicy.Minimum)
+        self.horizontalSpacer_2 = QSpacerItem(13, 13, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
 
         self.horizontalLayout_3.addItem(self.horizontalSpacer_2)
 
@@ -127,11 +133,10 @@ class Ui_BslVarStep(object):
         self.label = QLabel(BslVarStep)
         self.label.setObjectName(u"label")
         font1 = QFont()
-        font1.setFamily(u"Roboto")
+        font1.setFamilies([u"Roboto"])
         font1.setPointSize(12)
         font1.setBold(False)
         font1.setItalic(False)
-        font1.setWeight(50)
         font1.setStyleStrategy(QFont.PreferAntialias)
         self.label.setFont(font1)
 

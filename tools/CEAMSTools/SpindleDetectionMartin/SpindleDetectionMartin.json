@@ -1,8 +1,8 @@
 {
     "item_name": "SpindleDetectionMartin",
     "item_type": "tool",
-    "item_api_version": "1.0.0",
-    "item_url": "",
+    "item_api_version": "2.0.0",
+    "item_url": "https://snooz-toolbox-documentation.readthedocs.io/latest/user_guide/tools/Processing/Spindle_detection_Martin.html#spindle-detection-martin",
     "item_author": "",
     "item_description": "",
     "tool_params": {
@@ -76,11 +76,11 @@
     "dependencies": [
         {
             "package_name": "CEAMSModules",
-            "package_version": "6.12.0"
+            "package_version": "7.0.0"
         },
         {
             "package_name": "CEAMSTools",
-            "package_version": "6.12.0",
+            "package_version": "7.0.0",
             "deleteable": false
         }
     ],

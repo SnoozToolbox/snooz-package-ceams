@@ -164,12 +164,8 @@ class SleepStagesImporter(SciNode):
                 stage_file_read = stages_files[i]
                 # Read the current stage file
                 try: 
-                    if file_params['sep'] is None:
-                        current_stage_file = pd.read_csv(stage_file_read, engine='python', \
-                            encoding=file_params['encoding'], skiprows=file_params['n_rows_hdr'])
-                    else:
-                        current_stage_file = pd.read_csv(stage_file_read, engine='python', sep=file_params['sep'], \
-                            encoding=file_params['encoding'], skiprows=file_params['n_rows_hdr'])
+                    current_stage_file = pd.read_csv(stage_file_read, engine='python', \
+                    sep=file_params['sep'], encoding=file_params['encoding'], skiprows=file_params['n_rows_hdr'])
                 except:
                     raise NodeRuntimeException(self.identifier, "stages_files", \
                         f"SleepStagesImporter : The sleep stages file {stage_file_read} could not be read.")

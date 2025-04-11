@@ -1,21 +1,20 @@
-{   
+{
     "item_name": "EDFAnnotationsReader",
     "item_type": "module",
-    "item_api_version": "1.0.0",
-    "dependencies": [
-    ],
-    "module_params":{
-        "cls":"EDFAnnotationsReader",
-        "name":"EDFAnnotationsReader",
-        "metadata":{},
-        "file_location":null,
-        "module":"CEAMSModules.EDFAnnotationsReader",
+    "item_api_version": "2.0.0",
+    "dependencies": [],
+    "module_params": {
+        "cls": "EDFAnnotationsReader",
+        "name": "EDFAnnotationsReader",
+        "metadata": {},
+        "file_location": null,
+        "module": "CEAMSModules.EDFAnnotationsReader",
         "module_label": "EDF Annotations Reader",
-        "module_category":"Files I/O",
-        "module_author":"",
-        "module_url":"",
-        "module_description":"",
-        "module_options":{},
+        "module_category": "Files I/O",
+        "module_author": "",
+        "module_url": "",
+        "module_description": "",
+        "module_options": {},
         "inputs": {
             "annot_files": {
                 "name": "annot_files",
@@ -36,7 +35,8 @@
                 "value": "",
                 "connections": {},
                 "sub_plugs": {}
-            },"events": {
+            },
+            "events": {
                 "name": "events",
                 "value": "",
                 "connections": {},

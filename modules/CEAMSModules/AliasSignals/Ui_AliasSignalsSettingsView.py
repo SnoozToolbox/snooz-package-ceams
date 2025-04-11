@@ -1,44 +1,63 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file '/home/cbrain/projects/snooz-toolbox/src/main/python/plugins/AliasSignals/Ui_AliasSignalsSettingsView.ui'
-#
-# Created by: PyQt5 UI code generator 5.9.2
-#
-# WARNING! All changes made in this file will be lost!
+################################################################################
+## Form generated from reading UI file ''
+##
+## Created by: Qt User Interface Compiler version 6.8.2
+##
+## WARNING! All changes made in this file will be lost when recompiling UI file!
+################################################################################
 
-from qtpy import QtCore, QtGui, QtWidgets
+from PySide6.QtCore import (QCoreApplication, QDate, QDateTime, QLocale,
+    QMetaObject, QObject, QPoint, QRect,
+    QSize, QTime, QUrl, Qt)
+from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
+    QFont, QFontDatabase, QGradient, QIcon,
+    QImage, QKeySequence, QLinearGradient, QPainter,
+    QPalette, QPixmap, QRadialGradient, QTransform)
+from PySide6.QtWidgets import (QApplication, QGridLayout, QLabel, QSizePolicy,
+    QWidget)
+
+from widgets.QLineEditLive import QLineEditLive
 
 class Ui_AliasSignalsSettingsView(object):
     def setupUi(self, AliasSignalsSettingsView):
-        AliasSignalsSettingsView.setObjectName("AliasSignalsSettingsView")
+        if not AliasSignalsSettingsView.objectName():
+            AliasSignalsSettingsView.setObjectName(u"AliasSignalsSettingsView")
         AliasSignalsSettingsView.resize(415, 224)
-        self.layoutWidget = QtWidgets.QWidget(AliasSignalsSettingsView)
-        self.layoutWidget.setGeometry(QtCore.QRect(10, 10, 248, 46))
-        self.layoutWidget.setObjectName("layoutWidget")
-        self.gridLayout_2 = QtWidgets.QGridLayout(self.layoutWidget)
+        self.layoutWidget = QWidget(AliasSignalsSettingsView)
+        self.layoutWidget.setObjectName(u"layoutWidget")
+        self.layoutWidget.setGeometry(QRect(10, 10, 248, 46))
+        self.gridLayout_2 = QGridLayout(self.layoutWidget)
+        self.gridLayout_2.setObjectName(u"gridLayout_2")
         self.gridLayout_2.setContentsMargins(0, 0, 0, 0)
-        self.gridLayout_2.setObjectName("gridLayout_2")
-        self.label_8 = QtWidgets.QLabel(self.layoutWidget)
-        font = QtGui.QFont()
+        self.label_8 = QLabel(self.layoutWidget)
+        self.label_8.setObjectName(u"label_8")
+        font = QFont()
         font.setBold(True)
-        font.setWeight(75)
         self.label_8.setFont(font)
-        self.label_8.setObjectName("label_8")
+
         self.gridLayout_2.addWidget(self.label_8, 0, 0, 1, 2)
-        self.label_9 = QtWidgets.QLabel(self.layoutWidget)
-        self.label_9.setObjectName("label_9")
+
+        self.label_9 = QLabel(self.layoutWidget)
+        self.label_9.setObjectName(u"label_9")
+
         self.gridLayout_2.addWidget(self.label_9, 1, 0, 1, 1)
+
         self.alias_lineedit = QLineEditLive(self.layoutWidget)
-        self.alias_lineedit.setObjectName("alias_lineedit")
+        self.alias_lineedit.setObjectName(u"alias_lineedit")
+
         self.gridLayout_2.addWidget(self.alias_lineedit, 1, 1, 1, 1)
 
+
         self.retranslateUi(AliasSignalsSettingsView)
-        QtCore.QMetaObject.connectSlotsByName(AliasSignalsSettingsView)
+
+        QMetaObject.connectSlotsByName(AliasSignalsSettingsView)
+    # setupUi
 
     def retranslateUi(self, AliasSignalsSettingsView):
-        _translate = QtCore.QCoreApplication.translate
-        AliasSignalsSettingsView.setWindowTitle(_translate("AliasSignalsSettingsView", "Form"))
-        self.label_8.setText(_translate("AliasSignalsSettingsView", "AliasSignals settings"))
-        self.label_9.setText(_translate("AliasSignalsSettingsView", "Alias"))
+        AliasSignalsSettingsView.setWindowTitle(QCoreApplication.translate("AliasSignalsSettingsView", u"Form", None))
+        self.label_8.setText(QCoreApplication.translate("AliasSignalsSettingsView", u"AliasSignals settings", None))
+        self.label_9.setText(QCoreApplication.translate("AliasSignalsSettingsView", u"Alias", None))
+    # retranslateUi
 
-from widgets.QLineEditLive import QLineEditLive

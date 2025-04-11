@@ -87,7 +87,8 @@ class DominoConverterSettingsView(BaseSettingsView, Ui_DominoConverterSettingsVi
     # Called when the user press Add Folder push button
     def add_folder_slot(self):
         file_dialog = QtWidgets.QFileDialog()
-        file_dialog.setFileMode(QtWidgets.QFileDialog.DirectoryOnly) # Allows the user to select only directories (folders).
+        file_dialog.setFileMode(QtWidgets.QFileDialog.Directory) # Allows the user to select only directories (folders).
+        file_dialog.setOption(QtWidgets.QFileDialog.ShowDirsOnly, True)
         # The non native QFileDialog supports only local files.
             # So it is better to use the native dialog instead to see athena
         # The native dialog does not support multiple folders selection in windows and macOS

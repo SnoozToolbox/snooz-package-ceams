@@ -3,6 +3,7 @@ import json
 import os
 from os.path import exists
 import shutil
+import subprocess
 
 from jinja2 import Environment, FileSystemLoader
 
@@ -43,7 +44,7 @@ while module_label == "":
     module_label = input("(ex: JSON Reader): ")
 
 print("\n-- Module category --")
-print("IMPORTANT: this is used to organized the modules within the app, the synthax is crucial if you want your modules to appear in the correct category.")
+print("IMPORTANT: this is used to organized the modules within the application, the synthax is crucial if you want your modules to appear in the correct category.")
 module_category = ""
 while module_category == "":
     module_category = input("(ex: Hypnogram Analysis): ")
@@ -96,6 +97,15 @@ def create_file(template_filename, output_filename):
     f.write(output)
     f.close()
 
+def compile_ui_to_py(compiler, ui_file, py_file):
+    result = subprocess.run(
+        [compiler, os.path.join(module_path, ui_file), '-o', os.path.join(module_path, py_file)],
+        check=True,
+        shell=True
+    )
+    if result.returncode != 0:
+        print(f"Error Compiling {ui_file}: {result.stderr.decode('utf-8')}")
+
 if is_overwriting:
     shutil.rmtree(module_path)
 
@@ -109,6 +119,14 @@ create_file("module_settings_view_template.txt",f"{module_class}SettingsView.py"
 create_file("module_results_view_template.txt",f"{module_class}ResultsView.py")
 create_file("module_ui_settings_view_template.txt",f"Ui_{module_class}SettingsView.ui")
 create_file("module_ui_results_view_template.txt",f"Ui_{module_class}ResultsView.ui")
+
+# Compiling .ui files to python files
+compiler_exists = False
+compiler_path = shutil.which("pyside6-uic")
+if compiler_path:
+    compiler_exists = True
+    compile_ui_to_py(compiler_path, f"Ui_{module_class}SettingsView.ui", f"Ui_{module_class}SettingsView.py")
+    compile_ui_to_py(compiler_path, f"Ui_{module_class}ResultsView.ui", f"Ui_{module_class}ResultsView.py")
 
 # Add the modules to the description.json file of the package.
 if not is_overwriting:
@@ -138,11 +156,13 @@ if not is_overwriting:
         json_string = json.dumps(description, indent=4)
         outfile.write(json_string)
 
-
-print("What to do next?")
-print("Generate the .py files from all .ui files in the module")
-print("- Select the file in Visual Studio Code.")
-print("- Right-click")
-print("- Select 'Compile Qt UI File'")
-
-print("Done!")
+if compiler_exists:
+    print("Done!")
+else:
+    print("Done!\n")
+    print("As we did not find the pyside6-uic compiler in your virtual environment, we could not not compile the Ui files.")
+    print("What to do next?")
+    print("Generate the .py files manually from all .ui files in the module")
+    print("- Select the file in Visual Studio Code.")
+    print("- Right-click")
+    print("- Select 'Compile Qt UI File'")
