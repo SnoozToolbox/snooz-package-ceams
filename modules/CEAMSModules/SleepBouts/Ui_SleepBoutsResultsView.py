@@ -1,28 +1,41 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file '/home/david/projects/snooz-toolbox/src/main/python/plugins/SleepBouts/Ui_SleepBoutsResultsView.ui'
-#
-# Created by: PyQt5 UI code generator 5.12.3
-#
-# WARNING! All changes made in this file will be lost!
+################################################################################
+## Form generated from reading UI file ''
+##
+## Created by: Qt User Interface Compiler version 6.8.2
+##
+## WARNING! All changes made in this file will be lost when recompiling UI file!
+################################################################################
 
-
-from qtpy import QtCore, QtGui, QtWidgets
-
+from PySide6.QtCore import (QCoreApplication, QDate, QDateTime, QLocale,
+    QMetaObject, QObject, QPoint, QRect,
+    QSize, QTime, QUrl, Qt)
+from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
+    QFont, QFontDatabase, QGradient, QIcon,
+    QImage, QKeySequence, QLinearGradient, QPainter,
+    QPalette, QPixmap, QRadialGradient, QTransform)
+from PySide6.QtWidgets import (QApplication, QSizePolicy, QVBoxLayout, QWidget)
 
 class Ui_SleepBoutsResultsView(object):
     def setupUi(self, SleepBoutsResultsView):
-        SleepBoutsResultsView.setObjectName("SleepBoutsResultsView")
+        if not SleepBoutsResultsView.objectName():
+            SleepBoutsResultsView.setObjectName(u"SleepBoutsResultsView")
         SleepBoutsResultsView.resize(927, 262)
-        self.verticalLayout = QtWidgets.QVBoxLayout(SleepBoutsResultsView)
-        self.verticalLayout.setObjectName("verticalLayout")
-        self.signal_layout = QtWidgets.QVBoxLayout()
-        self.signal_layout.setObjectName("signal_layout")
+        self.verticalLayout = QVBoxLayout(SleepBoutsResultsView)
+        self.verticalLayout.setObjectName(u"verticalLayout")
+        self.signal_layout = QVBoxLayout()
+        self.signal_layout.setObjectName(u"signal_layout")
+
         self.verticalLayout.addLayout(self.signal_layout)
 
+
         self.retranslateUi(SleepBoutsResultsView)
-        QtCore.QMetaObject.connectSlotsByName(SleepBoutsResultsView)
+
+        QMetaObject.connectSlotsByName(SleepBoutsResultsView)
+    # setupUi
 
     def retranslateUi(self, SleepBoutsResultsView):
-        _translate = QtCore.QCoreApplication.translate
-        SleepBoutsResultsView.setWindowTitle(_translate("SleepBoutsResultsView", "Form"))
+        SleepBoutsResultsView.setWindowTitle(QCoreApplication.translate("SleepBoutsResultsView", u"Form", None))
+    # retranslateUi
+

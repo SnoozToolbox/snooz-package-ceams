@@ -657,7 +657,7 @@ class PSGReaderSettingsView( BaseSettingsView,  Ui_PSGReaderSettingsView, QtWidg
             if checkable:
                 # Make checkable and check the state of the group_item
                 group_item.setCheckable(True)
-                group_item.setTristate(True)
+                group_item.setAutoTristate(True)
                 group_item.setCheckState(QtCore.Qt.CheckState.Checked)
             # For each child of the group_item
             for i_name in range(0, ori_file_item.child(i_group,0).rowCount()):
@@ -669,7 +669,7 @@ class PSGReaderSettingsView( BaseSettingsView,  Ui_PSGReaderSettingsView, QtWidg
                 if checkable:
                     # Make checkable and check the state of the name_item
                     name_item.setCheckable(True)
-                    name_item.setTristate(False)
+                    name_item.setAutoTristate(False)
                     name_item.setCheckState(QtCore.Qt.CheckState.Checked)
                 group_item.appendRow([name_item, ori_name_item])
             # Add the new checkable item to the file_item
@@ -687,7 +687,8 @@ class PSGReaderSettingsView( BaseSettingsView,  Ui_PSGReaderSettingsView, QtWidg
 
     def add_folders_slot(self):
         file_dialog = QtWidgets.QFileDialog()
-        file_dialog.setFileMode(QtWidgets.QFileDialog.DirectoryOnly) # Allows the user to select only directories (folders).
+        file_dialog.setFileMode(QtWidgets.QFileDialog.Directory) 
+        file_dialog.setOption(QtWidgets.QFileDialog.ShowDirsOnly, True) # Allows the user to select only directories (folders).
         # The non native QFileDialog supports only local files.
             # So it is better to use the native dialog instead to see athena
         # The native dialog does not support multiple folders selection in windows and macos
@@ -1241,7 +1242,7 @@ class PSGReaderSettingsView( BaseSettingsView,  Ui_PSGReaderSettingsView, QtWidg
                 n_child = files_check_model.rowCount(view_index)
                 for i_c in range(n_child):
                     child_item = item.child(i_c)
-                    child_item.setTristate(False)
+                    child_item.setAutoTristate(False)
                     if child_item is not None:
                         child_item.setCheckState(item.checkState())
         return files_check_model

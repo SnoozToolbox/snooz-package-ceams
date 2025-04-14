@@ -1,17 +1,23 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file 'Ui_SelectionStep.ui'
+## Form generated from reading UI file ''
 ##
-## Created by: Qt User Interface Compiler version 5.15.2
+## Created by: Qt User Interface Compiler version 6.8.2
 ##
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
 
-from PySide2.QtCore import *
-from PySide2.QtGui import *
-from PySide2.QtWidgets import *
-
+from PySide6.QtCore import (QCoreApplication, QDate, QDateTime, QLocale,
+    QMetaObject, QObject, QPoint, QRect,
+    QSize, QTime, QUrl, Qt)
+from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
+    QFont, QFontDatabase, QGradient, QIcon,
+    QImage, QKeySequence, QLinearGradient, QPainter,
+    QPalette, QPixmap, QRadialGradient, QTransform)
+from PySide6.QtWidgets import (QApplication, QCheckBox, QFrame, QGridLayout,
+    QHBoxLayout, QLabel, QPlainTextEdit, QRadioButton,
+    QSizePolicy, QSpacerItem, QVBoxLayout, QWidget)
 import themes_rc
 
 class Ui_SelectionStep(object):
@@ -24,11 +30,10 @@ class Ui_SelectionStep(object):
         self.label = QLabel(SelectionStep)
         self.label.setObjectName(u"label")
         font = QFont()
-        font.setFamily(u"Roboto")
+        font.setFamilies([u"Roboto"])
         font.setPointSize(12)
         font.setBold(False)
         font.setItalic(False)
-        font.setWeight(50)
         self.label.setFont(font)
 
         self.verticalLayout_4.addWidget(self.label)
@@ -44,13 +49,13 @@ class Ui_SelectionStep(object):
 
         self.verticalLayout_4.addWidget(self.radioButton_sleep)
 
-        self.verticalSpacer = QSpacerItem(20, 30, QSizePolicy.Minimum, QSizePolicy.Fixed)
+        self.verticalSpacer = QSpacerItem(20, 30, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Fixed)
 
         self.verticalLayout_4.addItem(self.verticalSpacer)
 
         self.horizontalLayout = QHBoxLayout()
         self.horizontalLayout.setObjectName(u"horizontalLayout")
-        self.horizontalSpacer = QSpacerItem(40, 20, QSizePolicy.Minimum, QSizePolicy.Minimum)
+        self.horizontalSpacer = QSpacerItem(40, 20, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Minimum)
 
         self.horizontalLayout.addItem(self.horizontalSpacer)
 
@@ -135,7 +140,7 @@ class Ui_SelectionStep(object):
 
         self.verticalLayout_3.addLayout(self.verticalLayout)
 
-        self.verticalSpacer_7 = QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Fixed)
+        self.verticalSpacer_7 = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Fixed)
 
         self.verticalLayout_3.addItem(self.verticalSpacer_7)
 
@@ -150,7 +155,7 @@ class Ui_SelectionStep(object):
 
         self.verticalLayout_3.addWidget(self.label_7)
 
-        self.verticalSpacer_4 = QSpacerItem(20, 13, QSizePolicy.Minimum, QSizePolicy.Fixed)
+        self.verticalSpacer_4 = QSpacerItem(20, 13, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Fixed)
 
         self.verticalLayout_3.addItem(self.verticalSpacer_4)
 
@@ -158,7 +163,7 @@ class Ui_SelectionStep(object):
         self.gridLayout_2.setObjectName(u"gridLayout_2")
         self.plainTextEdit = QPlainTextEdit(SelectionStep)
         self.plainTextEdit.setObjectName(u"plainTextEdit")
-        sizePolicy = QSizePolicy(QSizePolicy.Expanding, QSizePolicy.Preferred)
+        sizePolicy = QSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Preferred)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.plainTextEdit.sizePolicy().hasHeightForWidth())
@@ -209,7 +214,7 @@ class Ui_SelectionStep(object):
 
         self.gridLayout_2.addLayout(self.verticalLayout_2, 1, 0, 1, 1)
 
-        self.verticalSpacer_2 = QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding)
+        self.verticalSpacer_2 = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
 
         self.gridLayout_2.addItem(self.verticalSpacer_2, 2, 1, 1, 1)
 

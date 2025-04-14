@@ -9,8 +9,8 @@ See the file LICENCE for full license details.
 
 from qtpy import QtWidgets
 from qtpy import QtCore
-from qtpy.QtGui import QRegExpValidator # To validate waht the user enters in the interface
-from qtpy.QtCore import QRegExp # To validate waht the user enters in the interface
+from qtpy.QtGui import QRegularExpressionValidator # To validate waht the user enters in the interface
+from qtpy.QtCore import QRegularExpression # To validate waht the user enters in the interface
 
 from CEAMSTools.DetectArtifacts.FlatlineStep.Ui_FlatlineStep import Ui_FlatlineStep
 from CEAMSTools.DetectArtifacts.DetectorsStep.DetectorsStep import DetectorsStep

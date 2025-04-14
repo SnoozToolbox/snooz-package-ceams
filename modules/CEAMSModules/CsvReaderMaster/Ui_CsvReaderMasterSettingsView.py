@@ -1,17 +1,24 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file 'Ui_CsvReaderMasterSettingsView.ui'
+## Form generated from reading UI file ''
 ##
-## Created by: Qt User Interface Compiler version 5.15.2
+## Created by: Qt User Interface Compiler version 6.8.2
 ##
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
 
-from PySide2.QtCore import *
-from PySide2.QtGui import *
-from PySide2.QtWidgets import *
-
+from PySide6.QtCore import (QCoreApplication, QDate, QDateTime, QLocale,
+    QMetaObject, QObject, QPoint, QRect,
+    QSize, QTime, QUrl, Qt)
+from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
+    QFont, QFontDatabase, QGradient, QIcon,
+    QImage, QKeySequence, QLinearGradient, QPainter,
+    QPalette, QPixmap, QRadialGradient, QTransform)
+from PySide6.QtWidgets import (QApplication, QButtonGroup, QCheckBox, QGridLayout,
+    QHBoxLayout, QLabel, QLineEdit, QListWidget,
+    QListWidgetItem, QPushButton, QRadioButton, QSizePolicy,
+    QSpacerItem, QSpinBox, QVBoxLayout, QWidget)
 
 class Ui_CsvReaderMasterSettingsView(object):
     def setupUi(self, CsvReaderMasterSettingsView):
@@ -31,7 +38,6 @@ class Ui_CsvReaderMasterSettingsView(object):
         font = QFont()
         font.setPointSize(12)
         font.setBold(True)
-        font.setWeight(75)
         self.label.setFont(font)
         self.label.setLayoutDirection(Qt.LeftToRight)
         self.label.setAlignment(Qt.AlignCenter)
@@ -74,7 +80,7 @@ class Ui_CsvReaderMasterSettingsView(object):
 
         self.verticalLayout_2.addWidget(self.label_7)
 
-        self.verticalSpacer_3 = QSpacerItem(20, 18, QSizePolicy.Minimum, QSizePolicy.Fixed)
+        self.verticalSpacer_3 = QSpacerItem(20, 18, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Fixed)
 
         self.verticalLayout_2.addItem(self.verticalSpacer_3)
 
@@ -82,7 +88,7 @@ class Ui_CsvReaderMasterSettingsView(object):
         self.gridLayout.setObjectName(u"gridLayout")
         self.group_spinbox = QSpinBox(CsvReaderMasterSettingsView)
         self.group_spinbox.setObjectName(u"group_spinbox")
-        sizePolicy = QSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
+        sizePolicy = QSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Fixed)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.group_spinbox.sizePolicy().hasHeightForWidth())
@@ -109,7 +115,7 @@ class Ui_CsvReaderMasterSettingsView(object):
 
         self.gridLayout.addWidget(self.label_6, 3, 1, 1, 1)
 
-        self.horizontalSpacer_3 = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
+        self.horizontalSpacer_3 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
 
         self.gridLayout.addItem(self.horizontalSpacer_3, 3, 3, 1, 1)
 
@@ -139,7 +145,7 @@ class Ui_CsvReaderMasterSettingsView(object):
 
         self.gridLayout.addWidget(self.time_radiobutton, 1, 1, 1, 1)
 
-        self.horizontalSpacer_5 = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
+        self.horizontalSpacer_5 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
 
         self.gridLayout.addItem(self.horizontalSpacer_5, 9, 3, 1, 1)
 
@@ -165,7 +171,7 @@ class Ui_CsvReaderMasterSettingsView(object):
 
         self.gridLayout.addWidget(self.label_4, 9, 0, 1, 1)
 
-        self.horizontalSpacer = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
+        self.horizontalSpacer = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
 
         self.gridLayout.addItem(self.horizontalSpacer, 8, 3, 1, 1)
 
@@ -175,7 +181,7 @@ class Ui_CsvReaderMasterSettingsView(object):
 
         self.gridLayout.addWidget(self.label_9, 11, 0, 1, 1)
 
-        self.horizontalSpacer_7 = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
+        self.horizontalSpacer_7 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
 
         self.gridLayout.addItem(self.horizontalSpacer_7, 10, 2, 1, 1)
 
@@ -209,7 +215,7 @@ class Ui_CsvReaderMasterSettingsView(object):
 
         self.gridLayout.addWidget(self.sample_radiobutton, 1, 2, 1, 1)
 
-        self.horizontalSpacer_6 = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
+        self.horizontalSpacer_6 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
 
         self.gridLayout.addItem(self.horizontalSpacer_6, 10, 3, 1, 1)
 
@@ -228,7 +234,7 @@ class Ui_CsvReaderMasterSettingsView(object):
 
         self.gridLayout.addWidget(self.event_name_spinbox, 7, 1, 1, 1)
 
-        self.horizontalSpacer_4 = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
+        self.horizontalSpacer_4 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
 
         self.gridLayout.addItem(self.horizontalSpacer_4, 7, 3, 1, 1)
 
@@ -241,7 +247,7 @@ class Ui_CsvReaderMasterSettingsView(object):
 
         self.gridLayout.addWidget(self.duration_spinbox, 9, 1, 1, 1)
 
-        self.horizontalSpacer_2 = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
+        self.horizontalSpacer_2 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
 
         self.gridLayout.addItem(self.horizontalSpacer_2, 1, 3, 1, 1)
 
@@ -269,7 +275,7 @@ class Ui_CsvReaderMasterSettingsView(object):
 
         self.verticalLayout_2.addLayout(self.gridLayout)
 
-        self.verticalSpacer_2 = QSpacerItem(20, 18, QSizePolicy.Minimum, QSizePolicy.Expanding)
+        self.verticalSpacer_2 = QSpacerItem(20, 18, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
 
         self.verticalLayout_2.addItem(self.verticalSpacer_2)
 

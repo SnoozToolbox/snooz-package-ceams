@@ -1,25 +1,36 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file '/home/david/projects/snooz-toolbox/src/main/python/plugins/Hypnogram/Ui_HypnogramResultsView.ui'
-#
-# Created by: PyQt5 UI code generator 5.12.3
-#
-# WARNING! All changes made in this file will be lost!
+################################################################################
+## Form generated from reading UI file ''
+##
+## Created by: Qt User Interface Compiler version 6.8.2
+##
+## WARNING! All changes made in this file will be lost when recompiling UI file!
+################################################################################
 
-
-from qtpy import QtCore, QtGui, QtWidgets
-
+from PySide6.QtCore import (QCoreApplication, QDate, QDateTime, QLocale,
+    QMetaObject, QObject, QPoint, QRect,
+    QSize, QTime, QUrl, Qt)
+from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
+    QFont, QFontDatabase, QGradient, QIcon,
+    QImage, QKeySequence, QLinearGradient, QPainter,
+    QPalette, QPixmap, QRadialGradient, QTransform)
+from PySide6.QtWidgets import (QApplication, QSizePolicy, QVBoxLayout, QWidget)
 
 class Ui_HypnogramResultsView(object):
     def setupUi(self, HypnogramResultsView):
-        HypnogramResultsView.setObjectName("HypnogramResultsView")
+        if not HypnogramResultsView.objectName():
+            HypnogramResultsView.setObjectName(u"HypnogramResultsView")
         HypnogramResultsView.resize(1292, 541)
-        self.verticalLayout = QtWidgets.QVBoxLayout(HypnogramResultsView)
-        self.verticalLayout.setObjectName("verticalLayout")
+        self.verticalLayout = QVBoxLayout(HypnogramResultsView)
+        self.verticalLayout.setObjectName(u"verticalLayout")
 
         self.retranslateUi(HypnogramResultsView)
-        QtCore.QMetaObject.connectSlotsByName(HypnogramResultsView)
+
+        QMetaObject.connectSlotsByName(HypnogramResultsView)
+    # setupUi
 
     def retranslateUi(self, HypnogramResultsView):
-        _translate = QtCore.QCoreApplication.translate
-        HypnogramResultsView.setWindowTitle(_translate("HypnogramResultsView", "Form"))
+        HypnogramResultsView.setWindowTitle(QCoreApplication.translate("HypnogramResultsView", u"Form", None))
+    # retranslateUi
+

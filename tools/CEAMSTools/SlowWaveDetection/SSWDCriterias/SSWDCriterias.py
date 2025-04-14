@@ -5,8 +5,8 @@
 """
 
 from qtpy import QtWidgets
-from qtpy.QtCore import QRegExp
-from qtpy.QtGui import QRegExpValidator
+from qtpy.QtCore import QRegularExpression
+from qtpy.QtGui import QRegularExpressionValidator
 
 from CEAMSTools.SlowWaveDetection.SSWDCriterias.Ui_SSWDCriterias import Ui_SSWDCriterias
 from commons.BaseStepView import BaseStepView
@@ -23,10 +23,10 @@ class SSWDCriterias( BaseStepView,  Ui_SSWDCriterias, QtWidgets.QWidget):
         self.setupUi(self)
 
         # Set input validators
-        # Create a QRegExpValidator with the desired regular expression
+        # Create a QRegularExpressionValidator with the desired regular expression
         # Regular expression for alphanumeric, space, dash, and latin1 (ISO/CEI 8859-1) characters
-        regex = QRegExp(r'^[a-zA-Z0-9ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖ×ØÙÚÛÜÝÞßàáâãäåæçèéêëìíîïðñòóôõö÷øùúûüýþÿ\s-_]*$')
-        validator = QRegExpValidator(regex)
+        regex = QRegularExpression(r'^[a-zA-Z0-9ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖ×ØÙÚÛÜÝÞßàáâãäåæçèéêëìíîïðñòóôõö÷øùúûüýþÿ\s-_]*$')
+        validator = QRegularExpressionValidator(regex)
 
         # Set the validator for the QLineEdit
         self.event_name_lineedit.setValidator(validator)

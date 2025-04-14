@@ -1,8 +1,8 @@
 {
     "item_name": "SlowWaveClassification",
     "item_type": "tool",
-    "item_api_version": "1.0.1",
-    "item_url": "",
+    "item_api_version": "2.0.0",
+    "item_url": "https://snooz-toolbox-documentation.readthedocs.io/latest/user_guide/tools/Postprocessing/Slow_wave_classifier.html#slow-wave-classifier",
     "item_author": "",
     "item_description": "",
     "tool_params": {
@@ -47,16 +47,15 @@
     "dependencies": [
         {
             "package_name": "CEAMSModules",
-            "package_version": "6.9.0"
+            "package_version": "7.0.0"
         },
         {
             "package_name": "CEAMSTools",
-            "package_version": "6.9.0",
+            "package_version": "7.0.0",
             "deleteable": false
         }
     ],
     "process_params": {
-        
         "subgraph_params": {},
         "nodes": [
             {

@@ -375,18 +375,18 @@ class DetectionsCohortReview(SciNode):
                 # Make sure the ROI includes at least 2 channels
                 if len(data_chan_cur_roi.shape)==2:
                     if roi_blank:
-                        # skipna=False means that if an index is NaN for a channel 
-                        # the average for that index (ex: TOTACTS1) is nan.
-                        #  TODO : it does not make sense for valid time in minutes
-                        # We should take the highest values if all channels are valid 
-                        act_roi = data_chan_cur_roi.mean(skipna=False, axis=1) 
+                         # skipna=False means that if an index is NaN for a channel 
+                         # the average for that index (ex: TOTACTS1) is nan. 
+                         #  TODO : it does not make sense for valid time in minutes
+                         # We should take the highest values if all channels are valid 
+                         act_roi = data_chan_cur_roi.mean(skipna=False, axis=1) 
                     else:
-                        # skipna=True means that if an index is NaN for a channel 
-                        # the average for that index (ex: TOTACTS1) skip the NaN channel
-                        # and the average value is still valid but based on less channels.    
-                        #  TODO : it does not make sense for valid time in minutes
-                        # We should take the highest values from the valid channels             
-                        act_roi = data_chan_cur_roi.mean(skipna=True, axis=1)           
+                         # skipna=True means that if an index is NaN for a channel 
+                         # the average for that index (ex: TOTACTS1) skip the NaN channel            
+                         # and the average value is still valid but based on less channels.    
+                         #  TODO : it does not make sense for valid time in minutes
+                         # We should take the highest values from the valid channels             
+                         act_roi = data_chan_cur_roi.mean(skipna=True, axis=1)               
                 else:
                     act_roi = data_chan_cur_roi
                 # Convert into a series (column)

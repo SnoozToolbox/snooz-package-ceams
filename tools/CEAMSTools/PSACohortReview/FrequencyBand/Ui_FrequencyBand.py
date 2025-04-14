@@ -1,17 +1,23 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file 'Ui_FrequencyBand.ui'
+## Form generated from reading UI file ''
 ##
-## Created by: Qt User Interface Compiler version 5.15.2
+## Created by: Qt User Interface Compiler version 6.8.2
 ##
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
 
-from PySide2.QtCore import *
-from PySide2.QtGui import *
-from PySide2.QtWidgets import *
-
+from PySide6.QtCore import (QCoreApplication, QDate, QDateTime, QLocale,
+    QMetaObject, QObject, QPoint, QRect,
+    QSize, QTime, QUrl, Qt)
+from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
+    QFont, QFontDatabase, QGradient, QIcon,
+    QImage, QKeySequence, QLinearGradient, QPainter,
+    QPalette, QPixmap, QRadialGradient, QTransform)
+from PySide6.QtWidgets import (QAbstractItemView, QApplication, QHBoxLayout, QHeaderView,
+    QLabel, QPushButton, QSizePolicy, QTableView,
+    QVBoxLayout, QWidget)
 import themes_rc
 
 class Ui_FrequencyBand(object):
@@ -37,7 +43,7 @@ class Ui_FrequencyBand(object):
         self.tiny_band_tableView.setObjectName(u"tiny_band_tableView")
         self.tiny_band_tableView.setMaximumSize(QSize(350, 16777215))
         font1 = QFont()
-        font1.setFamily(u"Roboto")
+        font1.setFamilies([u"Roboto"])
         font1.setPointSize(12)
         self.tiny_band_tableView.setFont(font1)
         self.tiny_band_tableView.setEditTriggers(QAbstractItemView.NoEditTriggers)
@@ -57,7 +63,7 @@ class Ui_FrequencyBand(object):
 
         self.new_band_tableView = QTableView(FrequencyBand)
         self.new_band_tableView.setObjectName(u"new_band_tableView")
-        sizePolicy = QSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
+        sizePolicy = QSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.new_band_tableView.sizePolicy().hasHeightForWidth())
