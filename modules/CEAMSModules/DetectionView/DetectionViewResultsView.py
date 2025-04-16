@@ -9,7 +9,7 @@ See the file LICENCE for full license details.
 
 from typing import Text
 import matplotlib
-matplotlib.use('Qt5Agg')
+matplotlib.use('QtAgg')
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT as NavigationToolbar
 from matplotlib.figure import Figure

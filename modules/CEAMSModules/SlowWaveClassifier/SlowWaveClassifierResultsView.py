@@ -10,7 +10,7 @@ import matplotlib
 from matplotlib.figure import Figure
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.lines import Line2D
-matplotlib.use('Qt5Agg')
+matplotlib.use('QtAgg')
 from scipy.stats import norm
 import numpy as np
 from qtpy import QtWidgets, QtCore, QtGui
