@@ -77,7 +77,7 @@ class SleepBoutsSettingsView( BaseSettingsView,  Ui_SleepBoutsSettingsView, QtWi
 
     def on_choose_ouput_file(self):
         name, _ = QtWidgets.QFileDialog.getSaveFileName(self, 'Output File', "",\
-             "CSV (*.csv)", options = QtWidgets.QFileDialog.DontConfirmOverwrite)
+             "TSV (*.tsv)", options = QtWidgets.QFileDialog.DontConfirmOverwrite)
         if name:
             self.output_file_lineedit.setText(name)
         
