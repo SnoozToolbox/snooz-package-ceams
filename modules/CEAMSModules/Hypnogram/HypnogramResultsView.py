@@ -17,7 +17,7 @@ from ..PSGReader import commons
 
 import matplotlib
 from numpy import ceil
-matplotlib.use('Qt5Agg')
+matplotlib.use('QtAgg')
 import matplotlib.pyplot as plt
 #from matplotlib.backends.backend_qtagg import (FigureCanvas, NavigationToolbar2QT as NavigationToolbar)
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
