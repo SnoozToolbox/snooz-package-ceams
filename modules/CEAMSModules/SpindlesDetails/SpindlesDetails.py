@@ -135,7 +135,7 @@ class SpindlesDetails(SciNode):
         InputPlug('export_spindles',self)
 
         # Init module variables
-        self.stage_stats_labels = ['N1', 'N2', 'N3', 'NREM', 'R']
+        self.stage_stats_labels = ['N1', 'N2', 'N3', 'N2N3', 'R']
 
         # A master module allows the process to be reexcuted multiple time.
         self._is_master = False 
@@ -805,7 +805,7 @@ class SpindlesDetails(SciNode):
         invalid_dur_sec = 0
 
         # Added to manage NREM
-        sleep_stages_name['NREM'] = ['2', '3']
+        sleep_stages_name['N2N3'] = ['2', '3']
 
         for stage in stage_stats_labels:
             inv_dur_sec_cur_stage = 0
