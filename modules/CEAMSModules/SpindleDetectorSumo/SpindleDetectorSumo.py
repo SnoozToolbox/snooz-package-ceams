@@ -15,19 +15,21 @@ from .get_model import get_model
 from sumo.config import Config
 from sumo.data import spindle_vect_to_indices
 from .butter_filter import butter_bandpass_filter, butter_bandpass_filter_nan, downsample
-from scipy.stats import zscore
-import torch
-from torch.utils.data import Dataset, DataLoader
-import pytorch_lightning as pl
-from CEAMSModules.EventReader import manage_events
-
-from flowpipe import SciNode, InputPlug, OutputPlug
-from commons.NodeInputException import NodeInputException
-from commons.NodeRuntimeException import NodeRuntimeException
 import numpy as np
 import sys, os
 # import time
 import pandas as pd
+from scipy.stats import zscore
+import torch
+from torch.utils.data import Dataset, DataLoader
+import pytorch_lightning as pl
+
+from commons.NodeInputException import NodeInputException
+from commons.NodeRuntimeException import NodeRuntimeException
+from flowpipe import SciNode, InputPlug, OutputPlug
+from flowpipe.ActivationState import ActivationState
+
+from CEAMSModules.EventReader import manage_events
 
 # Comment out the following imports if no need to plot the spindles
 # import matplotlib
@@ -43,7 +45,7 @@ os.environ['PYDEVD_INTERRUPT_THREAD_TIMEOUT'] = '5'
 DEBUG = False
 plot = False
 plot_len = 8  # Length of the window to plot around the spindle in seconds (any even number between 2 and 30) 
-sumo_input = "original"  # original or clean
+#sumo_input = "original"  # original or clean
 
 class SimpleDataset(Dataset):
     def __init__(self, data_vectors, mean, std):
@@ -82,7 +84,7 @@ class SpindleDetectorSumo(SciNode):
                 montage_index:  The index of the montage used for this signal
                 is_modified:    Value caracterizing if the signal as been modify 
                                 from the original         
-        cleaned_signals: List of SignalModel
+        (obsolete) cleaned_signals: List of SignalModel
             List of cleaned signal (filtered, resampled, artifact-removed) with dictionary of channels with SignalModel with 
             properties :
                 name:           The name of the channel
@@ -124,9 +126,6 @@ class SpindleDetectorSumo(SciNode):
 
         # Output plugs
         OutputPlug('events',self)
-        
-        # Init module variables
-        self.this_is_an_example_you_can_delete_it = 0
 
         # A master module allows the process to be reexcuted multiple time.
         # For exemple, this is useful when the process must be repeated over multiple
@@ -186,47 +185,41 @@ class SpindleDetectorSumo(SciNode):
             raise NodeInputException(self.identifier, "artifact_events", \
                 f"SpindleDetectorSUMO this input is a {type(artifact_events)}, it is expected to be a Pandas DataFrame.")            
 
-        # Raise NodeRuntimeException if there is a critical error during runtime. 
-        # This will usually be a user error, a file that can't be read due to security reason,
-        # a parameter that is out of bound, etc. This exception will stop and skip the current
-        # process but will not stop the followin iterations if a master node is not done.
-        # Once the master node is completed, a dialog will appear to show all NodeRuntimeException
-        # to the user.
-        #
-        # Set the iteration_identifier if this module is a master node.
-        # This will be used to identify the problematic iteration if a runtime exception occurs
-        # in any module during this process. For example, a master node that reads one file at a 
-        # could set the identifier to the name of the file.
-        # self.iteration_identifier = current_filename
-        #
-        # Iteration count and counter are used to show a progress bar in percent.
-        # Update these when creating a master node to properly show the progress 
-        # for each iteration. This is optional and can be ignored but it's a good practice
-        # to do for your users.
-        #self.iteration_count = the total amout of iteration to make
-        #self.iteration_counter = the current iteration number
+        # It is possible to bypass the "WindowsToSamples" by passing the input 
+        # signals_windows to the output samples_values without any modification
+        if self.activation_state == ActivationState.BYPASS:
+            return {
+                'events': manage_events.create_event_dataframe(None)
+            }   
+        if isinstance(original_signals, list) and len(original_signals) == 0:        
+            return {
+                'events': manage_events.create_event_dataframe(None)
+            }      
 
         signals = original_signals.copy()
         sample_rate = signals[0].sample_rate
         resample_rate = 100
 
-        # Filter and downsample
-        signals = [downsample(butter_bandpass_filter(x.samples, 0.3, 30.0, sample_rate, 10), sample_rate, resample_rate) for x in signals]
+        if sample_rate>resample_rate:
+            # Filter and downsample
+            signals = [downsample(butter_bandpass_filter(x.samples, 0.3, 30.0, sample_rate, 10), sample_rate, resample_rate) for x in signals]
+        else:
+            signals = [butter_bandpass_filter(x.samples, 0.3, 30.0, sample_rate, 10) for x in signals]
 
-        if sumo_input == "clean":
+        # if sumo_input == "clean":
 
-            cleaned_signals = [(butter_bandpass_filter_nan(x.samples, 0.3, 30.0, sample_rate, 10), sample_rate, resample_rate) for x in cleaned_signals]  # if not already done before sumo
+        #     cleaned_signals = [(butter_bandpass_filter_nan(x.samples, 0.3, 30.0, sample_rate, 10), sample_rate, resample_rate) for x in cleaned_signals]  # if not already done before sumo
             
-            # Calculate mean and std on cleaned signals for normalization
-            mean = [np.nanmean(x.samples) for x in cleaned_signals]
-            std = [np.nanstd(x.samples) for x in cleaned_signals]
+        #     # Calculate mean and std on cleaned signals for normalization
+        #     mean = [np.nanmean(x.samples) for x in cleaned_signals]
+        #     std = [np.nanstd(x.samples) for x in cleaned_signals]
 
-            # Release memory
-            del cleaned_signals
-        elif sumo_input == "original":
+        #     # Release memory
+        #     del cleaned_signals
+        # elif sumo_input == "original":
 
-            mean = norm_stat['mean']
-            std = norm_stat['std']
+        mean = norm_stat['mean']
+        std = norm_stat['std']
 
         # Create a dataset and dataloader
         dataset = SimpleDataset(signals, mean, std)
@@ -269,69 +262,61 @@ class SpindleDetectorSumo(SciNode):
         # Create a pandas dataframe of events (each row is an event) for the current pds
         events_df = manage_events.create_event_dataframe(event_lst)
 
-        # Plot/save the spindles on the first 5 segments containing spindles
-        if plot:
-            # Find the first segments with spindles
-            first_spindle_inds = []
-            for i, spindle_indices in enumerate(spindle_indices_list):
-                if spindle_indices.size > 0 and len(first_spindle_inds) < 10: 
-                    first_spindle_inds.append(i)
-            # Extract the corresponding signals
-            signal_to_plot, spindle_ind = [], []
-            for j in range(len(first_spindle_inds)):
-                signal_to_plot.append(signals[first_spindle_inds[j]].flatten())
-                spindle_ind.append(spindle_indices_list[first_spindle_inds[j]])
+        # # Plot/save the spindles on the first 5 segments containing spindles
+        # if plot:
+        #     # Find the first segments with spindles
+        #     first_spindle_inds = []
+        #     for i, spindle_indices in enumerate(spindle_indices_list):
+        #         if spindle_indices.size > 0 and len(first_spindle_inds) < 10: 
+        #             first_spindle_inds.append(i)
+        #     # Extract the corresponding signals
+        #     signal_to_plot, spindle_ind = [], []
+        #     for j in range(len(first_spindle_inds)):
+        #         signal_to_plot.append(signals[first_spindle_inds[j]].flatten())
+        #         spindle_ind.append(spindle_indices_list[first_spindle_inds[j]])
 
-            if plot_len == 30:
-                for i, (signal, ind) in enumerate(zip(signal_to_plot, spindle_ind)):
-                    # Plot the signal
-                    plt.figure(figsize=(12, 4))
-                    plt.plot(signal, label="EEG Signal", color="blue")
-                    # Highlight the spindle regions
-                    for start, stop in ind:
-                        plt.axvspan(start, stop, color='red', alpha=0.3, label="Spindle" if start == ind[0, 0] else "")
-                    plt.xlabel("Time (samples)")
-                    plt.ylabel("Amplitude")
-                    plt.title(f"EEG Segment {first_spindle_inds[i]} with Spindles Highlighted")
-                    plt.legend()
-                    plt.savefig(f"eeg_spindle_plot_{i}.png", dpi=300, bbox_inches="tight")
-                    plt.close()
-            else:
-                matplotlib.use("Agg")
-                for i, (signal, ind) in enumerate(zip(signal_to_plot, spindle_ind)):
-                    # Find the center of the spindle segment
-                    segment_center = (ind[0][0] + ind[0][1]) // 2
-                    # Define the window for 8 seconds around the spindle
-                    window_start = max(segment_center - int(plot_len/2) * resample_rate, 0)
-                    window_stop = min(segment_center + int(plot_len/2) * resample_rate, len(signal))
-                    # Extract the signal within this window
-                    time_axis = np.arange(window_start, window_stop) / resample_rate
-                    signal_segment = signal[window_start:window_stop]
-                    # Plot the extracted window
-                    plt.figure(figsize=(12, 4))
-                    plt.plot(time_axis, signal_segment, label="EEG Signal", color="blue")
-                    # Highlight spindle regions within this window
-                    for start, stop in ind:
-                        if stop >= window_start and start <= window_stop:
-                            plt.axvspan(start / resample_rate, stop / resample_rate, color='red', alpha=0.3, label="Spindle" if start == ind[0, 0] else "")
-                    plt.xlabel("Time (seconds)")
-                    plt.ylabel("Amplitude")
-                    plt.title(f"EEG Segment {first_spindle_inds[i]} with Spindles Highlighted ({plot_len}s Window)")
-                    plt.legend()
-                    plt.savefig(f"eeg_spindle_{plot_len}s_window_{i}.png", dpi=300, bbox_inches="tight")
-                    plt.close()  # Close to free memory
+        #     if plot_len == 30:
+        #         for i, (signal, ind) in enumerate(zip(signal_to_plot, spindle_ind)):
+        #             # Plot the signal
+        #             plt.figure(figsize=(12, 4))
+        #             plt.plot(signal, label="EEG Signal", color="blue")
+        #             # Highlight the spindle regions
+        #             for start, stop in ind:
+        #                 plt.axvspan(start, stop, color='red', alpha=0.3, label="Spindle" if start == ind[0, 0] else "")
+        #             plt.xlabel("Time (samples)")
+        #             plt.ylabel("Amplitude")
+        #             plt.title(f"EEG Segment {first_spindle_inds[i]} with Spindles Highlighted")
+        #             plt.legend()
+        #             plt.savefig(f"eeg_spindle_plot_{i}.png", dpi=300, bbox_inches="tight")
+        #             plt.close()
+        #     else:
+        #         matplotlib.use("Agg")
+        #         for i, (signal, ind) in enumerate(zip(signal_to_plot, spindle_ind)):
+        #             # Find the center of the spindle segment
+        #             segment_center = (ind[0][0] + ind[0][1]) // 2
+        #             # Define the window for 8 seconds around the spindle
+        #             window_start = max(segment_center - int(plot_len/2) * resample_rate, 0)
+        #             window_stop = min(segment_center + int(plot_len/2) * resample_rate, len(signal))
+        #             # Extract the signal within this window
+        #             time_axis = np.arange(window_start, window_stop) / resample_rate
+        #             signal_segment = signal[window_start:window_stop]
+        #             # Plot the extracted window
+        #             plt.figure(figsize=(12, 4))
+        #             plt.plot(time_axis, signal_segment, label="EEG Signal", color="blue")
+        #             # Highlight spindle regions within this window
+        #             for start, stop in ind:
+        #                 if stop >= window_start and start <= window_stop:
+        #                     plt.axvspan(start / resample_rate, stop / resample_rate, color='red', alpha=0.3, label="Spindle" if start == ind[0, 0] else "")
+        #             plt.xlabel("Time (seconds)")
+        #             plt.ylabel("Amplitude")
+        #             plt.title(f"EEG Segment {first_spindle_inds[i]} with Spindles Highlighted ({plot_len}s Window)")
+        #             plt.legend()
+        #             plt.savefig(f"eeg_spindle_{plot_len}s_window_{i}.png", dpi=300, bbox_inches="tight")
+        #             plt.close()  # Close to free memory
 
-        # Raise the runtime exception
-        # raise NodeRuntimeException(self.identifier, "files", \
-        #        f"Some file could not be open.")
 
-        # Write to the cache to use the data in the resultTab
-        # cache = {}
-        # cache['this_is_a_key'] = 42
-        # self._cache_manager.write_mem_cache(self.identifier, cache)
 
-        # Log message for the Logs tab
-        self._log_manager.log(self.identifier, "This module does nothing.")
+
 
         return {
             'events': events_df
