@@ -213,12 +213,6 @@ class SignalsFromEvents(SciNode):
         else:
             events_to_write = events.loc[events['name'].isin(event_name)].reset_index(drop=True).copy()   
 
-        # Patch for channels of stage == None
-        #events.loc[events['group']==commons.sleep_stages_group,['channels']]=""
-
-        # Verify if the events to extract signal are the same duration
-        #same_events_to_write = np.all(events_to_write['duration_sec'] == events_to_write['duration_sec'].values[0])
-
         # Transform dataframe events start and duration into array
         if (events_names == ''):
             start_times = events['start_sec'].to_numpy().astype(float)
@@ -329,6 +323,10 @@ class SignalsFromEvents(SciNode):
         channel_cur = signal.clone(clone_samples=False)
         # Because of the discontinuity, the signal can start with an offset (second section)
         signal_start_samples = int(signal.start_time * channel_cur.sample_rate)
+        # Round the start and duration based on the sample rate
+        # The signal may be resampled and we want to avoid having event onset and end between 2 samples.
+        start = np.round(start*channel_cur.sample_rate)/channel_cur.sample_rate
+        dur = np.round(dur*channel_cur.sample_rate)/channel_cur.sample_rate
 
         # if the event starts before the signal, we cut the signal
         if start < signal.start_time:

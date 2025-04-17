@@ -162,6 +162,9 @@ class Resample(SciNode):
                 n_pad_resampled = int(round(n_pad_start/factor,0))
                 resampled_signal.samples = signal.resample(np.pad(signal_model.samples,(n_pad_start,n_pad_end)), num)[n_pad_resampled:real_num+n_pad_resampled]
                 resampled_signal.sample_rate = sample_rate
+                resampled_signal.start_time = np.round(resampled_signal.start_time*sample_rate)/sample_rate
+                resampled_signal.end_time = np.round(resampled_signal.end_time*sample_rate)/sample_rate
+                resampled_signal.duration = np.round(resampled_signal.duration*sample_rate)/sample_rate
             else:
                 resampled_signal = signal_model.clone(clone_samples=False)
                 resampled_signal.samples = signal.resample(signal_model.samples, real_num)
@@ -172,7 +175,10 @@ class Resample(SciNode):
                 #     up_factor = 1
                 #     down_factor = int(factor)
                 # resampled_signal.samples = signal.resample_poly(signal_model.samples, up_factor, down_factor)
-                resampled_signal.sample_rate = sample_rate                
+                resampled_signal.sample_rate = sample_rate    
+                resampled_signal.start_time = np.round(resampled_signal.start_time*sample_rate)/sample_rate
+                resampled_signal.end_time = np.round(resampled_signal.end_time*sample_rate)/sample_rate
+                resampled_signal.duration = np.round(resampled_signal.duration*sample_rate)/sample_rate
                 
             output_signals.append(resampled_signal)
 
