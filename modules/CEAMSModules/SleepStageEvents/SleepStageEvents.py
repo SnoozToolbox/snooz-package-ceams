@@ -295,56 +295,42 @@ class SleepStageEvents(SciNode):
 
         # To exclude signals outside cycle
         if in_cycle==True: 
-            if len(cycle_df)==0:
-                err_message = "ERROR: impossible to use cycle wthout the sleep cycles information"
-                self._log_manager.log(self.identifier, err_message)
-                raise NodeInputException(self.identifier, "in_cycle", \
-                    f"SleepStageEvents in_cycle=1 and the sleep cycles information is missing.")    
-            else:
-                onlyCycle = create_event_dataframe(None)
+            # It is possible to have a subject without cycle especially if uncomplete cycles are not included
+            onlyCycle = create_event_dataframe(None)                
+            if len(cycle_df)>0:
                 # Keep any stage inside cycle
                 for index, row in cycle_df.iterrows():
                     idx_start = events_df[events_df.start_sec<(row.start_sec+row.duration_sec)].index
                     idx_stop = events_df[ (events_df.start_sec+events_df.duration_sec) > (row.start_sec)].index
                     idx_in_cycle = idx_start.intersection(idx_stop)
                     onlyCycle = pd.concat([onlyCycle,events_df.loc[idx_in_cycle]])
-                events_df = onlyCycle 
-                events_df.reset_index(drop=True,inplace=True)   
+            events_df = onlyCycle 
+            events_df.reset_index(drop=True,inplace=True)   
 
         # To exclude nrem period
         if exclude_nremp==True:
-            if len(nremp_df)==0:
-                err_message = "ERROR: impossible to exclude NREMP wthout the sleep cycles information"
-                self._log_manager.log(self.identifier, err_message)
-                raise NodeInputException(self.identifier, "exclude_nremp", \
-                    f"SleepStageEvents exclude_nremp=1 and the sleep cycles information is missing.")    
-            else:
-                nonremp = events_df
+            if len(nremp_df)>0:
+                no_nremp = events_df
                 # Exclude any stage during rem period
                 for index, row in nremp_df.iterrows():
-                    idx_start = nonremp[nonremp.start_sec<(row.start_sec+row.duration_sec)].index
-                    idx_stop = nonremp[ (nonremp.start_sec+nonremp.duration_sec) > (row.start_sec)].index
+                    idx_start = no_nremp[no_nremp.start_sec<(row.start_sec+row.duration_sec)].index
+                    idx_stop = no_nremp[ (no_nremp.start_sec+no_nremp.duration_sec) > (row.start_sec)].index
                     idx_drop_remp = idx_start.intersection(idx_stop)
-                    nonremp = nonremp.drop(idx_drop_remp)
-                events_df = nonremp
+                    no_nremp = no_nremp.drop(idx_drop_remp)
+                events_df = no_nremp
                 events_df.reset_index(drop=True,inplace=True)
 
         # To exclude rem period
         if exclude_remp==True:
-            if len(remp_df)==0:
-                err_message = "ERROR: impossible to exclude REMP wthout the sleep cycles information"
-                self._log_manager.log(self.identifier, err_message)
-                raise NodeInputException(self.identifier, "exclude_remp", \
-                    f"SleepStageEvents exclude_remp=1 and the sleep cycles information is missing.")    
-            else:
-                noremp = events_df
+            if len(remp_df)>0:
+                no_remp = events_df
                 # Exclude any stage during rem period
                 for index, row in remp_df.iterrows():
-                    idx_start = noremp[noremp.start_sec<(row.start_sec+row.duration_sec)].index
-                    idx_stop = noremp[ (noremp.start_sec+noremp.duration_sec) > (row.start_sec)].index
-                    idx_drop_noremp = idx_start.intersection(idx_stop)
-                    noremp = noremp.drop(idx_drop_noremp)
-                events_df = noremp 
+                    idx_start = no_remp[no_remp.start_sec<(row.start_sec+row.duration_sec)].index
+                    idx_stop = no_remp[ (no_remp.start_sec+no_remp.duration_sec) > (row.start_sec)].index
+                    idx_drop_no_remp = idx_start.intersection(idx_stop)
+                    no_remp = no_remp.drop(idx_drop_no_remp)
+                events_df = no_remp 
                 events_df.reset_index(drop=True,inplace=True)          
 
         # Format events_df event list

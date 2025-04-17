@@ -96,7 +96,7 @@
                         "value": "",
                         "sub_plugs": {},
                         "connections": {
-                            "277a2b87-1bab-422a-a1c4-c8d87014570a": "signals_from_events"
+                            "ab37610c-c1aa-4f98-a805-c815e43854e1": "constant"
                         }
                     },
                     "cleaned_signals": {
@@ -1205,7 +1205,7 @@
                     },
                     "spindle_gen_param": {
                         "name": "spindle_gen_param",
-                        "value": "{'min_duration': 0.3, 'max_duration': 2.5, 'sleep_stage_sel': ['2'], 'in_cycle': 1, 'exclude_nremp': 0, 'exclude_remp': 1}",
+                        "value": "{'min_duration': 0.5, 'max_duration': 2.5, 'sleep_stage_sel': ['2'], 'in_cycle': 1, 'exclude_nremp': 0, 'exclude_remp': 1}",
                         "sub_plugs": {},
                         "connections": {}
                     },
@@ -1316,7 +1316,7 @@
                     },
                     "spindle_gen_param": {
                         "name": "spindle_gen_param",
-                        "value": "{'min_duration': 0.3, 'max_duration': 2.5, 'sleep_stage_sel': ['2'], 'in_cycle': 1, 'exclude_nremp': 0, 'exclude_remp': 1}",
+                        "value": "{'min_duration': 0.5, 'max_duration': 2.5, 'sleep_stage_sel': ['2'], 'in_cycle': 1, 'exclude_nremp': 0, 'exclude_remp': 1}",
                         "sub_plugs": {},
                         "connections": {}
                     },
@@ -1740,6 +1740,9 @@
                             ],
                             "a91be608-8be8-4f87-92f7-d2f83a759d8c": [
                                 "signals"
+                            ],
+                            "ab37610c-c1aa-4f98-a805-c815e43854e1": [
+                                "constant"
                             ]
                         }
                     },
@@ -1778,7 +1781,7 @@
                     },
                     "parameters": {
                         "name": "parameters",
-                        "value": "{'defined_option': 'Minimum Criteria', 'Include_SOREMP': '1', 'Include_last_incompl': '1', 'Include_all_incompl': '1', 'dur_ends_REMP': '15', 'NREM_min_len_first': '0.0', 'NREM_min_len_mid_last': '0.0', 'NREM_min_len_val_last': '0.0', 'REM_min_len_first': '0', 'REM_min_len_mid': '0', 'REM_min_len_last': '0', 'mv_end_REMP': '0', 'sleep_stages': 'N1, N2, N3, N4, R', 'details': '<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\\n<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\\np, li { white-space: pre-wrap; }\\n</style></head><body style=\" font-family:\\'Roboto\\'; font-size:12pt; font-weight:400; font-style:normal;\">\\n<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:\\'MS Shell Dlg 2\\';\">Adjust options based on minimum criteria.<br />These criteria are generally used in the clinic.</span></p></body></html>'}",
+                        "value": "{'defined_option': 'Aeschbach 1993', 'Include_SOREMP': '1', 'Include_last_incompl': '1', 'Include_all_incompl': '1', 'dur_ends_REMP': '15', 'NREM_min_len_first': '15.0', 'NREM_min_len_mid_last': '15.0', 'NREM_min_len_val_last': '5.0', 'REM_min_len_first': '0.5', 'REM_min_len_mid': '5', 'REM_min_len_last': '0.5', 'mv_end_REMP': '1', 'sleep_stages': 'N2, N3, N4, R', 'details': '<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\\n<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset=\"utf-8\" /><style type=\"text/css\">\\np, li { white-space: pre-wrap; }\\nhr { height: 1px; border-width: 0; }\\nli.unchecked::marker { content: \"\\\\2610\"; }\\nli.checked::marker { content: \"\\\\2612\"; }\\n</style></head><body style=\" font-family:\\'Roboto\\'; font-size:12pt; font-weight:400; font-style:normal;\">\\n<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Adjust options based on [1].</p>\\n<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">\\xa0</p>\\n<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">NREM-REMS cycles were defined [...] by the succession of a NREMS episode of at least 15 min duration and a REMS episode of at least 5 min duration. No minimal duration of the REMS episode was required for the completion of the first and last cycle. NREMS episodes were defined as the time interval between the first occurrence of stage 2 and the first occurrence of REMS within a cycle. Consequently REMS episodes were defined as the time intervals between two consecutive NREMS episodes or the time interval between the last NREMS episode and the final awakening. Thus occasional stage 1 epochs between REMS and stage 2 were included in the REMS episode. The reasons for selecting this criterion were the similarity of the EEG in REMS and stage 1, the better delimitation of cycle onset by using stage 2 instead of stage 1, and the fact that the initiation of cycle 1 with stage 2 corresponds to a frequently used criterion of sleep onset.</p>\\n<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">\\xa0</p>\\n<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">[1] Aeschbach D, Borbely AA. All-night dynamics of the human sleep EEG. J Sleep Res. 1993 Jun; 2(2):70-81.<span style=\" color:#00ccff;\"> </span><a href=\"https://doi.org/10.1111/j.1365-2869.1993.tb00065.x\"><span style=\" text-decoration: underline; color:#00ccff;\">https://doi.org/10.1111/j.1365-2869.1993.tb00065.x</span></a></p></body></html>'}",
                         "sub_plugs": {},
                         "connections": {}
                     },
@@ -2926,7 +2929,7 @@
                     },
                     "min_len_sec": {
                         "name": "min_len_sec",
-                        "value": "0.3",
+                        "value": "0.5",
                         "sub_plugs": {},
                         "connections": {}
                     },
@@ -3092,9 +3095,6 @@
                         "sub_plugs": {},
                         "connections": {
                             "fbbf44ac-76ce-41b0-9ca9-306730affda5": [
-                                "events"
-                            ],
-                            "277a2b87-1bab-422a-a1c4-c8d87014570a": [
                                 "events"
                             ]
                         }
@@ -3278,9 +3278,6 @@
                             ],
                             "eb79e413-8e63-49f1-8eb4-48cdca1989bd": [
                                 "constant"
-                            ],
-                            "277a2b87-1bab-422a-a1c4-c8d87014570a": [
-                                "signals"
                             ]
                         }
                     },
@@ -3645,46 +3642,26 @@
                 "pos_y": 172.0
             },
             {
-                "cls": "SignalsFromEvents",
-                "name": "SignalsFromEvents",
+                "cls": "Constant",
+                "name": "Constant",
                 "metadata": {},
                 "file_location": "",
-                "module_label": "Signals From Events",
-                "module_category": "Events Utilities",
+                "module_label": "Constant",
+                "module_category": "Parameters",
                 "module_options": {},
                 "inputs": {
-                    "signals": {
-                        "name": "signals",
+                    "constant": {
+                        "name": "constant",
                         "value": "",
                         "sub_plugs": {},
                         "connections": {
-                            "afec6a23-8c85-4c7d-8b29-d04fea5a6887": "signals"
+                            "fbbf44ac-76ce-41b0-9ca9-306730affda5": "signals_from_events"
                         }
-                    },
-                    "events": {
-                        "name": "events",
-                        "value": "",
-                        "sub_plugs": {},
-                        "connections": {
-                            "6323a842-eb2b-47cd-b444-d299d0d6f2df": "sleep_stage_events"
-                        }
-                    },
-                    "events_names": {
-                        "name": "events_names",
-                        "value": "spindle_bout",
-                        "sub_plugs": {},
-                        "connections": {}
-                    },
-                    "create": {
-                        "name": "create",
-                        "value": true,
-                        "sub_plugs": {},
-                        "connections": {}
                     }
                 },
                 "outputs": {
-                    "signals_from_events": {
-                        "name": "signals_from_events",
+                    "constant": {
+                        "name": "constant",
                         "value": "",
                         "sub_plugs": {},
                         "connections": {
@@ -3692,22 +3669,16 @@
                                 "original_signals"
                             ]
                         }
-                    },
-                    "epochs_to_process": {
-                        "name": "epochs_to_process",
-                        "value": "",
-                        "sub_plugs": {},
-                        "connections": {}
                     }
                 },
-                "module": "CEAMSModules.SignalsFromEvents",
-                "identifier": "277a2b87-1bab-422a-a1c4-c8d87014570a",
+                "module": "CEAMSModules.Constant",
+                "identifier": "ab37610c-c1aa-4f98-a805-c815e43854e1",
                 "activation_state": "activated",
                 "package": {
                     "package_name": "CEAMSModules"
                 },
-                "pos_x": -393.0,
-                "pos_y": -158.0
+                "pos_x": -93.0,
+                "pos_y": -110.0
             }
         ]
     }

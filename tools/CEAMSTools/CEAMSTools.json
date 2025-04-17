@@ -163,7 +163,7 @@
         {
             "item_name": "SlowWaveDetection",
             "item_type": "tool",
-            "item_version": "0.20.0",
+            "item_version": "0.21.0",
             "item_hooks": [
                 {
                     "endpoint_name": "menu_endpoint",
@@ -177,7 +177,7 @@
         {
             "item_name": "SpindleDetectionA7",
             "item_type": "tool",
-            "item_version": "0.2.0",
+            "item_version": "0.3.0",
             "item_hooks": [
                 {
                     "endpoint_name": "menu_endpoint",
@@ -191,7 +191,7 @@
         {
             "item_name": "SpindleDetectionMartin",
             "item_type": "tool",
-            "item_version": "1.10.0",
+            "item_version": "1.11.0",
             "item_hooks": [
                 {
                     "endpoint_name": "menu_endpoint",
@@ -205,7 +205,7 @@
         {
             "item_name": "SleepBouts",
             "item_type": "tool",
-            "item_version": "0.10.0",
+            "item_version": "0.11.0",
             "item_hooks": [
                 {
                     "endpoint_name": "menu_endpoint",
@@ -233,7 +233,7 @@
         {
             "item_name": "PowerSpectralAnalysis",
             "item_type": "tool",
-            "item_version": "0.20.0",
+            "item_version": "0.21.0",
             "item_hooks": [
                 {
                     "endpoint_name": "menu_endpoint",
@@ -331,7 +331,7 @@
         {
             "item_name": "SpindleDetectionSumo",
             "item_type": "tool",
-            "item_version": "0.0.0",
+            "item_version": "0.1.0",
             "item_hooks": [
                 {
                     "endpoint_name": "menu_endpoint",

@@ -135,7 +135,7 @@ class SpindlesDetails(SciNode):
         InputPlug('export_spindles',self)
 
         # Init module variables
-        self.stage_stats_labels = ['N1', 'N2', 'N3', 'NREM', 'R']
+        self.stage_stats_labels = ['N1', 'N2', 'N3', 'N2N3', 'R']
 
         # A master module allows the process to be reexcuted multiple time.
         self._is_master = False 
@@ -273,15 +273,7 @@ class SpindlesDetails(SciNode):
                 "SpindlesDetails report_constants expected type is dict and received type is " +\
                     str(type(report_constants)))   
         self.N_HOURS = int(float(report_constants['N_HOURS']))
-        self.N_CYCLES = int(float(report_constants['N_CYCLES']))
-
-        # Raise NodeRuntimeException if there is a critical error during runtime. 
-        # This exception will stop and skip the current process but will not stop the following
-        # iterations if a master node is not done.
-        # Once the master node is completed, a dialog will appear to show all NodeRuntimeException to the user.
-        if len(signals)==0:
-            raise NodeRuntimeException(self.identifier, "signals", \
-                f"SpindlesDetails this input is empty, no signals no details.")              
+        self.N_CYCLES = int(float(report_constants['N_CYCLES']))    
 
         # To convert string to dict
         if isinstance(sleep_cycle_param, str):
@@ -368,8 +360,10 @@ class SpindlesDetails(SciNode):
         # TODO add if density per division of night if requested.
         # Extract sleep stages selected by the user from stage_in_cycle_df
         #stage_detection_df = stage_in_cycle_df[stage_in_cycle_df['name'].isin(sleep_stage_sel)]
-
-        channels_list = np.unique(SignalModel.get_attribute(signals, 'channel', 'channel'))
+        if len(signals)>0:
+            channels_list = np.unique(SignalModel.get_attribute(signals, 'channel', 'channel'))
+        else:
+            channels_list = []
 
         # For each spindle events add its sleep stage and cycle
         spindle_events = self.add_stage_cycle_to_spindle_df(spindle_events, stage_in_cycle_df, sleep_cycles_df)
@@ -490,6 +484,21 @@ class SpindlesDetails(SciNode):
                 cohort_characteristics_df = pd.concat([cohort_characteristics_df, cur_chan_df])
             else:
                 cohort_characteristics_df = cur_chan_df
+
+        # Even if no signals is analyzed, the recording has to be reported
+        if len(channels_list)==0 and len(cohort_filename)>0:
+            channel_info_param = {}
+            channel_info_param['chan_label']=np.NaN
+            channel_info_param['chan_fs']=np.NaN
+            # Organize data for the output (GENERAL)
+            cur_chan_general_dict = subject_info_params | cycle_info_param | gen_spindle_param | \
+                sel_spindle_param | artifact_info_param | channel_info_param | sleep_cycle_count   
+            cohort_characteristics_df = pd.DataFrame.from_records([cur_chan_general_dict])
+            # extract columns from the doc
+            out_columns = list(_get_doc(self.N_CYCLES, sel_spindle_param['spindle_event_name']).keys())
+            for col in out_columns:
+                if col not in cohort_characteristics_df.columns:
+                    cohort_characteristics_df[col] = np.NaN
 
         #----------------------------------------------------------------------------
         # Cohort TSV file
@@ -796,7 +805,7 @@ class SpindlesDetails(SciNode):
         invalid_dur_sec = 0
 
         # Added to manage NREM
-        sleep_stages_name['NREM'] = ['2', '3']
+        sleep_stages_name['N2N3'] = ['2', '3']
 
         for stage in stage_stats_labels:
             inv_dur_sec_cur_stage = 0
@@ -1118,6 +1127,9 @@ class SpindlesDetails(SciNode):
             ss_start_in_signal = signals_starttime<(ss_start+ss_dur)
             ss_end_in_signal = signals_endtime>ss_start
             ss_sel_in_signal = ss_start_in_signal & ss_end_in_signal
+            # if sum(ss_sel_in_signal)>1:
+            #     # Select the signal where the event overlaps the most.
+
             # Only one signal should include the spindle since the signals are splitted in continuous bouts (not stages)
             if sum(ss_sel_in_signal)==1:
                 signal_sel = np.nonzero(ss_sel_in_signal)[0][0]
