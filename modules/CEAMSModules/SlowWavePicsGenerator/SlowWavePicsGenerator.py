@@ -514,8 +514,11 @@ class SlowWavePicsGenerator(SciNode):
                 # Only one signal should include the event since the signals are splitted in continuous bouts (not stages)
                 if sum(evt_sel_in_signal)==1:
                     signal_sel = np.nonzero(evt_sel_in_signal)[0][0]
+                    fs_signal = signals_cur_chan[signal_sel].sample_rate
+                    evt_start_samples = int(np.round(evt_start*fs_signal))
+                    evt_dur_samples = int(np.round(evt_dur*fs_signal))
                     # Extract and define the new extracted channel_cur
-                    signal_evt_tmp = SignalsFromEvents.extract_events_from_signal(SignalsFromEvents, signals_cur_chan[signal_sel], evt_start, evt_dur)
+                    signal_evt_tmp = SignalsFromEvents.extract_events_from_signal(SignalsFromEvents, signals_cur_chan[signal_sel], evt_start_samples, evt_dur_samples)
                     signals_evt_cur_chan.append(signal_evt_tmp.samples)
                 # elif sum(evt_sel_in_signal)==0:
                 #     # Log message for the Logs tab, too many log message when the channel is missing.

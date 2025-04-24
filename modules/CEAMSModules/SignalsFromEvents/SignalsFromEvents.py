@@ -249,19 +249,26 @@ class SignalsFromEvents(SciNode):
             real_events_to_write = []
             for group, name, start, dur, chan in zip(event_groups, event_names, start_times, duration_times, channel_times):
                 for j, signal in enumerate(signals):
+                    # Convert time into samples to avoid rounding errors
+                    evt_start_samples = int(np.round(start*signal.sample_rate))
+                    evt_dur_samples = int(np.round(dur*signal.sample_rate))
+                    evt_end_samples = evt_start_samples + evt_dur_samples
+                    signal_start_samples = int(np.round(signal.start_time*signal.sample_rate))
+                    signal_dur_samples = int(np.round(signal.duration*signal.sample_rate))
+                    signal_end_samples = signal_start_samples + signal_dur_samples
                     # Because of the discontinuity
                     # we have to verify if the signal includes at least partially the events
                     # Look for the Right windows time
                     if len(chan)>0: # events are not applied to all channels (not a stage or a clean selection)
-                        if (signal.start_time<(start+dur)) and ((signal.start_time+signal.duration)>start) and (signal.channel == chan):
+                        if (signal_start_samples<evt_end_samples) and (signal_end_samples>evt_start_samples) and (signal.channel == chan):
                             # Extract and define the new extracted channel_cur
-                            channel_cur = self.extract_events_from_signal(signal, start, dur)
+                            channel_cur = self.extract_events_from_signal(signal, evt_start_samples, evt_dur_samples)
                             signals_from_events.append(channel_cur)
                         else:
                             channel_cur = None
-                    elif (signal.start_time<(start+dur)) and ((signal.start_time+signal.duration)>start): 
+                    elif (signal_start_samples<evt_end_samples) and (signal_end_samples>evt_start_samples): 
                         # Extract and define the new extracted channel_cur
-                        channel_cur = self.extract_events_from_signal(signal, start, dur)
+                        channel_cur = self.extract_events_from_signal(signal, evt_start_samples, evt_dur_samples)
                         signals_from_events.append(channel_cur)
                     else:
                         channel_cur = None
@@ -308,44 +315,43 @@ class SignalsFromEvents(SciNode):
         }
 
 
-    def extract_events_from_signal(self, signal, start, dur):
+    def extract_events_from_signal(self, signal, evt_start_samples, evt_dur_samples):
         """
         Parameters :
             signal : SignalModel object
                 signal with channel, samples, sample_rate...
-            start : float
-                start time in sec of the signal
+            evt_start_samples : float
+                start in samples of the signal
             dur : float
-                duration in sec of the signal
+                duration in samples of the signal
         Return : 
             signal modified (truncated) to extract the samples linked to the event specified by start and dur
         """
         channel_cur = signal.clone(clone_samples=False)
         # Because of the discontinuity, the signal can start with an offset (second section)
-        signal_start_samples = int(signal.start_time * channel_cur.sample_rate)
-        # Round the start and duration based on the sample rate
-        # The signal may be resampled and we want to avoid having event onset and end between 2 samples.
-        start = np.round(start*channel_cur.sample_rate)/channel_cur.sample_rate
-        dur = np.round(dur*channel_cur.sample_rate)/channel_cur.sample_rate
+        signal_start_samples = int(np.round(signal.start_time * channel_cur.sample_rate))
+        signal_dur_samples = int(np.round(signal.duration * signal.sample_rate))
+        signal_end_samples = signal_start_samples + signal_dur_samples
 
         # if the event starts before the signal, we cut the signal
-        if start < signal.start_time:
+        if evt_start_samples < signal_start_samples:
             channel_cur.start_time = signal.start_time
+            chan_start_samples = signal_start_samples
         else:
-            channel_cur.start_time = start
+            channel_cur.start_time = evt_start_samples/channel_cur.sample_rate
+            chan_start_samples = evt_start_samples
         # if the event ends after the signal, we cut the signal
-        if (start + dur) > signal.end_time:
+        if (evt_start_samples + evt_dur_samples) > signal_end_samples:
             channel_cur.end_time = signal.end_time
+            chan_end_samples = signal_end_samples
         else:
-            channel_cur.end_time = start + dur
+            channel_cur.end_time = (evt_start_samples + evt_dur_samples)/channel_cur.sample_rate
+            chan_end_samples = evt_start_samples + evt_dur_samples
         channel_cur.duration = channel_cur.end_time - channel_cur.start_time
 
-        # Define the first samples from the signal to extract the event
-        first_sample = int(channel_cur.start_time * channel_cur.sample_rate)
-        last_sample = int(channel_cur.end_time * channel_cur.sample_rate)
         # The offset of the signal is removed to extract the event
-        channel_cur.samples = signal.samples[first_sample-signal_start_samples:last_sample-signal_start_samples]
+        channel_cur.samples = signal.samples[chan_start_samples-signal_start_samples:chan_end_samples-signal_start_samples]
         if len(channel_cur.samples)==0:
-            self._log_manager.log(self.identifier, f'SignalFromEvents ERROR : event={start} to {start + dur} and signal={signal.start_time} to {signal.end_time}')
+            self._log_manager.log(self.identifier, f'SignalFromEvents ERROR : event={evt_start_samples/channel_cur.sample_rate} to {(evt_start_samples + evt_dur_samples)/channel_cur.sample_rate} and signal={signal.start_time} to {signal.end_time}')
         return channel_cur
         

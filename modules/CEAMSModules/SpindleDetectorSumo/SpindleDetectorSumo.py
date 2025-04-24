@@ -5,25 +5,21 @@ See the file LICENCE for full license details.
     SpindleDetectorSumo
     Class to detect spindles based on the SUMO deep learning algorithm
 """
-
-# # Get the directory of the current script
-# current_dir = os.path.dirname(os.path.abspath(__file__))
-# # Add the parent directory to the Python path
-# sys.path.append(current_dir)
-
 from .get_model import get_model
 from sumo.config import Config
 from sumo.data import spindle_vect_to_indices
 from .butter_filter import butter_bandpass_filter, butter_bandpass_filter_nan, downsample
 import numpy as np
-import sys, os
-# import time
+import os
+from os.path import isfile, join
 import pandas as pd
 from scipy.stats import zscore
 import torch
 from torch.utils.data import Dataset, DataLoader
 import pytorch_lightning as pl
 
+
+import config as snooz_config
 from commons.NodeInputException import NodeInputException
 from commons.NodeRuntimeException import NodeRuntimeException
 from flowpipe import SciNode, InputPlug, OutputPlug
@@ -43,6 +39,7 @@ os.environ['PYDEVD_THREAD_DUMP_ON_WARN_EVALUATION_TIMEOUT'] = 'true'
 os.environ['PYDEVD_INTERRUPT_THREAD_TIMEOUT'] = '5'
 
 DEBUG = False
+EXPECTED_SAMPLING_RATE = 100
 plot = False
 plot_len = 8  # Length of the window to plot around the spindle in seconds (any even number between 2 and 30) 
 #sumo_input = "original"  # original or clean
@@ -134,6 +131,7 @@ class SpindleDetectorSumo(SciNode):
         # There can only be 1 master module per process.
         self._is_master = False 
     
+
     def compute(self, original_signals,cleaned_signals,norm_stat,event_group,event_name,artifact_events):
         """
         Detect spindles based on the SUMO deep learning algorithm
@@ -196,15 +194,18 @@ class SpindleDetectorSumo(SciNode):
                 'events': manage_events.create_event_dataframe(None)
             }      
 
-        signals = original_signals.copy()
-        sample_rate = signals[0].sample_rate
-        resample_rate = 100
+        signals_model = original_signals.copy()
+        sample_rate = signals_model[0].sample_rate
 
-        if sample_rate>resample_rate:
-            # Filter and downsample
-            signals = [downsample(butter_bandpass_filter(x.samples, 0.3, 30.0, sample_rate, 10), sample_rate, resample_rate) for x in signals]
-        else:
-            signals = [butter_bandpass_filter(x.samples, 0.3, 30.0, sample_rate, 10) for x in signals]
+        if sample_rate>EXPECTED_SAMPLING_RATE:
+            raise NodeInputException(self.identifier, "signals", \
+                f"SpindleDetectorSUMO signals are sampled at {sample_rate}Hz, it is expected to be {EXPECTED_SAMPLING_RATE}Hz.")
+        
+        signals = [x.samples for x in signals_model]
+        #     # Filter and downsample
+        #     signals = [downsample(butter_bandpass_filter(x.samples, 0.3, 30.0, sample_rate, 10), sample_rate, resample_rate) for x in signals_model]
+        # else:
+        #     signals = [butter_bandpass_filter(x.samples, 0.3, 30.0, sample_rate, 10) for x in signals_model]
 
         # if sumo_input == "clean":
 
@@ -226,10 +227,11 @@ class SpindleDetectorSumo(SciNode):
         dataloader = DataLoader(dataset, num_workers=3, persistent_workers=True)
 
         # Set up the model and its config
+        # Get the path where PSGReader librairies are stored. 
+        #model_path = snooz_config.app_context.get_resource(join('models','SUMO','final.ckpt')) 
         current_dir = os.path.dirname(os.path.abspath(__file__))
-        model_path = current_dir + '/final.ckpt'  
+        model_path = current_dir + '/final.ckpt'         
         config = Config('predict', create_dirs=False)
-
         model = get_model(model_path, config)
         trainer = pl.Trainer(num_sanity_val_steps=0, logger=False)
  
@@ -244,20 +246,17 @@ class SpindleDetectorSumo(SciNode):
             # Compute spindle counts (keeping empty elements as 0)
             spindle_counts = [spindle.shape[0] if spindle.size > 0 else 0 for spindle in spindle_indices_list]
             total_spindles = sum(spindle_counts)  # Total spindles across all signals
-
-            # Find indices where the spindle indices list is not empty
-            non_empty_indices = [i for i, spindles in enumerate(spindle_indices_list) if spindles.size > 0]
-
             print(f"Total number of spindles detected: {total_spindles}")
 
-        # Index to time
-        spindle_time_list = [[(start / resample_rate, stop / resample_rate) for start, stop in spindle_indices] for spindle_indices in spindle_indices_list]
-        
         # Add the event_name and the channel label to the events list
         event_lst = []
-        for i, spindle_time in enumerate(spindle_time_list):
-            for start, stop in spindle_time:
-                event_lst.append((event_group, event_name, original_signals[i].start_time+start, stop-start, original_signals[i].channel))
+        for i, spindle_samples in enumerate(spindle_indices_list):
+            for start_smp, stop_smp in spindle_samples:
+                signal_start_smp = int(round(original_signals[i].start_time*EXPECTED_SAMPLING_RATE))
+                spindle_start_time = (signal_start_smp+start_smp)/EXPECTED_SAMPLING_RATE
+                spindle_dur_time = (stop_smp-start_smp)/EXPECTED_SAMPLING_RATE
+                event_lst.append((event_group, event_name, spindle_start_time, \
+                    spindle_dur_time, original_signals[i].channel))
         
         # Create a pandas dataframe of events (each row is an event) for the current pds
         events_df = manage_events.create_event_dataframe(event_lst)
@@ -321,3 +320,4 @@ class SpindleDetectorSumo(SciNode):
         return {
             'events': events_df
         }
+

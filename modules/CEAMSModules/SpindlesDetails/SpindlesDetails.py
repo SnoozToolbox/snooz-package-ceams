@@ -901,8 +901,12 @@ class SpindlesDetails(SciNode):
         from PySide2.QtWidgets import QDialog, QVBoxLayout
 
         # Extract and define the new extracted channel_cur
-        signal_cur = SignalsFromEvents.extract_events_from_signal(SignalsFromEvents, signals_cur_chan[signal_sel], ss_start, ss_dur)
-        sigma_cur = SignalsFromEvents.extract_events_from_signal(SignalsFromEvents, signals_sigma[signal_sel], ss_start, ss_dur)
+        # Convert onset and duration in samples to avoid rounding error
+        fs_signal = signals_cur_chan[signal_sel].sample_rate
+        ss_start_samples = int(np.round(ss_start*fs_signal))
+        ss_dur_samples = int(np.round(ss_dur*fs_signal))
+        signal_cur = SignalsFromEvents.extract_events_from_signal(SignalsFromEvents, signals_cur_chan[signal_sel], ss_start_samples, ss_dur_samples)
+        sigma_cur = SignalsFromEvents.extract_events_from_signal(SignalsFromEvents, signals_sigma[signal_sel], ss_start_samples, ss_dur_samples)
 
         dialog = QDialog()
         fig = Figure(figsize=(5, 4), dpi=100)
@@ -1046,8 +1050,7 @@ class SpindlesDetails(SciNode):
             # merge and sort (by position time)
             all_peaks = np.sort(np.concatenate([pos_peaks,neg_peaks]))
             pk_amp = np.max(np.abs(np.diff(ss_signal[all_peaks])))
-            # Accumulate Total for the cohort file
-            list_pk_amp.append(pk_amp)      
+            list_pk_amp.append(pk_amp)    
         return list_pk_amp
 
 
@@ -1111,14 +1114,6 @@ class SpindlesDetails(SciNode):
         signals_starttime = SignalModel.get_attribute(signals_cur_chan, 'start_time', 'start_time').flatten()
         # Extract end_time of the signals for the current channel as numpy array
         signals_endtime = SignalModel.get_attribute(signals_cur_chan, 'end_time', 'end_time').flatten()
-        
-        # # Round the start and duration based on the sample rate
-        # # The signal may be resampled and we want to avoid having event onset and end between 2 samples.
-        # fs_chan = signals[0].sample_rate
-        # ss_start_times = np.round(ss_start_times*fs_chan)/fs_chan
-        # ss_dur_times = np.round(ss_dur_times*fs_chan)/fs_chan
-        # signals_starttime = np.round(signals_starttime*fs_chan)/fs_chan
-        # signals_endtime = np.round(signals_endtime*fs_chan)/fs_chan
 
         # The signal is already filtered in sigma
         # To avoid border effect on each spindle, we filtter the whole signal
@@ -1131,18 +1126,25 @@ class SpindlesDetails(SciNode):
         spindle_index_to_drop = []
         spindle_i = 0
         for ss_start, ss_dur in zip(ss_start_times, ss_dur_times):
-            # Find in within signal the spindle is included
-            ss_start_in_signal = signals_starttime<(ss_start+ss_dur)
-            ss_end_in_signal = signals_endtime>ss_start
+            # It's important to avoid sum of non integer because the precision can change.
+            # It's better to convert the start and duration in samples to avoid rounding error
+            ss_start_samples = int(np.round(ss_start*fs_chan))
+            ss_dur_samples = int(np.round(ss_dur*fs_chan))
+            signals_start_samples = (np.round(signals_starttime*fs_chan)).astype(int)
+            signals_end_samples = (np.round(signals_endtime*fs_chan)).astype(int)
+            # Find in within signal the spindle is totally included 
+                # Because of the non integer sampling rate of Stellate
+                # the epochs are all 29.99 sec long, but are rounded to 30.0 sec
+                # so it happens that the last sample of one epoch is also the first sample of the next epoch
+                # Only one signal should include the spindle since the detection is run on the signals splitted (continuous bouts or epochs)
+                # So we extract where the spindle starts only in case the last sample is shared by 2 epochs.
+            ss_start_in_signal = signals_start_samples<=ss_start_samples
+            ss_end_in_signal = signals_end_samples>=(ss_start_samples+ss_dur_samples)
             ss_sel_in_signal = ss_start_in_signal & ss_end_in_signal
-            # if sum(ss_sel_in_signal)>1:
-            #     # Select the signal where the event overlaps the most.
-
-            # Only one signal should include the spindle since the signals are splitted in continuous bouts (not stages)
-            if sum(ss_sel_in_signal)==1:
+            if sum(ss_sel_in_signal)>0:
                 signal_sel = np.nonzero(ss_sel_in_signal)[0][0]
                 # Extract and define the new extracted channel_cur
-                sigma_cur = SignalsFromEvents.extract_events_from_signal(SignalsFromEvents, signals_cur_chan[signal_sel], ss_start, ss_dur)
+                sigma_cur = SignalsFromEvents.extract_events_from_signal(SignalsFromEvents, signals_cur_chan[signal_sel], ss_start_samples, ss_dur_samples)
                 signals_spindle_cur_chan.append(sigma_cur.samples)
                 # Open figure to debug, need to add a breakpoint at the code self._open_dialog_fig_filtered_spindle
                 # self._open_dialog_fig_filtered_spindle(signals_cur_chan, signals_sigma, fs_chan, ss_start_times, \
@@ -1150,10 +1152,7 @@ class SpindlesDetails(SciNode):
             elif sum(ss_sel_in_signal)==0:
                 # Log message for the Logs tab
                 self._log_manager.log(self.identifier, f"SpindlesDetails spindle event not included in the signals")
-                spindle_index_to_drop.append(spindle_i)
-            elif sum(ss_sel_in_signal)>1:
-                raise NodeRuntimeException(self.identifier, "signals", \
-                    f"SpindlesDetails spindle included in many signals")                
+                spindle_index_to_drop.append(spindle_i)              
             spindle_i = spindle_i +1
         # Drop spindles from the official list to compute stats
         # Can happen when we analyze spindles (without detecting them from the current pipeline)

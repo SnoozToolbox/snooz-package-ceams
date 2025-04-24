@@ -185,7 +185,11 @@ class SpindleDetectorSelStep( BaseStepView,  Ui_SpindleDetectorSelStep, QtWidget
             self._pub_sub_manager.publish(self, self._node_id_FilterSignal+".activation_state_change",ActivationState.ACTIVATED)
             self._pub_sub_manager.publish(self, self._node_id_ResetSignalArtefact_NaN+".activation_state_change",ActivationState.ACTIVATED)
             self._pub_sub_manager.publish(self, self._node_id_SpindleDetsumo+".activation_state_change", ActivationState.ACTIVATED)
-  
+            self._pub_sub_manager.publish(self, self._node_id_PSGWriter+".activation_state_change", ActivationState.ACTIVATED)
+            self._pub_sub_manager.publish(self, self._node_id_DiscardEvents+".activation_state_change", ActivationState.ACTIVATED)
+            self._pub_sub_manager.publish(self, self._node_id_EventCombine+".activation_state_change", ActivationState.ACTIVATED)
+            self._pub_sub_manager.publish(self, self._node_id_SignalStats+".activation_state_change", ActivationState.ACTIVATED)
+
             self._pub_sub_manager.publish(self, self._node_id_SpindleDetails_anal+".activation_state_change", ActivationState.DEACTIVATED)
             self._pub_sub_manager.publish(self, self._node_id_SpindleDetails_det+".activation_state_change", ActivationState.ACTIVATED)
             self._pub_sub_manager.publish(self, self._node_id_FilterEvents_anal+".activation_state_change", ActivationState.DEACTIVATED)
@@ -198,6 +202,7 @@ class SpindleDetectorSelStep( BaseStepView,  Ui_SpindleDetectorSelStep, QtWidget
             self._pub_sub_manager.publish(self, self._node_id_DiscardEvents+".activation_state_change", ActivationState.DEACTIVATED)
             self._pub_sub_manager.publish(self, self._node_id_EventCombine+".activation_state_change", ActivationState.DEACTIVATED)
             self._pub_sub_manager.publish(self, self._node_id_SignalStats+".activation_state_change", ActivationState.DEACTIVATED)
+
             self._pub_sub_manager.publish(self, self._node_id_SpindleDetails_det+".activation_state_change", ActivationState.DEACTIVATED)
             self._pub_sub_manager.publish(self, self._node_id_SpindleDetails_anal+".activation_state_change", ActivationState.ACTIVATED)
             self._pub_sub_manager.publish(self, self._node_id_FilterEvents_anal+".activation_state_change", ActivationState.ACTIVATED)
