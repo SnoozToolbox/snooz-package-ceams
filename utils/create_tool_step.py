@@ -2,6 +2,8 @@
 import json
 import os
 from os.path import exists
+import subprocess
+import shutil
 from jinja2 import Environment, FileSystemLoader
 
 # Get user inputs
@@ -11,7 +13,7 @@ print("IMPORTANT: always use the same package name for all your tools if you wan
 package_name = ""
 package_exist = False
 while not package_exist:
-    package_name = input("Only letters, no space, camel case (ie: MyPackage): ")
+    package_name = input("Only letters, no space, camel case (ie: ExampleToolsPackage): ")
     package_path = os.path.join(os.getcwd(), "tools", package_name)
     package_exist = exists(package_path)
     if not package_exist:
@@ -61,9 +63,25 @@ while not done:
             f.write(output)
             f.close()
 
+        def compile_ui_to_py(compiler, ui_file, py_file):
+            ui_path = os.path.join(root_path, ui_file)
+            py_path = os.path.join(root_path, py_file)
+            command = f'"{compiler}" "{ui_path}" -o "{py_path}"'
+
+            result = subprocess.run(command, shell=True)
+        
+            if result.returncode != 0:
+                print(f"Error Compiling {ui_file}: returncode {result.returncode}")
+
         # Create all files
         create_file("step_template.txt", f"{step_class}.py")
         create_file("step_ui_template.txt",f"Ui_{step_class}.ui")
+        # Compile the ui file to python
+        compiler_exists = False
+        compiler_path = shutil.which("pyside6-uic")
+        if compiler_path:
+            compiler_exists = True
+            compile_ui_to_py(compiler_path , f"Ui_{step_class}.ui", f"Ui_{step_class}.py")
 
         # Add the step to the description.json file of the parent tool
         tool_description_path = os.path.join(tool_path, f"{tool_name}.json")
@@ -107,10 +125,8 @@ while not done:
     if continue_decision.lower() != "y" and continue_decision.lower() != "":
         done = True
 
-
-print(f"\nWhat to do next?")
-#print(f"- Move the subfolder '{step_class}' into {import_path}")
-#print(f"- Add these lines to {init_path}")
-#print(f"from presets.{tool_name}.{step_class} import Ui_{step_class}")
-#print(f"from presets.{tool_name}.{step_class} import {step_class}")
-print(f"- Generate the .py files from the .ui files using pyuic")
+if compiler_exists:
+    print("Done!")
+else:        
+    print(f"\nWhat to do next?")    
+    print(f"- Generate the .py files from the .ui files using pyuic")

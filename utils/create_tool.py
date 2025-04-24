@@ -43,7 +43,6 @@ tool_description = {
         "tool_author": tool_author,
         "tool_url": tool_url,
         "tool_description": tool_description,
-        "tool_version":"0.0.0",
         "package_name":package_name,
         "steps": []
     },
