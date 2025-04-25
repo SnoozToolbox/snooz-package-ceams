@@ -24,21 +24,21 @@ class Ui_ExportResultsStep(object):
     def setupUi(self, ExportResultsStep):
         if not ExportResultsStep.objectName():
             ExportResultsStep.setObjectName(u"ExportResultsStep")
-        ExportResultsStep.resize(943, 590)
-        ExportResultsStep.setStyleSheet(u"font: 12pt \"Roboto\";background-color: rgb(255, 255, 255);")
+        ExportResultsStep.resize(943, 729)
+        ExportResultsStep.setStyleSheet(u"font: 12pt \"Roboto\";")
         self.verticalLayout_2 = QVBoxLayout(ExportResultsStep)
         self.verticalLayout_2.setObjectName(u"verticalLayout_2")
         self.verticalLayout = QVBoxLayout()
         self.verticalLayout.setObjectName(u"verticalLayout")
         self.frame = QFrame(ExportResultsStep)
         self.frame.setObjectName(u"frame")
-        self.frame.setStyleSheet(u"background-color: rgb(255, 255, 255);")
+        self.frame.setStyleSheet(u"")
         self.frame.setFrameShape(QFrame.Shape.NoFrame)
         self.verticalLayout_4 = QVBoxLayout(self.frame)
         self.verticalLayout_4.setObjectName(u"verticalLayout_4")
         self.label = QLabel(self.frame)
         self.label.setObjectName(u"label")
-        self.label.setStyleSheet(u"background-color: rgb(255, 255, 255);")
+        self.label.setStyleSheet(u"")
         self.label.setLineWidth(0)
 
         self.verticalLayout_4.addWidget(self.label)
@@ -50,7 +50,7 @@ class Ui_ExportResultsStep(object):
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.frame_7.sizePolicy().hasHeightForWidth())
         self.frame_7.setSizePolicy(sizePolicy)
-        self.frame_7.setStyleSheet(u"background-color: rgb(255, 255, 255);")
+        self.frame_7.setStyleSheet(u"background-color: ")
         self.frame_7.setFrameShape(QFrame.Shape.NoFrame)
         self.frame_7.setLineWidth(0)
         self.verticalLayout_6 = QVBoxLayout(self.frame_7)
@@ -59,6 +59,7 @@ class Ui_ExportResultsStep(object):
         self.textEdit.setObjectName(u"textEdit")
         self.textEdit.setFrameShape(QFrame.Shape.NoFrame)
         self.textEdit.setLineWidth(0)
+        self.textEdit.setReadOnly(True)
 
         self.verticalLayout_6.addWidget(self.textEdit)
 
@@ -67,7 +68,7 @@ class Ui_ExportResultsStep(object):
 
         self.frame_4 = QFrame(self.frame)
         self.frame_4.setObjectName(u"frame_4")
-        self.frame_4.setStyleSheet(u"background-color: rgb(255, 255, 255);")
+        self.frame_4.setStyleSheet(u"background-color: ")
         self.frame_4.setFrameShape(QFrame.Shape.NoFrame)
         self.horizontalLayout_3 = QHBoxLayout(self.frame_4)
         self.horizontalLayout_3.setObjectName(u"horizontalLayout_3")
@@ -101,19 +102,20 @@ class Ui_ExportResultsStep(object):
         font.setBold(False)
         font.setItalic(False)
         self.checkBox.setFont(font)
-        self.checkBox.setStyleSheet(u"background-color: rgb(255, 255, 255);")
+        self.checkBox.setStyleSheet(u"")
 
         self.verticalLayout_4.addWidget(self.checkBox)
 
         self.frame_3 = QFrame(self.frame)
         self.frame_3.setObjectName(u"frame_3")
-        self.frame_3.setStyleSheet(u"background-color: rgb(255, 255, 255);")
+        self.frame_3.setStyleSheet(u"")
         self.frame_3.setFrameShape(QFrame.Shape.NoFrame)
         self.frame_3.setLineWidth(0)
         self.horizontalLayout_2 = QHBoxLayout(self.frame_3)
         self.horizontalLayout_2.setObjectName(u"horizontalLayout_2")
         self.label_3 = QLabel(self.frame_3)
         self.label_3.setObjectName(u"label_3")
+        self.label_3.setStyleSheet(u"")
         self.label_3.setLineWidth(0)
 
         self.horizontalLayout_2.addWidget(self.label_3)
@@ -130,7 +132,7 @@ class Ui_ExportResultsStep(object):
 
         self.frame_5 = QFrame(ExportResultsStep)
         self.frame_5.setObjectName(u"frame_5")
-        self.frame_5.setStyleSheet(u"background-color: rgb(255, 255, 255);")
+        self.frame_5.setStyleSheet(u"")
         self.frame_5.setFrameShape(QFrame.Shape.NoFrame)
         self.verticalLayout_3 = QVBoxLayout(self.frame_5)
         self.verticalLayout_3.setObjectName(u"verticalLayout_3")

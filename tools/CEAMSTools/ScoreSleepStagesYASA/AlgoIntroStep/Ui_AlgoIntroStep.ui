@@ -6,15 +6,15 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1099</width>
-    <height>846</height>
+    <width>1056</width>
+    <height>732</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Form</string>
   </property>
   <property name="styleSheet">
-   <string notr="true">font: 12pt &quot;Roboto&quot;;background-color: rgb(255, 255, 255);</string>
+   <string notr="true">font: 12pt &quot;Roboto&quot;;</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_7">
    <item>
@@ -33,7 +33,7 @@
           </size>
          </property>
          <property name="styleSheet">
-          <string notr="true">background-color: rgb(255, 255, 255);</string>
+          <string notr="true"/>
          </property>
          <property name="frameShape">
           <enum>QFrame::Shape::NoFrame</enum>
@@ -48,7 +48,7 @@
           <item>
            <widget class="QLabel" name="label">
             <property name="styleSheet">
-             <string notr="true">background-color: rgb(255, 255, 255);</string>
+             <string notr="true"/>
             </property>
             <property name="lineWidth">
              <number>0</number>
@@ -60,8 +60,11 @@
           </item>
           <item>
            <widget class="QLabel" name="label_2">
+            <property name="toolTipDuration">
+             <number>-1</number>
+            </property>
             <property name="styleSheet">
-             <string notr="true">background-color: rgb(255, 255, 255);</string>
+             <string notr="true"/>
             </property>
             <property name="lineWidth">
              <number>0</number>
@@ -83,7 +86,7 @@
           </sizepolicy>
          </property>
          <property name="styleSheet">
-          <string notr="true">background-color: rgb(255, 255, 255);</string>
+          <string notr="true"/>
          </property>
          <property name="frameShape">
           <enum>QFrame::Shape::NoFrame</enum>
@@ -98,7 +101,7 @@
           <item>
            <widget class="QLabel" name="label_3">
             <property name="styleSheet">
-             <string notr="true">background-color: rgb(255, 255, 255);</string>
+             <string notr="true"/>
             </property>
             <property name="lineWidth">
              <number>0</number>
@@ -111,7 +114,7 @@
           <item>
            <widget class="QScrollArea" name="scrollArea">
             <property name="styleSheet">
-             <string notr="true">background-color: rgb(255, 255, 255);</string>
+             <string notr="true"/>
             </property>
             <property name="frameShape">
              <enum>QFrame::Shape::NoFrame</enum>
@@ -127,8 +130,8 @@
               <rect>
                <x>0</x>
                <y>0</y>
-               <width>1161</width>
-               <height>477</height>
+               <width>1156</width>
+               <height>390</height>
               </rect>
              </property>
              <layout class="QHBoxLayout" name="horizontalLayout">
@@ -146,8 +149,11 @@
                 <property name="contextMenuPolicy">
                  <enum>Qt::ContextMenuPolicy::NoContextMenu</enum>
                 </property>
+                <property name="toolTipDuration">
+                 <number>-9</number>
+                </property>
                 <property name="styleSheet">
-                 <string notr="true">background-color: rgb(255, 255, 255);</string>
+                 <string notr="true"/>
                 </property>
                 <property name="lineWidth">
                  <number>0</number>
@@ -170,7 +176,7 @@
        <item>
         <widget class="QFrame" name="frame_3">
          <property name="styleSheet">
-          <string notr="true">background-color: rgb(255, 255, 255);</string>
+          <string notr="true"/>
          </property>
          <property name="frameShape">
           <enum>QFrame::Shape::NoFrame</enum>
@@ -185,7 +191,7 @@
           <item>
            <widget class="QLabel" name="label_5">
             <property name="styleSheet">
-             <string notr="true">background-color: rgb(255, 255, 255);</string>
+             <string notr="true"/>
             </property>
             <property name="lineWidth">
              <number>0</number>
@@ -198,7 +204,7 @@
           <item>
            <widget class="QLabel" name="label_6">
             <property name="styleSheet">
-             <string notr="true">background-color: rgb(255, 255, 255);</string>
+             <string notr="true"/>
             </property>
             <property name="text">
              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;The YASA sleep scoring tool is compatible with different input files including, EDF, NATUS, and STS. &lt;/p&gt;&lt;p&gt;The output of the automatic scoring algorithm is an accessory file that saves the predicted sleep stages.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
