@@ -9,6 +9,8 @@ import torch.nn as nn
 import torch.optim as optim
 import yaml
 
+from ..loss.loss import GeneralizedDiceLoss
+
 
 class Config:
     """
@@ -132,8 +134,9 @@ class Config:
 
         # configuration of the used loss function
         config_loss = config_train['loss']
+
         try:
-            losses = import_module('sumo.loss')
+            losses = import_module('CEAMSModules.SpindleDetectorSumo.sumo.loss.loss')
             self.loss = getattr(losses, config_loss['class_name'])  # first try to import a custom loss function
         except AttributeError:
             self.loss = getattr(nn, config_loss['class_name'])  # if none (matching) exists import a pytorch function

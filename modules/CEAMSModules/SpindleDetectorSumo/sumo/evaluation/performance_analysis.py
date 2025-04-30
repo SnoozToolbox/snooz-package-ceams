@@ -1,7 +1,7 @@
 import numpy as np
 from scipy.stats import hmean
 
-from sumo.data import spindle_vect_to_indices
+from ..data import spindle_vect_to_indices
 
 
 def get_overlap(spindles_detected, spindles_gs):

@@ -9,7 +9,7 @@ from scipy.stats import zscore
 from sklearn.model_selection import StratifiedKFold, train_test_split
 from torch.utils.data import ConcatDataset, Dataset, DataLoader
 
-from sumo.config import Config
+from ..config import Config
 
 
 def spindle_vect_to_indices(x):
