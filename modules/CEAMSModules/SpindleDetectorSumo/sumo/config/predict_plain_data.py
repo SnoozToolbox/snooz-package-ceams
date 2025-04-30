@@ -16,9 +16,9 @@ from a7.detect_spindles import detect_spindles
 
 # append root dir to python path so that we find `sumo`
 path.insert(0, str(Path(__file__).absolute().parents[1]))
-from sumo.config import Config
-from sumo.data import spindle_vect_to_indices
-from sumo.model import SUMO
+from ..config import Config
+from ..data import spindle_vect_to_indices
+from ..model import SUMO
 
 
 def get_model(path: Union[str, Path]):
