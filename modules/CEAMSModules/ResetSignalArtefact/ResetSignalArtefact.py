@@ -9,6 +9,7 @@ See the file LICENCE for full license details.
     The signal is masked with NaN or forced to zero with a Turkey window (alpha=0.1) to smooth the edge.
     Smoothing the edges avoids additional glitch on the signal when forced directly to zero.
 """
+import copy
 import numpy as np
 import pandas as pd
 from scipy import signal as sci
@@ -42,6 +43,7 @@ class ResetSignalArtefact(SciNode):
             Signal values during artefact.
             0 : replace the artefacted signal values with zeros (with turkey mindow)
             NaN : replace the artefacted signal values with NaNs
+        signal_copy : Boolean
         
     Returns
     -----------
@@ -115,7 +117,7 @@ class ResetSignalArtefact(SciNode):
             raise NodeInputException(self.identifier, "events", \
                 f"ResetSignalArtefact input of wrong type. Expected: <class 'pd.DataFrame'> received: {type(events)}")            
 
-        signals_out = signals.copy()
+        signals_out = copy.deepcopy(signals)
 
         # It is possible to bypass the "ResetSignalArtefact" by passing the input signals directly
         # to the output signals without any modification
