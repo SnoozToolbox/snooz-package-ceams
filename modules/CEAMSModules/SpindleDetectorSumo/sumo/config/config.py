@@ -9,9 +9,6 @@ import torch.nn as nn
 import torch.optim as optim
 import yaml
 
-from ..loss.loss import GeneralizedDiceLoss
-
-
 class Config:
     """
     Class storing configuration of one experiment run.
