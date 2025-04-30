@@ -10,7 +10,7 @@ from pytorch_lightning.loggers import LightningLoggerBase
 from pytorch_lightning.loggers.base import rank_zero_experiment
 from pytorch_lightning.utilities import rank_zero_only
 
-from sumo.config import Config
+from ..config import Config
 
 
 class ExperimentLogger(logging.Logger):

@@ -6,8 +6,8 @@ See the file LICENCE for full license details.
     Class to detect spindles based on the SUMO deep learning algorithm
 """
 from .get_model import get_model
-from sumo.config import Config
-from sumo.data import spindle_vect_to_indices
+from .sumo.config import Config
+from .sumo.data import spindle_vect_to_indices
 from .butter_filter import butter_bandpass_filter, butter_bandpass_filter_nan, downsample
 import numpy as np
 import os

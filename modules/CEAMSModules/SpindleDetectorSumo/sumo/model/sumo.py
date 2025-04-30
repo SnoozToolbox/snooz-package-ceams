@@ -13,8 +13,8 @@ from pytorch_lightning.callbacks import EarlyStopping, LearningRateMonitor
 # # Add the parent directory to the Python path
 # sys.path.append(current_dir)
 
-from sumo.config import Config
-from sumo.evaluation.performance_analysis import PerformanceEvaluation, metric_scores
+from ..config import Config
+from ..evaluation.performance_analysis import PerformanceEvaluation, metric_scores
 from .model_parts import Decoder, DoubleConv, Encoder
 
 
