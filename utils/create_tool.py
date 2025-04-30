@@ -36,7 +36,7 @@ tool_url = input("URL: ")
 tool_description = {
     "item_name": tool_name,
     "item_type": "tool",
-    "item_api_version": "1.0.0",
+    "item_api_version": "2.0.0",
     "tool_params": {
         "tool_label": tool_label,
         "tool_category": tool_category,

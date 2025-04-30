@@ -116,6 +116,9 @@ while not done:
                 }
             )
 
+        # Compile the ui file to python
+        compiler_exists = True
+
         with open(tool_description_path, 'w', encoding="UTF-8") as outfile:
             json_string = json.dumps(tool_description, indent=4)
             outfile.write(json_string)
