@@ -896,7 +896,7 @@ class SpindlesDetails(SciNode):
             Debug function to open figure in a dialog. This funciton display the original spindle (mean removed) 
             and the filtered spindle in sigma band.
         """""
-        from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
+        from matplotlib.backends.backend_qtagg import FigureCanvasQTAgg as FigureCanvas
         from matplotlib.figure import Figure
         from PySide2.QtWidgets import QDialog, QVBoxLayout
 
@@ -928,7 +928,7 @@ class SpindlesDetails(SciNode):
             Debug function to open figure in a dialog. This funciton display the spectre and the frequency 
             with the highest energy in the sigma band.
         """""
-        from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
+        from matplotlib.backends.backend_qtagg import FigureCanvasQTAgg as FigureCanvas
         from matplotlib.figure import Figure
         from PySide2.QtWidgets import QDialog, QVBoxLayout
         dialog = QDialog()
