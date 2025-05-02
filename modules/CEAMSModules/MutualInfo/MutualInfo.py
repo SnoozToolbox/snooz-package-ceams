@@ -40,8 +40,6 @@ See the file LICENCE for full license details.
 from flowpipe import SciNode, InputPlug, OutputPlug
 from CEAMSModules.PSGReader.SignalModel import SignalModel
 from sklearn.metrics import mutual_info_score
-import numpy as np
-from tqdm import tqdm
 from commons.NodeInputException import NodeInputException
 
 DEBUG = False
