@@ -17,6 +17,7 @@ from scipy.stats import zscore
 import torch
 from torch.utils.data import Dataset, DataLoader
 import pytorch_lightning as pl
+import sys
 
 
 import config as snooz_config
@@ -227,13 +228,15 @@ class SpindleDetectorSumo(SciNode):
         dataloader = DataLoader(dataset, num_workers=3, persistent_workers=True)
 
         # Set up the model and its config
-        # Get the path where PSGReader librairies are stored. 
-        #model_path = snooz_config.app_context.get_resource(join('models','SUMO','final.ckpt')) 
-        current_dir = os.path.dirname(os.path.abspath(__file__))
-        model_path = current_dir + '/final.ckpt'         
+        model_path = snooz_config.app_context.get_resource(join('models','SUMO','final.ckpt')) 
+        #current_dir = os.path.dirname(os.path.abspath(__file__))
+        #model_path = current_dir + '/final.ckpt'         
         config = Config('predict', create_dirs=False)
         model = get_model(model_path, config)
-        trainer = pl.Trainer(num_sanity_val_steps=0, logger=False)
+
+        # Safe check for terminal support
+        use_progress_bar = sys.stdout is not None and sys.stdout.isatty()
+        trainer = pl.Trainer(num_sanity_val_steps=0, logger=False, enable_progress_bar=use_progress_bar)
  
         # Predict the spindles
         predictions = trainer.predict(model, dataloader)  # 0/1 label for each data point of each segment (takes ~50 sec)
