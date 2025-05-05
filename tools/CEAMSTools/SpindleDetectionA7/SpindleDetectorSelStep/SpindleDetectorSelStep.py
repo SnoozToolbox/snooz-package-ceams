@@ -41,6 +41,7 @@ class SpindleDetectorSelStep( BaseStepView,  Ui_SpindleDetectorSelStep, QtWidget
         self._node_id_FilterSignal = "fcf58c9f-1ad0-4bd5-bb47-228ac8b5ab91" 
         self._node_id_ResetSignalArtefact_NaN = "a91be608-8be8-4f87-92f7-d2f83a759d8c" 
         self._node_id_SpindleDetA7 = "72b146ad-eca2-41b5-9994-87177883020e"
+        self._node_id_PSGWriter = "07601632-b7a4-4365-81b6-b312d3565ad5"
 
         # Subscribe to the publisher for each node you want to talk to
         self._stages_topic = f'{self._node_id_SleepStageEvent}.stages'
@@ -118,18 +119,21 @@ class SpindleDetectorSelStep( BaseStepView,  Ui_SpindleDetectorSelStep, QtWidget
         self._pub_sub_manager.publish(self, self._max_len_topic, self.max_length_lineEdit.text())
         
         if self.radioButton_detect_spindle.isChecked():
-            self._pub_sub_manager.publish(self, self._node_id_FilterSignal+".activation_state_change",ActivationState.ACTIVATED)
+            #self._pub_sub_manager.publish(self, self._node_id_FilterSignal+".activation_state_change",ActivationState.ACTIVATED)
+
             self._pub_sub_manager.publish(self, self._node_id_ResetSignalArtefact_NaN+".activation_state_change",ActivationState.ACTIVATED)
             self._pub_sub_manager.publish(self, self._node_id_SpindleDetA7+".activation_state_change", ActivationState.ACTIVATED)
+            self._pub_sub_manager.publish(self, self._node_id_PSGWriter+".activation_state_change", ActivationState.ACTIVATED)
             
             self._pub_sub_manager.publish(self, self._node_id_SpindleDetails_anal+".activation_state_change", ActivationState.DEACTIVATED)
             self._pub_sub_manager.publish(self, self._node_id_SpindleDetails_det+".activation_state_change", ActivationState.ACTIVATED)
             self._pub_sub_manager.publish(self, self._node_id_FilterEvents_anal+".activation_state_change", ActivationState.DEACTIVATED)
 
         if self.radioButto_analyse_spindle.isChecked():
-            self._pub_sub_manager.publish(self, self._node_id_FilterSignal+".activation_state_change", ActivationState.BYPASS)   
+            #self._pub_sub_manager.publish(self, self._node_id_FilterSignal+".activation_state_change", ActivationState.BYPASS)   
             self._pub_sub_manager.publish(self, self._node_id_ResetSignalArtefact_NaN+".activation_state_change", ActivationState.BYPASS)   
             self._pub_sub_manager.publish(self, self._node_id_SpindleDetA7+".activation_state_change", ActivationState.BYPASS)
+            self._pub_sub_manager.publish(self, self._node_id_PSGWriter+".activation_state_change", ActivationState.DEACTIVATED)
                 
             self._pub_sub_manager.publish(self, self._node_id_SpindleDetails_det+".activation_state_change", ActivationState.DEACTIVATED)
             self._pub_sub_manager.publish(self, self._node_id_SpindleDetails_anal+".activation_state_change", ActivationState.ACTIVATED)
