@@ -22,8 +22,7 @@
      <item>
       <widget class="QFrame" name="frame">
        <property name="styleSheet">
-        <string notr="true">
-</string>
+        <string notr="true"/>
        </property>
        <property name="frameShape">
         <enum>QFrame::Shape::NoFrame</enum>
@@ -122,7 +121,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
            <item>
             <widget class="QLineEdit" name="lineEdit_2">
              <property name="text">
-              <string/>
+              <string>stage</string>
              </property>
             </widget>
            </item>
@@ -157,6 +156,9 @@ li.checked::marker { content: &quot;\2612&quot;; }
           </property>
           <property name="text">
            <string>Automatic Scoring</string>
+          </property>
+          <property name="checked">
+           <bool>true</bool>
           </property>
          </widget>
         </item>

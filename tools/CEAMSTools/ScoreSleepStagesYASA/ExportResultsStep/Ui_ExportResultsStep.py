@@ -103,6 +103,7 @@ class Ui_ExportResultsStep(object):
         font.setItalic(False)
         self.checkBox.setFont(font)
         self.checkBox.setStyleSheet(u"")
+        self.checkBox.setChecked(True)
 
         self.verticalLayout_4.addWidget(self.checkBox)
 
@@ -225,7 +226,7 @@ class Ui_ExportResultsStep(object):
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">In this step, you can either apply an automatic scoring or compare the results of the automatic scoring with expert scoring if you have expert-annotated sleep stage files.</p>\n"
 "<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">The sleep stage scoring from the YASA algorithm will then be exported.</p></body></html>", None))
         self.label_2.setText(QCoreApplication.translate("ExportResultsStep", u"<html><head/><body><p>Define a label for the predicted sleep stages group label in the accessory file.</p></body></html>", None))
-        self.lineEdit_2.setText("")
+        self.lineEdit_2.setText(QCoreApplication.translate("ExportResultsStep", u"stage", None))
         self.checkBox.setText(QCoreApplication.translate("ExportResultsStep", u"Automatic Scoring", None))
         self.label_3.setText(QCoreApplication.translate("ExportResultsStep", u"<html><head/><body><p>Be careful! Changing the group label <span style=\" font-weight:700;\">'stage'</span> to a different value may prevent Snooz from correctly identifying sleep stages<br/>in other tools.</p></body></html>", None))
         self.checkBox_2.setText(QCoreApplication.translate("ExportResultsStep", u"Compare with Expert Scoring", None))

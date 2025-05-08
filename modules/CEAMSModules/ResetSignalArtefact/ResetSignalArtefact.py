@@ -117,7 +117,8 @@ class ResetSignalArtefact(SciNode):
             raise NodeInputException(self.identifier, "events", \
                 f"ResetSignalArtefact input of wrong type. Expected: <class 'pd.DataFrame'> received: {type(events)}")            
 
-        signals_out = copy.deepcopy(signals)
+        #signals_out = copy.deepcopy(signals)
+        signals_out = signals
 
         # It is possible to bypass the "ResetSignalArtefact" by passing the input signals directly
         # to the output signals without any modification

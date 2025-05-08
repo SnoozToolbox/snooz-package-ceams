@@ -37,10 +37,13 @@ See the file LICENCE for full license details.
 """
 from commons.NodeInputException import NodeInputException
 from commons.NodeRuntimeException import NodeRuntimeException
+import numpy as np
 import os
+import pandas as pd
 
 from flowpipe import SciNode, InputPlug, OutputPlug
 from CEAMSModules.PSGReader.PSGReaderManager import PSGReaderManager
+from CEAMSModules.PSGReader.SignalModel import SignalModel
 
 DEBUG = False
 
@@ -152,7 +155,39 @@ class PSGReader(SciNode):
                 raise NodeRuntimeException(self.identifier, "files", \
                     f"PSGReader could not read signals from file:{filename}")            
 
+        # Extract sleep stages
         sleep_stages = self._psg_reader_manager.get_sleep_stages()
+
+        # Evaluate the sleep stages length against the signals length
+        total_stage_time = sleep_stages['duration_sec'].sum()
+        epoch_duration = sleep_stages['duration_sec'].mode().iloc[0]
+        signals_duration_chans = SignalModel.get_attribute(signals, 'duration', 'start_time')
+        signals_starttime_chans = SignalModel.get_attribute(signals, 'start_time', 'start_time')
+        # Signals can be discontinuous
+        if len(signals_duration_chans.shape) > 1:
+            # All the channels must have the same start and duration
+            # Better to select the first value of each list of channels to keep the order between start and duration
+            signals_duration = [duration[0] for duration in signals_duration_chans]
+            signals_starttime = [starttime[0] for starttime in signals_starttime_chans]
+        else:
+            # All the channels must have the same start and duration
+            signals_duration = signals_duration_chans[0]
+            signals_starttime = signals_starttime_chans[0]
+        # Sum the unique list of signal_duration
+        total_signal_time = np.sum(signals_duration)
+
+        # If the difference is greater than one epoch duration, fix the sleep stages
+        if abs(total_stage_time - total_signal_time) > epoch_duration:            
+            # Build mask to select valid sleep stages across all signals
+            valid_intervals = zip(signals_starttime, signals_duration)
+            masks = [(sleep_stages['start_sec'] >= start) & 
+                    (sleep_stages['start_sec'] < (start + dur))
+                    for start, dur in valid_intervals]
+
+            # Combine all masks using logical OR
+            combined_mask = pd.concat(masks, axis=1).any(axis=1)
+            sleep_stages = sleep_stages[combined_mask].reset_index(drop=True)
+
         events = self._psg_reader_manager.get_events()
         subject_info = self._psg_reader_manager.get_subject_info()
 

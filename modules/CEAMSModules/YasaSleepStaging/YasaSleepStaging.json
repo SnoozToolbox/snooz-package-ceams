@@ -42,14 +42,14 @@
                 "value": "",
                 "connections": {},
                 "sub_plugs": {}
-            },"events": {
-                "name": "events",
+            },"stage_group": {
+                "name": "stage_group",
                 "value": "",
                 "connections": {},
                 "sub_plugs": {}
             },
-            "Checkbox": {
-                "name": "Checkbox",
+            "validation_on": {
+                "name": "validation_on",
                 "value": "",
                 "connections": {},
                 "sub_plugs": {}
@@ -68,6 +68,11 @@
                 "sub_plugs": {}
             },"new_events": {
                 "name": "new_events",
+                "value": "",
+                "connections": {},
+                "sub_plugs": {}
+            },"events_to_remove": {
+                "name": "events_to_remove",
                 "value": "",
                 "connections": {},
                 "sub_plugs": {}

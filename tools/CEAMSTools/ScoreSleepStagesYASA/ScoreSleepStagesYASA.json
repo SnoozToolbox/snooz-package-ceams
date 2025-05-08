@@ -45,65 +45,39 @@
         "process_label": "",
         "nodes": [
             {
-                "cls": "YasaSleepStaging",
-                "name": "YasaSleepStaging",
+                "cls": "SleepStagingExportResults",
+                "name": "SleepStagingExportResults",
                 "metadata": {},
                 "file_location": null,
-                "module": "CEAMSModules.YasaSleepStaging",
-                "module_label": "Score Sleep Stages YASA",
-                "module_category": "Signal Processing",
+                "module": "CEAMSModules.SleepStagingExportResults",
+                "module_label": "Sleep Staging Export Results",
+                "module_category": "Statistics",
                 "module_author": "",
                 "module_url": "",
                 "module_description": "",
                 "module_options": {},
                 "inputs": {
-                    "filename": {
-                        "name": "filename",
+                    "ResultsDataframe": {
+                        "name": "ResultsDataframe",
                         "value": "",
                         "sub_plugs": {},
                         "connections": {
-                            "031201d5-ff93-4be6-90d3-256d2ba689d1": "filename"
+                            "e58aa07b-4802-45f7-92c2-61f6f19b1818": "results"
                         }
                     },
-                    "signals_EEG": {
-                        "name": "signals_EEG",
+                    "info": {
+                        "name": "info",
                         "value": "",
                         "sub_plugs": {},
                         "connections": {
-                            "9254a55e-78a3-41da-8916-158c99ca25ec": "signals_from_events"
+                            "e58aa07b-4802-45f7-92c2-61f6f19b1818": "info"
                         }
                     },
-                    "signals_EOG": {
-                        "name": "signals_EOG",
+                    "SavedDestination": {
+                        "name": "SavedDestination",
                         "value": "",
                         "sub_plugs": {},
-                        "connections": {
-                            "d3ef43f4-2327-49b7-9d40-738aa12f37f5": "signals_from_events"
-                        }
-                    },
-                    "signals_EMG": {
-                        "name": "signals_EMG",
-                        "value": "",
-                        "sub_plugs": {},
-                        "connections": {
-                            "3874c5b6-2e82-4a69-b4e0-0a8cc21bd582": "signals_from_events"
-                        }
-                    },
-                    "sleep_stages": {
-                        "name": "sleep_stages",
-                        "value": "",
-                        "sub_plugs": {},
-                        "connections": {
-                            "088a0708-6140-40b2-aaec-ef06bc21d7c4": "sleep_stage_events"
-                        }
-                    },
-                    "events": {
-                        "name": "events",
-                        "value": "",
-                        "sub_plugs": {},
-                        "connections": {
-                            "031201d5-ff93-4be6-90d3-256d2ba689d1": "events"
-                        }
+                        "connections": {}
                     },
                     "Checkbox": {
                         "name": "Checkbox",
@@ -113,126 +87,160 @@
                     }
                 },
                 "outputs": {
-                    "results": {
-                        "name": "results",
+                    "ExportResults": {
+                        "name": "ExportResults",
                         "value": "",
                         "sub_plugs": {},
-                        "connections": {
-                            "45e14f5d-5a72-4aaf-bf01-644c095979d6": [
-                                "ResultsDataframe"
-                            ]
-                        }
-                    },
-                    "info": {
-                        "name": "info",
-                        "value": "",
-                        "sub_plugs": {},
-                        "connections": {
-                            "45e14f5d-5a72-4aaf-bf01-644c095979d6": [
-                                "info"
-                            ]
-                        }
-                    },
-                    "new_events": {
-                        "name": "new_events",
-                        "value": "",
-                        "sub_plugs": {},
-                        "connections": {
-                            "a6186317-b100-4fb3-9dfa-017548e519b9": [
-                                "events_in"
-                            ]
-                        }
+                        "connections": {}
                     }
                 },
-                "identifier": "e58aa07b-4802-45f7-92c2-61f6f19b1818",
+                "identifier": "45e14f5d-5a72-4aaf-bf01-644c095979d6",
                 "activation_state": "activated",
                 "package": {
                     "package_name": "CEAMSModules"
                 },
-                "pos_x": 560.75,
-                "pos_y": -196.75
+                "pos_x": 1001.0,
+                "pos_y": -150.0
             },
             {
-                "cls": "CreateDict",
-                "name": "CreateDict",
+                "cls": "SignalsFromEvents",
+                "name": "SignalsFromEvents",
                 "metadata": {},
-                "file_location": null,
-                "module": "CEAMSModules.CreateDict",
-                "module_label": "Create Dictionary",
-                "module_category": "Parameters",
-                "module_author": "",
-                "module_url": "",
-                "module_description": "",
+                "file_location": "",
+                "module_label": "Signals From Events",
+                "module_category": "Events Utilities",
                 "module_options": {},
                 "inputs": {
-                    "Key": {
-                        "name": "Key",
-                        "value": "stage",
+                    "signals": {
+                        "name": "signals",
+                        "value": "",
+                        "sub_plugs": {},
+                        "connections": {
+                            "88996fb4-bd21-48ff-b9a5-e4478462f781": "signals"
+                        }
+                    },
+                    "events": {
+                        "name": "events",
+                        "value": "",
+                        "sub_plugs": {},
+                        "connections": {
+                            "6bce15ba-1723-42cb-b093-b42f78cbbe2e": "sleep_stage_events"
+                        }
+                    },
+                    "events_names": {
+                        "name": "events_names",
+                        "value": "",
                         "sub_plugs": {},
                         "connections": {}
                     },
-                    "Value": {
-                        "name": "Value",
-                        "value": "stage",
+                    "create": {
+                        "name": "create",
+                        "value": true,
                         "sub_plugs": {},
                         "connections": {}
                     }
                 },
                 "outputs": {
-                    "Dict": {
-                        "name": "Dict",
+                    "signals_from_events": {
+                        "name": "signals_from_events",
                         "value": "",
                         "sub_plugs": {},
                         "connections": {
-                            "a6186317-b100-4fb3-9dfa-017548e519b9": [
-                                "group_lut"
+                            "e58aa07b-4802-45f7-92c2-61f6f19b1818": [
+                                "signals_EOG"
                             ]
                         }
                     },
-                    "Value": {
-                        "name": "Value",
-                        "value": "stage",
+                    "epochs_to_process": {
+                        "name": "epochs_to_process",
+                        "value": "",
                         "sub_plugs": {},
-                        "connections": {
-                            "bcf76caa-7803-4b2f-a084-79c2fa23263d": [
-                                "group"
-                            ]
-                        }
+                        "connections": {}
                     }
                 },
-                "identifier": "bb58864d-fb92-46f4-93ca-02014502344f",
+                "module": "CEAMSModules.SignalsFromEvents",
+                "identifier": "d3ef43f4-2327-49b7-9d40-738aa12f37f5",
                 "activation_state": "activated",
                 "package": {
                     "package_name": "CEAMSModules"
                 },
-                "pos_x": 390.0,
-                "pos_y": 64.0
+                "pos_x": 46.43750000000003,
+                "pos_y": -337.75
             },
             {
-                "cls": "PSGWriter",
-                "name": "PSGWriter",
+                "cls": "SignalsFromEvents",
+                "name": "SignalsFromEvents",
                 "metadata": {},
                 "file_location": "",
-                "module_label": "PSGWriter",
-                "module_category": "Files I/O",
+                "module_label": "Signals From Events",
+                "module_category": "Events Utilities",
                 "module_options": {},
                 "inputs": {
-                    "input_filename": {
-                        "name": "input_filename",
+                    "signals": {
+                        "name": "signals",
                         "value": "",
                         "sub_plugs": {},
                         "connections": {
-                            "031201d5-ff93-4be6-90d3-256d2ba689d1": "filename"
+                            "10970b62-e202-442c-b3d6-18b529be7e9b": "signals"
                         }
                     },
-                    "output_filename": {
-                        "name": "output_filename",
+                    "events": {
+                        "name": "events",
                         "value": "",
                         "sub_plugs": {},
                         "connections": {
-                            "031201d5-ff93-4be6-90d3-256d2ba689d1": "filename"
+                            "6bce15ba-1723-42cb-b093-b42f78cbbe2e": "sleep_stage_events"
                         }
                     },
+                    "events_names": {
+                        "name": "events_names",
+                        "value": "",
+                        "sub_plugs": {},
+                        "connections": {}
+                    },
+                    "create": {
+                        "name": "create",
+                        "value": true,
+                        "sub_plugs": {},
+                        "connections": {}
+                    }
+                },
+                "outputs": {
+                    "signals_from_events": {
+                        "name": "signals_from_events",
+                        "value": "",
+                        "sub_plugs": {},
+                        "connections": {
+                            "e58aa07b-4802-45f7-92c2-61f6f19b1818": [
+                                "signals_EEG"
+                            ]
+                        }
+                    },
+                    "epochs_to_process": {
+                        "name": "epochs_to_process",
+                        "value": "",
+                        "sub_plugs": {},
+                        "connections": {}
+                    }
+                },
+                "module": "CEAMSModules.SignalsFromEvents",
+                "identifier": "9254a55e-78a3-41da-8916-158c99ca25ec",
+                "activation_state": "activated",
+                "package": {
+                    "package_name": "CEAMSModules"
+                },
+                "pos_x": 45.0,
+                "pos_y": -529.0
+            },
+            {
+                "cls": "AliasSignals",
+                "name": "AliasSignals",
+                "metadata": {},
+                "file_location": "",
+                "module_label": "Alias Signals",
+                "module_category": "Parameters",
+                "module_options": {},
+                "inputs": {
                     "signals": {
                         "name": "signals",
                         "value": "",
@@ -241,161 +249,141 @@
                             "031201d5-ff93-4be6-90d3-256d2ba689d1": "signals"
                         }
                     },
-                    "new_events": {
-                        "name": "new_events",
-                        "value": "",
-                        "sub_plugs": {},
-                        "connections": {
-                            "a6186317-b100-4fb3-9dfa-017548e519b9": "events_out"
-                        }
-                    },
-                    "events_to_remove": {
-                        "name": "events_to_remove",
-                        "value": "",
-                        "sub_plugs": {},
-                        "connections": {
-                            "bcf76caa-7803-4b2f-a084-79c2fa23263d": "group_name_list"
-                        }
-                    },
-                    "overwrite_events": {
-                        "name": "overwrite_events",
-                        "value": "False",
-                        "sub_plugs": {},
-                        "connections": {}
-                    },
-                    "overwrite_signals": {
-                        "name": "overwrite_signals",
-                        "value": "False",
-                        "sub_plugs": {},
-                        "connections": {}
-                    }
-                },
-                "outputs": {},
-                "module": "CEAMSModules.PSGWriter",
-                "identifier": "d58e68d0-a538-481b-87fe-9c7a3e9538a9",
-                "activation_state": "activated",
-                "package": {
-                    "package_name": "CEAMSModules"
-                },
-                "pos_x": 1118.25,
-                "pos_y": 405.6875
-            },
-            {
-                "cls": "PSGReader",
-                "name": "PSGReader",
-                "metadata": {},
-                "file_location": "",
-                "module_label": "PSGReader",
-                "module_category": "Files I/O",
-                "module_options": {
-                    "alias": {
-                        "value": "EEG;EOG;EMG",
-                        "tooltip": "List of aliases separated by a semicolon(;) character"
-                    },
-                    "file_selection_only": {
-                        "value": "0",
-                        "tooltip": "Set it to 1 if you only need to select a file and not its montages and channels."
-                    }
-                },
-                "inputs": {
-                    "files": {
-                        "name": "files",
-                        "value": {},
-                        "sub_plugs": {},
-                        "connections": {}
-                    },
                     "alias": {
                         "name": "alias",
-                        "value": {
-                            "EEG": [
-                                ""
-                            ],
-                            "EOG": [
-                                ""
-                            ],
-                            "EMG": [
-                                ""
-                            ]
-                        },
+                        "value": "EMG",
                         "sub_plugs": {},
                         "connections": {}
                     }
                 },
                 "outputs": {
-                    "filename": {
-                        "name": "filename",
-                        "value": "",
-                        "sub_plugs": {},
-                        "connections": {
-                            "d58e68d0-a538-481b-87fe-9c7a3e9538a9": [
-                                "input_filename",
-                                "output_filename"
-                            ],
-                            "e58aa07b-4802-45f7-92c2-61f6f19b1818": [
-                                "filename"
-                            ]
-                        }
-                    },
                     "signals": {
                         "name": "signals",
                         "value": "",
                         "sub_plugs": {},
                         "connections": {
-                            "10970b62-e202-442c-b3d6-18b529be7e9b": [
-                                "signals"
-                            ],
-                            "88996fb4-bd21-48ff-b9a5-e4478462f781": [
-                                "signals"
-                            ],
-                            "84e8421e-c317-41ec-abd3-7d528ae1b2cc": [
-                                "signals"
-                            ],
-                            "d58e68d0-a538-481b-87fe-9c7a3e9538a9": [
+                            "3874c5b6-2e82-4a69-b4e0-0a8cc21bd582": [
                                 "signals"
                             ]
                         }
                     },
-                    "events": {
-                        "name": "events",
-                        "value": "",
-                        "sub_plugs": {},
-                        "connections": {
-                            "bcf76caa-7803-4b2f-a084-79c2fa23263d": [
-                                "events"
-                            ],
-                            "e58aa07b-4802-45f7-92c2-61f6f19b1818": [
-                                "events"
-                            ]
-                        }
-                    },
-                    "sleep_stages": {
-                        "name": "sleep_stages",
-                        "value": "",
-                        "sub_plugs": {},
-                        "connections": {
-                            "6bce15ba-1723-42cb-b093-b42f78cbbe2e": [
-                                "sleep_stages"
-                            ],
-                            "088a0708-6140-40b2-aaec-ef06bc21d7c4": [
-                                "sleep_stages"
-                            ]
-                        }
-                    },
-                    "subject_info": {
-                        "name": "subject_info",
+                    "channels_name": {
+                        "name": "channels_name",
                         "value": "",
                         "sub_plugs": {},
                         "connections": {}
                     }
                 },
-                "module": "CEAMSModules.PSGReader",
-                "identifier": "031201d5-ff93-4be6-90d3-256d2ba689d1",
+                "module": "CEAMSModules.AliasSignals",
+                "identifier": "84e8421e-c317-41ec-abd3-7d528ae1b2cc",
                 "activation_state": "activated",
                 "package": {
                     "package_name": "CEAMSModules"
                 },
-                "pos_x": -534.1875,
-                "pos_y": 17.0
+                "pos_x": -239.75000000000003,
+                "pos_y": -200.81250000000003
+            },
+            {
+                "cls": "AliasSignals",
+                "name": "AliasSignals",
+                "metadata": {},
+                "file_location": "",
+                "module_label": "Alias Signals",
+                "module_category": "Parameters",
+                "module_options": {},
+                "inputs": {
+                    "signals": {
+                        "name": "signals",
+                        "value": "",
+                        "sub_plugs": {},
+                        "connections": {
+                            "031201d5-ff93-4be6-90d3-256d2ba689d1": "signals"
+                        }
+                    },
+                    "alias": {
+                        "name": "alias",
+                        "value": "EOG",
+                        "sub_plugs": {},
+                        "connections": {}
+                    }
+                },
+                "outputs": {
+                    "signals": {
+                        "name": "signals",
+                        "value": "",
+                        "sub_plugs": {},
+                        "connections": {
+                            "d3ef43f4-2327-49b7-9d40-738aa12f37f5": [
+                                "signals"
+                            ]
+                        }
+                    },
+                    "channels_name": {
+                        "name": "channels_name",
+                        "value": "",
+                        "sub_plugs": {},
+                        "connections": {}
+                    }
+                },
+                "module": "CEAMSModules.AliasSignals",
+                "identifier": "88996fb4-bd21-48ff-b9a5-e4478462f781",
+                "activation_state": "activated",
+                "package": {
+                    "package_name": "CEAMSModules"
+                },
+                "pos_x": -240.0,
+                "pos_y": -339.0
+            },
+            {
+                "cls": "AliasSignals",
+                "name": "AliasSignals",
+                "metadata": {},
+                "file_location": "",
+                "module_label": "Alias Signals",
+                "module_category": "Parameters",
+                "module_options": {},
+                "inputs": {
+                    "signals": {
+                        "name": "signals",
+                        "value": "",
+                        "sub_plugs": {},
+                        "connections": {
+                            "031201d5-ff93-4be6-90d3-256d2ba689d1": "signals"
+                        }
+                    },
+                    "alias": {
+                        "name": "alias",
+                        "value": "EEG",
+                        "sub_plugs": {},
+                        "connections": {}
+                    }
+                },
+                "outputs": {
+                    "signals": {
+                        "name": "signals",
+                        "value": "",
+                        "sub_plugs": {},
+                        "connections": {
+                            "9254a55e-78a3-41da-8916-158c99ca25ec": [
+                                "signals"
+                            ]
+                        }
+                    },
+                    "channels_name": {
+                        "name": "channels_name",
+                        "value": "",
+                        "sub_plugs": {},
+                        "connections": {}
+                    }
+                },
+                "module": "CEAMSModules.AliasSignals",
+                "identifier": "10970b62-e202-442c-b3d6-18b529be7e9b",
+                "activation_state": "activated",
+                "package": {
+                    "package_name": "CEAMSModules"
+                },
+                "pos_x": -237.0,
+                "pos_y": -481.0
             },
             {
                 "cls": "SleepStageEvents",
@@ -428,7 +416,7 @@
                     },
                     "merge_events": {
                         "name": "merge_events",
-                        "value": "1",
+                        "value": "0",
                         "sub_plugs": {},
                         "connections": {}
                     },
@@ -463,26 +451,20 @@
                         "value": "",
                         "sub_plugs": {},
                         "connections": {
-                            "3874c5b6-2e82-4a69-b4e0-0a8cc21bd582": [
-                                "events"
-                            ],
-                            "d3ef43f4-2327-49b7-9d40-738aa12f37f5": [
-                                "events"
-                            ],
-                            "9254a55e-78a3-41da-8916-158c99ca25ec": [
-                                "events"
+                            "e58aa07b-4802-45f7-92c2-61f6f19b1818": [
+                                "sleep_stages"
                             ]
                         }
                     }
                 },
                 "module": "CEAMSModules.SleepStageEvents",
-                "identifier": "6bce15ba-1723-42cb-b093-b42f78cbbe2e",
+                "identifier": "088a0708-6140-40b2-aaec-ef06bc21d7c4",
                 "activation_state": "activated",
                 "package": {
                     "package_name": "CEAMSModules"
                 },
-                "pos_x": -241.0,
-                "pos_y": 241.5
+                "pos_x": -242.5,
+                "pos_y": 498.25
             },
             {
                 "cls": "SignalsFromEvents",
@@ -580,7 +562,7 @@
                     },
                     "merge_events": {
                         "name": "merge_events",
-                        "value": "0",
+                        "value": "1",
                         "sub_plugs": {},
                         "connections": {}
                     },
@@ -615,345 +597,298 @@
                         "value": "",
                         "sub_plugs": {},
                         "connections": {
-                            "e58aa07b-4802-45f7-92c2-61f6f19b1818": [
-                                "sleep_stages"
+                            "3874c5b6-2e82-4a69-b4e0-0a8cc21bd582": [
+                                "events"
+                            ],
+                            "d3ef43f4-2327-49b7-9d40-738aa12f37f5": [
+                                "events"
+                            ],
+                            "9254a55e-78a3-41da-8916-158c99ca25ec": [
+                                "events"
                             ]
                         }
                     }
                 },
                 "module": "CEAMSModules.SleepStageEvents",
-                "identifier": "088a0708-6140-40b2-aaec-ef06bc21d7c4",
+                "identifier": "6bce15ba-1723-42cb-b093-b42f78cbbe2e",
                 "activation_state": "activated",
                 "package": {
                     "package_name": "CEAMSModules"
                 },
-                "pos_x": -242.5,
-                "pos_y": 498.25
+                "pos_x": -241.0,
+                "pos_y": 241.5
             },
             {
-                "cls": "AliasSignals",
-                "name": "AliasSignals",
+                "cls": "PSGReader",
+                "name": "PSGReader",
                 "metadata": {},
                 "file_location": "",
-                "module_label": "Alias Signals",
-                "module_category": "Parameters",
-                "module_options": {},
+                "module_label": "PSGReader",
+                "module_category": "Files I/O",
+                "module_options": {
+                    "alias": {
+                        "value": "EEG;EOG;EMG",
+                        "tooltip": "List of aliases separated by a semicolon(;) character"
+                    },
+                    "file_selection_only": {
+                        "value": "0",
+                        "tooltip": "Set it to 1 if you only need to select a file and not its montages and channels."
+                    }
+                },
                 "inputs": {
-                    "signals": {
-                        "name": "signals",
-                        "value": "",
+                    "files": {
+                        "name": "files",
+                        "value": {},
                         "sub_plugs": {},
-                        "connections": {
-                            "031201d5-ff93-4be6-90d3-256d2ba689d1": "signals"
-                        }
+                        "connections": {}
                     },
                     "alias": {
                         "name": "alias",
-                        "value": "EEG",
+                        "value": {
+                            "EEG": [
+                                ""
+                            ],
+                            "EOG": [
+                                ""
+                            ],
+                            "EMG": [
+                                ""
+                            ]
+                        },
                         "sub_plugs": {},
                         "connections": {}
                     }
                 },
                 "outputs": {
-                    "signals": {
-                        "name": "signals",
+                    "filename": {
+                        "name": "filename",
                         "value": "",
                         "sub_plugs": {},
                         "connections": {
-                            "9254a55e-78a3-41da-8916-158c99ca25ec": [
-                                "signals"
+                            "d58e68d0-a538-481b-87fe-9c7a3e9538a9": [
+                                "input_filename",
+                                "output_filename"
+                            ],
+                            "e58aa07b-4802-45f7-92c2-61f6f19b1818": [
+                                "filename"
                             ]
                         }
                     },
-                    "channels_name": {
-                        "name": "channels_name",
-                        "value": "",
-                        "sub_plugs": {},
-                        "connections": {}
-                    }
-                },
-                "module": "CEAMSModules.AliasSignals",
-                "identifier": "10970b62-e202-442c-b3d6-18b529be7e9b",
-                "activation_state": "activated",
-                "package": {
-                    "package_name": "CEAMSModules"
-                },
-                "pos_x": -237.0,
-                "pos_y": -481.0
-            },
-            {
-                "cls": "AliasSignals",
-                "name": "AliasSignals",
-                "metadata": {},
-                "file_location": "",
-                "module_label": "Alias Signals",
-                "module_category": "Parameters",
-                "module_options": {},
-                "inputs": {
                     "signals": {
                         "name": "signals",
                         "value": "",
                         "sub_plugs": {},
                         "connections": {
-                            "031201d5-ff93-4be6-90d3-256d2ba689d1": "signals"
-                        }
-                    },
-                    "alias": {
-                        "name": "alias",
-                        "value": "EOG",
-                        "sub_plugs": {},
-                        "connections": {}
-                    }
-                },
-                "outputs": {
-                    "signals": {
-                        "name": "signals",
-                        "value": "",
-                        "sub_plugs": {},
-                        "connections": {
-                            "d3ef43f4-2327-49b7-9d40-738aa12f37f5": [
+                            "10970b62-e202-442c-b3d6-18b529be7e9b": [
+                                "signals"
+                            ],
+                            "88996fb4-bd21-48ff-b9a5-e4478462f781": [
+                                "signals"
+                            ],
+                            "84e8421e-c317-41ec-abd3-7d528ae1b2cc": [
+                                "signals"
+                            ],
+                            "d58e68d0-a538-481b-87fe-9c7a3e9538a9": [
                                 "signals"
                             ]
-                        }
-                    },
-                    "channels_name": {
-                        "name": "channels_name",
-                        "value": "",
-                        "sub_plugs": {},
-                        "connections": {}
-                    }
-                },
-                "module": "CEAMSModules.AliasSignals",
-                "identifier": "88996fb4-bd21-48ff-b9a5-e4478462f781",
-                "activation_state": "activated",
-                "package": {
-                    "package_name": "CEAMSModules"
-                },
-                "pos_x": -240.0,
-                "pos_y": -339.0
-            },
-            {
-                "cls": "AliasSignals",
-                "name": "AliasSignals",
-                "metadata": {},
-                "file_location": "",
-                "module_label": "Alias Signals",
-                "module_category": "Parameters",
-                "module_options": {},
-                "inputs": {
-                    "signals": {
-                        "name": "signals",
-                        "value": "",
-                        "sub_plugs": {},
-                        "connections": {
-                            "031201d5-ff93-4be6-90d3-256d2ba689d1": "signals"
-                        }
-                    },
-                    "alias": {
-                        "name": "alias",
-                        "value": "EMG",
-                        "sub_plugs": {},
-                        "connections": {}
-                    }
-                },
-                "outputs": {
-                    "signals": {
-                        "name": "signals",
-                        "value": "",
-                        "sub_plugs": {},
-                        "connections": {
-                            "3874c5b6-2e82-4a69-b4e0-0a8cc21bd582": [
-                                "signals"
-                            ]
-                        }
-                    },
-                    "channels_name": {
-                        "name": "channels_name",
-                        "value": "",
-                        "sub_plugs": {},
-                        "connections": {}
-                    }
-                },
-                "module": "CEAMSModules.AliasSignals",
-                "identifier": "84e8421e-c317-41ec-abd3-7d528ae1b2cc",
-                "activation_state": "activated",
-                "package": {
-                    "package_name": "CEAMSModules"
-                },
-                "pos_x": -239.75000000000003,
-                "pos_y": -200.81250000000003
-            },
-            {
-                "cls": "SignalsFromEvents",
-                "name": "SignalsFromEvents",
-                "metadata": {},
-                "file_location": "",
-                "module_label": "Signals From Events",
-                "module_category": "Events Utilities",
-                "module_options": {},
-                "inputs": {
-                    "signals": {
-                        "name": "signals",
-                        "value": "",
-                        "sub_plugs": {},
-                        "connections": {
-                            "10970b62-e202-442c-b3d6-18b529be7e9b": "signals"
                         }
                     },
                     "events": {
                         "name": "events",
                         "value": "",
                         "sub_plugs": {},
-                        "connections": {
-                            "6bce15ba-1723-42cb-b093-b42f78cbbe2e": "sleep_stage_events"
-                        }
-                    },
-                    "events_names": {
-                        "name": "events_names",
-                        "value": "",
-                        "sub_plugs": {},
                         "connections": {}
                     },
-                    "create": {
-                        "name": "create",
-                        "value": true,
-                        "sub_plugs": {},
-                        "connections": {}
-                    }
-                },
-                "outputs": {
-                    "signals_from_events": {
-                        "name": "signals_from_events",
+                    "sleep_stages": {
+                        "name": "sleep_stages",
                         "value": "",
                         "sub_plugs": {},
                         "connections": {
-                            "e58aa07b-4802-45f7-92c2-61f6f19b1818": [
-                                "signals_EEG"
+                            "6bce15ba-1723-42cb-b093-b42f78cbbe2e": [
+                                "sleep_stages"
+                            ],
+                            "088a0708-6140-40b2-aaec-ef06bc21d7c4": [
+                                "sleep_stages"
                             ]
                         }
                     },
-                    "epochs_to_process": {
-                        "name": "epochs_to_process",
+                    "subject_info": {
+                        "name": "subject_info",
                         "value": "",
                         "sub_plugs": {},
                         "connections": {}
                     }
                 },
-                "module": "CEAMSModules.SignalsFromEvents",
-                "identifier": "9254a55e-78a3-41da-8916-158c99ca25ec",
+                "module": "CEAMSModules.PSGReader",
+                "identifier": "031201d5-ff93-4be6-90d3-256d2ba689d1",
                 "activation_state": "activated",
                 "package": {
                     "package_name": "CEAMSModules"
                 },
-                "pos_x": 45.0,
-                "pos_y": -529.0
+                "pos_x": -534.1875,
+                "pos_y": 17.0
             },
             {
-                "cls": "SignalsFromEvents",
-                "name": "SignalsFromEvents",
+                "cls": "PSGWriter",
+                "name": "PSGWriter",
                 "metadata": {},
                 "file_location": "",
-                "module_label": "Signals From Events",
-                "module_category": "Events Utilities",
+                "module_label": "PSGWriter",
+                "module_category": "Files I/O",
                 "module_options": {},
                 "inputs": {
+                    "input_filename": {
+                        "name": "input_filename",
+                        "value": "",
+                        "sub_plugs": {},
+                        "connections": {
+                            "031201d5-ff93-4be6-90d3-256d2ba689d1": "filename"
+                        }
+                    },
+                    "output_filename": {
+                        "name": "output_filename",
+                        "value": "",
+                        "sub_plugs": {},
+                        "connections": {
+                            "031201d5-ff93-4be6-90d3-256d2ba689d1": "filename"
+                        }
+                    },
                     "signals": {
                         "name": "signals",
                         "value": "",
                         "sub_plugs": {},
                         "connections": {
-                            "88996fb4-bd21-48ff-b9a5-e4478462f781": "signals"
+                            "031201d5-ff93-4be6-90d3-256d2ba689d1": "signals"
                         }
                     },
-                    "events": {
-                        "name": "events",
-                        "value": "",
-                        "sub_plugs": {},
-                        "connections": {
-                            "6bce15ba-1723-42cb-b093-b42f78cbbe2e": "sleep_stage_events"
-                        }
-                    },
-                    "events_names": {
-                        "name": "events_names",
-                        "value": "",
-                        "sub_plugs": {},
-                        "connections": {}
-                    },
-                    "create": {
-                        "name": "create",
-                        "value": true,
-                        "sub_plugs": {},
-                        "connections": {}
-                    }
-                },
-                "outputs": {
-                    "signals_from_events": {
-                        "name": "signals_from_events",
-                        "value": "",
-                        "sub_plugs": {},
-                        "connections": {
-                            "e58aa07b-4802-45f7-92c2-61f6f19b1818": [
-                                "signals_EOG"
-                            ]
-                        }
-                    },
-                    "epochs_to_process": {
-                        "name": "epochs_to_process",
-                        "value": "",
-                        "sub_plugs": {},
-                        "connections": {}
-                    }
-                },
-                "module": "CEAMSModules.SignalsFromEvents",
-                "identifier": "d3ef43f4-2327-49b7-9d40-738aa12f37f5",
-                "activation_state": "activated",
-                "package": {
-                    "package_name": "CEAMSModules"
-                },
-                "pos_x": 46.43750000000003,
-                "pos_y": -337.75
-            },
-            {
-                "cls": "SleepStageRename",
-                "name": "SleepStageRename",
-                "metadata": {},
-                "file_location": "",
-                "module_label": "Sleep Stage Rename",
-                "module_category": "Events Utilities",
-                "module_options": {},
-                "inputs": {
-                    "events_in": {
-                        "name": "events_in",
+                    "new_events": {
+                        "name": "new_events",
                         "value": "",
                         "sub_plugs": {},
                         "connections": {
                             "e58aa07b-4802-45f7-92c2-61f6f19b1818": "new_events"
                         }
                     },
-                    "group_lut": {
-                        "name": "group_lut",
-                        "value": "{'': ''}",
+                    "events_to_remove": {
+                        "name": "events_to_remove",
+                        "value": "",
                         "sub_plugs": {},
                         "connections": {
-                            "bb58864d-fb92-46f4-93ca-02014502344f": "Dict"
+                            "e58aa07b-4802-45f7-92c2-61f6f19b1818": "events_to_remove"
                         }
                     },
-                    "original_name": {
-                        "name": "original_name",
-                        "value": "{'wake': 'wake', 'N1': '1', 'N2': '2', 'N3': '3', 'N4': '4', 'R': '5', 'movement': '6', 'tech': '7', 'unscored': 'unscored', 'W': '0', 'undefined': '9'}",
+                    "overwrite_events": {
+                        "name": "overwrite_events",
+                        "value": "True",
                         "sub_plugs": {},
                         "connections": {}
                     },
-                    "new_name": {
-                        "name": "new_name",
-                        "value": "{'wake': 'wake', 'N1': '1', 'N2': '2', 'N3': '3', 'N4': '4', 'R': '5', 'movement': '6', 'tech': '7', 'unscored': 'unscored', 'W': '0', 'undefined': '9'}",
+                    "overwrite_signals": {
+                        "name": "overwrite_signals",
+                        "value": "False",
+                        "sub_plugs": {},
+                        "connections": {}
+                    }
+                },
+                "outputs": {},
+                "module": "CEAMSModules.PSGWriter",
+                "identifier": "d58e68d0-a538-481b-87fe-9c7a3e9538a9",
+                "activation_state": "activated",
+                "package": {
+                    "package_name": "CEAMSModules"
+                },
+                "pos_x": 989.25,
+                "pos_y": 150.6875
+            },
+            {
+                "cls": "YasaSleepStaging",
+                "name": "YasaSleepStaging",
+                "metadata": {},
+                "file_location": null,
+                "module": "CEAMSModules.YasaSleepStaging",
+                "module_label": "Score Sleep Stages YASA",
+                "module_category": "Signal Processing",
+                "module_author": "",
+                "module_url": "",
+                "module_description": "",
+                "module_options": {},
+                "inputs": {
+                    "filename": {
+                        "name": "filename",
+                        "value": "",
+                        "sub_plugs": {},
+                        "connections": {
+                            "031201d5-ff93-4be6-90d3-256d2ba689d1": "filename"
+                        }
+                    },
+                    "signals_EEG": {
+                        "name": "signals_EEG",
+                        "value": "",
+                        "sub_plugs": {},
+                        "connections": {
+                            "9254a55e-78a3-41da-8916-158c99ca25ec": "signals_from_events"
+                        }
+                    },
+                    "signals_EOG": {
+                        "name": "signals_EOG",
+                        "value": "",
+                        "sub_plugs": {},
+                        "connections": {
+                            "d3ef43f4-2327-49b7-9d40-738aa12f37f5": "signals_from_events"
+                        }
+                    },
+                    "signals_EMG": {
+                        "name": "signals_EMG",
+                        "value": "",
+                        "sub_plugs": {},
+                        "connections": {
+                            "3874c5b6-2e82-4a69-b4e0-0a8cc21bd582": "signals_from_events"
+                        }
+                    },
+                    "sleep_stages": {
+                        "name": "sleep_stages",
+                        "value": "",
+                        "sub_plugs": {},
+                        "connections": {
+                            "088a0708-6140-40b2-aaec-ef06bc21d7c4": "sleep_stage_events"
+                        }
+                    },
+                    "stage_group": {
+                        "name": "stage_group",
+                        "value": "stage",
+                        "sub_plugs": {},
+                        "connections": {}
+                    },
+                    "validation_on": {
+                        "name": "validation_on",
+                        "value": false,
                         "sub_plugs": {},
                         "connections": {}
                     }
                 },
                 "outputs": {
-                    "events_out": {
-                        "name": "events_out",
+                    "results": {
+                        "name": "results",
+                        "value": "",
+                        "sub_plugs": {},
+                        "connections": {
+                            "45e14f5d-5a72-4aaf-bf01-644c095979d6": [
+                                "ResultsDataframe"
+                            ]
+                        }
+                    },
+                    "info": {
+                        "name": "info",
+                        "value": "",
+                        "sub_plugs": {},
+                        "connections": {
+                            "45e14f5d-5a72-4aaf-bf01-644c095979d6": [
+                                "info"
+                            ]
+                        }
+                    },
+                    "new_events": {
+                        "name": "new_events",
                         "value": "",
                         "sub_plugs": {},
                         "connections": {
@@ -961,50 +896,9 @@
                                 "new_events"
                             ]
                         }
-                    }
-                },
-                "module": "CEAMSModules.SleepStageRename",
-                "identifier": "a6186317-b100-4fb3-9dfa-017548e519b9",
-                "activation_state": "activated",
-                "package": {
-                    "package_name": "CEAMSModules"
-                },
-                "pos_x": 846.8749999999997,
-                "pos_y": 154.68749999999991
-            },
-            {
-                "cls": "CreateListofGroupName",
-                "name": "CreateListofGroupName",
-                "metadata": {},
-                "file_location": null,
-                "module": "CEAMSModules.CreateListofGroupName",
-                "module_label": "Create List of Group Name",
-                "module_category": "Parameters",
-                "module_author": "",
-                "module_url": "",
-                "module_description": "",
-                "module_options": {},
-                "inputs": {
-                    "events": {
-                        "name": "events",
-                        "value": "",
-                        "sub_plugs": {},
-                        "connections": {
-                            "031201d5-ff93-4be6-90d3-256d2ba689d1": "events"
-                        }
                     },
-                    "group": {
-                        "name": "group",
-                        "value": "",
-                        "sub_plugs": {},
-                        "connections": {
-                            "bb58864d-fb92-46f4-93ca-02014502344f": "Value"
-                        }
-                    }
-                },
-                "outputs": {
-                    "group_name_list": {
-                        "name": "group_name_list",
+                    "events_to_remove": {
+                        "name": "events_to_remove",
                         "value": "",
                         "sub_plugs": {},
                         "connections": {
@@ -1014,71 +908,13 @@
                         }
                     }
                 },
-                "identifier": "bcf76caa-7803-4b2f-a084-79c2fa23263d",
+                "identifier": "e58aa07b-4802-45f7-92c2-61f6f19b1818",
                 "activation_state": "activated",
                 "package": {
                     "package_name": "CEAMSModules"
                 },
-                "pos_x": 669.0,
-                "pos_y": 443.0
-            },
-            {
-                "cls": "SleepStagingExportResults",
-                "name": "SleepStagingExportResults",
-                "metadata": {},
-                "file_location": null,
-                "module": "CEAMSModules.SleepStagingExportResults",
-                "module_label": "Sleep Staging Export Results",
-                "module_category": "Statistics",
-                "module_author": "",
-                "module_url": "",
-                "module_description": "",
-                "module_options": {},
-                "inputs": {
-                    "ResultsDataframe": {
-                        "name": "ResultsDataframe",
-                        "value": "",
-                        "sub_plugs": {},
-                        "connections": {
-                            "e58aa07b-4802-45f7-92c2-61f6f19b1818": "results"
-                        }
-                    },
-                    "info": {
-                        "name": "info",
-                        "value": "",
-                        "sub_plugs": {},
-                        "connections": {
-                            "e58aa07b-4802-45f7-92c2-61f6f19b1818": "info"
-                        }
-                    },
-                    "SavedDestination": {
-                        "name": "SavedDestination",
-                        "value": "",
-                        "sub_plugs": {},
-                        "connections": {}
-                    },
-                    "Checkbox": {
-                        "name": "Checkbox",
-                        "value": false,
-                        "sub_plugs": {},
-                        "connections": {}
-                    }
-                },
-                "outputs": {
-                    "ExportResults": {
-                        "name": "ExportResults",
-                        "value": "",
-                        "sub_plugs": {},
-                        "connections": {}
-                    }
-                },
-                "identifier": "45e14f5d-5a72-4aaf-bf01-644c095979d6",
-                "activation_state": "activated",
-                "package": {
-                    "package_name": "CEAMSModules"
-                },
-                "pos_x": 1001.0,
-                "pos_y": -150.0
+                "pos_x": 560.75,
+                "pos_y": -196.75
             }
         ]
     }

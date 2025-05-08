@@ -37,9 +37,9 @@ class YasaSleepStaging(SciNode):
             List of EMG signal objects (optional)
         sleep_stages: pd.DataFrame
             Expert-scored sleep stages (required in validation mode)
-        events: pd.DataFrame
-            Original sleep events annotation
-        Checkbox: bool
+        stage_group: str
+            group to add the predicted stages
+        validation_on: bool
             Flag indicating validation mode (True) or prediction mode (False)
 
     Returns
@@ -50,6 +50,8 @@ class YasaSleepStaging(SciNode):
             Contains [ground_truth_hypnogram, predicted_hypnogram, filename]
         new_events: pd.DataFrame
             Updated events with predicted sleep stages
+        events_to_remove :  list of tuple of n events to remove.
+            [('group1', 'name1'), ('group2', 'name2')]
     """
     def __init__(self, **kwargs):
         """ Initialize module YasaSleepStaging """
@@ -62,19 +64,20 @@ class YasaSleepStaging(SciNode):
         InputPlug('signals_EOG', self)       # EOG signals (optional)
         InputPlug('signals_EMG', self)       # EMG signals (optional)
         InputPlug('sleep_stages', self)      # Expert-scored stages (validation)
-        InputPlug('events', self)            # Sleep events annotation
-        InputPlug('Checkbox', self)          # Validation mode flag
+        InputPlug('stage_group', self)            # Sleep events annotation
+        InputPlug('validation_on', self)          # Validation mode flag
 
         # Output plugs
         OutputPlug('results', self)          # Classification metrics
         OutputPlug('info', self)             # Hypnogram comparison data
         OutputPlug('new_events', self)       # Updated events with predictions
+        OutputPlug('events_to_remove', self) # Events to remove in order to totally replace the previous sleep stages
 
         # Processing state flags
         self.is_done = False                 # Completion status
         self._is_master = False              # Master module flag
     
-    def compute(self, filename, signals_EEG, signals_EOG, signals_EMG , sleep_stages, events, Checkbox):
+    def compute(self, filename, signals_EEG, signals_EOG, signals_EMG , sleep_stages, stage_group, validation_on):
         """
         Main processing method that performs sleep stage classification.
 
@@ -90,9 +93,9 @@ class YasaSleepStaging(SciNode):
                 EMG signal objects
             sleep_stages: pd.DataFrame
                 Expert-scored stages (validation mode)
-            events: pd.DataFrame
+            stage_group: pd.DataFrame
                 Sleep events annotation
-            Checkbox: bool
+            validation_on: bool
                 Validation mode flag
 
         Returns
@@ -111,7 +114,19 @@ class YasaSleepStaging(SciNode):
             NodeRuntimeException
                 If processing fails at any stage
         """
-        
+
+        # Events to remove, provided to the PSGWriter, in order to replace the previous sleep stages.
+        # It is important to remove previous stages with the exact same group label 
+        # if they do not match the current unique list of sleep stages exactly.
+        # PSGWriter replaces event with the same group and name (but here a name can be missing and then not replaced).
+        events_to_remove = \
+            [(stage_group, '9'), \
+             (stage_group, '0'),
+             (stage_group, '1'),
+             (stage_group, '2'),
+             (stage_group, '3'),
+             (stage_group, '5')]
+
         # Split the data into EEG, EOG, and EMG signals
         signals = self.SplitData(signals_EEG, signals_EOG, signals_EMG)
         y_pred_list = []
@@ -146,11 +161,22 @@ class YasaSleepStaging(SciNode):
         y_pred = y_pred_majority_vote
         y_pred = yasa.Hypnogram(y_pred, freq="30s")
 
-        # If Checkbox is True, we are in validation mode, else we are in prediction mode
-        if Checkbox:
-                
-            # Mapping of sleep stages
-            stage_mapping = {
+        # Convert prediction to Snooz format
+        y_pred_YASA_lst = list(y_pred.hypno)
+        stage_mapping_to_snooz = {
+        'WAKE': '0',
+        'N1': '1',
+        'N2': '2',
+        'N3': '3',
+        'REM': '5',
+        'UNS': '9'
+        }
+        y_pred_snooz = [stage_mapping_to_snooz.get(stage, '9') for stage in y_pred_YASA_lst]
+        
+        # If validation_on is True, we are in validation mode, else we are in prediction mode
+        if validation_on:
+            # Convert snooz sleep stages into YASA labels
+            stage_mapping_to_YASA = {
                 '0': 'WAKE',
                 '1': 'N1',
                 '2': 'N2',
@@ -159,38 +185,31 @@ class YasaSleepStaging(SciNode):
                 '5': 'REM',
                 '9': 'UNS'
             }
-            # Map stages to be compatible with Snooz staging
-            labels = sleep_stages['name'].values
-            labels = [stage_mapping.get(stage, 'UNKNOWN') for stage in labels]
-            labels = yasa.Hypnogram(labels, freq="30s")
-            # Mask unwanted stages
-            #labels_new, first_wake, last_wake = self.mask_list(list(labels.hypno), mask_value='UNS', flag=True)
-            #y_pred_new, _, _ = self.mask_list(list(y_pred.hypno), mask_value='UNS', first_wake=first_wake, last_wake=last_wake, flag=False)
+            labels_snooz_val = sleep_stages['name'].values
+            labels_yasa = [stage_mapping_to_YASA.get(stage, 'UNS') for stage in labels_snooz_val]
+            # TODO : what is the difference between labels_yasa and labels_lst
+            labels_hyp = yasa.Hypnogram(labels_yasa, freq="30s")
+            labels_lst = list(labels_hyp.hypno)
 
-            labels_new = list(labels.hypno)
-            y_pred_new = list(y_pred.hypno)
-            
-            #NOTE Create a new events dataframe
-            new_events = self.event_writer(y_pred_new, events) #NOTE: Uncomment it if you want to write the events to a new file
-            # Filter out "UNS" stages
-            labels_new, y_pred_new = self.filter_uns(labels_new, y_pred_new)
+            # Filter out "UNS" stages to evaluate the performance on scored data only
+            labels_no_uns, y_pred_no_uns = self.filter_uns(labels_lst, y_pred_YASA_lst)
 
             # Calculate Accuracy
-            Accuracy = 100 * (pd.Series(labels_new) == pd.Series(y_pred_new)).mean()
+            Accuracy = 100 * (pd.Series(labels_no_uns) == pd.Series(y_pred_no_uns)).mean()
             # Calculate Cohen's Kappa
-            kappa = cohen_kappa_score(labels_new, y_pred_new)
-            report_dict = classification_report(labels_new, y_pred_new, output_dict=True)
+            kappa = cohen_kappa_score(labels_no_uns, y_pred_no_uns)
+            report_dict = classification_report(labels_no_uns, y_pred_no_uns, output_dict=True)
 
             # Calculate F1 scores for each stage
             F1_scores = {stage: report_dict[stage]['f1-score']*100 if stage in report_dict else None for stage in ['WAKE', 'N1', 'N2', 'N3', 'REM']}
 
             # Convert lists back to Hypnogram objects
-            labels_new = yasa.Hypnogram(labels_new, freq="30s")
-            y_pred_new = yasa.Hypnogram(y_pred_new, freq="30s")
+            labels_no_uns_hyp = yasa.Hypnogram(labels_no_uns, freq="30s")
+            y_pred_no_uns_hyp = yasa.Hypnogram(y_pred_no_uns, freq="30s")
 
             # Cache the results
             file_name = filename[:-4] # Extract the file name from the path
-            self.cache_signal(labels_new, y_pred_new, Accuracy, sls, Avg_Confidence, file_name, kappa)
+            self.cache_signal(labels_no_uns_hyp, y_pred_no_uns_hyp, Accuracy, sls, Avg_Confidence, file_name, kappa)
 
             # Log the results
             self._log_manager.log(self.identifier, "Hypnogram computed.")
@@ -198,19 +217,29 @@ class YasaSleepStaging(SciNode):
             filenamewe = os.path.basename(file_name)
             name_without_extension = os.path.splitext(filenamewe)[0]
             # Create a DataFrame for the classification report
-            df_Classification_report = pd.DataFrame({'Subject Name': [name_without_extension], 'Accuracy': [Accuracy], 'kappa':[kappa],'Average Confidence':[Avg_Confidence], **{f'F1-{stage}': [F1_scores[stage]] for stage in F1_scores}})
+            df_Classification_report = pd.DataFrame({'Subject Name': [name_without_extension], \
+                                                     'Accuracy': [Accuracy], 'kappa':[kappa],\
+                                                     'Average Confidence':[Avg_Confidence], \
+                                                    **{f'F1-{stage}': [F1_scores[stage]] for stage in F1_scores}})
         else:
-            y_pred_new = list(y_pred.hypno)
-            #NOTE Create a new events dataframe
-            new_events = self.event_writer_perd(y_pred_new, events) #NOTE: Uncomment it if you want to write the events to a new file
             df_Classification_report = pd.DataFrame()
-            labels_new = None
+            labels_no_uns_hyp = None
+            y_pred_no_uns_hyp = None
             file_name = None
-            
+
+        # Replace the group and name of the sleep_stages for the predicted ones
+        if len(y_pred_snooz) == len(sleep_stages):
+            sleep_stages['group'] = stage_group
+            sleep_stages['name'] = y_pred_snooz
+        else:
+            raise NodeInputException(self.identifier, "sleep_stages", \
+                    f"The number of predicted sleep stages {len(y_pred_snooz)} does not match the number of expected epochs {len(sleep_stages)}.")
+
         return {
             'results': df_Classification_report,
-            'info': [labels_new, y_pred_new, file_name],
-            'new_events': new_events
+            'info': [labels_no_uns_hyp, y_pred_no_uns_hyp, file_name],
+            'new_events': sleep_stages,
+            'events_to_remove' : events_to_remove
         }
 
     def SplitData(self, raw_EEG, raw_EOG, raw_EMG):
@@ -434,7 +463,7 @@ class YasaSleepStaging(SciNode):
                 filtered_preds.append(pred)
         return filtered_labels, filtered_preds
 
-    def event_writer(self, y_pred_new, events):
+    def event_writer(self, y_pred_new):
         """
         Write events to a new file.
 
@@ -442,8 +471,6 @@ class YasaSleepStaging(SciNode):
         ----------
         y_pred_new : list
             List of predicted labels.
-        events : dataframe
-            List of events.
 
         Returns
         -------
@@ -462,6 +489,7 @@ class YasaSleepStaging(SciNode):
             'UNS': '9'
         }
         y_pred_decod = [stage_mapping.get(stage, '9') for stage in y_pred_new]
+        new_events = pd.DataFrame()
         # Update the 'stage' column values in the dictionary
         j = -1
         for i, stage in enumerate(events['group']):
