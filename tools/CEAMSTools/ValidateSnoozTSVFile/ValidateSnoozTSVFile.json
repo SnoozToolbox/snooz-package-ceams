@@ -1,9 +1,9 @@
 {
-    "item_name": "TSVValidator",
+    "item_name": "ValidateSnoozTSVFile",
     "item_type": "tool",
     "item_api_version": "2.0.0",
     "tool_params": {
-        "tool_label": "TSV Validator",
+        "tool_label": "Validate Snooz TSV File",
         "tool_category": "1-Preprocessing",
         "tool_author": "Mohammad Hasan Azad",
         "tool_url": "",
@@ -11,7 +11,7 @@
         "package_name": "CEAMSTools",
         "steps": [
             {
-                "name": "TSV Validator",
+                "name": "Validate Snooz TSV File",
                 "description": "This tool validates the tsv annotation files to be compatible with Snooz format before utilizing it in other tools.",
                 "custom_step_name": "DescriptionStep",
                 "show_index": false
@@ -54,10 +54,7 @@
                 "inputs": {
                     "files": {
                         "name": "files",
-                        "value": [
-                            "D:/CEAMS/snooz_workspace/Datasets/MASS/01-03-0001 PSG.tsv",
-                            "D:/CEAMS/snooz_workspace/Datasets/MASS/01-03-0002 PSG.tsv"
-                        ],
+                        "value": [],
                         "sub_plugs": {},
                         "connections": {}
                     },

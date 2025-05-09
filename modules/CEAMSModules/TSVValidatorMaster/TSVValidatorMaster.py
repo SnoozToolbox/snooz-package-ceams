@@ -3,30 +3,32 @@
 See the file LICENCE for full license details.
 
     TSVValidatorMaster
-    TODO CLASS DESCRIPTION
+    This module validates TSV files by checking their encoding and structure.
+    It checks if the files are UTF-8 encoded and if they contain the expected columns and data types.
 """
 from flowpipe import SciNode, InputPlug, OutputPlug
 from commons.NodeInputException import NodeInputException
 from commons.NodeRuntimeException import NodeRuntimeException
 import os
 import pandas as pd
-
+from CEAMSModules.PSGReader.commons import sleep_stages_name
 DEBUG = False
 
 class TSVValidatorMaster(SciNode):
     """
-    TODO CLASS DESCRIPTION
+    This module validates TSV files by checking their encoding and structure.
+    It checks if the files are UTF-8 encoded and if they contain the expected columns and data types.
 
     Parameters
     ----------
-        files: TODO TYPE
-            TODO DESCRIPTION
+        files: input TSV files
+            A list of TSV files to be validated.
+        log_path: the directory where the validation logs will be saved
         
 
     Returns
     -------
-        output_logs: TODO TYPE
-            TODO DESCRIPTION
+        output_logs: the validation logs in a text file saved in the specified directory
         
     """
     def __init__(self, **kwargs):
@@ -48,23 +50,23 @@ class TSVValidatorMaster(SciNode):
     
     def compute(self, files, log_path):
         """
-        TODO DESCRIPTION
+   
+        This module validates TSV files by checking their encoding and structure.
+        It checks if the files are UTF-8 encoded and if they contain the expected columns and data types.
 
         Parameters
         ----------
-            files: TODO TYPE
-                TODO DESCRIPTION
-            log_path: TODO TYPE
-                TODO DESCRIPTION
+            files: input TSV files
+                A list of TSV files to be validated.
+            log_path: the directory where the validation logs will be saved
             
 
         Returns
         -------
-            output_logs: TODO TYPE
-                TODO DESCRIPTION
-            
+            output_logs: the validation logs in a text file saved in the specified directory
+                
 
-        Raises
+        Raises (To be added)
         ------
             NodeInputException
                 If any of the input parameters have invalid types or missing keys.
@@ -122,8 +124,17 @@ class TSVValidatorMaster(SciNode):
                 if list(df.columns) != expected_columns:
                     errors.append(f"Column mismatch. Expected {expected_columns}, but got {list(df.columns)}")
                 
+                # Track if any 'stage' group annotations exist
+                has_stage_group = False
+                invalid_stage_names = set()
+                uses_stage_4 = False
                 # Check 2: Validate each row's content
                 for idx, row in df.iterrows():
+                    for col in expected_columns:
+                        val = row[col]
+                        if pd.isna(val) or (isinstance(val, str) and val.strip() == ''):
+                            errors.append(f"Row {idx}: Empty or missing value in column '{col}'")
+
                     if not isinstance(row['group'], str):
                         errors.append(f"Row {idx}: 'group' should be str, got {type(row['group']).__name__}")
                     if not isinstance(row['name'], (str, int)):
@@ -135,6 +146,31 @@ class TSVValidatorMaster(SciNode):
                     if not isinstance(row['channels'], str):
                         errors.append(f"Row {idx}: 'channels' should be str, got {type(row['channels']).__name__}")
 
+                                        # Check for sleep staging group
+                    if row['group'].strip().lower() == 'stage':
+                        has_stage_group = True
+                        stage_name = str(row['name']).strip()
+
+                        # Detect if stage 4 is used
+                        if stage_name == '4' or stage_name == 4:
+                            uses_stage_4 = True
+
+                        # Validate stage name
+                        if stage_name not in sleep_stages_name and str(stage_name).isdigit():
+                            invalid_stage_names.add(stage_name)
+                
+                # Sleep staging checks
+                if not has_stage_group:
+                    errors.append("Info: No 'stage' group found — this recording may lack sleep staging annotations.")
+                else:
+                    errors.append("Info: 'stage' group detected.")
+
+                if invalid_stage_names:
+                    errors.append(f"Info: Invalid stage values found (not in {list(sleep_stages_name.keys())}): {sorted(invalid_stage_names)}")
+
+                if uses_stage_4:
+                    errors.append("Info: Detected stage value = 4. Please consider renaming stages using the preprocessing tool → Edit Annotations.")
+                
             except Exception as e:
                 errors.append(f"File could not be read or processed: {str(e)}")
 

@@ -357,7 +357,7 @@
             ]
         },
         {
-            "item_name": "TSVValidator",
+            "item_name": "ValidateSnoozTSVFile",
             "item_type": "tool",
             "item_version": "0.0.0",
             "item_hooks": [
@@ -365,7 +365,7 @@
                     "endpoint_name": "menu_endpoint",
                     "parameters": {
                         "menu_category": "1-Preprocessing",
-                        "menu_label": "TSV Validator"
+                        "menu_label": "Validate Snooz TSV File"
                     }
                 }
             ]

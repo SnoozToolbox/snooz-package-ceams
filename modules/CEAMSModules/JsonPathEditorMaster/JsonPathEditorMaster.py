@@ -3,7 +3,8 @@
 See the file LICENCE for full license details.
 
     JsonPathEditorMaster
-    TODO CLASS DESCRIPTION
+    This module is designed to edit JSON files by replacing paths within the JSON structure.
+    It takes a list of JSON files, a mapping of old paths to new paths, and saves the modified JSON files to a specified directory.
 """
 from flowpipe import SciNode, InputPlug, OutputPlug
 from commons.NodeInputException import NodeInputException
@@ -17,22 +18,20 @@ DEBUG = False
 
 class JsonPathEditorMaster(SciNode):
     """
-    TODO CLASS DESCRIPTION
+    This module is designed to edit JSON files by replacing paths within the JSON structure.
+    It takes a list of JSON files, a mapping of old paths to new paths, and saves the modified JSON files to a specified directory.
 
     Parameters
     ----------
-        files: TODO TYPE
-            TODO DESCRIPTION
-        newpaths: TODO TYPE
-            TODO DESCRIPTION
-        newfilespath: TODO TYPE
-            TODO DESCRIPTION
+        files: input json files
+        path_mapping: a dictionary mapping old paths to new paths
+        newfilespath: the directory where the modified JSON files will be saved
+        suffix: a suffix to be added to the modified JSON file names
         
 
     Returns
     -------
-        newfiles: TODO TYPE
-            TODO DESCRIPTION
+        newfiles: the modified JSON files saved in the specified directory (It is not used in the current implementation)
         
     """
     def __init__(self, **kwargs):
@@ -57,25 +56,22 @@ class JsonPathEditorMaster(SciNode):
     
     def compute(self, files, path_mapping, newfilespath, suffix):
         """
-        TODO DESCRIPTION
+        This module is designed to edit JSON files by replacing paths within the JSON structure.
+        It takes a list of JSON files, a mapping of old paths to new paths, and saves the modified JSON files to a specified directory.
 
         Parameters
         ----------
-            files: TODO TYPE
-                TODO DESCRIPTION
-            newpaths: TODO TYPE
-                TODO DESCRIPTION
-            newfilespath: TODO TYPE
-                TODO DESCRIPTION
+            files: input json files
+            path_mapping: a dictionary mapping old paths to new paths
+            newfilespath: the directory where the modified JSON files will be saved
+            suffix: a suffix to be added to the modified JSON file names
             
 
         Returns
         -------
-            newfiles: TODO TYPE
-                TODO DESCRIPTION
+            newfiles: the modified JSON files saved in the specified directory (It is not used in the current implementation)
             
-
-        Raises
+        Raises (To be added)
         ------
             NodeInputException
                 If any of the input parameters have invalid types or missing keys.
@@ -114,19 +110,6 @@ class JsonPathEditorMaster(SciNode):
         return {
             'newfiles': None
         }
-    
-    def collect_paths(self, obj, found_paths):
-        """Recursively collect all unique-looking file paths from the JSON structure."""
-        if isinstance(obj, dict):
-            for v in obj.values():
-                self.collect_paths(v, found_paths)
-        elif isinstance(obj, list):
-            for item in obj:
-                self.collect_paths(item, found_paths)
-        elif isinstance(obj, str):
-            # Heuristic: treat as path if it contains colon (:) and at least one backslash or slash
-            if re.match(r'^[A-Za-z]:[\\/].*', obj):
-                found_paths.add(obj)
 
     def replace_paths_in_json(self, data, path_mapping):
         """
@@ -162,23 +145,11 @@ class JsonPathEditorMaster(SciNode):
         with open(input_json_path, 'r', encoding='utf-8') as f:
             data = json.load(f)
 
-        # Step 1: Extract all paths
-        #found_paths = set()
-        #self.collect_paths(data, found_paths)
-
-        # Step 2: Ask user for replacements
-        '''path_mapping = {}
-        print("Detected the following paths in the JSON file:\n")
-        item = 0
-        for path in oldpaths.values():
-            new_path = newpaths[item]
-            path_mapping[path] = new_path.strip()
-            item += 1'''
-        # Step 3: Replace paths
+        # Replace paths
         file_path_mapping = path_mapping[input_json_path]
         updated_data = self.replace_paths_in_json(data, file_path_mapping)
 
-        # Step 4: Save to output
+        # Save to output
         output_json_path = os.path.join(newfilespath, os.path.basename(input_json_path).replace('.json', f'_{suffix}.json'))
         # Check if the output directory exists, if not create it
         with open(output_json_path, 'w', encoding='utf-8') as f:
