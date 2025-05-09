@@ -8,9 +8,11 @@ See the file LICENCE for full license details.
 import os
 import pandas as pd
 import numpy as np
-import matplotlib.pyplot as plt
-import seaborn as sns
-plt.switch_backend('agg')  # turn off gui
+import matplotlib
+matplotlib.use('Qtagg')  # Use non-GUI backend
+from matplotlib.backends.backend_qtagg import FigureCanvasQTAgg as FigureCanvas
+from matplotlib.figure import Figure
+#import matplotlib.pyplot as plt
 from scipy import signal as scipy_signal
 
 from flowpipe import SciNode, InputPlug, OutputPlug
@@ -18,7 +20,6 @@ from commons.NodeInputException import NodeInputException
 from commons.NodeRuntimeException import NodeRuntimeException
 
 from CEAMSModules.PSGReader.SignalModel import SignalModel
-from CEAMSModules.PSGReader.PSGReader import PSGReader
 from CEAMSModules.PSGReader.PSGReaderManager import PSGReaderManager
 from CEAMSModules.SignalsFromEvents.SignalsFromEvents import SignalsFromEvents
 
@@ -96,7 +97,7 @@ class SlowWavePicsGenerator(SciNode):
         # Properties of the module
         self.filter_freqs = [0.16, 4.0] #To filter the signal in delta
         self.filter_order = 30
-        self.fs_signal = 50 # Resample the signals to 32 Hz
+        self.fs_signal = 50 # Resample the signals
         # To display the pictures
         self.figsize = (6, 4) # in inches
         # Maximum time to plot in seconds
@@ -530,37 +531,37 @@ class SlowWavePicsGenerator(SciNode):
         return signals_evt_cur_chan
 
 
-    def _open_fig_sw(self, signals_evt_cur_chan, event_cur_chan_df):
-        """""
-            Debug function to open figure in a dialog. 
-            This funciton display all the signals for the events included in event_cur_chan_df.
-        """""
-        from matplotlib.backends.backend_qtagg import FigureCanvasQTAgg as FigureCanvas
-        from matplotlib.figure import Figure
-        from PySide6.QtWidgets import QDialog, QVBoxLayout
+    # def _open_fig_sw(self, signals_evt_cur_chan, event_cur_chan_df):
+    #     """""
+    #         Debug function to open figure in a dialog. 
+    #         This funciton display all the signals for the events included in event_cur_chan_df.
+    #     """""
+    #     from matplotlib.backends.backend_qtagg import FigureCanvasQTAgg as FigureCanvas
+    #     from matplotlib.figure import Figure
+    #     from PySide6.QtWidgets import QDialog, QVBoxLayout
 
 
-        dialog = QDialog()
-        fig = Figure(figsize=(self.figsize), dpi=100)
-        canvas = FigureCanvas(fig)
-        # Find the max duration of the events to prepare the time axis
-        max_evt_dur = max(event_cur_chan_df['duration_sec'].values)
-        longuest_evt = np.argmax(event_cur_chan_df['duration_sec'].values)
-        n_samples = len(signals_evt_cur_chan[longuest_evt])
-        fs_chan = n_samples/max_evt_dur
-        time = np.arange(0,max_evt_dur,1/fs_chan)
-        ax = fig.add_subplot(111)
-        # For each signal in signals_evt_cur_chan
-        for i, signal_cur in enumerate(signals_evt_cur_chan):
-            signal_no_offset = signal_cur-np.mean(signal_cur)
-            # Pad the end of the signal with nans
-            signal_to_plot = np.concatenate((signal_no_offset, np.nan*np.ones(len(time)-len(signal_no_offset))))
-            ax.plot(time,signal_to_plot,'k',alpha=0.1)
-        ax.set_xlabel('time (s)')
-        layout = QVBoxLayout()
-        layout.addWidget(canvas)
-        dialog.setLayout(layout)
-        dialog.exec_()
+    #     dialog = QDialog()
+    #     fig = Figure(figsize=(self.figsize), dpi=100)
+    #     canvas = FigureCanvas(fig)
+    #     # Find the max duration of the events to prepare the time axis
+    #     max_evt_dur = max(event_cur_chan_df['duration_sec'].values)
+    #     longuest_evt = np.argmax(event_cur_chan_df['duration_sec'].values)
+    #     n_samples = len(signals_evt_cur_chan[longuest_evt])
+    #     fs_chan = n_samples/max_evt_dur
+    #     time = np.arange(0,max_evt_dur,1/fs_chan)
+    #     ax = fig.add_subplot(111)
+    #     # For each signal in signals_evt_cur_chan
+    #     for i, signal_cur in enumerate(signals_evt_cur_chan):
+    #         signal_no_offset = signal_cur-np.mean(signal_cur)
+    #         # Pad the end of the signal with nans
+    #         signal_to_plot = np.concatenate((signal_no_offset, np.nan*np.ones(len(time)-len(signal_no_offset))))
+    #         ax.plot(time,signal_to_plot,'k',alpha=0.1)
+    #     ax.set_xlabel('time (s)')
+    #     layout = QVBoxLayout()
+    #     layout.addWidget(canvas)
+    #     dialog.setLayout(layout)
+    #     dialog.exec_()
 
 
     def _save_subject_chan_fig_sw(self, signals_evt_all_chan, event_all_chan_df, pics_param, base_name, chan_label, fig_save, colors):
@@ -608,9 +609,12 @@ class SlowWavePicsGenerator(SciNode):
         """""
         if fig_save:
             if 'subject' in fig_save:
-                fig, ax = plt.subplots()
+                # Initialize the figure and canvas for plotting
+                fig = Figure()
                 fig.set_size_inches(self.figsize)
-                ax.clear()
+                fig.clear() # reset the hold on
+                ax = fig.add_subplot()
+
         
         if isinstance(chan_label, str):
             signals_evt_all_chan = [signals_evt_all_chan]
@@ -922,11 +926,15 @@ class SlowWavePicsGenerator(SciNode):
                     ax.legend(loc='upper left')
                 ax.grid(which='both', axis='both')
                 ax.set_title(fig_title)
-                fig.savefig(fig_name)
+                try :
+                    fig.savefig(fig_name)
+                except:
+                    raise NodeRuntimeException(self.identifier, "files", f"Error while saving figure {fig_name}, make sure it is not open")
                 if DEBUG:
                     print(f"{fig_name} is saved")
                 fig.clf()
-            plt.close(fig)
+            # close the figure
+            #plt.close(fig)
 
         return signal_avg_per_cat, min_x_idx, max_x_idx, max_cat
 
@@ -965,7 +973,12 @@ class SlowWavePicsGenerator(SciNode):
             if blank_flag and miss_ch:
                 sw_char_subject_ch_sel = None
             else:
-                sw_char_subject_ch_sel = sw_char_subject_sw_sel[sw_char_subject_sw_sel['channels'].isin(chan_lst)]
+                sw_char_subject_ch_sel = []
+                for roi_ch in chan_lst:
+                    if len(sw_char_subject_ch_sel)==0:
+                        sw_char_subject_ch_sel = sw_char_subject_sw_sel[sw_char_subject_sw_sel['channels']==roi_ch]
+                    else:
+                        sw_char_subject_ch_sel = pd.concat([sw_char_subject_ch_sel, sw_char_subject_sw_sel[sw_char_subject_sw_sel['channels']==roi_ch]], ignore_index=True)
         else:
             sw_char_subject_ch_sel = sw_char_subject_sw_sel[sw_char_subject_sw_sel['channels']==ch]
         return sw_char_subject_ch_sel
@@ -1007,9 +1020,10 @@ class SlowWavePicsGenerator(SciNode):
             fig_title = sw_label+'_'+chan_label
 
         # Create the figure
-        fig, ax = plt.subplots()
+        fig = Figure()
         fig.set_size_inches(self.figsize)
-        ax.clear()
+        fig.clear() # reset the hold on
+        ax = fig.add_subplot()
         legend_labels = {}
 
         time = np.arange(-self.max_time_to_plot/2,self.max_time_to_plot/2,1/fs_chan)
@@ -1133,8 +1147,11 @@ class SlowWavePicsGenerator(SciNode):
         ax.legend(loc="upper left")
         ax.set_title(fig_title)
         if pics_param['cohort_avg'] | pics_param['cohort_sel']:
-            fig.savefig(fig_name)
+            try :
+                fig.savefig(fig_name)
+            except:
+                raise NodeRuntimeException(self.identifier, "files", f"Error while saving figure {fig_name}, make sure it is not open")
             if DEBUG:
                 print(f"{fig_name} is saved...")
             fig.clf()
-        plt.close(fig)
+        #plt.close(fig)

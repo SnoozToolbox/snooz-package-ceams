@@ -195,10 +195,13 @@ class OutputFiles(BaseStepView, Ui_OutputFiles, QtWidgets.QWidget):
 
         if self.pics_param["display"]=="mean":
             self.radioButton_mean.setChecked(True)
+            self.checkBox_cohort_sel.setEnabled(False)
         elif self.pics_param["display"] == "all":
             self.radioButton_all.setChecked(True)
+            self.checkBox_cohort_sel.setEnabled(True)
         elif self.pics_param["display"] == "mean_std":
             self.radioButton_meanstd.setChecked(True)
+            self.checkBox_cohort_sel.setEnabled(False)
 
         self.checkBox_inverse.setChecked(self.pics_param["neg_up"])
         
