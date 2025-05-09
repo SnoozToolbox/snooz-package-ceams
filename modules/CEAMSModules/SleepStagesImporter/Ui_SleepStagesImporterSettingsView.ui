@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>906</width>
+    <width>871</width>
     <height>664</height>
    </rect>
   </property>
@@ -20,7 +20,7 @@
    <item>
     <widget class="QSplitter" name="splitter">
      <property name="orientation">
-      <enum>Qt::Horizontal</enum>
+      <enum>Qt::Orientation::Horizontal</enum>
      </property>
      <property name="handleWidth">
       <number>30</number>
@@ -39,10 +39,10 @@
          <item>
           <widget class="QTableWidget" name="tableWidget_files">
            <property name="horizontalScrollBarPolicy">
-            <enum>Qt::ScrollBarAlwaysOn</enum>
+            <enum>Qt::ScrollBarPolicy::ScrollBarAlwaysOn</enum>
            </property>
            <property name="editTriggers">
-            <set>QAbstractItemView::NoEditTriggers</set>
+            <set>QAbstractItemView::EditTrigger::NoEditTriggers</set>
            </property>
           </widget>
          </item>
@@ -81,10 +81,10 @@
        <item>
         <spacer name="verticalSpacer_5">
          <property name="orientation">
-          <enum>Qt::Vertical</enum>
+          <enum>Qt::Orientation::Vertical</enum>
          </property>
          <property name="sizeType">
-          <enum>QSizePolicy::MinimumExpanding</enum>
+          <enum>QSizePolicy::Policy::MinimumExpanding</enum>
          </property>
          <property name="sizeHint" stdset="0">
           <size>
@@ -122,7 +122,7 @@
            <item row="0" column="2">
             <spacer name="horizontalSpacer_3">
              <property name="orientation">
-              <enum>Qt::Horizontal</enum>
+              <enum>Qt::Orientation::Horizontal</enum>
              </property>
              <property name="sizeHint" stdset="0">
               <size>
@@ -177,15 +177,18 @@
          <item>
           <widget class="QTextEdit" name="textEdit">
            <property name="frameShape">
-            <enum>QFrame::NoFrame</enum>
+            <enum>QFrame::Shape::NoFrame</enum>
            </property>
            <property name="readOnly">
             <bool>true</bool>
            </property>
            <property name="html">
             <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
-&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;meta charset=&quot;utf-8&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
+hr { height: 1px; border-width: 0; }
+li.unchecked::marker { content: &quot;\2610&quot;; }
+li.checked::marker { content: &quot;\2612&quot;; }
 &lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Roboto'; font-size:12pt; font-weight:400; font-style:normal;&quot;&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Example )&lt;/p&gt;
 &lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
@@ -202,10 +205,10 @@ p, li { white-space: pre-wrap; }
        <item>
         <spacer name="verticalSpacer">
          <property name="orientation">
-          <enum>Qt::Vertical</enum>
+          <enum>Qt::Orientation::Vertical</enum>
          </property>
          <property name="sizeType">
-          <enum>QSizePolicy::MinimumExpanding</enum>
+          <enum>QSizePolicy::Policy::MinimumExpanding</enum>
          </property>
          <property name="sizeHint" stdset="0">
           <size>
@@ -288,11 +291,11 @@ p, li { white-space: pre-wrap; }
              <item row="3" column="4">
               <spacer name="horizontalSpacer">
                <property name="orientation">
-                <enum>Qt::Horizontal</enum>
+                <enum>Qt::Orientation::Horizontal</enum>
                </property>
                <property name="sizeHint" stdset="0">
                 <size>
-                 <width>40</width>
+                 <width>5</width>
                  <height>20</height>
                 </size>
                </property>
@@ -342,7 +345,7 @@ p, li { white-space: pre-wrap; }
              <item row="1" column="0">
               <widget class="Line" name="line_2">
                <property name="orientation">
-                <enum>Qt::Horizontal</enum>
+                <enum>Qt::Orientation::Horizontal</enum>
                </property>
               </widget>
              </item>
@@ -359,7 +362,6 @@ p, li { white-space: pre-wrap; }
                 <font>
                  <family>Roboto</family>
                  <pointsize>12</pointsize>
-                 <weight>50</weight>
                  <italic>false</italic>
                  <bold>false</bold>
                 </font>
@@ -368,7 +370,7 @@ p, li { white-space: pre-wrap; }
                 <string>Description</string>
                </property>
                <property name="alignment">
-                <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+                <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter</set>
                </property>
               </widget>
              </item>
@@ -384,7 +386,6 @@ p, li { white-space: pre-wrap; }
                 <font>
                  <family>Roboto</family>
                  <pointsize>12</pointsize>
-                 <weight>50</weight>
                  <italic>false</italic>
                  <bold>false</bold>
                 </font>
@@ -493,7 +494,6 @@ in file to read</string>
                 <font>
                  <family>Roboto</family>
                  <pointsize>12</pointsize>
-                 <weight>50</weight>
                  <italic>false</italic>
                  <bold>false</bold>
                 </font>
@@ -506,7 +506,7 @@ in file to read</string>
              <item row="1" column="3">
               <widget class="Line" name="line_3">
                <property name="orientation">
-                <enum>Qt::Horizontal</enum>
+                <enum>Qt::Orientation::Horizontal</enum>
                </property>
               </widget>
              </item>
@@ -541,7 +541,7 @@ Intervention</string>
              <item row="1" column="1">
               <widget class="Line" name="line">
                <property name="orientation">
-                <enum>Qt::Horizontal</enum>
+                <enum>Qt::Orientation::Horizontal</enum>
                </property>
               </widget>
              </item>
@@ -568,10 +568,10 @@ Intervention</string>
        <item>
         <spacer name="verticalSpacer_6">
          <property name="orientation">
-          <enum>Qt::Vertical</enum>
+          <enum>Qt::Orientation::Vertical</enum>
          </property>
          <property name="sizeType">
-          <enum>QSizePolicy::MinimumExpanding</enum>
+          <enum>QSizePolicy::Policy::MinimumExpanding</enum>
          </property>
          <property name="sizeHint" stdset="0">
           <size>
@@ -590,7 +590,84 @@ Intervention</string>
        </item>
        <item>
         <layout class="QGridLayout" name="gridLayout">
+         <item row="3" column="2">
+          <spacer name="horizontalSpacer_2">
+           <property name="orientation">
+            <enum>Qt::Orientation::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>5</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
          <item row="4" column="1">
+          <widget class="QSpinBox" name="spinBox_colstage">
+           <property name="toolTip">
+            <string>Define the column index to extract the stage labels. 1 means the first column.</string>
+           </property>
+           <property name="minimum">
+            <number>1</number>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="0">
+          <widget class="QLabel" name="label_3">
+           <property name="minimumSize">
+            <size>
+             <width>220</width>
+             <height>0</height>
+            </size>
+           </property>
+           <property name="text">
+            <string>Number of rows to skip.</string>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="1">
+          <widget class="QComboBox" name="comboBox_sep">
+           <property name="toolTip">
+            <string>Delimiter character or pattern for the sleep stages file.
+Set to None if unknown, and the engine will detect it.
+Open the file in a text editor to see the separator.</string>
+           </property>
+           <item>
+            <property name="text">
+             <string>None</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>\t</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>;</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>,</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>\r</string>
+            </property>
+           </item>
+          </widget>
+         </item>
+         <item row="4" column="0">
+          <widget class="QLabel" name="label_14">
+           <property name="text">
+            <string>Column Index for stage</string>
+           </property>
+          </widget>
+         </item>
+         <item row="5" column="1">
           <widget class="QComboBox" name="comboBox_stage_s">
            <property name="toolTip">
             <string>Define the duration (s) of the stage corresponding to one row in the sleep stages text file.</string>
@@ -640,7 +717,21 @@ Intervention</string>
            </item>
           </widget>
          </item>
-         <item row="2" column="1">
+         <item row="0" column="1">
+          <widget class="QSpinBox" name="spinBox_n_rows">
+           <property name="toolTip">
+            <string>Number of rows to skip before reading the sleep stages.</string>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="0">
+          <widget class="QLabel" name="label_2">
+           <property name="text">
+            <string>Item separator</string>
+           </property>
+          </widget>
+         </item>
+         <item row="3" column="1">
           <widget class="QComboBox" name="comboBox_encoding">
            <property name="toolTip">
             <string>Define the sleep stage file encoding. You can open in Notepad++ to find out.</string>
@@ -677,111 +768,41 @@ Intervention</string>
            </item>
           </widget>
          </item>
-         <item row="3" column="1">
-          <widget class="QSpinBox" name="spinBox_colstage">
-           <property name="toolTip">
-            <string>Define the column index to extract the stage labels. 1 means the first column.</string>
-           </property>
-           <property name="minimum">
-            <number>1</number>
-           </property>
-          </widget>
-         </item>
-         <item row="1" column="0">
-          <widget class="QLabel" name="label_2">
-           <property name="text">
-            <string>Item separator</string>
-           </property>
-          </widget>
-         </item>
-         <item row="0" column="0">
-          <widget class="QLabel" name="label_3">
-           <property name="text">
-            <string>Number of rows in header</string>
-           </property>
-          </widget>
-         </item>
-         <item row="1" column="1">
-          <widget class="QComboBox" name="comboBox_sep">
-           <property name="toolTip">
-            <string>Delimiter character or pattern for the sleep stages file.
-Set to None if unknown, and the engine will detect it.
-Open the file in a text editor to see the separator.</string>
-           </property>
-           <item>
-            <property name="text">
-             <string>None</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>\t</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>;</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>,</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>\r</string>
-            </property>
-           </item>
-          </widget>
-         </item>
          <item row="3" column="0">
-          <widget class="QLabel" name="label_14">
-           <property name="text">
-            <string>Column Index for stage</string>
-           </property>
-          </widget>
-         </item>
-         <item row="0" column="1">
-          <widget class="QSpinBox" name="spinBox_n_rows">
-           <property name="toolTip">
-            <string>Number of rows to skip before reading the sleep stages.</string>
-           </property>
-          </widget>
-         </item>
-         <item row="4" column="0">
-          <widget class="QLabel" name="label_15">
-           <property name="text">
-            <string>Stage duration (s)</string>
-           </property>
-          </widget>
-         </item>
-         <item row="2" column="0">
           <widget class="QLabel" name="label_13">
            <property name="text">
             <string>Encoding</string>
            </property>
           </widget>
          </item>
-         <item row="2" column="2">
-          <spacer name="horizontalSpacer_2">
-           <property name="orientation">
-            <enum>Qt::Horizontal</enum>
+         <item row="5" column="0">
+          <widget class="QLabel" name="label_15">
+           <property name="text">
+            <string>Stage duration (s)</string>
            </property>
-           <property name="sizeHint" stdset="0">
-            <size>
-             <width>40</width>
-             <height>20</height>
-            </size>
+          </widget>
+         </item>
+         <item row="1" column="0" colspan="2">
+          <widget class="QLabel" name="label_20">
+           <property name="font">
+            <font>
+             <family>Roboto</family>
+             <pointsize>12</pointsize>
+             <italic>false</italic>
+             <bold>false</bold>
+            </font>
            </property>
-          </spacer>
+           <property name="text">
+            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;*Do not skip the row with column titles, if any.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+           </property>
+          </widget>
          </item>
         </layout>
        </item>
        <item>
         <spacer name="verticalSpacer_2">
          <property name="orientation">
-          <enum>Qt::Vertical</enum>
+          <enum>Qt::Orientation::Vertical</enum>
          </property>
          <property name="sizeHint" stdset="0">
           <size>
