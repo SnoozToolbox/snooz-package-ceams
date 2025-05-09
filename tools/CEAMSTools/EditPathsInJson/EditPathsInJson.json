@@ -1,0 +1,26 @@
+{
+    "item_name": "EditPathsInJson",
+    "item_type": "tool",
+    "item_api_version": "2.0.0",
+    "tool_params": {
+        "tool_label": "Edit Paths In Json",
+        "tool_category": "1-Preprocessing",
+        "tool_author": "Mohammad Hasan Azad",
+        "tool_url": "",
+        "tool_description": "This tool loads Json files and edits all the paths inside the file to be compatible with the new local system.",
+        "package_name": "CEAMSTools",
+        "steps": []
+    },
+    "dependencies": [
+        {
+            "package_name": "CEAMSTools",
+            "package_version": "7.0.0",
+            "deleteable": false
+        }
+    ],
+    "process_params": {
+        "process_label": "Edit Paths In Json",
+        "subgraph_params": {},
+        "nodes": []
+    }
+}
