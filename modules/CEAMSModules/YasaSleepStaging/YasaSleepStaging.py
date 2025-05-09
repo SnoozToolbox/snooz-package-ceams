@@ -114,18 +114,23 @@ class YasaSleepStaging(SciNode):
             NodeRuntimeException
                 If processing fails at any stage
         """
-
-        # Events to remove, provided to the PSGWriter, in order to replace the previous sleep stages.
-        # It is important to remove previous stages with the exact same group label 
-        # if they do not match the current unique list of sleep stages exactly.
-        # PSGWriter replaces event with the same group and name (but here a name can be missing and then not replaced).
-        events_to_remove = \
-            [(stage_group, '9'), \
-             (stage_group, '0'),
-             (stage_group, '1'),
-             (stage_group, '2'),
-             (stage_group, '3'),
-             (stage_group, '5')]
+        # split the ext from the filename
+        filename_no_path, file_ext = os.path.splitext(filename)
+        # Snooz can write the sleep staging only for the .edf format 
+        if file_ext.lower() == '.edf':
+            # Events to remove, provided to the PSGWriter, in order to replace the previous sleep stages.
+            # It is important to remove previous stages with the exact same group label 
+            # if they do not match the current unique list of sleep stages exactly.
+            # PSGWriter replaces event with the same group and name (but here a name can be missing and then not replaced).
+            events_to_remove = \
+                [(stage_group, '9'), \
+                (stage_group, '0'),
+                (stage_group, '1'),
+                (stage_group, '2'),
+                (stage_group, '3'),
+                (stage_group, '5')]
+        else:
+            events_to_remove = []
 
         # Split the data into EEG, EOG, and EMG signals
         signals = self.SplitData(signals_EEG, signals_EOG, signals_EMG)
@@ -234,6 +239,10 @@ class YasaSleepStaging(SciNode):
         else:
             raise NodeInputException(self.identifier, "sleep_stages", \
                     f"The number of predicted sleep stages {len(y_pred_snooz)} does not match the number of expected epochs {len(sleep_stages)}.")
+        
+        # Snooz can write the sleep staging only for the .edf format 
+        if file_ext.lower() != '.edf':
+            sleep_stages = pd.DataFrame(data=None, columns=sleep_stages.columns)
 
         return {
             'results': df_Classification_report,
@@ -463,75 +472,7 @@ class YasaSleepStaging(SciNode):
                 filtered_preds.append(pred)
         return filtered_labels, filtered_preds
 
-    def event_writer(self, y_pred_new):
-        """
-        Write events to a new file.
 
-        Parameters
-        ----------
-        y_pred_new : list
-            List of predicted labels.
-
-        Returns
-        -------
-        list
-            New list of events.
-        """
-        #NOTE creating the new dataframe for the predicted labels
-        # decode the lables names to the numerical values
-                # Mapping of numerical stages to string labels
-        stage_mapping = {
-            'WAKE': '0',
-            'N1': '1',
-            'N2': '2',
-            'N3': '3',
-            'REM': '5',
-            'UNS': '9'
-        }
-        y_pred_decod = [stage_mapping.get(stage, '9') for stage in y_pred_new]
-        new_events = pd.DataFrame()
-        # Update the 'stage' column values in the dictionary
-        j = -1
-        for i, stage in enumerate(events['group']):
-            if stage == 'stage':
-                j += 1
-                events['name'][i] = y_pred_decod[j]  # Change 'new_value' to the desired value
-        new_events = events
-        return new_events
     
-    def event_writer_perd(self, y_pred_new, events):
-        """
-        Write events to a new file.
 
-        Parameters
-        ----------
-        y_pred_new : list
-            List of predicted labels.
-        events : dataframe
-            List of events.
-
-        Returns
-        -------
-        list
-            New list of events.
-        """
-        #NOTE creating the new dataframe for the predicted labels
-        # decode the lables names to the numerical values
-                # Mapping of numerical stages to string labels
-        stage_mapping = {
-            'WAKE': '0',
-            'N1': '1',
-            'N2': '2',
-            'N3': '3',
-            'REM': '5',
-            'UNS': '9'
-        }
-        y_pred_decod = [stage_mapping.get(stage, '9') for stage in y_pred_new]
-        # Update the 'stage' column values in the dictionary
-        
-        for i in range(len(y_pred_decod)):
-            if events['group'][i] == 'stage':
-                events['name'][i] = y_pred_decod[i]  # Change 'new_value' to the desired value
-        new_events = events
-        return new_events
     
