@@ -72,6 +72,7 @@ from ica import ica1
 import numpy as np
 from tqdm import tqdm
 from sklearn import decomposition
+import sys
 
 from flowpipe import SciNode, InputPlug, OutputPlug
 from commons.NodeInputException import NodeInputException
@@ -260,7 +261,10 @@ class IcaComponents(SciNode):
         # Set progress bar
         total_event = len(signals_events)
         desc = 'Applying ICA'
-        pbar = tqdm(total=total_event, desc=desc)
+        
+        # Safe check for terminal support
+        use_progress_bar = sys.stdout is not None and sys.stdout.isatty()
+        pbar = tqdm(total=total_event, desc=desc, disable=not use_progress_bar)
 
         if parameters['ICA_algo']=='fastICA':
             # Instanciate all FastIca class for each event and output to 

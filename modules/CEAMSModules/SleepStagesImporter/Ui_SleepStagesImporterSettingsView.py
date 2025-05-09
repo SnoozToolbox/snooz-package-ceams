@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file ''
+## Form generated from reading UI file 'Ui_SleepStagesImporterSettingsView.ui'
 ##
 ## Created by: Qt User Interface Compiler version 6.8.2
 ##
@@ -26,13 +26,13 @@ class Ui_SleepStagesImporterSettingsView(object):
     def setupUi(self, SleepStagesImporterSettingsView):
         if not SleepStagesImporterSettingsView.objectName():
             SleepStagesImporterSettingsView.setObjectName(u"SleepStagesImporterSettingsView")
-        SleepStagesImporterSettingsView.resize(906, 664)
+        SleepStagesImporterSettingsView.resize(871, 664)
         SleepStagesImporterSettingsView.setStyleSheet(u"font: 12pt \"Roboto\";")
         self.horizontalLayout_2 = QHBoxLayout(SleepStagesImporterSettingsView)
         self.horizontalLayout_2.setObjectName(u"horizontalLayout_2")
         self.splitter = QSplitter(SleepStagesImporterSettingsView)
         self.splitter.setObjectName(u"splitter")
-        self.splitter.setOrientation(Qt.Horizontal)
+        self.splitter.setOrientation(Qt.Orientation.Horizontal)
         self.splitter.setHandleWidth(30)
         self.layoutWidget = QWidget(self.splitter)
         self.layoutWidget.setObjectName(u"layoutWidget")
@@ -48,8 +48,8 @@ class Ui_SleepStagesImporterSettingsView(object):
 
         self.tableWidget_files = QTableWidget(self.layoutWidget)
         self.tableWidget_files.setObjectName(u"tableWidget_files")
-        self.tableWidget_files.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOn)
-        self.tableWidget_files.setEditTriggers(QAbstractItemView.NoEditTriggers)
+        self.tableWidget_files.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOn)
+        self.tableWidget_files.setEditTriggers(QAbstractItemView.EditTrigger.NoEditTriggers)
 
         self.verticalLayout_3.addWidget(self.tableWidget_files)
 
@@ -127,7 +127,7 @@ class Ui_SleepStagesImporterSettingsView(object):
 
         self.textEdit = QTextEdit(self.layoutWidget)
         self.textEdit.setObjectName(u"textEdit")
-        self.textEdit.setFrameShape(QFrame.NoFrame)
+        self.textEdit.setFrameShape(QFrame.Shape.NoFrame)
         self.textEdit.setReadOnly(True)
 
         self.verticalLayout.addWidget(self.textEdit)
@@ -184,7 +184,7 @@ class Ui_SleepStagesImporterSettingsView(object):
 
         self.gridLayout_2.addWidget(self.label_0, 2, 3, 1, 1)
 
-        self.horizontalSpacer = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+        self.horizontalSpacer = QSpacerItem(5, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
 
         self.gridLayout_2.addItem(self.horizontalSpacer, 3, 4, 1, 1)
 
@@ -234,7 +234,7 @@ class Ui_SleepStagesImporterSettingsView(object):
         font.setBold(False)
         font.setItalic(False)
         self.label_9.setFont(font)
-        self.label_9.setAlignment(Qt.AlignLeading|Qt.AlignLeft|Qt.AlignVCenter)
+        self.label_9.setAlignment(Qt.AlignmentFlag.AlignLeading|Qt.AlignmentFlag.AlignLeft|Qt.AlignmentFlag.AlignVCenter)
 
         self.gridLayout_2.addWidget(self.label_9, 0, 0, 1, 1)
 
@@ -356,43 +356,19 @@ class Ui_SleepStagesImporterSettingsView(object):
 
         self.gridLayout = QGridLayout()
         self.gridLayout.setObjectName(u"gridLayout")
-        self.comboBox_stage_s = QComboBox(self.layoutWidget1)
-        self.comboBox_stage_s.addItem("")
-        self.comboBox_stage_s.addItem("")
-        self.comboBox_stage_s.addItem("")
-        self.comboBox_stage_s.addItem("")
-        self.comboBox_stage_s.addItem("")
-        self.comboBox_stage_s.addItem("")
-        self.comboBox_stage_s.addItem("")
-        self.comboBox_stage_s.addItem("")
-        self.comboBox_stage_s.setObjectName(u"comboBox_stage_s")
+        self.horizontalSpacer_2 = QSpacerItem(5, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
 
-        self.gridLayout.addWidget(self.comboBox_stage_s, 4, 1, 1, 1)
-
-        self.comboBox_encoding = QComboBox(self.layoutWidget1)
-        self.comboBox_encoding.addItem("")
-        self.comboBox_encoding.addItem("")
-        self.comboBox_encoding.addItem("")
-        self.comboBox_encoding.addItem("")
-        self.comboBox_encoding.addItem("")
-        self.comboBox_encoding.addItem("")
-        self.comboBox_encoding.setObjectName(u"comboBox_encoding")
-
-        self.gridLayout.addWidget(self.comboBox_encoding, 2, 1, 1, 1)
+        self.gridLayout.addItem(self.horizontalSpacer_2, 3, 2, 1, 1)
 
         self.spinBox_colstage = QSpinBox(self.layoutWidget1)
         self.spinBox_colstage.setObjectName(u"spinBox_colstage")
         self.spinBox_colstage.setMinimum(1)
 
-        self.gridLayout.addWidget(self.spinBox_colstage, 3, 1, 1, 1)
-
-        self.label_2 = QLabel(self.layoutWidget1)
-        self.label_2.setObjectName(u"label_2")
-
-        self.gridLayout.addWidget(self.label_2, 1, 0, 1, 1)
+        self.gridLayout.addWidget(self.spinBox_colstage, 4, 1, 1, 1)
 
         self.label_3 = QLabel(self.layoutWidget1)
         self.label_3.setObjectName(u"label_3")
+        self.label_3.setMinimumSize(QSize(220, 0))
 
         self.gridLayout.addWidget(self.label_3, 0, 0, 1, 1)
 
@@ -404,31 +380,62 @@ class Ui_SleepStagesImporterSettingsView(object):
         self.comboBox_sep.addItem("")
         self.comboBox_sep.setObjectName(u"comboBox_sep")
 
-        self.gridLayout.addWidget(self.comboBox_sep, 1, 1, 1, 1)
+        self.gridLayout.addWidget(self.comboBox_sep, 2, 1, 1, 1)
 
         self.label_14 = QLabel(self.layoutWidget1)
         self.label_14.setObjectName(u"label_14")
 
-        self.gridLayout.addWidget(self.label_14, 3, 0, 1, 1)
+        self.gridLayout.addWidget(self.label_14, 4, 0, 1, 1)
+
+        self.comboBox_stage_s = QComboBox(self.layoutWidget1)
+        self.comboBox_stage_s.addItem("")
+        self.comboBox_stage_s.addItem("")
+        self.comboBox_stage_s.addItem("")
+        self.comboBox_stage_s.addItem("")
+        self.comboBox_stage_s.addItem("")
+        self.comboBox_stage_s.addItem("")
+        self.comboBox_stage_s.addItem("")
+        self.comboBox_stage_s.addItem("")
+        self.comboBox_stage_s.setObjectName(u"comboBox_stage_s")
+
+        self.gridLayout.addWidget(self.comboBox_stage_s, 5, 1, 1, 1)
 
         self.spinBox_n_rows = QSpinBox(self.layoutWidget1)
         self.spinBox_n_rows.setObjectName(u"spinBox_n_rows")
 
         self.gridLayout.addWidget(self.spinBox_n_rows, 0, 1, 1, 1)
 
-        self.label_15 = QLabel(self.layoutWidget1)
-        self.label_15.setObjectName(u"label_15")
+        self.label_2 = QLabel(self.layoutWidget1)
+        self.label_2.setObjectName(u"label_2")
 
-        self.gridLayout.addWidget(self.label_15, 4, 0, 1, 1)
+        self.gridLayout.addWidget(self.label_2, 2, 0, 1, 1)
+
+        self.comboBox_encoding = QComboBox(self.layoutWidget1)
+        self.comboBox_encoding.addItem("")
+        self.comboBox_encoding.addItem("")
+        self.comboBox_encoding.addItem("")
+        self.comboBox_encoding.addItem("")
+        self.comboBox_encoding.addItem("")
+        self.comboBox_encoding.addItem("")
+        self.comboBox_encoding.setObjectName(u"comboBox_encoding")
+
+        self.gridLayout.addWidget(self.comboBox_encoding, 3, 1, 1, 1)
 
         self.label_13 = QLabel(self.layoutWidget1)
         self.label_13.setObjectName(u"label_13")
 
-        self.gridLayout.addWidget(self.label_13, 2, 0, 1, 1)
+        self.gridLayout.addWidget(self.label_13, 3, 0, 1, 1)
 
-        self.horizontalSpacer_2 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+        self.label_15 = QLabel(self.layoutWidget1)
+        self.label_15.setObjectName(u"label_15")
 
-        self.gridLayout.addItem(self.horizontalSpacer_2, 2, 2, 1, 1)
+        self.gridLayout.addWidget(self.label_15, 5, 0, 1, 1)
+
+        self.label_20 = QLabel(self.layoutWidget1)
+        self.label_20.setObjectName(u"label_20")
+        self.label_20.setFont(font)
+
+        self.gridLayout.addWidget(self.label_20, 1, 0, 1, 2)
 
 
         self.verticalLayout_6.addLayout(self.gridLayout)
@@ -469,15 +476,18 @@ class Ui_SleepStagesImporterSettingsView(object):
 #endif // QT_CONFIG(tooltip)
         self.checkBox_case_sensitive.setText(QCoreApplication.translate("SleepStagesImporterSettingsView", u"Filenames are case sensitive", None))
         self.textEdit.setHtml(QCoreApplication.translate("SleepStagesImporterSettingsView", u"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
-"<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
+"<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset=\"utf-8\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
+"hr { height: 1px; border-width: 0; }\n"
+"li.unchecked::marker { content: \"\\2610\"; }\n"
+"li.checked::marker { content: \"\\2612\"; }\n"
 "</style></head><body style=\" font-family:'Roboto'; font-size:12pt; font-weight:400; font-style:normal;\">\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Example )</p>\n"
 "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">    <span style=\" font-weight:600;\">prefix		</span>hyp_</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">    <span style=\" font-weight:600;\">PSG filename	</span>subject1.edf</p>\n"
-"<p s"
-                        "tyle=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">    <span style=\" font-weight:600;\">suffix		</span> _annotation</p>\n"
+"<p style=\" margin-top:0px; margin-bott"
+                        "om:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">    <span style=\" font-weight:600;\">PSG filename	</span>subject1.edf</p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">    <span style=\" font-weight:600;\">suffix		</span> _annotation</p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">    <span style=\" font-weight:600;\">stages filename	</span>hyp_subject1_annotation</p>\n"
 "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p></body></html>", None))
         self.label_4.setText(QCoreApplication.translate("SleepStagesImporterSettingsView", u"<html><head/><body><p><span style=\" font-weight:600;\">Stage renaming</span></p></body></html>", None))
@@ -517,6 +527,22 @@ class Ui_SleepStagesImporterSettingsView(object):
         self.label_8.setText(QCoreApplication.translate("SleepStagesImporterSettingsView", u"5", None))
         self.label_39.setText(QCoreApplication.translate("SleepStagesImporterSettingsView", u"REM", None))
         self.label.setText(QCoreApplication.translate("SleepStagesImporterSettingsView", u"<html><head/><body><p><span style=\" font-weight:600;\">Sleep Stages File Format</span></p></body></html>", None))
+#if QT_CONFIG(tooltip)
+        self.spinBox_colstage.setToolTip(QCoreApplication.translate("SleepStagesImporterSettingsView", u"Define the column index to extract the stage labels. 1 means the first column.", None))
+#endif // QT_CONFIG(tooltip)
+        self.label_3.setText(QCoreApplication.translate("SleepStagesImporterSettingsView", u"Number of rows to skip.", None))
+        self.comboBox_sep.setItemText(0, QCoreApplication.translate("SleepStagesImporterSettingsView", u"None", None))
+        self.comboBox_sep.setItemText(1, QCoreApplication.translate("SleepStagesImporterSettingsView", u"\\t", None))
+        self.comboBox_sep.setItemText(2, QCoreApplication.translate("SleepStagesImporterSettingsView", u";", None))
+        self.comboBox_sep.setItemText(3, QCoreApplication.translate("SleepStagesImporterSettingsView", u",", None))
+        self.comboBox_sep.setItemText(4, QCoreApplication.translate("SleepStagesImporterSettingsView", u"\\r", None))
+
+#if QT_CONFIG(tooltip)
+        self.comboBox_sep.setToolTip(QCoreApplication.translate("SleepStagesImporterSettingsView", u"Delimiter character or pattern for the sleep stages file.\n"
+"Set to None if unknown, and the engine will detect it.\n"
+"Open the file in a text editor to see the separator.", None))
+#endif // QT_CONFIG(tooltip)
+        self.label_14.setText(QCoreApplication.translate("SleepStagesImporterSettingsView", u"Column Index for stage", None))
         self.comboBox_stage_s.setItemText(0, QCoreApplication.translate("SleepStagesImporterSettingsView", u"1", None))
         self.comboBox_stage_s.setItemText(1, QCoreApplication.translate("SleepStagesImporterSettingsView", u"2", None))
         self.comboBox_stage_s.setItemText(2, QCoreApplication.translate("SleepStagesImporterSettingsView", u"3", None))
@@ -530,6 +556,10 @@ class Ui_SleepStagesImporterSettingsView(object):
         self.comboBox_stage_s.setToolTip(QCoreApplication.translate("SleepStagesImporterSettingsView", u"Define the duration (s) of the stage corresponding to one row in the sleep stages text file.", None))
 #endif // QT_CONFIG(tooltip)
         self.comboBox_stage_s.setCurrentText(QCoreApplication.translate("SleepStagesImporterSettingsView", u"1", None))
+#if QT_CONFIG(tooltip)
+        self.spinBox_n_rows.setToolTip(QCoreApplication.translate("SleepStagesImporterSettingsView", u"Number of rows to skip before reading the sleep stages.", None))
+#endif // QT_CONFIG(tooltip)
+        self.label_2.setText(QCoreApplication.translate("SleepStagesImporterSettingsView", u"Item separator", None))
         self.comboBox_encoding.setItemText(0, QCoreApplication.translate("SleepStagesImporterSettingsView", u"utf-8", None))
         self.comboBox_encoding.setItemText(1, QCoreApplication.translate("SleepStagesImporterSettingsView", u"latin-1", None))
         self.comboBox_encoding.setItemText(2, QCoreApplication.translate("SleepStagesImporterSettingsView", u"utf-16", None))
@@ -540,27 +570,8 @@ class Ui_SleepStagesImporterSettingsView(object):
 #if QT_CONFIG(tooltip)
         self.comboBox_encoding.setToolTip(QCoreApplication.translate("SleepStagesImporterSettingsView", u"Define the sleep stage file encoding. You can open in Notepad++ to find out.", None))
 #endif // QT_CONFIG(tooltip)
-#if QT_CONFIG(tooltip)
-        self.spinBox_colstage.setToolTip(QCoreApplication.translate("SleepStagesImporterSettingsView", u"Define the column index to extract the stage labels. 1 means the first column.", None))
-#endif // QT_CONFIG(tooltip)
-        self.label_2.setText(QCoreApplication.translate("SleepStagesImporterSettingsView", u"Item separator", None))
-        self.label_3.setText(QCoreApplication.translate("SleepStagesImporterSettingsView", u"Number of rows in header", None))
-        self.comboBox_sep.setItemText(0, QCoreApplication.translate("SleepStagesImporterSettingsView", u"None", None))
-        self.comboBox_sep.setItemText(1, QCoreApplication.translate("SleepStagesImporterSettingsView", u"\\t", None))
-        self.comboBox_sep.setItemText(2, QCoreApplication.translate("SleepStagesImporterSettingsView", u";", None))
-        self.comboBox_sep.setItemText(3, QCoreApplication.translate("SleepStagesImporterSettingsView", u",", None))
-        self.comboBox_sep.setItemText(4, QCoreApplication.translate("SleepStagesImporterSettingsView", u"\\r", None))
-
-#if QT_CONFIG(tooltip)
-        self.comboBox_sep.setToolTip(QCoreApplication.translate("SleepStagesImporterSettingsView", u"Delimiter character or pattern for the sleep stages file.\n"
-"Set to None if unknown, and the engine will detect it.\n"
-"Open the file in a text editor to see the separator.", None))
-#endif // QT_CONFIG(tooltip)
-        self.label_14.setText(QCoreApplication.translate("SleepStagesImporterSettingsView", u"Column Index for stage", None))
-#if QT_CONFIG(tooltip)
-        self.spinBox_n_rows.setToolTip(QCoreApplication.translate("SleepStagesImporterSettingsView", u"Number of rows to skip before reading the sleep stages.", None))
-#endif // QT_CONFIG(tooltip)
-        self.label_15.setText(QCoreApplication.translate("SleepStagesImporterSettingsView", u"Stage duration (s)", None))
         self.label_13.setText(QCoreApplication.translate("SleepStagesImporterSettingsView", u"Encoding", None))
+        self.label_15.setText(QCoreApplication.translate("SleepStagesImporterSettingsView", u"Stage duration (s)", None))
+        self.label_20.setText(QCoreApplication.translate("SleepStagesImporterSettingsView", u"<html><head/><body><p>*Do not skip the row with column titles, if any.</p></body></html>", None))
     # retranslateUi
 

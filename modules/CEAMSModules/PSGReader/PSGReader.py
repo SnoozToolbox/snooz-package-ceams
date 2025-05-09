@@ -148,6 +148,9 @@ class PSGReader(SciNode):
         signals = []
         if selected_channels is not None:
             signals = self.get_signal_models(selected_channels, montage_index, alias)    
+            if len(signals)==0:
+                raise NodeRuntimeException(self.identifier, "files", \
+                    f"PSGReader could not read signals from file:{filename}")            
 
         sleep_stages = self._psg_reader_manager.get_sleep_stages()
         events = self._psg_reader_manager.get_events()

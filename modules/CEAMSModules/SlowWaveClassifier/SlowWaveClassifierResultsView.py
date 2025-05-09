@@ -8,7 +8,7 @@ See the file LICENCE for full license details.
 
 import matplotlib
 from matplotlib.figure import Figure
-from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
+from matplotlib.backends.backend_qtagg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.lines import Line2D
 matplotlib.use('QtAgg')
 from scipy.stats import norm

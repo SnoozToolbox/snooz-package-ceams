@@ -61,7 +61,6 @@ from commons.NodeInputException import NodeInputException
 from math import *
 import numpy as np
 from sklearn import decomposition
-from tqdm import tqdm
 
 
 DEBUG = False

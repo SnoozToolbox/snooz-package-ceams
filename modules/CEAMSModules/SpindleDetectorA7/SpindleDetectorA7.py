@@ -13,7 +13,7 @@ import config
 from commons.NodeInputException import NodeInputException
 from commons.NodeRuntimeException import NodeRuntimeException
 from flowpipe import SciNode, InputPlug, OutputPlug
-
+from flowpipe.ActivationState import ActivationState
 from .detect_spindles import detect_spindles
 from CEAMSModules.EventReader import manage_events
 
@@ -148,6 +148,12 @@ class SpindleDetectorA7(SciNode):
 
         thresholds_np = np.array([thresholds['thresh_abs_sigma_pow_uv2'], thresholds['thresh_rel_sigma_pow_z'],\
              thresholds['thresh_sigma_cov_z'], float(thresholds['thresh_sigma_cor_perc'])/100])
+
+        # It is possible to bypass the detection of spindles
+        if self.activation_state == ActivationState.BYPASS:
+            return {
+                'events': manage_events.create_event_dataframe(None)
+            }   
 
         # Code are extracted from the SUMO project (https://github.com/dslaborg/sumo)
         # detect_spindles has been modified to keep all spindles

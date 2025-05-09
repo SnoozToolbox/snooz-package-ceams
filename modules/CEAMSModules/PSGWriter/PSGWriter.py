@@ -32,6 +32,7 @@ See the file LICENCE for full license details.
 import pandas as pd
 
 from commons.NodeInputException import NodeInputException
+from commons.NodeRuntimeException import NodeRuntimeException
 from flowpipe import SciNode, InputPlug
 from CEAMSModules.PSGReader.PSGReaderManager import PSGReaderManager
 
@@ -189,13 +190,16 @@ class PSGWriter(SciNode):
             # Add the new events
             for index, event in new_events.iterrows():
                 montage_index = self.get_montage_index(signals, event['channels'])
-                self._psg_reader_manager.add_event(
-                    name=           event['name'],
-                    group=          event['group'],
-                    start_sec=      event['start_sec'],
-                    duration_sec=   event['duration_sec'],
-                    channels=       event['channels'],
-                    montage_index=  montage_index)
+                success = self._psg_reader_manager.add_event(
+                        name=           event['name'],
+                        group=          event['group'],
+                        start_sec=      event['start_sec'],
+                        duration_sec=   event['duration_sec'],
+                        channels=       event['channels'],
+                        montage_index=  montage_index)
+                if not success:
+                    raise NodeRuntimeException(self.identifier, "files", \
+                        f"PSGRwriter cannot write events associated to the montage index :{montage_index}")
             
             # Write the events in the cache in order to view them on the resultsView
             if new_events is not None:

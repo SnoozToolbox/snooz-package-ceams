@@ -305,6 +305,7 @@ class PSGReaderSettingsView( BaseSettingsView,  Ui_PSGReaderSettingsView, QtWidg
 
             button = QtWidgets.QPushButton()
             button.setText(">")
+            button.setToolTip("Only the checked channels will be included in the analysis.\nHighlight the channel labels before pressing the button > to add them to the alias.")
             button.clicked.connect(lambda checked=None, x=a:self.on_add_alias(x))
             button.setMaximumSize(20, 20)
             size_policy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed,QtWidgets.QSizePolicy.Fixed)
