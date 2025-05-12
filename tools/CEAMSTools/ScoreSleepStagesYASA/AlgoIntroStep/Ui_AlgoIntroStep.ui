@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1056</width>
+    <width>1315</width>
     <height>732</height>
    </rect>
   </property>
@@ -70,7 +70,7 @@
              <number>0</number>
             </property>
             <property name="text">
-             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;This tool &lt;span style=&quot; font-weight:700;&quot;&gt;classifies sleep stages&lt;/span&gt; from PSG recordings using 30-second epochs.&lt;/p&gt;&lt;p&gt;Sleep stages can be classified based on a single EEG electrode, preferably central ones (C3, C4).&lt;br/&gt;Including one EOG and one EMG channel can improve classification accuracy.&lt;/p&gt;&lt;p align=&quot;justify&quot;&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;In Snooz, you can select up to four high-priority EEG channels&lt;/span&gt;, allowing the tool to determine the most confident classification for each.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;This tool &lt;span style=&quot; font-weight:700;&quot;&gt;classifies sleep stages&lt;/span&gt; from PSG recordings using 30-second epochs.&lt;/p&gt;&lt;p&gt;Sleep stages can be classified based on a single EEG electrode, preferably central ones (C3, C4).&lt;br/&gt;Including one EOG and one EMG channel can improve classification accuracy.&lt;/p&gt;&lt;p align=&quot;justify&quot;&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;In Snooz, you can select up to four high-priority EEG channels&lt;/span&gt;, allowing the tool to determine the most confident classification for each. &lt;/p&gt;&lt;p align=&quot;justify&quot;&gt;NOTE: Based on the internal analysis of Snooz, configurations combining central channels with one frontal and one occipital channel typically demonstrate marginally better performance.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
             </property>
            </widget>
           </item>
@@ -130,7 +130,7 @@
               <rect>
                <x>0</x>
                <y>0</y>
-               <width>1156</width>
+               <width>1265</width>
                <height>390</height>
               </rect>
              </property>

@@ -24,7 +24,7 @@ class Ui_AlgoIntroStep(object):
     def setupUi(self, AlgoIntroStep):
         if not AlgoIntroStep.objectName():
             AlgoIntroStep.setObjectName(u"AlgoIntroStep")
-        AlgoIntroStep.resize(1056, 732)
+        AlgoIntroStep.resize(1315, 732)
         AlgoIntroStep.setStyleSheet(u"font: 12pt \"Roboto\";")
         self.verticalLayout_7 = QVBoxLayout(AlgoIntroStep)
         self.verticalLayout_7.setObjectName(u"verticalLayout_7")
@@ -91,7 +91,7 @@ class Ui_AlgoIntroStep(object):
         self.scrollArea.setWidgetResizable(True)
         self.scrollAreaWidgetContents = QWidget()
         self.scrollAreaWidgetContents.setObjectName(u"scrollAreaWidgetContents")
-        self.scrollAreaWidgetContents.setGeometry(QRect(0, 0, 1156, 390))
+        self.scrollAreaWidgetContents.setGeometry(QRect(0, 0, 1265, 390))
         self.horizontalLayout = QHBoxLayout(self.scrollAreaWidgetContents)
         self.horizontalLayout.setObjectName(u"horizontalLayout")
         self.label_4 = QLabel(self.scrollAreaWidgetContents)
@@ -156,7 +156,7 @@ class Ui_AlgoIntroStep(object):
     def retranslateUi(self, AlgoIntroStep):
         AlgoIntroStep.setWindowTitle(QCoreApplication.translate("AlgoIntroStep", u"Form", None))
         self.label.setText(QCoreApplication.translate("AlgoIntroStep", u"<html><head/><body><p><span style=\" font-weight:600;\">Score Sleep Stages YASA</span></p></body></html>", None))
-        self.label_2.setText(QCoreApplication.translate("AlgoIntroStep", u"<html><head/><body><p>This tool <span style=\" font-weight:700;\">classifies sleep stages</span> from PSG recordings using 30-second epochs.</p><p>Sleep stages can be classified based on a single EEG electrode, preferably central ones (C3, C4).<br/>Including one EOG and one EMG channel can improve classification accuracy.</p><p align=\"justify\"><span style=\" font-weight:700;\">In Snooz, you can select up to four high-priority EEG channels</span>, allowing the tool to determine the most confident classification for each.</p></body></html>", None))
+        self.label_2.setText(QCoreApplication.translate("AlgoIntroStep", u"<html><head/><body><p>This tool <span style=\" font-weight:700;\">classifies sleep stages</span> from PSG recordings using 30-second epochs.</p><p>Sleep stages can be classified based on a single EEG electrode, preferably central ones (C3, C4).<br/>Including one EOG and one EMG channel can improve classification accuracy.</p><p align=\"justify\"><span style=\" font-weight:700;\">In Snooz, you can select up to four high-priority EEG channels</span>, allowing the tool to determine the most confident classification for each. </p><p align=\"justify\">NOTE: Based on the internal analysis of Snooz, configurations combining central channels with one frontal and one occipital channel typically demonstrate marginally better performance.</p></body></html>", None))
         self.label_3.setText(QCoreApplication.translate("AlgoIntroStep", u"<html><head/><body><p><span style=\" font-weight:600;\">Algorithm Details</span></p></body></html>", None))
         self.label_4.setText(QCoreApplication.translate("AlgoIntroStep", u"<html><head/><body><p>The sleep staging algorithm, YASA, is an open-source tool that has been trained,<br/>using over 30,000 hours of polysomnographic (PSG) sleep data across diverse populations. </p><p>-&gt;<span style=\" font-weight:600;\"> Data processing:</span> The algorithm uses a central EEG channel, along with EOG, and EMG channels.<br/>These signals are downsampled to 100 Hz and bandpassed-filtered between 0.4 Hz and 30 Hz. </p><p>-&gt; <span style=\" font-weight:600;\">Feature Extraction:</span> The algorithm extracts a set of time and frequency domain features from the EEG signal, and optionaly from the EOG and EMG signals.<br/>These features are calculated for each 30-second epoch of raw data. </p><p>-&gt; <span style=\" font-weight:600;\">Smoothing and Normalization:</span> The algorithm uses a smoothing approach across all the aformentioned features to incorporate contextual infromation.<br/>All the smoothed features are then z-scored across each night. </p><p>-&gt; <span style=\" font-weight:600"
                         ";\">Machine Learning Classification:</span> A lightGBM classifier, a tree-based gradient-boosting classifier, is used. </p><p>-&gt; <span style=\" font-weight:600;\">Performance Evaluation:</span> The algorithm's performance is evaluated using standardized guidelines,<br/>including accuracy, Cohen's kappa, Matthews correlation coefficient, confusion matrices, and F1-scores. </p><p><span style=\" text-decoration: underline;\">Reference</span>: <br/>Vallat, Raphael, and Matthew P. Walker. \u201cAn open-source, high-performance tool for automated sleep staging.\u201d Elife 10 (2021). <br/>doi: https://doi.org/10.7554/eLife.70092 (Documentation: <a href=\"https://raphaelvallat.com/yasa/\"><span style=\" text-decoration: underline; color:#0000ff;\">https://raphaelvallat.com/yasa/)<br/></span></a></p></body></html>", None))
