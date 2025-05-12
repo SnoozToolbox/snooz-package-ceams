@@ -95,98 +95,103 @@ class TSVValidatorMaster(SciNode):
         if filename is not None:
             errors = []
 
-            # Generate log path based on file name
+            # Generate log file path
             base_name = os.path.basename(filename)
             name_without_ext = os.path.splitext(base_name)[0]
-            log_file_path = f"{log_path}{name_without_ext}_validation_log.txt"
+            log_file_path = os.path.join(log_path, f"{name_without_ext}_validation_log.txt")
 
-            # UTF-8 check
+            # Check UTF-8 encoding
             try:
                 with open(filename, 'r', encoding='utf-8') as f:
-                    f.read()  # Just try reading to verify encoding
-                    print(f"File '{filename}' is UTF-8 encoded.")
+                    f.read()
             except UnicodeDecodeError:
                 errors.append("File encoding is not UTF-8.")
-                with open(log_file_path, 'w') as log_file:
+                with open(log_file_path, 'w', encoding='utf-8') as log_file:
                     for error in errors:
                         log_file.write(error + '\n')
-                print(f"Validation failed. Encoding issue found. See '{os.path.abspath(log_file_path)}'.")
                 return False
 
+            # Manual TSV structure check
+            expected_columns = ['group', 'name', 'start_sec', 'duration_sec', 'channels']
             try:
-                # Read the TSV file
-                df = pd.read_csv(filename, sep='\t', encoding='utf-8')
+                with open(filename, 'r', encoding='utf-8') as f:
+                    lines = f.readlines()
+                    header = lines[0].rstrip('\n').split('\t')
+                    expected_col_count = len(expected_columns)
 
-                # Define the expected columns
-                expected_columns = ['group', 'name', 'start_sec', 'duration_sec', 'channels']
+                    if header != expected_columns:
+                        errors.append(f"Header mismatch. Expected {expected_columns}, but got {header}")
 
-                # Check 1: Columns must match exactly
-                if list(df.columns) != expected_columns:
-                    errors.append(f"Column mismatch. Expected {expected_columns}, but got {list(df.columns)}")
-                
-                # Track if any 'stage' group annotations exist
-                has_stage_group = False
-                invalid_stage_names = set()
-                uses_stage_4 = False
-                # Check 2: Validate each row's content
-                for idx, row in df.iterrows():
-                    for col in expected_columns:
-                        val = row[col]
-                        if pd.isna(val) or (isinstance(val, str) and val.strip() == ''):
-                            errors.append(f"Row {idx}: Empty or missing value in column '{col}'")
+                    for i, line in enumerate(lines[1:], start=2):  # start=2 for line numbers
+                        if line.strip():  # skip blank lines
+                            fields = line.rstrip('\n').split('\t')
+                            if len(fields) != expected_col_count:
+                                errors.append(f"Line {i}: Expected {expected_col_count} columns, but found {len(fields)} → Possible missing value or tab")
 
-                    if not isinstance(row['group'], str):
-                        errors.append(f"Row {idx}: 'group' should be str, got {type(row['group']).__name__}")
-                    if not isinstance(row['name'], (str, int)):
-                        errors.append(f"Row {idx}: 'name' should be int or str, got {type(row['name']).__name__}")
-                    if not isinstance(row['start_sec'], (float, int)):
-                        errors.append(f"Row {idx}: 'start_sec' should be float or int, got {type(row['start_sec']).__name__}")
-                    if not isinstance(row['duration_sec'], (float, int)):
-                        errors.append(f"Row {idx}: 'duration_sec' should be float or int, got {type(row['duration_sec']).__name__}")
-                    if not isinstance(row['channels'], str):
-                        errors.append(f"Row {idx}: 'channels' should be str, got {type(row['channels']).__name__}")
-
-                                        # Check for sleep staging group
-                    if row['group'].strip().lower() == 'stage':
-                        has_stage_group = True
-                        stage_name = str(row['name']).strip()
-
-                        # Detect if stage 4 is used
-                        if stage_name == '4' or stage_name == 4:
-                            uses_stage_4 = True
-
-                        # Validate stage name
-                        if stage_name not in sleep_stages_name and str(stage_name).isdigit():
-                            invalid_stage_names.add(stage_name)
-                
-                # Sleep staging checks
-                if not has_stage_group:
-                    errors.append("Info: No 'stage' group found — this recording may lack sleep staging annotations.")
-                else:
-                    errors.append("Info: 'stage' group detected.")
-
-                if invalid_stage_names:
-                    errors.append(f"Info: Invalid stage values found (not in {list(sleep_stages_name.keys())}): {sorted(invalid_stage_names)}")
-
-                if uses_stage_4:
-                    errors.append("Info: Detected stage value = 4. Please consider renaming stages using the preprocessing tool → Edit Annotations.")
-                
             except Exception as e:
-                errors.append(f"File could not be read or processed: {str(e)}")
+                errors.append(f"File could not be read during line check: {str(e)}")
 
-            # Write all errors to a log file
-            if errors:
-                with open(log_file_path, 'w') as log_file:
+            # Only continue if structure is valid
+            if not errors:
+                try:
+                    df = pd.read_csv(filename, sep='\t', encoding='utf-8', na_values=[''], keep_default_na=False)
+
+                    has_stage_group = False
+                    invalid_stage_names = set()
+                    uses_stage_4 = False
+
+                    for idx, row in df.iterrows():
+                        for col in expected_columns:
+                            val = row[col]
+                            if pd.isna(val) or (isinstance(val, str) and val.strip() == ''):
+                                errors.append(f"Row {idx}: Empty or missing value in column '{col}'")
+                                continue
+                            
+                        if not pd.isna(row['group']) and not isinstance(row['group'], str):
+                            errors.append(f"Row {idx}: 'group' should be str, got {type(row['group']).__name__}")
+                        if not pd.isna(row['name']) and not isinstance(row['name'], (str, int)):
+                            errors.append(f"Row {idx}: 'name' should be int or str, got {type(row['name']).__name__}")
+                        if not pd.isna(row['start_sec']) and not isinstance(row['start_sec'], (float, int)):
+                            errors.append(f"Row {idx}: 'start_sec' should be float or int, got {type(row['start_sec']).__name__}")
+                        if not pd.isna(row['duration_sec']) and not isinstance(row['duration_sec'], (float, int)):
+                            errors.append(f"Row {idx}: 'duration_sec' should be float or int, got {type(row['duration_sec']).__name__}")
+                        if not pd.isna(row['channels']) and not isinstance(row['channels'], str):
+                            errors.append(f"Row {idx}: 'channels' should be str, got {type(row['channels']).__name__}")
+
+                        # Sleep staging validation
+                        if row['group'].strip().lower() == 'stage':
+                            has_stage_group = True
+                            stage_name = str(row['name']).strip()
+
+                            if stage_name == '4' or stage_name == 4:
+                                uses_stage_4 = True
+
+                            if stage_name not in sleep_stages_name.values():
+                                invalid_stage_names.add(stage_name)
+
+                    if not has_stage_group:
+                        errors.append("No 'stage' group found — this recording may lack sleep staging annotations.")
+
+                    if invalid_stage_names:
+                        errors.append(f"Invalid stage values found (not in {list(sleep_stages_name.values())}): {sorted(invalid_stage_names)}")
+
+                    if uses_stage_4:
+                        errors.append("Detected stage value = 4. Please consider renaming stages using the preprocessing tool → Edit Annotations.")
+
+                except Exception as e:
+                    errors.append(f"File could not be read or processed: {str(e)}")
+
+            # Write log file
+            with open(log_file_path, 'w', encoding='utf-8') as log_file:
+                if errors:
                     log_file.write("Validation failed. Issues found:\n")
-                    for error, item in zip(errors, range(len(errors))):
-                        log_file.write(f"{item+1}: {error}\n")
-                print(f"Validation failed. Details are saved in '{os.path.abspath(log_file_path)}'.")
-            else:
-                with open(log_file_path, 'w') as log_file:
+                    for idx, error in enumerate(errors):
+                        log_file.write(f"{idx+1}: {error}\n")
+                else:
                     log_file.write("Validation successful. No issues found.")
 
         # Log message for the Logs tab
-        self._log_manager.log(self.identifier, "This module does nothing.")
+        self._log_manager.log(self.identifier, "This module validates the TSV files by checking their encoding and structure.")
 
         return {
             'output_logs': None
