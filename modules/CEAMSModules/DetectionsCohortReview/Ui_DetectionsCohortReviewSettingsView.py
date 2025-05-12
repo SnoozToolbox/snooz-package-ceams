@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file ''
+## Form generated from reading UI file 'Ui_DetectionsCohortReviewSettingsView.ui'
 ##
 ## Created by: Qt User Interface Compiler version 6.8.2
 ##
@@ -31,7 +31,7 @@ class Ui_DetectionsCohortReviewSettingsView(object):
         self.horizontalLayout_3.setObjectName(u"horizontalLayout_3")
         self.splitter = QSplitter(DetectionsCohortReviewSettingsView)
         self.splitter.setObjectName(u"splitter")
-        self.splitter.setOrientation(Qt.Vertical)
+        self.splitter.setOrientation(Qt.Orientation.Vertical)
         self.splitter.setHandleWidth(15)
         self.splitter.setChildrenCollapsible(False)
         self.layoutWidget = QWidget(self.splitter)
@@ -56,7 +56,7 @@ class Ui_DetectionsCohortReviewSettingsView(object):
 
         self.subject_listView = QListView(self.layoutWidget)
         self.subject_listView.setObjectName(u"subject_listView")
-        self.subject_listView.setEditTriggers(QAbstractItemView.NoEditTriggers)
+        self.subject_listView.setEditTriggers(QAbstractItemView.EditTrigger.NoEditTriggers)
 
         self.gridLayout.addWidget(self.subject_listView, 1, 0, 1, 1)
 
@@ -147,6 +147,9 @@ class Ui_DetectionsCohortReviewSettingsView(object):
         self.add_pushButton.setText(QCoreApplication.translate("DetectionsCohortReviewSettingsView", u"Add Events Report", None))
         self.all_subject_chan_checkBox.setText(QCoreApplication.translate("DetectionsCohortReviewSettingsView", u"Select All", None))
         self.all_cohort_chan_checkBox.setText(QCoreApplication.translate("DetectionsCohortReviewSettingsView", u"Select All", None))
+#if QT_CONFIG(tooltip)
+        self.add_ROI_pushButton.setToolTip(QCoreApplication.translate("DetectionsCohortReviewSettingsView", u"Rename your channel labels first. Adding the ROIs must be the final step.", None))
+#endif // QT_CONFIG(tooltip)
         self.add_ROI_pushButton.setText(QCoreApplication.translate("DetectionsCohortReviewSettingsView", u"Add ROI", None))
         self.label_4.setText(QCoreApplication.translate("DetectionsCohortReviewSettingsView", u"Event File information", None))
     # retranslateUi

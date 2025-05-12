@@ -257,7 +257,7 @@ class PSACohortReview(SciNode):
                 for chan, sel in zip(mod_chan_list,check_lst):
                     if sel==False:
                         # Look for the row index to drop
-                        # Extract basename from subject TODO
+                        # Extract basename from subject
                         basename = os.path.basename(subject)
                         index_2_rm = self.PSA_df[ (self.PSA_df[self.PSA_label[0]] == basename) & \
                                             (self.PSA_df[self.PSA_label[1]] == chan) ].index
@@ -273,7 +273,7 @@ class PSACohortReview(SciNode):
             if ori_chan_lst!=mod_chan_list:
                 for ori_chan, mod_chan in zip(ori_chan_lst,mod_chan_list):
                     if ori_chan != mod_chan:
-                        # Extract basename from subject TODO
+                        # Extract basename from subject
                         basename = os.path.basename(subject)
                         # Look for the row index to drop
                         index_2_rm = self.PSA_df[ (self.PSA_df[self.PSA_label[0]] == basename) & \
@@ -302,7 +302,7 @@ class PSACohortReview(SciNode):
                     pandas series (a column) of all activities extracted, one row per activity.
                   
         '''
-        basename = os.path.basename(subject_i) # TODO
+        basename = os.path.basename(subject_i) 
         mask_row_sjt = np.asarray(self.PSA_df[self.PSA_label[0]]==basename).nonzero()
         # For each list of channels
         subject_act_s = pd.Series(dtype=float)
@@ -339,7 +339,7 @@ class PSACohortReview(SciNode):
                 # series (one column), each row is an activity
                 band_to_add_s = rel_freq_band_act.rename(dict_2_rename)
                 subject_act_s = pd.concat([subject_act_s,band_to_add_s])
-            # subject_act_s.name = subject_i TODO
+            # subject_act_s.name = subject_i 
             subject_act_s.name = basename
         
         return subject_act_s
@@ -619,10 +619,18 @@ class PSACohortReview(SciNode):
                         if roi_blank:
                             # The nan values are not skipped.  We want the ROI to be nan if there is a missing channel.
                             act_roi = rel_freq_band_act_roi.mean(axis=1, skipna=False)
+                            # It does not make sense for valid time in minutes
+                            #  We take the highest values if all channels are valid 
+                            act_roi[act_roi.index.str.contains('valid_min')] = \
+                                rel_freq_band_act_roi[rel_freq_band_act_roi.index.str.contains('valid_min')].max(skipna=False, axis=1)
                         else:
                             # The nan values are skipped.  We want the ROI to be valid event if there is a missing channel.
-                            # The average value is still valid but based on less channels.                                 
-                            act_roi = rel_freq_band_act_roi.mean(axis=1, skipna=True)                  
+                            # The average value is still valid but based on less channels.                                
+                            act_roi = rel_freq_band_act_roi.mean(axis=1, skipna=True)   
+                            # It does not make sense for valid time in minutes
+                            #  We take the highest values if all channels are valid      
+                            act_roi[act_roi.index.str.contains('valid_min')] = \
+                                rel_freq_band_act_roi[rel_freq_band_act_roi.index.str.contains('valid_min')].max(skipna=True, axis=1)                 
                     else:
                         act_roi = rel_freq_band_act_roi
                     # Construct a dictionnary to rename the index of the series which 
