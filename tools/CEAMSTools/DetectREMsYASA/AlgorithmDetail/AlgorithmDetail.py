@@ -12,7 +12,7 @@ from commons.BaseStepView import BaseStepView
 from flowpipe.ActivationState import ActivationState
 
 
-from CEAMSTools.REMsDetectorYASA.AlgorithmDetail.Ui_AlgorithmDetail import Ui_AlgorithmDetail
+from CEAMSTools.DetectREMsYASA.AlgorithmDetail.Ui_AlgorithmDetail import Ui_AlgorithmDetail
 
 from qtpy import QtWidgets
 

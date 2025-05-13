@@ -1,7 +1,7 @@
 {
     "item_name": "SpindleDetectionSumo",
     "item_type": "tool",
-    "item_url": "",
+    "item_url": "https://snooz-toolbox-documentation.readthedocs.io/beta-2.0.0/user_guide/tools/Processing/Spindle_detection_SUMO.html",
     "item_api_version": "2.0.0",
     "tool_params": {
         "tool_label": "Spindle Detection SUMO",

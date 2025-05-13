@@ -5,7 +5,7 @@
 """
 from commons.BaseStepView import BaseStepView
 
-from CEAMSTools.REMsDetectorYASA.IntroStepYASA.Ui_IntroStepYASA import Ui_IntroStepYASA
+from CEAMSTools.DetectREMsYASA.IntroStepYASA.Ui_IntroStepYASA import Ui_IntroStepYASA
 
 from qtpy import QtWidgets
 

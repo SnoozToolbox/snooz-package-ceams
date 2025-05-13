@@ -23,7 +23,7 @@ class Ui_DetectorStep(object):
     def setupUi(self, DetectorStep):
         if not DetectorStep.objectName():
             DetectorStep.setObjectName(u"DetectorStep")
-        DetectorStep.resize(755, 590)
+        DetectorStep.resize(874, 602)
         self.gridLayout_2 = QGridLayout(DetectorStep)
         self.gridLayout_2.setObjectName(u"gridLayout_2")
         self.gridLayout = QGridLayout()
@@ -159,6 +159,7 @@ class Ui_DetectorStep(object):
         self.horizontalLayout.setObjectName(u"horizontalLayout")
         self.label_18 = QLabel(self.frame)
         self.label_18.setObjectName(u"label_18")
+        self.label_18.setFont(font)
 
         self.horizontalLayout.addWidget(self.label_18)
 
@@ -343,6 +344,7 @@ class Ui_DetectorStep(object):
         self.horizontalLayout_9.setObjectName(u"horizontalLayout_9")
         self.checkBox_2 = QCheckBox(self.frame_9)
         self.checkBox_2.setObjectName(u"checkBox_2")
+        self.checkBox_2.setFont(font)
 
         self.horizontalLayout_9.addWidget(self.checkBox_2)
 
@@ -361,24 +363,24 @@ class Ui_DetectorStep(object):
     def retranslateUi(self, DetectorStep):
         DetectorStep.setWindowTitle("")
         DetectorStep.setStyleSheet(QCoreApplication.translate("DetectorStep", u"font: 10pt \"Roboto-Regular\";", None))
-        self.label_15.setText(QCoreApplication.translate("DetectorStep", u"<html><head/><body><p>REMs Event group<br/><span style=\" font-size:8pt;\">The group category in the annotation file.</span></p></body></html>", None))
+        self.label_15.setText(QCoreApplication.translate("DetectorStep", u"<html><head/><body><p><span style=\" font-size:12pt;\">REMs Event group<br/>The group category in the annotation file.</span></p></body></html>", None))
         self.checkBox.setText(QCoreApplication.translate("DetectorStep", u"Yes", None))
-        self.label_7.setText(QCoreApplication.translate("DetectorStep", u"<html><head/><body><p>Remove Outliers<br/><span style=\" font-size:8pt;\">If &quot;Yes&quot;, YASA will automatically detect and remove REMs outliers using<br/>its algorithm. </span><span style=\" font-size:8pt; font-weight:600;\">Note</span><span style=\" font-size:8pt;\"> that this step will only be applied if there are more<br/>than 50 detected REMs in the first place.</span></p></body></html>", None))
-        self.label_9.setText(QCoreApplication.translate("DetectorStep", u"<html><head/><body><p>REMs Event Name<br/><span style=\" font-size:8pt;\">The event name in the annotation file.</span></p></body></html>", None))
-        self.label_3.setText(QCoreApplication.translate("DetectorStep", u"<html><head/><body><p>REM Frequency (Hz)<br/><span style=\" font-size:8pt;\">Frequency range of REMs.</span></p></body></html>", None))
+        self.label_7.setText(QCoreApplication.translate("DetectorStep", u"<html><head/><body><p><span style=\" font-size:12pt;\">Remove Outliers<br/></span>If &quot;Yes&quot;, YASA will automatically detect and remove REMs outliers using<br/>its algorithm. <span style=\" font-weight:600;\">Note</span> that this step will only be applied if there are more<br/>than 50 detected REMs in the first place.</p></body></html>", None))
+        self.label_9.setText(QCoreApplication.translate("DetectorStep", u"<html><head/><body><p><span style=\" font-size:12pt;\">REMs Event Name<br/>The event name in the annotation file.</span></p></body></html>", None))
+        self.label_3.setText(QCoreApplication.translate("DetectorStep", u"<html><head/><body><p><span style=\" font-size:12pt;\">REM Frequency (Hz)<br/></span>Frequency range of REMs.</p></body></html>", None))
         self.label_5.setText(QCoreApplication.translate("DetectorStep", u"Value:", None))
         self.label_11.setText(QCoreApplication.translate("DetectorStep", u"Min:", None))
         self.label_12.setText(QCoreApplication.translate("DetectorStep", u"Max:", None))
         self.label_18.setText(QCoreApplication.translate("DetectorStep", u"Min:", None))
         self.label_17.setText(QCoreApplication.translate("DetectorStep", u"Max:", None))
-        self.label_4.setText(QCoreApplication.translate("DetectorStep", u"<html><head/><body><p>Relative Prominence<br/><span style=\" font-size:8pt;\">scales the minimum prominence threshold as a fraction of minimum amplitude.<br/>(e.g., relative prominence = 0.5 means peaks must stand out by at least 50%<br/>of the minimum amplitude.)</span></p></body></html>", None))
-        self.label.setText(QCoreApplication.translate("DetectorStep", u"There are 6 main parameters for this tool:", None))
-        self.label_16.setText(QCoreApplication.translate("DetectorStep", u"<html><head/><body><p>Sleep Stages<br/><span style=\" font-size:8pt;\">If the hypnogram is loaded, the detection will only be applied<br/>to the values defiend in &quot;Sleep Stages&quot;: Default = 5 (REM)<br/>Format for multiple sleep stages, e.g., &quot;Sleep Stages&quot; : [5, 3, ...]</span></p></body></html>", None))
-        self.label_2.setText(QCoreApplication.translate("DetectorStep", u"<html><head/><body><p>Duration (s)<br/><span style=\" font-size:8pt;\">Minimum and maximum duration of the REMs.</span></p></body></html>", None))
-        self.label_8.setText(QCoreApplication.translate("DetectorStep", u"<html><head/><body><p>Amplitude (uV)<br/><span style=\" font-size:8pt;\">Minimum and maximum amplitude of the peak of the REM.</span></p></body></html>", None))
+        self.label_4.setText(QCoreApplication.translate("DetectorStep", u"<html><head/><body><p><span style=\" font-size:12pt;\">Relative Prominence<br/></span>scales the minimum prominence threshold as a fraction of minimum amplitude.<br/>(e.g., relative prominence = 0.5 means peaks must stand out by at least 50%<br/>of the minimum amplitude.)</p></body></html>", None))
+        self.label.setText(QCoreApplication.translate("DetectorStep", u"<html><head/><body><p><span style=\" font-size:12pt;\">There are 6 main parameters for this tool:</span></p></body></html>", None))
+        self.label_16.setText(QCoreApplication.translate("DetectorStep", u"<html><head/><body><p><span style=\" font-size:12pt;\">Sleep Stages<br/></span>If the hypnogram is loaded, the detection will only be applied<br/>to the values defiend in &quot;Sleep Stages&quot;: Default = 5 (REM)<br/>Format for multiple sleep stages, e.g., &quot;Sleep Stages&quot; : [5, 3, ...]</p></body></html>", None))
+        self.label_2.setText(QCoreApplication.translate("DetectorStep", u"<html><head/><body><p><span style=\" font-size:12pt;\">Duration (s)<br/></span>Minimum and maximum duration of the REMs.</p></body></html>", None))
+        self.label_8.setText(QCoreApplication.translate("DetectorStep", u"<html><head/><body><p><span style=\" font-size:12pt;\">Amplitude (uV)<br/></span>Minimum and maximum amplitude of the peak of the REM.</p></body></html>", None))
         self.label_13.setText(QCoreApplication.translate("DetectorStep", u"Min:", None))
         self.label_14.setText(QCoreApplication.translate("DetectorStep", u"Max:", None))
-        self.label_6.setText(QCoreApplication.translate("DetectorStep", u"Hypnogram Loaded", None))
+        self.label_6.setText(QCoreApplication.translate("DetectorStep", u"<html><head/><body><p><span style=\" font-size:12pt;\">Hypnogram Loaded</span></p></body></html>", None))
         self.checkBox_2.setText(QCoreApplication.translate("DetectorStep", u"Yes", None))
     # retranslateUi
 

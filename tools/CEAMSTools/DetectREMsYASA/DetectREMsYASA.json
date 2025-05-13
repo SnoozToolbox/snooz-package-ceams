@@ -1,9 +1,10 @@
 {
-    "item_name": "REMsDetectorYASA",
+    "item_name": "DetectREMsYASA",
     "item_type": "tool",
     "item_api_version": "2.0.0",
+    "item_url": "",
     "tool_params": {
-        "tool_label": "REMs Detector YASA",
+        "tool_label": "Detect REMs YASA",
         "tool_category": "1-Preprocessing",
         "tool_author": "Mohammad Hasan Azad",
         "tool_url": "",
@@ -12,7 +13,7 @@
         "package_name": "CEAMSTools",
         "steps": [
             {
-                "name": "REMs Detector YASA",
+                "name": "Detect REMs YASA",
                 "description": "",
                 "custom_step_name": "IntroStepYASA",
                 "configs": {
@@ -51,7 +52,7 @@
         }
     ],
     "process_params": {
-        "process_label": "REMs Detector YASA",
+        "process_label": "Detect REMs-YASA",
         "subgraph_params": {},
         "nodes": [
             {
