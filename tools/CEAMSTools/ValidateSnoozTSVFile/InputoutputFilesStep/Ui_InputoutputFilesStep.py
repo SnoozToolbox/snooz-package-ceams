@@ -126,7 +126,7 @@ class Ui_InputoutputFilesStep(object):
         self.label_2.setText(QCoreApplication.translate("InputoutputFilesStep", u"<html><head/><body><p>Load TSV files</p></body></html>", None))
         self.pushButton_2.setText(QCoreApplication.translate("InputoutputFilesStep", u"Clear", None))
         self.pushButton.setText(QCoreApplication.translate("InputoutputFilesStep", u"Add", None))
-        self.label.setText(QCoreApplication.translate("InputoutputFilesStep", u"<html><head/><body><p>Paths for TSV files validation reports:</p></body></html>", None))
+        self.label.setText(QCoreApplication.translate("InputoutputFilesStep", u"<html><head/><body><p>Path for TSV files validation reports:</p></body></html>", None))
         self.pushButton_3.setText(QCoreApplication.translate("InputoutputFilesStep", u"Choose", None))
     # retranslateUi
 
