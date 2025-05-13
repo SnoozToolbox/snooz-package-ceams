@@ -369,6 +369,20 @@
                     }
                 }
             ]
+        },
+        {
+            "item_name": "REMsDetectorYASA",
+            "item_type": "tool",
+            "item_version": "2.0.0",
+            "item_hooks": [
+                {
+                    "endpoint_name": "menu_endpoint",
+                    "parameters": {
+                        "menu_category": "1-Preprocessing",
+                        "menu_label": "REMs Detector YASA"
+                    }
+                }
+            ]
         }
     ]
 }
