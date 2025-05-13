@@ -4,18 +4,18 @@
 See the file LICENCE for full license details.
 
     DescriptionStep
-    TODO CLASS DESCRIPTION
+    Description step explains the tool and how to use it.
 """
 
 from qtpy import QtWidgets
 
-from CEAMSTools.TSVValidator.DescriptionStep.Ui_DescriptionStep import Ui_DescriptionStep
+from CEAMSTools.ValidateSnoozTSVFile.DescriptionStep.Ui_DescriptionStep import Ui_DescriptionStep
 from commons.BaseStepView import BaseStepView
 
 class DescriptionStep(BaseStepView, Ui_DescriptionStep, QtWidgets.QWidget):
     """
-        DescriptionStep
-        TODO CLASS DESCRIPTION
+    DescriptionStep
+    Description step explains the tool and how to use it.
     """
     def __init__(self, **kwargs):
         super().__init__(**kwargs)

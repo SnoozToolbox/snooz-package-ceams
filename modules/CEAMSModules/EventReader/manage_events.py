@@ -188,15 +188,22 @@ def xml_events_to_df(filename, event_label=None):
     sleep_stages = []
     for stage in xroot.iter('SleepStage'):
         sleep_stages.append(int(stage.text))
+    if len(sleep_stages)>0:
+        sleep_stages = np.array(sleep_stages)
+    else: 
+        sleep_stages = []
 
     # Convert the list of dict into a DataFrame
-    events_df = pd.DataFrame(events)
-    # Clean up lists of channels for a single channel (string) per event
-    events_df = convert_event_df_to_single_channel(events_df)
-    # In NATUS/Stellate the annotations can be duplicated
-    events_df.drop_duplicates(inplace=True, ignore_index=True)
+    if len(events)>0:
+        events_df = pd.DataFrame(events)
+        # Clean up lists of channels for a single channel (string) per event
+        events_df = convert_event_df_to_single_channel(events_df)
+        # In NATUS/Stellate the annotations can be duplicated
+        events_df.drop_duplicates(inplace=True, ignore_index=True)
+    else:
+        events_df = create_event_dataframe(None)
 
-    return events_df, epoch_len, np.array(sleep_stages)
+    return events_df, epoch_len, sleep_stages
 
 
 #------------------------------------------------------------------------------

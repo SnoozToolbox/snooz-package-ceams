@@ -4,13 +4,14 @@
 See the file LICENCE for full license details.
 
     InputoutputFilesStep
-    TODO CLASS DESCRIPTION
+    InputoutputFilesStep is the second step of the ValidateSnoozTSVFile tool.
+    It allows the user to select input files and an output directory for the validation reports.
 """
 
 from qtpy import QtWidgets, QtCore, QtGui
 from PySide6.QtCore import *
 
-from CEAMSTools.TSVValidator.InputoutputFilesStep.Ui_InputoutputFilesStep import Ui_InputoutputFilesStep
+from CEAMSTools.ValidateSnoozTSVFile.InputoutputFilesStep.Ui_InputoutputFilesStep import Ui_InputoutputFilesStep
 from commons.BaseStepView import BaseStepView
 
 from widgets.WarningDialogWithButtons import WarningDialogWithButtons
@@ -18,8 +19,9 @@ from widgets.WarningDialog import WarningDialog
 
 class InputoutputFilesStep(BaseStepView, Ui_InputoutputFilesStep, QtWidgets.QWidget):
     """
-        InputoutputFilesStep
-        TODO CLASS DESCRIPTION
+    InputoutputFilesStep
+    InputoutputFilesStep is the second step of the ValidateSnoozTSVFile tool.
+    It allows the user to select input files and an output directory for the validation reports.
     """
     model_updated_signal = QtCore.Signal()
     

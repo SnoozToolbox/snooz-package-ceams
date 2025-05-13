@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>899</width>
-    <height>1225</height>
+    <width>886</width>
+    <height>824</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -41,32 +41,32 @@
       <string notr="true">background-color: rgb(255, 255, 255);</string>
      </property>
      <property name="frameShape">
-      <enum>QFrame::NoFrame</enum>
+      <enum>QFrame::Shape::NoFrame</enum>
      </property>
      <property name="frameShadow">
-      <enum>QFrame::Plain</enum>
+      <enum>QFrame::Shadow::Plain</enum>
      </property>
      <property name="lineWidth">
       <number>0</number>
      </property>
      <property name="verticalScrollBarPolicy">
-      <enum>Qt::ScrollBarAlwaysOn</enum>
+      <enum>Qt::ScrollBarPolicy::ScrollBarAlwaysOn</enum>
      </property>
      <property name="horizontalScrollBarPolicy">
-      <enum>Qt::ScrollBarAlwaysOff</enum>
+      <enum>Qt::ScrollBarPolicy::ScrollBarAlwaysOff</enum>
      </property>
      <property name="widgetResizable">
       <bool>true</bool>
      </property>
      <property name="alignment">
-      <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+      <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignTop</set>
      </property>
      <widget class="QWidget" name="scrollAreaWidgetContents">
       <property name="geometry">
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>864</width>
+        <width>862</width>
         <height>1200</height>
        </rect>
       </property>
@@ -89,7 +89,7 @@
        </size>
       </property>
       <property name="layoutDirection">
-       <enum>Qt::LeftToRight</enum>
+       <enum>Qt::LayoutDirection::LeftToRight</enum>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout_8">
        <item>
@@ -106,10 +106,10 @@
            <item>
             <spacer name="horizontalSpacer_2">
              <property name="orientation">
-              <enum>Qt::Horizontal</enum>
+              <enum>Qt::Orientation::Horizontal</enum>
              </property>
              <property name="sizeType">
-              <enum>QSizePolicy::Fixed</enum>
+              <enum>QSizePolicy::Policy::Fixed</enum>
              </property>
              <property name="sizeHint" stdset="0">
               <size>
@@ -130,6 +130,9 @@
              </item>
              <item>
               <widget class="QCheckBox" name="checkBox_subject_avg">
+               <property name="toolTip">
+                <string>Check the display option 'MEAN' in order to check this option.</string>
+               </property>
                <property name="text">
                 <string>All the channels or ROIs are illustrated on the same picture.
 *Useful to explore topographic differences (with the option to display mean).</string>
@@ -139,10 +142,10 @@
              <item>
               <spacer name="verticalSpacer_6">
                <property name="orientation">
-                <enum>Qt::Vertical</enum>
+                <enum>Qt::Orientation::Vertical</enum>
                </property>
                <property name="sizeType">
-                <enum>QSizePolicy::Fixed</enum>
+                <enum>QSizePolicy::Policy::Fixed</enum>
                </property>
                <property name="sizeHint" stdset="0">
                 <size>
@@ -161,6 +164,12 @@
              </item>
              <item>
               <widget class="QCheckBox" name="checkBox_subject_sel">
+               <property name="enabled">
+                <bool>false</bool>
+               </property>
+               <property name="toolTip">
+                <string>Check the display option 'Display all the SW' in order to check this option.</string>
+               </property>
                <property name="text">
                 <string>Useful to explore the slow wave events set (with the option to display all sw signals).</string>
                </property>
@@ -175,10 +184,10 @@
        <item>
         <spacer name="verticalSpacer_3">
          <property name="orientation">
-          <enum>Qt::Vertical</enum>
+          <enum>Qt::Orientation::Vertical</enum>
          </property>
          <property name="sizeType">
-          <enum>QSizePolicy::Fixed</enum>
+          <enum>QSizePolicy::Policy::Fixed</enum>
          </property>
          <property name="sizeHint" stdset="0">
           <size>
@@ -191,7 +200,7 @@
        <item>
         <layout class="QVBoxLayout" name="verticalLayout_11">
          <property name="sizeConstraint">
-          <enum>QLayout::SetNoConstraint</enum>
+          <enum>QLayout::SizeConstraint::SetNoConstraint</enum>
          </property>
          <item>
           <widget class="QLabel" name="label_2">
@@ -205,10 +214,10 @@
            <item>
             <spacer name="horizontalSpacer">
              <property name="orientation">
-              <enum>Qt::Horizontal</enum>
+              <enum>Qt::Orientation::Horizontal</enum>
              </property>
              <property name="sizeType">
-              <enum>QSizePolicy::Fixed</enum>
+              <enum>QSizePolicy::Policy::Fixed</enum>
              </property>
              <property name="sizeHint" stdset="0">
               <size>
@@ -242,10 +251,10 @@ or ROIs for a group of subjects.</string>
              <item>
               <spacer name="verticalSpacer_7">
                <property name="orientation">
-                <enum>Qt::Vertical</enum>
+                <enum>Qt::Orientation::Vertical</enum>
                </property>
                <property name="sizeType">
-                <enum>QSizePolicy::Fixed</enum>
+                <enum>QSizePolicy::Policy::Fixed</enum>
                </property>
                <property name="sizeHint" stdset="0">
                 <size>
@@ -279,10 +288,10 @@ Each SW curve represents the signal for a selected channel or ROI for a group of
        <item>
         <spacer name="verticalSpacer_4">
          <property name="orientation">
-          <enum>Qt::Vertical</enum>
+          <enum>Qt::Orientation::Vertical</enum>
          </property>
          <property name="sizeType">
-          <enum>QSizePolicy::Fixed</enum>
+          <enum>QSizePolicy::Policy::Fixed</enum>
          </property>
          <property name="sizeHint" stdset="0">
           <size>
@@ -314,10 +323,10 @@ with different transition frequency (if the information is available).</string>
        <item>
         <spacer name="verticalSpacer_8">
          <property name="orientation">
-          <enum>Qt::Vertical</enum>
+          <enum>Qt::Orientation::Vertical</enum>
          </property>
          <property name="sizeType">
-          <enum>QSizePolicy::Fixed</enum>
+          <enum>QSizePolicy::Policy::Fixed</enum>
          </property>
          <property name="sizeHint" stdset="0">
           <size>
@@ -341,7 +350,7 @@ with different transition frequency (if the information is available).</string>
            <item>
             <layout class="QVBoxLayout" name="verticalLayout_4">
              <property name="sizeConstraint">
-              <enum>QLayout::SetMinimumSize</enum>
+              <enum>QLayout::SizeConstraint::SetMinimumSize</enum>
              </property>
              <item>
               <widget class="QRadioButton" name="radioButton_zc">
@@ -379,10 +388,10 @@ with different transition frequency (if the information is available).</string>
              <item>
               <spacer name="verticalSpacer">
                <property name="orientation">
-                <enum>Qt::Vertical</enum>
+                <enum>Qt::Orientation::Vertical</enum>
                </property>
                <property name="sizeType">
-                <enum>QSizePolicy::Fixed</enum>
+                <enum>QSizePolicy::Policy::Fixed</enum>
                </property>
                <property name="sizeHint" stdset="0">
                 <size>
@@ -401,10 +410,10 @@ with different transition frequency (if the information is available).</string>
            <item>
             <spacer name="horizontalSpacer_5">
              <property name="orientation">
-              <enum>Qt::Horizontal</enum>
+              <enum>Qt::Orientation::Horizontal</enum>
              </property>
              <property name="sizeType">
-              <enum>QSizePolicy::Fixed</enum>
+              <enum>QSizePolicy::Policy::Fixed</enum>
              </property>
              <property name="sizeHint" stdset="0">
               <size>
@@ -429,13 +438,13 @@ with different transition frequency (if the information is available).</string>
               </size>
              </property>
              <property name="contextMenuPolicy">
-              <enum>Qt::NoContextMenu</enum>
+              <enum>Qt::ContextMenuPolicy::NoContextMenu</enum>
              </property>
              <property name="layoutDirection">
-              <enum>Qt::LeftToRight</enum>
+              <enum>Qt::LayoutDirection::LeftToRight</enum>
              </property>
              <property name="autoFillBackground">
-              <bool>true</bool>
+              <bool>false</bool>
              </property>
              <property name="lineWidth">
               <number>0</number>
@@ -450,7 +459,7 @@ with different transition frequency (if the information is available).</string>
               <bool>false</bool>
              </property>
              <property name="alignment">
-              <set>Qt::AlignCenter</set>
+              <set>Qt::AlignmentFlag::AlignCenter</set>
              </property>
              <property name="wordWrap">
               <bool>false</bool>
@@ -466,10 +475,10 @@ with different transition frequency (if the information is available).</string>
            <item>
             <spacer name="horizontalSpacer_4">
              <property name="orientation">
-              <enum>Qt::Horizontal</enum>
+              <enum>Qt::Orientation::Horizontal</enum>
              </property>
              <property name="sizeType">
-              <enum>QSizePolicy::Expanding</enum>
+              <enum>QSizePolicy::Policy::Expanding</enum>
              </property>
              <property name="sizeHint" stdset="0">
               <size>
@@ -486,10 +495,10 @@ with different transition frequency (if the information is available).</string>
        <item>
         <spacer name="verticalSpacer_9">
          <property name="orientation">
-          <enum>Qt::Vertical</enum>
+          <enum>Qt::Orientation::Vertical</enum>
          </property>
          <property name="sizeType">
-          <enum>QSizePolicy::Fixed</enum>
+          <enum>QSizePolicy::Policy::Fixed</enum>
          </property>
          <property name="sizeHint" stdset="0">
           <size>
@@ -531,7 +540,7 @@ with different transition frequency (if the information is available).</string>
          <item>
           <widget class="QRadioButton" name="radioButton_meanstd">
            <property name="sizePolicy">
-            <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+            <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
              <horstretch>0</horstretch>
              <verstretch>0</verstretch>
             </sizepolicy>
@@ -579,7 +588,7 @@ and the SW curve standard deviation in gray shaded area.</string>
               <string>x-min:</string>
              </property>
              <property name="alignment">
-              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+              <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
              </property>
             </widget>
            </item>
@@ -605,7 +614,7 @@ and the SW curve standard deviation in gray shaded area.</string>
               <string>x-max:</string>
              </property>
              <property name="alignment">
-              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+              <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
              </property>
             </widget>
            </item>
@@ -631,7 +640,7 @@ and the SW curve standard deviation in gray shaded area.</string>
               <string>y-min:</string>
              </property>
              <property name="alignment">
-              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+              <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
              </property>
             </widget>
            </item>
@@ -657,7 +666,7 @@ and the SW curve standard deviation in gray shaded area.</string>
               <string>y-max:</string>
              </property>
              <property name="alignment">
-              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+              <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
              </property>
             </widget>
            </item>
@@ -684,10 +693,10 @@ and the SW curve standard deviation in gray shaded area.</string>
        <item>
         <spacer name="verticalSpacer_5">
          <property name="orientation">
-          <enum>Qt::Vertical</enum>
+          <enum>Qt::Orientation::Vertical</enum>
          </property>
          <property name="sizeType">
-          <enum>QSizePolicy::Fixed</enum>
+          <enum>QSizePolicy::Policy::Fixed</enum>
          </property>
          <property name="sizeHint" stdset="0">
           <size>
@@ -723,7 +732,7 @@ and the SW curve standard deviation in gray shaded area.</string>
               </size>
              </property>
              <property name="alignment">
-              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+              <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
              </property>
              <property name="placeholderText">
               <string>Select the folder where the pictures will be saved.</string>
@@ -752,10 +761,10 @@ and the SW curve standard deviation in gray shaded area.</string>
            <item>
             <spacer name="horizontalSpacer_3">
              <property name="orientation">
-              <enum>Qt::Horizontal</enum>
+              <enum>Qt::Orientation::Horizontal</enum>
              </property>
              <property name="sizeType">
-              <enum>QSizePolicy::Expanding</enum>
+              <enum>QSizePolicy::Policy::Expanding</enum>
              </property>
              <property name="sizeHint" stdset="0">
               <size>
@@ -921,7 +930,7 @@ and the SW curve standard deviation in gray shaded area.</string>
   <slot>out_options_slot()</slot>
  </slots>
  <buttongroups>
-  <buttongroup name="buttonGroup_mean"/>
   <buttongroup name="buttonGroup_align"/>
+  <buttongroup name="buttonGroup_mean"/>
  </buttongroups>
 </ui>

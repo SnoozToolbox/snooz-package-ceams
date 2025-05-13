@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file ''
+## Form generated from reading UI file 'Ui_OutputFiles.ui'
 ##
 ## Created by: Qt User Interface Compiler version 6.8.2
 ##
@@ -26,7 +26,7 @@ class Ui_OutputFiles(object):
     def setupUi(self, OutputFiles):
         if not OutputFiles.objectName():
             OutputFiles.setObjectName(u"OutputFiles")
-        OutputFiles.resize(899, 1225)
+        OutputFiles.resize(886, 824)
         OutputFiles.setStyleSheet(u"font: 12pt \"Roboto\";")
         self.verticalLayout_5 = QVBoxLayout(OutputFiles)
         self.verticalLayout_5.setObjectName(u"verticalLayout_5")
@@ -40,16 +40,16 @@ class Ui_OutputFiles(object):
         self.scrollArea.setMinimumSize(QSize(0, 0))
         self.scrollArea.setMaximumSize(QSize(16777215, 16777215))
         self.scrollArea.setStyleSheet(u"background-color: rgb(255, 255, 255);")
-        self.scrollArea.setFrameShape(QFrame.NoFrame)
-        self.scrollArea.setFrameShadow(QFrame.Plain)
+        self.scrollArea.setFrameShape(QFrame.Shape.NoFrame)
+        self.scrollArea.setFrameShadow(QFrame.Shadow.Plain)
         self.scrollArea.setLineWidth(0)
-        self.scrollArea.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOn)
-        self.scrollArea.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
+        self.scrollArea.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOn)
+        self.scrollArea.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
         self.scrollArea.setWidgetResizable(True)
-        self.scrollArea.setAlignment(Qt.AlignLeading|Qt.AlignLeft|Qt.AlignTop)
+        self.scrollArea.setAlignment(Qt.AlignmentFlag.AlignLeading|Qt.AlignmentFlag.AlignLeft|Qt.AlignmentFlag.AlignTop)
         self.scrollAreaWidgetContents = QWidget()
         self.scrollAreaWidgetContents.setObjectName(u"scrollAreaWidgetContents")
-        self.scrollAreaWidgetContents.setGeometry(QRect(0, 0, 864, 1200))
+        self.scrollAreaWidgetContents.setGeometry(QRect(0, 0, 862, 1200))
         sizePolicy1 = QSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Maximum)
         sizePolicy1.setHorizontalStretch(0)
         sizePolicy1.setVerticalStretch(1)
@@ -57,7 +57,7 @@ class Ui_OutputFiles(object):
         self.scrollAreaWidgetContents.setSizePolicy(sizePolicy1)
         self.scrollAreaWidgetContents.setMinimumSize(QSize(862, 1200))
         self.scrollAreaWidgetContents.setMaximumSize(QSize(900, 1200))
-        self.scrollAreaWidgetContents.setLayoutDirection(Qt.LeftToRight)
+        self.scrollAreaWidgetContents.setLayoutDirection(Qt.LayoutDirection.LeftToRight)
         self.verticalLayout_8 = QVBoxLayout(self.scrollAreaWidgetContents)
         self.verticalLayout_8.setObjectName(u"verticalLayout_8")
         self.verticalLayout_10 = QVBoxLayout()
@@ -96,6 +96,7 @@ class Ui_OutputFiles(object):
 
         self.checkBox_subject_sel = QCheckBox(self.scrollAreaWidgetContents)
         self.checkBox_subject_sel.setObjectName(u"checkBox_subject_sel")
+        self.checkBox_subject_sel.setEnabled(False)
 
         self.verticalLayout.addWidget(self.checkBox_subject_sel)
 
@@ -114,7 +115,7 @@ class Ui_OutputFiles(object):
 
         self.verticalLayout_11 = QVBoxLayout()
         self.verticalLayout_11.setObjectName(u"verticalLayout_11")
-        self.verticalLayout_11.setSizeConstraint(QLayout.SetNoConstraint)
+        self.verticalLayout_11.setSizeConstraint(QLayout.SizeConstraint.SetNoConstraint)
         self.label_2 = QLabel(self.scrollAreaWidgetContents)
         self.label_2.setObjectName(u"label_2")
 
@@ -196,7 +197,7 @@ class Ui_OutputFiles(object):
 
         self.verticalLayout_4 = QVBoxLayout()
         self.verticalLayout_4.setObjectName(u"verticalLayout_4")
-        self.verticalLayout_4.setSizeConstraint(QLayout.SetMinimumSize)
+        self.verticalLayout_4.setSizeConstraint(QLayout.SizeConstraint.SetMinimumSize)
         self.radioButton_zc = QRadioButton(self.scrollAreaWidgetContents)
         self.buttonGroup_align = QButtonGroup(OutputFiles)
         self.buttonGroup_align.setObjectName(u"buttonGroup_align")
@@ -239,13 +240,13 @@ class Ui_OutputFiles(object):
         sizePolicy.setHeightForWidth(self.label_7.sizePolicy().hasHeightForWidth())
         self.label_7.setSizePolicy(sizePolicy)
         self.label_7.setMinimumSize(QSize(0, 250))
-        self.label_7.setContextMenuPolicy(Qt.NoContextMenu)
-        self.label_7.setLayoutDirection(Qt.LeftToRight)
-        self.label_7.setAutoFillBackground(True)
+        self.label_7.setContextMenuPolicy(Qt.ContextMenuPolicy.NoContextMenu)
+        self.label_7.setLayoutDirection(Qt.LayoutDirection.LeftToRight)
+        self.label_7.setAutoFillBackground(False)
         self.label_7.setLineWidth(0)
         self.label_7.setPixmap(QPixmap(u":/sw_signal_curve/SW_signal_curve.png"))
         self.label_7.setScaledContents(False)
-        self.label_7.setAlignment(Qt.AlignCenter)
+        self.label_7.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.label_7.setWordWrap(False)
         self.label_7.setMargin(0)
         self.label_7.setIndent(0)
@@ -290,8 +291,11 @@ class Ui_OutputFiles(object):
         self.radioButton_meanstd = QRadioButton(self.scrollAreaWidgetContents)
         self.buttonGroup_mean.addButton(self.radioButton_meanstd)
         self.radioButton_meanstd.setObjectName(u"radioButton_meanstd")
-        sizePolicy.setHeightForWidth(self.radioButton_meanstd.sizePolicy().hasHeightForWidth())
-        self.radioButton_meanstd.setSizePolicy(sizePolicy)
+        sizePolicy2 = QSizePolicy(QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Fixed)
+        sizePolicy2.setHorizontalStretch(0)
+        sizePolicy2.setVerticalStretch(0)
+        sizePolicy2.setHeightForWidth(self.radioButton_meanstd.sizePolicy().hasHeightForWidth())
+        self.radioButton_meanstd.setSizePolicy(sizePolicy2)
         self.radioButton_meanstd.setMinimumSize(QSize(0, 0))
         self.radioButton_meanstd.setChecked(True)
 
@@ -311,7 +315,7 @@ class Ui_OutputFiles(object):
 
         self.label_13 = QLabel(self.scrollAreaWidgetContents)
         self.label_13.setObjectName(u"label_13")
-        self.label_13.setAlignment(Qt.AlignRight|Qt.AlignTrailing|Qt.AlignVCenter)
+        self.label_13.setAlignment(Qt.AlignmentFlag.AlignRight|Qt.AlignmentFlag.AlignTrailing|Qt.AlignmentFlag.AlignVCenter)
 
         self.horizontalLayout_5.addWidget(self.label_13)
 
@@ -326,7 +330,7 @@ class Ui_OutputFiles(object):
 
         self.label_14 = QLabel(self.scrollAreaWidgetContents)
         self.label_14.setObjectName(u"label_14")
-        self.label_14.setAlignment(Qt.AlignRight|Qt.AlignTrailing|Qt.AlignVCenter)
+        self.label_14.setAlignment(Qt.AlignmentFlag.AlignRight|Qt.AlignmentFlag.AlignTrailing|Qt.AlignmentFlag.AlignVCenter)
 
         self.horizontalLayout_5.addWidget(self.label_14)
 
@@ -341,7 +345,7 @@ class Ui_OutputFiles(object):
 
         self.label_15 = QLabel(self.scrollAreaWidgetContents)
         self.label_15.setObjectName(u"label_15")
-        self.label_15.setAlignment(Qt.AlignRight|Qt.AlignTrailing|Qt.AlignVCenter)
+        self.label_15.setAlignment(Qt.AlignmentFlag.AlignRight|Qt.AlignmentFlag.AlignTrailing|Qt.AlignmentFlag.AlignVCenter)
 
         self.horizontalLayout_5.addWidget(self.label_15)
 
@@ -356,7 +360,7 @@ class Ui_OutputFiles(object):
 
         self.label_16 = QLabel(self.scrollAreaWidgetContents)
         self.label_16.setObjectName(u"label_16")
-        self.label_16.setAlignment(Qt.AlignRight|Qt.AlignTrailing|Qt.AlignVCenter)
+        self.label_16.setAlignment(Qt.AlignmentFlag.AlignRight|Qt.AlignmentFlag.AlignTrailing|Qt.AlignmentFlag.AlignVCenter)
 
         self.horizontalLayout_5.addWidget(self.label_16)
 
@@ -392,7 +396,7 @@ class Ui_OutputFiles(object):
         self.lineEdit_output.setObjectName(u"lineEdit_output")
         self.lineEdit_output.setMinimumSize(QSize(0, 0))
         self.lineEdit_output.setMaximumSize(QSize(900, 16777215))
-        self.lineEdit_output.setAlignment(Qt.AlignRight|Qt.AlignTrailing|Qt.AlignVCenter)
+        self.lineEdit_output.setAlignment(Qt.AlignmentFlag.AlignRight|Qt.AlignmentFlag.AlignTrailing|Qt.AlignmentFlag.AlignVCenter)
 
         self.horizontalLayout_3.addWidget(self.lineEdit_output)
 
@@ -440,9 +444,15 @@ class Ui_OutputFiles(object):
         OutputFiles.setWindowTitle("")
         self.label_3.setText(QCoreApplication.translate("OutputFiles", u"<html><head/><body><p><span style=\" font-weight:600;\">Subject level : to generate pictures for each individual subject.</span></p></body></html>", None))
         self.label_9.setText(QCoreApplication.translate("OutputFiles", u"<html><head/><body><p><span style=\" font-weight:600;\">One picture per subject</span></p></body></html>", None))
+#if QT_CONFIG(tooltip)
+        self.checkBox_subject_avg.setToolTip(QCoreApplication.translate("OutputFiles", u"Check the display option 'MEAN' in order to check this option.", None))
+#endif // QT_CONFIG(tooltip)
         self.checkBox_subject_avg.setText(QCoreApplication.translate("OutputFiles", u"All the channels or ROIs are illustrated on the same picture.\n"
 "*Useful to explore topographic differences (with the option to display mean).", None))
         self.label_10.setText(QCoreApplication.translate("OutputFiles", u"<html><head/><body><p><span style=\" font-weight:600;\">One picture per channel or ROI</span></p></body></html>", None))
+#if QT_CONFIG(tooltip)
+        self.checkBox_subject_sel.setToolTip(QCoreApplication.translate("OutputFiles", u"Check the display option 'Display all the SW' in order to check this option.", None))
+#endif // QT_CONFIG(tooltip)
         self.checkBox_subject_sel.setText(QCoreApplication.translate("OutputFiles", u"Useful to explore the slow wave events set (with the option to display all sw signals).", None))
         self.label_2.setText(QCoreApplication.translate("OutputFiles", u"<html><head/><body><p><span style=\" font-weight:600;\">Cohort level : to generate pictures for the cohort.</span></p></body></html>", None))
         self.label_11.setText(QCoreApplication.translate("OutputFiles", u"<html><head/><body><p><span style=\" font-weight:600;\">One picture per cohort</span></p></body></html>", None))

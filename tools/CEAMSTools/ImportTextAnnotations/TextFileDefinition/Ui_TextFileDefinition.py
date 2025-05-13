@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file ''
+## Form generated from reading UI file 'Ui_TextFileDefinition.ui'
 ##
 ## Created by: Qt User Interface Compiler version 6.8.2
 ##
@@ -25,14 +25,14 @@ class Ui_TextFileDefinition(object):
     def setupUi(self, TextFileDefinition):
         if not TextFileDefinition.objectName():
             TextFileDefinition.setObjectName(u"TextFileDefinition")
-        TextFileDefinition.resize(778, 697)
+        TextFileDefinition.resize(778, 753)
         TextFileDefinition.setStyleSheet(u"font: 12pt \"Roboto\";")
-        TextFileDefinition.setInputMethodHints(Qt.ImhNone)
+        TextFileDefinition.setInputMethodHints(Qt.InputMethodHint.ImhNone)
         self.horizontalLayout_3 = QHBoxLayout(TextFileDefinition)
         self.horizontalLayout_3.setObjectName(u"horizontalLayout_3")
         self.verticalLayout_3 = QVBoxLayout()
         self.verticalLayout_3.setObjectName(u"verticalLayout_3")
-        self.verticalLayout_3.setSizeConstraint(QLayout.SetFixedSize)
+        self.verticalLayout_3.setSizeConstraint(QLayout.SizeConstraint.SetFixedSize)
         self.label_10 = QLabel(TextFileDefinition)
         self.label_10.setObjectName(u"label_10")
         font = QFont()
@@ -59,8 +59,8 @@ class Ui_TextFileDefinition(object):
 
         self.delimiter_lineedit = QLineEdit(TextFileDefinition)
         self.delimiter_lineedit.setObjectName(u"delimiter_lineedit")
-        self.delimiter_lineedit.setInputMethodHints(Qt.ImhDialableCharactersOnly)
-        self.delimiter_lineedit.setAlignment(Qt.AlignLeading|Qt.AlignLeft|Qt.AlignVCenter)
+        self.delimiter_lineedit.setInputMethodHints(Qt.InputMethodHint.ImhDialableCharactersOnly)
+        self.delimiter_lineedit.setAlignment(Qt.AlignmentFlag.AlignLeading|Qt.AlignmentFlag.AlignLeft|Qt.AlignmentFlag.AlignVCenter)
 
         self.gridLayout_3.addWidget(self.delimiter_lineedit, 0, 1, 1, 1)
 
@@ -88,7 +88,7 @@ class Ui_TextFileDefinition(object):
         self.verticalLayout_2.setObjectName(u"verticalLayout_2")
         self.label_5 = QLabel(TextFileDefinition)
         self.label_5.setObjectName(u"label_5")
-        self.label_5.setAlignment(Qt.AlignLeading|Qt.AlignLeft|Qt.AlignVCenter)
+        self.label_5.setAlignment(Qt.AlignmentFlag.AlignLeading|Qt.AlignmentFlag.AlignLeft|Qt.AlignmentFlag.AlignVCenter)
 
         self.verticalLayout_2.addWidget(self.label_5)
 
@@ -113,8 +113,8 @@ class Ui_TextFileDefinition(object):
 
         self.label_6 = QLabel(TextFileDefinition)
         self.label_6.setObjectName(u"label_6")
-        self.label_6.setLayoutDirection(Qt.LeftToRight)
-        self.label_6.setAlignment(Qt.AlignLeading|Qt.AlignLeft|Qt.AlignVCenter)
+        self.label_6.setLayoutDirection(Qt.LayoutDirection.LeftToRight)
+        self.label_6.setAlignment(Qt.AlignmentFlag.AlignLeading|Qt.AlignmentFlag.AlignLeft|Qt.AlignmentFlag.AlignVCenter)
 
         self.gridLayout_2.addWidget(self.label_6, 1, 0, 1, 1)
 
@@ -196,11 +196,11 @@ class Ui_TextFileDefinition(object):
 
         self.gridLayout_4 = QGridLayout()
         self.gridLayout_4.setObjectName(u"gridLayout_4")
-        self.gridLayout_4.setSizeConstraint(QLayout.SetMaximumSize)
+        self.gridLayout_4.setSizeConstraint(QLayout.SizeConstraint.SetMaximumSize)
         self.label_9 = QLabel(TextFileDefinition)
         self.label_9.setObjectName(u"label_9")
         self.label_9.setMinimumSize(QSize(80, 0))
-        self.label_9.setAlignment(Qt.AlignLeading|Qt.AlignLeft|Qt.AlignVCenter)
+        self.label_9.setAlignment(Qt.AlignmentFlag.AlignLeading|Qt.AlignmentFlag.AlignLeft|Qt.AlignmentFlag.AlignVCenter)
 
         self.gridLayout_4.addWidget(self.label_9, 0, 0, 1, 1)
 
@@ -232,8 +232,8 @@ class Ui_TextFileDefinition(object):
 
         self.label_2 = QLabel(TextFileDefinition)
         self.label_2.setObjectName(u"label_2")
-        self.label_2.setLayoutDirection(Qt.LeftToRight)
-        self.label_2.setAlignment(Qt.AlignLeading|Qt.AlignLeft|Qt.AlignVCenter)
+        self.label_2.setLayoutDirection(Qt.LayoutDirection.LeftToRight)
+        self.label_2.setAlignment(Qt.AlignmentFlag.AlignLeading|Qt.AlignmentFlag.AlignLeft|Qt.AlignmentFlag.AlignVCenter)
 
         self.gridLayout_4.addWidget(self.label_2, 1, 0, 1, 1)
 
@@ -261,8 +261,8 @@ class Ui_TextFileDefinition(object):
 
         self.label_3 = QLabel(TextFileDefinition)
         self.label_3.setObjectName(u"label_3")
-        self.label_3.setLayoutDirection(Qt.LeftToRight)
-        self.label_3.setAlignment(Qt.AlignLeading|Qt.AlignLeft|Qt.AlignVCenter)
+        self.label_3.setLayoutDirection(Qt.LayoutDirection.LeftToRight)
+        self.label_3.setAlignment(Qt.AlignmentFlag.AlignLeading|Qt.AlignmentFlag.AlignLeft|Qt.AlignmentFlag.AlignVCenter)
 
         self.gridLayout_4.addWidget(self.label_3, 2, 0, 1, 1)
 
@@ -282,8 +282,8 @@ class Ui_TextFileDefinition(object):
 
         self.label_4 = QLabel(TextFileDefinition)
         self.label_4.setObjectName(u"label_4")
-        self.label_4.setLayoutDirection(Qt.LeftToRight)
-        self.label_4.setAlignment(Qt.AlignLeading|Qt.AlignLeft|Qt.AlignVCenter)
+        self.label_4.setLayoutDirection(Qt.LayoutDirection.LeftToRight)
+        self.label_4.setAlignment(Qt.AlignmentFlag.AlignLeading|Qt.AlignmentFlag.AlignLeft|Qt.AlignmentFlag.AlignVCenter)
 
         self.gridLayout_4.addWidget(self.label_4, 3, 0, 1, 1)
 
@@ -316,7 +316,7 @@ class Ui_TextFileDefinition(object):
 
         self.label_8 = QLabel(TextFileDefinition)
         self.label_8.setObjectName(u"label_8")
-        self.label_8.setAlignment(Qt.AlignLeading|Qt.AlignLeft|Qt.AlignVCenter)
+        self.label_8.setAlignment(Qt.AlignmentFlag.AlignLeading|Qt.AlignmentFlag.AlignLeft|Qt.AlignmentFlag.AlignVCenter)
 
         self.gridLayout_4.addWidget(self.label_8, 4, 0, 1, 1)
 
@@ -386,8 +386,8 @@ class Ui_TextFileDefinition(object):
 #endif // QT_CONFIG(tooltip)
         self.delimiter_lineedit.setPlaceholderText(QCoreApplication.translate("TextFileDefinition", u"Insert delimiter(s)", None))
         self.label.setText(QCoreApplication.translate("TextFileDefinition", u"Number of rows to skip (reserved for the header)\n"
-"Do not include blank rows in the count\n"
-"Do not include the row with the column names in the count.", None))
+"*Do not include blank rows in the count\n"
+"*Do not include the row with the column titles in the count.", None))
 #if QT_CONFIG(tooltip)
         self.spinBox_nrows_hdr.setToolTip(QCoreApplication.translate("TextFileDefinition", u"Blank rows are skipped automatically, so do not include them in the row count to skip. This feature is important to prevent issues with files that end with blank rows.", None))
 #endif // QT_CONFIG(tooltip)
@@ -396,20 +396,24 @@ class Ui_TextFileDefinition(object):
         self.label_6.setText(QCoreApplication.translate("TextFileDefinition", u"Sample rate", None))
         self.time_radiobutton.setText(QCoreApplication.translate("TextFileDefinition", u"Time", None))
         self.textEdit.setHtml(QCoreApplication.translate("TextFileDefinition", u"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
-"<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
+"<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset=\"utf-8\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
+"hr { height: 1px; border-width: 0; }\n"
+"li.unchecked::marker { content: \"\\2610\"; }\n"
+"li.checked::marker { content: \"\\2612\"; }\n"
 "</style></head><body style=\" font-family:'Roboto'; font-size:12pt; font-weight:400; font-style:normal;\">\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">For the complete definition see : https://strftime.org/</p>\n"
 "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Examples of string format code for time : </p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
-"<p style=\" "
-                        "margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">%H:%M:%S for 14:30:45</p>\n"
+"<p style"
+                        "=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">%H:%M:%S for 14:30:45</p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">%H.%M.%S for 14.30.45</p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">%H:%M:%S.%f for 14:30:45.123456</p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">%I:%M:%S %p for 02:30:45 PM</p>\n"
 "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Leave the time format empty if it is provided as seconds elapsed.</p></body></html>", None))
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block"
+                        "-indent:0; text-indent:0px;\">Leave the time format empty if it is provided as seconds elapsed.</p></body></html>", None))
         self.sample_radiobutton.setText(QCoreApplication.translate("TextFileDefinition", u"Samples", None))
 #if QT_CONFIG(tooltip)
         self.lineEdit_time_format.setToolTip(QCoreApplication.translate("TextFileDefinition", u"Let empty to define the time elapsed in seconds. Otherwise define the string format (see https://strftime.org/). ", None))

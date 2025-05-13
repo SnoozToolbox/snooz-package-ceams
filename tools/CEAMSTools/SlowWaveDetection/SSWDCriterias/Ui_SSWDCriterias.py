@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file ''
+## Form generated from reading UI file 'Ui_SSWDCriterias.ui'
 ##
 ## Created by: Qt User Interface Compiler version 6.8.2
 ##
@@ -44,8 +44,8 @@ class Ui_SSWDCriterias(object):
         font.setBold(False)
         font.setItalic(False)
         self.label_16.setFont(font)
-        self.label_16.setLayoutDirection(Qt.LeftToRight)
-        self.label_16.setAlignment(Qt.AlignLeading|Qt.AlignLeft|Qt.AlignVCenter)
+        self.label_16.setLayoutDirection(Qt.LayoutDirection.LeftToRight)
+        self.label_16.setAlignment(Qt.AlignmentFlag.AlignLeading|Qt.AlignmentFlag.AlignLeft|Qt.AlignmentFlag.AlignVCenter)
 
         self.verticalLayout_7.addWidget(self.label_16)
 
@@ -71,16 +71,16 @@ class Ui_SSWDCriterias(object):
 
         self.label = QLabel(SSWDCriterias)
         self.label.setObjectName(u"label")
-        self.label.setLayoutDirection(Qt.LeftToRight)
-        self.label.setAlignment(Qt.AlignLeading|Qt.AlignLeft|Qt.AlignVCenter)
+        self.label.setLayoutDirection(Qt.LayoutDirection.LeftToRight)
+        self.label.setAlignment(Qt.AlignmentFlag.AlignLeading|Qt.AlignmentFlag.AlignLeft|Qt.AlignmentFlag.AlignVCenter)
 
         self.gridLayout_2.addWidget(self.label, 1, 0, 1, 1)
 
         self.label_3 = QLabel(SSWDCriterias)
         self.label_3.setObjectName(u"label_3")
         self.label_3.setMinimumSize(QSize(150, 0))
-        self.label_3.setLayoutDirection(Qt.LeftToRight)
-        self.label_3.setAlignment(Qt.AlignLeading|Qt.AlignLeft|Qt.AlignVCenter)
+        self.label_3.setLayoutDirection(Qt.LayoutDirection.LeftToRight)
+        self.label_3.setAlignment(Qt.AlignmentFlag.AlignLeading|Qt.AlignmentFlag.AlignLeft|Qt.AlignmentFlag.AlignVCenter)
 
         self.gridLayout_2.addWidget(self.label_3, 0, 0, 1, 1)
 
@@ -212,8 +212,8 @@ class Ui_SSWDCriterias(object):
         self.label_5 = QLabel(SSWDCriterias)
         self.label_5.setObjectName(u"label_5")
         self.label_5.setFont(font)
-        self.label_5.setLayoutDirection(Qt.LeftToRight)
-        self.label_5.setAlignment(Qt.AlignLeading|Qt.AlignLeft|Qt.AlignVCenter)
+        self.label_5.setLayoutDirection(Qt.LayoutDirection.LeftToRight)
+        self.label_5.setAlignment(Qt.AlignmentFlag.AlignLeading|Qt.AlignmentFlag.AlignLeft|Qt.AlignmentFlag.AlignVCenter)
 
         self.verticalLayout_5.addWidget(self.label_5)
 
@@ -276,7 +276,7 @@ class Ui_SSWDCriterias(object):
 
         self.label_14 = QLabel(SSWDCriterias)
         self.label_14.setObjectName(u"label_14")
-        self.label_14.setAlignment(Qt.AlignCenter)
+        self.label_14.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
         self.gridLayout.addWidget(self.label_14, 4, 1, 1, 1)
 
@@ -299,7 +299,7 @@ class Ui_SSWDCriterias(object):
 
         self.label_6 = QLabel(SSWDCriterias)
         self.label_6.setObjectName(u"label_6")
-        self.label_6.setAlignment(Qt.AlignRight|Qt.AlignTrailing|Qt.AlignVCenter)
+        self.label_6.setAlignment(Qt.AlignmentFlag.AlignRight|Qt.AlignmentFlag.AlignTrailing|Qt.AlignmentFlag.AlignVCenter)
 
         self.gridLayout.addWidget(self.label_6, 3, 0, 1, 1)
 
@@ -327,7 +327,7 @@ class Ui_SSWDCriterias(object):
         self.label_11 = QLabel(SSWDCriterias)
         self.label_11.setObjectName(u"label_11")
         self.label_11.setMinimumSize(QSize(50, 0))
-        self.label_11.setAlignment(Qt.AlignCenter)
+        self.label_11.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
         self.gridLayout.addWidget(self.label_11, 3, 3, 1, 1)
 
@@ -340,7 +340,7 @@ class Ui_SSWDCriterias(object):
 
         self.label_7 = QLabel(SSWDCriterias)
         self.label_7.setObjectName(u"label_7")
-        self.label_7.setAlignment(Qt.AlignRight|Qt.AlignTrailing|Qt.AlignVCenter)
+        self.label_7.setAlignment(Qt.AlignmentFlag.AlignRight|Qt.AlignmentFlag.AlignTrailing|Qt.AlignmentFlag.AlignVCenter)
 
         self.gridLayout.addWidget(self.label_7, 4, 0, 1, 1)
 
@@ -351,7 +351,7 @@ class Ui_SSWDCriterias(object):
 
         self.label_2 = QLabel(SSWDCriterias)
         self.label_2.setObjectName(u"label_2")
-        self.label_2.setAlignment(Qt.AlignRight|Qt.AlignTrailing|Qt.AlignVCenter)
+        self.label_2.setAlignment(Qt.AlignmentFlag.AlignRight|Qt.AlignmentFlag.AlignTrailing|Qt.AlignmentFlag.AlignVCenter)
 
         self.gridLayout.addWidget(self.label_2, 1, 0, 1, 1)
 
@@ -364,7 +364,7 @@ class Ui_SSWDCriterias(object):
 
         self.label_4 = QLabel(SSWDCriterias)
         self.label_4.setObjectName(u"label_4")
-        self.label_4.setAlignment(Qt.AlignRight|Qt.AlignTrailing|Qt.AlignVCenter)
+        self.label_4.setAlignment(Qt.AlignmentFlag.AlignRight|Qt.AlignmentFlag.AlignTrailing|Qt.AlignmentFlag.AlignVCenter)
 
         self.gridLayout.addWidget(self.label_4, 2, 0, 1, 1)
 
@@ -376,7 +376,7 @@ class Ui_SSWDCriterias(object):
 
         self.label_10 = QLabel(SSWDCriterias)
         self.label_10.setObjectName(u"label_10")
-        self.label_10.setAlignment(Qt.AlignCenter)
+        self.label_10.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
         self.gridLayout.addWidget(self.label_10, 3, 1, 1, 1)
 
@@ -398,7 +398,7 @@ class Ui_SSWDCriterias(object):
 
         self.label_15 = QLabel(SSWDCriterias)
         self.label_15.setObjectName(u"label_15")
-        self.label_15.setAlignment(Qt.AlignCenter)
+        self.label_15.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
         self.gridLayout.addWidget(self.label_15, 4, 3, 1, 1)
 
@@ -484,6 +484,9 @@ class Ui_SSWDCriterias(object):
         self.label_3.setText(QCoreApplication.translate("SSWDCriterias", u"Event group", None))
         self.label_17.setText(QCoreApplication.translate("SSWDCriterias", u"<html><head/><body><p><span style=\" font-weight:600;\">Detections and/or analyses</span></p></body></html>", None))
         self.radioButton_det.setText(QCoreApplication.translate("SSWDCriterias", u"Detect slow waves.", None))
+#if QT_CONFIG(tooltip)
+        self.radioButton_anal.setToolTip(QCoreApplication.translate("SSWDCriterias", u"Avoiding the detection is currently not available.", None))
+#endif // QT_CONFIG(tooltip)
         self.radioButton_anal.setText(QCoreApplication.translate("SSWDCriterias", u"Do not detect slow waves, just analyze slow waves previously detected and saved in the accessory file.", None))
         self.label_19.setText(QCoreApplication.translate("SSWDCriterias", u"<html><head/><body><p><span style=\" font-weight:600;\">Sleep stages and periods selection</span></p></body></html>", None))
         self.checkBox_n1.setText(QCoreApplication.translate("SSWDCriterias", u"N1", None))

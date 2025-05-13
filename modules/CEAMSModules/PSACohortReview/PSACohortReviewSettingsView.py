@@ -378,7 +378,7 @@ class PSACohortReviewSettingsView(BaseSettingsView, Ui_PSACohortReviewSettingsVi
     def add_ROI_to_subject_item(self, subject_item, roi_label, roi_state):
         # Create the ROI item flag to identify that it is an ROI
         label_item = QStandardItem(roi_label)
-        #label_item.setEditable(False)
+        label_item.setEditable(False)
         label_item.setCheckable(True)
         label_item.setCheckState(Qt.Checked if roi_state else Qt.Unchecked)
         flag_item = QStandardItem('1')
@@ -572,7 +572,11 @@ class PSACohortReviewSettingsView(BaseSettingsView, Ui_PSACohortReviewSettingsVi
                 chan_item.setCheckState(cohort_state_list[i])
             else:
                 chan_item.setCheckState(Qt.Checked)
-            chan_item.setFlags(Qt.ItemIsEditable | Qt.ItemIsEnabled | Qt.ItemIsSelectable | Qt.ItemIsAutoTristate | Qt.ItemIsUserCheckable)
+            # if the item text include ROI, make it not editable
+            if 'ROI' in chan:
+                chan_item.setFlags(Qt.ItemIsEnabled | Qt.ItemIsSelectable | Qt.ItemIsAutoTristate | Qt.ItemIsUserCheckable)
+            else:
+                chan_item.setFlags(Qt.ItemIsEditable | Qt.ItemIsEnabled | Qt.ItemIsSelectable | Qt.ItemIsAutoTristate | Qt.ItemIsUserCheckable)
             self.chan_cohort_listWidget.addItem(chan_item) 
  
 

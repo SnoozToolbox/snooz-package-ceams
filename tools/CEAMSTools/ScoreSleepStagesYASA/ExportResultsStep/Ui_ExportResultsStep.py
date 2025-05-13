@@ -224,14 +224,17 @@ class Ui_ExportResultsStep(object):
 "li.checked::marker { content: \"\\2612\"; }\n"
 "</style></head><body style=\" font-family:'Roboto'; font-size:12pt; font-weight:400; font-style:normal;\">\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">In this step, you can either apply an automatic scoring or compare the results of the automatic scoring with expert scoring if you have expert-annotated sleep stage files.</p>\n"
-"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">The sleep stage scoring from the YASA algorithm will then be exported.</p></body></html>", None))
+"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">The sleep stage scoring from the YASA algorithm will then be exported.</p>\n"
+"<p style=\"-qt-paragrap"
+                        "h-type:empty; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
+"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">*NOTE: Snooz cannot write sleep staging data to NATUS or Stellate formats. However, the tool can still be used to compare YASA scoring with existing sleep staging in these formats.</p></body></html>", None))
         self.label_2.setText(QCoreApplication.translate("ExportResultsStep", u"<html><head/><body><p>Define a label for the predicted sleep stages group label in the accessory file.</p></body></html>", None))
         self.lineEdit_2.setText(QCoreApplication.translate("ExportResultsStep", u"stage", None))
         self.checkBox.setText(QCoreApplication.translate("ExportResultsStep", u"Automatic Scoring", None))
         self.label_3.setText(QCoreApplication.translate("ExportResultsStep", u"<html><head/><body><p>Be careful! Changing the group label <span style=\" font-weight:700;\">'stage'</span> to a different value may prevent Snooz from correctly identifying sleep stages<br/>in other tools.</p></body></html>", None))
         self.checkBox_2.setText(QCoreApplication.translate("ExportResultsStep", u"Compare with Expert Scoring", None))
-        self.label_4.setText(QCoreApplication.translate("ExportResultsStep", u"<html><head/><body><p>For proper tool functionality during validation, the gold standard group must be labeled as <span style=\" font-weight:700;\">'stage'</span>.</p></body></html>", None))
-        self.label_5.setText(QCoreApplication.translate("ExportResultsStep", u"<html><head/><body><p>To perform validation, place the expert annotation files in the same directory as the PSG files and convert them to .tsv format<br/>to ensure compatibility with PSGReader.</p></body></html>", None))
+        self.label_4.setText(QCoreApplication.translate("ExportResultsStep", u"<html><head/><body><p>To validate sleep stage scoring, expert annotations must be added to the accessory file (such as the TSV file associated with the EDF format) before running this tool.</p></body></html>", None))
+        self.label_5.setText(QCoreApplication.translate("ExportResultsStep", u"<html><head/><body><p>Sleep stage annotations for gold standard are defined with <span style=\" font-weight:700;\">group = &quot;stage&quot;</span>, and the <span style=\" font-weight:700;\">name</span> values correspond to: 0 (W), 1 (N1), 2 (N2), 3 (N3), 5 (R), and 9 (Unscored).</p></body></html>", None))
         self.lineEdit.setText(QCoreApplication.translate("ExportResultsStep", u"Select the folder where the exported files are supposed to be saved", None))
         self.pushButton.setText(QCoreApplication.translate("ExportResultsStep", u"Choose", None))
         self.label_6.setText(QCoreApplication.translate("ExportResultsStep", u"<html><head/><body><p>The exported file includes, the expert annotated hypnogram, the predicted hypnogram, confusion matrix, accuracy, and<br/>the average confidence.</p></body></html>", None))
