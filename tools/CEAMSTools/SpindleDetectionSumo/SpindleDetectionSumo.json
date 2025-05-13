@@ -7,7 +7,7 @@
         "tool_label": "Spindle Detection SUMO",
         "tool_category": "2-Processing",
         "tool_author": "",
-        "tool_url": "",
+        "tool_url": "https://snooz-toolbox-documentation.readthedocs.io/latest/user_guide/tools/Processing/Spindle_detection_SUMO.html#spindle-detection-sumo",
         "tool_description": "Spindle detection using SUMO",
         "tool_version": "0.0.0",
         "package_name": "CEAMSTools",
