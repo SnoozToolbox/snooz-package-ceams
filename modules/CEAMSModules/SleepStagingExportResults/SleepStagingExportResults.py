@@ -107,7 +107,7 @@ class SleepStagingExportResults(SciNode):
             raise NodeInputException(self.identifier, "ResultsDataframe", "Input must be a pandas DataFrame")
         if not isinstance(info, list) or len(info) != 3:
             raise NodeInputException(self.identifier, "info", "Info must be a list of [ground_truth, predicted, file_path]")
-        if not os.path.isdir(SavedDestination):
+        if not os.path.isdir(SavedDestination) and Checkbox:
             raise NodeInputException(self.identifier, "SavedDestination", "Output directory does not exist")
         
 

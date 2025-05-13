@@ -236,8 +236,16 @@ class YasaSleepStaging(SciNode):
         if len(y_pred_snooz) == len(sleep_stages):
             sleep_stages['group'] = stage_group
             sleep_stages['name'] = y_pred_snooz
+        elif len(y_pred_snooz) == len(sleep_stages) + 1:
+            # If the length of y_pred_snooz is one more than sleep_stages, remove the last element
+            sleep_stages['group'] = stage_group
+            sleep_stages['name'] = y_pred_snooz[:-1]
+        elif len(y_pred_snooz) == len(sleep_stages) - 1:
+            # If the length of y_pred_snooz is one less than sleep_stages, add a 'UNS' stage
+            sleep_stages['group'] = stage_group
+            sleep_stages['name'] = y_pred_snooz + [stage_mapping_to_snooz['UNS']]
         else:
-            raise NodeInputException(self.identifier, "sleep_stages", \
+            raise NodeRuntimeException(self.identifier, "sleep_stages", \
                     f"The number of predicted sleep stages {len(y_pred_snooz)} does not match the number of expected epochs {len(sleep_stages)}.")
         
         # Snooz can write the sleep staging only for the .edf format 
