@@ -369,20 +369,6 @@
                     }
                 }
             ]
-        },
-        {
-            "item_name": "EditPathsInJson",
-            "item_type": "tool",
-            "item_version": "0.0.0",
-            "item_hooks": [
-                {
-                    "endpoint_name": "menu_endpoint",
-                    "parameters": {
-                        "menu_category": "1-Preprocessing",
-                        "menu_label": "Edit Paths In Json"
-                    }
-                }
-            ]
         }
     ]
 }
