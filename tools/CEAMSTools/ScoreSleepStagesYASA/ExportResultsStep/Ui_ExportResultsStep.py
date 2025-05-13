@@ -24,7 +24,7 @@ class Ui_ExportResultsStep(object):
     def setupUi(self, ExportResultsStep):
         if not ExportResultsStep.objectName():
             ExportResultsStep.setObjectName(u"ExportResultsStep")
-        ExportResultsStep.resize(943, 729)
+        ExportResultsStep.resize(1270, 729)
         ExportResultsStep.setStyleSheet(u"font: 12pt \"Roboto\";")
         self.verticalLayout_2 = QVBoxLayout(ExportResultsStep)
         self.verticalLayout_2.setObjectName(u"verticalLayout_2")
@@ -227,7 +227,7 @@ class Ui_ExportResultsStep(object):
 "<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">The sleep stage scoring from the YASA algorithm will then be exported.</p>\n"
 "<p style=\"-qt-paragrap"
                         "h-type:empty; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
-"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">*NOTE: Snooz cannot write sleep staging data to NATUS or Stellate formats. However, the tool can still be used to compare YASA scoring with existing sleep staging in these formats.</p></body></html>", None))
+"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">*NOTE 1: Snooz cannot write sleep staging data to NATUS or Stellate formats. However, the tool can still be used to compare YASA scoring with existing sleep staging in these formats.<br />*NOTE 2: Currently, Snooz is not able to work with discontinuous files.</p></body></html>", None))
         self.label_2.setText(QCoreApplication.translate("ExportResultsStep", u"<html><head/><body><p>Define a label for the predicted sleep stages group label in the accessory file.</p></body></html>", None))
         self.lineEdit_2.setText(QCoreApplication.translate("ExportResultsStep", u"stage", None))
         self.checkBox.setText(QCoreApplication.translate("ExportResultsStep", u"Automatic Scoring", None))
