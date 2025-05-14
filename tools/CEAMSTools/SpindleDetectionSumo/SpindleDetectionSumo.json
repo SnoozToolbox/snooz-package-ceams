@@ -1,13 +1,13 @@
 {
     "item_name": "SpindleDetectionSumo",
     "item_type": "tool",
-    "item_url": "https://snooz-toolbox-documentation.readthedocs.io/beta-2.0.0/user_guide/tools/Processing/Spindle_detection_SUMO.html",
+    "item_url": "https://snooz-toolbox-documentation.readthedocs.io/latest/user_guide/tools/Processing/Spindle_detection_SUMO.html#spindle-detection-sumo",
     "item_api_version": "2.0.0",
     "tool_params": {
         "tool_label": "Spindle Detection SUMO",
         "tool_category": "2-Processing",
         "tool_author": "",
-        "tool_url": "https://snooz-toolbox-documentation.readthedocs.io/latest/user_guide/tools/Processing/Spindle_detection_SUMO.html#spindle-detection-sumo",
+        "tool_url":"",
         "tool_description": "Spindle detection using SUMO",
         "tool_version": "0.0.0",
         "package_name": "CEAMSTools",
