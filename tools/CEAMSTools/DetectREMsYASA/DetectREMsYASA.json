@@ -44,11 +44,11 @@
     "dependencies": [
         {
             "package_name": "CEAMSModules",
-            "package_version": "7.0.0"
+            "package_version": "7.1.0"
         },
         {
             "package_name": "CEAMSTools",
-            "package_version": "7.0.0"
+            "package_version": "7.1.0"
         }
     ],
     "process_params": {
