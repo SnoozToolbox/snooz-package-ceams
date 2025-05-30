@@ -1,6 +1,6 @@
 {
     "package_name": "CEAMSModules",
-    "package_version": "7.0.0",
+    "package_version": "7.3.0",
     "package_author": "",
     "package_url": "",
     "package_description": "",
@@ -23,7 +23,7 @@
         {
             "item_name": "PSGReader",
             "item_type": "module",
-            "item_version": "2.0.0",
+            "item_version": "2.1.0",
             "item_hooks": [
                 {
                     "endpoint_name": "module_endpoint",
@@ -205,7 +205,7 @@
         {
             "item_name": "SlowWaveDetector",
             "item_type": "module",
-            "item_version": "2.0.0",
+            "item_version": "2.1.0",
             "item_hooks": [
                 {
                     "endpoint_name": "module_endpoint",
@@ -1010,6 +1010,34 @@
                     "parameters": {
                         "module_category": "Files I/O",
                         "module_label": "TSV Validator Master"
+                    }
+                }
+            ]
+        },
+        {
+            "item_name": "REMsDetectionYasa",
+            "item_type": "module",
+            "item_version": "2.0.0",
+            "item_hooks": [
+                {
+                    "endpoint_name": "module_endpoint",
+                    "parameters": {
+                        "module_category": "Detectors",
+                        "module_label": "REMs Detection Yasa"
+                    }
+                }
+            ]
+        },
+        {
+            "item_name": "CreateTuple",
+            "item_type": "module",
+            "item_version": "2.0.0",
+            "item_hooks": [
+                {
+                    "endpoint_name": "module_endpoint",
+                    "parameters": {
+                        "module_category": "Parameters",
+                        "module_label": "Create Tuple"
                     }
                 }
             ]

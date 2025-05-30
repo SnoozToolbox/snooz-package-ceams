@@ -894,66 +894,102 @@ class PSGReaderSettingsView( BaseSettingsView,  Ui_PSGReaderSettingsView, QtWidg
 
         # Get the current date as a string YYYYMMDD
         current_date = datetime.datetime.now().strftime("%Y%m%d")
+        # Create a dictionnary to store the data
+        data_to_export = {}
+        # Ask the user to select a folder
+        QtWidgets.QMessageBox.information(
+            None,
+            "Select Folder",
+            "Please select an existing folder where the file selection will be exported."
+        )
+        folder = QtWidgets.QFileDialog.getExistingDirectory(self, "Select a folder", "", QtWidgets.QFileDialog.ShowDirsOnly)
+        if folder is not None and folder:
 
-        filename, _ = QtWidgets.QFileDialog.getSaveFileName(\
-            None, 'Export channels selection in a table format as',\
-                 f'Snooz-Channel_selections_log_table-{current_date}.txt', filter="*.txt")
-        if filename is not None and filename:
+            # Export the log of the channel selection
+            filename = os.path.join(folder, f'Snooz-Chan-log-{current_date}.txt')
             with open(filename, 'w') as tsv_file:
                 export_df = self.channels_table_model._data.loc[self.channels_table_model._data['Use'] == True]
                 export_df.to_csv(tsv_file, sep='\t', encoding="utf_8")
+            
+            # Create a dictionnary to store the files selection and the alias definition (if any)
+            files = self.files_details.copy()
+            if self._options['file_selection_only']['value'] == "0":
+                # Update the files selection (montage and channels) and return the dict of files
+                files = self.update_files_selection()
+                data_to_export['files'] = files
+                # Get the list of alias
+                alias = self.get_alias()
+                if len(alias) > 0:
+                    data_to_export['alias'] = alias
 
-        files = self.files_details.copy()
-        if self._options['file_selection_only']['value'] == "0":
-            # Update the files selection (montage and channels) and return the dict of files
-            files = self.update_files_selection()
-            # Get the list of alias
-            alias = self.get_alias()
-            if len(alias) > 0:
-                # Save the dictionnary alias in a text file
-                alias_filename, _ = QtWidgets.QFileDialog.getSaveFileName(\
-                    None, 'Save alias definition as text file to import later in an Input Files step in Snooz',\
-                         f'Snooz-Input_Files_Export-Alias-{current_date}.txt', filter="*.txt")
-                if alias_filename is not None and alias_filename:
-                    with open(alias_filename, 'w') as txt_file:
-                        # Write the dictionary converted to a string
-                        txt_file.write(str(alias))
-
-        # Save the dictionnary files in a text file
-        # Snooz_Input_Files_Selection_Export_{date}.tsv
-        filename, _ = QtWidgets.QFileDialog.getSaveFileName(None, \
-            'Save files selection as text file to import later in an Input Files step in Snooz',\
-                f'Snooz-Input_Files_Export-Files_Montages_Channels-{current_date}.txt', filter="*.txt")
-        if filename is not None and filename:
-            with open(filename, 'w') as txt_file:
-                # Write the dictionary converted to a string
-                txt_file.write(str(files))
+            # Save the dictionnary files in a text file
+            # Snooz_Files_{date}.tsv
+            filename = os.path.join(folder, f'Snooz-Files-{current_date}.txt')
+            try: 
+                with open(filename, 'w') as txt_file:
+                    # Write the dictionary converted to a string
+                    txt_file.write(str(data_to_export))
+                        # Ask the user to select a folder
+                QtWidgets.QMessageBox.information(
+                    None,
+                    "File Selection Exported",
+                    "The selection files were successufly exported."
+                )
+            except Exception as e:  
+                 QtWidgets.QMessageBox.critical(
+                    None,
+                    "File Selection Exported",
+                    "An error occured while exporting the selection files."
+                )               
 
 
     # Called when the user click on the import button
     def import_slot(self):
-        # Open a file. Ask the user for a txt file
-        alias_filename, _ = QtWidgets.QFileDialog.getOpenFileName(None, \
-            'Open alias definition if any (i.e. Previously exported from Snooz as Snooz-Input_Files_Export-Alias-date.txt)', \
-                f'Snooz-Alias.txt', filter="*.txt")
-        if alias_filename is not None and alias_filename:
-            with open(alias_filename, 'r') as txt_file:
-                alias = eval(txt_file.read())
-                self.load_alias_from_data(alias)
 
+        # Inform the user to select a file
+        QtWidgets.QMessageBox.information(
+            None,
+            "Select File",
+            "Please select the file selection (i.e. Previously exported as Snooz-Files-date.txt)."
+        )
         # Open a file. Ask the user for a txt file
-        filename, _ = QtWidgets.QFileDialog.getOpenFileName(None, \
-            'Open files selection (i.e. Previously exported from Snooz as Snooz-Input_Files_Export-Files_Montages_Channels-date.txt)', \
-                'Snooz-Files.txt\r', filter="*.txt")
+        filename, _ = QtWidgets.QFileDialog.getOpenFileName(parent=None, \
+            caption ='Open files selection (i.e. Previously exported as Snooz-Files-date.txt)', \
+            filter ="*.txt")
         if filename is not None and filename:
             # Display a loading dialog
             self._open_loading_dialog()
             with open(filename, 'r') as txt_file:
-                files = eval(txt_file.read())
-                self.load_files_from_data(files)
-            # Close the loading dialog
-            self._close_loading_dialog()
+                information_read = txt_file.read()
+                try:
+                    information_dict = eval(information_read)
+                    if 'files' in information_dict:
+                        files = information_dict['files']
+                        self.load_files_from_data(files)
 
+                        # Get the list of alias if any
+                        alias = self.get_alias()
+                        if len(alias) > 0:
+                            if 'alias' in information_dict:
+                                alias = information_dict['alias']
+                                self.load_alias_from_data(alias)      
+                        
+                        self._close_loading_dialog()      
+                    else:
+                        self._close_loading_dialog()  
+                        QtWidgets.QMessageBox.critical(
+                                None,
+                                "File Selection Import",
+                                f"The file {filename} does not include the needed information."
+                            )  
+
+                except Exception as e:  
+                    self._close_loading_dialog()  
+                    QtWidgets.QMessageBox.critical(
+                        None,
+                        "File Selection Import",
+                        f"The file {filename} is not properly formated."
+                    )    
 
     def file_selection_changed_slot(self):
         indexes = self.files_listview.selectedIndexes()

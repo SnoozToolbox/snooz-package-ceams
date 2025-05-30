@@ -418,7 +418,7 @@ class SlowWaveDetector(SciNode):
             for signal_model in signals:
                 
                 if signal_model.duration <= self.WANTED_TIME_EPOCHS:
-                    self. add_signal_data(i, wanted_signals, signal_model.samples, \
+                    self.add_signal_data(i, wanted_signals, signal_model.samples, \
                         signal_model.sample_rate, signal_model.start_time, signal_model.duration, \
                         signal_model.end_time, signal_model.channel)
                     i += 1
@@ -445,10 +445,10 @@ class SlowWaveDetector(SciNode):
             signal_data_to_analyse = []
                         
             # Modify time epochs if not already 30 s epochs
-            if current_time_segment < self.WANTED_TIME_EPOCHS:
+            if round(current_time_segment) < self.WANTED_TIME_EPOCHS:
                 wanted_signal_data = []
                 i = 0
-                for signal_model in enumerate(signals):
+                for signal_model in signals:
                     signal_data_to_analyse.extend(signal_model.samples)
                     n_segments += 1
                     if n_segments == n_segments_to_merge:
