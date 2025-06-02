@@ -5,13 +5,25 @@ See the file LICENCE for full license details.
     REMsDetectionYasa
     This class detects Rapid Eye Movements (REMs) in sleep recordings using YASA.
 """
-import matplotlib.pyplot as plt
+import matplotlib
 import mne
 import numpy as np
 import os
 import pandas as pd
 import yasa
 import sys
+import warnings
+import logging
+
+os.environ["QT_LOGGING_RULES"] = "qt.core.qmetaobject.connectslotsbyname=false"
+matplotlib.use('Agg') # Use non-interactive Agg backend for matplotlib
+# Suppress warnings from YASA and MNE
+logging.getLogger('yasa').setLevel(logging.ERROR)
+logging.getLogger('mne').setLevel(logging.ERROR)
+logging.basicConfig(level=logging.WARNING)
+# Suppress all warnings
+warnings.filterwarnings("ignore")
+mne.set_log_level('WARNING')
 
 from flowpipe import SciNode, InputPlug, OutputPlug
 from commons.NodeInputException import NodeInputException
@@ -104,7 +116,6 @@ class REMsDetectionYasa(SciNode):
             NodeRuntimeException
                 If an error occurs during execution.
         """
-        print(" this is -------------------------------------------------------")
         filename = filename[:-4]  # Remove file extension
         error_flag = False
 
@@ -140,7 +151,7 @@ class REMsDetectionYasa(SciNode):
                                   hypno=hypno_up, include=include, 
                                   amplitude=amplitude, duration=duration, 
                                   freq_rem=freq_rem, relative_prominence=relative_prominence, 
-                                  remove_outliers=remove_outliers, verbose='warning')
+                                  remove_outliers=remove_outliers, verbose= False)
 
             # Save results
             rems_detection_df = rem.summary().round(3)
