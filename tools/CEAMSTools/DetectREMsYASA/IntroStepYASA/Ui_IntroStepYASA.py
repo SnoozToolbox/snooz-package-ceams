@@ -142,7 +142,7 @@ class Ui_IntroStepYASA(object):
 
     def retranslateUi(self, IntroStepYASA):
         IntroStepYASA.setWindowTitle(QCoreApplication.translate("IntroStepYASA", u"Form", None))
-        self.label_2.setText(QCoreApplication.translate("IntroStepYASA", u"<html><head/><body><p><span style=\" font-size:12pt; font-weight:600;\">YASA RAPID EYE MOVEMENTS DETECTOR</span></p><p><span style=\" font-size:12pt;\">This tool utilizes the (Yet Another Spindle Algorithm) </span><span style=\" font-size:12pt; font-weight:600;\">YASA</span><span style=\" font-size:12pt;\"> rapid eye movements (</span><span style=\" font-size:12pt; font-weight:600;\">REMs</span><span style=\" font-size:12pt;\">) detector algorithm.</span></p></body></html>", None))
+        self.label_2.setText(QCoreApplication.translate("IntroStepYASA", u"<html><head/><body><p><span style=\" font-size:12pt; font-weight:600;\">YASA RAPID EYE MOVEMENTS DETECTOR</span></p><p><span style=\" font-size:12pt;\">This tool utilizes the Yet Another Spindle Algorithm (</span><span style=\" font-size:12pt; font-weight:600;\">YASA)</span><span style=\" font-size:12pt;\"> rapid eye movements (</span><span style=\" font-size:12pt; font-weight:600;\">REMs</span><span style=\" font-size:12pt;\">) detector algorithm.</span></p></body></html>", None))
         self.label.setText(QCoreApplication.translate("IntroStepYASA", u"<html><head/><body><p><span style=\" font-size:12pt; font-weight:600;\">Input</span></p></body></html>", None))
         self.textEdit.setHtml(QCoreApplication.translate("IntroStepYASA", u"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset=\"utf-8\" /><style type=\"text/css\">\n"

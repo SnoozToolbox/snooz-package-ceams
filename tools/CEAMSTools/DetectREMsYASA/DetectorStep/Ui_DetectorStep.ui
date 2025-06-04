@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>755</width>
+    <width>765</width>
     <height>590</height>
    </rect>
   </property>
@@ -115,7 +115,7 @@
         <number>-3</number>
        </property>
        <property name="text">
-        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;REMs Event group&lt;/span&gt;&lt;br/&gt;The group category in the annotation file.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;REMs Event Group&lt;/span&gt;&lt;br/&gt;The group category in the annotation file.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
        </property>
       </widget>
      </item>
@@ -535,7 +535,7 @@
         <number>0</number>
        </property>
        <property name="text">
-        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;Amplitude (uV)&lt;/span&gt;&lt;br/&gt;Minimum and maximum amplitude of the peak of the REM.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;Amplitude (uV)&lt;/span&gt;&lt;br/&gt;Minimum and maximum amplitude of the peak of the REMs.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
        </property>
       </widget>
      </item>
@@ -609,7 +609,7 @@
         <number>0</number>
        </property>
        <property name="text">
-        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;Sleep Stages&lt;/span&gt;&lt;br/&gt;If the hypnogram is loaded, the detection will only be applied&lt;br/&gt;to the values defiend in &amp;quot;Sleep Stages&amp;quot;: Default = 5 (REM)&lt;br/&gt;Format for multiple sleep stages, e.g., &amp;quot;Sleep Stages&amp;quot; : [5, 3, ...]&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;Sleep Stages&lt;/span&gt;&lt;br/&gt;If the hypnogram is loaded, the detection will only be applied&lt;br/&gt;to the values defined in &amp;quot;Sleep Stages&amp;quot;: Default = 5 (REM)&lt;br/&gt;Format for multiple sleep stages, e.g., &amp;quot;Sleep Stages&amp;quot; : [5, 3, ...]&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
        </property>
       </widget>
      </item>
