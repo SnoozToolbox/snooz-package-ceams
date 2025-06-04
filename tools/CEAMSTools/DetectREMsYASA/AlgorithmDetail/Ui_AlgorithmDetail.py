@@ -18,13 +18,13 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
 from PySide6.QtWidgets import (QApplication, QFrame, QGridLayout, QLabel,
     QLayout, QScrollArea, QSizePolicy, QTextEdit,
     QVBoxLayout, QWidget)
-from . import Detail_res_rc_rc
+from CEAMSTools.DetectREMsYASA.AlgorithmDetail import Detail_res_rc_rc
 
 class Ui_AlgorithmDetail(object):
     def setupUi(self, AlgorithmDetail):
         if not AlgorithmDetail.objectName():
             AlgorithmDetail.setObjectName(u"AlgorithmDetail")
-        AlgorithmDetail.resize(1018, 506)
+        AlgorithmDetail.resize(1012, 493)
         self.gridLayout_2 = QGridLayout(AlgorithmDetail)
         self.gridLayout_2.setObjectName(u"gridLayout_2")
         self.verticalLayout = QVBoxLayout()
@@ -112,7 +112,7 @@ class Ui_AlgorithmDetail(object):
     def retranslateUi(self, AlgorithmDetail):
         AlgorithmDetail.setWindowTitle("")
         AlgorithmDetail.setStyleSheet(QCoreApplication.translate("AlgorithmDetail", u"font: 10pt \"Roboto-Regular\";", None))
-        self.label.setText(QCoreApplication.translate("AlgorithmDetail", u"Details of the YASA REMs detector algorithm", None))
+        self.label.setText(QCoreApplication.translate("AlgorithmDetail", u"<html><head/><body><p><span style=\" font-size:12pt;\">Details of the YASA REMs detector algorithm</span></p></body></html>", None))
         self.textEdit.setHtml(QCoreApplication.translate("AlgorithmDetail", u"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset=\"utf-8\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
@@ -120,14 +120,13 @@ class Ui_AlgorithmDetail(object):
 "li.unchecked::marker { content: \"\\2610\"; }\n"
 "li.checked::marker { content: \"\\2612\"; }\n"
 "</style></head><body style=\" font-family:'Roboto-Regular'; font-size:10pt; font-weight:400; font-style:normal;\">\n"
-"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">This algorithm uses the idea from the methodologies proposed in [1] and [2], primarily building upon Agwal\u2019s [2] approach, which applies amplitude thresholding to the negative product of the LOC and ROC filtered signals. Using this technique, the algorithm identifies signal peaks and extracts key features, including <span style=\" font-weight:700;\">the duration of the REM period</span>,"
-                        " <span style=\" font-weight:700;\">the peak absolute values of ROC and LOC</span>, as well as <span style=\" font-weight:700;\">the absolute rise and fall slopes</span> for both signals.</p>\n"
-"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">To ensure reliable performance, the algorithm requires a minimum of 50 detected REMs to apply its model, which is based on the IsolationForest random forest classifier. Additionally, if the user selects the &quot;remove outlier&quot; option as <span style=\" font-style:italic;\">True</span>, any outliers detected after applying the IsolationForest will be excluded from the final detection results.</p>\n"
-"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-weight:600;\">Usage points</span></p>\n"
-"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-inde"
-                        "nt:0px;\">- All output parameters of this algorithm are computed using the filtered LOC and ROC signals. The filtering process is based on the thresholds defined in the <span style=\" font-style:italic;\">DetectionStep</span>.</p>\n"
-"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">- For optimal results, the user should apply this detection only to artifact-free REM sleep data.</p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p></body></html>", None))
+"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:12pt;\">This algorithm uses the idea from the methodologies proposed in [1] and [2], primarily building upon Agwal\u2019s [2] approach, which applies amplitude thresholding to the negative product of the LOC and ROC filtered signals. Using this technique, the algorithm identifies signal peaks and extracts key features, including </span><span style=\" font-size:12pt; f"
+                        "ont-weight:700;\">the duration of the REM period</span><span style=\" font-size:12pt;\">, </span><span style=\" font-size:12pt; font-weight:700;\">the peak absolute values of ROC and LOC</span><span style=\" font-size:12pt;\">, as well as </span><span style=\" font-size:12pt; font-weight:700;\">the absolute rise and fall slopes</span><span style=\" font-size:12pt;\"> for both signals.</span></p>\n"
+"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:12pt;\">To ensure reliable performance, the algorithm requires a minimum of 50 detected REMs to apply its model, which is based on the IsolationForest random forest classifier. Additionally, if the user selects the &quot;remove outlier&quot; option as </span><span style=\" font-size:12pt; font-style:italic;\">True</span><span style=\" font-size:12pt;\">, any outliers detected after applying the IsolationForest will be excluded from the final detection results.</span></p"
+                        ">\n"
+"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:12pt; font-weight:600;\">Usage points</span></p>\n"
+"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:12pt;\">- All output parameters of this algorithm are computed using the filtered LOC and ROC signals. The filtering process is based on the thresholds defined in the </span><span style=\" font-size:12pt; font-style:italic;\">DetectionStep</span><span style=\" font-size:12pt;\">.</span></p>\n"
+"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:12pt;\">- For optimal results, the user should apply this detection only to artifact-free REM sleep data.</span></p></body></html>", None))
         self.label_2.setText("")
     # retranslateUi
 
