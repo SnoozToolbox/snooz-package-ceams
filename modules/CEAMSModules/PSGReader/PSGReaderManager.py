@@ -56,14 +56,17 @@ class PSGReaderManager:
                         ext_filters = reader.get_extensions_filters()
                         for i, e in enumerate(ext):
                             if e in self.extensions:
-                                print(f"PSGReaderManager: ERROR File extension:{e} already registered by the class:{PSGReaderManager.extensions[e].__name__}")
+                                if config.is_dev : 
+                                    print(f"PSGReaderManager: ERROR File extension:{e} already registered by the class:{PSGReaderManager.extensions[e].__name__}")
                             else:
                                 self.extensions[e] = reader_class
                                 self.extensionsFilters[e] = ext_filters[i]
                     else:
-                        print(f"ERROR Can\'t load module:{module_name} path:{module_path}")
+                        if config.is_dev : 
+                            print(f"ERROR Can\'t load module:{module_name} path:{module_path}")
                 else:
-                    print(f"ERROR Can\'t load module:{module_name} path:{module_path}")
+                    if config.is_dev : 
+                        print(f"ERROR Can\'t load module:{module_name} path:{module_path}")
             except:
                 # TODO add message to log manager
                 traceback.print_exc()
@@ -93,18 +96,24 @@ class PSGReaderManager:
 
     ### Member functions
     def open_file(self, filename):
+        error = None
+
         _, extension = os.path.splitext(filename)
         reader_class = self.get_reader_class_by_extension(extension[1:]) # [1:] remove the dot from the extension ".sts" -> "sts"
         if reader_class is None:
-            print(f'ERROR PSGReaderManager could not find reader for extension file:{extension}')
-            return False
+            error = f'ERROR PSGReaderManager could not find reader for extension file:{extension}'
+            return False, error
         
         self.current_reader = reader_class()
-        success = self.current_reader.open_file(filename)
-        
+        output = self.current_reader.open_file(filename)
+        if isinstance(output, tuple) and len(output) == 2:
+            success, error = output
+        else:
+            success = output
         if not success:
-            print(f'ERROR PSGReaderManager could not open file:{filename}')
-            return False
+            if error is None:
+                error = f'ERROR PSGReaderManager could not open file:{filename}'
+            return False, error
 
         self.current_filename = filename
         return True
@@ -114,7 +123,8 @@ class PSGReaderManager:
         _, extension = os.path.splitext(source_filename)
         reader_class = self.get_reader_class_by_extension(extension[1:]) # [1:] remove the dot from the extension ".sts" -> "sts"
         if reader_class is None:
-            print(f'ERROR PSGReaderManager could not find reader for extension file:{extension}')
+            if config.is_dev : 
+                print(f'ERROR PSGReaderManager could not find reader for extension file:{extension}')
             return False
         reader = reader_class()
         
@@ -129,14 +139,16 @@ class PSGReaderManager:
 
     def get_montages(self):
         if self.current_reader is None:
-            print(f'ERROR PSGReaderManager.get_montages file not loaded')
+            if config.is_dev :
+                print(f'ERROR PSGReaderManager.get_montages file not loaded')
             return
         return self.current_reader.get_montages()
 
 
     def get_channels(self, montage_index):
         if self.current_reader is None:
-            print(f'ERROR PSGReaderManager.get_channels file not loaded')
+            if config.is_dev :
+                print(f'ERROR PSGReaderManager.get_channels file not loaded')
             return
         channels = self.current_reader.get_channels(montage_index)
 
@@ -152,7 +164,8 @@ class PSGReaderManager:
 
     def create_signal_model(self, montage_index, channel):
         if self.current_reader is None:
-            print(f'ERROR PSGReaderManager.create_signal_model file not loaded')
+            if config.is_dev :
+                print(f'ERROR PSGReaderManager.create_signal_model file not loaded')
             return
         channels = self.current_reader.get_channels(montage_index)
         
@@ -170,7 +183,8 @@ class PSGReaderManager:
 
     def get_event_groups(self):
         if self.current_reader is None:
-            print(f'ERROR PSGReaderManager.get_event_groups file not loaded')
+            if config.is_dev : 
+                print(f'ERROR PSGReaderManager.get_event_groups file not loaded')
             return
         return self.current_reader.get_event_groups()
 
@@ -187,7 +201,8 @@ class PSGReaderManager:
                 duration: The duration of the event. None if the event has no duration.
         """
         if self.current_reader is None:
-            print(f'ERROR PSGReaderManager.get_events file not loaded')
+            if config.is_dev : 
+                print(f'ERROR PSGReaderManager.get_events file not loaded')
             return
 
         eventsObj = self.current_reader.get_events()
@@ -214,7 +229,8 @@ class PSGReaderManager:
 
     def close_file(self):
         if self.current_reader is None:
-            print(f'ERROR PSGReaderManager.close_file file not loaded')
+            if config.is_dev : 
+                print(f'ERROR PSGReaderManager.close_file file not loaded')
             return
         self.current_reader.close_file()
         self.current_reader = None
@@ -224,14 +240,16 @@ class PSGReaderManager:
     def save_file(self):
 
         if self.current_reader is None:
-            print(f'ERROR PSGReaderManager.save_file file not loaded')
+            if config.is_dev : 
+                print(f'ERROR PSGReaderManager.save_file file not loaded')
             return
         self.current_reader.save_file()
 
 
     def get_signal_models(self, montage_index, channel_names):
         if self.current_reader is None:
-            print(f'ERROR PSGReaderManager.get_signal_by_names file not loaded')
+            if config.is_dev : 
+                print(f'ERROR PSGReaderManager.get_signal_by_names file not loaded')
             return None
 
         signal_models = []
@@ -260,7 +278,8 @@ class PSGReaderManager:
 
     def get_sleep_stages(self):
         if self.current_reader is None:
-            print(f'ERROR PSGReaderManager.get_sleep_stages file not loaded')
+            if config.is_dev : 
+                print(f'ERROR PSGReaderManager.get_sleep_stages file not loaded')
             return None
 
         df_label =  ['start_sec', 'duration_sec', 'channels']
@@ -291,7 +310,8 @@ class PSGReaderManager:
 
     def add_event(self, name, group, start_sec, duration_sec, channels, montage_index):
         if self.current_reader is None:
-            print(f'ERROR PSGReaderManager.add_event file not loaded')
+            if config.is_dev : 
+                print(f'ERROR PSGReaderManager.add_event file not loaded')
             return False
         # The input channels is always a string of a single channel
         # channels has to be a list of string for the current_reader
@@ -299,47 +319,54 @@ class PSGReaderManager:
         # HarmonieReader asks for those arguments arg0: str, arg1: str, arg2: float, arg3: float, arg4: List[str], arg5: int
         success = self.current_reader.add_event(name, group, start_sec, duration_sec, channels, montage_index)
         if not success:
-            error = self.current_reader.get_last_error()
-            print(error)
+            if config.is_dev : 
+                error = self.current_reader.get_last_error()
+                print(error)
         return success
 
 
     def remove_events_by_group(self, group):
         if self.current_reader is None:
-            print(f'ERROR PSGReaderManager.remove_events_by_group file not loaded')
+            if config.is_dev :
+                print(f'ERROR PSGReaderManager.remove_events_by_group file not loaded')
             return False
         success = self.current_reader.remove_events_by_group(group)
         if not success:
-            error = self.current_reader.get_last_error()
-            print(error)
+            if config.is_dev :
+                error = self.current_reader.get_last_error()
+                print(error)
         return success
 
 
     def remove_events_by_name(self, event_name, group_name):
         if self.current_reader is None:
-            print(f'ERROR PSGReaderManager.remove_events_by_group file not loaded')
+            if config.is_dev :
+                print(f'ERROR PSGReaderManager.remove_events_by_group file not loaded')
             return False
         success = self.current_reader.remove_events_by_name(event_name, group_name)
         if not success:
-            error = self.current_reader.get_last_error()
-            print(error)
+            if config.is_dev : 
+                error = self.current_reader.get_last_error()
+                print(error)
         return success
 
 
     def save_signals(self, signals):
         if self.current_reader is None:
-            print(f'ERROR PSGReaderManager.save_signals file not loaded')
+            if config.is_dev : 
+                print(f'ERROR PSGReaderManager.save_signals file not loaded')
             return None
-
         try:
             self.current_reader.save_signals(signals)
         except AttributeError as e:
-            print('WARNING This reader has no save_signal function' + e)
+            if config.is_dev : 
+                print('WARNING This reader has no save_signal function' + e)
     
 
     def get_subject_info(self):
         if self.current_reader is None:
-            print(f'ERROR PSGReaderManager.save_signals file not loaded')
+            if config.is_dev : 
+                print(f'ERROR PSGReaderManager.save_signals file not loaded')
             return None
 
         si = self.current_reader.get_subject_info()
@@ -437,6 +464,7 @@ class PSGReaderManager:
     
     def get_last_error(self):
         if self.current_reader is None:
-            print(f'ERROR PSGReaderManager.get_last_error file not loaded')
+            if config.is_dev : 
+                print(f'ERROR PSGReaderManager.get_last_error file not loaded')
             return None
         return self.current_reader.get_last_error()

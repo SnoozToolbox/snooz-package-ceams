@@ -161,12 +161,18 @@ class PSGWriter(SciNode):
         if output_filename != input_filename:
             self._psg_reader_manager.copy_file(input_filename, output_filename)
 
-        is_opened = self._psg_reader_manager.open_file(output_filename)
-
+        # Try to open the file
+        error = None
+        output = self._psg_reader_manager.open_file(output_filename)
+        if isinstance(output, tuple) and len(output) == 2:
+            is_opened, error = output
+        else:
+            is_opened = output
         if not is_opened:
-            self._log_manager.log(self.identifier, f'ERROR PSGWriter could not open file: {output_filename}')
-            return
-
+            if error is None:
+                error = f"ERROR PSGWriter could not open file:{output_filename}"
+            raise NodeRuntimeException(self.identifier, "output_filename", error)
+        
         # If there is new events
         if isinstance(new_events, pd.DataFrame):
 

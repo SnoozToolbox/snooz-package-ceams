@@ -224,11 +224,19 @@ class SlowWavePicsGenerator(SciNode):
             if(not os.path.isfile(file_name)):
                 raise NodeRuntimeException(self.identifier, "files", \
                     f"SlowWavePicsGenerator file not found:{file_name}")
+            
             # Try to open the file
-            success = self._psg_reader_manager.open_file(file_name)
+            error = None
+            output = self._psg_reader_manager.open_file(file_name)
+            if isinstance(output, tuple) and len(output) == 2:
+                success, error = output
+            else:
+                success = output
             if not success:
-                raise NodeRuntimeException(self.identifier, "files", \
-                    f"SlowWavePicsGenerator could not read file:{file_name}")
+                if error is None:
+                    error = f"SlowWavePicsGenerator could not open file:{file_name}"
+                raise NodeRuntimeException(self.identifier, "files", error)
+
             if selected_channels is not None:
                 signals = self._psg_reader_manager.get_signal_models(int(montage_index), selected_channels)
             # Close the file since the signals are saved

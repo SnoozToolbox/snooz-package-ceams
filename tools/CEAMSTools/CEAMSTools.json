@@ -65,7 +65,7 @@
         {
             "item_name": "ImportTextAnnotations",
             "item_type": "tool",
-            "item_version": "2.1.0",
+            "item_version": "2.2.0",
             "item_hooks": [
                 {
                     "endpoint_name": "menu_endpoint",
@@ -79,7 +79,7 @@
         {
             "item_name": "ImportSleepStagesVector",
             "item_type": "tool",
-            "item_version": "2.1.0",
+            "item_version": "2.2.0",
             "item_hooks": [
                 {
                     "endpoint_name": "menu_endpoint",
@@ -93,7 +93,7 @@
         {
             "item_name": "EditAnnotations",
             "item_type": "tool",
-            "item_version": "2.1.0",
+            "item_version": "2.2.0",
             "item_hooks": [
                 {
                     "endpoint_name": "menu_endpoint",
@@ -107,7 +107,7 @@
         {
             "item_name": "ExtractAnnotation",
             "item_type": "tool",
-            "item_version": "2.1.0",
+            "item_version": "2.2.0",
             "item_hooks": [
                 {
                     "endpoint_name": "menu_endpoint",
@@ -121,7 +121,7 @@
         {
             "item_name": "DetectArtifacts",
             "item_type": "tool",
-            "item_version": "2.1.0",
+            "item_version": "2.2.0",
             "item_hooks": [
                 {
                     "endpoint_name": "menu_endpoint",
@@ -149,7 +149,7 @@
         {
             "item_name": "SleepReport",
             "item_type": "tool",
-            "item_version": "2.1.0",
+            "item_version": "2.2.0",
             "item_hooks": [
                 {
                     "endpoint_name": "menu_endpoint",
@@ -163,7 +163,7 @@
         {
             "item_name": "SlowWaveDetection",
             "item_type": "tool",
-            "item_version": "2.1.0",
+            "item_version": "2.2.0",
             "item_hooks": [
                 {
                     "endpoint_name": "menu_endpoint",
@@ -177,7 +177,7 @@
         {
             "item_name": "SpindleDetectionA7",
             "item_type": "tool",
-            "item_version": "2.1.0",
+            "item_version": "2.2.0",
             "item_hooks": [
                 {
                     "endpoint_name": "menu_endpoint",
@@ -191,7 +191,7 @@
         {
             "item_name": "SpindleDetectionMartin",
             "item_type": "tool",
-            "item_version": "2.1.0",
+            "item_version": "2.2.0",
             "item_hooks": [
                 {
                     "endpoint_name": "menu_endpoint",
@@ -205,7 +205,7 @@
         {
             "item_name": "SleepBouts",
             "item_type": "tool",
-            "item_version": "2.1.0",
+            "item_version": "2.2.0",
             "item_hooks": [
                 {
                     "endpoint_name": "menu_endpoint",
@@ -219,7 +219,7 @@
         {
             "item_name": "SleepCycleExport",
             "item_type": "tool",
-            "item_version": "2.1.0",
+            "item_version": "2.2.0",
             "item_hooks": [
                 {
                     "endpoint_name": "menu_endpoint",
@@ -233,7 +233,7 @@
         {
             "item_name": "PowerSpectralAnalysis",
             "item_type": "tool",
-            "item_version": "2.1.0",
+            "item_version": "2.2.0",
             "item_hooks": [
                 {
                     "endpoint_name": "menu_endpoint",
@@ -261,7 +261,7 @@
         {
             "item_name": "CompareEventsFromPSG",
             "item_type": "tool",
-            "item_version": "2.1.0",
+            "item_version": "2.2.0",
             "item_hooks": [
                 {
                     "endpoint_name": "menu_endpoint",
@@ -289,7 +289,7 @@
         {
             "item_name": "OxygenSaturationReport",
             "item_type": "tool",
-            "item_version": "2.1.0",
+            "item_version": "2.2.0",
             "item_hooks": [
                 {
                     "endpoint_name": "menu_endpoint",
@@ -303,7 +303,7 @@
         {
             "item_name": "SlowWaveImages",
             "item_type": "tool",
-            "item_version": "2.0.0",
+            "item_version": "2.1.0",
             "item_hooks": [
                 {
                     "endpoint_name": "menu_endpoint",
@@ -331,7 +331,7 @@
         {
             "item_name": "SpindleDetectionSumo",
             "item_type": "tool",
-            "item_version": "2.1.0",
+            "item_version": "2.2.0",
             "item_hooks": [
                 {
                     "endpoint_name": "menu_endpoint",
@@ -345,7 +345,7 @@
         {
             "item_name": "ScoreSleepStagesYASA",
             "item_type": "tool",
-            "item_version": "0.1.0",
+            "item_version": "0.2.0",
             "item_hooks": [
                 {
                     "endpoint_name": "menu_endpoint",
