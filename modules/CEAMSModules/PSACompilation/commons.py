@@ -338,7 +338,7 @@ def get_miniband_index(identifier, freq_bin_chan, mini_bandwidth, first_freq, la
         cur_index_list = np.where((freq_bin_chan >= start_bin) & (freq_bin_chan < cur_end))[0] # [min, max[
         if len(cur_index_list): 
             cur_idx_start_end = [cur_index_list[0], cur_index_list[-1]]
-            if len(miniband_index):
+            if len(miniband_index): # Concatenate all the freq bins to creat the list of mini bands
                 miniband_index = np.vstack((miniband_index, cur_idx_start_end))
             else:
                 miniband_index = cur_idx_start_end

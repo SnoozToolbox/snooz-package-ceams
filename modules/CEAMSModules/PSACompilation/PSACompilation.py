@@ -299,6 +299,9 @@ class PSACompilation(SciNode):
             if freq_bin_space<1:
                 precision_space = int(abs(np.log10(freq_bin_space)))+2
                 freq_bin_chan = np.round(freq_bin_chan,precision_space)
+            else:
+                precision_space = 1
+                freq_bin_chan = np.round(freq_bin_chan,precision_space)
 
             miniband_indices = PSA.get_miniband_index(self.identifier, freq_bin_chan, mini_bandwidth, first_freq, last_freq, fs_chan)
             # The frequency band definded as [min, max[ (i.e. 0-3.8 Hz) are written in the report as 0-4 Hz

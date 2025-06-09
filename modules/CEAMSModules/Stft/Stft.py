@@ -253,7 +253,7 @@ class Stft(SciNode):
 
             if nsample_win > len(signal_model.samples):
                 self._log_manager.log(self.identifier, f"Stft - The signal {i} from {signal_model.channel} "\
-                    + f"is shoter than the fft window length of {win_len_sec}s.")
+                    + f"is shorter than the fft window length of {win_len_sec}s.")
 
             data = {}
             data['psd'], data['freq_bins'] = self.fft_norm(
