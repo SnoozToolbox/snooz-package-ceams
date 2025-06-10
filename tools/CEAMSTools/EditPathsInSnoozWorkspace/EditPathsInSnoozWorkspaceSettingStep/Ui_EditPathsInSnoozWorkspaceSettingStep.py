@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file 'Ui_JsonSettingStep.ui'
+## Form generated from reading UI file 'Ui_EditPathsInSnoozWorkspaceSettingStep.ui'
 ##
 ## Created by: Qt User Interface Compiler version 6.8.2
 ##
@@ -18,22 +18,22 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
 from PySide6.QtWidgets import (QApplication, QSizePolicy, QVBoxLayout, QWidget)
 import themes_rc
 
-class Ui_JsonSettingStep(object):
-    def setupUi(self, JsonSettingStep):
-        if not JsonSettingStep.objectName():
-            JsonSettingStep.setObjectName(u"JsonSettingStep")
-        JsonSettingStep.resize(1005, 689)
-        JsonSettingStep.setStyleSheet(u"font: 12pt \"Roboto\";")
-        self.verticalLayout = QVBoxLayout(JsonSettingStep)
+class Ui_EditPathsInSnoozWorkspaceSettingStep(object):
+    def setupUi(self, EditPathsInSnoozWorkspaceSettingStep):
+        if not EditPathsInSnoozWorkspaceSettingStep.objectName():
+            EditPathsInSnoozWorkspaceSettingStep.setObjectName(u"EditPathsInSnoozWorkspaceSettingStep")
+        EditPathsInSnoozWorkspaceSettingStep.resize(1005, 689)
+        EditPathsInSnoozWorkspaceSettingStep.setStyleSheet(u"font: 12pt \"Roboto\";")
+        self.verticalLayout = QVBoxLayout(EditPathsInSnoozWorkspaceSettingStep)
         self.verticalLayout.setSpacing(25)
         self.verticalLayout.setObjectName(u"verticalLayout")
 
-        self.retranslateUi(JsonSettingStep)
+        self.retranslateUi(EditPathsInSnoozWorkspaceSettingStep)
 
-        QMetaObject.connectSlotsByName(JsonSettingStep)
+        QMetaObject.connectSlotsByName(EditPathsInSnoozWorkspaceSettingStep)
     # setupUi
 
-    def retranslateUi(self, JsonSettingStep):
-        JsonSettingStep.setWindowTitle("")
+    def retranslateUi(self, EditPathsInSnoozWorkspaceSettingStep):
+        EditPathsInSnoozWorkspaceSettingStep.setWindowTitle("")
     # retranslateUi
 

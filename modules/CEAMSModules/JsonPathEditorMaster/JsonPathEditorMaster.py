@@ -13,6 +13,7 @@ from commons.NodeRuntimeException import NodeRuntimeException
 import os
 import json
 import re
+import ast
 
 DEBUG = False
 
@@ -113,8 +114,9 @@ class JsonPathEditorMaster(SciNode):
 
     def replace_paths_in_json(self, data, path_mapping):
         """
-        Recursively replace full paths in a JSON structure by checking the folder path
-        (excluding file name and extension) against the keys in path_mapping.
+        Recursively replace folder paths in JSON structure, including inside stringified lists/dicts.
+        Preserves formatting (i.e., stringified structures stay strings).
+        Also replaces direct folder matches (not only their contents).
         """
         if isinstance(data, dict):
             return {
@@ -127,18 +129,35 @@ class JsonPathEditorMaster(SciNode):
 
         elif isinstance(data, str):
             normalized = data.replace('\\', '/')
-            folder_path = os.path.dirname(normalized)
 
+            # Step 1: Try parsing stringified list/dict
+            try:
+                parsed = ast.literal_eval(normalized)
+                if isinstance(parsed, (list, dict)):
+                    replaced = self.replace_paths_in_json(parsed, path_mapping)
+                    return str(replaced)
+            except (ValueError, SyntaxError):
+                pass  # Not a stringified structure
+
+            # Step 2: Check direct full-folder path replacement
             for old_folder, new_folder in path_mapping.items():
-                if folder_path == old_folder.replace('\\', '/'):
-                    filename = os.path.basename(normalized)
-                    new_full_path = os.path.join(new_folder, filename).replace('\\', '/')
-                    return new_full_path
+                old_folder_norm = old_folder.replace('\\', '/')
+                if normalized == old_folder_norm:
+                    return new_folder.replace('\\', '/')
 
-            return data
+            # Step 3: Try replacing parent folder of the file
+            folder_path = os.path.dirname(normalized)
+            for old_folder, new_folder in path_mapping.items():
+                old_folder_norm = old_folder.replace('\\', '/')
+                if folder_path == old_folder_norm:
+                    filename = os.path.basename(normalized)
+                    return os.path.join(new_folder, filename).replace('\\', '/')
+
+            return data  # No match
 
         else:
             return data
+
 
     def update_json_paths_interactive(self, input_json_path, path_mapping, suffix, newfilespath):
         # Load original JSON
@@ -155,4 +174,4 @@ class JsonPathEditorMaster(SciNode):
         with open(output_json_path, 'w', encoding='utf-8') as f:
             json.dump(updated_data, f, indent=4)
 
-        print(f"\nUpdated JSON saved to: {os.path.abspath(output_json_path)}")
+        #print(f"\nUpdated JSON saved to: {os.path.abspath(output_json_path)}")

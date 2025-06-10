@@ -3,27 +3,27 @@
 @ Valorisation Recherche HSCM, Societe en Commandite – 2024
 See the file LICENCE for full license details.
 
-    JsonSettingStep
-    Setup the JsonPathEditorSettingsView in the step.
+    EditPathsInSnoozWorkspaceSettingStep
+    Setup the EditPathsInSnoozWorkspacePathEditorSettingsView in the step.
 """
 
 from qtpy import QtWidgets, QtCore, QtGui
 from PySide6.QtCore import *
 
-from CEAMSTools.EditPathsInJson.JsonSettingStep.Ui_JsonSettingStep import Ui_JsonSettingStep
+from CEAMSTools.EditPathsInSnoozWorkspace.EditPathsInSnoozWorkspaceSettingStep.Ui_EditPathsInSnoozWorkspaceSettingStep import Ui_EditPathsInSnoozWorkspaceSettingStep
 from commons.BaseStepView import BaseStepView
 
 from widgets.WarningDialogWithButtons import WarningDialogWithButtons
 from widgets.WarningDialog import WarningDialog
 
-class JsonSettingStep(BaseStepView, Ui_JsonSettingStep, QtWidgets.QWidget):
+class EditPathsInSnoozWorkspaceSettingStep(BaseStepView, Ui_EditPathsInSnoozWorkspaceSettingStep, QtWidgets.QWidget):
     
     
     context_files_view      = "input_files_settings_view"
-    Json_Path_Editor_identifier   = "a6e7fca0-3df9-4385-9730-d12fa5327523"
+    SnoozWorkspace_Path_Editor_identifier   = "a6e7fca0-3df9-4385-9730-d12fa5327523"
     """
-        JsonSettingStep
-        Setup the JsonPathEditorSettingsView in the step.
+        EditPathsInSnoozWorkspaceSettingStep
+        Setup the EditPathsInSnoozWorkspaceSettingsView in the step.
     """
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -32,29 +32,29 @@ class JsonSettingStep(BaseStepView, Ui_JsonSettingStep, QtWidgets.QWidget):
         self.setupUi(self)
 
         # Define modules and nodes to talk to
-        self._Json_Path_Editor_identifier = self.Json_Path_Editor_identifier
+        self._SnoozWorkspace_Path_Editor_identifier = self.SnoozWorkspace_Path_Editor_identifier
 
         # To use the SettingsView of a plugin and interract with its fonctions
-        module = self.process_manager.get_node_by_id(self._Json_Path_Editor_identifier)
+        module = self.process_manager.get_node_by_id(self._SnoozWorkspace_Path_Editor_identifier)
         if module is None:
-            print(f'ERROR module_id isn\'t found in the process:{self._Json_Path_Editor_identifier}')
+            print(f'ERROR module_id isn\'t found in the process:{self._SnoozWorkspace_Path_Editor_identifier}')
         else:
             # To extract the SettingsView and add it to our Layout in the preset
-            self.my_JsonPathEditorSettingsView = module.create_settings_view()
-            self.verticalLayout.addWidget(self.my_JsonPathEditorSettingsView)
+            self.my_SnoozWorkspacePathEditorSettingsView = module.create_settings_view()
+            self.verticalLayout.addWidget(self.my_SnoozWorkspacePathEditorSettingsView)
             # _context_manager is inherited from the BaseStepView
             # it allows to share information between steps in the step-by-step interface
             # ContextManager is a dictionary that publish an update through the 
             # PubSubManager whenever a value is modified.
-            self._context_manager[self.context_files_view] = self.my_JsonPathEditorSettingsView
-            self.my_JsonPathEditorSettingsView.model_updated_signal.connect(self.on_model_modified)
+            self._context_manager[self.context_files_view] = self.my_SnoozWorkspacePathEditorSettingsView
+            self.my_SnoozWorkspacePathEditorSettingsView.model_updated_signal.connect(self.on_model_modified)
 
         self._emit_timer = QTimer()
         self._emit_timer.setSingleShot(True)
         self._emit_timer.timeout.connect(self._emit_timeout_reached)
 
 
-    # Slot created to receive the signal emitted from JsonPathEditorSettingsView when the files_model is modified
+    # Slot created to receive the signal emitted from SnoozWorkspacePathEditorSettingsView when the files_model is modified
     @QtCore.Slot()
     def on_model_modified(self):
         # Add a timer delay to accumulate all the channel selection change before update the context
@@ -64,13 +64,13 @@ class JsonSettingStep(BaseStepView, Ui_JsonSettingStep, QtWidgets.QWidget):
     # Called when the timout is reached
     @QtCore.Slot()
     def _emit_timeout_reached(self):
-        self._context_manager[self.context_files_view] = self.my_JsonPathEditorSettingsView
+        self._context_manager[self.context_files_view] = self.my_SnoozWorkspacePathEditorSettingsView
 
         # If necessary, init the context. The context is a memory space shared by 
         # all steps of a tool. It is used to share and notice other steps whenever
         # the value in it changes. It's very useful when the parameter within a step
         # must have an impact in another step.
-        #self._context_manager["context_JsonDescriptionStep"] = {"the_data_I_want_to_share":"some_data"}
+        #self._context_manager["context_SnoozWorkspaceDescriptionStep"] = {"the_data_I_want_to_share":"some_data"}
         
     def load_settings(self):
         # Load settings is called after the constructor of all steps has been executed.
@@ -106,9 +106,20 @@ class JsonSettingStep(BaseStepView, Ui_JsonSettingStep, QtWidgets.QWidget):
         pass
 
     def on_validate_settings(self):
-        # Validate that all input were set correctly by the user.
-        # If everything is correct, return True.
-        # If not, display an error message to the user and return False.
-        # This is called just before the apply settings function.
-        # Returning False will prevent the process from executing.
+
+        if not self.my_SnoozWorkspacePathEditorSettingsView.files_model or self.my_SnoozWorkspacePathEditorSettingsView.files_model.rowCount() == 0:
+            WarningDialog(f"You need to select at least one Snooz workspace in step '1 - Setting Step.")
+            return False
+        if self.my_SnoozWorkspacePathEditorSettingsView.files_model.rowCount() >= 1:
+            selected_indexes = self.my_SnoozWorkspacePathEditorSettingsView.Files_listView.selectedIndexes()
+            if not selected_indexes:
+                WarningDialog("You need to select at least one Snooz workspace to modify its path in step '1 - Setting Step'.")
+                return False
+        if len(self.my_SnoozWorkspacePathEditorSettingsView.Suffix_lineEdit.text())==0:
+            WarningDialog(f"You need to define a suffix for the new Snooz workspaces in step '1 - Setting Step.")
+            return False
+        if len(self.my_SnoozWorkspacePathEditorSettingsView.New_files_lineEdit.text())==0:
+            WarningDialog(f"You need to define a destination to save the new Snooz workspaces in step '1 - Setting Step.")
+            return False        
+        
         return True

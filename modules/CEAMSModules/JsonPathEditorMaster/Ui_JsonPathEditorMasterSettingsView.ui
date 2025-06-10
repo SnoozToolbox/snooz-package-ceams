@@ -34,7 +34,7 @@
         <item>
          <widget class="QLabel" name="Json_label">
           <property name="text">
-           <string>Json files</string>
+           <string>Snooz Workspaces</string>
           </property>
          </widget>
         </item>
@@ -46,8 +46,14 @@
           <property name="lineWidth">
            <number>0</number>
           </property>
+          <property name="editTriggers">
+           <set>QAbstractItemView::EditTrigger::NoEditTriggers</set>
+          </property>
           <property name="selectionMode">
            <enum>QAbstractItemView::SelectionMode::ExtendedSelection</enum>
+          </property>
+          <property name="viewMode">
+           <enum>QListView::ViewMode::ListMode</enum>
           </property>
          </widget>
         </item>
@@ -106,7 +112,7 @@
            <item>
             <widget class="QLabel" name="New_Suffix">
              <property name="text">
-              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;New Json files suffix:&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;New Snooz workspaces suffix:&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
              </property>
             </widget>
            </item>
@@ -122,7 +128,7 @@
            <number>0</number>
           </property>
           <property name="text">
-           <string>Select a folder for new Json files to save</string>
+           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Select a folder for new Snooz workspaces to save&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
           </property>
          </widget>
         </item>
@@ -170,7 +176,7 @@
         <number>0</number>
        </property>
        <property name="text">
-        <string>Edit paths inside Json files</string>
+        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Edit paths inside Snooz workspaces&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
        </property>
       </widget>
      </item>

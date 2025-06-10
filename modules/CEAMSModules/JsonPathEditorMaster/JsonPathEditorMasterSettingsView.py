@@ -9,6 +9,7 @@ from qtpy import QtWidgets, QtCore, QtGui
 import os
 import re
 import json
+import ast
 
 from CEAMSModules.JsonPathEditorMaster.Ui_JsonPathEditorMasterSettingsView import Ui_JsonPathEditorMasterSettingsView
 from commons.BaseSettingsView import BaseSettingsView
@@ -46,12 +47,17 @@ class JsonPathEditorMasterSettingsView(BaseSettingsView, Ui_JsonPathEditorMaster
         self.SelectAll_pushButton.clicked.connect(self.select_all_items)
         self.selectAll_shortcut = QtWidgets.QShortcut(QtGui.QKeySequence("Ctrl+A"), self)
         self.selectAll_shortcut.activated.connect(self.select_all_items)
+        self.Files_listView.setSelectionMode(QtWidgets.QAbstractItemView.ExtendedSelection)
 
         self.New_files_lineEdit.setPlaceholderText("Choose the folder that you want to save the new JSON files")
         self.Choose_pushButton.clicked.connect(self.select_save_folder)
 
+        self.editable_model = None
+        self.table_model = None
         self.per_file_original_paths = {}  # key: file_path, value: list of original paths
         self.per_file_edited_paths = {}  # key: file_path, value: list of edited paths
+        self.per_file_mode = True  # True means per-file mode, False means select-all mode
+
 
         # Subscribe to the proper topics to send/get data from the node
         self._files_topic = f'{self._parent_node.identifier}.files'
@@ -97,45 +103,50 @@ class JsonPathEditorMasterSettingsView(BaseSettingsView, Ui_JsonPathEditorMaster
 
     def get_all_path_mappings(self):
         """
-        Return a dictionary: {json_file_path: {original_path: edited_path, ...}, ...}
-        Ensures edited paths from the current UI state are stored first.
+        Returns a dictionary: {json_file_path: {original_path: edited_path, ...}, ...}
+        Ensures latest UI edits are written back to per_file_edited_paths first.
         """
         path_mapping = {}
 
-        # Save current table edits back to per_file_edited_paths
-        if self.table_model and self.editable_model:
-            edited_paths = [self.editable_model.item(row, 0).text() for row in range(self.editable_model.rowCount())]
-            original_paths = [self.table_model.item(row, 0).text() for row in range(self.table_model.rowCount())]
+        if not self.table_model or not self.editable_model:
+            return {}
 
-            # Determine which files are currently selected in the list view
-            selected_indexes = self.Files_listView.selectedIndexes()
-            selected_files = [self.files_model.data(index, QtCore.Qt.DisplayRole) for index in selected_indexes]
+        original_paths = [self.table_model.item(row, 0).text() for row in range(self.table_model.rowCount())]
+        edited_paths = [self.editable_model.item(row, 0).text() for row in range(self.editable_model.rowCount())]
 
-            # Update each selected file with the latest edits
-            for file_path in selected_files:
-                # Match only the paths that belong to that file
-                per_file_originals = self.per_file_original_paths.get(file_path, [])
-                updated_edited_paths = []
-                for orig in per_file_originals:
-                    if orig in original_paths:
-                        idx = original_paths.index(orig)
-                        updated_edited_paths.append(edited_paths[idx])
-                    else:
-                        updated_edited_paths.append(orig)  # no edit shown, fallback to original
+        if self.per_file_mode:
+            # Update only the currently selected file
+            current_index = self.Files_listView.currentIndex()
+            if not current_index.isValid():
+                return {}
 
-                self.per_file_edited_paths[file_path] = updated_edited_paths
+            file_path = self.files_model.data(current_index, QtCore.Qt.DisplayRole)
+            if not file_path:
+                return {}
 
-        # Now build the mapping
-        for file_path in selected_files:
-            originals = self.per_file_original_paths.get(file_path, [])
-            edits = self.per_file_edited_paths.get(file_path, originals)
+            self.per_file_edited_paths[file_path] = edited_paths
 
-            path_mapping[file_path] = {
-                old: new for old, new in zip(originals, edits)
-            }
+        else:
+            # Select-all mode: apply edits to matching paths in all files
+            for orig_path, edit_path in zip(original_paths, edited_paths):
+                for file_path, orig_list in self.per_file_original_paths.items():
+                    if orig_path in orig_list:
+                        idx = orig_list.index(orig_path)
+                        # Update only the matching path
+                        if file_path not in self.per_file_edited_paths:
+                            self.per_file_edited_paths[file_path] = orig_list.copy()
+                        self.per_file_edited_paths[file_path][idx] = edit_path
+                        break  # Apply to first matching file only
+
+        # Build final path mapping
+        for file_path in self.per_file_original_paths:
+            originals = self.per_file_original_paths[file_path]
+            edits = self.per_file_edited_paths.get(file_path, originals.copy())
+            path_mapping[file_path] = {o: e for o, e in zip(originals, edits)}
 
         return path_mapping
-    
+
+        
     def select_save_folder(self):
         folder = QtWidgets.QFileDialog.getExistingDirectory(
            None, 
@@ -148,94 +159,138 @@ class JsonPathEditorMasterSettingsView(BaseSettingsView, Ui_JsonPathEditorMaster
             self.New_files_lineEdit.setText(folder)
 
     def store_current_edits(self):
-        """
-        Save current edited paths (line by line) from the editable table view into per_file_edited_paths.
-        """
-        current_index = self.Files_listView.currentIndex()
-        if not current_index.isValid() or not hasattr(self, 'editable_model'):
-            return
+        if (
+            not hasattr(self, 'editable_model')
+            or not hasattr(self, 'table_model')
+            or self.editable_model is None
+            or self.table_model is None):
+            return  # Nothing to store
+        
+        if self.per_file_mode:
+            # Save edits for currently selected file
+            current_index = self.Files_listView.currentIndex()
+            if not current_index.isValid():
+                return
 
-        file_path = self.files_model.data(current_index, QtCore.Qt.DisplayRole)
-        if not file_path:
-            return
+            file_path = self.files_model.data(current_index, QtCore.Qt.DisplayRole)
+            if not file_path:
+                return
 
-        edited_paths = [
-            self.editable_model.item(row, 0).text()
-            for row in range(self.editable_model.rowCount())
-        ]
-        self.per_file_edited_paths[file_path] = edited_paths
+            edited_paths = [
+                self.editable_model.item(row, 0).text()
+                for row in range(self.editable_model.rowCount())
+            ]
+
+            self.per_file_edited_paths[file_path] = edited_paths
+
+        else:
+            # In select-all mode: propagate merged edits back to each file
+            current_mapping = {
+                self.table_model.item(row, 0).text(): self.editable_model.item(row, 0).text()
+                for row in range(self.editable_model.rowCount())
+            }
+
+            for file_path, original_paths in self.per_file_original_paths.items():
+                existing_edits = self.per_file_edited_paths.get(file_path, original_paths.copy())
+                updated_edits = []
+
+                for orig_path in original_paths:
+                    # Priority: merged view edit → existing edit → original
+                    if orig_path in current_mapping:
+                        updated_edits.append(current_mapping[orig_path])
+                    else:
+                        idx = original_paths.index(orig_path)
+                        updated_edits.append(existing_edits[idx] if idx < len(existing_edits) else orig_path)
+
+                self.per_file_edited_paths[file_path] = updated_edits
 
     def select_all_items(self):
-        """
-        Select all files and merge original/edited paths into a unified view.
-        """
-        selection_model = self.Files_listView.selectionModel()
-        selection_model.clearSelection()
+        self.per_file_mode = False  # Enter select-all mode
+        if hasattr(self, 'editable_model') and hasattr(self, 'table_model'):
+            if self.editable_model is not None and self.table_model is not None:
+                self.store_current_edits()
 
-        # Save currently displayed edits (if any)
-        self.store_current_edits()
-
-        # Collect all unique original paths and their corresponding edited versions
         merged_originals = []
         merged_edits = []
-        seen_paths = set()
+        seen_pairs = set()
+
+        # Ensure all files are selected
+        selection_model = self.Files_listView.selectionModel()
+        selection = QtCore.QItemSelection()
 
         for row in range(self.files_model.rowCount()):
             index = self.files_model.index(row, 0)
-            selection_model.select(index, QtCore.QItemSelectionModel.Select)
-
             file_path = self.files_model.data(index, QtCore.Qt.DisplayRole)
 
+            # Select this file in the QListView
+            selection.select(index, index)
+
+            # Ensure original paths are loaded
             if file_path not in self.per_file_original_paths:
                 results = self.process_file(file_path)
                 original_paths = [str(v) for _, v in results.items()]
                 self.per_file_original_paths[file_path] = original_paths
 
+            # Ensure edited paths are initialized
             if file_path not in self.per_file_edited_paths:
-                self.per_file_edited_paths[file_path] = list(self.per_file_original_paths[file_path])
+                self.per_file_edited_paths[file_path] = self.per_file_original_paths[file_path].copy()
 
             originals = self.per_file_original_paths[file_path]
             edits = self.per_file_edited_paths[file_path]
 
             for orig, edit in zip(originals, edits):
-                if orig not in seen_paths:
-                    seen_paths.add(orig)
+                if (orig, edit) not in seen_pairs:
+                    seen_pairs.add((orig, edit))
                     merged_originals.append(orig)
                     merged_edits.append(edit)
 
-        # Set up original paths model
-        orig_model = QtGui.QStandardItemModel()
-        orig_model.setHorizontalHeaderLabels(["Original Paths"])
+        # Apply full selection to the view
+        selection_model.select(selection, QtCore.QItemSelectionModel.Select)
+
+        # Collect all original paths from all files
+        all_originals = []
+        for file_path, paths in self.per_file_original_paths.items():
+            all_originals.extend(paths)
+
+        # Check for duplicates
+        duplicates = set([p for p in all_originals if all_originals.count(p) > 1])
+
+        if duplicates:
+            duplicate_list = '\n'.join(sorted(duplicates))
+            WarningDialog(f"Some original paths are duplicated across JSON files.\n\n"
+                f"This may cause confusion when viewing edits in select-all mode.\n\n"
+                f"Duplicated folders:\n{duplicate_list}")
+            return  # Optionally stop execution here
+        
+        # === Display original paths (left) ===
+        temp_orig_model = QtGui.QStandardItemModel()
+        temp_orig_model.setHorizontalHeaderLabels(["Original Paths"])
         for path in merged_originals:
             item = QtGui.QStandardItem(path)
             item.setEditable(False)
             item.setForeground(QtGui.QBrush(QtGui.QColor('#888888')))
-            orig_model.appendRow([item])
-        self.Paths_tableView.setModel(orig_model)
+            temp_orig_model.appendRow([item])
+        self.Paths_tableView.setModel(temp_orig_model)
         self.Paths_tableView.setEditTriggers(QtWidgets.QAbstractItemView.NoEditTriggers)
 
-        # Set up editable paths model
-        edit_model = QtGui.QStandardItemModel()
-        edit_model.setHorizontalHeaderLabels(["New Paths (To be edited)"])
+        # === Display edited paths (right, view-only) ===
+        temp_edit_model = QtGui.QStandardItemModel()
+        temp_edit_model.setHorizontalHeaderLabels(["New Paths (View Only)"])
         for orig, edit in zip(merged_originals, merged_edits):
             item = QtGui.QStandardItem(edit)
-            item.setEditable(True)
+            item.setEditable(False)
             if edit == orig:
                 font = item.font()
                 font.setItalic(True)
                 item.setFont(font)
                 item.setForeground(QtGui.QBrush(QtGui.QColor('orange')))
-            elif not os.path.exists(edit):
-                font = item.font()
-                font.setBold(True)
-                item.setFont(font)
-                item.setForeground(QtGui.QBrush(QtGui.QColor('red')))
-            edit_model.appendRow([item])
+            temp_edit_model.appendRow([item])
+        self.New_paths_tableView.setModel(temp_edit_model)
+        self.New_paths_tableView.setEditTriggers(QtWidgets.QAbstractItemView.NoEditTriggers)
 
-        self.New_paths_tableView.setModel(edit_model)
+        # DO NOT assign to self.editable_model or self.table_model → avoids corrupting per-file logic
 
-        self.table_model = orig_model
-        self.editable_model = edit_model
+
 
     def clone_model_as_editable(self, source_model):
         editable_model = QtGui.QStandardItemModel()
@@ -250,22 +305,24 @@ class JsonPathEditorMasterSettingsView(BaseSettingsView, Ui_JsonPathEditorMaster
 
         return editable_model
 
+
     def collect_paths(self, obj, found_paths):
         """
         Recursively collect all unique folder paths from keys and values in the JSON structure.
-        Handles both file and folder paths, and retains folders fully.
+        Handles string paths, and also parses stringified lists/dicts.
         """
         folder_set = set()
 
         def is_path(s):
-            return isinstance(s, str) and re.match(r'^([A-Za-z]:|\\\\[^\\\/]+\\[^\\\/]+)[\\/]', s)
+            return (
+                isinstance(s, str)
+                and re.search(r'(^[A-Za-z]:[/\\])|(^//[^/\\])|(^\\\\[^\\])', s)
+            )
 
         def get_folder(s):
             s = s.replace('\\', '/')
-            # Keep full path if no file extension
             if not re.search(r'\.[a-zA-Z0-9]{2,4}$', os.path.basename(s)):
                 return s.rstrip('/')
-            # Otherwise, return parent folder
             return os.path.dirname(s).replace('\\', '/')
 
         def recurse(item):
@@ -276,16 +333,24 @@ class JsonPathEditorMasterSettingsView(BaseSettingsView, Ui_JsonPathEditorMaster
             elif isinstance(item, list):
                 for sub in item:
                     recurse(sub)
+            elif isinstance(item, str):
+                # Try to evaluate stringified structures
+                try:
+                    parsed = ast.literal_eval(item)
+                    recurse(parsed)
+                except (ValueError, SyntaxError):
+                    if is_path(item):
+                        folder_set.add(get_folder(item))
             elif is_path(item):
-                folder = get_folder(item)
-                folder_set.add(folder)
+                folder_set.add(get_folder(item))
 
         recurse(obj)
         found_paths.extend(sorted(folder_set))
 
-
     def on_file_selected(self, current, previous):
-        if previous.isValid() and hasattr(self, 'editable_model'):
+        self.per_file_mode = True
+        # Save edits from previously selected file
+        if previous.isValid() and hasattr(self, 'editable_model') and getattr(self, 'per_file_mode', True):
             prev_path = self.files_model.data(previous, QtCore.Qt.DisplayRole)
             self.per_file_edited_paths[prev_path] = [
                 self.editable_model.item(row, 0).text()
@@ -299,12 +364,18 @@ class JsonPathEditorMasterSettingsView(BaseSettingsView, Ui_JsonPathEditorMaster
         if not file_path:
             return
 
-        # Re-process and store original paths
-        results = self.process_file(file_path)
-        original_paths = [str(value) for _, value in results.items()]
-        self.per_file_original_paths[file_path] = original_paths
+        if file_path not in self.per_file_original_paths:
+            results = self.process_file(file_path)
+            original_paths = [str(value) for _, value in results.items()]
+            self.per_file_original_paths[file_path] = original_paths
+        else:
+            original_paths = self.per_file_original_paths[file_path]
 
-        # Always refresh original view
+        edited_paths = self.per_file_edited_paths.get(file_path, original_paths)
+        if len(edited_paths) != len(original_paths):
+            edited_paths = original_paths.copy()
+            self.per_file_edited_paths[file_path] = edited_paths
+
         orig_model = QtGui.QStandardItemModel()
         orig_model.setHorizontalHeaderLabels(["Original Paths"])
         for path in original_paths:
@@ -316,12 +387,6 @@ class JsonPathEditorMasterSettingsView(BaseSettingsView, Ui_JsonPathEditorMaster
         self.Paths_tableView.setEditTriggers(QtWidgets.QAbstractItemView.NoEditTriggers)
         self.table_model = orig_model
 
-        # Handle edited paths
-        edited_paths = self.per_file_edited_paths.get(file_path, original_paths)
-        if len(edited_paths) != len(original_paths):
-            edited_paths = original_paths
-            self.per_file_edited_paths[file_path] = edited_paths
-
         edit_model = QtGui.QStandardItemModel()
         edit_model.setHorizontalHeaderLabels(["New Paths (To be edited)"])
         for orig, edit in zip(original_paths, edited_paths):
@@ -332,28 +397,19 @@ class JsonPathEditorMasterSettingsView(BaseSettingsView, Ui_JsonPathEditorMaster
                 font.setItalic(True)
                 item.setFont(font)
                 item.setForeground(QtGui.QBrush(QtGui.QColor('orange')))
-            elif not os.path.exists(edit):
-                font = item.font()
-                font.setBold(True)
-                item.setFont(font)
-                item.setForeground(QtGui.QBrush(QtGui.QColor('red')))
             edit_model.appendRow([item])
-
         self.New_paths_tableView.setModel(edit_model)
         self.editable_model = edit_model
+        self.New_paths_tableView.setEditTriggers(QtWidgets.QAbstractItemView.AllEditTriggers)
+
 
     def process_file(self, file_path):
-        # Example: if it's a JSON file, parse it
-        #try:
         with open(file_path, 'r', encoding='utf-8') as f:
             data = json.load(f)
             found_paths = []
             self.collect_paths(data, found_paths)
-            dict_paths = {path: found_paths[path] for path in range(len(found_paths))}
-            return dict_paths
-        '''except Exception as e:
-            WarningDialog(f"Error! Could not read file:\n{e}")
-            return {}'''
+            return {i: path for i, path in enumerate(found_paths)}
+
     
     # Slot called when user wants to add folders
     def on_add_folder(self):
@@ -400,19 +456,46 @@ class JsonPathEditorMasterSettingsView(BaseSettingsView, Ui_JsonPathEditorMaster
             # Generate a signal to inform that self.files_model has been updated
             self.model_updated_signal.emit() 
 
-    def load_files_from_data(self, data):
+    def load_files_from_data(self, data, saved_path_map=None):
+        """
+        Load the list of JSON files into the view and optionally restore their original/edited path mappings.
+
+        Args:
+            data (list): List of file paths.
+            saved_path_map (dict, optional): Dictionary of form:
+                {
+                    "file_path1": {
+                        "original_path1": "edited_path1",
+                        ...
+                    },
+                    ...
+                }
+        """
         self.files_model.clear()
         self.per_file_original_paths.clear()
         self.per_file_edited_paths.clear()
         self.Paths_tableView.setModel(None)
         self.New_paths_tableView.setModel(None)
-        
-        for filename in data:
-            # Add files to listView
-            item = QtGui.QStandardItem(filename)
-            self.files_model.appendRow(item) 
-        # Generate a signal to inform that self.files_model has been updated
+
+        for file_path in data:
+            item = QtGui.QStandardItem(file_path)
+            self.files_model.appendRow(item)
+
+            if saved_path_map and file_path in saved_path_map:
+                # Restore from saved path mapping
+                restored = saved_path_map[file_path]
+                original_paths = list(restored.keys())
+                edited_paths = list(restored.values())
+
+                self.per_file_original_paths[file_path] = original_paths
+                self.per_file_edited_paths[file_path] = edited_paths
+            else:
+                # Will be filled during selection
+                self.per_file_original_paths[file_path] = []
+                self.per_file_edited_paths[file_path] = []
+
         self.model_updated_signal.emit()
+
 
     def clear_list_slot(self):
         selected_indexes = self.Files_listView.selectedIndexes()
@@ -483,13 +566,8 @@ class JsonPathEditorMasterSettingsView(BaseSettingsView, Ui_JsonPathEditorMaster
         
         missing_paths = self.validate_all_paths()
         if missing_paths:
-            # For example, log or show a warning
-            print("Some paths are missing:", json.dumps(missing_paths, indent=2))
-
             WarningDialog(f"Some file paths do not exist. Please verify.\nDetails:\n{json.dumps(missing_paths, indent=2)}") # change it later in the tool
-        else:
-            print("All paths exist.")
-
+ 
     def on_topic_update(self, topic, message, sender):
         """ Only used in a custom step of a tool, you can ignore it.
         """
@@ -501,11 +579,20 @@ class JsonPathEditorMasterSettingsView(BaseSettingsView, Ui_JsonPathEditorMaster
         """
         if DEBUG: print(f'JsonPathEditorSettingsView.on_topic_response:{topic} message:{message}')
         if topic == self._files_topic:
-            self.load_files_from_data(message)
+            self.load_files_from_data(message)  # No saved mappings
+        elif topic == self._path_mapping_topic:
+            self.saved_path_mapping = message  # Store temporarily
         elif topic == self._suffix_topic:
             self.Suffix_lineEdit.setText(message)
         elif topic == self._newfilespath_topic:
             self.New_files_lineEdit.setText(message)
+
+        # After all topics responded, bind paths to files
+        if hasattr(self, 'saved_path_mapping') and hasattr(self, 'files_model'):
+            files = [self.files_model.data(self.files_model.index(i, 0), QtCore.Qt.DisplayRole)
+                    for i in range(self.files_model.rowCount())]
+            self.load_files_from_data(files, saved_path_map=self.saved_path_mapping)
+            del self.saved_path_mapping  # Clean up
 
 
    # Called when the user delete an instance of the plugin

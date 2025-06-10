@@ -47,7 +47,9 @@ class Ui_JsonPathEditorMasterSettingsView(object):
         self.Files_listView.setObjectName(u"Files_listView")
         self.Files_listView.setFrameShape(QFrame.Shape.NoFrame)
         self.Files_listView.setLineWidth(0)
+        self.Files_listView.setEditTriggers(QAbstractItemView.EditTrigger.NoEditTriggers)
         self.Files_listView.setSelectionMode(QAbstractItemView.SelectionMode.ExtendedSelection)
+        self.Files_listView.setViewMode(QListView.ViewMode.ListMode)
 
         self.verticalLayout_2.addWidget(self.Files_listView)
 
@@ -200,14 +202,14 @@ class Ui_JsonPathEditorMasterSettingsView(object):
 
     def retranslateUi(self, JsonPathEditorMasterSettingsView):
         JsonPathEditorMasterSettingsView.setWindowTitle(QCoreApplication.translate("JsonPathEditorMasterSettingsView", u"Form", None))
-        self.Json_label.setText(QCoreApplication.translate("JsonPathEditorMasterSettingsView", u"Json files", None))
+        self.Json_label.setText(QCoreApplication.translate("JsonPathEditorMasterSettingsView", u"Snooz Workspaces", None))
         self.Remove_pushButton.setText(QCoreApplication.translate("JsonPathEditorMasterSettingsView", u"Remove", None))
         self.Add_from_folders_pushButton.setText(QCoreApplication.translate("JsonPathEditorMasterSettingsView", u"Add from folders", None))
         self.Add_files_pushButton.setText(QCoreApplication.translate("JsonPathEditorMasterSettingsView", u"Add files", None))
         self.SelectAll_pushButton.setText(QCoreApplication.translate("JsonPathEditorMasterSettingsView", u"Select All", None))
-        self.New_Suffix.setText(QCoreApplication.translate("JsonPathEditorMasterSettingsView", u"<html><head/><body><p>New Json files suffix:</p></body></html>", None))
-        self.Select_label.setText(QCoreApplication.translate("JsonPathEditorMasterSettingsView", u"Select a folder for new Json files to save", None))
+        self.New_Suffix.setText(QCoreApplication.translate("JsonPathEditorMasterSettingsView", u"<html><head/><body><p>New Snooz workspaces suffix:</p></body></html>", None))
+        self.Select_label.setText(QCoreApplication.translate("JsonPathEditorMasterSettingsView", u"<html><head/><body><p>Select a folder for new Snooz workspaces to save</p></body></html>", None))
         self.Choose_pushButton.setText(QCoreApplication.translate("JsonPathEditorMasterSettingsView", u"Choose", None))
-        self.label.setText(QCoreApplication.translate("JsonPathEditorMasterSettingsView", u"Edit paths inside Json files", None))
+        self.label.setText(QCoreApplication.translate("JsonPathEditorMasterSettingsView", u"<html><head/><body><p>Edit paths inside Snooz workspaces</p></body></html>", None))
     # retranslateUi
 

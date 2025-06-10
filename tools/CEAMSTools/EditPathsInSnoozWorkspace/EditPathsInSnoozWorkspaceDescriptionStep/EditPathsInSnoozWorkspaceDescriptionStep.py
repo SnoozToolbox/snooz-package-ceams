@@ -3,19 +3,19 @@
 @ Valorisation Recherche HSCM, Societe en Commandite – 2024
 See the file LICENCE for full license details.
 
-    JsonDescriptionStep
-    JsonDescription step explains the tool and how to use it.
+    EditPathsInSnoozWorkspaceDescriptionStep
+    EditPathsInSnoozWorkspaceDescription step explains the tool and how to use it.
 """
 
 from qtpy import QtWidgets
 
-from CEAMSTools.EditPathsInJson.JsonDescriptionStep.Ui_JsonDescriptionStep import Ui_JsonDescriptionStep
+from CEAMSTools.EditPathsInSnoozWorkspace.EditPathsInSnoozWorkspaceDescriptionStep.Ui_EditPathsInSnoozWorkspaceDescriptionStep import Ui_EditPathsInSnoozWorkspaceDescriptionStep
 from commons.BaseStepView import BaseStepView
 
-class JsonDescriptionStep(BaseStepView, Ui_JsonDescriptionStep, QtWidgets.QWidget):
+class EditPathsInSnoozWorkspaceDescriptionStep(BaseStepView, Ui_EditPathsInSnoozWorkspaceDescriptionStep, QtWidgets.QWidget):
     """
-        JsonDescriptionStep
-        JsonDescription step explains the tool and how to use it.
+        EditPathsInSnoozWorkspaceDescriptionStep
+        EditPathsInSnoozWorkspaceDescription step explains the tool and how to use it.
     """
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -27,7 +27,7 @@ class JsonDescriptionStep(BaseStepView, Ui_JsonDescriptionStep, QtWidgets.QWidge
         # all steps of a tool. It is used to share and notice other steps whenever
         # the value in it changes. It's very useful when the parameter within a step
         # must have an impact in another step.
-        #self._context_manager["context_JsonDescriptionStep"] = {"the_data_I_want_to_share":"some_data"}
+        #self._context_manager["context_EditPathsInSnoozWorkspaceDescriptionStep"] = {"the_data_I_want_to_share":"some_data"}
         
     def load_settings(self):
         # Load settings is called after the constructor of all steps has been executed.
@@ -35,7 +35,7 @@ class JsonDescriptionStep(BaseStepView, Ui_JsonDescriptionStep, QtWidgets.QWidge
         # It is a good place to do all ping calls that will request the 
         # underlying process to get the value of a module.
 
-        # You need to look into your process.json file to know the ID of the node
+        # You need to look into your process.EditPathsInSnoozWorkspace file to know the ID of the node
         # you are interest in, this is just an example value:
         #identifier = "ea6060df-a4da-4ec1-a75c-399ece7a3c1b" 
         #self._somevalue_topic = identifier + ".some_input" # Change some_input for the name of the input your are looking for.

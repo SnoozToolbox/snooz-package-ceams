@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>JsonSettingStep</class>
- <widget class="QWidget" name="JsonSettingStep">
+ <class>EditPathsInSnoozWorkspaceSettingStep</class>
+ <widget class="QWidget" name="EditPathsInSnoozWorkspaceSettingStep">
   <property name="geometry">
    <rect>
     <x>0</x>
