@@ -17,6 +17,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 from scipy.signal import resample
 from sklearn.metrics import classification_report, confusion_matrix, cohen_kappa_score
+import matplotlib
 
 DEBUG = False
 
@@ -136,18 +137,21 @@ class YasaSleepStaging(SciNode):
         signals = self.SplitData(signals_EEG, signals_EOG, signals_EMG)
         y_pred_list = []
         confidence_list = []
+        sls_dict = {}
         for signal in signals:
             # Prepare raw data for sleep staging
             signal = self.prepare_raw_data(signal)
             # Apply sleep staging
             sls = self.apply_sleep_staging(signal)
+            # Store the SleepStaging object in a dictionary for later use
+            sls_dict[", ".join(signal.ch_names[:])] = sls
             # Check the features
             #features = sls.get_features()
             # Predict sleep stages
             y_pred = sls.predict()
             y_pred_list.append(y_pred)
             # Get the probability of each stage
-            proba = sls.predict_proba()        
+            proba = sls.predict_proba()
             # Get the confidence
             confidence = proba.max(axis=1)
             confidence_list.append(confidence)
@@ -158,10 +162,14 @@ class YasaSleepStaging(SciNode):
             max_confidence_index = np.argmax([confidence[i] for confidence in confidence_list])
             Decided_Confidence.append(confidence_list[max_confidence_index][i])
             y_pred_majority_vote.append(y_pred_list[max_confidence_index][i])
+        
+        sls_dict['Maximum Confidence'] = sls
         '''for i in range(len(y_pred_list[0])):
             votes = [y_pred[i] for y_pred in y_pred_list]
             majority_vote = max(set(votes), key=votes.count)
             y_pred_majority_vote.append(majority_vote)'''
+
+        # Calculate average confidence
         Avg_Confidence = 100 * np.mean(Decided_Confidence)
         y_pred = y_pred_majority_vote
         y_pred = yasa.Hypnogram(y_pred, freq="30s")
@@ -213,7 +221,7 @@ class YasaSleepStaging(SciNode):
             y_pred_no_uns_hyp = yasa.Hypnogram(y_pred_no_uns, freq="30s")
 
             # Cache the results
-            file_name = filename[:-4] # Extract the file name from the path
+            file_name = os.path.splitext(filename)[0] # Extract the file name from the path
             self.cache_signal(labels_no_uns_hyp, y_pred_no_uns_hyp, Accuracy, sls, Avg_Confidence, file_name, kappa)
 
             # Log the results
@@ -230,7 +238,7 @@ class YasaSleepStaging(SciNode):
             df_Classification_report = pd.DataFrame()
             labels_no_uns_hyp = None
             y_pred_no_uns_hyp = None
-            file_name = None
+            file_name = os.path.splitext(filename)[0]
 
         # Replace the group and name of the sleep_stages for the predicted ones
         if len(y_pred_snooz) == len(sleep_stages):
@@ -254,7 +262,7 @@ class YasaSleepStaging(SciNode):
 
         return {
             'results': df_Classification_report,
-            'info': [labels_no_uns_hyp, y_pred_no_uns_hyp, file_name],
+            'info': [labels_no_uns_hyp, y_pred_no_uns_hyp, file_name, sls_dict, Decided_Confidence],
             'new_events': sleep_stages,
             'events_to_remove' : events_to_remove
         }

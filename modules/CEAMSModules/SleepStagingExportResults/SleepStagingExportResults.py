@@ -105,15 +105,62 @@ class SleepStagingExportResults(SciNode):
         # Validate inputs
         if not isinstance(ResultsDataframe, pd.DataFrame):
             raise NodeInputException(self.identifier, "ResultsDataframe", "Input must be a pandas DataFrame")
-        if not isinstance(info, list) or len(info) != 3:
-            raise NodeInputException(self.identifier, "info", "Info must be a list of [ground_truth, predicted, file_path]")
+        if not isinstance(info, list) or len(info) != 5:
+            raise NodeInputException(self.identifier, "info", "Info must be a list of [ground_truth, predicted, file_path, hypno_objects, confidence]")
         if not os.path.isdir(SavedDestination) and Checkbox:
             raise NodeInputException(self.identifier, "SavedDestination", "Output directory does not exist")
         
+        # plot the hypnodensity figure for both cases: validation and prediction
+        stage_colors = {
+            'N1': "#88cee6",
+            'N2': "#1A7CCCFF",
+            'N3': '#00008B',
+            'R': 'purple',
+            'W': 'gold'}
+        names = list(info[3].keys())
+        n = len(names)
+        cols = 2
+        rows = (n + cols - 1) // cols
+        self.fig, axes = plt.subplots(rows, cols, figsize=(14, rows * 4))
+        self.fig.suptitle('Hypnodensity Plots', fontsize=20)
+        axes = axes.flatten()
+        for i, name in enumerate(names):
+            proba = info[3][name].predict_proba()
+            if i == len(names) - 1:
+                # change the proba to a new one which has the confidence of the majority vote
+                max_stages = proba.idxmax(axis=1)
+                for j, stage in enumerate(max_stages):
+                    proba.loc[j, stage] = info[4][j]
+                # Normalize the probabilities to ensure they sum to 1 across each row
+                proba = proba.div(proba.sum(axis=1), axis=0)
+                proba.plot(kind="area", stacked=True, alpha=0.8, ax=axes[i], color=[stage_colors[stage] for stage in proba.columns])
+                axes[i].set_title(name)
+                axes[i].set_xlabel("Time (30-sec epoch)")
+                axes[i].set_ylabel("Probability")
+                axes[i].legend(loc='center left', bbox_to_anchor=(1.22, 0.5), borderaxespad=0, fontsize=17)
+            else:
+                proba.plot(kind="area", stacked=True, alpha=0.8, ax=axes[i], color=[stage_colors[stage] for stage in proba.columns])
+                axes[i].set_title(name)
+                axes[i].set_xlabel("Time (30-sec epoch)")
+                axes[i].set_ylabel("Probability")
+                axes[i].legend().remove()
+                #axes[i].legend(loc='center left', bbox_to_anchor=(1.02, 0.5), borderaxespad=0)
+
+        # Hide any unused axes
+        for k in range(len(names), len(axes)):
+            self.fig.delaxes(axes[k])
+        self.fig.tight_layout()
 
         if Checkbox:
+            # Save the hypnodensity figure to a PDF file
+            filename = os.path.basename(info[2])
+            name_without_extension = os.path.splitext(filename)[0]
+            hypno_file_name = SavedDestination + name_without_extension + '_hypnodensity_plot.pdf'
+            self.fig.savefig(hypno_file_name, format='pdf')
+
             # Define file path (change extension to .tsv)
             export_results_file_path = SavedDestination + 'YASA_sleep_staging_metrics_cohort_report.tsv'  # TSV file
+
             # Check if file exists, if not create it with headers
             if not os.path.exists(export_results_file_path):
                 pd.DataFrame().to_csv(export_results_file_path, sep='\t', index=False)  # TSV creation
@@ -189,11 +236,8 @@ class SleepStagingExportResults(SciNode):
                                 # Adjust layout to add more space between subplots
             self.figure.tight_layout(pad=10.0)
 
-                    # Save the figure to a PDF file
-            filename = os.path.basename(info[2])
-            name_without_extension = os.path.splitext(filename)[0]
-            file_name = SavedDestination + name_without_extension
-            file_name = file_name + '.pdf'
+            # Save the figure to a PDF file
+            file_name = SavedDestination + name_without_extension + '.pdf'
             self.figure.savefig(file_name, format='pdf')
 
             # refresh canvas
@@ -201,6 +245,12 @@ class SleepStagingExportResults(SciNode):
             # Return the path to the updated Excel file
         else:
             export_results_file_path = None
+            # Save the figure to a PDF file
+            filename = info[2]
+            #name_without_extension = os.path.splitext(filename)[0]
+            hypno_file_name = filename + '_hypnodensity_plot.pdf'
+            self.fig.savefig(hypno_file_name, format='pdf')
+
 
         return {
             'ExportResults': export_results_file_path
