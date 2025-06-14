@@ -134,7 +134,7 @@ class YasaSleepStaging(SciNode):
             events_to_remove = []
 
         # Split the data into EEG, EOG, and EMG signals
-        signals = self.SplitData(signals_EEG, signals_EOG, signals_EMG)
+        signals, number_of_parts = self.SplitData(signals_EEG, signals_EOG, signals_EMG)
         y_pred_list = []
         confidence_list = []
         sls_dict = {}
@@ -156,6 +156,13 @@ class YasaSleepStaging(SciNode):
             confidence = proba.max(axis=1)
             confidence_list.append(confidence)
         # Perform majority vote for each element across all lists in y_pred_list
+        # Merge the discontinuities to create a single prediction
+        if number_of_parts > 1:
+            y_pred_list, part_lengths = self.merge_by_parts(y_pred_list, number_of_parts)
+            confidence_list, part_lengths  = self.merge_by_parts(confidence_list, number_of_parts)
+            sleep_stages.drop(index=np.cumsum(part_lengths)[:-1], inplace=True)
+            sleep_stages.reset_index(drop=True, inplace=True)
+            
         y_pred_majority_vote = []
         Decided_Confidence = []
         for i in range(len(y_pred_list[0])):
@@ -267,56 +274,107 @@ class YasaSleepStaging(SciNode):
             'events_to_remove' : events_to_remove
         }
 
+    def merge_by_parts(self, array_list, number_of_parts):
+        """
+        Merge arrays that belong to the same relative index in each part.
+
+        Parameters
+        ----------
+        array_list : list of np.ndarray
+            Each entry is an array you want to combine.
+        number_of_parts : int
+            How many “chunks” the list is split into.
+            
+        Returns
+        -------
+        list of np.ndarray
+            New list whose length is len(array_list) // number_of_parts,
+            with arrays concatenated along axis 0.
+        """
+
+        n = len(array_list)
+        if n % number_of_parts != 0:
+            raise ValueError(f"List of length {n} is not divisible by {number_of_parts}.")
+
+        stride = n // number_of_parts
+        merged = []
+
+        # Merge arrays from each part per index
+        for i in range(stride):
+            group = [array_list[i + p * stride] for p in range(number_of_parts)]
+            merged.append(np.concatenate(group, axis=0))
+
+        # Get one length from the first item in each part
+        part_lengths = [len(array_list[p * stride]) for p in range(number_of_parts)]
+
+        return merged, part_lengths
+    
     def SplitData(self, raw_EEG, raw_EOG, raw_EMG):
         """
-        Split the data into EEG, EOG, and EMG signals based on available inputs.
-        EEG is mandatory, while EOG and EMG are optional.
+        Split EEG signals into groups by part and combine with corresponding EOG and EMG signals,
+        if available. If both EOG and EMG are missing, return EEGs as-is.
 
         Parameters
         ----------
         raw_EEG : list
             List of EEG signal objects (mandatory)
         raw_EOG : list or None
-            List of EOG signal objects (optional)
+            List of EOG signal objects (optional, 1 per part)
         raw_EMG : list or None
-            List of EMG signal objects (optional)
+            List of EMG signal objects (optional, 1 per part)
 
         Returns
         -------
         list
-            List of signal combinations for each EEG signal. Each combination will include
-            available EOG and EMG signals.
+            Grouped [EEG (+EOG/EMG)] combinations, or EEG-only if no EOG/EMG present.
 
         Raises
         ------
         NodeInputException
-            If raw_EEG is empty or None
+            If raw_EEG is empty or not divisible by number of parts (if EOG/EMG exist)
         """
-        # Validate that EEG is present (mandatory)
         if not raw_EEG:
             raise NodeInputException(self.identifier, "raw_EEG", "EEG signal is mandatory but was not provided")
 
+        # If no EOG and EMG, return EEGs individually
+        if not raw_EOG and not raw_EMG:
+            return [[eeg] for eeg in raw_EEG]
+
+        # Infer number of parts from EOG or EMG
+        num_parts = 0
+        if raw_EOG:
+            num_parts = len(raw_EOG)
+        elif raw_EMG:
+            num_parts = len(raw_EMG)
+        else:
+            raise NodeInputException(self.identifier, "parts", "Cannot determine number of parts without EOG or EMG")
+
+        if len(raw_EEG) % num_parts != 0:
+            raise NodeInputException(
+                self.identifier, "raw_EEG",
+                f"EEG signals ({len(raw_EEG)}) cannot be evenly divided into {num_parts} parts"
+            )
+
+        eegs_per_part = len(raw_EEG) // num_parts
         rawlist = []
-        
-        # Get optional EOG and EMG signals if available
-        eog = next(iter(raw_EOG), None) if raw_EOG else None
-        emg = next(iter(raw_EMG), None) if raw_EMG else None
-        
-        # Create combinations based on available signals
-        for eeg in raw_EEG:
-            if eog and emg:  # All signals available
-                rawlist.append([eeg, eog, emg])
-            elif eog:  # Only EEG and EOG
-                rawlist.append([eeg, eog])
-            elif emg:  # Only EEG and EMG
-                rawlist.append([eeg, emg])
-            else:  # Only EEG
-                rawlist.append([eeg])
-        
-        return rawlist
-        '''eog = next(s for s in raw_EOG)
-        emg = next(s for s in raw_EMG)
-        rawlist = [[i, eog, emg] for i in raw_EEG]'''
+        eeg_index = 0
+
+        for i in range(num_parts):
+            eog = raw_EOG[i] if raw_EOG else None
+            emg = raw_EMG[i] if raw_EMG else None
+
+            for _ in range(eegs_per_part):
+                eeg = raw_EEG[eeg_index]
+                eeg_index += 1
+
+                combo = [eeg]
+                if eog:
+                    combo.append(eog)
+                if emg:
+                    combo.append(emg)
+                rawlist.append(combo)
+
+        return rawlist, num_parts
 
     def prepare_raw_data(self, raw):
         """
@@ -347,10 +405,18 @@ class YasaSleepStaging(SciNode):
         else:
             raise NodeInputException(self.identifier, "raw", "The number of channels is not supported.")
 
-        # Create MNE RawArray object
+        # Check if all signals have the same number of samples
         sfreq = raw[0].sample_rate
+        for i, rate in enumerate([r.sample_rate for r in raw]):
+            if rate != sfreq:
+                raise NodeInputException(self.identifier, "raw", f"All signals must have the same sampling frequency. Found {sfreq} and {rate}.")
+
+        max_len = max(len(r.samples) for r in raw)
+        padded_samples = [np.pad(sig.samples, (0, max_len - len(sig.samples)), mode='constant', constant_values=0.0) for sig in raw]
+        for item in range(len(padded_samples)):
+            raw[item].samples = padded_samples[item]
+        # Create MNE RawArray object
         data = np.array([r.samples*1e-6 for r in raw])
-        
         info = mne.create_info(ch_names=ch_names, sfreq=sfreq, ch_types=ch_type)
         return mne.io.RawArray(data, info)
 
