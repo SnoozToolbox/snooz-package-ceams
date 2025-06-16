@@ -137,14 +137,13 @@ class YasaSleepStaging(SciNode):
         signals, number_of_parts = self.SplitData(signals_EEG, signals_EOG, signals_EMG)
         y_pred_list = []
         confidence_list = []
-        sls_dict = {}
+        proba_list = []
+        Combination_names = []
         for signal in signals:
             # Prepare raw data for sleep staging
             signal = self.prepare_raw_data(signal)
             # Apply sleep staging
             sls = self.apply_sleep_staging(signal)
-            # Store the SleepStaging object in a dictionary for later use
-            sls_dict[", ".join(signal.ch_names[:])] = sls
             # Check the features
             #features = sls.get_features()
             # Predict sleep stages
@@ -152,6 +151,9 @@ class YasaSleepStaging(SciNode):
             y_pred_list.append(y_pred)
             # Get the probability of each stage
             proba = sls.predict_proba()
+            proba_list.append(proba)
+            names = ", ".join(signal.ch_names[:])
+            Combination_names.append(names)
             # Get the confidence
             confidence = proba.max(axis=1)
             confidence_list.append(confidence)
@@ -160,6 +162,7 @@ class YasaSleepStaging(SciNode):
         if number_of_parts > 1:
             y_pred_list, part_lengths = self.merge_by_parts(y_pred_list, number_of_parts)
             confidence_list, part_lengths  = self.merge_by_parts(confidence_list, number_of_parts)
+            proba_list, part_lengths = self.merge_by_parts(proba_list, number_of_parts)
             sleep_stages.drop(index=np.cumsum(part_lengths)[:-1], inplace=True)
             sleep_stages.reset_index(drop=True, inplace=True)
             
@@ -170,7 +173,11 @@ class YasaSleepStaging(SciNode):
             Decided_Confidence.append(confidence_list[max_confidence_index][i])
             y_pred_majority_vote.append(y_pred_list[max_confidence_index][i])
         
-        sls_dict['Maximum Confidence'] = sls
+        # Add the maximum confidence to the proba_list to plot the hypnodensity for it later on
+        Combination_names = list(dict.fromkeys(Combination_names))
+        proba_list.append(proba_list[-1])
+        Combination_names.append('Maximum Confidence')
+
         '''for i in range(len(y_pred_list[0])):
             votes = [y_pred[i] for y_pred in y_pred_list]
             majority_vote = max(set(votes), key=votes.count)
@@ -269,43 +276,61 @@ class YasaSleepStaging(SciNode):
 
         return {
             'results': df_Classification_report,
-            'info': [labels_no_uns_hyp, y_pred_no_uns_hyp, file_name, sls_dict, Decided_Confidence],
+            'info': [labels_no_uns_hyp, y_pred_no_uns_hyp, file_name, proba_list, Decided_Confidence, Combination_names],
             'new_events': sleep_stages,
             'events_to_remove' : events_to_remove
         }
 
-    def merge_by_parts(self, array_list, number_of_parts):
+    def merge_by_parts(self, data_list, number_of_parts):
         """
-        Merge arrays that belong to the same relative index in each part.
+        Merge elements that belong to the same relative index across parts.
+
+        Works with both:
+        • list of np.ndarray  – concatenated with np.concatenate(axis=0)
+        • list of pd.DataFrame – concatenated with pd.concat(axis=0, ignore_index=True)
 
         Parameters
         ----------
-        array_list : list of np.ndarray
-            Each entry is an array you want to combine.
+        data_list : list[np.ndarray] | list[pd.DataFrame]
+            Items to merge. The length must be divisible by `number_of_parts`.
         number_of_parts : int
-            How many “chunks” the list is split into.
-            
+            Into how many equal chunks the list is logically split.
+
         Returns
         -------
-        list of np.ndarray
-            New list whose length is len(array_list) // number_of_parts,
-            with arrays concatenated along axis 0.
+        merged : list[np.ndarray | pd.DataFrame]
+            Merged objects, length = len(data_list) // number_of_parts.
+        part_lengths : list[int]
+            One length per part (non-repeated).
         """
-
-        n = len(array_list)
+        if not data_list:
+            raise ValueError("Input list is empty.")
+        
+        n = len(data_list)
         if n % number_of_parts != 0:
             raise ValueError(f"List of length {n} is not divisible by {number_of_parts}.")
+
+        # Determine merge strategy from the first element
+        first = data_list[0]
+        if isinstance(first, np.ndarray):
+            concat = lambda grp: np.concatenate(grp, axis=0)
+        elif isinstance(first, (pd.DataFrame, pd.Series)):
+            concat = lambda grp: pd.concat(grp, axis=0, ignore_index=True)
+        else:
+            raise TypeError(
+                "Unsupported element type. Expected np.ndarray or pd.DataFrame."
+            )
 
         stride = n // number_of_parts
         merged = []
 
         # Merge arrays from each part per index
-        for i in range(stride):
-            group = [array_list[i + p * stride] for p in range(number_of_parts)]
-            merged.append(np.concatenate(group, axis=0))
+        merged = [
+            concat([data_list[i + p * stride] for p in range(number_of_parts)])
+            for i in range(stride)]
 
         # Get one length from the first item in each part
-        part_lengths = [len(array_list[p * stride]) for p in range(number_of_parts)]
+        part_lengths = [len(data_list[p * stride]) for p in range(number_of_parts)]
 
         return merged, part_lengths
     

@@ -105,8 +105,8 @@ class SleepStagingExportResults(SciNode):
         # Validate inputs
         if not isinstance(ResultsDataframe, pd.DataFrame):
             raise NodeInputException(self.identifier, "ResultsDataframe", "Input must be a pandas DataFrame")
-        if not isinstance(info, list) or len(info) != 5:
-            raise NodeInputException(self.identifier, "info", "Info must be a list of [ground_truth, predicted, file_path, hypno_objects, confidence]")
+        if not isinstance(info, list) or len(info) != 6:
+            raise NodeInputException(self.identifier, "info", "Info must be a list of [ground_truth, predicted, file_path, proba_list, confidence, names]")
         if not os.path.isdir(SavedDestination) and Checkbox:
             raise NodeInputException(self.identifier, "SavedDestination", "Output directory does not exist")
         
@@ -117,7 +117,7 @@ class SleepStagingExportResults(SciNode):
             'N3': '#00008B',
             'R': 'purple',
             'W': 'gold'}
-        names = list(info[3].keys())
+        names = info[5]
         n = len(names)
         cols = 2
         rows = (n + cols - 1) // cols
@@ -125,7 +125,7 @@ class SleepStagingExportResults(SciNode):
         self.fig.suptitle('Hypnodensity Plots', fontsize=20)
         axes = axes.flatten()
         for i, name in enumerate(names):
-            proba = info[3][name].predict_proba()
+            proba = info[3][i]
             if i == len(names) - 1:
                 # change the proba to a new one which has the confidence of the majority vote
                 max_stages = proba.idxmax(axis=1)
