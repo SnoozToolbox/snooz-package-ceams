@@ -82,6 +82,8 @@ class RenameFileListSettingsView(BaseSettingsView, Ui_RenameFileListSettingsView
         if topic == self._file_list_topic:
             if isinstance(message, str) and not message == '':
                 self._files = eval(message)
+            elif isinstance(message, list):
+                self._files = message
             else:
                 self._files = []
             self.fill_file_table()
