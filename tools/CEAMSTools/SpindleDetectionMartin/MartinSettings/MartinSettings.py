@@ -31,7 +31,7 @@ class MartinSettings( BaseStepView,  Ui_MartinSettings, QtWidgets.QWidget):
         # Set input validators
         # Create a QRegularExpressionValidator with the desired regular expression
         # Regular expression for alphanumeric, space, dash, and latin1 (ISO/CEI 8859-1) characters
-        regex = QRegularExpression(r'^[a-zA-Z0-9ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖ×ØÙÚÛÜÝÞßàáâãäåæçèéêëìíîïðñòóôõö÷øùúûüýþÿ\s-_]*$')
+        regex = QRegularExpression(r'^[a-zA-Z0-9ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖ×ØÙÚÛÜÝÞßàáâãäåæçèéêëìíîïðñòóôõö÷øùúûüýþÿ\s_-]*$')
         validator = QRegularExpressionValidator(regex)
 
         # Set the validator for the QLineEdit

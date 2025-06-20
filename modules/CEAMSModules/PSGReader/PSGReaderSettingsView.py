@@ -1098,12 +1098,19 @@ class PSGReaderSettingsView( BaseSettingsView,  Ui_PSGReaderSettingsView, QtWidg
             self.files_details[filename] = 
                 'event_groups':event_groups,
         """
-        success = self._psg_reader_manager.open_file(filename)
-
+        error = None
+        output = self._psg_reader_manager.open_file(filename)
+        if isinstance(output, tuple) and len(output) == 2:
+            success, error = output
+        else:
+            success = output
         if not success:
             msg = QtWidgets.QMessageBox()
             msg.setIcon(QtWidgets.QMessageBox.Critical)
-            msg.setText(f"Could not open the PSG or the accessory file. The format is not valid for {filename}")
+            if error is not None:
+                msg.setText(error)
+            else:
+                msg.setText(f"Could not open the PSG or the accessory file. The format is not valid for {filename}")
             msg.setWindowTitle("File load error")
             msg.exec()
             return False

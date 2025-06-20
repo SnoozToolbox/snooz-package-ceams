@@ -143,10 +143,16 @@ class PSGReader(SciNode):
                 f"PSGReader file not found:{filename}")
 
         # Try to open the file
-        success = self._psg_reader_manager.open_file(filename)
+        error = None
+        output = self._psg_reader_manager.open_file(filename)
+        if isinstance(output, tuple) and len(output) == 2:
+            success, error = output
+        else:
+            success = output
         if not success:
-            raise NodeRuntimeException(self.identifier, "files", \
-                f"PSGReader could not read file:{filename}")
+            if error is None:
+                error = f"PSGReader could not open file:{filename}"
+            raise NodeRuntimeException(self.identifier, "files", error)
         
         signals = []
         if selected_channels is not None:

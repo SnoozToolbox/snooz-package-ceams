@@ -5,12 +5,25 @@ See the file LICENCE for full license details.
     REMsDetectionYasa
     This class detects Rapid Eye Movements (REMs) in sleep recordings using YASA.
 """
-import matplotlib.pyplot as plt
+import matplotlib
 import mne
 import numpy as np
 import os
 import pandas as pd
 import yasa
+import sys
+import warnings
+import logging
+
+os.environ["QT_LOGGING_RULES"] = "qt.core.qmetaobject.connectslotsbyname=false"
+matplotlib.use('Agg') # Use non-interactive Agg backend for matplotlib
+# Suppress warnings from YASA and MNE
+logging.getLogger('yasa').setLevel(logging.ERROR)
+logging.getLogger('mne').setLevel(logging.ERROR)
+logging.basicConfig(level=logging.WARNING)
+# Suppress all warnings
+warnings.filterwarnings("ignore")
+mne.set_log_level('WARNING')
 
 from flowpipe import SciNode, InputPlug, OutputPlug
 from commons.NodeInputException import NodeInputException
@@ -111,7 +124,8 @@ class REMsDetectionYasa(SciNode):
             raise NodeInputException(self.identifier, "Invalid 'signals' input. Must be a list containing at least two elements.")
         if not isinstance(sleepstages, pd.DataFrame):
             raise NodeInputException(self.identifier, "Invalid 'sleepstages' input. Must be a DataFrame.")
-
+        
+        use_progress_bar = sys.stdout is not None and sys.stdout.isatty() ### added to check
         try:
             # Extract sleep stage information
             hypno = np.squeeze(sleepstages["name"].values).tolist()
@@ -137,7 +151,7 @@ class REMsDetectionYasa(SciNode):
                                   hypno=hypno_up, include=include, 
                                   amplitude=amplitude, duration=duration, 
                                   freq_rem=freq_rem, relative_prominence=relative_prominence, 
-                                  remove_outliers=remove_outliers, verbose='info')
+                                  remove_outliers=remove_outliers, verbose= False)
 
             # Save results
             rems_detection_df = rem.summary().round(3)
@@ -154,7 +168,7 @@ class REMsDetectionYasa(SciNode):
             snooz_rem.to_csv(f"{filename}_YASA_REMs_snooz.tsv", sep='\t', index=False)
         
         except Exception as e:
-            raise NodeRuntimeException(f"Error during REM detection: {str(e)}")
+            raise NodeRuntimeException(self.identifier, "REMs detection", f"Error during REM detection: {str(e)}")
 
         self._log_manager.log(self.identifier, "This module detects Rapid Eye Movements.")
 

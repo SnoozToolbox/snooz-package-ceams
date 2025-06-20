@@ -17,6 +17,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 from scipy.signal import resample
 from sklearn.metrics import classification_report, confusion_matrix, cohen_kappa_score
+import matplotlib
 
 DEBUG = False
 
@@ -133,9 +134,11 @@ class YasaSleepStaging(SciNode):
             events_to_remove = []
 
         # Split the data into EEG, EOG, and EMG signals
-        signals = self.SplitData(signals_EEG, signals_EOG, signals_EMG)
+        signals, number_of_parts = self.SplitData(signals_EEG, signals_EOG, signals_EMG)
         y_pred_list = []
         confidence_list = []
+        proba_list = []
+        Combination_names = []
         for signal in signals:
             # Prepare raw data for sleep staging
             signal = self.prepare_raw_data(signal)
@@ -147,21 +150,40 @@ class YasaSleepStaging(SciNode):
             y_pred = sls.predict()
             y_pred_list.append(y_pred)
             # Get the probability of each stage
-            proba = sls.predict_proba()        
+            proba = sls.predict_proba()
+            proba_list.append(proba)
+            names = ", ".join(signal.ch_names[:])
+            Combination_names.append(names)
             # Get the confidence
             confidence = proba.max(axis=1)
             confidence_list.append(confidence)
         # Perform majority vote for each element across all lists in y_pred_list
+        # Merge the discontinuities to create a single prediction
+        if number_of_parts > 1:
+            y_pred_list, part_lengths = self.merge_by_parts(y_pred_list, number_of_parts)
+            confidence_list, part_lengths  = self.merge_by_parts(confidence_list, number_of_parts)
+            proba_list, part_lengths = self.merge_by_parts(proba_list, number_of_parts)
+            sleep_stages.drop(index=np.cumsum(part_lengths)[:-1], inplace=True)
+            sleep_stages.reset_index(drop=True, inplace=True)
+            
         y_pred_majority_vote = []
         Decided_Confidence = []
         for i in range(len(y_pred_list[0])):
             max_confidence_index = np.argmax([confidence[i] for confidence in confidence_list])
             Decided_Confidence.append(confidence_list[max_confidence_index][i])
             y_pred_majority_vote.append(y_pred_list[max_confidence_index][i])
+        
+        # Add the maximum confidence to the proba_list to plot the hypnodensity for it later on
+        Combination_names = list(dict.fromkeys(Combination_names))
+        proba_list.append(proba_list[-1])
+        Combination_names.append('Maximum Confidence')
+
         '''for i in range(len(y_pred_list[0])):
             votes = [y_pred[i] for y_pred in y_pred_list]
             majority_vote = max(set(votes), key=votes.count)
             y_pred_majority_vote.append(majority_vote)'''
+
+        # Calculate average confidence
         Avg_Confidence = 100 * np.mean(Decided_Confidence)
         y_pred = y_pred_majority_vote
         y_pred = yasa.Hypnogram(y_pred, freq="30s")
@@ -213,7 +235,7 @@ class YasaSleepStaging(SciNode):
             y_pred_no_uns_hyp = yasa.Hypnogram(y_pred_no_uns, freq="30s")
 
             # Cache the results
-            file_name = filename[:-4] # Extract the file name from the path
+            file_name = os.path.splitext(filename)[0] # Extract the file name from the path
             self.cache_signal(labels_no_uns_hyp, y_pred_no_uns_hyp, Accuracy, sls, Avg_Confidence, file_name, kappa)
 
             # Log the results
@@ -230,7 +252,7 @@ class YasaSleepStaging(SciNode):
             df_Classification_report = pd.DataFrame()
             labels_no_uns_hyp = None
             y_pred_no_uns_hyp = None
-            file_name = None
+            file_name = os.path.splitext(filename)[0]
 
         # Replace the group and name of the sleep_stages for the predicted ones
         if len(y_pred_snooz) == len(sleep_stages):
@@ -254,61 +276,130 @@ class YasaSleepStaging(SciNode):
 
         return {
             'results': df_Classification_report,
-            'info': [labels_no_uns_hyp, y_pred_no_uns_hyp, file_name],
+            'info': [labels_no_uns_hyp, y_pred_no_uns_hyp, file_name, proba_list, Decided_Confidence, Combination_names],
             'new_events': sleep_stages,
             'events_to_remove' : events_to_remove
         }
 
+    def merge_by_parts(self, data_list, number_of_parts):
+        """
+        Merge elements that belong to the same relative index across parts.
+
+        Works with both:
+        • list of np.ndarray  – concatenated with np.concatenate(axis=0)
+        • list of pd.DataFrame – concatenated with pd.concat(axis=0, ignore_index=True)
+
+        Parameters
+        ----------
+        data_list : list[np.ndarray] | list[pd.DataFrame]
+            Items to merge. The length must be divisible by `number_of_parts`.
+        number_of_parts : int
+            Into how many equal chunks the list is logically split.
+
+        Returns
+        -------
+        merged : list[np.ndarray | pd.DataFrame]
+            Merged objects, length = len(data_list) // number_of_parts.
+        part_lengths : list[int]
+            One length per part (non-repeated).
+        """
+        if not data_list:
+            raise ValueError("Input list is empty.")
+        
+        n = len(data_list)
+        if n % number_of_parts != 0:
+            raise ValueError(f"List of length {n} is not divisible by {number_of_parts}.")
+
+        # Determine merge strategy from the first element
+        first = data_list[0]
+        if isinstance(first, np.ndarray):
+            concat = lambda grp: np.concatenate(grp, axis=0)
+        elif isinstance(first, (pd.DataFrame, pd.Series)):
+            concat = lambda grp: pd.concat(grp, axis=0, ignore_index=True)
+        else:
+            raise TypeError(
+                "Unsupported element type. Expected np.ndarray or pd.DataFrame."
+            )
+
+        stride = n // number_of_parts
+        merged = []
+
+        # Merge arrays from each part per index
+        merged = [
+            concat([data_list[i + p * stride] for p in range(number_of_parts)])
+            for i in range(stride)]
+
+        # Get one length from the first item in each part
+        part_lengths = [len(data_list[p * stride]) for p in range(number_of_parts)]
+
+        return merged, part_lengths
+    
     def SplitData(self, raw_EEG, raw_EOG, raw_EMG):
         """
-        Split the data into EEG, EOG, and EMG signals based on available inputs.
-        EEG is mandatory, while EOG and EMG are optional.
+        Split EEG signals into groups by part and combine with corresponding EOG and EMG signals,
+        if available. If both EOG and EMG are missing, return EEGs as-is.
 
         Parameters
         ----------
         raw_EEG : list
             List of EEG signal objects (mandatory)
         raw_EOG : list or None
-            List of EOG signal objects (optional)
+            List of EOG signal objects (optional, 1 per part)
         raw_EMG : list or None
-            List of EMG signal objects (optional)
+            List of EMG signal objects (optional, 1 per part)
 
         Returns
         -------
         list
-            List of signal combinations for each EEG signal. Each combination will include
-            available EOG and EMG signals.
+            Grouped [EEG (+EOG/EMG)] combinations, or EEG-only if no EOG/EMG present.
 
         Raises
         ------
         NodeInputException
-            If raw_EEG is empty or None
+            If raw_EEG is empty or not divisible by number of parts (if EOG/EMG exist)
         """
-        # Validate that EEG is present (mandatory)
         if not raw_EEG:
             raise NodeInputException(self.identifier, "raw_EEG", "EEG signal is mandatory but was not provided")
 
+        # If no EOG and EMG, return EEGs individually
+        if not raw_EOG and not raw_EMG:
+            return [[eeg] for eeg in raw_EEG]
+
+        # Infer number of parts from EOG or EMG
+        num_parts = 0
+        if raw_EOG:
+            num_parts = len(raw_EOG)
+        elif raw_EMG:
+            num_parts = len(raw_EMG)
+        else:
+            raise NodeInputException(self.identifier, "parts", "Cannot determine number of parts without EOG or EMG")
+
+        if len(raw_EEG) % num_parts != 0:
+            raise NodeInputException(
+                self.identifier, "raw_EEG",
+                f"EEG signals ({len(raw_EEG)}) cannot be evenly divided into {num_parts} parts"
+            )
+
+        eegs_per_part = len(raw_EEG) // num_parts
         rawlist = []
-        
-        # Get optional EOG and EMG signals if available
-        eog = next(iter(raw_EOG), None) if raw_EOG else None
-        emg = next(iter(raw_EMG), None) if raw_EMG else None
-        
-        # Create combinations based on available signals
-        for eeg in raw_EEG:
-            if eog and emg:  # All signals available
-                rawlist.append([eeg, eog, emg])
-            elif eog:  # Only EEG and EOG
-                rawlist.append([eeg, eog])
-            elif emg:  # Only EEG and EMG
-                rawlist.append([eeg, emg])
-            else:  # Only EEG
-                rawlist.append([eeg])
-        
-        return rawlist
-        '''eog = next(s for s in raw_EOG)
-        emg = next(s for s in raw_EMG)
-        rawlist = [[i, eog, emg] for i in raw_EEG]'''
+        eeg_index = 0
+
+        for i in range(num_parts):
+            eog = raw_EOG[i] if raw_EOG else None
+            emg = raw_EMG[i] if raw_EMG else None
+
+            for _ in range(eegs_per_part):
+                eeg = raw_EEG[eeg_index]
+                eeg_index += 1
+
+                combo = [eeg]
+                if eog:
+                    combo.append(eog)
+                if emg:
+                    combo.append(emg)
+                rawlist.append(combo)
+
+        return rawlist, num_parts
 
     def prepare_raw_data(self, raw):
         """
@@ -339,10 +430,18 @@ class YasaSleepStaging(SciNode):
         else:
             raise NodeInputException(self.identifier, "raw", "The number of channels is not supported.")
 
-        # Create MNE RawArray object
+        # Check if all signals have the same number of samples
         sfreq = raw[0].sample_rate
+        for i, rate in enumerate([r.sample_rate for r in raw]):
+            if rate != sfreq:
+                raise NodeInputException(self.identifier, "raw", f"All signals must have the same sampling frequency. Found {sfreq} and {rate}.")
+
+        max_len = max(len(r.samples) for r in raw)
+        padded_samples = [np.pad(sig.samples, (0, max_len - len(sig.samples)), mode='constant', constant_values=0.0) for sig in raw]
+        for item in range(len(padded_samples)):
+            raw[item].samples = padded_samples[item]
+        # Create MNE RawArray object
         data = np.array([r.samples*1e-6 for r in raw])
-        
         info = mne.create_info(ch_names=ch_names, sfreq=sfreq, ch_types=ch_type)
         return mne.io.RawArray(data, info)
 

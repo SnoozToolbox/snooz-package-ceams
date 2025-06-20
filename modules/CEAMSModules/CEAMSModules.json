@@ -23,7 +23,7 @@
         {
             "item_name": "PSGReader",
             "item_type": "module",
-            "item_version": "2.1.0",
+            "item_version": "2.2.0",
             "item_hooks": [
                 {
                     "endpoint_name": "module_endpoint",
@@ -303,7 +303,7 @@
         {
             "item_name": "PSGWriter",
             "item_type": "module",
-            "item_version": "2.0.0",
+            "item_version": "2.010",
             "item_hooks": [
                 {
                     "endpoint_name": "module_endpoint",
@@ -653,7 +653,7 @@
         {
             "item_name": "PSACompilation",
             "item_type": "module",
-            "item_version": "2.0.0",
+            "item_version": "2.1.0",
             "item_hooks": [
                 {
                     "endpoint_name": "module_endpoint",
@@ -667,7 +667,7 @@
         {
             "item_name": "PSACohortReview",
             "item_type": "module",
-            "item_version": "2.0.0",
+            "item_version": "2.3.0",
             "item_hooks": [
                 {
                     "endpoint_name": "module_endpoint",
@@ -681,7 +681,7 @@
         {
             "item_name": "PSAOnEvents",
             "item_type": "module",
-            "item_version": "2.0.0",
+            "item_version": "2.1.0",
             "item_hooks": [
                 {
                     "endpoint_name": "module_endpoint",
@@ -835,7 +835,7 @@
         {
             "item_name": "SlowWavePicsGenerator",
             "item_type": "module",
-            "item_version": "2.0.0",
+            "item_version": "2.1.0",
             "item_hooks": [
                 {
                     "endpoint_name": "module_endpoint",
@@ -877,7 +877,7 @@
         {
             "item_name": "RenameFileList",
             "item_type": "module",
-            "item_version": "2.0.0",
+            "item_version": "2.1.0",
             "item_hooks": [
                 {
                     "endpoint_name": "module_endpoint",
@@ -1038,6 +1038,20 @@
                     "parameters": {
                         "module_category": "Parameters",
                         "module_label": "Create Tuple"
+                    }
+                }
+            ]
+        },
+        {
+            "item_name": "JsonPathEditorMaster",
+            "item_type": "module",
+            "item_version": "0.0.0",
+            "item_hooks": [
+                {
+                    "endpoint_name": "module_endpoint",
+                    "parameters": {
+                        "module_category": "Files I/O",
+                        "module_label": "Json Path Editor Master"
                     }
                 }
             ]
