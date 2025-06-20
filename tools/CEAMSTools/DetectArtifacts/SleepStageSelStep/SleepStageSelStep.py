@@ -26,11 +26,15 @@ class SleepStageSelStep(BaseStepView, Ui_SleepStageSelStep, QtWidgets.QWidget):
         self.setupUi(self)
 
         # Sleep Stage Events selection
-        self._node_id_sleep_stages = "d7196198-e2f9-432c-9134-c825e7a19193"
         self.stages_sel = '1,2,3,5'
+        self._node_id_sleep_stages = "d7196198-e2f9-432c-9134-c825e7a19193"
         self._sleep_stage_topic = f'{self._node_id_sleep_stages}.stages'
         self._pub_sub_manager.subscribe(self, self._sleep_stage_topic)
-        
+        # The sleep stage selection needs to be sent to the FilterEvents Module
+        self._node_id_filter_events ="8b9ceb12-694f-4289-a611-d46e85b57cb5"
+        self._filter_events_topic = f'{self._node_id_filter_events}.stages_selection'
+        self._pub_sub_manager.subscribe(self, self._filter_events_topic)        
+
 
     def load_settings(self):
         # Load settings is called after the constructor of all steps has been executed.
@@ -67,7 +71,8 @@ class SleepStageSelStep(BaseStepView, Ui_SleepStageSelStep, QtWidgets.QWidget):
         # Stages
         self.update_stages_slot()
         self._pub_sub_manager.publish(self, self._sleep_stage_topic, self.stages_sel) 
-
+        self._pub_sub_manager.publish(self, self._filter_events_topic, self.stages_sel) 
+        
 
     def on_validate_settings(self):
         # Validate that all input were set correctly by the user.

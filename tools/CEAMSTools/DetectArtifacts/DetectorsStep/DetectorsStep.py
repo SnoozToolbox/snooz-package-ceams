@@ -51,12 +51,12 @@ class DetectorsStep( BaseStepView,  Ui_DetectorsStep, QtWidgets.QWidget):
         self._node_id_SpectralDetector_flatline = "bb852d74-45b5-4bd3-9e8b-73ae5ef93f7f"
         # high freq
         self._node_id_stft_highfreq = "99e3de6b-d59e-4151-9b3a-2b69aa015820"
-        self._node_id_SpectralDetector_glitch_rel = "55ca6e02-e2b3-469e-b5f9-a878d1b3ec2c"
-        self._node_id_SpectralDetector_glitsh_abs = "787ab295-8f3b-4a76-91b6-4d0303261d73"
+        self._node_id_SpectralDetector_glitch_rel = "55ca6e02-e2b3-469e-b5f9-a878d1b3ec2c" #confirmed art_hfreq_rel
+        self._node_id_SpectralDetector_glitch_abs = "787ab295-8f3b-4a76-91b6-4d0303261d73" #confirmed art_hfreq_abs
+        self._node_id_SpectralDetector_glitch_hf = "28ae29a0-a8bb-4c74-b8de-ede9f8a80a73" #confirmed art_hf_ratio
         # persistent noise
         self._node_id_SpectralDetector_noise = "3c2ea592-fbbd-4d95-9be9-c2414157ddc0"
         # power line
-        self._node_id_SpectralDetector_60Hz_abs = "f15c4b54-bc09-4338-983a-df244c7eb915"
         self._node_id_SpectralDetector_60Hz_rel = "eb5f8c18-de1e-4bef-a747-2888c774c878"
         self._node_id_SpectralDetector_60Hz_abs1 = "ff04ef89-738b-46be-a8d4-0a5f2fd3aa31"
         # bsl var
@@ -78,10 +78,6 @@ class DetectorsStep( BaseStepView,  Ui_DetectorsStep, QtWidgets.QWidget):
 
         # Subscribe to the publisher for each topic
         # Input nodes port
-        self._low_freq_topic_abs = f'{self._node_id_SpectralDetector_60Hz_abs}.low_freq'
-        self._pub_sub_manager.subscribe(self, self._low_freq_topic_abs)
-        self._high_freq_topic_abs = f'{self._node_id_SpectralDetector_60Hz_abs}.high_freq'
-        self._pub_sub_manager.subscribe(self, self._high_freq_topic_abs)
         self._low_freq_topic_rel = f'{self._node_id_SpectralDetector_60Hz_rel}.low_freq'
         self._pub_sub_manager.subscribe(self, self._low_freq_topic_rel)
         self._high_freq_topic_rel = f'{self._node_id_SpectralDetector_60Hz_rel}.high_freq'
@@ -111,8 +107,6 @@ class DetectorsStep( BaseStepView,  Ui_DetectorsStep, QtWidgets.QWidget):
     def load_settings(self):
 
         # Input nodes
-        self._pub_sub_manager.publish(self, self._low_freq_topic_abs, 'ping')
-        self._pub_sub_manager.publish(self, self._high_freq_topic_abs, 'ping')
         self._pub_sub_manager.publish(self, self._low_freq_topic_rel, 'ping')
         self._pub_sub_manager.publish(self, self._high_freq_topic_rel, 'ping')
         self._pub_sub_manager.publish(self, self._high_freq_topic_rel_bsl, 'ping')
@@ -125,9 +119,9 @@ class DetectorsStep( BaseStepView,  Ui_DetectorsStep, QtWidgets.QWidget):
         self._pub_sub_manager.publish(self, self._node_id_SpectralDetector_flatline+".get_activation_state", None)
         self._pub_sub_manager.publish(self, self._node_id_stft_highfreq+".get_activation_state", None)
         self._pub_sub_manager.publish(self, self._node_id_SpectralDetector_glitch_rel+".get_activation_state", None)
-        self._pub_sub_manager.publish(self, self._node_id_SpectralDetector_glitsh_abs+".get_activation_state", None)
+        self._pub_sub_manager.publish(self, self._node_id_SpectralDetector_glitch_abs+".get_activation_state", None)
+        self._pub_sub_manager.publish(self, self._node_id_SpectralDetector_glitch_hf+".get_activation_state", None)
         self._pub_sub_manager.publish(self, self._node_id_SpectralDetector_noise+".get_activation_state", None)
-        self._pub_sub_manager.publish(self, self._node_id_SpectralDetector_60Hz_abs+".get_activation_state", None)
         self._pub_sub_manager.publish(self, self._node_id_SpectralDetector_60Hz_rel+".get_activation_state", None)
         self._pub_sub_manager.publish(self, self._node_id_SpectralDetector_60Hz_abs1+".get_activation_state", None)
         self._pub_sub_manager.publish(self, self._node_id_lowpass_bslvar+".get_activation_state", None)
@@ -145,12 +139,14 @@ class DetectorsStep( BaseStepView,  Ui_DetectorsStep, QtWidgets.QWidget):
 
 
     def on_notch_context_changed(self):
-        # Extract the filter (if the notch filter is applied or not)
+        # Extract the filter (if the notch filter is applied -> do not detect power line corruption)
+        # The inverse is not true
         self.notch_stopband = self._context_manager[FilterSignalsStep.context_notch]
-        self.powerline_checkBox.setChecked(not self.notch_stopband[0])
-        self.radioButton_50Hz.setEnabled(not self.notch_stopband[0])
-        self.radioButton_60Hz.setEnabled(not self.notch_stopband[0])
-        if not self.notch_stopband[0]:
+        if self.notch_stopband[0] == True: # A stop band is applied
+            self.powerline_checkBox.setChecked(not self.notch_stopband[0])
+            self.radioButton_50Hz.setEnabled(not self.notch_stopband[0])
+            self.radioButton_60Hz.setEnabled(not self.notch_stopband[0])
+        if not self.notch_stopband[0]: # No stop band applied, we can update the frequency, but the user can deside to detect corruption of not.
             if '49' in self.notch_stopband[1]:
                 self.radioButton_50Hz.setChecked(True)
             elif '59' in self.notch_stopband[1]:
@@ -174,16 +170,20 @@ class DetectorsStep( BaseStepView,  Ui_DetectorsStep, QtWidgets.QWidget):
                 +".activation_state_change", ActivationState.ACTIVATED)
             self._pub_sub_manager.publish(self, self._node_id_SpectralDetector_glitch_rel\
                 +".activation_state_change", ActivationState.ACTIVATED)
-            self._pub_sub_manager.publish(self, self._node_id_SpectralDetector_glitsh_abs\
+            self._pub_sub_manager.publish(self, self._node_id_SpectralDetector_glitch_abs\
+                +".activation_state_change", ActivationState.ACTIVATED)
+            self._pub_sub_manager.publish(self, self._node_id_SpectralDetector_glitch_hf\
                 +".activation_state_change", ActivationState.ACTIVATED)
         else:
             self._pub_sub_manager.publish(self, self._node_id_stft_highfreq\
                 +".activation_state_change", ActivationState.BYPASS)   
             self._pub_sub_manager.publish(self, self._node_id_SpectralDetector_glitch_rel\
                 +".activation_state_change", ActivationState.BYPASS)   
-            self._pub_sub_manager.publish(self, self._node_id_SpectralDetector_glitsh_abs\
+            self._pub_sub_manager.publish(self, self._node_id_SpectralDetector_glitch_abs\
                 +".activation_state_change", ActivationState.BYPASS)   
-
+            self._pub_sub_manager.publish(self, self._node_id_SpectralDetector_glitch_hf\
+                +".activation_state_change", ActivationState.BYPASS)   
+            
         # Persistent noise
         if self.persistent_checkBox.isChecked():
             self._pub_sub_manager.publish(self, self._node_id_SpectralDetector_noise\
@@ -194,31 +194,23 @@ class DetectorsStep( BaseStepView,  Ui_DetectorsStep, QtWidgets.QWidget):
 
         # Send the 50 of 60 Hz information to setup properly the power line detector
         if self.powerline_checkBox.isChecked():
-            self._pub_sub_manager.publish(self, self._node_id_SpectralDetector_60Hz_abs\
-                +".activation_state_change", ActivationState.ACTIVATED)
             self._pub_sub_manager.publish(self, self._node_id_SpectralDetector_60Hz_rel\
                 +".activation_state_change", ActivationState.ACTIVATED)
             self._pub_sub_manager.publish(self, self._node_id_SpectralDetector_60Hz_abs1\
                 +".activation_state_change", ActivationState.ACTIVATED)            
             if self.radioButton_60Hz.isChecked():
-                self._pub_sub_manager.publish(self, self._low_freq_topic_abs, str(59))
-                self._pub_sub_manager.publish(self, self._high_freq_topic_abs, str(61))
                 self._pub_sub_manager.publish(self, self._low_freq_topic_rel, str(59))
                 self._pub_sub_manager.publish(self, self._high_freq_topic_rel, str(61))
                 self._pub_sub_manager.publish(self, self._high_freq_topic_rel_bsl, str(61))
                 self._pub_sub_manager.publish(self, self._low_freq_topic_abs1, str(59))
                 self._pub_sub_manager.publish(self, self._high_freq_topic_abs1, str(61))
             elif self.radioButton_50Hz.isChecked():
-                self._pub_sub_manager.publish(self, self._low_freq_topic_abs, str(49))
-                self._pub_sub_manager.publish(self, self._high_freq_topic_abs, str(51))
                 self._pub_sub_manager.publish(self, self._low_freq_topic_rel, str(49))
                 self._pub_sub_manager.publish(self, self._high_freq_topic_rel, str(51))
                 self._pub_sub_manager.publish(self, self._high_freq_topic_rel_bsl, str(51))
                 self._pub_sub_manager.publish(self, self._low_freq_topic_abs1, str(49))
                 self._pub_sub_manager.publish(self, self._high_freq_topic_abs1, str(51))                
         else:
-            self._pub_sub_manager.publish(self, self._node_id_SpectralDetector_60Hz_abs\
-                +".activation_state_change", ActivationState.BYPASS)
             self._pub_sub_manager.publish(self, self._node_id_SpectralDetector_60Hz_rel\
                 +".activation_state_change", ActivationState.BYPASS)
             self._pub_sub_manager.publish(self, self._node_id_SpectralDetector_60Hz_abs1\
@@ -330,7 +322,7 @@ class DetectorsStep( BaseStepView,  Ui_DetectorsStep, QtWidgets.QWidget):
                 self.flatline_checkBox.setChecked(True)
             elif message == ActivationState.BYPASS:
                 self.flatline_checkBox.setChecked(False)
-        if topic == self._node_id_SpectralDetector_60Hz_abs+".get_activation_state":
+        if topic == self._node_id_SpectralDetector_60Hz_abs1+".get_activation_state":
             if message == ActivationState.ACTIVATED:
                 self.powerline_checkBox.setChecked(True)
             elif message == ActivationState.BYPASS:
@@ -345,7 +337,7 @@ class DetectorsStep( BaseStepView,  Ui_DetectorsStep, QtWidgets.QWidget):
                 self.muscle_checkBox.setChecked(True)
             elif message == ActivationState.BYPASS:
                 self.muscle_checkBox.setChecked(False)
-        if topic == self._node_id_stft_highfreq+".get_activation_state":
+        if topic == self._node_id_stft_highfreq+".get_activation_state": 
             if message == ActivationState.ACTIVATED:
                 self.highfreq_checkBox.setChecked(True)
             elif message == ActivationState.BYPASS:
@@ -388,8 +380,6 @@ class DetectorsStep( BaseStepView,  Ui_DetectorsStep, QtWidgets.QWidget):
     def __del__(self):
         if self._pub_sub_manager is not None:
             # Input nodes ports
-            self._pub_sub_manager.unsubscribe(self, self._low_freq_topic_abs)
-            self._pub_sub_manager.unsubscribe(self, self._high_freq_topic_abs)
             self._pub_sub_manager.unsubscribe(self, self._low_freq_topic_rel)
             self._pub_sub_manager.unsubscribe(self, self._high_freq_topic_rel)
             self._pub_sub_manager.unsubscribe(self, self._high_freq_topic_rel_bsl)
