@@ -79,6 +79,16 @@ class OutputFilesStep(BaseStepView, Ui_OutputFilesStep, QtWidgets.QWidget):
             self.checkBox_4.setChecked('4' in stages_lst)
             self.checkBox_R.setChecked('5' in stages_lst)
             self.checkBox_W.setChecked('0' in stages_lst)
+        if topic == self._node_id_TP_writer+".get_activation_state":
+            if message == ActivationState.ACTIVATED:
+                self.checkBox_TP_exp.setChecked(True)
+            elif message == ActivationState.DEACTIVATED:
+                self.checkBox_TP_exp.setChecked(False)
+        if topic == self._node_id_FNFP_writer+".get_activation_state":
+            if message == ActivationState.ACTIVATED:
+                self.checkBox_FPFN_exp.setChecked(True)
+            elif message == ActivationState.DEACTIVATED:
+                self.checkBox_FPFN_exp.setChecked(False)
                 
 
     # Called when the user clicks on RUN or when the pipeline is saved
