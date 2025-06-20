@@ -37,10 +37,11 @@ class DetectorsStep( BaseStepView,  Ui_DetectorsStep, QtWidgets.QWidget):
         # Set input validators
         # Create a QRegularExpressionValidator with the desired regular expression
         # Regular expression for alphanumeric, space, dash, and latin1 (ISO/CEI 8859-1) characters
-        regex = QRegularExpression(r'^[a-zA-Z0-9ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖ×ØÙÚÛÜÝÞßàáâãäåæçèéêëìíîïðñòóôõö÷øùúûüýþÿ\s-_]*$')
+        regex = QRegularExpression(
+            r'^[a-zA-Z0-9ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖ×ØÙÚÛÜÝÞß'
+            r'àáâãäåæçèéêëìíîïðñòóôõö÷øùúûüýþÿ\s_-]*$'
+        )
         validator = QRegularExpressionValidator(regex)
-
-        self.stages_sel = '1,2,3,5'
 
         # Set the validator for the QLineEdit
         self.unique_name_lineEdit.setValidator(validator)
@@ -78,9 +79,6 @@ class DetectorsStep( BaseStepView,  Ui_DetectorsStep, QtWidgets.QWidget):
         # common group and name
         self._node_id_combine_event = "ac5efd3e-15f4-428c-a5d7-5b5ac3fce300"
 
-        # Sleep Stage Events 
-        self._node_id_sleep_stages = "d7196198-e2f9-432c-9134-c825e7a19193"
-
         # Subscribe to the publisher for each topic
         # Input nodes port
         self._low_freq_topic_abs = f'{self._node_id_SpectralDetector_60Hz_abs}.low_freq'
@@ -111,8 +109,6 @@ class DetectorsStep( BaseStepView,  Ui_DetectorsStep, QtWidgets.QWidget):
             self._context_manager[DetectorsStep.context_common_group] = ""
             self._context_manager[DetectorsStep.context_common_name] = ""            
 
-        self._sleep_stage_topic = f'{self._node_id_sleep_stages}.stages'
-        self._pub_sub_manager.subscribe(self, self._sleep_stage_topic)
 
     # Ask for the settings to the publisher to display on the SettingsView
     def load_settings(self):
@@ -127,13 +123,6 @@ class DetectorsStep( BaseStepView,  Ui_DetectorsStep, QtWidgets.QWidget):
         self._pub_sub_manager.publish(self, self._high_freq_topic_abs1, 'ping')
         self._pub_sub_manager.publish(self, self._new_event_group_topic, 'ping')
         self._pub_sub_manager.publish(self, self._new_event_name_topic, 'ping')
-        self._pub_sub_manager.publish(self, self._sleep_stage_topic, 'ping')
-        self.checkBox_0.setChecked('0' in self.stages_sel)
-        self.checkBox_1.setChecked('1' in self.stages_sel)
-        self.checkBox_2.setChecked('2' in self.stages_sel)
-        self.checkBox_3.setChecked('3' in self.stages_sel)
-        self.checkBox_5.setChecked('5' in self.stages_sel)
-        self.checkBox_9.setChecked('9' in self.stages_sel)
 
         # Activation state
         self._pub_sub_manager.publish(self, self._node_id_SpectralDetector_flatline+".get_activation_state", None)
@@ -300,11 +289,7 @@ class DetectorsStep( BaseStepView,  Ui_DetectorsStep, QtWidgets.QWidget):
             self._pub_sub_manager.publish(self, self._new_event_name_topic, self.unique_name_lineEdit.text()) 
         if self.specific_radioButton.isChecked():
             self._pub_sub_manager.publish(self, self._new_event_group_topic, '') 
-            self._pub_sub_manager.publish(self, self._new_event_name_topic,  '')    
-
-        # Stages
-        self.update_stages_slot()
-        self._pub_sub_manager.publish(self, self._sleep_stage_topic, self.stages_sel)       
+            self._pub_sub_manager.publish(self, self._new_event_name_topic,  '')     
 
 
     # Called when the user changes the 50/60 Hz radio button
@@ -329,23 +314,6 @@ class DetectorsStep( BaseStepView,  Ui_DetectorsStep, QtWidgets.QWidget):
             self.unique_name_lineEdit.setEnabled(False)
             self._context_manager[DetectorsStep.context_common_group] = ''
             self._context_manager[DetectorsStep.context_common_name] = '' 
-
-
-    def update_stages_slot(self):
-        stages_message = []
-        if self.checkBox_0.isChecked():
-            stages_message.append('0')
-        if self.checkBox_1.isChecked():
-            stages_message.append('1')
-        if self.checkBox_2.isChecked():
-            stages_message.append('2')
-        if self.checkBox_3.isChecked():
-            stages_message.append('3')
-        if self.checkBox_5.isChecked():
-            stages_message.append('5')
-        if self.checkBox_9.isChecked():
-            stages_message.append('9')
-        self.stages_sel = (','.join(stages_message))
 
 
     # To init 
@@ -408,8 +376,6 @@ class DetectorsStep( BaseStepView,  Ui_DetectorsStep, QtWidgets.QWidget):
                 self.unique_name_lineEdit.setEnabled(True)
                 self.unique_name_lineEdit.setText(message)
             self._context_manager[DetectorsStep.context_common_name] = message
-        if topic == self._sleep_stage_topic:
-            self.stages_sel = message
 
 
     # Called when a value listened is changed

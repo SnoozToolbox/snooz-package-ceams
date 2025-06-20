@@ -2,41 +2,136 @@
 <ui version="4.0">
  <class>SleepStageSelStep</class>
  <widget class="QWidget" name="SleepStageSelStep">
-  <property name="styleSheet">
-   <string notr="true">font: 12pt &quot;Roboto&quot;;</string>
-  </property>
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>730</width>
+    <width>1068</width>
     <height>590</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string></string>
+   <string/>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout">
-   <property name="spacing">
-    <number>25</number>
-   </property>
+  <property name="styleSheet">
+   <string notr="true">font: 12pt &quot;Roboto&quot;;</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout_2">
    <item>
-    <spacer name="verticalSpacer">
+    <layout class="QVBoxLayout" name="verticalLayout">
+     <item>
+      <widget class="QLabel" name="label_7">
+       <property name="text">
+        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Sleep Stage Selection&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="label_8">
+       <property name="text">
+        <string>Artifact detection is performed on the entire recording.
+However, you can select specific sleep stages to potentially establish a cleaner baseline
+for the set of algorithms that use a 3-component Gaussian Mixture Model (GMM).</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <layout class="QHBoxLayout" name="horizontalLayout_4">
+       <item>
+        <layout class="QGridLayout" name="gridLayout">
+         <item row="0" column="0">
+          <widget class="QCheckBox" name="checkBox_1">
+           <property name="text">
+            <string>N1</string>
+           </property>
+           <property name="checked">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="1" colspan="2">
+          <widget class="QCheckBox" name="checkBox_2">
+           <property name="text">
+            <string>N2</string>
+           </property>
+           <property name="checked">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="3">
+          <widget class="QCheckBox" name="checkBox_3">
+           <property name="text">
+            <string>N3</string>
+           </property>
+           <property name="checked">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="4">
+          <widget class="QCheckBox" name="checkBox_5">
+           <property name="text">
+            <string>R</string>
+           </property>
+           <property name="checked">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="0" colspan="2">
+          <widget class="QCheckBox" name="checkBox_9">
+           <property name="text">
+            <string>Unscored</string>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="2" colspan="2">
+          <widget class="QCheckBox" name="checkBox_0">
+           <property name="text">
+            <string>Awake</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <spacer name="horizontalSpacer">
+         <property name="orientation">
+          <enum>Qt::Orientation::Horizontal</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>40</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+      </layout>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <spacer name="verticalSpacer_4">
      <property name="orientation">
-      <enum>Qt::Vertical</enum>
+      <enum>Qt::Orientation::Vertical</enum>
+     </property>
+     <property name="sizeType">
+      <enum>QSizePolicy::Policy::Expanding</enum>
      </property>
      <property name="sizeHint" stdset="0">
       <size>
        <width>20</width>
-       <height>40</height>
+       <height>417</height>
       </size>
      </property>
     </spacer>
    </item>
   </layout>
  </widget>
-  <resources>
-   <include location="../../../../../snooz-toolbox/src/main/python/ui/themes/themes.qrc"/>
-  </resources>
-  <connections/>
- </ui>
+ <resources>
+  <include location="../../../../../snooz-toolbox/src/main/python/ui/themes/themes.qrc"/>
+ </resources>
+ <connections/>
+</ui>
