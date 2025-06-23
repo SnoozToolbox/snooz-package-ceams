@@ -66,8 +66,8 @@ class SpindleDetectorSumo(SciNode):
 
     Parameters
     ----------
-        original_signals: List of SignalModel
-            List of original signal (with artifacts) with dictionary of channels with SignalModel with 
+        signals: List of SignalModel
+            List of signal with dictionary of channels with SignalModel with 
             properties :
                 name:           The name of the channel
                 samples:        The samples of the signal
@@ -77,26 +77,10 @@ class SpindleDetectorSumo(SciNode):
                 montage_index:  The index of the montage used for this signal
                 is_modified:    Value caracterizing if the signal as been modify 
                                 from the original         
-        (obsolete) cleaned_signals: List of SignalModel
-            List of cleaned signal (filtered, resampled, artifact-removed) with dictionary of channels with SignalModel with 
-            properties :
-                name:           The name of the channel
-                samples:        The samples of the signal
-                alias:          The alias of the channel
-                sample_rate:    The sample rate of the signal
-                start_time:     The start time of the recording
-                montage_index:  The index of the montage used for this signal
-                is_modified:    Value caracterizing if the signal as been modify 
-                                from the original     
-        norm_stat: List of Float
-            List of cleaned signal statistics for normalization
-            Contains mean and std for each channel
         event_group : String
             List of Event group to filter separated by comma (discard too long, short)
         event_name : String
             List of Event name to filter separated by comma (discard too long, short)
-        artifact_events : Pandas DataFrame (columns=['group','name','start_sec','duration_sec','channels']) 
-            Selected events list for artifacts.
         
     Returns
     -------
@@ -110,12 +94,9 @@ class SpindleDetectorSumo(SciNode):
         if DEBUG: print('SpindleDetectorSumo.__init__')
 
         # Input plugs
-        InputPlug('original_signals',self)
-        InputPlug('cleaned_signals',self)
-        InputPlug('norm_stat',self)
+        InputPlug('signals',self)
         InputPlug('event_group',self)
         InputPlug('event_name',self)
-        InputPlug('artifact_events',self)
 
         # Output plugs
         OutputPlug('events',self)
@@ -128,25 +109,18 @@ class SpindleDetectorSumo(SciNode):
         self._is_master = False 
     
 
-    def compute(self, original_signals,cleaned_signals,norm_stat,event_group,event_name,artifact_events):
+    def compute(self, signals, event_group, event_name):
         """
         Detect spindles based on the SUMO deep learning algorithm
 
         Parameters
         ----------
-        original_signals: List of SignalModel
-            List of original signal (with artifacts) with dictionary of channels with SignalModel with        
-        cleaned_signals: List of SignalModel
-            List of cleaned signal (filtered, resampled, artifact-removed) with dictionary of channels with SignalModel with 
-        norm_stat: List of Float
-            List of cleaned signal statistics for normalization
-            Contains mean and std for each channel
+        signals: List of SignalModel
+            List of signal with dictionary of channels with SignalModel with        
         event_group : String
             List of Event group to filter separated by comma (discard too long, short)
         event_name : String
             List of Event name to filter separated by comma (discard too long, short)
-        artifact_events : Pandas DataFrame (columns=['group','name','start_sec','duration_sec','channels']) 
-            Selected events list for artifacts.
         
         Returns
         -------
@@ -163,21 +137,15 @@ class SpindleDetectorSumo(SciNode):
 
         # Raise NodeInputException if an input is wrong. This type of
         # exception will stop the process with the error message given in parameter.
-        # if isinstance(original_signals, str) and original_signals=='':
-        #     raise NodeInputException(self.identifier, "original_signals", \
-        #         f"SpindleDetectorSUMO this input is empty, no signals no spindles.")   
-        if isinstance(cleaned_signals, str) and cleaned_signals=='':
-            raise NodeInputException(self.identifier, "cleaned_signals", \
+        if isinstance(signals, str) and signals=='':
+            raise NodeInputException(self.identifier, "signals", \
                 f"SpindleDetectorSUMO this input is empty, no signals no spindles.")    
         if isinstance(event_group, str) and event_group=='':
             raise NodeInputException(self.identifier, "event_group", \
                 f"SpindleDetectorSUMO this input is empty, no event_group no spindles.")
         if isinstance(event_name, str) and event_name=='':
             raise NodeInputException(self.identifier, "event_name", \
-                f"SpindleDetectorSUMO this input is empty, no event_name no spindles.")
-        if not isinstance(artifact_events, pd.DataFrame) and not artifact_events=='':
-            raise NodeInputException(self.identifier, "artifact_events", \
-                f"SpindleDetectorSUMO this input is a {type(artifact_events)}, it is expected to be a Pandas DataFrame.")            
+                f"SpindleDetectorSUMO this input is empty, no event_name no spindles.")        
 
         # It is possible to bypass the "WindowsToSamples" by passing the input 
         # signals_windows to the output samples_values without any modification
@@ -185,26 +153,24 @@ class SpindleDetectorSumo(SciNode):
             return {
                 'events': manage_events.create_event_dataframe(None)
             }   
-        if isinstance(cleaned_signals, list) and len(cleaned_signals) == 0:        
+        if isinstance(signals, list) and len(signals) == 0:        
             return {
                 'events': manage_events.create_event_dataframe(None)
             }      
 
-        signals_model = cleaned_signals.copy()
-        sample_rate = signals_model[0].sample_rate
-
+        sample_rate = signals[0].sample_rate
         if sample_rate>EXPECTED_SAMPLING_RATE:
             raise NodeInputException(self.identifier, "signals", \
                 f"SpindleDetectorSUMO signals are sampled at {sample_rate}Hz, it is expected to be {EXPECTED_SAMPLING_RATE}Hz.")
 
         # Calculate mean and std of signal epochs 
-        mean = [np.nanmean(x.samples) for x in cleaned_signals]
-        std = [np.nanstd(x.samples) for x in cleaned_signals]
+        mean = [np.nanmean(x.samples) for x in signals]
+        std = [np.nanstd(x.samples) for x in signals]
 
-        signals = [x.samples for x in cleaned_signals]
+        data = [x.samples for x in signals]
 
         # Create a dataset and dataloader
-        dataset = SimpleDataset(signals, mean, std)
+        dataset = SimpleDataset(data, mean, std)
         dataloader = DataLoader(dataset, num_workers=3, persistent_workers=True)
 
         # Set up the model and its config
@@ -233,11 +199,11 @@ class SpindleDetectorSumo(SciNode):
         event_lst = []
         for i, spindle_samples in enumerate(spindle_indices_list):
             for start_smp, stop_smp in spindle_samples:
-                signal_start_smp = int(round(cleaned_signals[i].start_time*EXPECTED_SAMPLING_RATE))
+                signal_start_smp = int(round(signals[i].start_time*EXPECTED_SAMPLING_RATE))
                 spindle_start_time = (signal_start_smp+start_smp)/EXPECTED_SAMPLING_RATE
                 spindle_dur_time = (stop_smp-start_smp)/EXPECTED_SAMPLING_RATE
                 event_lst.append((event_group, event_name, spindle_start_time, \
-                    spindle_dur_time, cleaned_signals[i].channel))
+                    spindle_dur_time, signals[i].channel))
         
         # Create a pandas dataframe of events (each row is an event) for the current pds
         events_df = manage_events.create_event_dataframe(event_lst)
