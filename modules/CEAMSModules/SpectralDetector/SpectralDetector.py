@@ -750,17 +750,25 @@ class SpectralDetector(SciNode):
         """
 
         # Because of the discontinuity, the signal can start with an offset (second section)
-        #   if the event starts before the signal, we cut the signal
+        #   if the event starts before the signal (psd) : event_start <= psd_start
+        #   and the event is overlapping with the signal (psd) : ((event_start + event_dur) > psd_start
+        #   -> the signal start stays the same because we cannot create signal
+        #   if the event starts after the signal : event_start >= psd_start
+        #   and the event is overlapping with the signal (psd) : event_start < psd_end
+        #   -> the signal start changes to start with the event
         if (event_start <= psd_start) and ((event_start + event_dur) > psd_start):
             psd_start_sel_s = psd_start
-        elif (event_start >= psd_start) and ((event_start + event_dur) <= psd_end):
+        elif (event_start >= psd_start) and (event_start < psd_end):
             psd_start_sel_s = event_start
         else: 
-            psd_start_sel_s = None
-        #   if the event ends after the signal, we cut the signal
+            psd_start_sel_s = None # No overlap between the signal and the event
+        #   if the event ends after the signal
+        #   -> the signal end stays the same because we cannot create signal
+        #   if the event ends before the signal
+        #   -> the signal end changes to end with the event
         if ((event_start + event_dur) > psd_end) and (event_start < psd_end):
             psd_end_sel_s = psd_end
-        elif ((event_start + event_dur) <= psd_end) and (event_start >= psd_start):
+        elif ((event_start + event_dur) <= psd_end) and ((event_start + event_dur) >= psd_start):
             psd_end_sel_s = event_start + event_dur
         else:
             psd_end_sel_s = None
