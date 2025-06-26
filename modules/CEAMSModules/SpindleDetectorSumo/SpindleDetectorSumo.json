@@ -16,20 +16,8 @@
         "module_description": "",
         "module_options": {},
         "inputs": {
-            "original_signals": {
-                "name": "original_signals",
-                "value": "",
-                "connections": {},
-                "sub_plugs": {}
-            },
-            "cleaned_signals": {
-                "name": "cleaned_signals",
-                "value": "",
-                "connections": {},
-                "sub_plugs": {}
-            },
-            "norm_stat": {
-                "name": "norm_stat",
+            "signals": {
+                "name": "signals",
                 "value": "",
                 "connections": {},
                 "sub_plugs": {}
@@ -42,12 +30,6 @@
             },
             "event_name": {
                 "name": "event_name",
-                "value": "",
-                "connections": {},
-                "sub_plugs": {}
-            },
-            "artifact_events": {
-                "name": "artifact_events",
                 "value": "",
                 "connections": {},
                 "sub_plugs": {}
