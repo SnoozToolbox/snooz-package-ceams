@@ -7,9 +7,8 @@ from .sumo.model import SUMO
 def get_model(path: Union[str, Path], config):
     path = Path(path)
 
-    model_file = path # modified by me
-    # model_file = current_dir + '/final.ckpt'  # added by me
-    gpu = torch.cuda.is_available()  # added by me
+    model_file = path 
+    gpu = torch.cuda.is_available() 
 
     if gpu:
         model_checkpoint = torch.load(model_file)

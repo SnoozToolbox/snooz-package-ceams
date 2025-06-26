@@ -7,7 +7,7 @@
         "tool_label": "Spindle Detection SUMO",
         "tool_category": "2-Processing",
         "tool_author": "",
-        "tool_url":"",
+        "tool_url": "",
         "tool_description": "Spindle detection using SUMO",
         "tool_version": "0.0.0",
         "package_name": "CEAMSTools",
@@ -92,26 +92,12 @@
                 "module_description": "",
                 "module_options": {},
                 "inputs": {
-                    "original_signals": {
-                        "name": "original_signals",
+                    "signals": {
+                        "name": "signals",
                         "value": "",
                         "sub_plugs": {},
                         "connections": {
-                            "ab37610c-c1aa-4f98-a805-c815e43854e1": "constant"
-                        }
-                    },
-                    "cleaned_signals": {
-                        "name": "cleaned_signals",
-                        "value": "",
-                        "sub_plugs": {},
-                        "connections": {}
-                    },
-                    "norm_stat": {
-                        "name": "norm_stat",
-                        "value": "",
-                        "sub_plugs": {},
-                        "connections": {
-                            "6e12e8a3-d6dc-4c43-a710-845a6eac1cf6": "stats"
+                            "a91be608-8be8-4f87-92f7-d2f83a759d8c": "signals"
                         }
                     },
                     "event_group": {
@@ -129,14 +115,6 @@
                         "connections": {
                             "73b79daf-92e6-46e1-9ff3-cceacbf273f3": "constant"
                         }
-                    },
-                    "artifact_events": {
-                        "name": "artifact_events",
-                        "value": "",
-                        "sub_plugs": {},
-                        "connections": {
-                            "1301746b-9bd8-4829-b0c7-15c25e933685": "events_selected"
-                        }
                     }
                 },
                 "outputs": {
@@ -151,55 +129,13 @@
                         }
                     }
                 },
-                "identifier": "4625208b-d806-42f2-9856-36a7d2b3946a",
+                "identifier": "fa7bbb2f-877a-4983-a722-9c46faa21234",
                 "activation_state": "activated",
                 "package": {
                     "package_name": "CEAMSModules"
                 },
-                "pos_x": 560.0,
-                "pos_y": -263.0
-            },
-            {
-                "cls": "SignalStats",
-                "name": "SignalStats",
-                "metadata": {},
-                "file_location": null,
-                "module": "CEAMSModules.SignalStats",
-                "module_label": "Signal Stats",
-                "module_category": "Statistics",
-                "module_author": "",
-                "module_url": "",
-                "module_description": "",
-                "module_options": {},
-                "inputs": {
-                    "signals": {
-                        "name": "signals",
-                        "value": "",
-                        "sub_plugs": {},
-                        "connections": {
-                            "a91be608-8be8-4f87-92f7-d2f83a759d8c": "signals"
-                        }
-                    }
-                },
-                "outputs": {
-                    "stats": {
-                        "name": "stats",
-                        "value": "",
-                        "sub_plugs": {},
-                        "connections": {
-                            "4625208b-d806-42f2-9856-36a7d2b3946a": [
-                                "norm_stat"
-                            ]
-                        }
-                    }
-                },
-                "identifier": "6e12e8a3-d6dc-4c43-a710-845a6eac1cf6",
-                "activation_state": "activated",
-                "package": {
-                    "package_name": "CEAMSModules"
-                },
-                "pos_x": 98.0,
-                "pos_y": -282.0
+                "pos_x": 588.0,
+                "pos_y": -254.0
             },
             {
                 "cls": "StringManip",
@@ -1741,9 +1677,6 @@
                             ],
                             "a91be608-8be8-4f87-92f7-d2f83a759d8c": [
                                 "signals"
-                            ],
-                            "ab37610c-c1aa-4f98-a805-c815e43854e1": [
-                                "constant"
                             ]
                         }
                     },
@@ -1979,7 +1912,7 @@
                             "35e1a36a-814d-49e6-b1c4-7bfe78557d5d": [
                                 "constant"
                             ],
-                            "4625208b-d806-42f2-9856-36a7d2b3946a": [
+                            "fa7bbb2f-877a-4983-a722-9c46faa21234": [
                                 "event_name"
                             ]
                         }
@@ -2019,7 +1952,7 @@
                             "ea83e541-91c8-459d-a28d-07c7e8fd0297": [
                                 "constant"
                             ],
-                            "4625208b-d806-42f2-9856-36a7d2b3946a": [
+                            "fa7bbb2f-877a-4983-a722-9c46faa21234": [
                                 "event_group"
                             ]
                         }
@@ -2165,7 +2098,7 @@
                         "value": "",
                         "sub_plugs": {},
                         "connections": {
-                            "4625208b-d806-42f2-9856-36a7d2b3946a": "events"
+                            "fa7bbb2f-877a-4983-a722-9c46faa21234": "events"
                         }
                     },
                     "event1_name": {
@@ -2303,9 +2236,6 @@
                             ],
                             "72b044f1-c860-46ba-a075-2f5686c7c665": [
                                 "constant"
-                            ],
-                            "4625208b-d806-42f2-9856-36a7d2b3946a": [
-                                "artifact_events"
                             ]
                         }
                     },
@@ -2724,7 +2654,7 @@
                         "value": "",
                         "sub_plugs": {},
                         "connections": {
-                            "6e12e8a3-d6dc-4c43-a710-845a6eac1cf6": [
+                            "fa7bbb2f-877a-4983-a722-9c46faa21234": [
                                 "signals"
                             ]
                         }
@@ -3641,45 +3571,6 @@
                 },
                 "pos_x": 1607.0,
                 "pos_y": 172.0
-            },
-            {
-                "cls": "Constant",
-                "name": "Constant",
-                "metadata": {},
-                "file_location": "",
-                "module_label": "Constant",
-                "module_category": "Parameters",
-                "module_options": {},
-                "inputs": {
-                    "constant": {
-                        "name": "constant",
-                        "value": "",
-                        "sub_plugs": {},
-                        "connections": {
-                            "fbbf44ac-76ce-41b0-9ca9-306730affda5": "signals_from_events"
-                        }
-                    }
-                },
-                "outputs": {
-                    "constant": {
-                        "name": "constant",
-                        "value": "",
-                        "sub_plugs": {},
-                        "connections": {
-                            "4625208b-d806-42f2-9856-36a7d2b3946a": [
-                                "original_signals"
-                            ]
-                        }
-                    }
-                },
-                "module": "CEAMSModules.Constant",
-                "identifier": "ab37610c-c1aa-4f98-a805-c815e43854e1",
-                "activation_state": "activated",
-                "package": {
-                    "package_name": "CEAMSModules"
-                },
-                "pos_x": -93.0,
-                "pos_y": -110.0
             }
         ]
     }
