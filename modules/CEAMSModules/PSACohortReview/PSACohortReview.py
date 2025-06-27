@@ -185,11 +185,11 @@ class PSACohortReview(SciNode):
             
             # Find out the regular expression to extract the right PSA activity based on the activity_label
             if activity_label.lower()=="distribution per hour":
-                activity_2_export = "hour\d(?:_[A-Za-z0-9]+)?_act"
+                activity_2_export = "hour\d(?:_[A-Za-z0-9+]+)?_act"
             elif activity_label.lower()=="distribution per sleep cycle":
-                activity_2_export = "cyc\d(?:_[A-Za-z0-9+)?_act"
+                activity_2_export = "cyc\d(?:_[A-Za-z0-9+]+)?_act"
             else:
-                activity_2_export = "total(?:_[A-Za-z0-9]+)?_act"
+                activity_2_export = "total(?:_[A-Za-z0-9+]+)?_act"
             # Extract all the columns of the spectral data
             mask_activity = self.PSA_df.columns.str.contains(activity_2_export,regex=True)
             if any(mask_activity):
