@@ -194,7 +194,7 @@ class ResetSignalArtefact(SciNode):
                                     - (evt_start+evt_dur) ) * signals_out[sel].sample_rate))
                                 # Modify artefacted signal values
                                 # artefact starts before the signal
-                                if start_i<0:
+                                if start_i<=0:
                                     # artefact stop before the end of the signal
                                     if stop_i>0:
                                         real_stop_i = int(round((evt_start+evt_dur-signals_out[sel].start_time) * signals_out[sel].sample_rate))
@@ -212,8 +212,8 @@ class ResetSignalArtefact(SciNode):
                                             nan_array = np.empty(real_stop_i)
                                             nan_array[:] = np.nan
                                             signals_out[sel].samples[0:real_stop_i] = nan_array
-                                    # artefact stops after the end of the signal
-                                    elif stop_i<0:
+                                    # artefact stops at the end or after the end of the signal
+                                    elif stop_i<=0:
                                         if signal_values=='0':
                                             # no scaling the whole signal is an artifact
                                             signals_out[sel].samples = np.zeros(len(signals_out[sel].samples)) 
@@ -240,7 +240,7 @@ class ResetSignalArtefact(SciNode):
                                             nan_array[:] = np.nan
                                             signals_out[sel].samples[start_i:real_stop_i] = nan_array
                                     # artefact stop after the signal
-                                    elif stop_i<0:
+                                    elif stop_i<=0:
                                         length_win = len(signals_out[sel].samples)-start_i
                                         # we want a slope around 0.5 s as maximum for any artifact length
                                         alpha_turkey = 1/(length_win/fs_sel)
