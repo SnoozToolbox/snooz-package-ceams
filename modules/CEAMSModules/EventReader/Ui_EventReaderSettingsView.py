@@ -166,11 +166,6 @@ class Ui_EventReaderSettingsView(object):
 
         self.gridLayout_2.addWidget(self.label_6, 1, 0, 1, 1)
 
-        self.label_14 = QLabel(EventReaderSettingsView)
-        self.label_14.setObjectName(u"label_14")
-
-        self.gridLayout_2.addWidget(self.label_14, 6, 0, 1, 1)
-
         self.sample_radiobutton = QRadioButton(EventReaderSettingsView)
         self.buttonGroup_2 = QButtonGroup(EventReaderSettingsView)
         self.buttonGroup_2.setObjectName(u"buttonGroup_2")
@@ -184,14 +179,16 @@ class Ui_EventReaderSettingsView(object):
 
         self.gridLayout_2.addWidget(self.sample_radiobutton, 0, 1, 1, 1)
 
-        self.time_radiobutton = QRadioButton(EventReaderSettingsView)
-        self.buttonGroup_2.addButton(self.time_radiobutton)
-        self.time_radiobutton.setObjectName(u"time_radiobutton")
-        sizePolicy.setHeightForWidth(self.time_radiobutton.sizePolicy().hasHeightForWidth())
-        self.time_radiobutton.setSizePolicy(sizePolicy)
-        self.time_radiobutton.setChecked(True)
+        self.lineEdit_onset_time_format = QLineEdit(EventReaderSettingsView)
+        self.lineEdit_onset_time_format.setObjectName(u"lineEdit_onset_time_format")
 
-        self.gridLayout_2.addWidget(self.time_radiobutton, 0, 0, 1, 1)
+        self.gridLayout_2.addWidget(self.lineEdit_onset_time_format, 6, 1, 1, 1)
+
+        self.textEdit = QTextEdit(EventReaderSettingsView)
+        self.textEdit.setObjectName(u"textEdit")
+        self.textEdit.setReadOnly(True)
+
+        self.gridLayout_2.addWidget(self.textEdit, 8, 0, 1, 2)
 
         self.sample_rate_lineedit = QLineEdit(EventReaderSettingsView)
         self.sample_rate_lineedit.setObjectName(u"sample_rate_lineedit")
@@ -204,16 +201,29 @@ class Ui_EventReaderSettingsView(object):
 
         self.gridLayout_2.addWidget(self.sample_rate_lineedit, 1, 1, 1, 1)
 
-        self.lineEdit_time_format = QLineEdit(EventReaderSettingsView)
-        self.lineEdit_time_format.setObjectName(u"lineEdit_time_format")
+        self.label_15 = QLabel(EventReaderSettingsView)
+        self.label_15.setObjectName(u"label_15")
 
-        self.gridLayout_2.addWidget(self.lineEdit_time_format, 6, 1, 1, 1)
+        self.gridLayout_2.addWidget(self.label_15, 7, 0, 1, 1)
 
-        self.textEdit = QTextEdit(EventReaderSettingsView)
-        self.textEdit.setObjectName(u"textEdit")
-        self.textEdit.setReadOnly(True)
+        self.time_radiobutton = QRadioButton(EventReaderSettingsView)
+        self.buttonGroup_2.addButton(self.time_radiobutton)
+        self.time_radiobutton.setObjectName(u"time_radiobutton")
+        sizePolicy.setHeightForWidth(self.time_radiobutton.sizePolicy().hasHeightForWidth())
+        self.time_radiobutton.setSizePolicy(sizePolicy)
+        self.time_radiobutton.setChecked(True)
 
-        self.gridLayout_2.addWidget(self.textEdit, 7, 0, 1, 2)
+        self.gridLayout_2.addWidget(self.time_radiobutton, 0, 0, 1, 1)
+
+        self.label_14 = QLabel(EventReaderSettingsView)
+        self.label_14.setObjectName(u"label_14")
+
+        self.gridLayout_2.addWidget(self.label_14, 6, 0, 1, 1)
+
+        self.lineEdit_dur_time_format = QLineEdit(EventReaderSettingsView)
+        self.lineEdit_dur_time_format.setObjectName(u"lineEdit_dur_time_format")
+
+        self.gridLayout_2.addWidget(self.lineEdit_dur_time_format, 7, 1, 1, 1)
 
 
         self.horizontalLayout.addLayout(self.gridLayout_2)
@@ -449,12 +459,9 @@ class Ui_EventReaderSettingsView(object):
 
         self.label_5.setText(QCoreApplication.translate("EventReaderSettingsView", u"Annotation Time format", None))
         self.label_6.setText(QCoreApplication.translate("EventReaderSettingsView", u"Sample rate", None))
-        self.label_14.setText(QCoreApplication.translate("EventReaderSettingsView", u"Time format if not seconds", None))
         self.sample_radiobutton.setText(QCoreApplication.translate("EventReaderSettingsView", u"Samples", None))
-        self.time_radiobutton.setText(QCoreApplication.translate("EventReaderSettingsView", u"Time", None))
-        self.sample_rate_lineedit.setText(QCoreApplication.translate("EventReaderSettingsView", u"256", None))
 #if QT_CONFIG(tooltip)
-        self.lineEdit_time_format.setToolTip(QCoreApplication.translate("EventReaderSettingsView", u"Let empty to define the time elapsed in seconds. Otherwise define the string format (see https://strftime.org/). ", None))
+        self.lineEdit_onset_time_format.setToolTip(QCoreApplication.translate("EventReaderSettingsView", u"Let empty to define the time elapsed in seconds. Otherwise define the string format (see https://strftime.org/). ", None))
 #endif // QT_CONFIG(tooltip)
         self.textEdit.setHtml(QCoreApplication.translate("EventReaderSettingsView", u"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset=\"utf-8\" /><style type=\"text/css\">\n"
@@ -475,6 +482,10 @@ class Ui_EventReaderSettingsView(object):
 "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block"
                         "-indent:0; text-indent:0px;\">Leave the time format empty if it is provided as seconds elapsed.</p></body></html>", None))
+        self.sample_rate_lineedit.setText(QCoreApplication.translate("EventReaderSettingsView", u"256", None))
+        self.label_15.setText(QCoreApplication.translate("EventReaderSettingsView", u"Duration time format if not seconds", None))
+        self.time_radiobutton.setText(QCoreApplication.translate("EventReaderSettingsView", u"Time", None))
+        self.label_14.setText(QCoreApplication.translate("EventReaderSettingsView", u"Onset time format if not seconds", None))
         self.label_7.setText(QCoreApplication.translate("EventReaderSettingsView", u"Column Index", None))
 #if QT_CONFIG(tooltip)
         self.channel_spinBox.setToolTip(QCoreApplication.translate("EventReaderSettingsView", u"Mark 0 if events are not channel specific (as sleep stage).", None))

@@ -30,8 +30,10 @@ class EventReaderSettingsView( Ui_EventReaderSettingsView,  BaseSettingsView, Qt
         self._pub_sub_manager.subscribe(self, self._nrows_topic)
         self._encoding_topic = f'{self._parent_node.identifier}.encoding'
         self._pub_sub_manager.subscribe(self, self._encoding_topic)
-        self._input_as_time_topic = f'{self._parent_node.identifier}.input_as_time'
-        self._pub_sub_manager.subscribe(self, self._input_as_time_topic) 
+        self._input_as_onset_topic = f'{self._parent_node.identifier}.input_as_onset'
+        self._pub_sub_manager.subscribe(self, self._input_as_onset_topic)
+        self._input_as_dur_topic = f'{self._parent_node.identifier}.input_as_dur'
+        self._pub_sub_manager.subscribe(self, self._input_as_dur_topic)
         self._group_topic = f'{self._parent_node.identifier}.group_col_i'
         self._pub_sub_manager.subscribe(self, self._group_topic)
         self._group_def_topic = f'{self._parent_node.identifier}.group_def'
@@ -134,7 +136,8 @@ class EventReaderSettingsView( Ui_EventReaderSettingsView,  BaseSettingsView, Qt
             self.time_radiobutton.setEnabled(False)
             self.sample_radiobutton.setEnabled(False)
             self.sample_rate_lineedit.setEnabled(False)
-            self.lineEdit_time_format.setEnabled(False)
+            self.lineEdit_onset_time_format.setEnabled(False)
+            self.lineEdit_dur_time_format.setEnabled(False)
 
             self.checkBox_group_enabled.setEnabled(False)
             self.group_spinbox.setEnabled(False)
@@ -162,7 +165,8 @@ class EventReaderSettingsView( Ui_EventReaderSettingsView,  BaseSettingsView, Qt
             self.time_radiobutton.setEnabled(True)
             self.sample_radiobutton.setEnabled(True)
             self.sample_rate_lineedit.setEnabled(True)
-            self.lineEdit_time_format.setEnabled(True)
+            self.lineEdit_onset_time_format.setEnabled(True)
+            self.lineEdit_dur_time_format.setEnabled(True)
 
             self.checkBox_group_enabled.setEnabled(True)
             self.group_spinbox.setEnabled(True)
@@ -191,17 +195,21 @@ class EventReaderSettingsView( Ui_EventReaderSettingsView,  BaseSettingsView, Qt
 
         if self.time_radiobutton.isChecked():
             self.sample_rate_lineedit.setEnabled(False)
-            self.lineEdit_time_format.setEnabled(True)
+            self.lineEdit_onset_time_format.setEnabled(True)
+            self.lineEdit_dur_time_format.setEnabled(True)
         else:
             self.sample_rate_lineedit.setEnabled(True)
-            self.lineEdit_time_format.setEnabled(False)
+            self.lineEdit_onset_time_format.setEnabled(False)
+            self.lineEdit_dur_time_format.setEnabled(False)
 
         if self.sample_radiobutton.isChecked():
             self.sample_rate_lineedit.setEnabled(True)
-            self.lineEdit_time_format.setEnabled(False)
+            self.lineEdit_onset_time_format.setEnabled(False)
+            self.lineEdit_dur_time_format.setEnabled(False)
         else:
             self.sample_rate_lineedit.setEnabled(False)
-            self.lineEdit_time_format.setEnabled(True)
+            self.lineEdit_onset_time_format.setEnabled(True)
+            self.lineEdit_dur_time_format.setEnabled(True)
 
 
     def group_enabled_slot(self):
@@ -306,7 +314,8 @@ class EventReaderSettingsView( Ui_EventReaderSettingsView,  BaseSettingsView, Qt
         self._pub_sub_manager.publish(self, self._delimiter_topic, 'ping')
         self._pub_sub_manager.publish(self, self._nrows_topic, 'ping')
         self._pub_sub_manager.publish(self, self._encoding_topic, 'ping')
-        self._pub_sub_manager.publish(self, self._input_as_time_topic, 'ping')
+        self._pub_sub_manager.publish(self, self._input_as_onset_topic, 'ping')
+        self._pub_sub_manager.publish(self, self._input_as_dur_topic, 'ping')
         self._pub_sub_manager.publish(self, self._group_topic, 'ping')
         self._pub_sub_manager.publish(self, self._group_def_topic, 'ping')
         self._pub_sub_manager.publish(self, self._event_name_topic, 'ping')
@@ -329,13 +338,24 @@ class EventReaderSettingsView( Ui_EventReaderSettingsView,  BaseSettingsView, Qt
             str(self.delimiter_lineedit.text()))
         self._pub_sub_manager.publish(self, self._nrows_topic, self.spinBox_nrows_hdr.value())
         self._pub_sub_manager.publish(self, self._encoding_topic, self.comboBox_encoding.currentText())
-        if self.sample_radiobutton.isChecked():
-            self._pub_sub_manager.publish(self, self._input_as_time_topic, "samples")
-        elif self.lineEdit_time_format.text()=="":
-            self._pub_sub_manager.publish(self, self._input_as_time_topic, "seconds")
+        if self.sample_radiobutton.isChecked(): #NOTE: Check this logic
+            self._pub_sub_manager.publish(self, self._input_as_onset_topic, "samples")
+            self._pub_sub_manager.publish(self, self._input_as_dur_topic, "samples")
+        elif self.lineEdit_onset_time_format.text()=="" and self.lineEdit_dur_time_format.text()=="":
+            self._pub_sub_manager.publish(self, self._input_as_onset_topic, "seconds")
+            self._pub_sub_manager.publish(self, self._input_as_dur_topic, "seconds")
+        elif self.lineEdit_onset_time_format.text()=="" or self.lineEdit_dur_time_format.text()=="":
+            if self.lineEdit_onset_time_format.text()=="":
+                self._pub_sub_manager.publish(self, self._input_as_onset_topic, "seconds")
+                self._pub_sub_manager.publish(self, self._input_as_dur_topic, self.lineEdit_dur_time_format.text())
+            elif self.lineEdit_dur_time_format.text()=="":
+                self._pub_sub_manager.publish(self, self._input_as_dur_topic, "seconds")
+                self._pub_sub_manager.publish(self, self._input_as_onset_topic, self.lineEdit_onset_time_format.text())
         else:
             # Extract a specific time format
-            self._pub_sub_manager.publish(self, self._input_as_time_topic, self.lineEdit_time_format.text())
+            self._pub_sub_manager.publish(self, self._input_as_onset_topic, self.lineEdit_onset_time_format.text())
+            self._pub_sub_manager.publish(self, self._input_as_dur_topic, self.lineEdit_dur_time_format.text())
+
         self._pub_sub_manager.publish(self, self._group_topic, \
             str(self.group_spinbox.value()))
         self._pub_sub_manager.publish(self, self._group_def_topic, \
@@ -377,19 +397,33 @@ class EventReaderSettingsView( Ui_EventReaderSettingsView,  BaseSettingsView, Qt
         if topic == self._encoding_topic:
             self.comboBox_encoding.setCurrentText(message)
         # Exclusive radio button : only check the one checked
-        if topic == self._input_as_time_topic:
+        if topic == self._input_as_onset_topic:
             if message=='samples':
                 self.sample_radiobutton.setChecked(True)
-                self.lineEdit_time_format.setText("")
-                self.lineEdit_time_format.setEnabled(False)
+                self.lineEdit_onset_time_format.setText("")
+                self.lineEdit_onset_time_format.setEnabled(False)
             elif message=='seconds':
                 self.time_radiobutton.setChecked(True)
-                self.lineEdit_time_format.setText("")
-                self.lineEdit_time_format.setEnabled(True)
+                self.lineEdit_onset_time_format.setText("")
+                self.lineEdit_onset_time_format.setEnabled(True)
             else:
                 self.time_radiobutton.setChecked(True)
-                self.lineEdit_time_format.setText(message)
-                self.lineEdit_time_format.setEnabled(True)                
+                self.lineEdit_onset_time_format.setText(message)
+                self.lineEdit_onset_time_format.setEnabled(True)
+        if topic == self._input_as_dur_topic:
+            if message=='samples':
+                self.sample_radiobutton.setChecked(True)
+                self.lineEdit_dur_time_format.setText("")
+                self.lineEdit_dur_time_format.setEnabled(False)
+            elif message=='seconds':
+                self.time_radiobutton.setChecked(True)
+                self.lineEdit_dur_time_format.setText("")
+                self.lineEdit_dur_time_format.setEnabled(True)
+            else:
+                self.time_radiobutton.setChecked(True)
+                self.lineEdit_dur_time_format.setText(message)
+                self.lineEdit_dur_time_format.setEnabled(True)
+
         if topic == self._group_topic:
             self.group_spinbox.setValue(int(message))
         if topic == self._group_def_topic:
@@ -424,7 +458,8 @@ class EventReaderSettingsView( Ui_EventReaderSettingsView,  BaseSettingsView, Qt
             self._pub_sub_manager.unsubscribe(self, self._delimiter_topic)
             self._pub_sub_manager.unsubscribe(self, self._nrows_topic)
             self._pub_sub_manager.unsubcribe(self, self._encoding_topic)
-            self._pub_sub_manager.unsubscribe(self, self._input_as_time_topic)
+            self._pub_sub_manager.unsubscribe(self, self._input_as_onset_topic)
+            self._pub_sub_manager.unsubscribe(self, self._input_as_dur_topic)
             self._pub_sub_manager.unsubscribe(self, self._group_topic)
             self._pub_sub_manager.unsubscribe(self, self._group_def_topic)
             self._pub_sub_manager.unsubscribe(self, self._event_name_topic)

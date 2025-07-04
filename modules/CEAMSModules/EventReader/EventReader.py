@@ -42,7 +42,15 @@ class EventReader(SciNode):
                 The column index of the duration of the events
             channels_col_i       : integer
                 The column index of the channel of the events
-            input_as_time : string
+            input_as_onset : string
+                The specific input for the onset (start_sec) in the annotation file
+                If "seconds", the content are in time (s)
+                if "samples", the content are in samples
+                or any valid datetime string format, see https://docs.python.org/3/library/datetime.html#strftime-and-strptime-behavior
+                ex) "%H:%M:%S%f" for "14:30:45"
+                    "%H%M%S%f" for "14:30:45.123456"
+            input_as_dur: string
+                The specific input for the duration in the annotation file
                 If "seconds", the content are in time (s)
                 if "samples", the content are in samples
                 or any valid datetime string format, see https://docs.python.org/3/library/datetime.html#strftime-and-strptime-behavior
@@ -83,7 +91,8 @@ class EventReader(SciNode):
         InputPlug('duration_col_i', self)
         InputPlug('channels_col_i', self)
         InputPlug('sample_rate', self)
-        InputPlug('input_as_time', self)
+        InputPlug('input_as_onset', self)
+        InputPlug('input_as_dur', self)
         InputPlug('event_center', self)
         InputPlug('dur_disable', self)
         InputPlug('fixed_dur', self)    
@@ -99,7 +108,7 @@ class EventReader(SciNode):
 
     def compute(self, filename, delimiter, nrows_header, encoding, group_col_i, group_def, name_col_i, name_def, \
         onset_col_i, duration_col_i, channels_col_i, sample_rate, \
-        input_as_time, event_center, dur_disable, fixed_dur, personalized_header):
+        input_as_onset, input_as_dur, event_center, dur_disable, fixed_dur, personalized_header):
         """
             Read events from a Tsv file
 
@@ -127,7 +136,15 @@ class EventReader(SciNode):
                     The column index of the duration of the event
                 channels_col_i       : integer
                     The column index of the channels of the event
-                input_as_time : string
+                input_as_onset : string
+                    The specific input for the onset (start_sec) in the annotation file
+                    If "seconds", the content are in time (s)
+                    if "samples", the content are in samples
+                    or any valid datetime string format, see https://docs.python.org/3/library/datetime.html#strftime-and-strptime-behavior
+                    ex) "%H:%M:%S%f" for "14:30:45"
+                        "%H%M%S%f" for "14:30:45.123456"
+                input_as_dur: string
+                    The specific input for the duration in the annotation file
                     If "seconds", the content are in time (s)
                     if "samples", the content are in samples
                     or any valid datetime string format, see https://docs.python.org/3/library/datetime.html#strftime-and-strptime-behavior
@@ -215,8 +232,9 @@ class EventReader(SciNode):
                 if not fixed_dur=='':
                         events["duration_sec"] = np.ones(len(events)) * float(fixed_dur)
 
+                #NOTE: This section has been updated to be compatible with the new input_as_onset and input_as_dur parameters.
                 # Convert start and duration in sec if not already
-                if input_as_time=="samples":
+                if input_as_onset=="samples" and input_as_dur=="samples":
                     # Make sure there is NaN in number columns
                     events['start_sec'] = events['start_sec'].fillna(0)
                     events['duration_sec'] = events['duration_sec'].fillna(0)
@@ -224,18 +242,32 @@ class EventReader(SciNode):
                     events['start_sec'] = events['start_sec'].apply(lambda x:x/sample_rate)
                     if 'duration_sec' in events:
                         events['duration_sec'] = events['duration_sec'].apply(lambda x:x/sample_rate)
-                elif not input_as_time=="seconds":
-                    self.input_as_time = input_as_time
-                    events['start_sec'] = events['start_sec'].apply(self.convert_to_seconds)
+                elif not input_as_onset=="seconds" and not input_as_dur=="seconds":
+                    self.input_as_onset = input_as_onset
+                    self.input_as_dur = input_as_dur
+                    events['start_sec'] = events['start_sec'].apply(lambda x: self.convert_to_seconds(x, input_as_onset_flag = True))
                     if pd.isnull(events['start_sec']).any():
-                        error_message = f"Snooz can not read properly {filename}, the start_sec is not defined by the time format {input_as_time}, row {pd.isnull(events['start_sec']).to_numpy().nonzero()[0][0]}"
+                        error_message = f"Snooz can not read properly {filename}, the start_sec is not defined by the time format {input_as_onset}, row {pd.isnull(events['start_sec']).to_numpy().nonzero()[0][0]}"
                         raise NodeRuntimeException(self.identifier, "EventReader", error_message)
                     if 'duration_sec' in events:
                         try : 
-                            events['duration_sec'] = events['duration_sec'].apply(self.convert_to_seconds)
+                            events['duration_sec'] = events['duration_sec'].apply(lambda x: self.convert_to_seconds(x, input_as_onset_flag = False))
                         except : 
                             events['duration_sec'] = events['duration_sec'].fillna(0)
-                
+                elif input_as_onset=="seconds" and not input_as_dur=="seconds":
+                    self.input_as_dur = input_as_dur
+                    if 'duration_sec' in events:
+                        try : 
+                            events['duration_sec'] = events['duration_sec'].apply(lambda x: self.convert_to_seconds(x, input_as_onset_flag = False))
+                        except : 
+                            events['duration_sec'] = events['duration_sec'].fillna(0)
+                elif not input_as_onset=="seconds" and input_as_dur=="seconds":
+                    self.input_as_onset = input_as_onset
+                    events['start_sec'] = events['start_sec'].apply(lambda x: self.convert_to_seconds(x, input_as_onset_flag = True))
+                    if pd.isnull(events['start_sec']).any():
+                        error_message = f"Snooz can not read properly {filename}, the start_sec is not defined by the time format {input_as_onset}, row {pd.isnull(events['start_sec']).to_numpy().nonzero()[0][0]}"
+                        raise NodeRuntimeException(self.identifier, "EventReader", error_message)
+
                 # The event is identified with its center instead of the onset 
                 if int(event_center):
                     events['start_sec'] = events['start_sec'] - (events['duration_sec']/2)
@@ -291,10 +323,13 @@ class EventReader(SciNode):
 
 
     # Function to convert elapsed time to seconds using pd.to_datetime
-    def convert_to_seconds(self, time_str):
+    def convert_to_seconds(self, time_str, input_as_onset_flag):
         # Parse the time string using pd.to_datetime, specifying the format if known
         if isinstance(time_str,str):
-            time_obj = pd.to_datetime(time_str, format=self.input_as_time, errors='coerce')
+            if input_as_onset_flag:
+                time_obj = pd.to_datetime(time_str, format=self.input_as_onset, errors='coerce')
+            else:
+                time_obj = pd.to_datetime(time_str, format=self.input_as_dur, errors='coerce')
         
             # Convert to total seconds
             if not pd.isnull(time_obj):

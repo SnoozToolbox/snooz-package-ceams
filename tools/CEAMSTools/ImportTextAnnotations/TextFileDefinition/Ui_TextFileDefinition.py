@@ -16,16 +16,17 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QImage, QKeySequence, QLinearGradient, QPainter,
     QPalette, QPixmap, QRadialGradient, QTransform)
 from PySide6.QtWidgets import (QApplication, QButtonGroup, QCheckBox, QComboBox,
-    QGridLayout, QHBoxLayout, QLabel, QLayout,
-    QLineEdit, QRadioButton, QSizePolicy, QSpacerItem,
-    QSpinBox, QTextEdit, QVBoxLayout, QWidget)
+    QFrame, QGridLayout, QHBoxLayout, QLabel,
+    QLayout, QLineEdit, QRadioButton, QSizePolicy,
+    QSpacerItem, QSpinBox, QTextEdit, QVBoxLayout,
+    QWidget)
 import themes_rc
 
 class Ui_TextFileDefinition(object):
     def setupUi(self, TextFileDefinition):
         if not TextFileDefinition.objectName():
             TextFileDefinition.setObjectName(u"TextFileDefinition")
-        TextFileDefinition.resize(778, 753)
+        TextFileDefinition.resize(752, 741)
         TextFileDefinition.setStyleSheet(u"font: 12pt \"Roboto\";")
         TextFileDefinition.setInputMethodHints(Qt.InputMethodHint.ImhNone)
         self.horizontalLayout_3 = QHBoxLayout(TextFileDefinition)
@@ -43,10 +44,6 @@ class Ui_TextFileDefinition(object):
         self.label_10.setFont(font)
 
         self.verticalLayout_3.addWidget(self.label_10)
-
-        self.verticalSpacer_2 = QSpacerItem(20, 10, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Fixed)
-
-        self.verticalLayout_3.addItem(self.verticalSpacer_2)
 
         self.verticalLayout = QVBoxLayout()
         self.verticalLayout.setObjectName(u"verticalLayout")
@@ -80,12 +77,12 @@ class Ui_TextFileDefinition(object):
 
         self.verticalLayout_3.addLayout(self.verticalLayout)
 
-        self.verticalSpacer_3 = QSpacerItem(20, 10, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Fixed)
-
-        self.verticalLayout_3.addItem(self.verticalSpacer_3)
-
         self.verticalLayout_2 = QVBoxLayout()
         self.verticalLayout_2.setObjectName(u"verticalLayout_2")
+        self.verticalSpacer_7 = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
+
+        self.verticalLayout_2.addItem(self.verticalSpacer_7)
+
         self.label_5 = QLabel(TextFileDefinition)
         self.label_5.setObjectName(u"label_5")
         self.label_5.setAlignment(Qt.AlignmentFlag.AlignLeading|Qt.AlignmentFlag.AlignLeft|Qt.AlignmentFlag.AlignVCenter)
@@ -100,6 +97,32 @@ class Ui_TextFileDefinition(object):
 
         self.gridLayout_2 = QGridLayout()
         self.gridLayout_2.setObjectName(u"gridLayout_2")
+        self.comboBox_encoding = QComboBox(TextFileDefinition)
+        self.comboBox_encoding.addItem("")
+        self.comboBox_encoding.addItem("")
+        self.comboBox_encoding.addItem("")
+        self.comboBox_encoding.addItem("")
+        self.comboBox_encoding.addItem("")
+        self.comboBox_encoding.addItem("")
+        self.comboBox_encoding.addItem("")
+        self.comboBox_encoding.setObjectName(u"comboBox_encoding")
+
+        self.gridLayout_2.addWidget(self.comboBox_encoding, 4, 1, 1, 1)
+
+        self.textEdit = QTextEdit(TextFileDefinition)
+        self.textEdit.setObjectName(u"textEdit")
+        self.textEdit.setFrameShape(QFrame.Shape.NoFrame)
+        self.textEdit.setFrameShadow(QFrame.Shadow.Plain)
+        self.textEdit.setLineWidth(0)
+        self.textEdit.setReadOnly(True)
+
+        self.gridLayout_2.addWidget(self.textEdit, 6, 0, 1, 2)
+
+        self.lineEdit_onset_time_format = QLineEdit(TextFileDefinition)
+        self.lineEdit_onset_time_format.setObjectName(u"lineEdit_onset_time_format")
+
+        self.gridLayout_2.addWidget(self.lineEdit_onset_time_format, 2, 1, 1, 1)
+
         self.sample_rate_lineedit = QLineEdit(TextFileDefinition)
         self.sample_rate_lineedit.setObjectName(u"sample_rate_lineedit")
         self.sample_rate_lineedit.setEnabled(False)
@@ -111,6 +134,29 @@ class Ui_TextFileDefinition(object):
 
         self.gridLayout_2.addWidget(self.sample_rate_lineedit, 1, 1, 1, 1)
 
+        self.label_13 = QLabel(TextFileDefinition)
+        self.label_13.setObjectName(u"label_13")
+
+        self.gridLayout_2.addWidget(self.label_13, 4, 0, 1, 1)
+
+        self.label_12 = QLabel(TextFileDefinition)
+        self.label_12.setObjectName(u"label_12")
+
+        self.gridLayout_2.addWidget(self.label_12, 2, 0, 1, 1)
+
+        self.sample_radiobutton = QRadioButton(TextFileDefinition)
+        self.buttonGroup_2 = QButtonGroup(TextFileDefinition)
+        self.buttonGroup_2.setObjectName(u"buttonGroup_2")
+        self.buttonGroup_2.addButton(self.sample_radiobutton)
+        self.sample_radiobutton.setObjectName(u"sample_radiobutton")
+        sizePolicy1 = QSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Fixed)
+        sizePolicy1.setHorizontalStretch(0)
+        sizePolicy1.setVerticalStretch(0)
+        sizePolicy1.setHeightForWidth(self.sample_radiobutton.sizePolicy().hasHeightForWidth())
+        self.sample_radiobutton.setSizePolicy(sizePolicy1)
+
+        self.gridLayout_2.addWidget(self.sample_radiobutton, 0, 1, 1, 1)
+
         self.label_6 = QLabel(TextFileDefinition)
         self.label_6.setObjectName(u"label_6")
         self.label_6.setLayoutDirection(Qt.LayoutDirection.LeftToRight)
@@ -118,60 +164,29 @@ class Ui_TextFileDefinition(object):
 
         self.gridLayout_2.addWidget(self.label_6, 1, 0, 1, 1)
 
+        self.label_14 = QLabel(TextFileDefinition)
+        self.label_14.setObjectName(u"label_14")
+
+        self.gridLayout_2.addWidget(self.label_14, 3, 0, 1, 1)
+
         self.time_radiobutton = QRadioButton(TextFileDefinition)
-        self.buttonGroup_2 = QButtonGroup(TextFileDefinition)
-        self.buttonGroup_2.setObjectName(u"buttonGroup_2")
         self.buttonGroup_2.addButton(self.time_radiobutton)
         self.time_radiobutton.setObjectName(u"time_radiobutton")
-        sizePolicy1 = QSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Fixed)
-        sizePolicy1.setHorizontalStretch(0)
-        sizePolicy1.setVerticalStretch(0)
         sizePolicy1.setHeightForWidth(self.time_radiobutton.sizePolicy().hasHeightForWidth())
         self.time_radiobutton.setSizePolicy(sizePolicy1)
         self.time_radiobutton.setChecked(True)
 
         self.gridLayout_2.addWidget(self.time_radiobutton, 0, 0, 1, 1)
 
-        self.textEdit = QTextEdit(TextFileDefinition)
-        self.textEdit.setObjectName(u"textEdit")
-        self.textEdit.setReadOnly(True)
+        self.lineEdit_dur_time_format = QLineEdit(TextFileDefinition)
+        self.lineEdit_dur_time_format.setObjectName(u"lineEdit_dur_time_format")
 
-        self.gridLayout_2.addWidget(self.textEdit, 4, 0, 1, 2)
+        self.gridLayout_2.addWidget(self.lineEdit_dur_time_format, 3, 1, 1, 1)
 
-        self.sample_radiobutton = QRadioButton(TextFileDefinition)
-        self.buttonGroup_2.addButton(self.sample_radiobutton)
-        self.sample_radiobutton.setObjectName(u"sample_radiobutton")
-        sizePolicy1.setHeightForWidth(self.sample_radiobutton.sizePolicy().hasHeightForWidth())
-        self.sample_radiobutton.setSizePolicy(sizePolicy1)
+        self.label_7 = QLabel(TextFileDefinition)
+        self.label_7.setObjectName(u"label_7")
 
-        self.gridLayout_2.addWidget(self.sample_radiobutton, 0, 1, 1, 1)
-
-        self.lineEdit_time_format = QLineEdit(TextFileDefinition)
-        self.lineEdit_time_format.setObjectName(u"lineEdit_time_format")
-
-        self.gridLayout_2.addWidget(self.lineEdit_time_format, 2, 1, 1, 1)
-
-        self.label_12 = QLabel(TextFileDefinition)
-        self.label_12.setObjectName(u"label_12")
-
-        self.gridLayout_2.addWidget(self.label_12, 2, 0, 1, 1)
-
-        self.label_13 = QLabel(TextFileDefinition)
-        self.label_13.setObjectName(u"label_13")
-
-        self.gridLayout_2.addWidget(self.label_13, 3, 0, 1, 1)
-
-        self.comboBox_encoding = QComboBox(TextFileDefinition)
-        self.comboBox_encoding.addItem("")
-        self.comboBox_encoding.addItem("")
-        self.comboBox_encoding.addItem("")
-        self.comboBox_encoding.addItem("")
-        self.comboBox_encoding.addItem("")
-        self.comboBox_encoding.addItem("")
-        self.comboBox_encoding.addItem("")
-        self.comboBox_encoding.setObjectName(u"comboBox_encoding")
-
-        self.gridLayout_2.addWidget(self.comboBox_encoding, 3, 1, 1, 1)
+        self.gridLayout_2.addWidget(self.label_7, 5, 0, 1, 2)
 
 
         self.horizontalLayout.addLayout(self.gridLayout_2)
@@ -179,14 +194,19 @@ class Ui_TextFileDefinition(object):
 
         self.verticalLayout_2.addLayout(self.horizontalLayout)
 
-        self.verticalSpacer_4 = QSpacerItem(20, 10, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Fixed)
 
-        self.verticalLayout_2.addItem(self.verticalSpacer_4)
+        self.verticalLayout_3.addLayout(self.verticalLayout_2)
 
-        self.label_7 = QLabel(TextFileDefinition)
-        self.label_7.setObjectName(u"label_7")
+        self.verticalSpacer = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
 
-        self.verticalLayout_2.addWidget(self.label_7)
+        self.verticalLayout_3.addItem(self.verticalSpacer)
+
+        self.verticalLayout_8 = QVBoxLayout()
+        self.verticalLayout_8.setObjectName(u"verticalLayout_8")
+        self.label_15 = QLabel(TextFileDefinition)
+        self.label_15.setObjectName(u"label_15")
+
+        self.verticalLayout_8.addWidget(self.label_15)
 
         self.horizontalLayout_2 = QHBoxLayout()
         self.horizontalLayout_2.setObjectName(u"horizontalLayout_2")
@@ -350,29 +370,29 @@ class Ui_TextFileDefinition(object):
         self.horizontalLayout_2.addLayout(self.gridLayout_4)
 
 
-        self.verticalLayout_2.addLayout(self.horizontalLayout_2)
+        self.verticalLayout_8.addLayout(self.horizontalLayout_2)
 
 
-        self.verticalLayout_3.addLayout(self.verticalLayout_2)
+        self.verticalLayout_3.addLayout(self.verticalLayout_8)
 
 
         self.horizontalLayout_3.addLayout(self.verticalLayout_3)
 
 
         self.retranslateUi(TextFileDefinition)
-        self.time_radiobutton.clicked.connect(TextFileDefinition.on_input_format_changed)
-        self.sample_radiobutton.clicked.connect(TextFileDefinition.on_input_format_changed)
-        self.checkBox_define_dur.clicked.connect(TextFileDefinition.on_event_pos_changed)
-        self.group_spinbox.valueChanged.connect(TextFileDefinition.on_group_index_changed)
-        self.event_name_spinbox.valueChanged.connect(TextFileDefinition.on_name_index_changed)
-        self.checkBox_group_enabled.clicked.connect(TextFileDefinition.group_enabled_slot)
-        self.checkBox_dur_enabled.clicked.connect(TextFileDefinition.dur_enabled_slot)
+        self.channel_spinBox.valueChanged.connect(TextFileDefinition.on_chan_index_changed)
         self.checkBox_chan_enabled.clicked.connect(TextFileDefinition.chan_enabled_slot)
-        self.checkBox_define_group.clicked.connect(TextFileDefinition.on_event_pos_changed)
-        self.checkBox_define_name.clicked.connect(TextFileDefinition.on_event_pos_changed)
+        self.sample_radiobutton.clicked.connect(TextFileDefinition.on_input_format_changed)
         self.checkBox_define_chan.clicked.connect(TextFileDefinition.on_event_pos_changed)
         self.duration_spinbox.valueChanged.connect(TextFileDefinition.on_duration_index_changed)
-        self.channel_spinBox.valueChanged.connect(TextFileDefinition.on_chan_index_changed)
+        self.checkBox_define_dur.clicked.connect(TextFileDefinition.on_event_pos_changed)
+        self.event_name_spinbox.valueChanged.connect(TextFileDefinition.on_name_index_changed)
+        self.checkBox_define_name.clicked.connect(TextFileDefinition.on_event_pos_changed)
+        self.checkBox_group_enabled.clicked.connect(TextFileDefinition.group_enabled_slot)
+        self.checkBox_define_group.clicked.connect(TextFileDefinition.on_event_pos_changed)
+        self.checkBox_dur_enabled.clicked.connect(TextFileDefinition.dur_enabled_slot)
+        self.group_spinbox.valueChanged.connect(TextFileDefinition.on_group_index_changed)
+        self.time_radiobutton.clicked.connect(TextFileDefinition.on_input_format_changed)
 
         QMetaObject.connectSlotsByName(TextFileDefinition)
     # setupUi
@@ -391,35 +411,7 @@ class Ui_TextFileDefinition(object):
 #if QT_CONFIG(tooltip)
         self.spinBox_nrows_hdr.setToolTip(QCoreApplication.translate("TextFileDefinition", u"Blank rows are skipped automatically, so do not include them in the row count to skip. This feature is important to prevent issues with files that end with blank rows.", None))
 #endif // QT_CONFIG(tooltip)
-        self.label_5.setText(QCoreApplication.translate("TextFileDefinition", u"Annotation Time format", None))
-        self.sample_rate_lineedit.setText(QCoreApplication.translate("TextFileDefinition", u"256", None))
-        self.label_6.setText(QCoreApplication.translate("TextFileDefinition", u"Sample rate", None))
-        self.time_radiobutton.setText(QCoreApplication.translate("TextFileDefinition", u"Time", None))
-        self.textEdit.setHtml(QCoreApplication.translate("TextFileDefinition", u"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
-"<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset=\"utf-8\" /><style type=\"text/css\">\n"
-"p, li { white-space: pre-wrap; }\n"
-"hr { height: 1px; border-width: 0; }\n"
-"li.unchecked::marker { content: \"\\2610\"; }\n"
-"li.checked::marker { content: \"\\2612\"; }\n"
-"</style></head><body style=\" font-family:'Roboto'; font-size:12pt; font-weight:400; font-style:normal;\">\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">For the complete definition see : https://strftime.org/</p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Examples of string format code for time : </p>\n"
-"<p style"
-                        "=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">%H:%M:%S for 14:30:45</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">%H.%M.%S for 14.30.45</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">%H:%M:%S.%f for 14:30:45.123456</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">%I:%M:%S %p for 02:30:45 PM</p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block"
-                        "-indent:0; text-indent:0px;\">Leave the time format empty if it is provided as seconds elapsed.</p></body></html>", None))
-        self.sample_radiobutton.setText(QCoreApplication.translate("TextFileDefinition", u"Samples", None))
-#if QT_CONFIG(tooltip)
-        self.lineEdit_time_format.setToolTip(QCoreApplication.translate("TextFileDefinition", u"Let empty to define the time elapsed in seconds. Otherwise define the string format (see https://strftime.org/). ", None))
-#endif // QT_CONFIG(tooltip)
-        self.label_12.setText(QCoreApplication.translate("TextFileDefinition", u"Time format if not seconds", None))
-        self.label_13.setText(QCoreApplication.translate("TextFileDefinition", u"File encoding", None))
+        self.label_5.setText(QCoreApplication.translate("TextFileDefinition", u"<html><head/><body><p><span style=\" font-weight:700;\">Annotation Time format</span></p></body></html>", None))
         self.comboBox_encoding.setItemText(0, QCoreApplication.translate("TextFileDefinition", u"utf-8", None))
         self.comboBox_encoding.setItemText(1, QCoreApplication.translate("TextFileDefinition", u"latin-1", None))
         self.comboBox_encoding.setItemText(2, QCoreApplication.translate("TextFileDefinition", u"utf-16", None))
@@ -428,7 +420,29 @@ class Ui_TextFileDefinition(object):
         self.comboBox_encoding.setItemText(5, QCoreApplication.translate("TextFileDefinition", u"ascii", None))
         self.comboBox_encoding.setItemText(6, QCoreApplication.translate("TextFileDefinition", u"ansi", None))
 
-        self.label_7.setText(QCoreApplication.translate("TextFileDefinition", u"Column Index", None))
+        self.textEdit.setHtml(QCoreApplication.translate("TextFileDefinition", u"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
+"<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset=\"utf-8\" /><style type=\"text/css\">\n"
+"p, li { white-space: pre-wrap; }\n"
+"hr { height: 1px; border-width: 0; }\n"
+"li.unchecked::marker { content: \"\\2610\"; }\n"
+"li.checked::marker { content: \"\\2612\"; }\n"
+"</style></head><body style=\" font-family:'Roboto'; font-size:12pt; font-weight:400; font-style:normal;\">\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">For the complete definition see : https://strftime.org/</p>\n"
+"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Examples of string format code for time :</p>\n"
+"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">%H:%M:%S             for 14:30:45<br />%H.%M."
+                        "%S             for 14.30.45<br />%H:%M:%S.%f        for 14:30:45.123456<br />%I:%M:%S %p        for 02:30:45 PM</p></body></html>", None))
+#if QT_CONFIG(tooltip)
+        self.lineEdit_onset_time_format.setToolTip(QCoreApplication.translate("TextFileDefinition", u"Let empty to define the time elapsed in seconds. Otherwise define the string format (see https://strftime.org/). ", None))
+#endif // QT_CONFIG(tooltip)
+        self.sample_rate_lineedit.setText(QCoreApplication.translate("TextFileDefinition", u"256", None))
+        self.label_13.setText(QCoreApplication.translate("TextFileDefinition", u"File encoding", None))
+        self.label_12.setText(QCoreApplication.translate("TextFileDefinition", u"Onset time format if not seconds", None))
+        self.sample_radiobutton.setText(QCoreApplication.translate("TextFileDefinition", u"Samples", None))
+        self.label_6.setText(QCoreApplication.translate("TextFileDefinition", u"Sample rate", None))
+        self.label_14.setText(QCoreApplication.translate("TextFileDefinition", u"Duration time format if not seconds", None))
+        self.time_radiobutton.setText(QCoreApplication.translate("TextFileDefinition", u"Time", None))
+        self.label_7.setText(QCoreApplication.translate("TextFileDefinition", u"<html><head/><body><p><span style=\" font-weight:700;\">NOTE:</span> Leave the time format empty if it is provided as seconds elapsed.</p></body></html>", None))
+        self.label_15.setText(QCoreApplication.translate("TextFileDefinition", u"<html><head/><body><p><span style=\" font-weight:700;\">Column Index</span><br/>Match the relevant columns from your annotation file to the corresponding Snooz columns listed below.</p></body></html>", None))
         self.label_9.setText(QCoreApplication.translate("TextFileDefinition", u"Group Label", None))
         self.checkBox_group_enabled.setText("")
         self.checkBox_define_group.setText(QCoreApplication.translate("TextFileDefinition", u"Define a group", None))

@@ -8,7 +8,7 @@
         "tool_author": "CEAMS",
         "tool_url": "",
         "tool_description": "To import annotations from a text file into the Snooz annotations file.",
-        "tool_version": "0.2.0",
+        "tool_version": "0.3.0",
         "package_name": "CEAMSTools",
         "steps": [
             {
@@ -24,13 +24,13 @@
             },
             {
                 "name": "Link PSG and Text file",
-                "description": "Define how to link the text file with the PSG file.",
+                "description": "Define how to link the text file with the PSG file. \nWARNING!\nThe annotation file must not have the exact same name as the PSG file. To avoid errors during processing, please specify a prefix and/or suffix for the annotation file in this step.",
                 "custom_step_name": "TextFileAssociation",
                 "show_index": true
             },
             {
                 "name": "Text File Format",
-                "description": "Define the Text file format.",
+                "description": "Define the Text file format.\n\nFor the complete definition of annotation time format see : https://strftime.org/ \n\nExamples of string format code for time :\n\n%H:%M:%S for 14:30:45\n%H.%M.%S for 14.30.45\n%H:%M:%S.%f for 14:30:45.123456\n%I:%M:%S %p for 02:30:45 PM",
                 "custom_step_name": "TextFileDefinition",
                 "show_index": true
             }
@@ -273,11 +273,17 @@
                         "sub_plugs": {},
                         "connections": {}
                     },
-                    "input_as_time": {
-                        "name": "input_as_time",
+                    "input_as_onset": {
+                        "name": "input_as_onset",
                         "value": "seconds",
-                        "sub_plugs": {},
-                        "connections": {}
+                        "connections": {},
+                        "sub_plugs": {}
+                    },
+                    "input_as_dur": {
+                        "name": "input_as_dur",
+                        "value": "seconds",
+                        "connections": {},
+                        "sub_plugs": {}
                     },
                     "event_center": {
                         "name": "event_center",

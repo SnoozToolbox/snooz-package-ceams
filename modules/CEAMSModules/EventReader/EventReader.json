@@ -1,7 +1,7 @@
 {
     "item_name": "EventReader",
     "item_type": "module",
-    "item_api_version": "2.0.0",
+    "item_api_version": "3.0.0",
     "item_url": "",
     "item_author": "CEAMS",
     "item_description": "",
@@ -87,8 +87,14 @@
                 "connections": {},
                 "sub_plugs": {}
             },
-            "input_as_time": {
-                "name": "input_as_time",
+            "input_as_onset": {
+                "name": "input_as_onset",
+                "value": "seconds",
+                "connections": {},
+                "sub_plugs": {}
+            },
+            "input_as_dur": {
+                "name": "input_as_dur",
                 "value": "seconds",
                 "connections": {},
                 "sub_plugs": {}
