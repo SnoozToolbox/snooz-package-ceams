@@ -291,6 +291,9 @@ class SleepStageEvents(SciNode):
                     stage_df.name = new_event_name
                 # Concatenate all the stages
                 events_df = pd.concat( [events_df, stage_df])
+        
+        # Sort events_df rows by start_sec
+        events_df = events_df.sort_values(by=['start_sec'])
         events_df.reset_index(drop=True,inplace=True)
 
         # To exclude signals outside cycle
@@ -300,9 +303,14 @@ class SleepStageEvents(SciNode):
             if len(cycle_df)>0:
                 # Keep any stage inside cycle
                 for index, row in cycle_df.iterrows():
-                    idx_start = events_df[events_df.start_sec<(row.start_sec+row.duration_sec)].index
-                    idx_stop = events_df[ (events_df.start_sec+events_df.duration_sec) > (row.start_sec)].index
-                    idx_in_cycle = idx_start.intersection(idx_stop)
+                    # Get the start and end of the cycle
+                    cycle_start = row.start_sec
+                    cycle_end = row.start_sec + row.duration_sec
+                    # Include only events fully contained in the cycle
+                    idx_in_cycle = events_df[
+                (events_df.start_sec >= cycle_start) &
+                ((events_df.start_sec + events_df.duration_sec) <= cycle_end)
+                ].index
                     onlyCycle = pd.concat([onlyCycle,events_df.loc[idx_in_cycle]])
             events_df = onlyCycle 
             events_df.reset_index(drop=True,inplace=True)   
