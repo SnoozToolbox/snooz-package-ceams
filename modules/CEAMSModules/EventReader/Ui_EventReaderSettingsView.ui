@@ -288,13 +288,6 @@
              </property>
             </widget>
            </item>
-           <item row="6" column="0">
-            <widget class="QLabel" name="label_14">
-             <property name="text">
-              <string>Time format if not seconds</string>
-             </property>
-            </widget>
-           </item>
            <item row="0" column="1">
             <widget class="QRadioButton" name="sample_radiobutton">
              <property name="sizePolicy">
@@ -311,49 +304,14 @@
              </attribute>
             </widget>
            </item>
-           <item row="0" column="0">
-            <widget class="QRadioButton" name="time_radiobutton">
-             <property name="sizePolicy">
-              <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-               <horstretch>0</horstretch>
-               <verstretch>0</verstretch>
-              </sizepolicy>
-             </property>
-             <property name="text">
-              <string>Time</string>
-             </property>
-             <property name="checked">
-              <bool>true</bool>
-             </property>
-             <attribute name="buttonGroup">
-              <string notr="true">buttonGroup_2</string>
-             </attribute>
-            </widget>
-           </item>
-           <item row="1" column="1">
-            <widget class="QLineEdit" name="sample_rate_lineedit">
-             <property name="enabled">
-              <bool>false</bool>
-             </property>
-             <property name="sizePolicy">
-              <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-               <horstretch>0</horstretch>
-               <verstretch>0</verstretch>
-              </sizepolicy>
-             </property>
-             <property name="text">
-              <string>256</string>
-             </property>
-            </widget>
-           </item>
            <item row="6" column="1">
-            <widget class="QLineEdit" name="lineEdit_time_format">
+            <widget class="QLineEdit" name="lineEdit_onset_time_format">
              <property name="toolTip">
               <string>Let empty to define the time elapsed in seconds. Otherwise define the string format (see https://strftime.org/). </string>
              </property>
             </widget>
            </item>
-           <item row="7" column="0" colspan="2">
+           <item row="8" column="0" colspan="2">
             <widget class="QTextEdit" name="textEdit">
              <property name="readOnly">
               <bool>true</bool>
@@ -378,6 +336,58 @@ li.checked::marker { content: &quot;\2612&quot;; }
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Leave the time format empty if it is provided as seconds elapsed.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
              </property>
             </widget>
+           </item>
+           <item row="1" column="1">
+            <widget class="QLineEdit" name="sample_rate_lineedit">
+             <property name="enabled">
+              <bool>false</bool>
+             </property>
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="text">
+              <string>256</string>
+             </property>
+            </widget>
+           </item>
+           <item row="7" column="0">
+            <widget class="QLabel" name="label_15">
+             <property name="text">
+              <string>Duration time format if not seconds</string>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="0">
+            <widget class="QRadioButton" name="time_radiobutton">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="text">
+              <string>Time</string>
+             </property>
+             <property name="checked">
+              <bool>true</bool>
+             </property>
+             <attribute name="buttonGroup">
+              <string notr="true">buttonGroup_2</string>
+             </attribute>
+            </widget>
+           </item>
+           <item row="6" column="0">
+            <widget class="QLabel" name="label_14">
+             <property name="text">
+              <string>Onset time format if not seconds</string>
+             </property>
+            </widget>
+           </item>
+           <item row="7" column="1">
+            <widget class="QLineEdit" name="lineEdit_dur_time_format"/>
            </item>
           </layout>
          </item>
@@ -975,7 +985,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
   <slot>on_chan_index_changed()</slot>
  </slots>
  <buttongroups>
-  <buttongroup name="buttonGroup"/>
   <buttongroup name="buttonGroup_2"/>
+  <buttongroup name="buttonGroup"/>
  </buttongroups>
 </ui>
