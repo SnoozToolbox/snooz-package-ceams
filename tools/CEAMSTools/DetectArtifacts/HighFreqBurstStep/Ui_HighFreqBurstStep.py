@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file ''
+## Form generated from reading UI file 'Ui_HighFreqBurstStep.ui'
 ##
 ## Created by: Qt User Interface Compiler version 6.8.2
 ##
@@ -46,7 +46,7 @@ class Ui_HighFreqBurstStep(object):
         self.label_10 = QLabel(self.scrollAreaWidgetContents)
         self.label_10.setObjectName(u"label_10")
         self.label_10.setPixmap(QPixmap(u":/high_freq_noise/burst_noise.png"))
-        self.label_10.setAlignment(Qt.AlignCenter)
+        self.label_10.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
         self.horizontalLayout.addWidget(self.label_10)
 
@@ -103,7 +103,7 @@ class Ui_HighFreqBurstStep(object):
         self.group_lineEdit = QLineEdit(HighFreqBurstStep)
         self.group_lineEdit.setObjectName(u"group_lineEdit")
         self.group_lineEdit.setEnabled(False)
-        self.group_lineEdit.setMaximumSize(QSize(100, 16777215))
+        self.group_lineEdit.setMaximumSize(QSize(16777215, 16777215))
 
         self.formLayout.setWidget(0, QFormLayout.FieldRole, self.group_lineEdit)
 
@@ -117,16 +117,12 @@ class Ui_HighFreqBurstStep(object):
         self.name_burst_lineEdit = QLineEdit(HighFreqBurstStep)
         self.name_burst_lineEdit.setObjectName(u"name_burst_lineEdit")
         self.name_burst_lineEdit.setEnabled(False)
-        self.name_burst_lineEdit.setMaximumSize(QSize(100, 16777215))
+        self.name_burst_lineEdit.setMaximumSize(QSize(16777215, 16777215))
 
         self.formLayout.setWidget(1, QFormLayout.FieldRole, self.name_burst_lineEdit)
 
 
         self.horizontalLayout_3.addLayout(self.formLayout)
-
-        self.horizontalSpacer = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
-
-        self.horizontalLayout_3.addItem(self.horizontalSpacer)
 
 
         self.verticalLayout.addLayout(self.horizontalLayout_3)
@@ -156,7 +152,7 @@ class Ui_HighFreqBurstStep(object):
         self.label_5.setMinimumSize(QSize(140, 0))
         self.label_5.setFont(font)
         self.label_5.setMidLineWidth(0)
-        self.label_5.setTextFormat(Qt.RichText)
+        self.label_5.setTextFormat(Qt.TextFormat.RichText)
 
         self.gridLayout.addWidget(self.label_5, 0, 0, 1, 1)
 
@@ -177,7 +173,7 @@ class Ui_HighFreqBurstStep(object):
         self.label_2.setMinimumSize(QSize(210, 0))
         self.label_2.setMaximumSize(QSize(210, 16777215))
         self.label_2.setFont(font)
-        self.label_2.setTextFormat(Qt.RichText)
+        self.label_2.setTextFormat(Qt.TextFormat.RichText)
 
         self.gridLayout.addWidget(self.label_2, 1, 0, 1, 1)
 
@@ -223,8 +219,8 @@ class Ui_HighFreqBurstStep(object):
         self.textEdit.setObjectName(u"textEdit")
         self.textEdit.setFont(font)
         self.textEdit.setAutoFillBackground(True)
-        self.textEdit.setFrameShape(QFrame.HLine)
-        self.textEdit.setFrameShadow(QFrame.Plain)
+        self.textEdit.setFrameShape(QFrame.Shape.HLine)
+        self.textEdit.setFrameShadow(QFrame.Shadow.Plain)
         self.textEdit.setLineWidth(0)
         self.textEdit.setReadOnly(True)
 
@@ -240,8 +236,8 @@ class Ui_HighFreqBurstStep(object):
         self.textEdit_2.setMaximumSize(QSize(16777215, 16777215))
         self.textEdit_2.setFont(font)
         self.textEdit_2.setAutoFillBackground(True)
-        self.textEdit_2.setFrameShape(QFrame.HLine)
-        self.textEdit_2.setFrameShadow(QFrame.Plain)
+        self.textEdit_2.setFrameShape(QFrame.Shape.HLine)
+        self.textEdit_2.setFrameShadow(QFrame.Shadow.Plain)
         self.textEdit_2.setLineWidth(0)
         self.textEdit_2.setReadOnly(True)
 
@@ -289,43 +285,49 @@ class Ui_HighFreqBurstStep(object):
         self.thresh_ratio_lineEdit.setText(QCoreApplication.translate("HighFreqBurstStep", u"0.1", None))
         self.label_14.setText(QCoreApplication.translate("HighFreqBurstStep", u"optimal value from 0.05 to 0.4", None))
         self.textEdit.setHtml(QCoreApplication.translate("HighFreqBurstStep", u"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
-"<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
+"<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset=\"utf-8\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
+"hr { height: 1px; border-width: 0; }\n"
+"li.unchecked::marker { content: \"\\2610\"; }\n"
+"li.checked::marker { content: \"\\2612\"; }\n"
 "</style></head><body style=\" font-family:'Roboto'; font-size:12pt; font-weight:400; font-style:normal;\">\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" text-decoration: underline;\">Fixed threshold</span><span style=\" color:#000000;\"> (mean + x STD)</span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">The power is log10 transformed to make the data more normally distributed, however the distribution of the power of all selected channels is often skewed right du to artifacts.</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">The distribut"
-                        "ion is then modeled by a 3-components Gaussian Mixture Model (GMM).</p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">The power is log10 transformed to make the data more normally distributed, however the distribution of the power of all selected channels is often skewed "
+                        "right du to artifacts.</p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">The distribution is then modeled by a 3-components Gaussian Mixture Model (GMM).</p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">The threshold is multiplied by the standard deviation (STD) and added to the mean of the main gaussian (over a mixture of 3).</p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">An artifact is possibly identified when the log10(power) &gt; (mean + threshold*STD)</p>\n"
 "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" text-decoration: underline;\">Adaptive threshold</span> (baseline)</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-i"
-                        "ndent:0px;\">An adaptive threshold is computed from a baseline window (BSL) of 30 s around the segment to evaluate.  A segment with a power x times the median power of the baseline is possibly an artifact. The adaptive threshold may be too sensitive when the EEG recording does not include much high frequency noise. </p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" text-decoration: u"
+                        "nderline;\">Adaptive threshold</span> (baseline)</p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">An adaptive threshold is computed from a baseline window (BSL) of 30 s around the segment to evaluate.  A segment with a power x times the median power of the baseline is possibly an artifact. The adaptive threshold may be too sensitive when the EEG recording does not include much high frequency noise. </p>\n"
 "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" text-decoration: underline;\">Power ratio threshold</span> (relative power)</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">High frequency bursts can be masked (thus non-disturbing) by a strong low frequency signal. An artifact is possibly identified when the relative power (25-64 Hz)/(8-64 Hz) &gt; threshold.</p>\n"
-"<"
-                        "p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">High frequency bursts can be mas"
+                        "ked (thus non-disturbing) by a strong low frequency signal. An artifact is possibly identified when the relative power (25-64 Hz)/(8-64 Hz) &gt; threshold.</p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">A segment whose power exceeds the 3 thresholds is considered an artifact.</p>\n"
 "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">To reduce the number of false positives, especially during spindles, alpha waves, or beta bursts, please first increase the power ratio threshold value.</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">A greater proportion of the signal in the 25-64 Hz frequency band will be needed to mark the segme"
-                        "nt as an artifact.</p></body></html>", None))
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-"
+                        "left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">A greater proportion of the signal in the 25-64 Hz frequency band will be needed to mark the segment as an artifact.</p></body></html>", None))
         self.textEdit_2.setHtml(QCoreApplication.translate("HighFreqBurstStep", u"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
-"<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
+"<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset=\"utf-8\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
+"hr { height: 1px; border-width: 0; }\n"
+"li.unchecked::marker { content: \"\\2610\"; }\n"
+"li.checked::marker { content: \"\\2612\"; }\n"
 "</style></head><body style=\" font-family:'Roboto'; font-size:12pt; font-weight:400; font-style:normal;\">\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">The power is computed on sliding windows through STFT.</p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Window length = 0.5 s</p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Window step = 0.25 s </p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">The STFT is applied to integrate (sum) the signal power within a frequency range of "
-                        "the true spectrum (units\u00b2 ex. \u00b5V\u00b2) as suggested in [1].</p>\n"
+"<p style=\" margin-top:0px; margin-botto"
+                        "m:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">The STFT is applied to integrate (sum) the signal power within a frequency range of the true spectrum (units\u00b2 ex. \u00b5V\u00b2) as suggested in [1].</p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">The adaptive treshold is computed from a baseline window (BSL).</p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Window length around the segment = 30 s</p>\n"
 "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" text-decoration: underline;\">Reference</span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">[1] Cox, R. &amp; Fell, J. Analyzing human sleep EEG: A methodological primer with code implementation. Sleep M"
-                        "edicine Reviews54, 101353 (2020).</p></body></html>", None))
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; mar"
+                        "gin-right:0px; -qt-block-indent:0; text-indent:0px;\">[1] Cox, R. &amp; Fell, J. Analyzing human sleep EEG: A methodological primer with code implementation. Sleep Medicine Reviews54, 101353 (2020).</p></body></html>", None))
     # retranslateUi
 

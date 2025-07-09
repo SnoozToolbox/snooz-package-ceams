@@ -24,7 +24,7 @@ class Ui_SleepStageSelStep(object):
     def setupUi(self, SleepStageSelStep):
         if not SleepStageSelStep.objectName():
             SleepStageSelStep.setObjectName(u"SleepStageSelStep")
-        SleepStageSelStep.resize(1068, 590)
+        SleepStageSelStep.resize(805, 576)
         SleepStageSelStep.setStyleSheet(u"font: 12pt \"Roboto\";")
         self.verticalLayout_2 = QVBoxLayout(SleepStageSelStep)
         self.verticalLayout_2.setObjectName(u"verticalLayout_2")
