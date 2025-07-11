@@ -23,7 +23,7 @@
         {
             "item_name": "PSGReader",
             "item_type": "module",
-            "item_version": "2.2.0",
+            "item_version": "2.3.0",
             "item_hooks": [
                 {
                     "endpoint_name": "module_endpoint",
@@ -163,7 +163,7 @@
         {
             "item_name": "RescaleSignal",
             "item_type": "module",
-            "item_version": "2.0.0",
+            "item_version": "2.1.0",
             "item_hooks": [
                 {
                     "endpoint_name": "module_endpoint",
@@ -317,7 +317,7 @@
         {
             "item_name": "ReplaceEventInSignals",
             "item_type": "module",
-            "item_version": "2.0.0",
+            "item_version": "2.1.0",
             "item_hooks": [
                 {
                     "endpoint_name": "module_endpoint",
