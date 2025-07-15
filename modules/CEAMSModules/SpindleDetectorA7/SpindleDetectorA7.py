@@ -47,7 +47,8 @@ class SpindleDetectorA7(SciNode):
             List of Event name to filter separated by comma (discard too long, short)
         artifact_events : Pandas DataFrame (columns=['group','name','start_sec','duration_sec','channels']) 
             Selected events list for artifacts.
-
+        frequency_band : dict
+            frequency_band : Dictionary with the frequency band to use for the detection
     Returns
     -------
         events: Pandas DataFrame (columns=['group','name','start_sec','duration_sec','channels']) 
@@ -65,6 +66,7 @@ class SpindleDetectorA7(SciNode):
         InputPlug('event_group',self)
         InputPlug('event_name',self)
         InputPlug('artifact_events',self)
+        InputPlug('frequency_band',self)
         # Output plugs
         OutputPlug('events',self)
 
@@ -76,7 +78,7 @@ class SpindleDetectorA7(SciNode):
         self.BSL_LENGTH_SEC = 30
     
 
-    def compute(self, signals, thresholds, event_group, event_name, artifact_events):
+    def compute(self, signals, thresholds, event_group, event_name, artifact_events, frequency_band):
         """
         Function to detect spindles based on the a7 algorithm.
 
@@ -108,6 +110,9 @@ class SpindleDetectorA7(SciNode):
             artifact_events: Pandas DataFrame (columns=['group','name','start_sec','duration_sec','channels']) 
                 Selected events list for artifacts.
 
+            frequency_band: dict
+                frequency_band : Dictionary with the frequency band to use for the detection
+
         Returns
         -------
             events: Pandas DataFrame (columns=['group','name','start_sec','duration_sec','channels']) 
@@ -132,12 +137,20 @@ class SpindleDetectorA7(SciNode):
         if isinstance(event_name, str) and event_name=='':
             raise NodeInputException(self.identifier, "event_name", \
                 f"SpindleDetectorA7 this input is empty, no event_name no spindles.")
+        if isinstance(frequency_band, str) and frequency_band=='':
+            raise NodeInputException(self.identifier, "frequency_band", \
+                f"SpindleDetectorA7 this input is empty, no frequency_band no spindles.")
         
         if not isinstance(thresholds, dict):
             thresholds = eval(thresholds)
         if not isinstance(thresholds, dict):
             raise NodeInputException(self.identifier, "thresholds", \
                 f"SpindleDetectorA7 this input is a {type(thresholds)}, it is expected to be a dict.")
+        if not isinstance(frequency_band, dict):
+            frequency_band = eval(frequency_band)
+        if not isinstance(frequency_band, dict):
+            raise NodeInputException(self.identifier, "frequency_band", \
+                f"SpindleDetectorA7 this input is a {type(frequency_band)}, it is expected to be a dict.")
 
         if not isinstance(artifact_events, pd.DataFrame) and not artifact_events=='':
             raise NodeInputException(self.identifier, "artifact_events", \
@@ -149,6 +162,7 @@ class SpindleDetectorA7(SciNode):
         thresholds_np = np.array([thresholds['thresh_abs_sigma_pow_uv2'], thresholds['thresh_rel_sigma_pow_z'],\
              thresholds['thresh_sigma_cov_z'], float(thresholds['thresh_sigma_cor_perc'])/100])
 
+        frequency_band_np = np.array([frequency_band['low'], frequency_band['high']])
         # It is possible to bypass the detection of spindles
         if self.activation_state == ActivationState.BYPASS:
             return {
@@ -171,7 +185,7 @@ class SpindleDetectorA7(SciNode):
             data = signal.samples
             sample_rate = signal.sample_rate
             features, events_index_lst  = detect_spindles(data, thresholds_np, \
-                self.WIN_LENGTH_SEC, self.WIN_STEP_SEC, self.BSL_LENGTH_SEC, sample_rate)
+                self.WIN_LENGTH_SEC, self.WIN_STEP_SEC, self.BSL_LENGTH_SEC, sample_rate, frequency_band_np)
             if config.is_dev:
                 for i in range(features.shape[1]):
                     feature_signal = signal.clone()
