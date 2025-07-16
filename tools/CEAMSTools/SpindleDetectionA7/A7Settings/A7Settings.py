@@ -67,8 +67,8 @@ class A7Settings( BaseStepView,  Ui_A7Settings, QtWidgets.QWidget):
         self._spindle_a7_param['thresh_sigma_cov_z'] = 1.3
         self._spindle_a7_param['thresh_sigma_cor_perc'] = 69
         self._spindle_a7_freq_param = {}
-        self._spindle_a7_freq_param['frequency_band_low'] = 11
-        self._spindle_a7_freq_param['frequency_band_high'] = 16
+        self._spindle_a7_freq_param['low'] = 11
+        self._spindle_a7_freq_param['high'] = 16
     
 
     def load_settings(self):
@@ -91,8 +91,8 @@ class A7Settings( BaseStepView,  Ui_A7Settings, QtWidgets.QWidget):
         self._spindle_a7_param['thresh_rel_sigma_pow_z'] = self.doubleSpinBox_relSigma.value()
         self._spindle_a7_param['thresh_sigma_cov_z'] = self.doubleSpinBox_sigmaCov.value()
         self._spindle_a7_param['thresh_sigma_cor_perc'] = self.doubleSpinBox_sigmaCor.value()
-        self._spindle_a7_freq_param['frequency_band_low'] = self.doubleSpinBox_Lower_Bound.value()
-        self._spindle_a7_freq_param['frequency_band_high'] = self.doubleSpinBox_Upper_Bound.value()
+        self._spindle_a7_freq_param['low'] = self.doubleSpinBox_Lower_Bound.value()
+        self._spindle_a7_freq_param['high'] = self.doubleSpinBox_Upper_Bound.value()
         self._pub_sub_manager.publish(self, self._thresholds_a7_topic, self._spindle_a7_param)
         self._pub_sub_manager.publish(self, self._spindle_param_a7_det_topic, self._spindle_a7_param)
         self._pub_sub_manager.publish(self, self._spindle_param_a7_anal_topic, self._spindle_a7_param)
@@ -128,3 +128,4 @@ class A7Settings( BaseStepView,  Ui_A7Settings, QtWidgets.QWidget):
             self._pub_sub_manager.unsubscribe(self, self._name_topic)
             self._pub_sub_manager.unsubscribe(self, self._spindle_param_a7_det_topic)
             self._pub_sub_manager.unsubscribe(self, self._spindle_param_a7_anal_topic)
+            self._pub_sub_manager.unsubscribe(self, self._frequency_band_a7_topic)
