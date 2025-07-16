@@ -168,6 +168,7 @@ class Ui_A7Settings(object):
         self.textEdit_6.setMaximumSize(QSize(16777215, 65))
         self.textEdit_6.setFrameShape(QFrame.Shape.NoFrame)
         self.textEdit_6.setFrameShadow(QFrame.Shadow.Plain)
+        self.textEdit_6.setReadOnly(True)
 
         self.verticalLayout.addWidget(self.textEdit_6)
 
