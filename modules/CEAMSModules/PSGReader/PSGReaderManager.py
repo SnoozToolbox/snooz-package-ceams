@@ -217,7 +217,8 @@ class PSGReaderManager:
                     'name': event.name, 
                     'start_sec': event.start_time, 
                     'duration_sec': event.duration, 
-                    'channels': event.channels})
+                    'channels': event.channels,
+                    'time elapsed(HH:MM:SS)': event.time_elapsed})
             # Convert the list of dicts into a DataFrame
             events_df = pd.DataFrame(events)
         # Clean up lists of channels for a single channel (string) per event
@@ -282,7 +283,7 @@ class PSGReaderManager:
                 print(f'ERROR PSGReaderManager.get_sleep_stages file not loaded')
             return None
 
-        df_label =  ['start_sec', 'duration_sec', 'channels']
+        df_label =  ['start_sec', 'duration_sec', 'channels', 'time elapsed(HH:MM:SS)']
         stages =    self.current_reader.get_sleep_stages()
         events =    []
 
@@ -298,17 +299,19 @@ class PSGReaderManager:
             start_time =    stage.start_time
             duration =      stage.duration
             channels =      ""
+            time_elapsed = stage.time_elapsed if hasattr(stage, 'time_elapsed') else ""
             events.append({
                 'group': commons.sleep_stages_group,
                 'name': name, 
                 df_label[0]: start_time, 
                 df_label[1]: duration, 
-                df_label[2]: channels})
+                df_label[2]: channels,
+                df_label[3]: time_elapsed})
 
         return pd.DataFrame(events)
 
 
-    def add_event(self, name, group, start_sec, duration_sec, channels, montage_index):
+    def add_event(self, name, group, start_sec, duration_sec, channels, montage_index, time_elapsed):
         if self.current_reader is None:
             if config.is_dev : 
                 print(f'ERROR PSGReaderManager.add_event file not loaded')
@@ -317,7 +320,7 @@ class PSGReaderManager:
         # channels has to be a list of string for the current_reader
         channels = [channels]       
         # HarmonieReader asks for those arguments arg0: str, arg1: str, arg2: float, arg3: float, arg4: List[str], arg5: int
-        success = self.current_reader.add_event(name, group, start_sec, duration_sec, channels, montage_index)
+        success = self.current_reader.add_event(name, group, start_sec, duration_sec, channels, montage_index, time_elapsed)
         if not success:
             if config.is_dev : 
                 error = self.current_reader.get_last_error()
@@ -450,8 +453,8 @@ class PSGReaderManager:
             for index, event in events1_many.iterrows():
                 if len(event.channels)>0:
                     for i_chan in range(len(event.channels)):
-                        single_chan_events1.append([event['group'],event['name'],event['start_sec'], event['duration_sec'], event.channels[i_chan]])
-            event_df_single_chan = pd.DataFrame(data=single_chan_events1,columns=['group','name','start_sec','duration_sec','channels'])
+                        single_chan_events1.append([event['group'],event['name'],event['start_sec'], event['duration_sec'], event.channels[i_chan], event['time elapsed(HH:MM:SS)']])
+            event_df_single_chan = pd.DataFrame(data=single_chan_events1,columns=['group','name','start_sec','duration_sec','channels', 'time elapsed(HH:MM:SS)'])
             events1_single = pd.concat([events1_single,event_df_single_chan])
         return events1_single
     

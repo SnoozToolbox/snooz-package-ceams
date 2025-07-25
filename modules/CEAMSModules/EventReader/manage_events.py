@@ -38,7 +38,7 @@ def create_event_dataframe(data, index=None, dtype=None, copy=False):
     """
     return pd.DataFrame(data,
                         index=index,
-                        columns=['group','name','start_sec','duration_sec','channels'],
+                        columns=['group','name','start_sec','duration_sec','channels', 'time elapsed(HH:MM:SS)'],
                         dtype=dtype,
                         copy=copy)
 
@@ -83,8 +83,8 @@ def convert_event_df_to_single_channel(events1):
         for index, event in events1_many.iterrows():
             if len(event.channels)>0:
                 for i_chan in range(len(event.channels)):
-                    single_chan_events1.append([event['group'],event['name'],event['start_sec'], event['duration_sec'], event.channels[i_chan]])
-        event_df_single_chan = pd.DataFrame(data=single_chan_events1,columns=['group','name','start_sec','duration_sec','channels'])
+                    single_chan_events1.append([event['group'],event['name'],event['start_sec'], event['duration_sec'], event.channels[i_chan], event['time elapsed(HH:MM:SS)']])
+        event_df_single_chan = pd.DataFrame(data=single_chan_events1,columns=['group','name','start_sec','duration_sec','channels', 'time elapsed(HH:MM:SS)'])
         events1_single = pd.concat([events1_single,event_df_single_chan])
     return events1_single
 
