@@ -119,6 +119,7 @@ class ResetSignalArtefact(SciNode):
 
         signals_out = copy.deepcopy(signals)
 
+        masked_channels = set()
         # It is possible to bypass the "ResetSignalArtefact" by passing the input signals directly
         # to the output signals without any modification
         if self.activation_state == ActivationState.BYPASS:
@@ -207,19 +208,23 @@ class ResetSignalArtefact(SciNode):
                                             scaling_win[0:int(round((length_win/2)*alpha_turkey))] = np.zeros(int(round((length_win/2)*alpha_turkey)))
                                             # First part of the scaling is reset since the artifact starts before
                                             signals_out[sel].samples[0:real_stop_i] = signals_out[sel].samples[0:real_stop_i]*scaling_win
+                                            masked_channels.add(signals_out[sel].channel)
                                         elif signal_values == 'NaN':
                                             nan_array = np.empty(real_stop_i)
                                             nan_array[:] = np.nan
                                             signals_out[sel].samples[0:real_stop_i] = nan_array
+                                            masked_channels.add(signals_out[sel].channel)
                                     # artefact stops after the end of the signal
                                     elif stop_i<0:
                                         if signal_values=='0':
                                             # no scaling the whole signal is an artifact
-                                            signals_out[sel].samples = np.zeros(len(signals_out[sel].samples)) 
+                                            signals_out[sel].samples = np.zeros(len(signals_out[sel].samples))
+                                            masked_channels.add(signals_out[sel].channel) 
                                         elif signal_values == 'NaN':
                                             nan_array = np.empty(len(signals_out[sel].samples))
                                             nan_array[:] = np.nan                                        
                                             signals_out[sel].samples = nan_array
+                                            masked_channels.add(signals_out[sel].channel)
                                 # artefact starts after the start of the signal
                                 else:
                                     # artefact stop before the end of the signal
@@ -234,10 +239,12 @@ class ResetSignalArtefact(SciNode):
                                             scaling_win = 1-(sci.windows.tukey(length_win, alpha=alpha_turkey))
                                             signals_out[sel].samples[start_i:real_stop_i] = \
                                                 signals_out[sel].samples[start_i:real_stop_i]*scaling_win
+                                            masked_channels.add(signals_out[sel].channel)
                                         elif signal_values == 'NaN':
                                             nan_array = np.empty(length_win)
                                             nan_array[:] = np.nan
                                             signals_out[sel].samples[start_i:real_stop_i] = nan_array
+                                            masked_channels.add(signals_out[sel].channel)
                                     # artefact stop after the signal
                                     elif stop_i<0:
                                         length_win = len(signals_out[sel].samples)-start_i
@@ -251,10 +258,12 @@ class ResetSignalArtefact(SciNode):
                                             start_slope_end = length_win-int(round(length_win/2*alpha_turkey))
                                             scaling_win[start_slope_end:] = np.zeros(int(round(length_win/2*alpha_turkey)))
                                             signals_out[sel].samples[start_i:] = signals_out[sel].samples[start_i:]*scaling_win
+                                            masked_channels.add(signals_out[sel].channel)
                                         elif signal_values == 'NaN':
                                             nan_array = np.empty(len(signals_out[sel].samples)-start_i)
                                             nan_array[:] = np.nan
                                             signals_out[sel].samples[start_i:] = nan_array
+                                            masked_channels.add(signals_out[sel].channel)
         else:
             # Log message for the Logs tab
             self._log_manager.log(self.identifier, "No events as input.")            
@@ -263,8 +272,10 @@ class ResetSignalArtefact(SciNode):
             }                  
 
         # Write to the cache to use the data in the resultTab
-        cache = {}
-        cache['events'] = events_selected
+        cache = {
+            'events': events_selected,
+            'masked_channels': sorted(masked_channels)
+        }
         self._cache_manager.write_mem_cache(self.identifier, cache)
 
         return {

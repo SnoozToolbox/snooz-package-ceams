@@ -29,7 +29,7 @@ class FilterStep(BaseStepView, Ui_FilterStep, QtWidgets.QWidget):
         # the value in it changes. It's very useful when the parameter within a step
         # must have an impact in another step.
         #self._context_manager["context_FilterStep"] = {"the_data_I_want_to_share":"some_data"}
-
+        
         self._node_id_bandpass_filter = "b36768be-9cab-41f9-850f-22edf97b1c13"
         self._node_id_notch_filter = "8f7c9ad5-7790-45bb-bcf0-03a5c125954a"
         # Input node topic

@@ -54,7 +54,7 @@ from commons.NodeInputException import NodeInputException
 from CEAMSModules.PSGReader.SignalModel import SignalModel
 from CEAMSModules.EventReader.manage_events import create_event_dataframe
 from CEAMSModules.PSGReader import commons
-
+from flowpipe.ActivationState import ActivationState
 import numpy as np
 
 DEBUG = False
@@ -196,6 +196,13 @@ class SignalsFromEvents(SciNode):
                 'signals_from_events': [],
                 'epochs_to_process' : create_event_dataframe(None)
             }
+        
+        # It is possible to bypass the module by passing the input signals directly
+        # to the output signals without any modification
+        if self.activation_state == ActivationState.BYPASS:
+            return {
+                'signals': signals
+            }
 
         if isinstance(events, str) and events == '':
             err_message = "ERROR: events not connected"
@@ -308,6 +315,17 @@ class SignalsFromEvents(SciNode):
             cache['n_chan'] = n_chan
             cache['signals'] = signals_from_events
             self._cache_manager.write_mem_cache(self.identifier, cache)
+
+        # print(signals_from_events)
+        # print(len(signals_from_events))
+        # print(signals_from_events[0].samples, signals_from_events[0].channel)
+        # print(signals_from_events[1].samples, signals_from_events[1].channel)
+        # print(events_to_write)
+
+        self._log_manager.log(self.identifier, f"Number of output segments: {len(signals_from_events)}")
+        for i, sig in enumerate(signals_from_events):
+            self._log_manager.log(self.identifier, f"Segment {i}: channel={sig.channel}, start={sig.start_time}s, dur={sig.duration}s, samples_shape={sig.samples.shape}")
+        self._log_manager.log(self.identifier, f"Epochs to process DataFrame:\n{events_to_write}")
 
         return {
             'signals_from_events': signals_from_events,

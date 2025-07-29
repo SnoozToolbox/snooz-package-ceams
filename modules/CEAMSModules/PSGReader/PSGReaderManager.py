@@ -236,6 +236,7 @@ class PSGReaderManager:
 
         signal_models = []
         section_count = self.current_reader.get_signal_section_count()
+        # print('section count:', section_count)
         for i in range(section_count):
             signals = self.current_reader.get_signal_section(montage_index, channel_names, i)
             
@@ -254,7 +255,7 @@ class PSGReaderManager:
                 signal_model.montage_index = montage_index
 
                 signal_models.append(signal_model)
-
+            print(len(signal_models))
         return signal_models
 
 
