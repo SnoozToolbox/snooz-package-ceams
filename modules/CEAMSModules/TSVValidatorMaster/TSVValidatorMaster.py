@@ -119,13 +119,13 @@ class TSVValidatorMaster(SciNode):
                     header = lines[0].rstrip('\n').split('\t')
                     expected_col_count = len(expected_columns)
 
-                    if header != expected_columns:
+                    if header != expected_columns and header != expected_columns + ['time elapsed (HH:MM:SS)']:
                         errors.append(f"Header mismatch. Expected {expected_columns}, but got {header}")
 
                     for i, line in enumerate(lines[1:], start=2):  # start=2 for line numbers
                         if line.strip():  # skip blank lines
                             fields = line.rstrip('\n').split('\t')
-                            if len(fields) != expected_col_count:
+                            if len(fields) != expected_col_count and len(fields) != expected_col_count + 1:
                                 errors.append(f"Line {i}: Expected {expected_col_count} columns, but found {len(fields)} → Possible missing value or tab")
 
             except Exception as e:
