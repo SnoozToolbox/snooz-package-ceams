@@ -188,11 +188,11 @@ def unmask_result(result):
     return result.compressed()
 
 
-def absolute_power_values(data, win_length_sec, win_step_sec, sample_rate):
+def absolute_power_values(data, win_length_sec, win_step_sec, sample_rate, frequency_band):
     n_samples = data.shape[0]
 
-    # Filter the sigma signal as bandpass filter from 11 to 16 Hz
-    sigma_data = butter_bandpass_filter(data, 11, 16, sample_rate, 20)
+    # Filter the sigma signal as bandpass filter from 11 to 16 Hz default value is 11-16 Hz, but now the user can adjust the frequency band
+    sigma_data = butter_bandpass_filter(data, frequency_band[0], frequency_band[1], sample_rate, 20)
     # Get matrix of sliding windows
     win_sample_matrix = sample_to_win(sigma_data, win_length_sec, win_step_sec, sample_rate)
     # Calculate average squared power per window
@@ -205,7 +205,7 @@ def absolute_power_values(data, win_length_sec, win_step_sec, sample_rate):
     return np.log10(np.nanmean(absolute_power_per_sample,axis=0))
 
 
-def relative_power_values(data, win_length_sec, win_step_sec, bsl_length_sec, sample_rate):
+def relative_power_values(data, win_length_sec, win_step_sec, bsl_length_sec, sample_rate, frequency_band):
     n_samples = data.shape[0]
 
     # The time on which the sliding windows should be zero padded before performing the FFT
@@ -215,7 +215,7 @@ def relative_power_values(data, win_length_sec, win_step_sec, bsl_length_sec, sa
 
     # Calculate the sigma power by summing the PSD windows in the sigma band
     # As freq_index_stop should be excluded, 1 is added
-    freq_index_start, freq_index_stop = np.argmin(np.abs(freq_bins - 11)), np.argmin(np.abs(freq_bins - 16)) + 1
+    freq_index_start, freq_index_stop = np.argmin(np.abs(freq_bins - frequency_band[0])), np.argmin(np.abs(freq_bins - frequency_band[1])) + 1
     psd_sigma_freq = psd[:, freq_index_start:freq_index_stop].sum(axis=1)
 
     # Calculate the total power by summing the PSD windows in the broadband signal excluding delta band
@@ -241,11 +241,11 @@ def relative_power_values(data, win_length_sec, win_step_sec, bsl_length_sec, sa
     return np.nanmean(relative_power_per_sample, axis=0)
 
 
-def covariance_values(data, win_length_sec, win_step_sec, bsl_length_sec, sample_rate):
+def covariance_values(data, win_length_sec, win_step_sec, bsl_length_sec, sample_rate, frequency_band):
     n_samples = data.shape[0]
 
     # Filter the sigma signal as bandpass filter from 11 to 16 Hz
-    sigma_data = butter_bandpass_filter(data, 11, 16, sample_rate, 20)
+    sigma_data = butter_bandpass_filter(data, frequency_band[0], frequency_band[1], sample_rate, 20)
 
     # Get matrix of sliding windows for broadband signal
     win_sample_matrix_raw = sample_to_win(data, win_length_sec, win_step_sec, sample_rate)
@@ -280,11 +280,11 @@ def covariance_values(data, win_length_sec, win_step_sec, bsl_length_sec, sample
     return np.nanmean(covariance_per_sample, axis=0)
 
 
-def correlation_values(data, win_length_sec, win_step_sec, sample_rate):
+def correlation_values(data, win_length_sec, win_step_sec, sample_rate, frequency_band):
     n_samples = data.shape[0]
 
     # Filter the sigma signal as bandpass filter from 11 to 16 Hz
-    sigma_data = butter_bandpass_filter(data, 11, 16, sample_rate, 20)
+    sigma_data = butter_bandpass_filter(data, frequency_band[0], frequency_band[1], sample_rate, 20)
 
     # Get matrix of sliding windows for broadband signal
     win_sample_matrix_raw = sample_to_win(data, win_length_sec, win_step_sec, sample_rate)

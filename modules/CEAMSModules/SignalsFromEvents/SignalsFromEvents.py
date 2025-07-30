@@ -49,6 +49,7 @@ See the file LICENCE for full license details.
 """
 
 from flowpipe import SciNode, InputPlug, OutputPlug
+from flowpipe.ActivationState import ActivationState
 import config
 from commons.NodeInputException import NodeInputException
 from CEAMSModules.PSGReader.SignalModel import SignalModel
@@ -204,6 +205,15 @@ class SignalsFromEvents(SciNode):
                 'signals_from_events': signals,
                 'epochs_to_process' : create_event_dataframe(None)
             }
+        
+        # It is possible to bypass the module by passing the input signals directly
+        # to the output signals without any modification
+        if self.activation_state == ActivationState.BYPASS:
+            return {
+                'signals_from_events': signals,
+                'epochs_to_process' : create_event_dataframe(None)
+            }    
+ 
 
         # split list to check on the events desired
         event_name = list(events_names.split(","))

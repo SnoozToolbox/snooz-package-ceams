@@ -37,14 +37,14 @@ def possible_spindle_indices(features, thresholds):
     # Return the (included) start indices and the (excluded) stop indices
     return start_stop_idx[:, 0], start_stop_idx[:, 1]
 
-
-def detect_spindles(data, thresholds, win_length_sec, win_step_sec, bsl_length_sec, sample_rate):
+# The frequency band is added to adjust the specific frequency band for the spindle detection, however I don't change the name of the features so they are still names with sigma in them.
+def detect_spindles(data, thresholds, win_length_sec, win_step_sec, bsl_length_sec, sample_rate, frequency_band):
 
     # Calculate the four features of the given data
-    a7_absolute_sigma_power = absolute_power_values(data, win_length_sec, win_step_sec, sample_rate)
-    a7_relative_sigma_power = relative_power_values(data, win_length_sec, win_step_sec, bsl_length_sec, sample_rate)
-    a7_sigma_covariance = covariance_values(data, win_length_sec, win_step_sec, bsl_length_sec, sample_rate)
-    a7_sigma_correlation = correlation_values(data, win_length_sec, win_step_sec, sample_rate)
+    a7_absolute_sigma_power = absolute_power_values(data, win_length_sec, win_step_sec, sample_rate, frequency_band)
+    a7_relative_sigma_power = relative_power_values(data, win_length_sec, win_step_sec, bsl_length_sec, sample_rate, frequency_band)
+    a7_sigma_covariance = covariance_values(data, win_length_sec, win_step_sec, bsl_length_sec, sample_rate, frequency_band)
+    a7_sigma_correlation = correlation_values(data, win_length_sec, win_step_sec, sample_rate, frequency_band)
 
     # Stack the features to a (n_samples, 4) matrix
     features = np.stack((a7_absolute_sigma_power, a7_relative_sigma_power, a7_sigma_covariance, a7_sigma_correlation),

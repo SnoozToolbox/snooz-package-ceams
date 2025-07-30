@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file ''
+## Form generated from reading UI file 'Ui_A7Settings.ui'
 ##
 ## Created by: Qt User Interface Compiler version 6.8.2
 ##
@@ -15,7 +15,7 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QFont, QFontDatabase, QGradient, QIcon,
     QImage, QKeySequence, QLinearGradient, QPainter,
     QPalette, QPixmap, QRadialGradient, QTransform)
-from PySide6.QtWidgets import (QAbstractScrollArea, QApplication, QDoubleSpinBox, QFormLayout,
+from PySide6.QtWidgets import (QAbstractScrollArea, QAbstractSpinBox, QApplication, QDoubleSpinBox,
     QFrame, QGridLayout, QHBoxLayout, QLabel,
     QLineEdit, QSizePolicy, QSpacerItem, QTextEdit,
     QVBoxLayout, QWidget)
@@ -25,7 +25,7 @@ class Ui_A7Settings(object):
     def setupUi(self, A7Settings):
         if not A7Settings.objectName():
             A7Settings.setObjectName(u"A7Settings")
-        A7Settings.resize(1103, 880)
+        A7Settings.resize(1125, 880)
         self.verticalLayout = QVBoxLayout(A7Settings)
         self.verticalLayout.setObjectName(u"verticalLayout")
         self.label_6 = QLabel(A7Settings)
@@ -43,7 +43,7 @@ class Ui_A7Settings(object):
         self.textEdit.setObjectName(u"textEdit")
         self.textEdit.setMinimumSize(QSize(0, 100))
         self.textEdit.setMaximumSize(QSize(16777215, 16777215))
-        self.textEdit.setFrameShape(QFrame.NoFrame)
+        self.textEdit.setFrameShape(QFrame.Shape.NoFrame)
         self.textEdit.setLineWidth(0)
         self.textEdit.setReadOnly(True)
 
@@ -53,14 +53,46 @@ class Ui_A7Settings(object):
 
         self.verticalLayout.addItem(self.verticalSpacer_2)
 
+        self.gridLayout_4 = QGridLayout()
+        self.gridLayout_4.setObjectName(u"gridLayout_4")
+        self.horizontalSpacer = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+
+        self.gridLayout_4.addItem(self.horizontalSpacer, 1, 1, 1, 1)
+
+        self.label_15 = QLabel(A7Settings)
+        self.label_15.setObjectName(u"label_15")
+
+        self.gridLayout_4.addWidget(self.label_15, 0, 2, 1, 1)
+
+        self.horizontalLayout_3 = QHBoxLayout()
+        self.horizontalLayout_3.setObjectName(u"horizontalLayout_3")
+        self.label_3 = QLabel(A7Settings)
+        self.label_3.setObjectName(u"label_3")
+        self.label_3.setMinimumSize(QSize(275, 0))
+        self.label_3.setMaximumSize(QSize(16777215, 16777215))
+
+        self.horizontalLayout_3.addWidget(self.label_3)
+
+        self.name_lineEdit = QLineEdit(A7Settings)
+        self.name_lineEdit.setObjectName(u"name_lineEdit")
+        self.name_lineEdit.setMinimumSize(QSize(120, 0))
+        self.name_lineEdit.setMaximumSize(QSize(120, 16777215))
+
+        self.horizontalLayout_3.addWidget(self.name_lineEdit)
+
+
+        self.gridLayout_4.addLayout(self.horizontalLayout_3, 2, 0, 1, 1)
+
+        self.horizontalSpacer_4 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+
+        self.gridLayout_4.addItem(self.horizontalSpacer_4, 1, 4, 1, 1)
+
         self.label = QLabel(A7Settings)
         self.label.setObjectName(u"label")
         self.label.setFont(font)
 
-        self.verticalLayout.addWidget(self.label)
+        self.gridLayout_4.addWidget(self.label, 0, 0, 1, 1)
 
-        self.formLayout_2 = QFormLayout()
-        self.formLayout_2.setObjectName(u"formLayout_2")
         self.horizontalLayout = QHBoxLayout()
         self.horizontalLayout.setObjectName(u"horizontalLayout")
         self.label_2 = QLabel(A7Settings)
@@ -83,41 +115,62 @@ class Ui_A7Settings(object):
         self.horizontalLayout.addWidget(self.group_lineEdit)
 
 
-        self.formLayout_2.setLayout(0, QFormLayout.LabelRole, self.horizontalLayout)
+        self.gridLayout_4.addLayout(self.horizontalLayout, 1, 0, 1, 1)
 
-        self.horizontalSpacer = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+        self.horizontalLayout_4 = QHBoxLayout()
+        self.horizontalLayout_4.setObjectName(u"horizontalLayout_4")
+        self.label_14 = QLabel(A7Settings)
+        self.label_14.setObjectName(u"label_14")
 
-        self.formLayout_2.setItem(0, QFormLayout.FieldRole, self.horizontalSpacer)
+        self.horizontalLayout_4.addWidget(self.label_14)
 
-        self.horizontalLayout_3 = QHBoxLayout()
-        self.horizontalLayout_3.setObjectName(u"horizontalLayout_3")
-        self.label_3 = QLabel(A7Settings)
-        self.label_3.setObjectName(u"label_3")
-        self.label_3.setMinimumSize(QSize(275, 0))
-        self.label_3.setMaximumSize(QSize(16777215, 16777215))
+        self.doubleSpinBox_Lower_Bound = QDoubleSpinBox(A7Settings)
+        self.doubleSpinBox_Lower_Bound.setObjectName(u"doubleSpinBox_Lower_Bound")
+        self.doubleSpinBox_Lower_Bound.setSingleStep(0.100000000000000)
+        self.doubleSpinBox_Lower_Bound.setStepType(QAbstractSpinBox.StepType.DefaultStepType)
+        self.doubleSpinBox_Lower_Bound.setValue(11.000000000000000)
 
-        self.horizontalLayout_3.addWidget(self.label_3)
-
-        self.name_lineEdit = QLineEdit(A7Settings)
-        self.name_lineEdit.setObjectName(u"name_lineEdit")
-        self.name_lineEdit.setMinimumSize(QSize(120, 0))
-        self.name_lineEdit.setMaximumSize(QSize(120, 16777215))
-
-        self.horizontalLayout_3.addWidget(self.name_lineEdit)
+        self.horizontalLayout_4.addWidget(self.doubleSpinBox_Lower_Bound)
 
 
-        self.formLayout_2.setLayout(1, QFormLayout.LabelRole, self.horizontalLayout_3)
+        self.gridLayout_4.addLayout(self.horizontalLayout_4, 1, 2, 1, 1)
 
-        self.horizontalSpacer_4 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+        self.horizontalLayout_5 = QHBoxLayout()
+        self.horizontalLayout_5.setObjectName(u"horizontalLayout_5")
+        self.label_16 = QLabel(A7Settings)
+        self.label_16.setObjectName(u"label_16")
 
-        self.formLayout_2.setItem(1, QFormLayout.FieldRole, self.horizontalSpacer_4)
+        self.horizontalLayout_5.addWidget(self.label_16)
+
+        self.doubleSpinBox_Upper_Bound = QDoubleSpinBox(A7Settings)
+        self.doubleSpinBox_Upper_Bound.setObjectName(u"doubleSpinBox_Upper_Bound")
+        self.doubleSpinBox_Upper_Bound.setSingleStep(0.100000000000000)
+        self.doubleSpinBox_Upper_Bound.setValue(16.000000000000000)
+
+        self.horizontalLayout_5.addWidget(self.doubleSpinBox_Upper_Bound)
 
 
-        self.verticalLayout.addLayout(self.formLayout_2)
+        self.gridLayout_4.addLayout(self.horizontalLayout_5, 2, 2, 1, 1)
+
+        self.horizontalSpacer_3 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+
+        self.gridLayout_4.addItem(self.horizontalSpacer_3, 1, 3, 1, 1)
+
+
+        self.verticalLayout.addLayout(self.gridLayout_4)
 
         self.verticalSpacer_3 = QSpacerItem(20, 34, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
 
         self.verticalLayout.addItem(self.verticalSpacer_3)
+
+        self.textEdit_6 = QTextEdit(A7Settings)
+        self.textEdit_6.setObjectName(u"textEdit_6")
+        self.textEdit_6.setMaximumSize(QSize(16777215, 65))
+        self.textEdit_6.setFrameShape(QFrame.Shape.NoFrame)
+        self.textEdit_6.setFrameShadow(QFrame.Shadow.Plain)
+        self.textEdit_6.setReadOnly(True)
+
+        self.verticalLayout.addWidget(self.textEdit_6)
 
         self.label_5 = QLabel(A7Settings)
         self.label_5.setObjectName(u"label_5")
@@ -129,31 +182,66 @@ class Ui_A7Settings(object):
         self.horizontalLayout_2.setObjectName(u"horizontalLayout_2")
         self.gridLayout = QGridLayout()
         self.gridLayout.setObjectName(u"gridLayout")
-        self.label_10 = QLabel(A7Settings)
-        self.label_10.setObjectName(u"label_10")
+        self.doubleSpinBox_relSigma = QDoubleSpinBox(A7Settings)
+        self.doubleSpinBox_relSigma.setObjectName(u"doubleSpinBox_relSigma")
+        self.doubleSpinBox_relSigma.setMaximum(30.000000000000000)
+        self.doubleSpinBox_relSigma.setSingleStep(0.100000000000000)
+        self.doubleSpinBox_relSigma.setValue(1.600000000000000)
 
-        self.gridLayout.addWidget(self.label_10, 0, 2, 1, 1)
-
-        self.textEdit_3 = QTextEdit(A7Settings)
-        self.textEdit_3.setObjectName(u"textEdit_3")
-        self.textEdit_3.setMinimumSize(QSize(400, 0))
-        self.textEdit_3.setSizeAdjustPolicy(QAbstractScrollArea.AdjustToContents)
-        self.textEdit_3.setReadOnly(True)
-
-        self.gridLayout.addWidget(self.textEdit_3, 2, 3, 1, 1)
+        self.gridLayout.addWidget(self.doubleSpinBox_relSigma, 1, 1, 1, 1)
 
         self.label_8 = QLabel(A7Settings)
         self.label_8.setObjectName(u"label_8")
 
         self.gridLayout.addWidget(self.label_8, 2, 0, 1, 1)
 
-        self.textEdit_2 = QTextEdit(A7Settings)
-        self.textEdit_2.setObjectName(u"textEdit_2")
-        self.textEdit_2.setMinimumSize(QSize(400, 0))
-        self.textEdit_2.setSizeAdjustPolicy(QAbstractScrollArea.AdjustToContents)
-        self.textEdit_2.setReadOnly(True)
+        self.label_11 = QLabel(A7Settings)
+        self.label_11.setObjectName(u"label_11")
 
-        self.gridLayout.addWidget(self.textEdit_2, 0, 3, 1, 1)
+        self.gridLayout.addWidget(self.label_11, 1, 2, 1, 1)
+
+        self.label_7 = QLabel(A7Settings)
+        self.label_7.setObjectName(u"label_7")
+        self.label_7.setMinimumSize(QSize(230, 0))
+        self.label_7.setMaximumSize(QSize(16777215, 16777215))
+
+        self.gridLayout.addWidget(self.label_7, 1, 0, 1, 1)
+
+        self.label_9 = QLabel(A7Settings)
+        self.label_9.setObjectName(u"label_9")
+
+        self.gridLayout.addWidget(self.label_9, 3, 0, 1, 1)
+
+        self.doubleSpinBox_sigmaCov = QDoubleSpinBox(A7Settings)
+        self.doubleSpinBox_sigmaCov.setObjectName(u"doubleSpinBox_sigmaCov")
+        self.doubleSpinBox_sigmaCov.setMaximum(30.000000000000000)
+        self.doubleSpinBox_sigmaCov.setSingleStep(0.100000000000000)
+        self.doubleSpinBox_sigmaCov.setValue(1.300000000000000)
+
+        self.gridLayout.addWidget(self.doubleSpinBox_sigmaCov, 2, 1, 1, 1)
+
+        self.label_13 = QLabel(A7Settings)
+        self.label_13.setObjectName(u"label_13")
+
+        self.gridLayout.addWidget(self.label_13, 3, 2, 1, 1)
+
+        self.label_10 = QLabel(A7Settings)
+        self.label_10.setObjectName(u"label_10")
+
+        self.gridLayout.addWidget(self.label_10, 0, 2, 1, 1)
+
+        self.doubleSpinBox_absSigma = QDoubleSpinBox(A7Settings)
+        self.doubleSpinBox_absSigma.setObjectName(u"doubleSpinBox_absSigma")
+        self.doubleSpinBox_absSigma.setSingleStep(0.250000000000000)
+        self.doubleSpinBox_absSigma.setValue(1.250000000000000)
+
+        self.gridLayout.addWidget(self.doubleSpinBox_absSigma, 0, 1, 1, 1)
+
+        self.label_4 = QLabel(A7Settings)
+        self.label_4.setObjectName(u"label_4")
+        self.label_4.setMinimumSize(QSize(275, 0))
+
+        self.gridLayout.addWidget(self.label_4, 0, 0, 1, 1)
 
         self.label_12 = QLabel(A7Settings)
         self.label_12.setObjectName(u"label_12")
@@ -167,80 +255,40 @@ class Ui_A7Settings(object):
 
         self.gridLayout.addWidget(self.doubleSpinBox_sigmaCor, 3, 1, 1, 1)
 
-        self.label_11 = QLabel(A7Settings)
-        self.label_11.setObjectName(u"label_11")
+        self.textEdit_2 = QTextEdit(A7Settings)
+        self.textEdit_2.setObjectName(u"textEdit_2")
+        self.textEdit_2.setMinimumSize(QSize(400, 0))
+        self.textEdit_2.setSizeAdjustPolicy(QAbstractScrollArea.SizeAdjustPolicy.AdjustToContents)
+        self.textEdit_2.setReadOnly(True)
 
-        self.gridLayout.addWidget(self.label_11, 1, 2, 1, 1)
-
-        self.textEdit_4 = QTextEdit(A7Settings)
-        self.textEdit_4.setObjectName(u"textEdit_4")
-        self.textEdit_4.setMinimumSize(QSize(400, 0))
-        self.textEdit_4.setSizeAdjustPolicy(QAbstractScrollArea.AdjustToContents)
-        self.textEdit_4.setReadOnly(True)
-
-        self.gridLayout.addWidget(self.textEdit_4, 3, 3, 1, 1)
+        self.gridLayout.addWidget(self.textEdit_2, 0, 3, 1, 1)
 
         self.textEdit_5 = QTextEdit(A7Settings)
         self.textEdit_5.setObjectName(u"textEdit_5")
         self.textEdit_5.setMinimumSize(QSize(400, 0))
-        self.textEdit_5.setSizeAdjustPolicy(QAbstractScrollArea.AdjustToContents)
+        self.textEdit_5.setSizeAdjustPolicy(QAbstractScrollArea.SizeAdjustPolicy.AdjustToContents)
         self.textEdit_5.setReadOnly(True)
 
         self.gridLayout.addWidget(self.textEdit_5, 1, 3, 1, 1)
 
-        self.label_13 = QLabel(A7Settings)
-        self.label_13.setObjectName(u"label_13")
+        self.textEdit_3 = QTextEdit(A7Settings)
+        self.textEdit_3.setObjectName(u"textEdit_3")
+        self.textEdit_3.setMinimumSize(QSize(400, 0))
+        self.textEdit_3.setSizeAdjustPolicy(QAbstractScrollArea.SizeAdjustPolicy.AdjustToContents)
+        self.textEdit_3.setReadOnly(True)
 
-        self.gridLayout.addWidget(self.label_13, 3, 2, 1, 1)
+        self.gridLayout.addWidget(self.textEdit_3, 2, 3, 1, 1)
 
-        self.doubleSpinBox_relSigma = QDoubleSpinBox(A7Settings)
-        self.doubleSpinBox_relSigma.setObjectName(u"doubleSpinBox_relSigma")
-        self.doubleSpinBox_relSigma.setMaximum(30.000000000000000)
-        self.doubleSpinBox_relSigma.setSingleStep(0.100000000000000)
-        self.doubleSpinBox_relSigma.setValue(1.600000000000000)
+        self.textEdit_4 = QTextEdit(A7Settings)
+        self.textEdit_4.setObjectName(u"textEdit_4")
+        self.textEdit_4.setMinimumSize(QSize(400, 0))
+        self.textEdit_4.setSizeAdjustPolicy(QAbstractScrollArea.SizeAdjustPolicy.AdjustToContents)
+        self.textEdit_4.setReadOnly(True)
 
-        self.gridLayout.addWidget(self.doubleSpinBox_relSigma, 1, 1, 1, 1)
-
-        self.label_9 = QLabel(A7Settings)
-        self.label_9.setObjectName(u"label_9")
-
-        self.gridLayout.addWidget(self.label_9, 3, 0, 1, 1)
-
-        self.label_7 = QLabel(A7Settings)
-        self.label_7.setObjectName(u"label_7")
-        self.label_7.setMinimumSize(QSize(230, 0))
-        self.label_7.setMaximumSize(QSize(16777215, 16777215))
-
-        self.gridLayout.addWidget(self.label_7, 1, 0, 1, 1)
-
-        self.doubleSpinBox_sigmaCov = QDoubleSpinBox(A7Settings)
-        self.doubleSpinBox_sigmaCov.setObjectName(u"doubleSpinBox_sigmaCov")
-        self.doubleSpinBox_sigmaCov.setMaximum(30.000000000000000)
-        self.doubleSpinBox_sigmaCov.setSingleStep(0.100000000000000)
-        self.doubleSpinBox_sigmaCov.setValue(1.300000000000000)
-
-        self.gridLayout.addWidget(self.doubleSpinBox_sigmaCov, 2, 1, 1, 1)
-
-        self.label_4 = QLabel(A7Settings)
-        self.label_4.setObjectName(u"label_4")
-        self.label_4.setMinimumSize(QSize(275, 0))
-        self.label_4.setMaximumSize(QSize(16777215, 16777215))
-
-        self.gridLayout.addWidget(self.label_4, 0, 0, 1, 1)
-
-        self.doubleSpinBox_absSigma = QDoubleSpinBox(A7Settings)
-        self.doubleSpinBox_absSigma.setObjectName(u"doubleSpinBox_absSigma")
-        self.doubleSpinBox_absSigma.setSingleStep(0.250000000000000)
-        self.doubleSpinBox_absSigma.setValue(1.250000000000000)
-
-        self.gridLayout.addWidget(self.doubleSpinBox_absSigma, 0, 1, 1, 1)
+        self.gridLayout.addWidget(self.textEdit_4, 3, 3, 1, 1)
 
 
         self.horizontalLayout_2.addLayout(self.gridLayout)
-
-        self.horizontalSpacer_2 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
-
-        self.horizontalLayout_2.addItem(self.horizontalSpacer_2)
 
 
         self.verticalLayout.addLayout(self.horizontalLayout_2)
@@ -260,54 +308,81 @@ class Ui_A7Settings(object):
         A7Settings.setStyleSheet(QCoreApplication.translate("A7Settings", u"font: 12pt \"Roboto\";", None))
         self.label_6.setText(QCoreApplication.translate("A7Settings", u"<html><head/><body><p><span style=\" font-weight:600;\">Spindle detector that emulates human scoring.</span></p></body></html>", None))
         self.textEdit.setHtml(QCoreApplication.translate("A7Settings", u"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
-"<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
+"<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset=\"utf-8\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
+"hr { height: 1px; border-width: 0; }\n"
+"li.unchecked::marker { content: \"\\2610\"; }\n"
+"li.checked::marker { content: \"\\2612\"; }\n"
 "</style></head><body style=\" font-family:'Roboto'; font-size:12pt; font-weight:400; font-style:normal;\">\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Computes the absolute (Mean Square) sigma (11\u201316 Hz) power, the relative sigma power with Power Spectral Analysis, the covariance and correlation between sigma filtered and the unfiltered EEG signal on sliding windows (0.3 sec length with a step of 0.1 sec). It then detects a spindle if the 4 features extracted from EEG exceed their respective threshold (1.25 \u03bcV2, 1.6 \u00d7 STD, 1.3 \u00d7 STD and 69%).</p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\""
-                        "><br /></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Computes the absolute (Mean Square) power in the specified frequency band, the relative band power with Power Spectral Analysis, the covariance and correlation between band-filtered and the unfiltered EEG signal on sliding windows (0.3 sec length with a step of 0.1 sec). It then detects a spindle if the 4 features extracted from EEG exceed their respective threshold (1.25 \u03bcV2, 1.6 \u00d7 STD, 1.3 "
+                        "\u00d7 STD and 69%).<br /><span style=\" font-weight:700;\">Note:</span> These thresholds are set for the default sigma band (11-16 Hz)</p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; line-height:135%;\"><span style=\" text-decoration: underline;\">Reference</span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; line-height:135%;\">[1] Lacourse, K., Delfrate, J., Beaudry, J., Peppard, P., Warby, S.C., 2019. A sleep spindle detection algorithm that emulates human expert spindle scoring. Journal of Neuroscience Methods 316, 3\u201311. <a href=\"https://doi.org/10.1016/j.jneumeth.2018.08.014\"><span style=\" text-decoration: underline; color:#0000ff;\">https://doi.org/10.1016/j.jneumeth.2018.08.014</span></a> </p></body></html>", None))
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; line-height:135%;\">[1] Lacourse, K., Delfrate, J., Beaudry, J., Peppard, P., Warby, S.C., 2019. A sleep spindle detection algorithm that emulates human expert spindle scoring. Journal of Neuroscience Methods 316, 3\u201311. <a href=\"https://doi.org/10.1016/j.jneumeth.2018.08.014\"><span style=\" text-decoration: underline; color:#0000ff;\">https://doi.org/10.1016/j.jneumeth.2018.08.014</"
+                        "span></a> </p></body></html>", None))
+        self.label_15.setText(QCoreApplication.translate("A7Settings", u"<html><head/><body><p><span style=\" font-weight:700;\">Detection Frequecny Band Settings</span></p></body></html>", None))
+        self.label_3.setText(QCoreApplication.translate("A7Settings", u"Name", None))
+#if QT_CONFIG(tooltip)
+        self.name_lineEdit.setToolTip(QCoreApplication.translate("A7Settings", u"Define the name of the spindle events.", None))
+#endif // QT_CONFIG(tooltip)
+        self.name_lineEdit.setText(QCoreApplication.translate("A7Settings", u"a7", None))
         self.label.setText(QCoreApplication.translate("A7Settings", u"<html><head/><body><p><span style=\" font-weight:600;\">Events Settings</span></p></body></html>", None))
         self.label_2.setText(QCoreApplication.translate("A7Settings", u"Group", None))
 #if QT_CONFIG(tooltip)
         self.group_lineEdit.setToolTip(QCoreApplication.translate("A7Settings", u"Define in which group the spindles will be added.", None))
 #endif // QT_CONFIG(tooltip)
         self.group_lineEdit.setText(QCoreApplication.translate("A7Settings", u"spindle", None))
-        self.label_3.setText(QCoreApplication.translate("A7Settings", u"Name", None))
-#if QT_CONFIG(tooltip)
-        self.name_lineEdit.setToolTip(QCoreApplication.translate("A7Settings", u"Define the name of the spindle events.", None))
-#endif // QT_CONFIG(tooltip)
-        self.name_lineEdit.setText(QCoreApplication.translate("A7Settings", u"a7", None))
+        self.label_14.setText(QCoreApplication.translate("A7Settings", u"Lower bound", None))
+        self.label_16.setText(QCoreApplication.translate("A7Settings", u"Upper bound", None))
+        self.textEdit_6.setHtml(QCoreApplication.translate("A7Settings", u"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
+"<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset=\"utf-8\" /><style type=\"text/css\">\n"
+"p, li { white-space: pre-wrap; }\n"
+"hr { height: 1px; border-width: 0; }\n"
+"li.unchecked::marker { content: \"\\2610\"; }\n"
+"li.checked::marker { content: \"\\2612\"; }\n"
+"</style></head><body style=\" font-family:'Roboto'; font-size:12pt; font-weight:400; font-style:normal;\">\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-weight:700;\">Warning:</span> The spindle detection thresholds are pre-set and validated specifically for the sigma frequency band (11-16 Hz). If you change the frequency band from the default values, you <span style=\" font-weight:700;\">must</span> define new thresholds to ensure accurate spindle detection.</p></body></html>", None))
         self.label_5.setText(QCoreApplication.translate("A7Settings", u"<html><head/><body><p><span style=\" font-weight:600;\">Thresholds</span></p></body></html>", None))
-        self.label_10.setText(QCoreApplication.translate("A7Settings", u"\u00b5V2", None))
-        self.textEdit_3.setHtml(QCoreApplication.translate("A7Settings", u"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
-"<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
-"p, li { white-space: pre-wrap; }\n"
-"</style></head><body style=\" font-family:'Roboto'; font-size:12pt; font-weight:400; font-style:normal;\">\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">z-score( log10( cov( EEG:0.3-30Hz, EEG:11-16Hz ) ) )</p></body></html>", None))
-        self.label_8.setText(QCoreApplication.translate("A7Settings", u"Sigma Covariance", None))
-        self.textEdit_2.setHtml(QCoreApplication.translate("A7Settings", u"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
-"<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
-"p, li { white-space: pre-wrap; }\n"
-"</style></head><body style=\" font-family:'Roboto'; font-size:12pt; font-weight:400; font-style:normal;\">\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">log10( mean squared sigma power )</p></body></html>", None))
-        self.label_12.setText(QCoreApplication.translate("A7Settings", u"x STD", None))
+        self.label_8.setText(QCoreApplication.translate("A7Settings", u"Specified Frequency Band Covariance", None))
         self.label_11.setText(QCoreApplication.translate("A7Settings", u"x STD", None))
-        self.textEdit_4.setHtml(QCoreApplication.translate("A7Settings", u"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
-"<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
-"p, li { white-space: pre-wrap; }\n"
-"</style></head><body style=\" font-family:'Roboto'; font-size:12pt; font-weight:400; font-style:normal;\">\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" text-decoration: underline;\">cov ( EEG:0.3-30Hz, EEG:11-16Hz )  </span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">std(EEG:0.3-30Hz) * std(EEG:11-16Hz)</p></body></html>", None))
-        self.textEdit_5.setHtml(QCoreApplication.translate("A7Settings", u"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
-"<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
-"p, li { white-space: pre-wrap; }\n"
-"</style></head><body style=\" font-family:'Roboto'; font-size:12pt; font-weight:400; font-style:normal;\">\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">z-score( log10( PSA:11-16Hz/PSA:4.5-30Hz ) )</p></body></html>", None))
+        self.label_7.setText(QCoreApplication.translate("A7Settings", u"Relative Band Power", None))
+        self.label_9.setText(QCoreApplication.translate("A7Settings", u"Specified Frequency Band Correlation", None))
         self.label_13.setText(QCoreApplication.translate("A7Settings", u"%", None))
-        self.label_9.setText(QCoreApplication.translate("A7Settings", u"Sigma Correlation", None))
-        self.label_7.setText(QCoreApplication.translate("A7Settings", u"Relative Sigma Power", None))
-        self.label_4.setText(QCoreApplication.translate("A7Settings", u"Absolute (Mean Square) Sigma Power", None))
+        self.label_10.setText(QCoreApplication.translate("A7Settings", u"\u00b5V2", None))
+        self.label_4.setText(QCoreApplication.translate("A7Settings", u"Absolute Power in Specified Frequency Band", None))
+        self.label_12.setText(QCoreApplication.translate("A7Settings", u"x STD", None))
+        self.textEdit_2.setHtml(QCoreApplication.translate("A7Settings", u"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
+"<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset=\"utf-8\" /><style type=\"text/css\">\n"
+"p, li { white-space: pre-wrap; }\n"
+"hr { height: 1px; border-width: 0; }\n"
+"li.unchecked::marker { content: \"\\2610\"; }\n"
+"li.checked::marker { content: \"\\2612\"; }\n"
+"</style></head><body style=\" font-family:'Roboto'; font-size:12pt; font-weight:400; font-style:normal;\">\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">log10( mean squared band power )</p></body></html>", None))
+        self.textEdit_5.setHtml(QCoreApplication.translate("A7Settings", u"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
+"<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset=\"utf-8\" /><style type=\"text/css\">\n"
+"p, li { white-space: pre-wrap; }\n"
+"hr { height: 1px; border-width: 0; }\n"
+"li.unchecked::marker { content: \"\\2610\"; }\n"
+"li.checked::marker { content: \"\\2612\"; }\n"
+"</style></head><body style=\" font-family:'Roboto'; font-size:12pt; font-weight:400; font-style:normal;\">\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">z-score( log10( PSA: desired frequency band Hz/PSA:4.5-30Hz ) )</p></body></html>", None))
+        self.textEdit_3.setHtml(QCoreApplication.translate("A7Settings", u"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
+"<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset=\"utf-8\" /><style type=\"text/css\">\n"
+"p, li { white-space: pre-wrap; }\n"
+"hr { height: 1px; border-width: 0; }\n"
+"li.unchecked::marker { content: \"\\2610\"; }\n"
+"li.checked::marker { content: \"\\2612\"; }\n"
+"</style></head><body style=\" font-family:'Roboto'; font-size:12pt; font-weight:400; font-style:normal;\">\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">z-score( log10( cov( EEG:0.3-30Hz, EEG: desired frequency band Hz ) ) )</p></body></html>", None))
+        self.textEdit_4.setHtml(QCoreApplication.translate("A7Settings", u"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
+"<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset=\"utf-8\" /><style type=\"text/css\">\n"
+"p, li { white-space: pre-wrap; }\n"
+"hr { height: 1px; border-width: 0; }\n"
+"li.unchecked::marker { content: \"\\2610\"; }\n"
+"li.checked::marker { content: \"\\2612\"; }\n"
+"</style></head><body style=\" font-family:'Roboto'; font-size:12pt; font-weight:400; font-style:normal;\">\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" text-decoration: underline;\">cov ( EEG:0.3-30Hz, EEG: desired frequency band Hz )  </span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">std(EEG:0.3-30Hz) * std(EEG:desired frequency band Hz)</p></body></html>", None))
     # retranslateUi
 

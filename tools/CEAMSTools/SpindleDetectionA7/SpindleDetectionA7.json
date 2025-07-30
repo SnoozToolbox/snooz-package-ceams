@@ -1,7 +1,7 @@
 {
     "item_name": "SpindleDetectionA7",
     "item_type": "tool",
-    "item_api_version": "2.0.0",
+    "item_api_version": "3.0.0",
     "item_url": "https://snooz-toolbox-documentation.readthedocs.io/latest/user_guide/tools/Processing/Spindle_detection_A7.html#spindle-detection-a7",
     "item_author": "",
     "item_description": "",
@@ -2750,6 +2750,15 @@
                         "connections": {
                             "1301746b-9bd8-4829-b0c7-15c25e933685": "events_selected"
                         }
+                    },
+                    "frequency_band": {
+                        "name": "frequency_band",
+                        "value": {
+                            "low": 11,
+                            "high": 16
+                        },
+                        "sub_plugs": {},
+                        "connections": {}
                     }
                 },
                 "outputs": {
