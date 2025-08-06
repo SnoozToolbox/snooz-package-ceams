@@ -19,7 +19,7 @@ from PySide6.QtWidgets import (QApplication, QFormLayout, QFrame, QGridLayout,
     QHBoxLayout, QLabel, QLineEdit, QScrollArea,
     QSizePolicy, QSpacerItem, QSplitter, QTextEdit,
     QVBoxLayout, QWidget)
-from . import PowerLine_res_rc
+from . import PowerLine_res
 import themes_rc
 
 class Ui_PowerLineStep(object):

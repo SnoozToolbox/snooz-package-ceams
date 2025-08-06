@@ -26,7 +26,7 @@ class SleepStageSelStep(BaseStepView, Ui_SleepStageSelStep, QtWidgets.QWidget):
         self.setupUi(self)
 
         # Sleep Stage Events selection
-        self.stages_sel = '1,2,3,5'
+        self.stages_sel = '1,2,3'
         self._node_id_sleep_stages = "d7196198-e2f9-432c-9134-c825e7a19193"
         self._sleep_stage_topic = f'{self._node_id_sleep_stages}.stages'
         self._pub_sub_manager.subscribe(self, self._sleep_stage_topic)
