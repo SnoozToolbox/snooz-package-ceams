@@ -116,7 +116,7 @@ class InputFilesStep(BaseStepView, Ui_InputFilesStep, QtWidgets.QWidget):
                 except pd.errors.ParserError:
                     file_result['errors'].append("Failed to parse CSV (check file format or delimiter)")
                 except ValueError as e:
-                    file_result['errors'].append(f"Error reading columns: {str(e)}")
+                    file_result['errors'].append(f"Error reading columns: Usecols do not match columns, columns format expected but not found: ['Onset', 'Duration', 'Annotation']")
                 except Exception as e:
                     file_result['errors'].append(f"Unexpected error: {str(e)}")
                 

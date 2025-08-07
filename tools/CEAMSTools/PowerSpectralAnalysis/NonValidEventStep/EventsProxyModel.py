@@ -101,3 +101,44 @@ class EventsProxyModel(QtCore.QSortFilterProxyModel):
     @selection.setter
     def selection(self, value):
         self._selection = value
+
+    def count_checked_items_cohort(self):
+        def count_checked_recursive(item):
+            name_checked = 0
+            group_checked = 0
+            for row in range(item.rowCount()):
+                child = item.child(row)
+                if child.isCheckable() and child.checkState() == QtCore.Qt.Checked:
+                    if not child.hasChildren() and (not child in childlist):
+                        name_checked += 1
+                        childlist.append(child.text())
+                    if child.hasChildren() and (not child in childlist):
+                        group_checked += 1
+                        childlist.append(child.text())
+                # Recurse into deeper levels if needed
+                child_name_checked, child_group_checked = count_checked_recursive(child)
+                name_checked += child_name_checked
+                group_checked += child_group_checked
+            return name_checked, group_checked
+
+        total_name_checked = 0
+        total_group_checked = 0
+        childlist = []
+        top_item_list = []
+        model = self.sourceModel()
+        if model is not None:
+            for row in range(model.rowCount()):
+                top_item = model.item(row)
+                if top_item is not None:
+                    if top_item.isCheckable() and top_item.checkState() == QtCore.Qt.Checked:
+                        if not top_item.hasChildren() and (not top_item in top_item_list):
+                            total_name_checked += 1
+                            top_item_list.append(top_item.text())
+                        if top_item.hasChildren() and (not top_item in top_item_list):
+                            total_group_checked += 1
+                            top_item_list.append(top_item.text())
+                    top_item_total_name_checked, top_item_total_group_checked = count_checked_recursive(top_item)
+                    total_name_checked += top_item_total_name_checked
+                    total_group_checked += top_item_total_group_checked
+
+        return total_name_checked, total_group_checked

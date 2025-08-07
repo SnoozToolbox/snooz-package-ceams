@@ -209,7 +209,8 @@ class StadeSelection( BaseStepView,  Ui_StadeSelection, QtWidgets.QWidget):
     # The input parameter item is the one changed
     def on_item_changed(self, item):
         self._context_manager[self.context_event_sel_def] = self.files_check_event_model
-
+        num_checked = self.event_proxy_model.count_checked_items()
+        self.updateLabel_Events(num_checked)
 
     # Called when the user select a file in the PSG Files list
     def on_file_selected(self):
@@ -330,3 +331,6 @@ class StadeSelection( BaseStepView,  Ui_StadeSelection, QtWidgets.QWidget):
         files_model.setHeaderData(1, QtCore.Qt.Horizontal, 'Count')
         files_model.setHorizontalHeaderLabels(['Group-Name', 'Count'])
         return files_model
+
+    def updateLabel_Events(self, count):
+        self.label_2.setText(f"Events ({count})")

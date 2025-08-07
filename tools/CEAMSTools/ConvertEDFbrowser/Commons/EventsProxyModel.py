@@ -61,3 +61,26 @@ class EventsProxyModel(QtCore.QSortFilterProxyModel):
     @selection.setter
     def selection(self, value):
         self._selection = value
+
+    def count_checked_items(self):
+        def count_checked_recursive(item):
+            checked = 0
+            for row in range(item.rowCount()):
+                child = item.child(row)
+                if child.isCheckable() and child.checkState() == QtCore.Qt.Checked:
+                    checked += 1
+                # Recurse into deeper levels if needed
+                checked += count_checked_recursive(child)
+            return checked
+
+        total_checked = 0
+        model = self.sourceModel()
+        if model is not None:
+            for row in range(model.rowCount()):
+                top_item = model.item(row)
+                if top_item is not None:
+                    if top_item.isCheckable() and top_item.checkState() == QtCore.Qt.Checked:
+                        total_checked += 1
+                    total_checked += count_checked_recursive(top_item)
+
+        return total_checked

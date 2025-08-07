@@ -105,6 +105,9 @@ class EditorStep(BaseStepView, Ui_EditorStep, QtWidgets.QWidget):
                 self.treeView_cohort.resizeColumnToContents(0)
                 # Select/show the first file if any
                 self.select_first_file()
+                # Update the label with the number of checked items
+                num_name_checked, num_group_checked = self.count_checked_items_cohort()
+                self.updateLabel_Events_cohort(num_name_checked, num_group_checked)
 
 
     def try_disconnect_UI(self):
@@ -284,6 +287,9 @@ class EditorStep(BaseStepView, Ui_EditorStep, QtWidgets.QWidget):
         # Fill the cohort tree widget with the modifications    
         self.update_editable_cohort_model()
 
+        num_name_checked, num_group_checked = self.count_checked_items_cohort()
+        self.updateLabel_Events_cohort(num_name_checked, num_group_checked)
+
 
     # Called when the user checked\unchecked a group/name or edit a group/name
     #   in the cohort window
@@ -375,6 +381,9 @@ class EditorStep(BaseStepView, Ui_EditorStep, QtWidgets.QWidget):
         #   self.update_editable_cohort_model()   
         self.files_editable_cohort_model.itemChanged.connect(self.item_changed_cohort_slot)
         self.files_editable_subject_model.itemChanged.connect(self.on_item_changed)
+
+        num_name_checked, num_group_checked = self.count_checked_items_cohort()
+        self.updateLabel_Events_cohort(num_name_checked, num_group_checked)
         
 
     # Function to update the dict_rename from the modified subject item 
@@ -648,3 +657,50 @@ class EditorStep(BaseStepView, Ui_EditorStep, QtWidgets.QWidget):
             table_df = pd.DataFrame(None,columns=['group', 'name', 'file'])
         table_drop_msg = TableDialog(df=table_df, title="Annotations to remove",message="Those annotations will be removed at runtime.", showDownloadButton=True)
         table_drop_msg.exec_()
+
+    
+    def count_checked_items_cohort(self):
+        def count_checked_recursive(item):
+            name_checked = 0
+            group_checked = 0
+            for row in range(item.rowCount()):
+                child = item.child(row)
+                if child.isCheckable() and child.checkState() == QtCore.Qt.Checked:
+                    if not child.hasChildren() and (not child in childlist):
+                        name_checked += 1
+                        childlist.append(child.text())
+                    if child.hasChildren() and (not child in childlist):
+                        group_checked += 1
+                        childlist.append(child.text())
+                # Recurse into deeper levels if needed
+                child_name_checked, child_group_checked = count_checked_recursive(child)
+                name_checked += child_name_checked
+                group_checked += child_group_checked
+            return name_checked, group_checked
+
+        total_name_checked = 0
+        total_group_checked = 0
+        childlist = []
+        top_item_list = []
+        model = self.files_editable_cohort_model
+        if model is not None:
+            for row in range(model.rowCount()):
+                top_item = model.item(row)
+                if top_item is not None:
+                    if top_item.isCheckable() and top_item.checkState() == QtCore.Qt.Checked:
+                        if not top_item.hasChildren() and (not top_item in top_item_list):
+                            total_name_checked += 1
+                            top_item_list.append(top_item.text())
+                        if top_item.hasChildren() and (not top_item in top_item_list):
+                            total_group_checked += 1
+                            top_item_list.append(top_item.text())
+                    top_item_total_name_checked, top_item_total_group_checked = count_checked_recursive(top_item)
+                    total_name_checked += top_item_total_name_checked
+                    total_group_checked += top_item_total_group_checked
+
+        return total_name_checked, total_group_checked
+        
+
+    def updateLabel_Events_cohort(self, count_name, count_group):
+        #self.label_2.setText(f"Events from selection (group:{count_group}, name:{count_name})")
+        self.label_3.setText(f"Events from cohort (group:{count_group}, name:{count_name})")

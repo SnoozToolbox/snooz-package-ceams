@@ -281,6 +281,9 @@ class AnnotationsSelection( BaseStepView,  Ui_NonValidEventStep, QtWidgets.QWidg
             if not self._validate_model_from_ref(self.files_model, self.files_check_event_model):
                 print("Model corrupted after the on_item_changed")
 
+        num_name_checked, num_group_checked = self.event_proxy_model.count_checked_items_cohort()
+        self.updateLabel_Events_cohort(num_name_checked, num_group_checked)
+
 
     # Called when the user select a file in the PSG Files list
     def on_file_selected(self):
@@ -441,3 +444,6 @@ class AnnotationsSelection( BaseStepView,  Ui_NonValidEventStep, QtWidgets.QWidg
                         print(f"{filename} : reference name {name_item_ref.text()} is different in checkable model = {name_item_test.text()}")
                         return False
         return True
+    
+    def updateLabel_Events_cohort(self, count_name, count_group):
+        self.label_2.setText(f"Events (group:{count_group}, name:{count_name})")
