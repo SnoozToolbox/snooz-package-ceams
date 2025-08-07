@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file ''
+## Form generated from reading UI file 'Ui_MuscularStep.ui'
 ##
 ## Created by: Qt User Interface Compiler version 6.8.2
 ##
@@ -16,8 +16,9 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QImage, QKeySequence, QLinearGradient, QPainter,
     QPalette, QPixmap, QRadialGradient, QTransform)
 from PySide6.QtWidgets import (QApplication, QFormLayout, QFrame, QGridLayout,
-    QHBoxLayout, QLabel, QLineEdit, QScrollArea,
-    QSizePolicy, QTextEdit, QVBoxLayout, QWidget)
+    QHBoxLayout, QLabel, QLayout, QLineEdit,
+    QScrollArea, QSizePolicy, QSpacerItem, QTextEdit,
+    QVBoxLayout, QWidget)
 from . import muscular_res
 import themes_rc
 
@@ -25,40 +26,54 @@ class Ui_MuscularStep(object):
     def setupUi(self, MuscularStep):
         if not MuscularStep.objectName():
             MuscularStep.setObjectName(u"MuscularStep")
-        MuscularStep.resize(1114, 885)
+        MuscularStep.resize(1317, 748)
         MuscularStep.setStyleSheet(u"font: 12pt \"Roboto\";")
-        self.verticalLayout_4 = QVBoxLayout(MuscularStep)
-        self.verticalLayout_4.setObjectName(u"verticalLayout_4")
+        self.verticalLayout_2 = QVBoxLayout(MuscularStep)
+        self.verticalLayout_2.setObjectName(u"verticalLayout_2")
         self.scrollArea = QScrollArea(MuscularStep)
         self.scrollArea.setObjectName(u"scrollArea")
-        sizePolicy = QSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Preferred)
+        sizePolicy = QSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.scrollArea.sizePolicy().hasHeightForWidth())
         self.scrollArea.setSizePolicy(sizePolicy)
+        self.scrollArea.setMaximumSize(QSize(16777215, 160))
         self.scrollArea.setWidgetResizable(True)
         self.scrollAreaWidgetContents = QWidget()
         self.scrollAreaWidgetContents.setObjectName(u"scrollAreaWidgetContents")
         self.scrollAreaWidgetContents.setGeometry(QRect(0, 0, 1549, 151))
+        sizePolicy.setHeightForWidth(self.scrollAreaWidgetContents.sizePolicy().hasHeightForWidth())
+        self.scrollAreaWidgetContents.setSizePolicy(sizePolicy)
+        self.scrollAreaWidgetContents.setMaximumSize(QSize(16777215, 160))
         self.horizontalLayout = QHBoxLayout(self.scrollAreaWidgetContents)
         self.horizontalLayout.setObjectName(u"horizontalLayout")
         self.picture_label = QLabel(self.scrollAreaWidgetContents)
         self.picture_label.setObjectName(u"picture_label")
-        sizePolicy.setHeightForWidth(self.picture_label.sizePolicy().hasHeightForWidth())
-        self.picture_label.setSizePolicy(sizePolicy)
+        sizePolicy1 = QSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Preferred)
+        sizePolicy1.setHorizontalStretch(0)
+        sizePolicy1.setVerticalStretch(0)
+        sizePolicy1.setHeightForWidth(self.picture_label.sizePolicy().hasHeightForWidth())
+        self.picture_label.setSizePolicy(sizePolicy1)
+        self.picture_label.setMaximumSize(QSize(16777215, 160))
         self.picture_label.setPixmap(QPixmap(u":/muscular/muscular.png"))
-        self.picture_label.setAlignment(Qt.AlignCenter)
+        self.picture_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
         self.horizontalLayout.addWidget(self.picture_label)
 
         self.scrollArea.setWidget(self.scrollAreaWidgetContents)
 
-        self.verticalLayout_4.addWidget(self.scrollArea)
+        self.verticalLayout_2.addWidget(self.scrollArea)
 
         self.verticalLayout_3 = QVBoxLayout()
         self.verticalLayout_3.setObjectName(u"verticalLayout_3")
+        self.verticalLayout_3.setSizeConstraint(QLayout.SizeConstraint.SetMinimumSize)
         self.label_9 = QLabel(MuscularStep)
         self.label_9.setObjectName(u"label_9")
+        sizePolicy2 = QSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Fixed)
+        sizePolicy2.setHorizontalStretch(0)
+        sizePolicy2.setVerticalStretch(0)
+        sizePolicy2.setHeightForWidth(self.label_9.sizePolicy().hasHeightForWidth())
+        self.label_9.setSizePolicy(sizePolicy2)
         font = QFont()
         font.setFamilies([u"Roboto"])
         font.setPointSize(12)
@@ -68,48 +83,39 @@ class Ui_MuscularStep(object):
 
         self.verticalLayout_3.addWidget(self.label_9)
 
-        self.line_3 = QFrame(MuscularStep)
-        self.line_3.setObjectName(u"line_3")
-        self.line_3.setFrameShape(QFrame.Shape.HLine)
-        self.line_3.setFrameShadow(QFrame.Shadow.Sunken)
-
-        self.verticalLayout_3.addWidget(self.line_3)
-
         self.description_textEdit = QTextEdit(MuscularStep)
         self.description_textEdit.setObjectName(u"description_textEdit")
-        sizePolicy.setHeightForWidth(self.description_textEdit.sizePolicy().hasHeightForWidth())
-        self.description_textEdit.setSizePolicy(sizePolicy)
+        sizePolicy3 = QSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Maximum)
+        sizePolicy3.setHorizontalStretch(0)
+        sizePolicy3.setVerticalStretch(0)
+        sizePolicy3.setHeightForWidth(self.description_textEdit.sizePolicy().hasHeightForWidth())
+        self.description_textEdit.setSizePolicy(sizePolicy3)
+        self.description_textEdit.setMaximumSize(QSize(16777215, 195))
         self.description_textEdit.setStyleSheet(u"")
-        self.description_textEdit.setFrameShape(QFrame.HLine)
-        self.description_textEdit.setFrameShadow(QFrame.Plain)
+        self.description_textEdit.setFrameShape(QFrame.Shape.NoFrame)
+        self.description_textEdit.setFrameShadow(QFrame.Shadow.Plain)
         self.description_textEdit.setLineWidth(0)
         self.description_textEdit.setReadOnly(True)
 
         self.verticalLayout_3.addWidget(self.description_textEdit)
 
 
-        self.verticalLayout_4.addLayout(self.verticalLayout_3)
+        self.verticalLayout_2.addLayout(self.verticalLayout_3)
 
         self.horizontalLayout_2 = QHBoxLayout()
         self.horizontalLayout_2.setObjectName(u"horizontalLayout_2")
-        self.verticalLayout_2 = QVBoxLayout()
-        self.verticalLayout_2.setObjectName(u"verticalLayout_2")
         self.verticalLayout = QVBoxLayout()
         self.verticalLayout.setObjectName(u"verticalLayout")
+        self.verticalLayout.setSizeConstraint(QLayout.SizeConstraint.SetMinimumSize)
         self.label_4 = QLabel(MuscularStep)
         self.label_4.setObjectName(u"label_4")
+        sizePolicy2.setHeightForWidth(self.label_4.sizePolicy().hasHeightForWidth())
+        self.label_4.setSizePolicy(sizePolicy2)
         self.label_4.setMinimumSize(QSize(0, 20))
         self.label_4.setMaximumSize(QSize(16777215, 20))
         self.label_4.setFont(font)
 
         self.verticalLayout.addWidget(self.label_4)
-
-        self.line = QFrame(MuscularStep)
-        self.line.setObjectName(u"line")
-        self.line.setFrameShape(QFrame.Shape.HLine)
-        self.line.setFrameShadow(QFrame.Shadow.Sunken)
-
-        self.verticalLayout.addWidget(self.line)
 
         self.formLayout = QFormLayout()
         self.formLayout.setObjectName(u"formLayout")
@@ -154,6 +160,7 @@ class Ui_MuscularStep(object):
         self.label_7 = QLabel(MuscularStep)
         self.label_7.setObjectName(u"label_7")
         self.label_7.setMinimumSize(QSize(140, 0))
+        self.label_7.setMaximumSize(QSize(170, 16777215))
         self.label_7.setFont(font)
 
         self.formLayout.setWidget(2, QFormLayout.LabelRole, self.label_7)
@@ -161,16 +168,13 @@ class Ui_MuscularStep(object):
 
         self.verticalLayout.addLayout(self.formLayout)
 
-
-        self.verticalLayout_2.addLayout(self.verticalLayout)
-
         self.label = QLabel(MuscularStep)
         self.label.setObjectName(u"label")
         self.label.setMinimumSize(QSize(0, 20))
         self.label.setMaximumSize(QSize(16777215, 20))
         self.label.setFont(font)
 
-        self.verticalLayout_2.addWidget(self.label)
+        self.verticalLayout.addWidget(self.label)
 
         self.label_8 = QLabel(MuscularStep)
         self.label_8.setObjectName(u"label_8")
@@ -178,33 +182,26 @@ class Ui_MuscularStep(object):
         self.label_8.setMaximumSize(QSize(16777215, 20))
         self.label_8.setFont(font)
 
-        self.verticalLayout_2.addWidget(self.label_8)
-
-        self.line_2 = QFrame(MuscularStep)
-        self.line_2.setObjectName(u"line_2")
-        self.line_2.setFrameShape(QFrame.Shape.HLine)
-        self.line_2.setFrameShadow(QFrame.Shadow.Sunken)
-
-        self.verticalLayout_2.addWidget(self.line_2)
+        self.verticalLayout.addWidget(self.label_8)
 
         self.gridLayout = QGridLayout()
         self.gridLayout.setObjectName(u"gridLayout")
+        self.gridLayout.setSizeConstraint(QLayout.SizeConstraint.SetMinimumSize)
         self.label_5 = QLabel(MuscularStep)
         self.label_5.setObjectName(u"label_5")
-        self.label_5.setMinimumSize(QSize(0, 0))
+        sizePolicy2.setHeightForWidth(self.label_5.sizePolicy().hasHeightForWidth())
+        self.label_5.setSizePolicy(sizePolicy2)
+        self.label_5.setMinimumSize(QSize(230, 0))
         self.label_5.setFont(font)
         self.label_5.setMidLineWidth(0)
-        self.label_5.setTextFormat(Qt.RichText)
+        self.label_5.setTextFormat(Qt.TextFormat.RichText)
 
         self.gridLayout.addWidget(self.label_5, 0, 0, 1, 1)
 
         self.EEG_lineEdit = QLineEdit(MuscularStep)
         self.EEG_lineEdit.setObjectName(u"EEG_lineEdit")
-        sizePolicy1 = QSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
-        sizePolicy1.setHorizontalStretch(0)
-        sizePolicy1.setVerticalStretch(0)
-        sizePolicy1.setHeightForWidth(self.EEG_lineEdit.sizePolicy().hasHeightForWidth())
-        self.EEG_lineEdit.setSizePolicy(sizePolicy1)
+        sizePolicy2.setHeightForWidth(self.EEG_lineEdit.sizePolicy().hasHeightForWidth())
+        self.EEG_lineEdit.setSizePolicy(sizePolicy2)
         self.EEG_lineEdit.setMaximumSize(QSize(100, 16777215))
         self.EEG_lineEdit.setFont(font)
 
@@ -212,11 +209,16 @@ class Ui_MuscularStep(object):
 
         self.label_10 = QLabel(MuscularStep)
         self.label_10.setObjectName(u"label_10")
+        sizePolicy2.setHeightForWidth(self.label_10.sizePolicy().hasHeightForWidth())
+        self.label_10.setSizePolicy(sizePolicy2)
+        self.label_10.setMaximumSize(QSize(210, 16777215))
 
         self.gridLayout.addWidget(self.label_10, 0, 2, 1, 1)
 
         self.label_2 = QLabel(MuscularStep)
         self.label_2.setObjectName(u"label_2")
+        sizePolicy2.setHeightForWidth(self.label_2.sizePolicy().hasHeightForWidth())
+        self.label_2.setSizePolicy(sizePolicy2)
         self.label_2.setMinimumSize(QSize(0, 0))
         self.label_2.setFont(font)
 
@@ -224,8 +226,8 @@ class Ui_MuscularStep(object):
 
         self.EMG_lineEdit = QLineEdit(MuscularStep)
         self.EMG_lineEdit.setObjectName(u"EMG_lineEdit")
-        sizePolicy1.setHeightForWidth(self.EMG_lineEdit.sizePolicy().hasHeightForWidth())
-        self.EMG_lineEdit.setSizePolicy(sizePolicy1)
+        sizePolicy2.setHeightForWidth(self.EMG_lineEdit.sizePolicy().hasHeightForWidth())
+        self.EMG_lineEdit.setSizePolicy(sizePolicy2)
         self.EMG_lineEdit.setMaximumSize(QSize(100, 16777215))
         self.EMG_lineEdit.setFont(font)
 
@@ -233,19 +235,24 @@ class Ui_MuscularStep(object):
 
         self.label_12 = QLabel(MuscularStep)
         self.label_12.setObjectName(u"label_12")
+        sizePolicy2.setHeightForWidth(self.label_12.sizePolicy().hasHeightForWidth())
+        self.label_12.setSizePolicy(sizePolicy2)
+        self.label_12.setMaximumSize(QSize(210, 16777215))
 
         self.gridLayout.addWidget(self.label_12, 1, 2, 1, 1)
 
         self.label_6 = QLabel(MuscularStep)
         self.label_6.setObjectName(u"label_6")
+        sizePolicy2.setHeightForWidth(self.label_6.sizePolicy().hasHeightForWidth())
+        self.label_6.setSizePolicy(sizePolicy2)
         self.label_6.setFont(font)
 
         self.gridLayout.addWidget(self.label_6, 2, 0, 1, 1)
 
         self.both_lineEdit = QLineEdit(MuscularStep)
         self.both_lineEdit.setObjectName(u"both_lineEdit")
-        sizePolicy1.setHeightForWidth(self.both_lineEdit.sizePolicy().hasHeightForWidth())
-        self.both_lineEdit.setSizePolicy(sizePolicy1)
+        sizePolicy2.setHeightForWidth(self.both_lineEdit.sizePolicy().hasHeightForWidth())
+        self.both_lineEdit.setSizePolicy(sizePolicy2)
         self.both_lineEdit.setMaximumSize(QSize(100, 16777215))
         self.both_lineEdit.setFont(font)
 
@@ -253,42 +260,53 @@ class Ui_MuscularStep(object):
 
         self.label_13 = QLabel(MuscularStep)
         self.label_13.setObjectName(u"label_13")
+        sizePolicy2.setHeightForWidth(self.label_13.sizePolicy().hasHeightForWidth())
+        self.label_13.setSizePolicy(sizePolicy2)
+        self.label_13.setMaximumSize(QSize(210, 16777215))
 
         self.gridLayout.addWidget(self.label_13, 2, 2, 1, 1)
 
 
-        self.verticalLayout_2.addLayout(self.gridLayout)
+        self.verticalLayout.addLayout(self.gridLayout)
 
         self.label_14 = QLabel(MuscularStep)
         self.label_14.setObjectName(u"label_14")
+        sizePolicy2.setHeightForWidth(self.label_14.sizePolicy().hasHeightForWidth())
+        self.label_14.setSizePolicy(sizePolicy2)
 
-        self.verticalLayout_2.addWidget(self.label_14)
+        self.verticalLayout.addWidget(self.label_14)
 
         self.label_15 = QLabel(MuscularStep)
         self.label_15.setObjectName(u"label_15")
+        sizePolicy2.setHeightForWidth(self.label_15.sizePolicy().hasHeightForWidth())
+        self.label_15.setSizePolicy(sizePolicy2)
 
-        self.verticalLayout_2.addWidget(self.label_15)
+        self.verticalLayout.addWidget(self.label_15)
+
+        self.verticalSpacer = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
+
+        self.verticalLayout.addItem(self.verticalSpacer)
 
 
-        self.horizontalLayout_2.addLayout(self.verticalLayout_2)
+        self.horizontalLayout_2.addLayout(self.verticalLayout)
 
         self.settings_textEdit = QTextEdit(MuscularStep)
         self.settings_textEdit.setObjectName(u"settings_textEdit")
         sizePolicy.setHeightForWidth(self.settings_textEdit.sizePolicy().hasHeightForWidth())
         self.settings_textEdit.setSizePolicy(sizePolicy)
-        self.settings_textEdit.setFocusPolicy(Qt.NoFocus)
-        self.settings_textEdit.setContextMenuPolicy(Qt.NoContextMenu)
+        self.settings_textEdit.setFocusPolicy(Qt.FocusPolicy.NoFocus)
+        self.settings_textEdit.setContextMenuPolicy(Qt.ContextMenuPolicy.NoContextMenu)
         self.settings_textEdit.setAcceptDrops(False)
         self.settings_textEdit.setStyleSheet(u"")
-        self.settings_textEdit.setFrameShape(QFrame.HLine)
-        self.settings_textEdit.setFrameShadow(QFrame.Plain)
+        self.settings_textEdit.setFrameShape(QFrame.Shape.NoFrame)
+        self.settings_textEdit.setFrameShadow(QFrame.Shadow.Plain)
         self.settings_textEdit.setLineWidth(0)
         self.settings_textEdit.setReadOnly(True)
 
         self.horizontalLayout_2.addWidget(self.settings_textEdit)
 
 
-        self.verticalLayout_4.addLayout(self.horizontalLayout_2)
+        self.verticalLayout_2.addLayout(self.horizontalLayout_2)
 
 
         self.retranslateUi(MuscularStep)
@@ -301,13 +319,16 @@ class Ui_MuscularStep(object):
         self.picture_label.setText("")
         self.label_9.setText(QCoreApplication.translate("MuscularStep", u"<html><head/><body><p><span style=\" font-weight:600;\">Muscular Artifact : Segments with burst of activity in the frequency band 20.25-32 Hz.</span></p></body></html>", None))
         self.description_textEdit.setHtml(QCoreApplication.translate("MuscularStep", u"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
-"<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
+"<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset=\"utf-8\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
+"hr { height: 1px; border-width: 0; }\n"
+"li.unchecked::marker { content: \"\\2610\"; }\n"
+"li.checked::marker { content: \"\\2612\"; }\n"
 "</style></head><body style=\" font-family:'Roboto'; font-size:12pt; font-weight:400; font-style:normal;\">\n"
 "<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" color:#000000;\">Identification of bursts of myogenic activity (26.25\u201332.0 Hz) via spectral power (STFT :  Short Term Fourier Transform).</span></p>\n"
-"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" color:#000000;\">The algorithm compares high frequency activity (26.25\u201332.0 Hz) in each mini 4-s epoch with the activity level in a local 3-min baseline window.\u00a0</span></p>\n"
-"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; marg"
-                        "in-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" color:#000000;\">A muscular artifact is identified when the high frequency activity of the 4-s epoch exceeded the local baseline activity by a certain factor (ex. 4 x median value of the baseline).</span></p>\n"
+"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" color:#000000;\">The algorithm compares high frequency activity (26.25\u201332.0 Hz) in each"
+                        " mini 4-s epoch with the activity level in a local 3-min baseline window.\u00a0</span></p>\n"
+"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" color:#000000;\">A muscular artifact is identified when the high frequency activity of the 4-s epoch exceeded the local baseline activity by a certain factor (ex. 4 x median value of the baseline).</span></p>\n"
 "<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" color:#000000;\">*** To enhance the detection we also use the EMG signal. ***<br />A muscle artifact is identified when an increase in myogenic activity on the EEG signal is greater than a certain high threshold.<br />A slightly lower increase can also be identified as a muscle artifact if it is also measured on the EMG signal. <br />New, not included in [1]</span></p></body></html>", None))
         self.label_4.setText(QCoreApplication.translate("MuscularStep", u"<html><head/><body><p><span style=\" font-weight:600;\">Event Settings</span></p></body></html>", None))
         self.label_3.setText(QCoreApplication.translate("MuscularStep", u"Event Group", None))
@@ -345,21 +366,24 @@ class Ui_MuscularStep(object):
         self.label_15.setText(QCoreApplication.translate("MuscularStep", u"The \"B\" and \"C\" thresholds can also be inscreased,\n"
 "especially if the EMG channel is unstable or really sensitive.", None))
         self.settings_textEdit.setHtml(QCoreApplication.translate("MuscularStep", u"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
-"<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
+"<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset=\"utf-8\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
+"hr { height: 1px; border-width: 0; }\n"
+"li.unchecked::marker { content: \"\\2610\"; }\n"
+"li.checked::marker { content: \"\\2612\"; }\n"
 "</style></head><body style=\" font-family:'Roboto'; font-size:12pt; font-weight:400; font-style:normal;\">\n"
 "<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" color:#000000;\">EEG signals are filtered from 0.3-30 Hz.<br />EEG signals are downsampled to 64 Hz.</span></p>\n"
 "<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-style:italic; color:#000000;\">These preprocessing steps are taken from [1]</span></p>\n"
-"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-style:italic; color:#000000;\">Filter is a 6 th order butter"
-                        "worth IIR filter in Second-Order Sections (SOS) format applied with filtfilt to correct the non-linear phase delay.</span></p>\n"
+"<p style=\" margin-top:12px; margin-bo"
+                        "ttom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-style:italic; color:#000000;\">Filter is a 6 th order butterworth IIR filter in Second-Order Sections (SOS) format applied with filtfilt to correct the non-linear phase delay.</span></p>\n"
 "<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" color:#000000;\">STFT Settings</span></p>\n"
 "<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" color:#000000;\">Window length = 4 s<br />Window step = 2 s</span></p>\n"
 "<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-style:italic; color:#000000;\">[1] suggested a window step of 4 s, but we wanted a finer time resolution</span></p>\n"
-"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-style:italic; color:#000000;\">The STFT is applied to integrate (sum) the signal power with"
-                        "in a frequency range of the true spectrum (units\u00b2 ex. \u00b5V\u00b2) as suggested in [2].</span></p>\n"
+"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; mar"
+                        "gin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-style:italic; color:#000000;\">The STFT is applied to integrate (sum) the signal power within a frequency range of the true spectrum (units\u00b2 ex. \u00b5V\u00b2) as suggested in [2].</span></p>\n"
 "<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><a href=\"https://pubmed.ncbi.nlm.nih.gov/12723066/\"><span style=\" text-decoration: underline; color:#000000;\">Reference</span></a></p>\n"
-"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" color:#000000;\">[1] D. Brunner, R. Vasko, C. Detka, J. Monahan, C. Reynolds Iii, and D. Kupfer, \u201cMuscle artifacts in the sleep EEG: Automated detection and effect on all-night EEG power spectra,\u201d Journal of Sleep Research, vol. 5, no. 3, pp. 155\u2013164, Sep. 1996, doi: </span><a href=\"https://doi.org/10.1046/j.1365-2869.1996.00009.x\"><span style=\" text-decoration: underline; color:#000000;\">10.1046/j.1365-2869.1996.00009.x</span></a><span style=\" color:#000000;\">.</span></p>\n"
-"<p style"
-                        "=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" color:#000000;\">[2]\u00a0Cox, R. &amp; Fell, J. Analyzing human sleep EEG: A methodological primer with code implementation. Sleep Medicine Reviews 54, 101353 (2020).</span></p></body></html>", None))
+"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" color:#000000;\">[1] D. Brunner, R. Vasko, C. Detka, J. Monahan, C. Reynolds Iii, and D. Kupfer, \u201cMuscle artifacts in the sleep EEG: Automated detection and effect on all-night EEG power spectra,\u201d Journal of Sleep Research, vol. 5, no. 3, pp. 155\u2013164, Sep. 1996, doi: </span><a href=\"https://doi.org/10.1046/j.1365-2869.1996.00009"
+                        ".x\"><span style=\" text-decoration: underline; color:#000000;\">10.1046/j.1365-2869.1996.00009.x</span></a><span style=\" color:#000000;\">.</span></p>\n"
+"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" color:#000000;\">[2]\u00a0Cox, R. &amp; Fell, J. Analyzing human sleep EEG: A methodological primer with code implementation. Sleep Medicine Reviews 54, 101353 (2020).</span></p></body></html>", None))
     # retranslateUi
 

@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>980</width>
-    <height>739</height>
+    <width>1075</width>
+    <height>851</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -51,7 +51,7 @@
       </size>
      </property>
      <property name="frameShape">
-      <enum>QFrame::Shape::NoFrame</enum>
+      <enum>QFrame::Shape::Panel</enum>
      </property>
      <property name="lineWidth">
       <number>0</number>
@@ -216,7 +216,14 @@ Please select &quot;Unscored&quot; if your data does not include sleep stages.</
       </sizepolicy>
      </property>
      <property name="text">
-      <string>However, we also provide two sets of default values:</string>
+      <string>However, two sets of default values are also available.</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QLabel" name="label_5">
+     <property name="text">
+      <string>Clicking any of the radio buttons below will automatically apply the corresponding default values to all detectors.</string>
      </property>
     </widget>
    </item>
@@ -234,13 +241,68 @@ Please select &quot;Unscored&quot; if your data does not include sleep stages.</
     </widget>
    </item>
    <item>
+    <widget class="QTextEdit" name="textEdit">
+     <property name="frameShape">
+      <enum>QFrame::Shape::NoFrame</enum>
+     </property>
+     <property name="lineWidth">
+      <number>0</number>
+     </property>
+     <property name="readOnly">
+      <bool>true</bool>
+     </property>
+     <property name="html">
+      <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;meta charset=&quot;utf-8&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+hr { height: 1px; border-width: 0; }
+li.unchecked::marker { content: &quot;\2610&quot;; }
+li.checked::marker { content: &quot;\2612&quot;; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Roboto'; font-size:12pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Default values for detection in NREM (Set 1)&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;    &lt;span style=&quot; font-weight:700;&quot;&gt;Flatline&lt;/span&gt; : 		A=&lt;span style=&quot; font-weight:700;&quot;&gt;0.25&lt;/span&gt; µV&lt;span style=&quot; vertical-align:super;&quot;&gt;2&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;    &lt;span style=&quot; font-weight:700;&quot;&gt;High Frequency Burst &lt;/span&gt;: 	A=&lt;span style=&quot; font-weight:700;&quot;&gt;4&lt;/span&gt; STD; 		B=&lt;span style=&quot; font-weight:700;&quot;&gt;8&lt;/span&gt; BSL MED, 	C=&lt;span style=&quot; font-weight:700;&quot;&gt;0.1&lt;/span&gt; Ratio&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;    &lt;span style=&quot; font-weight:700;&quot;&gt;Persistent Noise&lt;/span&gt; : 		A=&lt;span style=&quot; font-weight:700;&quot;&gt;4&lt;/span&gt; STD; 		B=&lt;span style=&quot; font-weight:700;&quot;&gt;0.1&lt;/span&gt; Ratio&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;    &lt;span style=&quot; font-weight:700;&quot;&gt;Power Line Contamination&lt;/span&gt; : 	A=&lt;span style=&quot; font-weight:700;&quot;&gt;0&lt;/span&gt; STD; 		B=&lt;span style=&quot; font-weight:700;&quot;&gt;0.1&lt;/span&gt; Ratio&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;    &lt;span style=&quot; font-weight:700;&quot;&gt;Baseline Variation&lt;/span&gt; : 	A=&lt;span style=&quot; font-weight:700;&quot;&gt;4&lt;/span&gt; STD&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;    &lt;span style=&quot; font-weight:700;&quot;&gt;Muscular&lt;/span&gt; : 		A=&lt;span style=&quot; font-weight:700;&quot;&gt;8&lt;/span&gt; BSL MED, 	B=&lt;span style=&quot; font-weight:700;&quot;&gt;5 &lt;/span&gt;BSL MED, 	C=&lt;span style=&quot; font-weight:700;&quot;&gt;5&lt;/span&gt; BSL MED&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+     </property>
+    </widget>
+   </item>
+   <item>
     <widget class="QRadioButton" name="radioButton_set2">
      <property name="text">
-      <string>Set 2 is more sensitive and intended for REM sleep stages.</string>
+      <string>Set 2 : is more sensitive and intended for REM sleep stages.</string>
      </property>
      <attribute name="buttonGroup">
       <string notr="true">Theshold_sets</string>
      </attribute>
+    </widget>
+   </item>
+   <item>
+    <widget class="QTextEdit" name="textEdit_2">
+     <property name="frameShape">
+      <enum>QFrame::Shape::NoFrame</enum>
+     </property>
+     <property name="readOnly">
+      <bool>true</bool>
+     </property>
+     <property name="html">
+      <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;meta charset=&quot;utf-8&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+hr { height: 1px; border-width: 0; }
+li.unchecked::marker { content: &quot;\2610&quot;; }
+li.checked::marker { content: &quot;\2612&quot;; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Roboto'; font-size:12pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;The default values for detection in REM (Set 2)&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;    &lt;span style=&quot; font-weight:700;&quot;&gt;Flatline&lt;/span&gt; : 		A=0.25 µV&lt;span style=&quot; vertical-align:super;&quot;&gt;2&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;    &lt;span style=&quot; font-weight:700;&quot;&gt;High Frequency Burst&lt;/span&gt; : 	A=&lt;span style=&quot; font-weight:700; color:#ff0000;&quot;&gt;3&lt;/span&gt; STD; 		B=&lt;span style=&quot; font-weight:700; color:#ff0000;&quot;&gt;6&lt;/span&gt; BSL MED, 	C=0.1 Ratio&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;    &lt;span style=&quot; font-weight:700;&quot;&gt;Persistent Noise&lt;/span&gt; : 		A=&lt;span style=&quot; font-weight:700; color:#ff0000;&quot;&gt;2&lt;/span&gt; STD; 		B=0.1 Ratio&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;    &lt;span style=&quot; font-weight:700;&quot;&gt;Power Line Contamination&lt;/span&gt; : 	A=0 STD; 		B=0.1 Ratio&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;    &lt;span style=&quot; font-weight:700;&quot;&gt;Baseline Variation&lt;/span&gt; : 	A=&lt;span style=&quot; font-weight:700; color:#ff0000;&quot;&gt;2.5&lt;/span&gt; STD&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;    &lt;span style=&quot; font-weight:700;&quot;&gt;Muscular&lt;/span&gt; : 		A=&lt;span style=&quot; font-weight:700; color:#ff0000;&quot;&gt;4&lt;/span&gt; BSL MED, 	B=&lt;span style=&quot; font-weight:700; color:#ff0000;&quot;&gt;3&lt;/span&gt; BSL MED, 	C=&lt;span style=&quot; font-weight:700; color:#ff0000;&quot;&gt;3&lt;/span&gt; BSL MED&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+     </property>
     </widget>
    </item>
    <item>
@@ -271,7 +333,43 @@ Please select &quot;Unscored&quot; if your data does not include sleep stages.</
  <resources>
   <include location="../../../../../snooz-toolbox/src/main/python/ui/themes/themes.qrc"/>
  </resources>
- <connections/>
+ <connections>
+  <connection>
+   <sender>radioButton_set1</sender>
+   <signal>clicked()</signal>
+   <receiver>SleepStageSelStep</receiver>
+   <slot>radio_threshold_slot()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>489</x>
+     <y>414</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>489</x>
+     <y>369</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>radioButton_set2</sender>
+   <signal>clicked()</signal>
+   <receiver>SleepStageSelStep</receiver>
+   <slot>radio_threshold_slot()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>489</x>
+     <y>443</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>489</x>
+     <y>369</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+ <slots>
+  <slot>radio_threshold_slot()</slot>
+ </slots>
  <buttongroups>
   <buttongroup name="Theshold_sets"/>
  </buttongroups>

@@ -26,7 +26,7 @@ class Ui_PowerLineStep(object):
     def setupUi(self, PowerLineStep):
         if not PowerLineStep.objectName():
             PowerLineStep.setObjectName(u"PowerLineStep")
-        PowerLineStep.resize(1274, 903)
+        PowerLineStep.resize(1274, 834)
         PowerLineStep.setStyleSheet(u"font: 12pt \"Roboto\";")
         self.verticalLayout_4 = QVBoxLayout(PowerLineStep)
         self.verticalLayout_4.setObjectName(u"verticalLayout_4")
@@ -62,6 +62,11 @@ class Ui_PowerLineStep(object):
         self.verticalLayout_3.setContentsMargins(0, 0, 0, 0)
         self.label_9 = QLabel(self.layoutWidget)
         self.label_9.setObjectName(u"label_9")
+        sizePolicy1 = QSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Fixed)
+        sizePolicy1.setHorizontalStretch(0)
+        sizePolicy1.setVerticalStretch(0)
+        sizePolicy1.setHeightForWidth(self.label_9.sizePolicy().hasHeightForWidth())
+        self.label_9.setSizePolicy(sizePolicy1)
         font = QFont()
         font.setFamilies([u"Roboto"])
         font.setPointSize(12)
@@ -73,16 +78,17 @@ class Ui_PowerLineStep(object):
 
         self.description_textEdit = QTextEdit(self.layoutWidget)
         self.description_textEdit.setObjectName(u"description_textEdit")
-        sizePolicy1 = QSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
-        sizePolicy1.setHorizontalStretch(0)
-        sizePolicy1.setVerticalStretch(0)
-        sizePolicy1.setHeightForWidth(self.description_textEdit.sizePolicy().hasHeightForWidth())
-        self.description_textEdit.setSizePolicy(sizePolicy1)
+        sizePolicy2 = QSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
+        sizePolicy2.setHorizontalStretch(0)
+        sizePolicy2.setVerticalStretch(0)
+        sizePolicy2.setHeightForWidth(self.description_textEdit.sizePolicy().hasHeightForWidth())
+        self.description_textEdit.setSizePolicy(sizePolicy2)
+        self.description_textEdit.setMaximumSize(QSize(16777215, 340))
         self.description_textEdit.setAutoFillBackground(True)
         self.description_textEdit.setStyleSheet(u"")
-        self.description_textEdit.setFrameShape(QFrame.Shape.HLine)
-        self.description_textEdit.setFrameShadow(QFrame.Shadow.Plain)
-        self.description_textEdit.setLineWidth(0)
+        self.description_textEdit.setFrameShape(QFrame.Shape.NoFrame)
+        self.description_textEdit.setFrameShadow(QFrame.Shadow.Sunken)
+        self.description_textEdit.setLineWidth(1)
         self.description_textEdit.setReadOnly(True)
 
         self.verticalLayout_3.addWidget(self.description_textEdit)
@@ -147,14 +153,15 @@ class Ui_PowerLineStep(object):
 
         self.settings_textEdit = QTextEdit(PowerLineStep)
         self.settings_textEdit.setObjectName(u"settings_textEdit")
+        self.settings_textEdit.setMinimumSize(QSize(0, 200))
         self.settings_textEdit.setFocusPolicy(Qt.FocusPolicy.NoFocus)
         self.settings_textEdit.setContextMenuPolicy(Qt.ContextMenuPolicy.NoContextMenu)
         self.settings_textEdit.setAcceptDrops(False)
         self.settings_textEdit.setAutoFillBackground(True)
         self.settings_textEdit.setStyleSheet(u"")
-        self.settings_textEdit.setFrameShape(QFrame.Shape.HLine)
-        self.settings_textEdit.setFrameShadow(QFrame.Shadow.Plain)
-        self.settings_textEdit.setLineWidth(0)
+        self.settings_textEdit.setFrameShape(QFrame.Shape.NoFrame)
+        self.settings_textEdit.setFrameShadow(QFrame.Shadow.Sunken)
+        self.settings_textEdit.setLineWidth(1)
         self.settings_textEdit.setReadOnly(True)
 
         self.gridLayout_2.addWidget(self.settings_textEdit, 0, 1, 2, 1)
@@ -239,10 +246,6 @@ class Ui_PowerLineStep(object):
 
         self.verticalLayout_4.addLayout(self.verticalLayout_2)
 
-        self.verticalSpacer_4 = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
-
-        self.verticalLayout_4.addItem(self.verticalSpacer_4)
-
 
         self.retranslateUi(PowerLineStep)
 
@@ -275,7 +278,7 @@ class Ui_PowerLineStep(object):
 "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
 "<p style=\""
                         " margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">A segment whose power exceeds the 2 thresholds is considered an artifact.</p></body></html>", None))
-        self.label_4.setText(QCoreApplication.translate("PowerLineStep", u"Event Settings", None))
+        self.label_4.setText(QCoreApplication.translate("PowerLineStep", u"<html><head/><body><p><span style=\" font-weight:700;\">Event Settings</span></p></body></html>", None))
         self.label_3.setText(QCoreApplication.translate("PowerLineStep", u"Event Group", None))
 #if QT_CONFIG(tooltip)
         self.group_lineEdit.setToolTip(QCoreApplication.translate("PowerLineStep", u"In which \"Event Group\" the detected artifact are added (label in the annotation file). Go to the general Detectors Settings to edit the group.", None))
@@ -298,7 +301,7 @@ class Ui_PowerLineStep(object):
                         "ge of the true spectrum (units\u00b2 ex. \u00b5V\u00b2) as suggested in [1].</span></p>\n"
 "<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><a href=\"https://pubmed.ncbi.nlm.nih.gov/12723066/\"><span style=\" text-decoration: underline; color:#000000;\">Reference</span></a></p>\n"
 "<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" color:#000000;\">[1] Cox, R. &amp; Fell, J. Analyzing human sleep EEG: A methodological primer with code implementation. Sleep Medicine Reviews54, 101353 (2020).</span></p></body></html>", None))
-        self.label.setText(QCoreApplication.translate("PowerLineStep", u"Thresholds ", None))
+        self.label.setText(QCoreApplication.translate("PowerLineStep", u"<html><head/><body><p><span style=\" font-weight:700;\">Thresholds </span></p></body></html>", None))
         self.label_8.setText(QCoreApplication.translate("PowerLineStep", u"Artifact when (A and B)", None))
         self.thresh_rel_lineEdit.setText(QCoreApplication.translate("PowerLineStep", u"0.1", None))
         self.label_7.setText(QCoreApplication.translate("PowerLineStep", u"optimal value from 0 to 2, where 0 is the mean", None))

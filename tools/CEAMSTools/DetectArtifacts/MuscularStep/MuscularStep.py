@@ -14,6 +14,7 @@ from qtpy.QtCore import QRegularExpression # To validate waht the user enters in
 
 from CEAMSTools.DetectArtifacts.MuscularStep.Ui_MuscularStep import Ui_MuscularStep
 from CEAMSTools.DetectArtifacts.DetectorsStep.DetectorsStep import DetectorsStep
+from CEAMSTools.DetectArtifacts.SleepStageSelStep.SleepStageSelStep import SleepStageSelStep
 from commons.BaseStepView import BaseStepView
 
 class MuscularStep( BaseStepView,  Ui_MuscularStep, QtWidgets.QWidget):
@@ -60,6 +61,11 @@ class MuscularStep( BaseStepView,  Ui_MuscularStep, QtWidgets.QWidget):
         #self.picture_label.scaled(self.picture_label.size(), QtCore.Qt.KeepAspectRatio)
         # Subscribe to the context
         self._pub_sub_manager.subscribe(self, self._context_manager.topic)  
+
+        # Default value for the threshold [set 1 (precise-NREM), set 2 (sensitive-REM)]
+        self.thresh_A_value = [8, 4]
+        self.thresh_B_value = [5, 3]
+        self.thresh_C_value = [5, 3]
 
 
     # Called when the settingsView is opened by the user
@@ -121,6 +127,15 @@ class MuscularStep( BaseStepView,  Ui_MuscularStep, QtWidgets.QWidget):
                 else: # Specific -> make it editable
                     self.name_eeg_lineEdit.setEnabled(True)
                     self.name_emg_lineEdit.setEnabled(True)
+            if message==SleepStageSelStep.context_threshold_set: # key of the context dict
+                self.threshold_context_changed()
+
+
+    def threshold_context_changed(self):
+        threshold_set = int(self._context_manager[SleepStageSelStep.context_threshold_set])
+        self.EEG_lineEdit.setText(str(self.thresh_A_value[threshold_set-1]))
+        self.EMG_lineEdit.setText(str(self.thresh_B_value[threshold_set-1]))
+        self.both_lineEdit.setText(str(self.thresh_C_value[threshold_set-1]))
 
 
     # To init 

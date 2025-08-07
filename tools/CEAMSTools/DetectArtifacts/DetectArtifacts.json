@@ -52,17 +52,17 @@
                             "custom_step_name": "FlatlineStep"
                         },
                         {
-                            "name": "High Frequency burst",
+                            "name": "High Frequency Burst",
                             "description": "Define settings for the high frequency burst detector.",
                             "custom_step_name": "HighFreqBurstStep"
                         },
                         {
-                            "name": "Persistent noise",
+                            "name": "Persistent Noise",
                             "description": "Define settings for the persistent noise detector.",
                             "custom_step_name": "PersistentNoiseStep"
                         },
                         {
-                            "name": "Power line contamination",
+                            "name": "Power Line Contamination",
                             "description": "Define settings for the power line contamination detector.",
                             "custom_step_name": "PowerLineStep"
                         },

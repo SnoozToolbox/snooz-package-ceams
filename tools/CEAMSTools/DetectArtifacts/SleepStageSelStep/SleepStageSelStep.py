@@ -19,6 +19,10 @@ class SleepStageSelStep(BaseStepView, Ui_SleepStageSelStep, QtWidgets.QWidget):
         Class to define the Sleep Stage selection step for the artifact detection.
         The detection threholds may vary depending on the sleep stage.
     """
+
+    # The context key to share the set of thresholds chosen by the user
+    context_threshold_set = "threshold_set"
+
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
@@ -33,7 +37,10 @@ class SleepStageSelStep(BaseStepView, Ui_SleepStageSelStep, QtWidgets.QWidget):
         # The sleep stage selection needs to be sent to the FilterEvents Module
         self._node_id_filter_events ="8b9ceb12-694f-4289-a611-d46e85b57cb5"
         self._filter_events_topic = f'{self._node_id_filter_events}.stages_selection'
-        self._pub_sub_manager.subscribe(self, self._filter_events_topic)        
+        self._pub_sub_manager.subscribe(self, self._filter_events_topic)      
+
+        # Define the default value of the context (set 1 of thresholds)
+        self._context_manager[self.context_threshold_set] = "1"  
 
 
     def load_settings(self):
@@ -60,6 +67,7 @@ class SleepStageSelStep(BaseStepView, Ui_SleepStageSelStep, QtWidgets.QWidget):
             #if message == "context_some_other_step":
                 #updated_value = self._context_manager["context_some_other_step"]
         pass
+
 
     def on_topic_response(self, topic, message, sender):
         # This will be called as a response to ping request.
@@ -98,3 +106,12 @@ class SleepStageSelStep(BaseStepView, Ui_SleepStageSelStep, QtWidgets.QWidget):
         if self.checkBox_9.isChecked():
             stages_message.append('9')
         self.stages_sel = (','.join(stages_message))
+
+
+    # Called when the radio button is changed
+    # The value is stored in the context
+    def radio_threshold_slot(self):
+        if self.radioButton_set1.isChecked():
+            self._context_manager[self.context_threshold_set] = "1"
+        if self.radioButton_set2.isChecked():
+            self._context_manager[self.context_threshold_set] = "2"

@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1002</width>
-    <height>658</height>
+    <width>734</width>
+    <height>535</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -136,7 +136,7 @@ A glitch or a noise burst may be caused by a bad connection of the electrode.</s
           </font>
          </property>
          <property name="text">
-          <string>Event Settings</string>
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Event Settings&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
          </property>
         </widget>
        </item>
@@ -176,9 +176,21 @@ A glitch or a noise burst may be caused by a bad connection of the electrode.</s
              <property name="enabled">
               <bool>false</bool>
              </property>
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="minimumSize">
+              <size>
+               <width>500</width>
+               <height>0</height>
+              </size>
+             </property>
              <property name="maximumSize">
               <size>
-               <width>16777215</width>
+               <width>500</width>
                <height>16777215</height>
               </size>
              </property>
@@ -216,9 +228,21 @@ A glitch or a noise burst may be caused by a bad connection of the electrode.</s
              <property name="enabled">
               <bool>false</bool>
              </property>
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="minimumSize">
+              <size>
+               <width>500</width>
+               <height>0</height>
+              </size>
+             </property>
              <property name="maximumSize">
               <size>
-               <width>16777215</width>
+               <width>500</width>
                <height>16777215</height>
               </size>
              </property>
@@ -273,7 +297,7 @@ A glitch or a noise burst may be caused by a bad connection of the electrode.</s
           </font>
          </property>
          <property name="text">
-          <string>Thresholds</string>
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Thresholds&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
          </property>
         </widget>
        </item>
@@ -294,12 +318,27 @@ A glitch or a noise burst may be caused by a bad connection of the electrode.</s
        </item>
        <item>
         <layout class="QGridLayout" name="gridLayout">
+         <property name="sizeConstraint">
+          <enum>QLayout::SizeConstraint::SetFixedSize</enum>
+         </property>
          <item row="0" column="0">
           <widget class="QLabel" name="label_5">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
            <property name="minimumSize">
             <size>
              <width>140</width>
              <height>0</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>315</width>
+             <height>16777215</height>
             </size>
            </property>
            <property name="font">
@@ -323,6 +362,12 @@ A glitch or a noise burst may be caused by a bad connection of the electrode.</s
          </item>
          <item row="0" column="1">
           <widget class="QLineEdit" name="tresh_fixe_lineEdit">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
            <property name="minimumSize">
             <size>
              <width>0</width>
@@ -345,6 +390,18 @@ A glitch or a noise burst may be caused by a bad connection of the electrode.</s
          </item>
          <item row="0" column="2">
           <widget class="QLabel" name="label_12">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>220</width>
+             <height>16777215</height>
+            </size>
+           </property>
            <property name="text">
             <string>optimal value from 3 to 5</string>
            </property>
@@ -352,6 +409,12 @@ A glitch or a noise burst may be caused by a bad connection of the electrode.</s
          </item>
          <item row="1" column="0">
           <widget class="QLabel" name="label_2">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
            <property name="minimumSize">
             <size>
              <width>210</width>
@@ -360,7 +423,7 @@ A glitch or a noise burst may be caused by a bad connection of the electrode.</s
            </property>
            <property name="maximumSize">
             <size>
-             <width>210</width>
+             <width>315</width>
              <height>16777215</height>
             </size>
            </property>
@@ -382,6 +445,12 @@ A glitch or a noise burst may be caused by a bad connection of the electrode.</s
          </item>
          <item row="1" column="1">
           <widget class="QLineEdit" name="thresh_adp_lineEdit">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
            <property name="maximumSize">
             <size>
              <width>100</width>
@@ -395,6 +464,18 @@ A glitch or a noise burst may be caused by a bad connection of the electrode.</s
          </item>
          <item row="1" column="2">
           <widget class="QLabel" name="label_13">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>220</width>
+             <height>16777215</height>
+            </size>
+           </property>
            <property name="text">
             <string>optimal value from 6 to 10</string>
            </property>
@@ -402,6 +483,18 @@ A glitch or a noise burst may be caused by a bad connection of the electrode.</s
          </item>
          <item row="2" column="0">
           <widget class="QLabel" name="label_11">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>315</width>
+             <height>16777215</height>
+            </size>
+           </property>
            <property name="font">
             <font>
              <family>Roboto</family>
@@ -417,6 +510,12 @@ A glitch or a noise burst may be caused by a bad connection of the electrode.</s
          </item>
          <item row="2" column="1">
           <widget class="QLineEdit" name="thresh_ratio_lineEdit">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
            <property name="maximumSize">
             <size>
              <width>100</width>
@@ -430,6 +529,18 @@ A glitch or a noise burst may be caused by a bad connection of the electrode.</s
          </item>
          <item row="2" column="2">
           <widget class="QLabel" name="label_14">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>220</width>
+             <height>16777215</height>
+            </size>
+           </property>
            <property name="text">
             <string>optimal value from 0.05 to 0.4</string>
            </property>
@@ -469,13 +580,13 @@ A glitch or a noise burst may be caused by a bad connection of the electrode.</s
         <bool>true</bool>
        </property>
        <property name="frameShape">
-        <enum>QFrame::Shape::HLine</enum>
+        <enum>QFrame::Shape::StyledPanel</enum>
        </property>
        <property name="frameShadow">
-        <enum>QFrame::Shadow::Plain</enum>
+        <enum>QFrame::Shadow::Sunken</enum>
        </property>
        <property name="lineWidth">
-        <number>0</number>
+        <number>2</number>
        </property>
        <property name="readOnly">
         <bool>true</bool>
@@ -516,7 +627,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
        <property name="maximumSize">
         <size>
          <width>16777215</width>
-         <height>16777215</height>
+         <height>200</height>
         </size>
        </property>
        <property name="font">
@@ -531,10 +642,10 @@ li.checked::marker { content: &quot;\2612&quot;; }
         <bool>true</bool>
        </property>
        <property name="frameShape">
-        <enum>QFrame::Shape::HLine</enum>
+        <enum>QFrame::Shape::NoFrame</enum>
        </property>
        <property name="frameShadow">
-        <enum>QFrame::Shadow::Plain</enum>
+        <enum>QFrame::Shadow::Sunken</enum>
        </property>
        <property name="lineWidth">
         <number>0</number>

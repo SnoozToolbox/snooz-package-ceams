@@ -13,6 +13,7 @@ from qtpy.QtGui import QRegularExpressionValidator # To validate waht the user e
 from qtpy.QtCore import QRegularExpression # To validate waht the user enters in the interface
 
 from CEAMSTools.DetectArtifacts.HighFreqBurstStep.Ui_HighFreqBurstStep import Ui_HighFreqBurstStep
+from CEAMSTools.DetectArtifacts.SleepStageSelStep.SleepStageSelStep import SleepStageSelStep
 from CEAMSTools.DetectArtifacts.DetectorsStep.DetectorsStep import DetectorsStep
 from commons.BaseStepView import BaseStepView
 
@@ -52,6 +53,11 @@ class HighFreqBurstStep( BaseStepView,  Ui_HighFreqBurstStep, QtWidgets.QWidget)
 
         # Subscribe to the context
         self._pub_sub_manager.subscribe(self, self._context_manager.topic)  
+
+        # Default value for the threshold [set 1 (precise-NREM), set 2 (sensitive-REM)]
+        self.thresh_A_value = [4, 3]
+        self.thresh_B_value = [8, 6]
+        self.thresh_C_value = [0.1, 0.1]
         
 
     # Called when the settingsView is opened by the user
@@ -100,6 +106,15 @@ class HighFreqBurstStep( BaseStepView,  Ui_HighFreqBurstStep, QtWidgets.QWidget)
                     self.name_burst_lineEdit.setEnabled(False)
                 else: # Specific -> make it editable
                     self.name_burst_lineEdit.setEnabled(True)
+            if message==SleepStageSelStep.context_threshold_set: # key of the context dict
+                self.threshold_context_changed()
+
+
+    def threshold_context_changed(self):
+        threshold_set = int(self._context_manager[SleepStageSelStep.context_threshold_set])
+        self.tresh_fixe_lineEdit.setText(str(self.thresh_A_value[threshold_set-1]))
+        self.thresh_adp_lineEdit.setText(str(self.thresh_B_value[threshold_set-1]))
+        self.thresh_ratio_lineEdit.setText(str(self.thresh_C_value[threshold_set-1]))
 
 
     # To init 
