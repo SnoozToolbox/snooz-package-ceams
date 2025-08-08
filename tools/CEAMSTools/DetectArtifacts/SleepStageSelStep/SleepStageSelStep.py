@@ -22,6 +22,8 @@ class SleepStageSelStep(BaseStepView, Ui_SleepStageSelStep, QtWidgets.QWidget):
 
     # The context key to share the set of thresholds chosen by the user
     context_threshold_set = "threshold_set"
+    # The context key to share the sleep stages chosen by the user
+    context_stages_sel = "stages_sel"
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -41,6 +43,8 @@ class SleepStageSelStep(BaseStepView, Ui_SleepStageSelStep, QtWidgets.QWidget):
 
         # Define the default value of the context (set 1 of thresholds)
         self._context_manager[self.context_threshold_set] = "1"  
+        # Define the default sleep stages
+        self._context_manager[self.context_stages_sel] = "NREM"     
 
 
     def load_settings(self):
@@ -77,7 +81,7 @@ class SleepStageSelStep(BaseStepView, Ui_SleepStageSelStep, QtWidgets.QWidget):
 
     def on_apply_settings(self):
         # Stages
-        self.update_stages_slot()
+        #self.check_stages_slot()
         self._pub_sub_manager.publish(self, self._sleep_stage_topic, self.stages_sel) 
         self._pub_sub_manager.publish(self, self._filter_events_topic, self.stages_sel) 
         
@@ -91,7 +95,7 @@ class SleepStageSelStep(BaseStepView, Ui_SleepStageSelStep, QtWidgets.QWidget):
         return True
 
 
-    def update_stages_slot(self):
+    def check_stages_slot(self):
         stages_message = []
         if self.checkBox_0.isChecked():
             stages_message.append('0')
@@ -106,6 +110,30 @@ class SleepStageSelStep(BaseStepView, Ui_SleepStageSelStep, QtWidgets.QWidget):
         if self.checkBox_9.isChecked():
             stages_message.append('9')
         self.stages_sel = (','.join(stages_message))
+        
+        if (self.stages_sel == '1,2,3'):
+            stage_names = 'NREM'
+        elif (self.stages_sel == '1,2,3,5'):
+            stage_names = 'SLEEP'
+        elif self.stages_sel == '0,1,2,3,5' or self.stages_sel == '0,1,2,3,5,9':
+            stage_names = 'ALL'    
+        elif (self.stages_sel == '9'):
+            stage_names = 'UNS'    
+        else:
+            stage_names = ''
+            if '1' in self.stages_sel:
+                stage_names = stage_names+'N1'
+            if '2' in self.stages_sel:   
+                stage_names = stage_names+'N2'
+            if '3' in self.stages_sel:   
+                stage_names = stage_names+'N3'
+            if '5' in self.stages_sel:   
+                stage_names = stage_names+'REM'
+            if '0' in self.stages_sel:   
+                stage_names = stage_names+'W'
+        
+        # Update the context to inform the Detector Settings Step of the new sleep stages
+        self._context_manager[self.context_stages_sel] = stage_names
 
 
     # Called when the radio button is changed
@@ -115,3 +143,4 @@ class SleepStageSelStep(BaseStepView, Ui_SleepStageSelStep, QtWidgets.QWidget):
             self._context_manager[self.context_threshold_set] = "1"
         if self.radioButton_set2.isChecked():
             self._context_manager[self.context_threshold_set] = "2"
+

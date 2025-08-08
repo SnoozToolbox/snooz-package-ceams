@@ -184,6 +184,12 @@ class Ui_SleepStageSelStep(object):
         self.retranslateUi(SleepStageSelStep)
         self.radioButton_set1.clicked.connect(SleepStageSelStep.radio_threshold_slot)
         self.radioButton_set2.clicked.connect(SleepStageSelStep.radio_threshold_slot)
+        self.checkBox_0.clicked.connect(SleepStageSelStep.check_stages_slot)
+        self.checkBox_1.clicked.connect(SleepStageSelStep.check_stages_slot)
+        self.checkBox_2.clicked.connect(SleepStageSelStep.check_stages_slot)
+        self.checkBox_3.clicked.connect(SleepStageSelStep.check_stages_slot)
+        self.checkBox_5.clicked.connect(SleepStageSelStep.check_stages_slot)
+        self.checkBox_9.clicked.connect(SleepStageSelStep.check_stages_slot)
 
         QMetaObject.connectSlotsByName(SleepStageSelStep)
     # setupUi

@@ -25,7 +25,7 @@ class Ui_DetectorsStep(object):
     def setupUi(self, DetectorsStep):
         if not DetectorsStep.objectName():
             DetectorsStep.setObjectName(u"DetectorsStep")
-        DetectorsStep.resize(926, 794)
+        DetectorsStep.resize(1065, 794)
         DetectorsStep.setStyleSheet(u"font: 12pt \"Roboto\";")
         self.verticalLayout_5 = QVBoxLayout(DetectorsStep)
         self.verticalLayout_5.setObjectName(u"verticalLayout_5")
@@ -39,6 +39,16 @@ class Ui_DetectorsStep(object):
         self.label_3.setFont(font)
 
         self.verticalLayout_5.addWidget(self.label_3)
+
+        self.label_7 = QLabel(DetectorsStep)
+        self.label_7.setObjectName(u"label_7")
+
+        self.verticalLayout_5.addWidget(self.label_7)
+
+        self.label_8 = QLabel(DetectorsStep)
+        self.label_8.setObjectName(u"label_8")
+
+        self.verticalLayout_5.addWidget(self.label_8)
 
         self.verticalLayout_3 = QVBoxLayout()
         self.verticalLayout_3.setSpacing(0)
@@ -58,26 +68,32 @@ class Ui_DetectorsStep(object):
 
         self.label_4 = QLabel(DetectorsStep)
         self.label_4.setObjectName(u"label_4")
+        self.label_4.setMinimumSize(QSize(50, 0))
 
         self.horizontalLayout_2.addWidget(self.label_4)
 
         self.unique_group_lineEdit = QLineEdit(DetectorsStep)
         self.unique_group_lineEdit.setObjectName(u"unique_group_lineEdit")
         self.unique_group_lineEdit.setMinimumSize(QSize(150, 0))
-        self.unique_group_lineEdit.setMaximumSize(QSize(150, 16777215))
+        self.unique_group_lineEdit.setMaximumSize(QSize(200, 16777215))
         self.unique_group_lineEdit.setAlignment(Qt.AlignmentFlag.AlignLeading|Qt.AlignmentFlag.AlignLeft|Qt.AlignmentFlag.AlignVCenter)
 
         self.horizontalLayout_2.addWidget(self.unique_group_lineEdit)
 
+        self.horizontalSpacer = QSpacerItem(10, 20, QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Minimum)
+
+        self.horizontalLayout_2.addItem(self.horizontalSpacer)
+
         self.label_5 = QLabel(DetectorsStep)
         self.label_5.setObjectName(u"label_5")
+        self.label_5.setMinimumSize(QSize(50, 0))
 
         self.horizontalLayout_2.addWidget(self.label_5)
 
         self.unique_name_lineEdit = QLineEdit(DetectorsStep)
         self.unique_name_lineEdit.setObjectName(u"unique_name_lineEdit")
         self.unique_name_lineEdit.setMinimumSize(QSize(150, 0))
-        self.unique_name_lineEdit.setMaximumSize(QSize(150, 16777215))
+        self.unique_name_lineEdit.setMaximumSize(QSize(200, 16777215))
 
         self.horizontalLayout_2.addWidget(self.unique_name_lineEdit)
 
@@ -261,14 +277,16 @@ class Ui_DetectorsStep(object):
     def retranslateUi(self, DetectorsStep):
         DetectorsStep.setWindowTitle("")
         self.label_3.setText(QCoreApplication.translate("DetectorsStep", u"<html><head/><body><p><span style=\" font-weight:600;\">Artifact Event Labels</span></p></body></html>", None))
+        self.label_7.setText(QCoreApplication.translate("DetectorsStep", u"The default label reflects the selected sleep stages and the chosen set of default values.", None))
+        self.label_8.setText(QCoreApplication.translate("DetectorsStep", u"Edit the group and name to reflect your changes if any.", None))
         self.common_radioButton.setText(QCoreApplication.translate("DetectorsStep", u"Common to all the detectors", None))
         self.label_4.setText(QCoreApplication.translate("DetectorsStep", u"Group", None))
 #if QT_CONFIG(tooltip)
         self.unique_group_lineEdit.setToolTip(QCoreApplication.translate("DetectorsStep", u"Write the common artifact event name to use for all the detectors.", None))
 #endif // QT_CONFIG(tooltip)
-        self.unique_group_lineEdit.setText(QCoreApplication.translate("DetectorsStep", u"art_snooz", None))
+        self.unique_group_lineEdit.setText(QCoreApplication.translate("DetectorsStep", u"art_snooz_NREM_set1", None))
         self.label_5.setText(QCoreApplication.translate("DetectorsStep", u"Name", None))
-        self.unique_name_lineEdit.setText(QCoreApplication.translate("DetectorsStep", u"art_snooz", None))
+        self.unique_name_lineEdit.setText(QCoreApplication.translate("DetectorsStep", u"art_snooz_NREM_set1", None))
         self.specific_radioButton.setText(QCoreApplication.translate("DetectorsStep", u"Specific to each detector", None))
         self.specific_name_label.setText(QCoreApplication.translate("DetectorsStep", u"Group and name are defined in the settings page of each detector.", None))
         self.label_6.setText(QCoreApplication.translate("DetectorsStep", u"<html><head/><body><p><span style=\" font-weight:600;\">Artifact Detectors</span></p></body></html>", None))

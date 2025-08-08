@@ -366,9 +366,106 @@ li.checked::marker { content: &quot;\2612&quot;; }
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>checkBox_0</sender>
+   <signal>clicked()</signal>
+   <receiver>SleepStageSelStep</receiver>
+   <slot>check_stages_slot()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>145</x>
+     <y>282</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>537</x>
+     <y>425</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>checkBox_1</sender>
+   <signal>clicked()</signal>
+   <receiver>SleepStageSelStep</receiver>
+   <slot>check_stages_slot()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>33</x>
+     <y>253</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>537</x>
+     <y>425</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>checkBox_2</sender>
+   <signal>clicked()</signal>
+   <receiver>SleepStageSelStep</receiver>
+   <slot>check_stages_slot()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>96</x>
+     <y>253</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>537</x>
+     <y>425</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>checkBox_3</sender>
+   <signal>clicked()</signal>
+   <receiver>SleepStageSelStep</receiver>
+   <slot>check_stages_slot()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>158</x>
+     <y>253</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>537</x>
+     <y>425</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>checkBox_5</sender>
+   <signal>clicked()</signal>
+   <receiver>SleepStageSelStep</receiver>
+   <slot>check_stages_slot()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>206</x>
+     <y>253</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>537</x>
+     <y>425</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>checkBox_9</sender>
+   <signal>clicked()</signal>
+   <receiver>SleepStageSelStep</receiver>
+   <slot>check_stages_slot()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>56</x>
+     <y>282</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>537</x>
+     <y>425</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>radio_threshold_slot()</slot>
+  <slot>check_stages_slot()</slot>
  </slots>
  <buttongroups>
   <buttongroup name="Theshold_sets"/>

@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>926</width>
+    <width>1065</width>
     <height>794</height>
    </rect>
   </property>
@@ -29,6 +29,20 @@
      </property>
      <property name="text">
       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Artifact Event Labels&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QLabel" name="label_7">
+     <property name="text">
+      <string>The default label reflects the selected sleep stages and the chosen set of default values.</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QLabel" name="label_8">
+     <property name="text">
+      <string>Edit the group and name to reflect your changes if any.</string>
      </property>
     </widget>
    </item>
@@ -66,6 +80,12 @@
        </item>
        <item>
         <widget class="QLabel" name="label_4">
+         <property name="minimumSize">
+          <size>
+           <width>50</width>
+           <height>0</height>
+          </size>
+         </property>
          <property name="text">
           <string>Group</string>
          </property>
@@ -81,7 +101,7 @@
          </property>
          <property name="maximumSize">
           <size>
-           <width>150</width>
+           <width>250</width>
            <height>16777215</height>
           </size>
          </property>
@@ -89,7 +109,7 @@
           <string>Write the common artifact event name to use for all the detectors.</string>
          </property>
          <property name="text">
-          <string>art_snooz</string>
+          <string>art_snooz_NREM_set1</string>
          </property>
          <property name="alignment">
           <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter</set>
@@ -97,7 +117,29 @@
         </widget>
        </item>
        <item>
+        <spacer name="horizontalSpacer">
+         <property name="orientation">
+          <enum>Qt::Orientation::Horizontal</enum>
+         </property>
+         <property name="sizeType">
+          <enum>QSizePolicy::Policy::Fixed</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>10</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item>
         <widget class="QLabel" name="label_5">
+         <property name="minimumSize">
+          <size>
+           <width>50</width>
+           <height>0</height>
+          </size>
+         </property>
          <property name="text">
           <string>Name</string>
          </property>
@@ -113,12 +155,12 @@
          </property>
          <property name="maximumSize">
           <size>
-           <width>150</width>
+           <width>250</width>
            <height>16777215</height>
           </size>
          </property>
          <property name="text">
-          <string>art_snooz</string>
+          <string>art_snooz_NREM_set1</string>
          </property>
         </widget>
        </item>
@@ -618,7 +660,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
   <slot>update_stages_slot()</slot>
  </slots>
  <buttongroups>
-  <buttongroup name="buttonGroup_2"/>
   <buttongroup name="buttonGroup"/>
+  <buttongroup name="buttonGroup_2"/>
  </buttongroups>
 </ui>

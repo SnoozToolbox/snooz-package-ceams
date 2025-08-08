@@ -13,6 +13,7 @@ from qtpy.QtGui import QRegularExpressionValidator
 
 from CEAMSTools.DetectArtifacts.FilterSignalsStep.FilterSignalsStep import FilterSignalsStep
 from CEAMSTools.DetectArtifacts.DetectorsStep.Ui_DetectorsStep import Ui_DetectorsStep
+from CEAMSTools.DetectArtifacts.SleepStageSelStep.SleepStageSelStep import SleepStageSelStep
 from commons.BaseStepView import BaseStepView
 from flowpipe.ActivationState import ActivationState
 
@@ -374,6 +375,17 @@ class DetectorsStep( BaseStepView,  Ui_DetectorsStep, QtWidgets.QWidget):
         if topic==self._context_manager.topic:
             if message==FilterSignalsStep.context_notch: # key of the context dict
                 self.on_notch_context_changed()
+            if message==SleepStageSelStep.context_threshold_set: # key of the context dict
+                self.threshold_context_changed()
+            if message==SleepStageSelStep.context_stages_sel: # key of the context dict
+                self.threshold_context_changed()
+
+
+    def threshold_context_changed(self):
+        threshold_set = self._context_manager[SleepStageSelStep.context_threshold_set]
+        sleep_stage_sel = self._context_manager[SleepStageSelStep.context_stages_sel]
+        self.unique_group_lineEdit.setText("art_snooz_set"+str(threshold_set)+"_"+sleep_stage_sel)
+        self.unique_name_lineEdit.setText("art_snooz_set"+str(threshold_set)+"_"+sleep_stage_sel)
 
 
     # Called when the user delete an instance of the plugin
