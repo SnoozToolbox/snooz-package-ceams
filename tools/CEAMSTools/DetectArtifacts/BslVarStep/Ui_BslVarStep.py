@@ -15,10 +15,10 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QFont, QFontDatabase, QGradient, QIcon,
     QImage, QKeySequence, QLinearGradient, QPainter,
     QPalette, QPixmap, QRadialGradient, QTransform)
-from PySide6.QtWidgets import (QApplication, QFormLayout, QFrame, QHBoxLayout,
-    QLabel, QLayout, QLineEdit, QPlainTextEdit,
-    QScrollArea, QSizePolicy, QSpacerItem, QSplitter,
-    QTextEdit, QVBoxLayout, QWidget)
+from PySide6.QtWidgets import (QApplication, QFrame, QHBoxLayout, QLabel,
+    QLineEdit, QPlainTextEdit, QScrollArea, QSizePolicy,
+    QSpacerItem, QSplitter, QTextEdit, QVBoxLayout,
+    QWidget)
 from . import BSLVar_res
 import themes_rc
 
@@ -26,7 +26,7 @@ class Ui_BslVarStep(object):
     def setupUi(self, BslVarStep):
         if not BslVarStep.objectName():
             BslVarStep.setObjectName(u"BslVarStep")
-        BslVarStep.resize(1269, 811)
+        BslVarStep.resize(704, 776)
         BslVarStep.setStyleSheet(u"font: 12pt \"Roboto\";")
         self.verticalLayout_2 = QVBoxLayout(BslVarStep)
         self.verticalLayout_2.setObjectName(u"verticalLayout_2")
@@ -95,12 +95,10 @@ class Ui_BslVarStep(object):
 
         self.verticalLayout_2.addWidget(self.splitter)
 
-        self.horizontalLayout_3 = QHBoxLayout()
-        self.horizontalLayout_3.setObjectName(u"horizontalLayout_3")
-        self.horizontalLayout_3.setSizeConstraint(QLayout.SizeConstraint.SetNoConstraint)
+        self.horizontalLayout_5 = QHBoxLayout()
+        self.horizontalLayout_5.setObjectName(u"horizontalLayout_5")
         self.verticalLayout = QVBoxLayout()
         self.verticalLayout.setObjectName(u"verticalLayout")
-        self.verticalLayout.setSizeConstraint(QLayout.SizeConstraint.SetFixedSize)
         self.label_4 = QLabel(BslVarStep)
         self.label_4.setObjectName(u"label_4")
         sizePolicy1.setHeightForWidth(self.label_4.sizePolicy().hasHeightForWidth())
@@ -109,51 +107,58 @@ class Ui_BslVarStep(object):
 
         self.verticalLayout.addWidget(self.label_4)
 
-        self.formLayout = QFormLayout()
-        self.formLayout.setObjectName(u"formLayout")
-        self.formLayout.setSizeConstraint(QLayout.SizeConstraint.SetFixedSize)
-        self.formLayout.setFieldGrowthPolicy(QFormLayout.FieldGrowthPolicy.FieldsStayAtSizeHint)
+        self.horizontalLayout_3 = QHBoxLayout()
+        self.horizontalLayout_3.setObjectName(u"horizontalLayout_3")
         self.label_3 = QLabel(BslVarStep)
         self.label_3.setObjectName(u"label_3")
-        sizePolicy1.setHeightForWidth(self.label_3.sizePolicy().hasHeightForWidth())
-        self.label_3.setSizePolicy(sizePolicy1)
-        self.label_3.setMinimumSize(QSize(140, 0))
+        sizePolicy3 = QSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Fixed)
+        sizePolicy3.setHorizontalStretch(0)
+        sizePolicy3.setVerticalStretch(0)
+        sizePolicy3.setHeightForWidth(self.label_3.sizePolicy().hasHeightForWidth())
+        self.label_3.setSizePolicy(sizePolicy3)
+        self.label_3.setMinimumSize(QSize(120, 0))
 
-        self.formLayout.setWidget(0, QFormLayout.LabelRole, self.label_3)
+        self.horizontalLayout_3.addWidget(self.label_3)
 
         self.group_lineEdit = QLineEdit(BslVarStep)
         self.group_lineEdit.setObjectName(u"group_lineEdit")
         self.group_lineEdit.setEnabled(False)
         self.group_lineEdit.setMaximumSize(QSize(300, 16777215))
 
-        self.formLayout.setWidget(0, QFormLayout.FieldRole, self.group_lineEdit)
+        self.horizontalLayout_3.addWidget(self.group_lineEdit)
 
+
+        self.verticalLayout.addLayout(self.horizontalLayout_3)
+
+        self.horizontalLayout_4 = QHBoxLayout()
+        self.horizontalLayout_4.setObjectName(u"horizontalLayout_4")
         self.label_11 = QLabel(BslVarStep)
         self.label_11.setObjectName(u"label_11")
-        sizePolicy1.setHeightForWidth(self.label_11.sizePolicy().hasHeightForWidth())
-        self.label_11.setSizePolicy(sizePolicy1)
+        sizePolicy3.setHeightForWidth(self.label_11.sizePolicy().hasHeightForWidth())
+        self.label_11.setSizePolicy(sizePolicy3)
+        self.label_11.setMinimumSize(QSize(120, 0))
 
-        self.formLayout.setWidget(1, QFormLayout.LabelRole, self.label_11)
+        self.horizontalLayout_4.addWidget(self.label_11)
 
         self.name_lineEdit = QLineEdit(BslVarStep)
         self.name_lineEdit.setObjectName(u"name_lineEdit")
         self.name_lineEdit.setEnabled(False)
         self.name_lineEdit.setMaximumSize(QSize(300, 16777215))
 
-        self.formLayout.setWidget(1, QFormLayout.FieldRole, self.name_lineEdit)
+        self.horizontalLayout_4.addWidget(self.name_lineEdit)
 
 
-        self.verticalLayout.addLayout(self.formLayout)
+        self.verticalLayout.addLayout(self.horizontalLayout_4)
 
 
-        self.horizontalLayout_3.addLayout(self.verticalLayout)
+        self.horizontalLayout_5.addLayout(self.verticalLayout)
 
         self.horizontalSpacer_2 = QSpacerItem(13, 13, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
 
-        self.horizontalLayout_3.addItem(self.horizontalSpacer_2)
+        self.horizontalLayout_5.addItem(self.horizontalSpacer_2)
 
 
-        self.verticalLayout_2.addLayout(self.horizontalLayout_3)
+        self.verticalLayout_2.addLayout(self.horizontalLayout_5)
 
         self.label = QLabel(BslVarStep)
         self.label.setObjectName(u"label")

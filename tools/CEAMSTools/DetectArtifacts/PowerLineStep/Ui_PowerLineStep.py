@@ -15,8 +15,8 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QFont, QFontDatabase, QGradient, QIcon,
     QImage, QKeySequence, QLinearGradient, QPainter,
     QPalette, QPixmap, QRadialGradient, QTransform)
-from PySide6.QtWidgets import (QApplication, QFormLayout, QFrame, QGridLayout,
-    QHBoxLayout, QLabel, QLineEdit, QScrollArea,
+from PySide6.QtWidgets import (QApplication, QFrame, QGridLayout, QHBoxLayout,
+    QLabel, QLayout, QLineEdit, QScrollArea,
     QSizePolicy, QSpacerItem, QSplitter, QTextEdit,
     QVBoxLayout, QWidget)
 from . import PowerLine_res
@@ -26,7 +26,7 @@ class Ui_PowerLineStep(object):
     def setupUi(self, PowerLineStep):
         if not PowerLineStep.objectName():
             PowerLineStep.setObjectName(u"PowerLineStep")
-        PowerLineStep.resize(1274, 834)
+        PowerLineStep.resize(970, 590)
         PowerLineStep.setStyleSheet(u"font: 12pt \"Roboto\";")
         self.verticalLayout_4 = QVBoxLayout(PowerLineStep)
         self.verticalLayout_4.setObjectName(u"verticalLayout_4")
@@ -35,7 +35,7 @@ class Ui_PowerLineStep(object):
         self.splitter.setOrientation(Qt.Orientation.Vertical)
         self.scrollArea = QScrollArea(self.splitter)
         self.scrollArea.setObjectName(u"scrollArea")
-        sizePolicy = QSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Preferred)
+        sizePolicy = QSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.scrollArea.sizePolicy().hasHeightForWidth())
@@ -44,10 +44,13 @@ class Ui_PowerLineStep(object):
         self.scrollAreaWidgetContents = QWidget()
         self.scrollAreaWidgetContents.setObjectName(u"scrollAreaWidgetContents")
         self.scrollAreaWidgetContents.setGeometry(QRect(0, 0, 1549, 164))
+        sizePolicy.setHeightForWidth(self.scrollAreaWidgetContents.sizePolicy().hasHeightForWidth())
+        self.scrollAreaWidgetContents.setSizePolicy(sizePolicy)
         self.horizontalLayout = QHBoxLayout(self.scrollAreaWidgetContents)
         self.horizontalLayout.setObjectName(u"horizontalLayout")
         self.label_10 = QLabel(self.scrollAreaWidgetContents)
         self.label_10.setObjectName(u"label_10")
+        self.label_10.setMaximumSize(QSize(16777215, 150))
         self.label_10.setPixmap(QPixmap(u":/powerline/powerLine_marked.png"))
         self.label_10.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
@@ -59,6 +62,7 @@ class Ui_PowerLineStep(object):
         self.layoutWidget.setObjectName(u"layoutWidget")
         self.verticalLayout_3 = QVBoxLayout(self.layoutWidget)
         self.verticalLayout_3.setObjectName(u"verticalLayout_3")
+        self.verticalLayout_3.setSizeConstraint(QLayout.SizeConstraint.SetNoConstraint)
         self.verticalLayout_3.setContentsMargins(0, 0, 0, 0)
         self.label_9 = QLabel(self.layoutWidget)
         self.label_9.setObjectName(u"label_9")
@@ -78,12 +82,9 @@ class Ui_PowerLineStep(object):
 
         self.description_textEdit = QTextEdit(self.layoutWidget)
         self.description_textEdit.setObjectName(u"description_textEdit")
-        sizePolicy2 = QSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
-        sizePolicy2.setHorizontalStretch(0)
-        sizePolicy2.setVerticalStretch(0)
-        sizePolicy2.setHeightForWidth(self.description_textEdit.sizePolicy().hasHeightForWidth())
-        self.description_textEdit.setSizePolicy(sizePolicy2)
-        self.description_textEdit.setMaximumSize(QSize(16777215, 340))
+        sizePolicy.setHeightForWidth(self.description_textEdit.sizePolicy().hasHeightForWidth())
+        self.description_textEdit.setSizePolicy(sizePolicy)
+        self.description_textEdit.setMaximumSize(QSize(16777215, 16777215))
         self.description_textEdit.setAutoFillBackground(True)
         self.description_textEdit.setStyleSheet(u"")
         self.description_textEdit.setFrameShape(QFrame.Shape.NoFrame)
@@ -97,13 +98,15 @@ class Ui_PowerLineStep(object):
 
         self.verticalLayout_4.addWidget(self.splitter)
 
-        self.gridLayout_2 = QGridLayout()
-        self.gridLayout_2.setObjectName(u"gridLayout_2")
+        self.horizontalLayout_4 = QHBoxLayout()
+        self.horizontalLayout_4.setObjectName(u"horizontalLayout_4")
+        self.horizontalLayout_4.setSizeConstraint(QLayout.SizeConstraint.SetDefaultConstraint)
         self.verticalLayout = QVBoxLayout()
         self.verticalLayout.setObjectName(u"verticalLayout")
-        self.verticalSpacer_2 = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Fixed)
+        self.verticalLayout.setSizeConstraint(QLayout.SizeConstraint.SetNoConstraint)
+        self.verticalSpacer = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Preferred)
 
-        self.verticalLayout.addItem(self.verticalSpacer_2)
+        self.verticalLayout.addItem(self.verticalSpacer)
 
         self.label_4 = QLabel(PowerLineStep)
         self.label_4.setObjectName(u"label_4")
@@ -113,47 +116,73 @@ class Ui_PowerLineStep(object):
 
         self.verticalLayout.addWidget(self.label_4)
 
-        self.formLayout = QFormLayout()
-        self.formLayout.setObjectName(u"formLayout")
+        self.horizontalLayout_2 = QHBoxLayout()
+        self.horizontalLayout_2.setObjectName(u"horizontalLayout_2")
         self.label_3 = QLabel(PowerLineStep)
         self.label_3.setObjectName(u"label_3")
-        self.label_3.setMinimumSize(QSize(140, 0))
+        sizePolicy2 = QSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Fixed)
+        sizePolicy2.setHorizontalStretch(0)
+        sizePolicy2.setVerticalStretch(0)
+        sizePolicy2.setHeightForWidth(self.label_3.sizePolicy().hasHeightForWidth())
+        self.label_3.setSizePolicy(sizePolicy2)
+        self.label_3.setMinimumSize(QSize(120, 0))
+        self.label_3.setMaximumSize(QSize(120, 16777215))
         self.label_3.setFont(font)
 
-        self.formLayout.setWidget(0, QFormLayout.LabelRole, self.label_3)
+        self.horizontalLayout_2.addWidget(self.label_3)
 
         self.group_lineEdit = QLineEdit(PowerLineStep)
         self.group_lineEdit.setObjectName(u"group_lineEdit")
         self.group_lineEdit.setEnabled(False)
-        self.group_lineEdit.setMaximumSize(QSize(16777215, 16777215))
+        sizePolicy2.setHeightForWidth(self.group_lineEdit.sizePolicy().hasHeightForWidth())
+        self.group_lineEdit.setSizePolicy(sizePolicy2)
+        self.group_lineEdit.setMinimumSize(QSize(300, 0))
+        self.group_lineEdit.setMaximumSize(QSize(300, 16777215))
         self.group_lineEdit.setFont(font)
 
-        self.formLayout.setWidget(0, QFormLayout.FieldRole, self.group_lineEdit)
+        self.horizontalLayout_2.addWidget(self.group_lineEdit)
 
+
+        self.verticalLayout.addLayout(self.horizontalLayout_2)
+
+        self.horizontalLayout_3 = QHBoxLayout()
+        self.horizontalLayout_3.setObjectName(u"horizontalLayout_3")
+        self.horizontalLayout_3.setSizeConstraint(QLayout.SizeConstraint.SetDefaultConstraint)
         self.label_11 = QLabel(PowerLineStep)
         self.label_11.setObjectName(u"label_11")
-        self.label_11.setMinimumSize(QSize(250, 0))
+        sizePolicy2.setHeightForWidth(self.label_11.sizePolicy().hasHeightForWidth())
+        self.label_11.setSizePolicy(sizePolicy2)
+        self.label_11.setMinimumSize(QSize(120, 0))
+        self.label_11.setMaximumSize(QSize(120, 16777215))
         self.label_11.setFont(font)
 
-        self.formLayout.setWidget(1, QFormLayout.LabelRole, self.label_11)
+        self.horizontalLayout_3.addWidget(self.label_11)
 
         self.name_rel_lineEdit = QLineEdit(PowerLineStep)
         self.name_rel_lineEdit.setObjectName(u"name_rel_lineEdit")
         self.name_rel_lineEdit.setEnabled(False)
-        self.name_rel_lineEdit.setMaximumSize(QSize(16777215, 16777215))
+        sizePolicy2.setHeightForWidth(self.name_rel_lineEdit.sizePolicy().hasHeightForWidth())
+        self.name_rel_lineEdit.setSizePolicy(sizePolicy2)
+        self.name_rel_lineEdit.setMinimumSize(QSize(300, 0))
+        self.name_rel_lineEdit.setMaximumSize(QSize(300, 16777215))
         self.name_rel_lineEdit.setFont(font)
 
-        self.formLayout.setWidget(1, QFormLayout.FieldRole, self.name_rel_lineEdit)
+        self.horizontalLayout_3.addWidget(self.name_rel_lineEdit)
 
 
-        self.verticalLayout.addLayout(self.formLayout)
+        self.verticalLayout.addLayout(self.horizontalLayout_3)
+
+        self.verticalSpacer_2 = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Preferred)
+
+        self.verticalLayout.addItem(self.verticalSpacer_2)
 
 
-        self.gridLayout_2.addLayout(self.verticalLayout, 0, 0, 1, 1)
+        self.horizontalLayout_4.addLayout(self.verticalLayout)
 
         self.settings_textEdit = QTextEdit(PowerLineStep)
         self.settings_textEdit.setObjectName(u"settings_textEdit")
-        self.settings_textEdit.setMinimumSize(QSize(0, 200))
+        self.settings_textEdit.setMinimumSize(QSize(0, 0))
+        self.settings_textEdit.setMaximumSize(QSize(16777215, 200))
         self.settings_textEdit.setFocusPolicy(Qt.FocusPolicy.NoFocus)
         self.settings_textEdit.setContextMenuPolicy(Qt.ContextMenuPolicy.NoContextMenu)
         self.settings_textEdit.setAcceptDrops(False)
@@ -164,14 +193,10 @@ class Ui_PowerLineStep(object):
         self.settings_textEdit.setLineWidth(1)
         self.settings_textEdit.setReadOnly(True)
 
-        self.gridLayout_2.addWidget(self.settings_textEdit, 0, 1, 2, 1)
-
-        self.verticalSpacer = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Fixed)
-
-        self.gridLayout_2.addItem(self.verticalSpacer, 1, 0, 1, 1)
+        self.horizontalLayout_4.addWidget(self.settings_textEdit)
 
 
-        self.verticalLayout_4.addLayout(self.gridLayout_2)
+        self.verticalLayout_4.addLayout(self.horizontalLayout_4)
 
         self.verticalLayout_2 = QVBoxLayout()
         self.verticalLayout_2.setObjectName(u"verticalLayout_2")
@@ -242,6 +267,10 @@ class Ui_PowerLineStep(object):
         self.label_5.setFont(font)
 
         self.verticalLayout_2.addWidget(self.label_5)
+
+        self.verticalSpacer_3 = QSpacerItem(20, 10, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Preferred)
+
+        self.verticalLayout_2.addItem(self.verticalSpacer_3)
 
 
         self.verticalLayout_4.addLayout(self.verticalLayout_2)

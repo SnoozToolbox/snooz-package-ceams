@@ -34,7 +34,7 @@
                 "show_index": true
             },
             {
-                "name": "Sleep Stage Selection",
+                "name": "Stage Selection",
                 "description": "Select specific sleep stages for the artifact detection.",
                 "custom_step_name": "SleepStageSelStep",
                 "show_index": true

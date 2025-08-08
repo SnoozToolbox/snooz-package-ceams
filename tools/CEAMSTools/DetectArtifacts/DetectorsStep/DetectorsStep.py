@@ -386,6 +386,7 @@ class DetectorsStep( BaseStepView,  Ui_DetectorsStep, QtWidgets.QWidget):
         sleep_stage_sel = self._context_manager[SleepStageSelStep.context_stages_sel]
         self.unique_group_lineEdit.setText("art_snooz_set"+str(threshold_set)+"_"+sleep_stage_sel)
         self.unique_name_lineEdit.setText("art_snooz_set"+str(threshold_set)+"_"+sleep_stage_sel)
+        self.update_event_label_slot()
 
 
     # Called when the user delete an instance of the plugin
