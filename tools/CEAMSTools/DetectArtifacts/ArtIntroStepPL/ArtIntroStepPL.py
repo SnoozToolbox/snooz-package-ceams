@@ -21,6 +21,7 @@ class ArtIntroStepPL( BaseStepView,  Ui_ArtIntroStepPL, QtWidgets.QWidget):
 
         # init UI
         self.setupUi(self)
+        self.splitter.setSizes([125, 100])
 
     def load_settings(self):
         pass
