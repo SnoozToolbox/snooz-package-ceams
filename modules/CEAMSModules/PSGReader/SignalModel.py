@@ -112,17 +112,21 @@ class SignalModel:
         # Extract one attribute and convert it in an array
         #   ex) samples1 = SignalModel.get_attribute(signals, 'samples', None)
         if (not attr == None) and (group_by == None) and (value_to_test == None):
+            grouped_attributes = [getattr(signal, attr) for signal in signals]
+            # Try converting to numpy array, fall back to list if it fails
             try :
-                attribute_list = np.array([getattr(signal, attr) for signal in signals])
+                attribute_list = np.array(grouped_attributes)
             except :
                 # When the shape cannot be converted into an numpy array, keep it in list
-                attribute_list = [getattr(signal, attr) for signal in signals]
+                attribute_list = grouped_attributes
         # Group the list of dict (SignalModel) by the attribute group_by and convert it in an array
         #   ex) signals_events = SignalModel.get_attribute(signals, None, 'start_time')
         elif (not group_by == None) and (attr == None) and (value_to_test == None):
             condition = np.vstack([getattr(signal, group_by) for signal in signals])
             unq_condition = np.unique(condition)
             attribute_list = np.array([[signal for signal in signals if getattr(signal, group_by) == cond] for cond in unq_condition])
+        # Group the list of dict (SignalModel) by the attribute group_by with a condition and convert it in an array
+        #   ex) signals_events = SignalModel.get_attribute(signals, None, 'channel', 'c3')
         elif (not group_by == None) and (attr == None) and (not value_to_test == None):
             condition = np.vstack([getattr(signal, group_by) for signal in signals])
             unq_condition = np.unique(condition)
@@ -139,7 +143,15 @@ class SignalModel:
         elif (not attr == None) and (not group_by == None) and (value_to_test == None):
             condition = np.vstack([getattr(signal, group_by) for signal in signals])
             unq_condition = np.unique(condition)
-            attribute_list = np.array([[getattr(signal, attr) for signal in signals if getattr(signal, group_by) == cond] for cond in unq_condition])
+            grouped_attributes = [
+                [getattr(signal, attr) for signal in signals if getattr(signal, group_by) == cond] 
+                for cond in unq_condition
+                ]
+            # Try converting to numpy array, fall back to list if it fails
+            try:
+                attribute_list = np.array(grouped_attributes)
+            except ValueError:  # Only catch the relevant error
+                attribute_list = grouped_attributes
         # Extract the only attr that match the value_to_test
         #   ex) fs_chan = SignalModel.get_attribute(signals, 'sample_rate', 'chan_label', channel)
         else:

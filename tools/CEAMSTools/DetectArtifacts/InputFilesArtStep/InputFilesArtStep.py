@@ -14,7 +14,7 @@ class InputFilesArtStep( InputFilesStep):
     # (really important to keep :
     #   context_files_view      = "input_files_settings_view")
     psg_reader_identifier = "64feff16-15d2-4acf-b2e5-195412e476ba"
-    valid_stage_mandatory = False    # To verify that all recordings have valid sleep stages
+    valid_stage_mandatory = False   # To verify that all recordings have valid sleep stages
     valid_selected_chan   = True    # To verify if at least one channel is selected
     valid_single_chan     = False   # To verify if only one chan is selected for each file
 

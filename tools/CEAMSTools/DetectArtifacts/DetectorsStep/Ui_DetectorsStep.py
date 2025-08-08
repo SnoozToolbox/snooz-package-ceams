@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file ''
+## Form generated from reading UI file 'Ui_DetectorsStep.ui'
 ##
 ## Created by: Qt User Interface Compiler version 6.8.2
 ##
@@ -16,16 +16,16 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QImage, QKeySequence, QLinearGradient, QPainter,
     QPalette, QPixmap, QRadialGradient, QTransform)
 from PySide6.QtWidgets import (QAbstractScrollArea, QApplication, QButtonGroup, QCheckBox,
-    QFrame, QGridLayout, QHBoxLayout, QLabel,
-    QLineEdit, QRadioButton, QSizePolicy, QSpacerItem,
-    QTextEdit, QVBoxLayout, QWidget)
+    QFrame, QHBoxLayout, QLabel, QLineEdit,
+    QRadioButton, QSizePolicy, QSpacerItem, QTextEdit,
+    QVBoxLayout, QWidget)
 import themes_rc
 
 class Ui_DetectorsStep(object):
     def setupUi(self, DetectorsStep):
         if not DetectorsStep.objectName():
             DetectorsStep.setObjectName(u"DetectorsStep")
-        DetectorsStep.resize(722, 663)
+        DetectorsStep.resize(1065, 794)
         DetectorsStep.setStyleSheet(u"font: 12pt \"Roboto\";")
         self.verticalLayout_5 = QVBoxLayout(DetectorsStep)
         self.verticalLayout_5.setObjectName(u"verticalLayout_5")
@@ -39,6 +39,16 @@ class Ui_DetectorsStep(object):
         self.label_3.setFont(font)
 
         self.verticalLayout_5.addWidget(self.label_3)
+
+        self.label_7 = QLabel(DetectorsStep)
+        self.label_7.setObjectName(u"label_7")
+
+        self.verticalLayout_5.addWidget(self.label_7)
+
+        self.label_8 = QLabel(DetectorsStep)
+        self.label_8.setObjectName(u"label_8")
+
+        self.verticalLayout_5.addWidget(self.label_8)
 
         self.verticalLayout_3 = QVBoxLayout()
         self.verticalLayout_3.setSpacing(0)
@@ -58,26 +68,32 @@ class Ui_DetectorsStep(object):
 
         self.label_4 = QLabel(DetectorsStep)
         self.label_4.setObjectName(u"label_4")
+        self.label_4.setMinimumSize(QSize(50, 0))
 
         self.horizontalLayout_2.addWidget(self.label_4)
 
         self.unique_group_lineEdit = QLineEdit(DetectorsStep)
         self.unique_group_lineEdit.setObjectName(u"unique_group_lineEdit")
         self.unique_group_lineEdit.setMinimumSize(QSize(150, 0))
-        self.unique_group_lineEdit.setMaximumSize(QSize(150, 16777215))
-        self.unique_group_lineEdit.setAlignment(Qt.AlignLeading|Qt.AlignLeft|Qt.AlignVCenter)
+        self.unique_group_lineEdit.setMaximumSize(QSize(200, 16777215))
+        self.unique_group_lineEdit.setAlignment(Qt.AlignmentFlag.AlignLeading|Qt.AlignmentFlag.AlignLeft|Qt.AlignmentFlag.AlignVCenter)
 
         self.horizontalLayout_2.addWidget(self.unique_group_lineEdit)
 
+        self.horizontalSpacer = QSpacerItem(10, 20, QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Minimum)
+
+        self.horizontalLayout_2.addItem(self.horizontalSpacer)
+
         self.label_5 = QLabel(DetectorsStep)
         self.label_5.setObjectName(u"label_5")
+        self.label_5.setMinimumSize(QSize(50, 0))
 
         self.horizontalLayout_2.addWidget(self.label_5)
 
         self.unique_name_lineEdit = QLineEdit(DetectorsStep)
         self.unique_name_lineEdit.setObjectName(u"unique_name_lineEdit")
         self.unique_name_lineEdit.setMinimumSize(QSize(150, 0))
-        self.unique_name_lineEdit.setMaximumSize(QSize(150, 16777215))
+        self.unique_name_lineEdit.setMaximumSize(QSize(200, 16777215))
 
         self.horizontalLayout_2.addWidget(self.unique_name_lineEdit)
 
@@ -115,7 +131,7 @@ class Ui_DetectorsStep(object):
 
         self.verticalLayout_5.addLayout(self.verticalLayout_3)
 
-        self.verticalSpacer_3 = QSpacerItem(20, 20, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Fixed)
+        self.verticalSpacer_3 = QSpacerItem(20, 20, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Minimum)
 
         self.verticalLayout_5.addItem(self.verticalSpacer_3)
 
@@ -221,7 +237,7 @@ class Ui_DetectorsStep(object):
 
         self.verticalLayout_5.addLayout(self.verticalLayout_2)
 
-        self.verticalSpacer = QSpacerItem(20, 20, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Fixed)
+        self.verticalSpacer = QSpacerItem(20, 20, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Minimum)
 
         self.verticalLayout_5.addItem(self.verticalSpacer)
 
@@ -229,88 +245,21 @@ class Ui_DetectorsStep(object):
         self.textEdit.setObjectName(u"textEdit")
         sizePolicy = QSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
         sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(10)
+        sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.textEdit.sizePolicy().hasHeightForWidth())
         self.textEdit.setSizePolicy(sizePolicy)
         self.textEdit.setMinimumSize(QSize(0, 0))
-        self.textEdit.setMaximumSize(QSize(16777215, 268))
-        self.textEdit.setFrameShape(QFrame.VLine)
+        self.textEdit.setMaximumSize(QSize(16777215, 16777215))
+        self.textEdit.setFrameShape(QFrame.Shape.VLine)
         self.textEdit.setLineWidth(0)
-        self.textEdit.setSizeAdjustPolicy(QAbstractScrollArea.AdjustToContents)
+        self.textEdit.setSizeAdjustPolicy(QAbstractScrollArea.SizeAdjustPolicy.AdjustToContents)
         self.textEdit.setReadOnly(True)
 
         self.verticalLayout_5.addWidget(self.textEdit)
 
-        self.verticalSpacer_2 = QSpacerItem(20, 20, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Fixed)
+        self.verticalSpacer_2 = QSpacerItem(20, 5, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Preferred)
 
         self.verticalLayout_5.addItem(self.verticalSpacer_2)
-
-        self.verticalLayout_4 = QVBoxLayout()
-        self.verticalLayout_4.setObjectName(u"verticalLayout_4")
-        self.label_7 = QLabel(DetectorsStep)
-        self.label_7.setObjectName(u"label_7")
-
-        self.verticalLayout_4.addWidget(self.label_7)
-
-        self.label_8 = QLabel(DetectorsStep)
-        self.label_8.setObjectName(u"label_8")
-
-        self.verticalLayout_4.addWidget(self.label_8)
-
-
-        self.verticalLayout_5.addLayout(self.verticalLayout_4)
-
-        self.horizontalLayout_4 = QHBoxLayout()
-        self.horizontalLayout_4.setObjectName(u"horizontalLayout_4")
-        self.gridLayout = QGridLayout()
-        self.gridLayout.setObjectName(u"gridLayout")
-        self.checkBox_1 = QCheckBox(DetectorsStep)
-        self.checkBox_1.setObjectName(u"checkBox_1")
-        self.checkBox_1.setChecked(True)
-
-        self.gridLayout.addWidget(self.checkBox_1, 0, 0, 1, 1)
-
-        self.checkBox_2 = QCheckBox(DetectorsStep)
-        self.checkBox_2.setObjectName(u"checkBox_2")
-        self.checkBox_2.setChecked(True)
-
-        self.gridLayout.addWidget(self.checkBox_2, 0, 1, 1, 2)
-
-        self.checkBox_3 = QCheckBox(DetectorsStep)
-        self.checkBox_3.setObjectName(u"checkBox_3")
-        self.checkBox_3.setChecked(True)
-
-        self.gridLayout.addWidget(self.checkBox_3, 0, 3, 1, 1)
-
-        self.checkBox_5 = QCheckBox(DetectorsStep)
-        self.checkBox_5.setObjectName(u"checkBox_5")
-        self.checkBox_5.setChecked(True)
-
-        self.gridLayout.addWidget(self.checkBox_5, 0, 4, 1, 1)
-
-        self.checkBox_9 = QCheckBox(DetectorsStep)
-        self.checkBox_9.setObjectName(u"checkBox_9")
-
-        self.gridLayout.addWidget(self.checkBox_9, 1, 0, 1, 2)
-
-        self.checkBox_0 = QCheckBox(DetectorsStep)
-        self.checkBox_0.setObjectName(u"checkBox_0")
-
-        self.gridLayout.addWidget(self.checkBox_0, 1, 2, 1, 2)
-
-
-        self.horizontalLayout_4.addLayout(self.gridLayout)
-
-        self.horizontalSpacer = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
-
-        self.horizontalLayout_4.addItem(self.horizontalSpacer)
-
-
-        self.verticalLayout_5.addLayout(self.horizontalLayout_4)
-
-        self.verticalSpacer_4 = QSpacerItem(20, 10, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
-
-        self.verticalLayout_5.addItem(self.verticalSpacer_4)
 
 
         self.retranslateUi(DetectorsStep)
@@ -321,11 +270,6 @@ class Ui_DetectorsStep(object):
         self.specific_radioButton.clicked.connect(DetectorsStep.update_event_label_slot)
         self.unique_group_lineEdit.editingFinished.connect(DetectorsStep.update_event_label_slot)
         self.unique_name_lineEdit.editingFinished.connect(DetectorsStep.update_event_label_slot)
-        self.checkBox_0.clicked.connect(DetectorsStep.update_stages_slot)
-        self.checkBox_1.clicked.connect(DetectorsStep.update_stages_slot)
-        self.checkBox_2.clicked.connect(DetectorsStep.update_stages_slot)
-        self.checkBox_3.clicked.connect(DetectorsStep.update_stages_slot)
-        self.checkBox_5.clicked.connect(DetectorsStep.update_stages_slot)
 
         QMetaObject.connectSlotsByName(DetectorsStep)
     # setupUi
@@ -333,14 +277,16 @@ class Ui_DetectorsStep(object):
     def retranslateUi(self, DetectorsStep):
         DetectorsStep.setWindowTitle("")
         self.label_3.setText(QCoreApplication.translate("DetectorsStep", u"<html><head/><body><p><span style=\" font-weight:600;\">Artifact Event Labels</span></p></body></html>", None))
+        self.label_7.setText(QCoreApplication.translate("DetectorsStep", u"The default label reflects the selected sleep stages and the chosen set of default values.", None))
+        self.label_8.setText(QCoreApplication.translate("DetectorsStep", u"Edit the group and name to reflect your changes if any.", None))
         self.common_radioButton.setText(QCoreApplication.translate("DetectorsStep", u"Common to all the detectors", None))
         self.label_4.setText(QCoreApplication.translate("DetectorsStep", u"Group", None))
 #if QT_CONFIG(tooltip)
         self.unique_group_lineEdit.setToolTip(QCoreApplication.translate("DetectorsStep", u"Write the common artifact event name to use for all the detectors.", None))
 #endif // QT_CONFIG(tooltip)
-        self.unique_group_lineEdit.setText(QCoreApplication.translate("DetectorsStep", u"art_snooz", None))
+        self.unique_group_lineEdit.setText(QCoreApplication.translate("DetectorsStep", u"art_snooz_NREM_set1", None))
         self.label_5.setText(QCoreApplication.translate("DetectorsStep", u"Name", None))
-        self.unique_name_lineEdit.setText(QCoreApplication.translate("DetectorsStep", u"art_snooz", None))
+        self.unique_name_lineEdit.setText(QCoreApplication.translate("DetectorsStep", u"art_snooz_NREM_set1", None))
         self.specific_radioButton.setText(QCoreApplication.translate("DetectorsStep", u"Specific to each detector", None))
         self.specific_name_label.setText(QCoreApplication.translate("DetectorsStep", u"Group and name are defined in the settings page of each detector.", None))
         self.label_6.setText(QCoreApplication.translate("DetectorsStep", u"<html><head/><body><p><span style=\" font-weight:600;\">Artifact Detectors</span></p></body></html>", None))
@@ -355,36 +301,29 @@ class Ui_DetectorsStep(object):
         self.bslvar_checkBox.setText(QCoreApplication.translate("DetectorsStep", u"Baseline Variation (Breathing, Sweat) : Segments with high power in the low frequency band (<0.4 Hz).", None))
         self.muscle_checkBox.setText(QCoreApplication.translate("DetectorsStep", u"Muscle Artifact : Segments with burst of activity in the frequency band 20.25-32 Hz.", None))
         self.textEdit.setHtml(QCoreApplication.translate("DetectorsStep", u"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
-"<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
+"<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset=\"utf-8\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
+"hr { height: 1px; border-width: 0; }\n"
+"li.unchecked::marker { content: \"\\2610\"; }\n"
+"li.checked::marker { content: \"\\2612\"; }\n"
 "</style></head><body style=\" font-family:'Roboto'; font-size:12pt; font-weight:400; font-style:normal;\">\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">The thresholds of each detector can be modified in the &quot;Detectors Settings&quot; configuration pages.</p>\n"
 "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">    To make a detector more precise : </p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">     "
-                        "   - Flatline detector : decrease the threshold</p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">    To m"
+                        "ake a detector more precise : </p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">        - Flatline detector : decrease the threshold</p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">        - All other detectors : increase the thresholds</p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">        - You could start by increasing the fixed thresholds based on the main gaussian distrbution.</p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">          I.e. increase the thresholds from 4 X STD to 5 X STD.</p>\n"
 "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">    To make a detector more sensitive : </p>\n"
-"<p style=\" margin-top:0px; ma"
-                        "rgin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">        - Flatline detector : increase the threshold</p>\n"
+"<p style=\" margin-top:0px; margin-"
+                        "bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">    To make a detector more sensitive : </p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">        - Flatline detector : increase the threshold</p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">        - All other detectors : decrease the thresholds</p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">        - You could start by decreasing the fixed thresholds based on the main gaussian distrbution.</p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">          I.e. decrease the thresholds from 4 X STD to 3 X STD, except for the baseline variation which the minimum value should be 3.5.</p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
-"<p style=\" margin-top:0px; mar"
-                        "gin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">For more information see the  &quot;Detectors Settings&quot; configuration page for each specific detector. </p></body></html>", None))
-        self.label_7.setText(QCoreApplication.translate("DetectorsStep", u"<html><head/><body><p><span style=\" font-weight:600;\">Sleep Stage Selection</span></p></body></html>", None))
-        self.label_8.setText(QCoreApplication.translate("DetectorsStep", u"Artifact detection is performed on the entire recording.\n"
-"However, you can select specific sleep stages to potentially establish a cleaner baseline\n"
-"for the set of algorithms that use a 3-component Gaussian Mixture Model (GMM).", None))
-        self.checkBox_1.setText(QCoreApplication.translate("DetectorsStep", u"N1", None))
-        self.checkBox_2.setText(QCoreApplication.translate("DetectorsStep", u"N2", None))
-        self.checkBox_3.setText(QCoreApplication.translate("DetectorsStep", u"N3", None))
-        self.checkBox_5.setText(QCoreApplication.translate("DetectorsStep", u"R", None))
-        self.checkBox_9.setText(QCoreApplication.translate("DetectorsStep", u"Unscored", None))
-        self.checkBox_0.setText(QCoreApplication.translate("DetectorsStep", u"Awake", None))
+"<p style=\"-qt-paragraph-ty"
+                        "pe:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">For more information see the  &quot;Detectors Settings&quot; configuration page for each specific detector. </p></body></html>", None))
     # retranslateUi
 

@@ -14,6 +14,7 @@ from qtpy.QtCore import QRegularExpression  # To validate waht the user enters i
 
 from CEAMSTools.DetectArtifacts.BslVarStep.Ui_BslVarStep import Ui_BslVarStep
 from CEAMSTools.DetectArtifacts.DetectorsStep.DetectorsStep import DetectorsStep
+from CEAMSTools.DetectArtifacts.SleepStageSelStep.SleepStageSelStep import SleepStageSelStep
 from commons.BaseStepView import BaseStepView
 
 class BslVarStep( BaseStepView,  Ui_BslVarStep, QtWidgets.QWidget):
@@ -43,7 +44,10 @@ class BslVarStep( BaseStepView,  Ui_BslVarStep, QtWidgets.QWidget):
         self._pub_sub_manager.subscribe(self, self._threshold_topic)
 
         # Subscribe to the context
-        self._pub_sub_manager.subscribe(self, self._context_manager.topic)  
+        self._pub_sub_manager.subscribe(self, self._context_manager.topic)
+
+        # Default value for the threshold [set 1 (precise-NREM), set 2 (sensitive-REM)]
+        self.threshold_value = [4, 2.5] # STD of the main gaussian from 3 components
 
 
     # Called when the settingsView is opened by the user
@@ -87,6 +91,13 @@ class BslVarStep( BaseStepView,  Ui_BslVarStep, QtWidgets.QWidget):
                     self.name_lineEdit.setEnabled(False)
                 else: # Specific -> make it editable
                     self.name_lineEdit.setEnabled(True)
+            if message==SleepStageSelStep.context_threshold_set: # key of the context dict
+                self.threshold_context_changed()
+
+
+    def threshold_context_changed(self):
+        threshold_set = int(self._context_manager[SleepStageSelStep.context_threshold_set])
+        self.threshold_lineEdit.setText(str(self.threshold_value[threshold_set-1]))
 
 
     # To init 

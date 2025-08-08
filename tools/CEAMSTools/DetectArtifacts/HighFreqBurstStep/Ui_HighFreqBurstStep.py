@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file ''
+## Form generated from reading UI file 'Ui_HighFreqBurstStep.ui'
 ##
 ## Created by: Qt User Interface Compiler version 6.8.2
 ##
@@ -16,9 +16,9 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QImage, QKeySequence, QLinearGradient, QPainter,
     QPalette, QPixmap, QRadialGradient, QTransform)
 from PySide6.QtWidgets import (QApplication, QFormLayout, QFrame, QGridLayout,
-    QHBoxLayout, QLabel, QLineEdit, QScrollArea,
-    QSizePolicy, QSpacerItem, QTextEdit, QVBoxLayout,
-    QWidget)
+    QHBoxLayout, QLabel, QLayout, QLineEdit,
+    QScrollArea, QSizePolicy, QSpacerItem, QTextEdit,
+    QVBoxLayout, QWidget)
 from . import high_freq_noise_res_rc
 import themes_rc
 
@@ -26,7 +26,7 @@ class Ui_HighFreqBurstStep(object):
     def setupUi(self, HighFreqBurstStep):
         if not HighFreqBurstStep.objectName():
             HighFreqBurstStep.setObjectName(u"HighFreqBurstStep")
-        HighFreqBurstStep.resize(1002, 658)
+        HighFreqBurstStep.resize(734, 535)
         HighFreqBurstStep.setStyleSheet(u"font: 12pt \"Roboto\";")
         self.verticalLayout_2 = QVBoxLayout(HighFreqBurstStep)
         self.verticalLayout_2.setObjectName(u"verticalLayout_2")
@@ -46,7 +46,7 @@ class Ui_HighFreqBurstStep(object):
         self.label_10 = QLabel(self.scrollAreaWidgetContents)
         self.label_10.setObjectName(u"label_10")
         self.label_10.setPixmap(QPixmap(u":/high_freq_noise/burst_noise.png"))
-        self.label_10.setAlignment(Qt.AlignCenter)
+        self.label_10.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
         self.horizontalLayout.addWidget(self.label_10)
 
@@ -103,7 +103,13 @@ class Ui_HighFreqBurstStep(object):
         self.group_lineEdit = QLineEdit(HighFreqBurstStep)
         self.group_lineEdit.setObjectName(u"group_lineEdit")
         self.group_lineEdit.setEnabled(False)
-        self.group_lineEdit.setMaximumSize(QSize(100, 16777215))
+        sizePolicy1 = QSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Fixed)
+        sizePolicy1.setHorizontalStretch(0)
+        sizePolicy1.setVerticalStretch(0)
+        sizePolicy1.setHeightForWidth(self.group_lineEdit.sizePolicy().hasHeightForWidth())
+        self.group_lineEdit.setSizePolicy(sizePolicy1)
+        self.group_lineEdit.setMinimumSize(QSize(500, 0))
+        self.group_lineEdit.setMaximumSize(QSize(500, 16777215))
 
         self.formLayout.setWidget(0, QFormLayout.FieldRole, self.group_lineEdit)
 
@@ -117,16 +123,15 @@ class Ui_HighFreqBurstStep(object):
         self.name_burst_lineEdit = QLineEdit(HighFreqBurstStep)
         self.name_burst_lineEdit.setObjectName(u"name_burst_lineEdit")
         self.name_burst_lineEdit.setEnabled(False)
-        self.name_burst_lineEdit.setMaximumSize(QSize(100, 16777215))
+        sizePolicy1.setHeightForWidth(self.name_burst_lineEdit.sizePolicy().hasHeightForWidth())
+        self.name_burst_lineEdit.setSizePolicy(sizePolicy1)
+        self.name_burst_lineEdit.setMinimumSize(QSize(500, 0))
+        self.name_burst_lineEdit.setMaximumSize(QSize(500, 16777215))
 
         self.formLayout.setWidget(1, QFormLayout.FieldRole, self.name_burst_lineEdit)
 
 
         self.horizontalLayout_3.addLayout(self.formLayout)
-
-        self.horizontalSpacer = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
-
-        self.horizontalLayout_3.addItem(self.horizontalSpacer)
 
 
         self.verticalLayout.addLayout(self.horizontalLayout_3)
@@ -151,17 +156,23 @@ class Ui_HighFreqBurstStep(object):
 
         self.gridLayout = QGridLayout()
         self.gridLayout.setObjectName(u"gridLayout")
+        self.gridLayout.setSizeConstraint(QLayout.SizeConstraint.SetFixedSize)
         self.label_5 = QLabel(HighFreqBurstStep)
         self.label_5.setObjectName(u"label_5")
+        sizePolicy1.setHeightForWidth(self.label_5.sizePolicy().hasHeightForWidth())
+        self.label_5.setSizePolicy(sizePolicy1)
         self.label_5.setMinimumSize(QSize(140, 0))
+        self.label_5.setMaximumSize(QSize(315, 16777215))
         self.label_5.setFont(font)
         self.label_5.setMidLineWidth(0)
-        self.label_5.setTextFormat(Qt.RichText)
+        self.label_5.setTextFormat(Qt.TextFormat.RichText)
 
         self.gridLayout.addWidget(self.label_5, 0, 0, 1, 1)
 
         self.tresh_fixe_lineEdit = QLineEdit(HighFreqBurstStep)
         self.tresh_fixe_lineEdit.setObjectName(u"tresh_fixe_lineEdit")
+        sizePolicy1.setHeightForWidth(self.tresh_fixe_lineEdit.sizePolicy().hasHeightForWidth())
+        self.tresh_fixe_lineEdit.setSizePolicy(sizePolicy1)
         self.tresh_fixe_lineEdit.setMinimumSize(QSize(0, 0))
         self.tresh_fixe_lineEdit.setMaximumSize(QSize(100, 16777215))
 
@@ -169,43 +180,61 @@ class Ui_HighFreqBurstStep(object):
 
         self.label_12 = QLabel(HighFreqBurstStep)
         self.label_12.setObjectName(u"label_12")
+        sizePolicy1.setHeightForWidth(self.label_12.sizePolicy().hasHeightForWidth())
+        self.label_12.setSizePolicy(sizePolicy1)
+        self.label_12.setMaximumSize(QSize(220, 16777215))
 
         self.gridLayout.addWidget(self.label_12, 0, 2, 1, 1)
 
         self.label_2 = QLabel(HighFreqBurstStep)
         self.label_2.setObjectName(u"label_2")
+        sizePolicy1.setHeightForWidth(self.label_2.sizePolicy().hasHeightForWidth())
+        self.label_2.setSizePolicy(sizePolicy1)
         self.label_2.setMinimumSize(QSize(210, 0))
-        self.label_2.setMaximumSize(QSize(210, 16777215))
+        self.label_2.setMaximumSize(QSize(315, 16777215))
         self.label_2.setFont(font)
-        self.label_2.setTextFormat(Qt.RichText)
+        self.label_2.setTextFormat(Qt.TextFormat.RichText)
 
         self.gridLayout.addWidget(self.label_2, 1, 0, 1, 1)
 
         self.thresh_adp_lineEdit = QLineEdit(HighFreqBurstStep)
         self.thresh_adp_lineEdit.setObjectName(u"thresh_adp_lineEdit")
+        sizePolicy1.setHeightForWidth(self.thresh_adp_lineEdit.sizePolicy().hasHeightForWidth())
+        self.thresh_adp_lineEdit.setSizePolicy(sizePolicy1)
         self.thresh_adp_lineEdit.setMaximumSize(QSize(100, 16777215))
 
         self.gridLayout.addWidget(self.thresh_adp_lineEdit, 1, 1, 1, 1)
 
         self.label_13 = QLabel(HighFreqBurstStep)
         self.label_13.setObjectName(u"label_13")
+        sizePolicy1.setHeightForWidth(self.label_13.sizePolicy().hasHeightForWidth())
+        self.label_13.setSizePolicy(sizePolicy1)
+        self.label_13.setMaximumSize(QSize(220, 16777215))
 
         self.gridLayout.addWidget(self.label_13, 1, 2, 1, 1)
 
         self.label_11 = QLabel(HighFreqBurstStep)
         self.label_11.setObjectName(u"label_11")
+        sizePolicy1.setHeightForWidth(self.label_11.sizePolicy().hasHeightForWidth())
+        self.label_11.setSizePolicy(sizePolicy1)
+        self.label_11.setMaximumSize(QSize(315, 16777215))
         self.label_11.setFont(font)
 
         self.gridLayout.addWidget(self.label_11, 2, 0, 1, 1)
 
         self.thresh_ratio_lineEdit = QLineEdit(HighFreqBurstStep)
         self.thresh_ratio_lineEdit.setObjectName(u"thresh_ratio_lineEdit")
+        sizePolicy1.setHeightForWidth(self.thresh_ratio_lineEdit.sizePolicy().hasHeightForWidth())
+        self.thresh_ratio_lineEdit.setSizePolicy(sizePolicy1)
         self.thresh_ratio_lineEdit.setMaximumSize(QSize(100, 16777215))
 
         self.gridLayout.addWidget(self.thresh_ratio_lineEdit, 2, 1, 1, 1)
 
         self.label_14 = QLabel(HighFreqBurstStep)
         self.label_14.setObjectName(u"label_14")
+        sizePolicy1.setHeightForWidth(self.label_14.sizePolicy().hasHeightForWidth())
+        self.label_14.setSizePolicy(sizePolicy1)
+        self.label_14.setMaximumSize(QSize(220, 16777215))
 
         self.gridLayout.addWidget(self.label_14, 2, 2, 1, 1)
 
@@ -223,9 +252,9 @@ class Ui_HighFreqBurstStep(object):
         self.textEdit.setObjectName(u"textEdit")
         self.textEdit.setFont(font)
         self.textEdit.setAutoFillBackground(True)
-        self.textEdit.setFrameShape(QFrame.HLine)
-        self.textEdit.setFrameShadow(QFrame.Plain)
-        self.textEdit.setLineWidth(0)
+        self.textEdit.setFrameShape(QFrame.Shape.StyledPanel)
+        self.textEdit.setFrameShadow(QFrame.Shadow.Sunken)
+        self.textEdit.setLineWidth(2)
         self.textEdit.setReadOnly(True)
 
         self.horizontalLayout_2.addWidget(self.textEdit)
@@ -237,11 +266,11 @@ class Ui_HighFreqBurstStep(object):
         self.horizontalLayout_4.setObjectName(u"horizontalLayout_4")
         self.textEdit_2 = QTextEdit(HighFreqBurstStep)
         self.textEdit_2.setObjectName(u"textEdit_2")
-        self.textEdit_2.setMaximumSize(QSize(16777215, 16777215))
+        self.textEdit_2.setMaximumSize(QSize(16777215, 200))
         self.textEdit_2.setFont(font)
         self.textEdit_2.setAutoFillBackground(True)
-        self.textEdit_2.setFrameShape(QFrame.HLine)
-        self.textEdit_2.setFrameShadow(QFrame.Plain)
+        self.textEdit_2.setFrameShape(QFrame.Shape.NoFrame)
+        self.textEdit_2.setFrameShadow(QFrame.Shadow.Sunken)
         self.textEdit_2.setLineWidth(0)
         self.textEdit_2.setReadOnly(True)
 
@@ -263,7 +292,7 @@ class Ui_HighFreqBurstStep(object):
         self.label_6.setText(QCoreApplication.translate("HighFreqBurstStep", u"Identification of bursts of high frequency (>25 Hz) noise\n"
 "via spectral power (STFT :  Short Term Fourier Transform).\n"
 "A glitch or a noise burst may be caused by a bad connection of the electrode.", None))
-        self.label_4.setText(QCoreApplication.translate("HighFreqBurstStep", u"Event Settings", None))
+        self.label_4.setText(QCoreApplication.translate("HighFreqBurstStep", u"<html><head/><body><p><span style=\" font-weight:700;\">Event Settings</span></p></body></html>", None))
         self.label_3.setText(QCoreApplication.translate("HighFreqBurstStep", u"Event Group", None))
 #if QT_CONFIG(tooltip)
         self.group_lineEdit.setToolTip(QCoreApplication.translate("HighFreqBurstStep", u"In which \"Event Group\" the detected artifact are added (how they will be written to  the annotation file). Go to the general Detectors Settings to edit the group.", None))
@@ -274,7 +303,7 @@ class Ui_HighFreqBurstStep(object):
         self.name_burst_lineEdit.setToolTip(QCoreApplication.translate("HighFreqBurstStep", u"The event name of the detected artifact (how they will be wrtten to the annotation file).  Go to the general Detectors Settings to edit the name.", None))
 #endif // QT_CONFIG(tooltip)
         self.name_burst_lineEdit.setText(QCoreApplication.translate("HighFreqBurstStep", u"art_snooz", None))
-        self.label.setText(QCoreApplication.translate("HighFreqBurstStep", u"Thresholds", None))
+        self.label.setText(QCoreApplication.translate("HighFreqBurstStep", u"<html><head/><body><p><span style=\" font-weight:700;\">Thresholds</span></p></body></html>", None))
         self.label_8.setText(QCoreApplication.translate("HighFreqBurstStep", u"Artifact when A and B and C", None))
         self.label_5.setText(QCoreApplication.translate("HighFreqBurstStep", u"<html><head/><body><p>(A) Fixed (mean + x STD) of main gaussian</p></body></html>", None))
 #if QT_CONFIG(tooltip)
@@ -289,43 +318,49 @@ class Ui_HighFreqBurstStep(object):
         self.thresh_ratio_lineEdit.setText(QCoreApplication.translate("HighFreqBurstStep", u"0.1", None))
         self.label_14.setText(QCoreApplication.translate("HighFreqBurstStep", u"optimal value from 0.05 to 0.4", None))
         self.textEdit.setHtml(QCoreApplication.translate("HighFreqBurstStep", u"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
-"<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
+"<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset=\"utf-8\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
+"hr { height: 1px; border-width: 0; }\n"
+"li.unchecked::marker { content: \"\\2610\"; }\n"
+"li.checked::marker { content: \"\\2612\"; }\n"
 "</style></head><body style=\" font-family:'Roboto'; font-size:12pt; font-weight:400; font-style:normal;\">\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" text-decoration: underline;\">Fixed threshold</span><span style=\" color:#000000;\"> (mean + x STD)</span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">The power is log10 transformed to make the data more normally distributed, however the distribution of the power of all selected channels is often skewed right du to artifacts.</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">The distribut"
-                        "ion is then modeled by a 3-components Gaussian Mixture Model (GMM).</p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">The power is log10 transformed to make the data more normally distributed, however the distribution of the power of all selected channels is often skewed "
+                        "right du to artifacts.</p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">The distribution is then modeled by a 3-components Gaussian Mixture Model (GMM).</p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">The threshold is multiplied by the standard deviation (STD) and added to the mean of the main gaussian (over a mixture of 3).</p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">An artifact is possibly identified when the log10(power) &gt; (mean + threshold*STD)</p>\n"
 "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" text-decoration: underline;\">Adaptive threshold</span> (baseline)</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-i"
-                        "ndent:0px;\">An adaptive threshold is computed from a baseline window (BSL) of 30 s around the segment to evaluate.  A segment with a power x times the median power of the baseline is possibly an artifact. The adaptive threshold may be too sensitive when the EEG recording does not include much high frequency noise. </p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" text-decoration: u"
+                        "nderline;\">Adaptive threshold</span> (baseline)</p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">An adaptive threshold is computed from a baseline window (BSL) of 30 s around the segment to evaluate.  A segment with a power x times the median power of the baseline is possibly an artifact. The adaptive threshold may be too sensitive when the EEG recording does not include much high frequency noise. </p>\n"
 "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" text-decoration: underline;\">Power ratio threshold</span> (relative power)</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">High frequency bursts can be masked (thus non-disturbing) by a strong low frequency signal. An artifact is possibly identified when the relative power (25-64 Hz)/(8-64 Hz) &gt; threshold.</p>\n"
-"<"
-                        "p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">High frequency bursts can be mas"
+                        "ked (thus non-disturbing) by a strong low frequency signal. An artifact is possibly identified when the relative power (25-64 Hz)/(8-64 Hz) &gt; threshold.</p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">A segment whose power exceeds the 3 thresholds is considered an artifact.</p>\n"
 "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">To reduce the number of false positives, especially during spindles, alpha waves, or beta bursts, please first increase the power ratio threshold value.</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">A greater proportion of the signal in the 25-64 Hz frequency band will be needed to mark the segme"
-                        "nt as an artifact.</p></body></html>", None))
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-"
+                        "left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">A greater proportion of the signal in the 25-64 Hz frequency band will be needed to mark the segment as an artifact.</p></body></html>", None))
         self.textEdit_2.setHtml(QCoreApplication.translate("HighFreqBurstStep", u"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
-"<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
+"<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset=\"utf-8\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
+"hr { height: 1px; border-width: 0; }\n"
+"li.unchecked::marker { content: \"\\2610\"; }\n"
+"li.checked::marker { content: \"\\2612\"; }\n"
 "</style></head><body style=\" font-family:'Roboto'; font-size:12pt; font-weight:400; font-style:normal;\">\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">The power is computed on sliding windows through STFT.</p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Window length = 0.5 s</p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Window step = 0.25 s </p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">The STFT is applied to integrate (sum) the signal power within a frequency range of "
-                        "the true spectrum (units\u00b2 ex. \u00b5V\u00b2) as suggested in [1].</p>\n"
+"<p style=\" margin-top:0px; margin-botto"
+                        "m:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">The STFT is applied to integrate (sum) the signal power within a frequency range of the true spectrum (units\u00b2 ex. \u00b5V\u00b2) as suggested in [1].</p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">The adaptive treshold is computed from a baseline window (BSL).</p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Window length around the segment = 30 s</p>\n"
 "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" text-decoration: underline;\">Reference</span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">[1] Cox, R. &amp; Fell, J. Analyzing human sleep EEG: A methodological primer with code implementation. Sleep M"
-                        "edicine Reviews54, 101353 (2020).</p></body></html>", None))
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; mar"
+                        "gin-right:0px; -qt-block-indent:0; text-indent:0px;\">[1] Cox, R. &amp; Fell, J. Analyzing human sleep EEG: A methodological primer with code implementation. Sleep Medicine Reviews54, 101353 (2020).</p></body></html>", None))
     # retranslateUi
 

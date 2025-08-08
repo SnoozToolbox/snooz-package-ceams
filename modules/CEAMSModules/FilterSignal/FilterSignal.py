@@ -165,7 +165,7 @@ class FilterSignal(SciNode):
 
             samples_to_filter = signal_model.samples
             # Extract where are the NaN values
-            non_nan_indices = np.where(~np.isnan(samples_to_filter))
+            non_nan_indices = np.where(~np.isnan(samples_to_filter))[0]
             if len(non_nan_indices) > 0:
                 # reshape the i_nan_samples (x,1) to (x,)
                 non_nan_indices = np.squeeze(non_nan_indices)
@@ -190,7 +190,9 @@ class FilterSignal(SciNode):
                         taps, 1, samples_without_nan).copy() # .copy() is a hack to make 
                                                 # recording the EDF with pyedflib much
                                                 # much much faster
-
+            else: # The whole signal is NaN - no filter applied
+                filtered_signal = np.empty_like(signal_model.samples)
+                filtered_signal.fill(np.nan)
             # Clone the signal object and set it back into the dictionary
             s = signal_model.clone(clone_samples=False)
             s.samples = np.empty_like(signal_model.samples)
