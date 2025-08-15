@@ -9,7 +9,7 @@ See the file LICENCE for full license details.
 
 from qtpy import QtWidgets
 from qtpy.QtGui import QPixmap, QImage
-from qtpy.QtCore import QFile
+from qtpy.QtCore import QFile, QTimer
 
 from . import SleepCycleDelimiter_rs
 
@@ -29,11 +29,18 @@ class SleepCyclesDelimiterSettingsView( BaseSettingsView,  Ui_SleepCyclesDelimit
 
         # init UI
         self.setupUi(self)
-        _SleepCycleDelimiter_ref = SleepCycleDelimiter_rs  # prevent it from being garbage collected
+        # keep the qrc module alive
+        self._SleepCycleDelimiter_ref = SleepCycleDelimiter_rs  # prevent it from being garbage collected
         self.image_min = ":/sleep_cycle_del/UI_v5_minimal.png"
         self.image_aesch = ":/sleep_cycle_del/UI_v5_Aeschbach.png"
         self.image_floyd = ":/sleep_cycle_del/UI_v5_Feinberg_floyd.png"
-        self.image.setPixmap(self.load_safe_pixmap(self.image_min))
+
+        # defer image loading
+        self._load_image_timer = QTimer(self)
+        self._load_image_timer.setSingleShot(True)
+        self._load_image_timer.timeout.connect(lambda: self._load_pixmap(self.image_aesch))
+        self._load_image_timer.start(50)
+        self.destroyed.connect(self._load_image_timer.stop)
 
         # Dictionary to convert into string
         self.parameters = {}
@@ -51,16 +58,16 @@ class SleepCyclesDelimiterSettingsView( BaseSettingsView,  Ui_SleepCyclesDelimit
         self._pub_sub_manager.subscribe(self, self._parameters_topic)
         
 
+    def _load_pixmap(self, image_path: str):
+        if not self.isVisible():   # <- skip if the widget has already been closed
+            return
+        pixmap = self.load_safe_pixmap(image_path)
+        self.image.setPixmap(pixmap)
+
     def load_safe_pixmap(self, image_path: str) -> QPixmap:
-        """
-        Load a QImage in the **main Qt thread**, then convert to QPixmap.
-        This avoids random access-violation crashes on Windows.
-        """
-        # Verify if this resource exists : ":/spindle_moda/e0004-b1-01-05-0001-smp303751_res80.png"
-        if QFile.exists(image_path):
-            img = QImage(image_path)
-        else:
+        if not QFile.exists(image_path):
             return QPixmap()
+        img = QImage(image_path)
         return QPixmap.fromImage(img)
     
 
@@ -121,17 +128,19 @@ class SleepCyclesDelimiterSettingsView( BaseSettingsView,  Ui_SleepCyclesDelimit
             # based on the dictionary
             if self.parameters['defined_option'] == "Minimum Criteria":
                 self.radioButton_Min.setChecked(True)
-                self.image.setPixmap(self.load_safe_pixmap(self.image_min))
+                QTimer.singleShot(0, lambda: self._load_pixmap(self.image_min))
+                #self.image.setPixmap(self.load_safe_pixmap(self.image_min))
+                
                 #self.image.setPixmap(self.image_min)
             elif self.parameters['defined_option'] == "Aeschbach 1993":
                 self.radioButton_Aesch.setChecked(True)
-                image = self.load_safe_pixmap(self.image_aesch)
-                self.image.setPixmap(image)                
-                #self.image.setPixmap(self.image_aesch)
+                QTimer.singleShot(0, lambda: self._load_pixmap(self.image_aesch))
+                #self.image.setPixmap(self.load_safe_pixmap(self.image_aesch))                
+
             elif self.parameters['defined_option'] == "Feinberg 1979":
                 self.radioButton_Floyd.setChecked(True)
-                image = self.load_safe_pixmap(self.image_floyd)
-                self.image.setPixmap(image)                   
+                QTimer.singleShot(0, lambda: self._load_pixmap(self.image_floyd))
+                #self.image.setPixmap(self.load_safe_pixmap(self.image_floyd))                   
                 #self.image.setPixmap(self.image_floyd)
             # elif self.parameters['defined_option'] == "Mice":
             #     self.radioButton_Mice.setChecked(True)
@@ -167,9 +176,7 @@ class SleepCyclesDelimiterSettingsView( BaseSettingsView,  Ui_SleepCyclesDelimit
     # only when the user apply settings.
     def on_options_changed(self):
         if self.radioButton_Min.isChecked():
-            image = self.load_safe_pixmap(self.image_min)
-            self.image.setPixmap(image)    
-            #self.image.setPixmap(self.image_min)
+            QTimer.singleShot(0, lambda: self._load_pixmap(self.image_min))
             # Include incomplete cycle
             self.checkBox_incl_SOREMP.setChecked(1)
             self.checkBox_incl_last.setChecked(1)
@@ -195,8 +202,9 @@ class SleepCyclesDelimiterSettingsView( BaseSettingsView,  Ui_SleepCyclesDelimit
             self.textBrowser.setReadOnly(True)
 
         elif self.radioButton_Aesch.isChecked():
-            image = self.load_safe_pixmap(self.image_aesch)
-            self.image.setPixmap(image)  
+            QTimer.singleShot(0, lambda: self._load_pixmap(self.image_aesch))
+            # image = self.load_safe_pixmap(self.image_aesch)
+            # self.image.setPixmap(image)  
             #self.image.setPixmap(self.image_aesch)
             # Include incomplete cycle
             self.checkBox_incl_SOREMP.setChecked(0)
@@ -224,8 +232,9 @@ class SleepCyclesDelimiterSettingsView( BaseSettingsView,  Ui_SleepCyclesDelimit
             self.textBrowser.setReadOnly(True)
 
         elif self.radioButton_Floyd.isChecked():
-            image = self.load_safe_pixmap(self.image_floyd)
-            self.image.setPixmap(image) 
+            QTimer.singleShot(0, lambda: self._load_pixmap(self.image_floyd))
+            # image = self.load_safe_pixmap(self.image_floyd)
+            # self.image.setPixmap(image) 
             #self.image.setPixmap(self.image_floyd)
             # Include incomplete cycle
             self.checkBox_incl_SOREMP.setChecked(0)
