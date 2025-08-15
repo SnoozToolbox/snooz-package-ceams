@@ -8,12 +8,15 @@ See the file LICENCE for full license details.
 """
 
 from qtpy import QtWidgets
-from qtpy import QtGui
-from qtpy.QtGui import QFont 
+from qtpy.QtGui import QPixmap, QImage
+from qtpy.QtCore import QFile
+
+from . import SleepCycleDelimiter_rs
 
 from CEAMSModules.SleepCyclesDelimiter.Ui_SleepCyclesDelimiterSettingsView import Ui_SleepCyclesDelimiterSettingsView
 from commons.BaseSettingsView import BaseSettingsView
 import config
+
 
 class SleepCyclesDelimiterSettingsView( BaseSettingsView,  Ui_SleepCyclesDelimiterSettingsView, QtWidgets.QWidget):
     """
@@ -26,6 +29,11 @@ class SleepCyclesDelimiterSettingsView( BaseSettingsView,  Ui_SleepCyclesDelimit
 
         # init UI
         self.setupUi(self)
+        _SleepCycleDelimiter_ref = SleepCycleDelimiter_rs  # prevent it from being garbage collected
+        self.image_min = ":/sleep_cycle_del/UI_v5_minimal.png"
+        self.image_aesch = ":/sleep_cycle_del/UI_v5_Aeschbach.png"
+        self.image_floyd = ":/sleep_cycle_del/UI_v5_Feinberg_floyd.png"
+        self.image.setPixmap(self.load_safe_pixmap(self.image_min))
 
         # Dictionary to convert into string
         self.parameters = {}
@@ -41,11 +49,20 @@ class SleepCyclesDelimiterSettingsView( BaseSettingsView,  Ui_SleepCyclesDelimit
         # Subscribe to the proper topics to send/get data from the node
         self._parameters_topic = f'{self._parent_node.identifier}.parameters'
         self._pub_sub_manager.subscribe(self, self._parameters_topic)
-
-        # self.setStyleSheet(f"color: {config.C.text_foreground_color_X};")
-        # self.setStyleSheet(f"background-color: {config.C.background_color_X};")
-        self.textBrowser.setFont(QFont("Roboto", 10))
         
+
+    def load_safe_pixmap(self, image_path: str) -> QPixmap:
+        """
+        Load a QImage in the **main Qt thread**, then convert to QPixmap.
+        This avoids random access-violation crashes on Windows.
+        """
+        # Verify if this resource exists : ":/spindle_moda/e0004-b1-01-05-0001-smp303751_res80.png"
+        if QFile.exists(image_path):
+            img = QImage(image_path)
+        else:
+            return QPixmap()
+        return QPixmap.fromImage(img)
+    
 
     # Called when the settingsView is opened by the user
     # The node asks to the publisher the settings
@@ -104,16 +121,21 @@ class SleepCyclesDelimiterSettingsView( BaseSettingsView,  Ui_SleepCyclesDelimit
             # based on the dictionary
             if self.parameters['defined_option'] == "Minimum Criteria":
                 self.radioButton_Min.setChecked(True)
-                self.label.setPixmap(QtGui.QPixmap(":/sleep_cycle_del/UI_v5_minimal.png"))
+                self.image.setPixmap(self.load_safe_pixmap(self.image_min))
+                #self.image.setPixmap(self.image_min)
             elif self.parameters['defined_option'] == "Aeschbach 1993":
                 self.radioButton_Aesch.setChecked(True)
-                self.label.setPixmap(QtGui.QPixmap(":/sleep_cycle_del/UI_v5_Aeschbach.png"))
+                image = self.load_safe_pixmap(self.image_aesch)
+                self.image.setPixmap(image)                
+                #self.image.setPixmap(self.image_aesch)
             elif self.parameters['defined_option'] == "Feinberg 1979":
                 self.radioButton_Floyd.setChecked(True)
-                self.label.setPixmap(QtGui.QPixmap(":/sleep_cycle_del/UI_v5_Feinberg_floyd.png"))
-            elif self.parameters['defined_option'] == "Mice":
-                self.radioButton_Mice.setChecked(True)
-                self.label.setPixmap(QtGui.QPixmap(":/sleep_cycle_del/UI_v5_minimal.png"))
+                image = self.load_safe_pixmap(self.image_floyd)
+                self.image.setPixmap(image)                   
+                #self.image.setPixmap(self.image_floyd)
+            # elif self.parameters['defined_option'] == "Mice":
+            #     self.radioButton_Mice.setChecked(True)
+            #     self.image.setPixmap(self.image_min)
             
             # NREM Periods Init
             self.minL_NREM_first = float(self.parameters['NREM_min_len_first'])
@@ -145,7 +167,9 @@ class SleepCyclesDelimiterSettingsView( BaseSettingsView,  Ui_SleepCyclesDelimit
     # only when the user apply settings.
     def on_options_changed(self):
         if self.radioButton_Min.isChecked():
-            self.label.setPixmap(QtGui.QPixmap(":/sleep_cycle_del/UI_v5_minimal.png"))
+            image = self.load_safe_pixmap(self.image_min)
+            self.image.setPixmap(image)    
+            #self.image.setPixmap(self.image_min)
             # Include incomplete cycle
             self.checkBox_incl_SOREMP.setChecked(1)
             self.checkBox_incl_last.setChecked(1)
@@ -171,7 +195,9 @@ class SleepCyclesDelimiterSettingsView( BaseSettingsView,  Ui_SleepCyclesDelimit
             self.textBrowser.setReadOnly(True)
 
         elif self.radioButton_Aesch.isChecked():
-            self.label.setPixmap(QtGui.QPixmap(":/sleep_cycle_del/UI_v5_Aeschbach.png"))
+            image = self.load_safe_pixmap(self.image_aesch)
+            self.image.setPixmap(image)  
+            #self.image.setPixmap(self.image_aesch)
             # Include incomplete cycle
             self.checkBox_incl_SOREMP.setChecked(0)
             self.checkBox_incl_last.setChecked(0)
@@ -198,7 +224,9 @@ class SleepCyclesDelimiterSettingsView( BaseSettingsView,  Ui_SleepCyclesDelimit
             self.textBrowser.setReadOnly(True)
 
         elif self.radioButton_Floyd.isChecked():
-            self.label.setPixmap(QtGui.QPixmap(":/sleep_cycle_del/UI_v5_Feinberg_floyd.png"))
+            image = self.load_safe_pixmap(self.image_floyd)
+            self.image.setPixmap(image) 
+            #self.image.setPixmap(self.image_floyd)
             # Include incomplete cycle
             self.checkBox_incl_SOREMP.setChecked(0)
             self.checkBox_incl_last.setChecked(0)
@@ -224,34 +252,34 @@ class SleepCyclesDelimiterSettingsView( BaseSettingsView,  Ui_SleepCyclesDelimit
                 + '<div>&nbsp;</div><div>[1] Feinberg I, Floyd TC. Systematic trends across the night in human sleep cycles. Psychophysiology. 1979 May; 16(3):283-91.<span style="color: #00ccff; "> <a style="color: #00ccff; " href="https://doi.org/10.1111/j.1469-8986.1979.tb02991.x" aria-label="Digital Object Identifier">https://doi.org/10.1111/j.1469-8986.1979.tb02991.x</a></div><div>&nbsp;</div><div>&nbsp;</div>')
             self.textBrowser.setReadOnly(True)
 
-        elif self.radioButton_Mice.isChecked():
-            self.label.setPixmap(QtGui.QPixmap(":/sleep_cycle_del/UI_v5_minimal.png"))
-            # Include incomplete cycle
-            self.checkBox_incl_SOREMP.setChecked(1)
-            self.checkBox_incl_last.setChecked(1)
-            self.checkBox_incl_all.setChecked(1)
-            # NREM Periods Init
-            self.minL_NREM_first = 0
-            self.minL_NREM_mid = 0
-            self.minL_NREM_val_last = 0
-            # REM Periods Not read only anymore
-            self.minL_REM_first_lineEdit.setReadOnly(False)
-            self.minL_REM_mid_lineEdit.setReadOnly(False)
-            self.minL_REM_last_lineEdit.setReadOnly(False)
-            # REM Periods Init
-            self.minL_REM_first_lineEdit.setText('0')     
-            self.minL_REM_mid_lineEdit.setText('0')
-            self.minL_REM_last_lineEdit.setText('0')
-            self.mv_end_checkBox.setChecked(False)
-            # Sleep Stages
-            self.sleep_stages = "N2, N1, R, N4(mice)"
-            # Details
-            self.textBrowser.setReadOnly(False)
-            self.textBrowser.setHtml("<p>Adjust the options according to the mouse criteria."\
-                + "<br />The sleep stages of mice are as follows:</p><p>0 : wake, "\
-                    + "3: wake with artefact;<br />2 : NREM, 1 : NREM with artefact;<br />"\
-                        + "5 : REM; 4 : REM with artefact;</p>")
-            self.textBrowser.setReadOnly(True)        
+        # elif self.radioButton_Mice.isChecked():
+        #     self.image.setPixmap(self.image_min)
+        #     # Include incomplete cycle
+        #     self.checkBox_incl_SOREMP.setChecked(1)
+        #     self.checkBox_incl_last.setChecked(1)
+        #     self.checkBox_incl_all.setChecked(1)
+        #     # NREM Periods Init
+        #     self.minL_NREM_first = 0
+        #     self.minL_NREM_mid = 0
+        #     self.minL_NREM_val_last = 0
+        #     # REM Periods Not read only anymore
+        #     self.minL_REM_first_lineEdit.setReadOnly(False)
+        #     self.minL_REM_mid_lineEdit.setReadOnly(False)
+        #     self.minL_REM_last_lineEdit.setReadOnly(False)
+        #     # REM Periods Init
+        #     self.minL_REM_first_lineEdit.setText('0')     
+        #     self.minL_REM_mid_lineEdit.setText('0')
+        #     self.minL_REM_last_lineEdit.setText('0')
+        #     self.mv_end_checkBox.setChecked(False)
+        #     # Sleep Stages
+        #     self.sleep_stages = "N2, N1, R, N4(mice)"
+        #     # Details
+        #     self.textBrowser.setReadOnly(False)
+        #     self.textBrowser.setHtml("<p>Adjust the options according to the mouse criteria."\
+        #         + "<br />The sleep stages of mice are as follows:</p><p>0 : wake, "\
+        #             + "3: wake with artefact;<br />2 : NREM, 1 : NREM with artefact;<br />"\
+        #                 + "5 : REM; 4 : REM with artefact;</p>")
+        #     self.textBrowser.setReadOnly(True)        
 
 
     # Called when the user check/uncheck the checkbox to include all incomplete cycles.
@@ -281,3 +309,6 @@ class SleepCyclesDelimiterSettingsView( BaseSettingsView,  Ui_SleepCyclesDelimit
     def __del__(self):
         if self._pub_sub_manager is not None:
             self._pub_sub_manager.unsubscribe(self, self._parameters_topic)
+        self.image_min = None
+        self.image_aesch = None
+        self.image_floyd = None

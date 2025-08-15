@@ -179,7 +179,7 @@ class SpindleDetectorSumo(SciNode):
         model = get_model(model_path, config)
 
         # Safe check for terminal support
-        use_progress_bar = sys.stdout is not None and sys.stdout.isatty()
+        use_progress_bar = False#sys.stdout is not None and sys.stdout.isatty()
         trainer = pl.Trainer(num_sanity_val_steps=0, logger=False, enable_progress_bar=use_progress_bar)
  
         # Predict the spindles

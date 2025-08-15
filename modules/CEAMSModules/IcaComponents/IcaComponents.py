@@ -71,6 +71,7 @@ import ica
 from ica import ica1
 import numpy as np
 from tqdm import tqdm
+tqdm.disable()
 from sklearn import decomposition
 import sys
 
