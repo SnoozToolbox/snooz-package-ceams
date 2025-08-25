@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>786</width>
-    <height>635</height>
+    <height>646</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -100,6 +100,9 @@
        </property>
        <property name="frameShape">
         <enum>QFrame::Shape::NoFrame</enum>
+       </property>
+       <property name="frameShadow">
+        <enum>QFrame::Shadow::Plain</enum>
        </property>
        <property name="readOnly">
         <bool>true</bool>

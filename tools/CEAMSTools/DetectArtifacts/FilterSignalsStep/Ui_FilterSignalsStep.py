@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file ''
+## Form generated from reading UI file 'Ui_FilterSignalsStep.ui'
 ##
 ## Created by: Qt User Interface Compiler version 6.8.2
 ##
@@ -25,16 +25,16 @@ class Ui_FilterSignalsStep(object):
     def setupUi(self, FilterSignalsStep):
         if not FilterSignalsStep.objectName():
             FilterSignalsStep.setObjectName(u"FilterSignalsStep")
+        FilterSignalsStep.resize(817, 343)
         FilterSignalsStep.setStyleSheet(u"font: 12pt \"Roboto\";")
-        FilterSignalsStep.resize(680, 343)
         self.horizontalLayout = QHBoxLayout(FilterSignalsStep)
         self.horizontalLayout.setObjectName(u"horizontalLayout")
         self.verticalLayout = QVBoxLayout()
         self.verticalLayout.setObjectName(u"verticalLayout")
         self.textBrowser = QTextBrowser(FilterSignalsStep)
         self.textBrowser.setObjectName(u"textBrowser")
-        self.textBrowser.setFrameShape(QFrame.HLine)
-        self.textBrowser.setFrameShadow(QFrame.Plain)
+        self.textBrowser.setFrameShape(QFrame.Shape.NoFrame)
+        self.textBrowser.setFrameShadow(QFrame.Shadow.Plain)
         self.textBrowser.setLineWidth(0)
 
         self.verticalLayout.addWidget(self.textBrowser)
@@ -48,7 +48,10 @@ class Ui_FilterSignalsStep(object):
         self.notch_checkBox = QCheckBox(FilterSignalsStep)
         self.notch_checkBox.setObjectName(u"notch_checkBox")
         font = QFont()
-        font.setBold(True)
+        font.setFamilies([u"Roboto"])
+        font.setPointSize(12)
+        font.setBold(False)
+        font.setItalic(False)
         self.notch_checkBox.setFont(font)
 
         self.gridLayout.addWidget(self.notch_checkBox, 0, 3, 1, 1)
@@ -138,17 +141,20 @@ class Ui_FilterSignalsStep(object):
         FilterSignalsStep.setToolTip("")
 #endif // QT_CONFIG(tooltip)
         self.textBrowser.setHtml(QCoreApplication.translate("FilterSignalsStep", u"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
-"<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
+"<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset=\"utf-8\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
+"hr { height: 1px; border-width: 0; }\n"
+"li.unchecked::marker { content: \"\\2610\"; }\n"
+"li.checked::marker { content: \"\\2612\"; }\n"
 "</style></head><body style=\" font-family:'Roboto'; font-size:12pt; font-weight:400; font-style:normal;\">\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:12pt\">The EEG signals are downsampled to 256 Hz (if the sampling rate is above 256 Hz) to reduce the processing time.</span></p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:12pt\"><br /></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:12pt\">Note that very high frequency noise &gt; 128 Hz will not be detected as artifact s"
-                        "ince a 128 Hz low pass filter is applied before downsampling.</span></p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:12pt\"><br /></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:12pt text-decoration: underline;\">Warning</span><span style=\" font-size:12pt\"> : The high cutoff of the bandpass filter can not be higher than the signal sampling rate / 2.  </span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:12pt\">               I.e. 128 Hz for a sampling rate of 256 Hz.</span></p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:12pt\"><br /></p></body></html>", None))
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">The EEG signals are downsampled to 256 Hz (if the sampling rate is above 256 Hz) to reduce the processing time.</p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Not"
+                        "e that very high frequency noise &gt; 128 Hz will not be detected as artifact since a 128 Hz low pass filter is applied before downsampling.</p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Warning : The high cutoff of the bandpass filter can not be higher than the signal sampling rate / 2.  </p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">               I.e. 128 Hz for a sampling rate of 256 Hz.</p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p></body></html>", None))
         self.notch_checkBox.setText(QCoreApplication.translate("FilterSignalsStep", u"Power line notch filter", None))
         self.radioButton_50Hz.setText(QCoreApplication.translate("FilterSignalsStep", u"50 Hz", None))
         self.label.setText(QCoreApplication.translate("FilterSignalsStep", u"Low cutoff", None))

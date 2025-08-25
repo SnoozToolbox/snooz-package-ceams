@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file ''
+## Form generated from reading UI file 'Ui_OutputFiles.ui'
 ##
 ## Created by: Qt User Interface Compiler version 6.8.2
 ##
@@ -31,10 +31,10 @@ class Ui_OutputFiles(object):
         self.textEdit = QTextEdit(OutputFiles)
         self.textEdit.setObjectName(u"textEdit")
         self.textEdit.setMinimumSize(QSize(0, 0))
-        self.textEdit.setContextMenuPolicy(Qt.NoContextMenu)
+        self.textEdit.setContextMenuPolicy(Qt.ContextMenuPolicy.NoContextMenu)
         self.textEdit.setAutoFillBackground(True)
-        self.textEdit.setFrameShape(QFrame.HLine)
-        self.textEdit.setFrameShadow(QFrame.Plain)
+        self.textEdit.setFrameShape(QFrame.Shape.NoFrame)
+        self.textEdit.setFrameShadow(QFrame.Shadow.Plain)
         self.textEdit.setLineWidth(0)
         self.textEdit.setReadOnly(True)
 
@@ -59,8 +59,8 @@ class Ui_OutputFiles(object):
         self.horizontalLayout.setObjectName(u"horizontalLayout")
         self.lineEdit_filename = QLineEdit(OutputFiles)
         self.lineEdit_filename.setObjectName(u"lineEdit_filename")
-        self.lineEdit_filename.setLayoutDirection(Qt.LeftToRight)
-        self.lineEdit_filename.setAlignment(Qt.AlignRight|Qt.AlignTrailing|Qt.AlignVCenter)
+        self.lineEdit_filename.setLayoutDirection(Qt.LayoutDirection.LeftToRight)
+        self.lineEdit_filename.setAlignment(Qt.AlignmentFlag.AlignRight|Qt.AlignmentFlag.AlignTrailing|Qt.AlignmentFlag.AlignVCenter)
 
         self.horizontalLayout.addWidget(self.lineEdit_filename)
 
@@ -95,8 +95,8 @@ class Ui_OutputFiles(object):
         self.horizontalLayout_2.setObjectName(u"horizontalLayout_2")
         self.lineEdit_picturename = QLineEdit(OutputFiles)
         self.lineEdit_picturename.setObjectName(u"lineEdit_picturename")
-        self.lineEdit_picturename.setLayoutDirection(Qt.LeftToRight)
-        self.lineEdit_picturename.setAlignment(Qt.AlignRight|Qt.AlignTrailing|Qt.AlignVCenter)
+        self.lineEdit_picturename.setLayoutDirection(Qt.LayoutDirection.LeftToRight)
+        self.lineEdit_picturename.setAlignment(Qt.AlignmentFlag.AlignRight|Qt.AlignmentFlag.AlignTrailing|Qt.AlignmentFlag.AlignVCenter)
 
         self.horizontalLayout_2.addWidget(self.lineEdit_picturename)
 
@@ -116,7 +116,7 @@ class Ui_OutputFiles(object):
         self.horizontalLayout_3.setObjectName(u"horizontalLayout_3")
         self.label_3 = QLabel(OutputFiles)
         self.label_3.setObjectName(u"label_3")
-        self.label_3.setAlignment(Qt.AlignLeading|Qt.AlignLeft|Qt.AlignVCenter)
+        self.label_3.setAlignment(Qt.AlignmentFlag.AlignLeading|Qt.AlignmentFlag.AlignLeft|Qt.AlignmentFlag.AlignVCenter)
 
         self.horizontalLayout_3.addWidget(self.label_3)
 
@@ -172,20 +172,23 @@ class Ui_OutputFiles(object):
     def retranslateUi(self, OutputFiles):
         OutputFiles.setWindowTitle("")
         self.textEdit.setHtml(QCoreApplication.translate("OutputFiles", u"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
-"<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
+"<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset=\"utf-8\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
+"hr { height: 1px; border-width: 0; }\n"
+"li.unchecked::marker { content: \"\\2610\"; }\n"
+"li.checked::marker { content: \"\\2612\"; }\n"
 "</style></head><body style=\" font-family:'Roboto'; font-size:12pt; font-weight:400; font-style:normal;\">\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-weight:600;\">Oxygen saturation report variables</span></p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">The Oxygen Saturation Report comprises three main categories:</p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\""
-                        " text-decoration: underline;\">1. Oxygen channel variables</span></p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; tex"
+                        "t-indent:0px;\"><br /></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" text-decoration: underline;\">1. Oxygen channel variables</span></p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Minimum, maximum and average oxygen saturation per thirds, halves, sleep cycles and sleep stages.</p>\n"
 "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" text-decoration: underline;\">2. Oxygen desaturation drop variables</span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Oxygen desaturation count, average duration (sec), percentage of sleep time and </p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">index (count "
-                        "per sleep hour) for the total sleep time and each sleep stage.</p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Oxygen desaturation count, average duration (sec), percen"
+                        "tage of sleep time and </p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">index (count per sleep hour) for the total sleep time and each sleep stage.</p>\n"
 "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">These variables are stored in the Oxygen Saturation Report, with one line per recording. </p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Each new recording is appended to the report file.</p></body></html>", None))

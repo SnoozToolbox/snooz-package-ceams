@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file ''
+## Form generated from reading UI file 'Ui_SelectionStep.ui'
 ##
 ## Created by: Qt User Interface Compiler version 6.8.2
 ##
@@ -170,8 +170,8 @@ class Ui_SelectionStep(object):
         self.plainTextEdit.setSizePolicy(sizePolicy)
         self.plainTextEdit.setMinimumSize(QSize(0, 0))
         self.plainTextEdit.setMaximumSize(QSize(16777215, 16777215))
-        self.plainTextEdit.setFrameShape(QFrame.HLine)
-        self.plainTextEdit.setFrameShadow(QFrame.Plain)
+        self.plainTextEdit.setFrameShape(QFrame.Shape.NoFrame)
+        self.plainTextEdit.setFrameShadow(QFrame.Shadow.Plain)
         self.plainTextEdit.setLineWidth(0)
         self.plainTextEdit.setReadOnly(True)
 
@@ -182,8 +182,8 @@ class Ui_SelectionStep(object):
         sizePolicy.setHeightForWidth(self.plainTextEdit_2.sizePolicy().hasHeightForWidth())
         self.plainTextEdit_2.setSizePolicy(sizePolicy)
         self.plainTextEdit_2.setMaximumSize(QSize(16777215, 16777215))
-        self.plainTextEdit_2.setFrameShape(QFrame.HLine)
-        self.plainTextEdit_2.setFrameShadow(QFrame.Plain)
+        self.plainTextEdit_2.setFrameShape(QFrame.Shape.NoFrame)
+        self.plainTextEdit_2.setFrameShadow(QFrame.Shadow.Plain)
         self.plainTextEdit_2.setLineWidth(0)
         self.plainTextEdit_2.setReadOnly(True)
 

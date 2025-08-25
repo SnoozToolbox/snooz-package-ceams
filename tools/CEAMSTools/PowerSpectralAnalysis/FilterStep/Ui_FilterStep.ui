@@ -29,7 +29,6 @@
       <font>
        <family>Roboto</family>
        <pointsize>12</pointsize>
-       <weight>50</weight>
        <italic>false</italic>
        <bold>false</bold>
       </font>
@@ -48,10 +47,10 @@
       </size>
      </property>
      <property name="frameShape">
-      <enum>QFrame::HLine</enum>
+      <enum>QFrame::Shape::NoFrame</enum>
      </property>
      <property name="frameShadow">
-      <enum>QFrame::Plain</enum>
+      <enum>QFrame::Shadow::Plain</enum>
      </property>
      <property name="lineWidth">
       <number>0</number>
@@ -74,7 +73,6 @@ Warning : The highest cutoff frequency must be lower than the Sample Rate / 2.</
         <font>
          <family>Roboto</family>
          <pointsize>12</pointsize>
-         <weight>50</weight>
          <italic>false</italic>
          <bold>false</bold>
         </font>
@@ -93,7 +91,6 @@ Warning : The highest cutoff frequency must be lower than the Sample Rate / 2.</
         <font>
          <family>Roboto</family>
          <pointsize>12</pointsize>
-         <weight>50</weight>
          <italic>false</italic>
          <bold>false</bold>
         </font>
@@ -186,10 +183,10 @@ Warning : The highest cutoff frequency must be lower than the Sample Rate / 2.</
      <item row="2" column="2">
       <spacer name="horizontalSpacer_2">
        <property name="orientation">
-        <enum>Qt::Horizontal</enum>
+        <enum>Qt::Orientation::Horizontal</enum>
        </property>
        <property name="sizeType">
-        <enum>QSizePolicy::Fixed</enum>
+        <enum>QSizePolicy::Policy::Fixed</enum>
        </property>
        <property name="sizeHint" stdset="0">
         <size>
@@ -214,7 +211,7 @@ Warning : The highest cutoff frequency must be lower than the Sample Rate / 2.</
    <item>
     <spacer name="verticalSpacer">
      <property name="orientation">
-      <enum>Qt::Vertical</enum>
+      <enum>Qt::Orientation::Vertical</enum>
      </property>
      <property name="sizeHint" stdset="0">
       <size>

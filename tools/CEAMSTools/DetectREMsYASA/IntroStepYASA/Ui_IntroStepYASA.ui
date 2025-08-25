@@ -118,7 +118,7 @@
         <string notr="true"/>
        </property>
        <property name="frameShape">
-        <enum>QFrame::Shape::HLine</enum>
+        <enum>QFrame::Shape::NoFrame</enum>
        </property>
        <property name="frameShadow">
         <enum>QFrame::Shadow::Plain</enum>
@@ -211,7 +211,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
         </size>
        </property>
        <property name="frameShape">
-        <enum>QFrame::Shape::HLine</enum>
+        <enum>QFrame::Shape::NoFrame</enum>
        </property>
        <property name="frameShadow">
         <enum>QFrame::Shadow::Plain</enum>

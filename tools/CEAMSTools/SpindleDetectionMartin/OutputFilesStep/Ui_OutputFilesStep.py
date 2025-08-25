@@ -24,7 +24,7 @@ class Ui_OutputFilesStep(object):
     def setupUi(self, OutputFilesStep):
         if not OutputFilesStep.objectName():
             OutputFilesStep.setObjectName(u"OutputFilesStep")
-        OutputFilesStep.resize(786, 635)
+        OutputFilesStep.resize(786, 646)
         OutputFilesStep.setStyleSheet(u"font: 12pt \"Roboto\";")
         self.horizontalLayout_3 = QHBoxLayout(OutputFilesStep)
         self.horizontalLayout_3.setObjectName(u"horizontalLayout_3")
@@ -75,6 +75,7 @@ class Ui_OutputFilesStep(object):
         self.textEdit.setObjectName(u"textEdit")
         self.textEdit.setMinimumSize(QSize(0, 270))
         self.textEdit.setFrameShape(QFrame.Shape.NoFrame)
+        self.textEdit.setFrameShadow(QFrame.Shadow.Plain)
         self.textEdit.setReadOnly(True)
 
         self.verticalLayout_2.addWidget(self.textEdit)

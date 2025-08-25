@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file ''
+## Form generated from reading UI file 'Ui_SleepCyclesDelimiterSettingsView.ui'
 ##
 ## Created by: Qt User Interface Compiler version 6.8.2
 ##
@@ -20,7 +20,7 @@ from PySide6.QtWidgets import (QApplication, QCheckBox, QFormLayout, QFrame,
     QLineEdit, QPlainTextEdit, QRadioButton, QSizePolicy,
     QSpacerItem, QSplitter, QTextBrowser, QTextEdit,
     QVBoxLayout, QWidget)
-from . import SleepCycleDelimiter_rs
+from . import SleepCycleDelimiter_rs_rc
 import themes_rc
 
 class Ui_SleepCyclesDelimiterSettingsView(object):
@@ -33,7 +33,7 @@ class Ui_SleepCyclesDelimiterSettingsView(object):
         self.horizontalLayout_2.setObjectName(u"horizontalLayout_2")
         self.splitter = QSplitter(SleepCyclesDelimiterSettingsView)
         self.splitter.setObjectName(u"splitter")
-        self.splitter.setOrientation(Qt.Vertical)
+        self.splitter.setOrientation(Qt.Orientation.Vertical)
         self.splitter.setHandleWidth(15)
         self.layoutWidget = QWidget(self.splitter)
         self.layoutWidget.setObjectName(u"layoutWidget")
@@ -53,14 +53,14 @@ class Ui_SleepCyclesDelimiterSettingsView(object):
 
         self.horizontalLayout_3 = QHBoxLayout()
         self.horizontalLayout_3.setObjectName(u"horizontalLayout_3")
-        self.horizontalLayout_3.setSizeConstraint(QLayout.SetNoConstraint)
+        self.horizontalLayout_3.setSizeConstraint(QLayout.SizeConstraint.SetNoConstraint)
         self.textEdit = QTextEdit(self.layoutWidget)
         self.textEdit.setObjectName(u"textEdit")
         self.textEdit.setMinimumSize(QSize(330, 175))
         self.textEdit.setMaximumSize(QSize(16777215, 16777215))
         self.textEdit.setStyleSheet(u"")
-        self.textEdit.setFrameShape(QFrame.HLine)
-        self.textEdit.setFrameShadow(QFrame.Plain)
+        self.textEdit.setFrameShape(QFrame.Shape.NoFrame)
+        self.textEdit.setFrameShadow(QFrame.Shadow.Plain)
         self.textEdit.setLineWidth(0)
         self.textEdit.setReadOnly(True)
 
@@ -71,8 +71,8 @@ class Ui_SleepCyclesDelimiterSettingsView(object):
         self.textEdit_3.setMinimumSize(QSize(330, 175))
         self.textEdit_3.setMaximumSize(QSize(16777215, 16777215))
         self.textEdit_3.setStyleSheet(u"")
-        self.textEdit_3.setFrameShape(QFrame.HLine)
-        self.textEdit_3.setFrameShadow(QFrame.Plain)
+        self.textEdit_3.setFrameShape(QFrame.Shape.NoFrame)
+        self.textEdit_3.setFrameShadow(QFrame.Shadow.Plain)
         self.textEdit_3.setLineWidth(0)
         self.textEdit_3.setReadOnly(True)
 
@@ -90,13 +90,13 @@ class Ui_SleepCyclesDelimiterSettingsView(object):
         self.label.setSizePolicy(sizePolicy)
         self.label.setMinimumSize(QSize(567, 0))
         self.label.setPixmap(QPixmap(u":/sleep_cycle_del/UI_v5_minimal.png"))
-        self.label.setAlignment(Qt.AlignCenter)
+        self.label.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
         self.verticalLayout_3.addWidget(self.label)
 
         self.gridLayout = QGridLayout()
         self.gridLayout.setObjectName(u"gridLayout")
-        self.gridLayout.setSizeConstraint(QLayout.SetMaximumSize)
+        self.gridLayout.setSizeConstraint(QLayout.SizeConstraint.SetMaximumSize)
         self.verticalLayout_2 = QVBoxLayout()
         self.verticalLayout_2.setObjectName(u"verticalLayout_2")
         self.checkBox_incl_SOREMP = QCheckBox(self.layoutWidget)
@@ -140,7 +140,7 @@ class Ui_SleepCyclesDelimiterSettingsView(object):
 
         self.verticalLayout = QVBoxLayout()
         self.verticalLayout.setObjectName(u"verticalLayout")
-        self.verticalLayout.setSizeConstraint(QLayout.SetNoConstraint)
+        self.verticalLayout.setSizeConstraint(QLayout.SizeConstraint.SetNoConstraint)
         self.radioButton_Min = QRadioButton(self.layoutWidget)
         self.radioButton_Min.setObjectName(u"radioButton_Min")
         self.radioButton_Min.setMaximumSize(QSize(16777215, 18))
@@ -205,6 +205,9 @@ class Ui_SleepCyclesDelimiterSettingsView(object):
 
         self.plainTextEdit = QPlainTextEdit(self.layoutWidget)
         self.plainTextEdit.setObjectName(u"plainTextEdit")
+        self.plainTextEdit.setFrameShape(QFrame.Shape.NoFrame)
+        self.plainTextEdit.setFrameShadow(QFrame.Shadow.Plain)
+        self.plainTextEdit.setLineWidth(0)
         self.plainTextEdit.setReadOnly(True)
 
         self.verticalLayout_5.addWidget(self.plainTextEdit)
@@ -280,8 +283,8 @@ class Ui_SleepCyclesDelimiterSettingsView(object):
         self.textEdit_4.setObjectName(u"textEdit_4")
         self.textEdit_4.setMaximumSize(QSize(16777215, 125))
         self.textEdit_4.setStyleSheet(u"")
-        self.textEdit_4.setFrameShape(QFrame.HLine)
-        self.textEdit_4.setFrameShadow(QFrame.Plain)
+        self.textEdit_4.setFrameShape(QFrame.Shape.NoFrame)
+        self.textEdit_4.setFrameShadow(QFrame.Shadow.Plain)
         self.textEdit_4.setLineWidth(0)
         self.textEdit_4.setReadOnly(True)
 
@@ -304,8 +307,8 @@ class Ui_SleepCyclesDelimiterSettingsView(object):
         sizePolicy1.setHeightForWidth(self.textBrowser.sizePolicy().hasHeightForWidth())
         self.textBrowser.setSizePolicy(sizePolicy1)
         self.textBrowser.setStyleSheet(u"")
-        self.textBrowser.setFrameShape(QFrame.HLine)
-        self.textBrowser.setFrameShadow(QFrame.Plain)
+        self.textBrowser.setFrameShape(QFrame.Shape.NoFrame)
+        self.textBrowser.setFrameShadow(QFrame.Shadow.Plain)
         self.textBrowser.setLineWidth(0)
         self.textBrowser.setReadOnly(True)
         self.textBrowser.setOpenExternalLinks(True)
@@ -338,23 +341,31 @@ class Ui_SleepCyclesDelimiterSettingsView(object):
         SleepCyclesDelimiterSettingsView.setWindowTitle(QCoreApplication.translate("SleepCyclesDelimiterSettingsView", u"Form", None))
         self.label_2.setText(QCoreApplication.translate("SleepCyclesDelimiterSettingsView", u"<html><head/><body><p><span style=\" font-weight:600;\">Sleep Cycles Definition</span></p></body></html>", None))
         self.textEdit.setHtml(QCoreApplication.translate("SleepCyclesDelimiterSettingsView", u"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
-"<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
+"<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset=\"utf-8\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
+"hr { height: 1px; border-width: 0; }\n"
+"li.unchecked::marker { content: \"\\2610\"; }\n"
+"li.checked::marker { content: \"\\2612\"; }\n"
 "</style></head><body style=\" font-family:'Roboto'; font-size:12pt; font-weight:400; font-style:normal;\">\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">NREM Period (NREMP):</p>\n"
-"<ul style=\"margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 0px; -qt-list-indent: 1;\"><li style=\" margin-top:12px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">First NREMP : begins at the first NREM stage of the recording.</li>\n"
-"<li style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Central NREMPs : begin at the next NREM stage following a REMP end.</li>\n"
-"<li style=\" margin-top:0px; margin-bot"
-                        "tom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">The NREMP ends at the start of a REMP.</li></ul></body></html>", None))
+"<ul style=\"margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 0px; -qt-list-indent: 1;\">\n"
+"<li style=\" margin-top:12px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">First NREMP : begins at the first NREM stage of the recording.</li>\n"
+"<li style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; mar"
+                        "gin-right:0px; -qt-block-indent:0; text-indent:0px;\">Central NREMPs : begin at the next NREM stage following a REMP end.</li>\n"
+"<li style=\" margin-top:0px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">The NREMP ends at the start of a REMP.</li></ul></body></html>", None))
         self.textEdit_3.setHtml(QCoreApplication.translate("SleepCyclesDelimiterSettingsView", u"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
-"<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
+"<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset=\"utf-8\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
+"hr { height: 1px; border-width: 0; }\n"
+"li.unchecked::marker { content: \"\\2610\"; }\n"
+"li.checked::marker { content: \"\\2612\"; }\n"
 "</style></head><body style=\" font-family:'Roboto'; font-size:12pt; font-weight:400; font-style:normal;\">\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">REM Period (REMP):</p>\n"
-"<ul style=\"margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 0px; -qt-list-indent: 1;\"><li style=\" margin-top:12px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">The REMP ends when there are 15 min without an R stage (except at the last cycle).</li>\n"
-"<li style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">The end is defined as the last R stage of the REMP or the beginning of the next NREMP.</li>\n"
-"<l"
-                        "i style=\" margin-top:0px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">The REMP begins at the first stage R.</li></ul></body></html>", None))
+"<ul style=\"margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 0px; -qt-list-indent: 1;\">\n"
+"<li style=\" margin-top:12px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">The REMP ends when there are 15 min without an R stage (except at the last cycle).</li>\n"
+"<li style=\" margin-top:0px; margin-bottom:0px; ma"
+                        "rgin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">The end is defined as the last R stage of the REMP or the beginning of the next NREMP.</li>\n"
+"<li style=\" margin-top:0px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">The REMP begins at the first stage R.</li></ul></body></html>", None))
         self.label.setText("")
 #if QT_CONFIG(tooltip)
         self.checkBox_incl_SOREMP.setToolTip(QCoreApplication.translate("SleepCyclesDelimiterSettingsView", u"Check to include incomplete cycle because of SOREMP (Sleep Onset in REMP).", None))
@@ -385,13 +396,19 @@ class Ui_SleepCyclesDelimiterSettingsView(object):
         self.label_7.setText(QCoreApplication.translate("SleepCyclesDelimiterSettingsView", u"Last Cycle", None))
         self.minL_REM_last_lineEdit.setText(QCoreApplication.translate("SleepCyclesDelimiterSettingsView", u"0", None))
         self.textEdit_4.setHtml(QCoreApplication.translate("SleepCyclesDelimiterSettingsView", u"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
-"<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
+"<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset=\"utf-8\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
+"hr { height: 1px; border-width: 0; }\n"
+"li.unchecked::marker { content: \"\\2610\"; }\n"
+"li.checked::marker { content: \"\\2612\"; }\n"
 "</style></head><body style=\" font-family:'Roboto'; font-size:12pt; font-weight:400; font-style:normal;\">\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">A REMP is joined to the preceding one if it does not meet the minimum REMP duration.</p></body></html>", None))
         self.textBrowser.setHtml(QCoreApplication.translate("SleepCyclesDelimiterSettingsView", u"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
-"<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
+"<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset=\"utf-8\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
+"hr { height: 1px; border-width: 0; }\n"
+"li.unchecked::marker { content: \"\\2610\"; }\n"
+"li.checked::marker { content: \"\\2612\"; }\n"
 "</style></head><body style=\" font-family:'Roboto'; font-size:12pt; font-weight:400; font-style:normal;\">\n"
 "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p></body></html>", None))
     # retranslateUi
