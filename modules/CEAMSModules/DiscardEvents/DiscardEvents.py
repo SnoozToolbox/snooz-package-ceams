@@ -217,8 +217,10 @@ class DiscardEvents(SciNode):
                 # for each event, evaluate for artefact
                 event_sel_to_drop = []
                 for event_sel in range(len(events_out)):
+                    # Select artifact events that are on the same channel as the detected event (i.e. spindle)
+                    # Or artifact events that are on all channels (channels=='')
                     cur_event = events_out.loc[event_sel]
-                    art_cur_chan = art_selected[art_selected.channels==cur_event.channels]
+                    art_cur_chan = art_selected[ (art_selected.channels==cur_event.channels) | (art_selected.channels=="") ] 
                     if len(art_cur_chan)>0:
                         art_start = art_cur_chan['start_sec'].to_numpy().astype(float)
                         art_dur = art_cur_chan['duration_sec'].to_numpy().astype(float)
