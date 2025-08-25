@@ -178,32 +178,36 @@ class ThresholdComputation(SciNode):
             # Accumulate samples for each channel and each cycle
             # Warning, it is possible to have no samples at all (depending of the sleep stages selection) for a specific cycle
             #  so make sure to extract existing samples only
-            elif int(threshold_scope)>0:
-                if threshold_scope=='1':
+            elif int(threshold_scope) > 0:
+                if threshold_scope == '1':
                     # if signal_model.channel is not a key of samples_all_chan, add it
                     # Every cycle must be defined in case we received no signals for a specific cycle
-                    if not signal_model.channel in samples_all_chan:
-                        samples_all_chan[signal_model.channel] =  [np.empty((0,)) for _ in range(len(cycle_df))]
+                    if signal_model.channel not in samples_all_chan:
+                        samples_all_chan[signal_model.channel] = [np.empty((0,)) for _ in range(len(cycle_df))]
                         
                     # Find which sleep cycles start before the current signal_model starts
-                    (idx_start,) = np.where(signal_model.start_time-cycle_df.start_sec>=-0.1) # -0.1 to support non interger sampling rate in Stellate
+                    (idx_start,) = np.where(signal_model.start_time - cycle_df.start_sec >= -0.1)  # -0.1 to support non-integer sampling rate in Stellate
                     # Find which sleep cycles end after the current signal_model ends
-                    (idx_stop,) = np.where((cycle_df.start_sec+cycle_df.duration_sec)-(signal_model.start_time+signal_model.duration)>=-0.1) # -0.1 to support non interger sampling rate in Stellate
+                    (idx_stop,) = np.where((cycle_df.start_sec + cycle_df.duration_sec) - (signal_model.start_time + signal_model.duration) >= -0.1)  # -0.1 to support non-integer sampling rate in Stellate
                     # Find intersection between idx_start and idx_stop
-                    idx_include_signal = np.intersect1d(idx_start,idx_stop).tolist()
+                    idx_include_signal = np.intersect1d(idx_start, idx_stop).tolist()
                 else:
-                    idx_include_signal=[0]
-                if len(idx_include_signal)==1:
+                    # Ensure the key exists for threshold_scope '2' or other cases
+                    if signal_model.channel not in samples_all_chan:
+                        samples_all_chan[signal_model.channel] = [np.empty((0,))]  # Initialize with a single empty array
+                    idx_include_signal = [0]
+
+                if len(idx_include_signal) == 1:
                     cycle_i = idx_include_signal[0]
                     samples_all_chan[signal_model.channel][cycle_i] = \
-                        np.concatenate((samples_all_chan[signal_model.channel][cycle_i],signal_model.samples))
+                        np.concatenate((samples_all_chan[signal_model.channel][cycle_i], signal_model.samples))
                 else:
-                    if len(idx_include_signal)==0:
-                        raise NodeRuntimeException(self.identifier, "cycle_events",\
-                            f"ThresholdComputation signal to process not included in the sleep cycle.")
+                    if len(idx_include_signal) == 0:
+                        raise NodeRuntimeException(self.identifier, "cycle_events",
+                                                f"ThresholdComputation signal to process not included in the sleep cycle.")
                     else:
-                        raise NodeRuntimeException(self.identifier, "cycle_events",\
-                            f"ThresholdComputation signal to process found twice in the sleep cycle.")                        
+                        raise NodeRuntimeException(self.identifier, "cycle_events",
+                                                f"ThresholdComputation signal to process found twice in the sleep cycle.")
 
         # Compute the threshold for the whole list "signals"
         # Still one threshold per channel
