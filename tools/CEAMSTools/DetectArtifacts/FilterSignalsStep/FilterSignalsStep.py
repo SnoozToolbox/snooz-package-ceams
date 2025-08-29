@@ -64,6 +64,7 @@ class FilterSignalsStep( BaseStepView,  Ui_FilterSignalsStep, QtWidgets.QWidget)
         # Suggested frequency band of band pass filter
         self.MAX_FREQ = 128
         self.LOW_FREQ = 0.3
+        self.min_fs = 256 # Default value when no channels are selected
 
 
     def update_low_cutoff_slot(self):
@@ -77,6 +78,7 @@ class FilterSignalsStep( BaseStepView,  Ui_FilterSignalsStep, QtWidgets.QWidget)
 
 
     def update_high_cutoff_slot(self):    
+        self.update_min_fs()
         if float(self.high_cutoff_lineEdit.text())>self.MAX_FREQ:
             error_message = "The high cutoff frequency is limited to 128 Hz due to downsampling at 256 Hz."
             msg = QtWidgets.QMessageBox()
@@ -84,6 +86,14 @@ class FilterSignalsStep( BaseStepView,  Ui_FilterSignalsStep, QtWidgets.QWidget)
             msg.setText(error_message)
             msg.setWindowTitle("Filter")
             self.high_cutoff_lineEdit.setText('128')
+            msg.exec()
+        elif float(self.high_cutoff_lineEdit.text())>(self.min_fs/2):
+            error_message = f"The high cutoff frequency is limited to {self.min_fs/2} Hz due to minimum sampling frequency of the selected channels, which is {self.min_fs} Hz.  The value has been reduced automatically."
+            msg = QtWidgets.QMessageBox()
+            msg.setIcon(QtWidgets.QMessageBox.Critical)
+            msg.setText(error_message)
+            msg.setWindowTitle("Filter")
+            self.high_cutoff_lineEdit.setText(str(int(round((self.min_fs)/2))-1))
             msg.exec()
 
 
@@ -129,11 +139,13 @@ class FilterSignalsStep( BaseStepView,  Ui_FilterSignalsStep, QtWidgets.QWidget)
         # If not, display an error message to the user and return False.
         # This is called just before the apply settings function.
         # Returning False will prevent the process from executing.
+        self.update_min_fs() # Need to be called because the channel selection does not trig a model update.
         if float(self.high_cutoff_lineEdit.text())>(self.min_fs/2):
             message = f'The high frequency cutoff ({self.high_cutoff_lineEdit.text()}Hz) '\
                 + f'of the band pass filter is higher than the Nyquist frequency ({self.min_fs/2}Hz)'\
                     + f'\n\nIn step 2- Filter EEG signals : lower the high frequency cutoff of the band '\
-                        + f'pass below the Nyquist frequency of {self.min_fs/2}Hz.'
+                        + f'pass below the Nyquist frequency of {self.min_fs/2}Hz.  The value has been reduced automatically.  You can press RUN again.'
+            self.high_cutoff_lineEdit.setText(str(int(round((self.min_fs)/2))-1))
             WarningDialog(message)     
             return False
         else:
@@ -222,20 +234,23 @@ class FilterSignalsStep( BaseStepView,  Ui_FilterSignalsStep, QtWidgets.QWidget)
     def on_topic_update(self, topic, message, sender):
         # Whenever a value is updated within the context, all steps receives a 
         # self._context_manager.topic message and can then act on it.
-        
         if topic == self._context_manager.topic:
             # The message will be the KEY of the value that's been updated inside the context.
             # If it's the one you are looking for, we can then take the updated value and use it.
             if message == InputFilesStep.context_files_view:
-                self.reader_settings_view = self._context_manager[InputFilesStep.context_files_view]
-                alias = self.reader_settings_view.get_alias()
-                eeg_chan_alias = alias['EEG']
-                channels_info_df = self.reader_settings_view.channels_table_model.get_data()
-                chans_used = channels_info_df[(channels_info_df['Use']==True) & channels_info_df['Channel'].isin(eeg_chan_alias)]
-                if len(chans_used)>0:
-                    self.min_fs = float(min(chans_used['Sample rate'].to_list()) )
-                else:
-                    self.min_fs = 256 # Default value when no channels are selected
+                self.update_min_fs()
+
+
+    def update_min_fs(self):
+        self.reader_settings_view = self._context_manager[InputFilesStep.context_files_view]
+        alias = self.reader_settings_view.get_alias()
+        eeg_chan_alias = alias['EEG']
+        channels_info_df = self.reader_settings_view.channels_table_model.get_data()
+        chans_used = channels_info_df[(channels_info_df['Use']==True) & channels_info_df['Channel'].isin(eeg_chan_alias)]
+        if len(chans_used)>0:
+            self.min_fs = float(min(chans_used['Sample rate'].to_list()) )
+        else:
+            self.min_fs = 256 # Default value when no channels are selected
 
 
     # Called when the user delete an instance of the plugin
