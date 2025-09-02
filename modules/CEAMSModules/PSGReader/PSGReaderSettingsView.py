@@ -335,7 +335,8 @@ class PSGReaderSettingsView( BaseSettingsView,  Ui_PSGReaderSettingsView, QtWidg
     def on_add_alias(self, alias):
         # Get selected channels
         selected_channels = [r.data() for r in self.channels_tableview.selectedIndexes()]
-
+        # Get the unique list of channels
+        selected_channels = list(set(selected_channels))
         current_aliases = self._alias_line_edit[alias].text()
         aliases_list = current_aliases.split(';')
         for ch in selected_channels:
