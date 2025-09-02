@@ -1,7 +1,7 @@
 {
     "item_name": "SpindleDetectionA7",
     "item_type": "tool",
-    "item_api_version": "3.0.0",
+    "item_api_version": "2.0.0",
     "item_url": "https://snooz-toolbox-documentation.readthedocs.io/latest/user_guide/tools/Processing/Spindle_detection_A7.html#spindle-detection-a7",
     "item_author": "",
     "item_description": "",
@@ -76,12 +76,12 @@
     "dependencies": [
         {
             "package_name": "CEAMSTools",
-            "package_version": "7.3.0",
+            "package_version": "7.2.4",
             "deleteable": false
         },
         {
             "package_name": "CEAMSModules",
-            "package_version": "7.3.0"
+            "package_version": "7.2.4"
         }
     ],
     "process_params": {
