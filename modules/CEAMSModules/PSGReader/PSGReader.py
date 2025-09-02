@@ -163,6 +163,11 @@ class PSGReader(SciNode):
 
         # Extract sleep stages
         sleep_stages = self._psg_reader_manager.get_sleep_stages()
+        # Fix stage 4 if present
+        if sleep_stages is not None and 'name' in sleep_stages.columns:
+            if (sleep_stages['name'] == '4').any():
+                sleep_stages.loc[sleep_stages['name'] == '4', 'name'] = '3'
+
         if selected_channels is not None:
             # Evaluate the sleep stages length against the signals length
             total_stage_time = sleep_stages['duration_sec'].sum()
@@ -195,6 +200,11 @@ class PSGReader(SciNode):
                 sleep_stages = sleep_stages[combined_mask].reset_index(drop=True)
 
         events = self._psg_reader_manager.get_events()
+        # Update the events dataframe with the replacement of the stage 4
+        if events is not None and 'name' in events.columns:
+            if (events['name'] == '4').any():
+                events.loc[events['name'] == '4', 'name'] = '3'
+                
         subject_info = self._psg_reader_manager.get_subject_info()
 
         # Write the events in the cache in order to view them on the resultsView
