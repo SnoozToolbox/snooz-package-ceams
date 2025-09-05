@@ -108,7 +108,7 @@ class EventsProxyModel(QtCore.QSortFilterProxyModel):
             group_checked = 0
             for row in range(item.rowCount()):
                 child = item.child(row)
-                if child.isCheckable() and child.checkState() == QtCore.Qt.Checked:
+                if child.isCheckable() and (child.checkState() in (QtCore.Qt.Checked, QtCore.Qt.PartiallyChecked)):
                     if not child.hasChildren() and (not child in childlist):
                         name_checked += 1
                         childlist.append(child.text())
@@ -130,7 +130,7 @@ class EventsProxyModel(QtCore.QSortFilterProxyModel):
             for row in range(model.rowCount()):
                 top_item = model.item(row)
                 if top_item is not None:
-                    if top_item.isCheckable() and top_item.checkState() == QtCore.Qt.Checked:
+                    if top_item.isCheckable() and (top_item.checkState() in (QtCore.Qt.Checked, QtCore.Qt.PartiallyChecked)):
                         if not top_item.hasChildren() and (not top_item in top_item_list):
                             total_name_checked += 1
                             top_item_list.append(top_item.text())
