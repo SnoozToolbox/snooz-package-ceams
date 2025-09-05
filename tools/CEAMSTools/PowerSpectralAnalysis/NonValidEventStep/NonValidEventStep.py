@@ -130,6 +130,8 @@ class NonValidEventStep( BaseStepView,  Ui_NonValidEventStep, QtWidgets.QWidget)
                 # Update the model for the checkable events tree, based on modification made in self.files_model
                 #   The checksate are not modified, only the files are added or removed.
                 self.files_check_event_model = self.update_checkable_model(self.files_check_event_model)
+                # Update the number of files in the title
+                self.label.setText(f"PSG files ({self.files_model.rowCount()})")
                 self.event_treeview.resizeColumnToContents(0)
                 if DEBUG:
                     if not self._validate_model_from_ref(self.files_model, self.files_check_event_model):
