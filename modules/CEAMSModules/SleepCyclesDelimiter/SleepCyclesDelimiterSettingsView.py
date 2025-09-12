@@ -10,8 +10,9 @@ See the file LICENCE for full license details.
 from qtpy import QtWidgets
 from qtpy.QtGui import QPixmap, QImage
 from qtpy.QtCore import QFile, QTimer, Slot
+import base64
 
-from . import SleepCycleDelimiter_rs
+#from . import SleepCycleDelimiter_rs
 
 from CEAMSModules.SleepCyclesDelimiter.Ui_SleepCyclesDelimiterSettingsView import Ui_SleepCyclesDelimiterSettingsView
 from commons.BaseSettingsView import BaseSettingsView
@@ -30,15 +31,12 @@ class SleepCyclesDelimiterSettingsView( BaseSettingsView,  Ui_SleepCyclesDelimit
         # init UI
         self.setupUi(self)
         # keep the qrc module alive
-        self._SleepCycleDelimiter_ref = SleepCycleDelimiter_rs  # prevent it from being garbage collected
-        # resources - makes Snooz crash on "img = QImage(image_path)"
-        self.image_min = ":/sleep_cycle_del/UI_v5_minimal.png"
-        self.image_aesch = ":/sleep_cycle_del/UI_v5_Aeschbach.png"
-        self.image_floyd = ":/sleep_cycle_del/UI_v5_Feinberg_floyd.png"
-        # No crash
-        # self.image_min = "C:/Users/klacourse/Documents/snooz_workspace/snooz-package-ceams/modules/CEAMSModules/SleepCyclesDelimiter/UI_v5_minimal.png"
-        # self.image_aesch = "C:/Users/klacourse/Documents/snooz_workspace/snooz-package-ceams/modules/CEAMSModules/SleepCyclesDelimiter/UI_v5_Aeschbach.png"
-        # self.image_floyd = "C:/Users/klacourse/Documents/snooz_workspace/snooz-package-ceams/modules/CEAMSModules/SleepCyclesDelimiter/UI_v5_Feinberg_floyd.png"
+        #self._SleepCycleDelimiter_ref = SleepCycleDelimiter_rs  # prevent it from being garbage collected
+        
+        # Remove the old image paths - we'll use base64 now
+        # self.image_min = "./UI_v5_minimal.png"
+        # self.image_aesch = "./UI_v5_Aeschbach.png"
+        # self.image_floyd = "./UI_v5_Feinberg_floyd.png"
 
         # flag to make sure we only load once
         self._image_loaded = False
@@ -67,15 +65,51 @@ class SleepCyclesDelimiterSettingsView( BaseSettingsView,  Ui_SleepCyclesDelimit
         """
         super().showEvent(event)
         if not self._image_loaded:
-            self._load_pixmap(self.image_aesch)
+            self._load_embedded_pixmap('aeschbach')  # Default image
             self._image_loaded = True
 
+    def _load_embedded_pixmap(self, image_type):
+        """Load the embedded base64 image data into the QLabel."""
+        try:
+            # Import the base64 data from the separate file
+            from .sleep_cycle_image_data import MINIMAL_IMAGE_BASE64, AESCHBACH_IMAGE_BASE64, FEINBERG_FLOYD_IMAGE_BASE64
+            
+            # Select the appropriate image based on type
+            if image_type == 'minimal':
+                image_data = MINIMAL_IMAGE_BASE64
+            elif image_type == 'aeschbach':
+                image_data = AESCHBACH_IMAGE_BASE64
+            elif image_type == 'feinberg_floyd':
+                image_data = FEINBERG_FLOYD_IMAGE_BASE64
+            else:
+                print(f"Unknown image type: {image_type}")
+                return
+            
+            # Decode base64 data to bytes
+            image_bytes = base64.b64decode(image_data)
+            
+            # Create QPixmap from bytes
+            pixmap = QPixmap()
+            if pixmap.loadFromData(image_bytes):
+                self.image.setPixmap(pixmap)
+            else:
+                print(f"Failed to load {image_type} image from base64 data")
+        except ImportError:
+            print("Could not import sleep cycle image data - make sure sleep_cycle_image_data.py exists")
+        except Exception as e:
+            print(f"Error loading embedded image: {e}")
 
-    #@Slot(str)
+    # Replace the old _load_pixmap method
     def _load_pixmap(self, image_path: str):
-        img = QImage(image_path)
-        self.image.setPixmap(QPixmap.fromImage(img))
-    
+        """Legacy method - now routes to embedded images."""
+        if "minimal" in image_path:
+            self._load_embedded_pixmap('minimal')
+        elif "Aeschbach" in image_path:
+            self._load_embedded_pixmap('aeschbach')
+        elif "floyd" in image_path or "Feinberg" in image_path:
+            self._load_embedded_pixmap('feinberg_floyd')
+        else:
+            print(f"Unknown image path: {image_path}")
 
     # Called when the settingsView is opened by the user
     # The node asks to the publisher the settings
@@ -134,15 +168,15 @@ class SleepCyclesDelimiterSettingsView( BaseSettingsView,  Ui_SleepCyclesDelimit
             # based on the dictionary
             if self.parameters['defined_option'] == "Minimum Criteria":
                 self.radioButton_Min.setChecked(True)
-                self._load_pixmap(self.image_min)
+                self._load_embedded_pixmap('minimal')
                 
             elif self.parameters['defined_option'] == "Aeschbach 1993":
                 self.radioButton_Aesch.setChecked(True)
-                self._load_pixmap(self.image_aesch)              
+                self._load_embedded_pixmap('aeschbach')              
 
             elif self.parameters['defined_option'] == "Feinberg 1979":
                 self.radioButton_Floyd.setChecked(True)
-                self._load_pixmap(self.image_floyd)
+                self._load_embedded_pixmap('feinberg_floyd')
             
             # NREM Periods Init
             self.minL_NREM_first = float(self.parameters['NREM_min_len_first'])
@@ -174,7 +208,7 @@ class SleepCyclesDelimiterSettingsView( BaseSettingsView,  Ui_SleepCyclesDelimit
     # only when the user apply settings.
     def on_options_changed(self):
         if self.radioButton_Min.isChecked():
-            self._load_pixmap(self.image_min)
+            self._load_embedded_pixmap('minimal')
             #QTimer.singleShot(300, lambda: self._load_pixmap(self.image_min))
             # Include incomplete cycle
             self.checkBox_incl_SOREMP.setChecked(1)
@@ -201,7 +235,7 @@ class SleepCyclesDelimiterSettingsView( BaseSettingsView,  Ui_SleepCyclesDelimit
             self.textBrowser.setReadOnly(True)
 
         elif self.radioButton_Aesch.isChecked():
-            self._load_pixmap(self.image_aesch)
+            self._load_embedded_pixmap('aeschbach')
             # Include incomplete cycle
             self.checkBox_incl_SOREMP.setChecked(0)
             self.checkBox_incl_last.setChecked(0)
@@ -228,7 +262,7 @@ class SleepCyclesDelimiterSettingsView( BaseSettingsView,  Ui_SleepCyclesDelimit
             self.textBrowser.setReadOnly(True)
 
         elif self.radioButton_Floyd.isChecked():
-            self._load_pixmap(self.image_floyd)
+            self._load_embedded_pixmap('feinberg_floyd')
             # Include incomplete cycle
             self.checkBox_incl_SOREMP.setChecked(0)
             self.checkBox_incl_last.setChecked(0)

@@ -251,9 +251,6 @@ li.checked::marker { content: &quot;\2612&quot;; }
           <property name="text">
            <string/>
           </property>
-          <property name="pixmap">
-           <pixmap resource="intro_res_rc.qrc">:/intro/2_amplitude_v2.png</pixmap>
-          </property>
           <property name="alignment">
            <set>Qt::AlignmentFlag::AlignCenter</set>
           </property>
@@ -263,9 +260,6 @@ li.checked::marker { content: &quot;\2612&quot;; }
          <widget class="QLabel" name="label_8">
           <property name="text">
            <string/>
-          </property>
-          <property name="pixmap">
-           <pixmap resource="intro_res_rc.qrc">:/intro/3_burst_noise_v2.png</pixmap>
           </property>
           <property name="alignment">
            <set>Qt::AlignmentFlag::AlignCenter</set>
@@ -283,9 +277,6 @@ li.checked::marker { content: &quot;\2612&quot;; }
           <property name="text">
            <string/>
           </property>
-          <property name="pixmap">
-           <pixmap resource="intro_res_rc.qrc">:/intro/3b_persistent_noise.png</pixmap>
-          </property>
           <property name="alignment">
            <set>Qt::AlignmentFlag::AlignCenter</set>
           </property>
@@ -295,9 +286,6 @@ li.checked::marker { content: &quot;\2612&quot;; }
          <widget class="QLabel" name="label_9">
           <property name="text">
            <string/>
-          </property>
-          <property name="pixmap">
-           <pixmap resource="intro_res_rc.qrc">:/intro/4_powerLine_v2.png</pixmap>
           </property>
           <property name="alignment">
            <set>Qt::AlignmentFlag::AlignCenter</set>
@@ -309,9 +297,6 @@ li.checked::marker { content: &quot;\2612&quot;; }
           <property name="text">
            <string/>
           </property>
-          <property name="pixmap">
-           <pixmap resource="intro_res_rc.qrc">:/intro/5_BSLVar_v2.png</pixmap>
-          </property>
           <property name="alignment">
            <set>Qt::AlignmentFlag::AlignCenter</set>
           </property>
@@ -321,9 +306,6 @@ li.checked::marker { content: &quot;\2612&quot;; }
          <widget class="QLabel" name="label_11">
           <property name="text">
            <string/>
-          </property>
-          <property name="pixmap">
-           <pixmap resource="intro_res_rc.qrc">:/intro/6_muscular_v2.png</pixmap>
           </property>
           <property name="alignment">
            <set>Qt::AlignmentFlag::AlignCenter</set>
@@ -338,7 +320,6 @@ li.checked::marker { content: &quot;\2612&quot;; }
   </layout>
  </widget>
  <resources>
-  <include location="intro_res_rc.qrc"/>
   <include location="../../../../../snooz-toolbox/src/main/python/ui/themes/themes.qrc"/>
  </resources>
  <connections/>
