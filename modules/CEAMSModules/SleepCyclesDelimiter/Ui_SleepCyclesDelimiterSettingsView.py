@@ -20,7 +20,6 @@ from PySide6.QtWidgets import (QApplication, QCheckBox, QFormLayout, QFrame,
     QLineEdit, QPlainTextEdit, QRadioButton, QSizePolicy,
     QSpacerItem, QSplitter, QTextBrowser, QTextEdit,
     QVBoxLayout, QWidget)
-from . import SleepCycleDelimiter_rs
 import themes_rc
 
 class Ui_SleepCyclesDelimiterSettingsView(object):
@@ -83,6 +82,7 @@ class Ui_SleepCyclesDelimiterSettingsView(object):
 
         self.image = QLabel(self.layoutWidget)
         self.image.setObjectName(u"image")
+        self.image.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
         self.verticalLayout_3.addWidget(self.image)
 
@@ -197,6 +197,9 @@ class Ui_SleepCyclesDelimiterSettingsView(object):
 
         self.plainTextEdit = QPlainTextEdit(self.layoutWidget)
         self.plainTextEdit.setObjectName(u"plainTextEdit")
+        self.plainTextEdit.setFrameShape(QFrame.Shape.NoFrame)
+        self.plainTextEdit.setFrameShadow(QFrame.Shadow.Plain)
+        self.plainTextEdit.setLineWidth(0)
         self.plainTextEdit.setReadOnly(True)
 
         self.verticalLayout_5.addWidget(self.plainTextEdit)
@@ -296,7 +299,7 @@ class Ui_SleepCyclesDelimiterSettingsView(object):
         sizePolicy.setHeightForWidth(self.textBrowser.sizePolicy().hasHeightForWidth())
         self.textBrowser.setSizePolicy(sizePolicy)
         self.textBrowser.setStyleSheet(u"")
-        self.textBrowser.setFrameShape(QFrame.Shape.HLine)
+        self.textBrowser.setFrameShape(QFrame.Shape.NoFrame)
         self.textBrowser.setFrameShadow(QFrame.Shadow.Plain)
         self.textBrowser.setLineWidth(0)
         self.textBrowser.setReadOnly(True)

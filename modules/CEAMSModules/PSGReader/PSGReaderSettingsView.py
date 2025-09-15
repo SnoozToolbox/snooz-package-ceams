@@ -335,7 +335,8 @@ class PSGReaderSettingsView( BaseSettingsView,  Ui_PSGReaderSettingsView, QtWidg
     def on_add_alias(self, alias):
         # Get selected channels
         selected_channels = [r.data() for r in self.channels_tableview.selectedIndexes()]
-
+        # Get the unique list of channels
+        selected_channels = list(set(selected_channels))
         current_aliases = self._alias_line_edit[alias].text()
         aliases_list = current_aliases.split(';')
         for ch in selected_channels:
@@ -800,7 +801,7 @@ class PSGReaderSettingsView( BaseSettingsView,  Ui_PSGReaderSettingsView, QtWidg
         # If not, display an error message to the user and return False.
         # This is called just before the apply settings function.
         # Returning False will prevent the process from executing.
-       
+        
         # If the file list is empty -> open a warning dialog
         # If none of the channels is selected for a subject -> open a warning dialog
         if self._options['file_selection_only']['value'] == "1":
@@ -821,12 +822,19 @@ class PSGReaderSettingsView( BaseSettingsView,  Ui_PSGReaderSettingsView, QtWidg
                         WarningDialog(f"Only one montage per recording is allowed. Check the montages selection of the file : {file}.")
                         return False
 
-                # For each recording check the channel selection
+                # For each recording check the channel selection and sleep stage 4
                 for file in file_list:
                     chans_used = channels_info_df[(channels_info_df['Filename']==file) & (channels_info_df['Use']==True)]
                     if len(chans_used)==0:
                         WarningDialog(f"At least one recording has no channel selected, check the channel selection of the file : {file}.")
                         return False
+                    # Check for sleep stage 4 in annotations and warn user
+                    success = self._psg_reader_manager.open_file(file)
+                    if success:
+                        sleep_stages = self._psg_reader_manager.get_sleep_stages()
+                        if sleep_stages is not None and 'name' in sleep_stages.columns:
+                            if (sleep_stages['name'] == '4').any():
+                                WarningDialog(f"Sleep stage '4' detected in annotation file {file}. It will be converted to '3' automatically.")
         else:
             WarningDialog(f"Add files before running the pipeline.")    
             return False

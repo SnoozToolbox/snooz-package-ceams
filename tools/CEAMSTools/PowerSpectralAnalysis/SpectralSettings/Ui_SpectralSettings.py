@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file ''
+## Form generated from reading UI file 'Ui_SpectralSettings.ui'
 ##
 ## Created by: Qt User Interface Compiler version 6.8.2
 ##
@@ -47,8 +47,8 @@ class Ui_SpectralSettings(object):
         self.plainTextEdit_2.setObjectName(u"plainTextEdit_2")
         self.plainTextEdit_2.setMinimumSize(QSize(0, 45))
         self.plainTextEdit_2.setMaximumSize(QSize(16777215, 80))
-        self.plainTextEdit_2.setFrameShape(QFrame.HLine)
-        self.plainTextEdit_2.setFrameShadow(QFrame.Plain)
+        self.plainTextEdit_2.setFrameShape(QFrame.Shape.NoFrame)
+        self.plainTextEdit_2.setFrameShadow(QFrame.Shadow.Plain)
         self.plainTextEdit_2.setLineWidth(0)
         self.plainTextEdit_2.setReadOnly(True)
 
@@ -56,7 +56,7 @@ class Ui_SpectralSettings(object):
 
         self.gridLayout = QGridLayout()
         self.gridLayout.setObjectName(u"gridLayout")
-        self.gridLayout.setSizeConstraint(QLayout.SetNoConstraint)
+        self.gridLayout.setSizeConstraint(QLayout.SizeConstraint.SetNoConstraint)
         self.label_2 = QLabel(SpectralSettings)
         self.label_2.setObjectName(u"label_2")
         sizePolicy = QSizePolicy(QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Preferred)
@@ -125,8 +125,8 @@ class Ui_SpectralSettings(object):
         self.plainTextEdit.setSizePolicy(sizePolicy1)
         self.plainTextEdit.setMinimumSize(QSize(0, 300))
         self.plainTextEdit.setMaximumSize(QSize(16777215, 16777215))
-        self.plainTextEdit.setFrameShape(QFrame.HLine)
-        self.plainTextEdit.setFrameShadow(QFrame.Plain)
+        self.plainTextEdit.setFrameShape(QFrame.Shape.NoFrame)
+        self.plainTextEdit.setFrameShadow(QFrame.Shadow.Plain)
         self.plainTextEdit.setLineWidth(0)
         self.plainTextEdit.setReadOnly(True)
 
@@ -150,7 +150,7 @@ class Ui_SpectralSettings(object):
         self.miniband_lineEdit.setObjectName(u"miniband_lineEdit")
         self.miniband_lineEdit.setMinimumSize(QSize(0, 0))
         self.miniband_lineEdit.setMaximumSize(QSize(80, 16777215))
-        self.miniband_lineEdit.setAlignment(Qt.AlignRight|Qt.AlignTrailing|Qt.AlignVCenter)
+        self.miniband_lineEdit.setAlignment(Qt.AlignmentFlag.AlignRight|Qt.AlignmentFlag.AlignTrailing|Qt.AlignmentFlag.AlignVCenter)
 
         self.gridLayout_2.addWidget(self.miniband_lineEdit, 0, 1, 1, 1)
 
@@ -166,7 +166,7 @@ class Ui_SpectralSettings(object):
         self.first_freq_lineEdit = QLineEdit(SpectralSettings)
         self.first_freq_lineEdit.setObjectName(u"first_freq_lineEdit")
         self.first_freq_lineEdit.setMaximumSize(QSize(80, 16777215))
-        self.first_freq_lineEdit.setAlignment(Qt.AlignRight|Qt.AlignTrailing|Qt.AlignVCenter)
+        self.first_freq_lineEdit.setAlignment(Qt.AlignmentFlag.AlignRight|Qt.AlignmentFlag.AlignTrailing|Qt.AlignmentFlag.AlignVCenter)
 
         self.gridLayout_2.addWidget(self.first_freq_lineEdit, 1, 1, 1, 1)
 
@@ -186,7 +186,7 @@ class Ui_SpectralSettings(object):
         self.last_freq_lineEdit = QLineEdit(SpectralSettings)
         self.last_freq_lineEdit.setObjectName(u"last_freq_lineEdit")
         self.last_freq_lineEdit.setMaximumSize(QSize(80, 16777215))
-        self.last_freq_lineEdit.setAlignment(Qt.AlignRight|Qt.AlignTrailing|Qt.AlignVCenter)
+        self.last_freq_lineEdit.setAlignment(Qt.AlignmentFlag.AlignRight|Qt.AlignmentFlag.AlignTrailing|Qt.AlignmentFlag.AlignVCenter)
 
         self.gridLayout_2.addWidget(self.last_freq_lineEdit, 2, 1, 1, 1)
 
@@ -200,7 +200,7 @@ class Ui_SpectralSettings(object):
         self.label_10 = QLabel(SpectralSettings)
         self.label_10.setObjectName(u"label_10")
         self.label_10.setFont(font)
-        self.label_10.setAlignment(Qt.AlignLeading|Qt.AlignLeft|Qt.AlignVCenter)
+        self.label_10.setAlignment(Qt.AlignmentFlag.AlignLeading|Qt.AlignmentFlag.AlignLeft|Qt.AlignmentFlag.AlignVCenter)
 
         self.verticalLayout_2.addWidget(self.label_10)
 

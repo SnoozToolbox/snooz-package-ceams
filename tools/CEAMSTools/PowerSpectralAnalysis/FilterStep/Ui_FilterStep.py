@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file ''
+## Form generated from reading UI file 'Ui_FilterStep.ui'
 ##
 ## Created by: Qt User Interface Compiler version 6.8.2
 ##
@@ -42,8 +42,8 @@ class Ui_FilterStep(object):
         self.textBrowser = QPlainTextEdit(FilterStep)
         self.textBrowser.setObjectName(u"textBrowser")
         self.textBrowser.setMaximumSize(QSize(16777215, 100))
-        self.textBrowser.setFrameShape(QFrame.HLine)
-        self.textBrowser.setFrameShadow(QFrame.Plain)
+        self.textBrowser.setFrameShape(QFrame.Shape.NoFrame)
+        self.textBrowser.setFrameShadow(QFrame.Shadow.Plain)
         self.textBrowser.setLineWidth(0)
         self.textBrowser.setReadOnly(True)
 

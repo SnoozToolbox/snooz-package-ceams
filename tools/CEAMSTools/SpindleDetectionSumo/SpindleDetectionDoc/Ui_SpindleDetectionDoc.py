@@ -17,7 +17,6 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QPalette, QPixmap, QRadialGradient, QTransform)
 from PySide6.QtWidgets import (QApplication, QFrame, QLabel, QSizePolicy,
     QSpacerItem, QTextEdit, QVBoxLayout, QWidget)
-from . import spindle_rc
 import themes_rc
 
 class Ui_SpindleDetectionDoc(object):
@@ -30,6 +29,7 @@ class Ui_SpindleDetectionDoc(object):
         self.verticalLayout_2.setObjectName(u"verticalLayout_2")
         self.spindle_image = QLabel(SpindleDetectionDoc)
         self.spindle_image.setObjectName(u"spindle_image")
+        self.spindle_image.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
         self.verticalLayout_2.addWidget(self.spindle_image)
 
