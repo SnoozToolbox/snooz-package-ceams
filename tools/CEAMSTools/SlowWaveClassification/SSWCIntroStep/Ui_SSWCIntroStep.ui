@@ -32,9 +32,7 @@
          <property name="text">
           <string/>
          </property>
-         <property name="pixmap">
-          <pixmap resource="hist_freq_transition.qrc">:/hist/transition_frequency.png</pixmap>
-         </property>
+         <property name="text"><string/></property>
          <property name="alignment">
           <set>Qt::AlignCenter</set>
          </property>
@@ -92,9 +90,7 @@ p, li { white-space: pre-wrap; }
   </layout>
  </widget>
  <resources>
-  <include location="imgs.qrc"/>
-  <include location="hist_freq_transition.qrc"/>
-  <include location="../../../../../snooz-toolbox/src/main/python/ui/themes/themes.qrc"/>
+    <include location="../../../../../snooz-toolbox/src/main/python/ui/themes/themes.qrc"/>
  </resources>
  <connections/>
 </ui>
