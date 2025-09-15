@@ -5,6 +5,8 @@
     The Settings view is used to buil a dictionary to provide to the 
     oxygen desaturation detector.
 """
+import base64
+from qtpy.QtGui import QPixmap
 
 from qtpy import QtWidgets
 
@@ -25,6 +27,7 @@ class DetectionSettings(BaseStepView, Ui_DetectionSettings, QtWidgets.QWidget):
 
         # init UI
         self.setupUi(self)
+        self._load_embedded_image()
 
         # If necessary, init the context. The context is a memory space shared by 
         # all steps of a tool. It is used to share and notice other steps whenever
@@ -36,6 +39,15 @@ class DetectionSettings(BaseStepView, Ui_DetectionSettings, QtWidgets.QWidget):
         self._oxy_topic = f'{self._node_id_oxy_det}.parameters_oxy'
         self._pub_sub_manager.subscribe(self, self._oxy_topic)
         
+
+    def _load_embedded_image(self):
+        """Load the embedded base64 image data into label_pic."""
+        from .art_image_data import OXY_DESATURATION_SMALL_IMAGE_BASE64
+        
+        image_bytes = base64.b64decode(OXY_DESATURATION_SMALL_IMAGE_BASE64)
+        pixmap = QPixmap()
+        pixmap.loadFromData(image_bytes)
+        self.label_pic.setPixmap(pixmap)
 
     def load_settings(self):
         # Load settings is called after the constructor of all steps has been executed.

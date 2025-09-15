@@ -127,9 +127,7 @@ The order is divided by 2 when applied since is it applied twice.</string>
        <property name="text">
         <string/>
        </property>
-       <property name="pixmap">
-        <pixmap resource="desaturation_criteria.qrc">:/desat_critera/oxy_desaturation_small.png</pixmap>
-       </property>
+       <property name="text"><string/></property>
       </widget>
      </item>
      <item>
@@ -564,8 +562,7 @@ A Sensitive and Specific Tool to Detect Sleep-Disordered Breathing in Surgical P
   </layout>
  </widget>
  <resources>
-  <include location="desaturation_criteria.qrc"/>
-  <include location="../../../../../snooz-toolbox/src/main/python/ui/themes/themes.qrc"/>
+    <include location="../../../../../snooz-toolbox/src/main/python/ui/themes/themes.qrc"/>
  </resources>
  <connections/>
  <buttongroups>
