@@ -43,9 +43,6 @@
          <property name="text">
           <string/>
          </property>
-         <property name="pixmap">
-          <pixmap resource="FlatlineStep_res.qrc">:/flatline/flatlined.png</pixmap>
-         </property>
         </widget>
        </item>
       </layout>
@@ -320,7 +317,6 @@ p, li { white-space: pre-wrap; }
   </layout>
  </widget>
  <resources>
-  <include location="FlatlineStep_res.qrc"/>
   <include location="../../../../../snooz-toolbox/src/main/python/ui/themes/themes.qrc"/>
  </resources>
  <connections/>

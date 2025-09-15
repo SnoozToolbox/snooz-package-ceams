@@ -19,7 +19,6 @@ from PySide6.QtWidgets import (QApplication, QFrame, QHBoxLayout, QLabel,
     QLineEdit, QPlainTextEdit, QScrollArea, QSizePolicy,
     QSpacerItem, QSplitter, QTextEdit, QVBoxLayout,
     QWidget)
-from . import BSLVar_res
 import themes_rc
 
 class Ui_BslVarStep(object):
@@ -45,7 +44,6 @@ class Ui_BslVarStep(object):
         self.horizontalLayout.setObjectName(u"horizontalLayout")
         self.label_7 = QLabel(self.scrollAreaWidgetContents)
         self.label_7.setObjectName(u"label_7")
-        self.label_7.setPixmap(QPixmap(u":/BSLVar/BSLVar.png"))
         self.label_7.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
         self.horizontalLayout.addWidget(self.label_7)

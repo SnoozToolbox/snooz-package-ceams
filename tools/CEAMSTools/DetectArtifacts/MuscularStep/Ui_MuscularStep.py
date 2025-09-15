@@ -19,7 +19,6 @@ from PySide6.QtWidgets import (QApplication, QFormLayout, QFrame, QGridLayout,
     QHBoxLayout, QLabel, QLayout, QLineEdit,
     QScrollArea, QSizePolicy, QSpacerItem, QTextEdit,
     QVBoxLayout, QWidget)
-from . import muscular_res
 import themes_rc
 
 class Ui_MuscularStep(object):
@@ -55,7 +54,6 @@ class Ui_MuscularStep(object):
         sizePolicy1.setHeightForWidth(self.picture_label.sizePolicy().hasHeightForWidth())
         self.picture_label.setSizePolicy(sizePolicy1)
         self.picture_label.setMaximumSize(QSize(16777215, 160))
-        self.picture_label.setPixmap(QPixmap(u":/muscular/muscular.png"))
         self.picture_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
         self.horizontalLayout.addWidget(self.picture_label)
@@ -316,6 +314,7 @@ class Ui_MuscularStep(object):
 
     def retranslateUi(self, MuscularStep):
         MuscularStep.setWindowTitle(QCoreApplication.translate("MuscularStep", u"Form", None))
+        self.picture_label.setText("")
         self.picture_label.setText("")
         self.label_9.setText(QCoreApplication.translate("MuscularStep", u"<html><head/><body><p><span style=\" font-weight:600;\">Muscular Artifact : Segments with burst of activity in the frequency band 20.25-32 Hz.</span></p></body></html>", None))
         self.description_textEdit.setHtml(QCoreApplication.translate("MuscularStep", u"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
