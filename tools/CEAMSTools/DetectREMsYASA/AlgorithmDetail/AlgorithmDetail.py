@@ -6,6 +6,7 @@
 
 from qtpy import QtWidgets, QtCore
 from qtpy.QtCore import QTimer
+import base64
 from PySide6.QtCore import *
 
 from commons.BaseStepView import BaseStepView
@@ -15,6 +16,7 @@ from flowpipe.ActivationState import ActivationState
 from CEAMSTools.DetectREMsYASA.AlgorithmDetail.Ui_AlgorithmDetail import Ui_AlgorithmDetail
 
 from qtpy import QtWidgets
+from qtpy.QtGui import QPixmap
 
 class AlgorithmDetail(BaseStepView, Ui_AlgorithmDetail, QtWidgets.QWidget):
     """
@@ -26,7 +28,17 @@ class AlgorithmDetail(BaseStepView, Ui_AlgorithmDetail, QtWidgets.QWidget):
 
         # init UI
         self.setupUi(self)
+        self._load_embedded_image()
 
+
+    def _load_embedded_image(self):
+        """Load the embedded base64 image data into label."""
+        from .art_image_data import EYES_MOVEMENT_IMAGE_BASE64
+        
+        image_bytes = base64.b64decode(EYES_MOVEMENT_IMAGE_BASE64)
+        pixmap = QPixmap()
+        pixmap.loadFromData(image_bytes)
+        self.label_2.setPixmap(pixmap)
 
     def load_settings(self):
         # Load settings is called after the constructor of all steps has been executed.
@@ -34,7 +46,6 @@ class AlgorithmDetail(BaseStepView, Ui_AlgorithmDetail, QtWidgets.QWidget):
         # It is a good place to do all ping calls that will request the 
         # underlying process to get the value of a module.
         pass
-        
 
     def on_topic_update(self, topic, message, sender):
         # Whenever a value is updated within the context, all steps receives a 
@@ -46,14 +57,10 @@ class AlgorithmDetail(BaseStepView, Ui_AlgorithmDetail, QtWidgets.QWidget):
                 #updated_value = self._context_manager["context_some_other_step"]
         pass
 
-
     def on_topic_response(self, topic, message, sender):
         # This will be called as a response to ping request.
         pass
         
-                
-    
-
     def on_apply_settings(self):
         # Slot called when the user wants to apply the settings
         pass
@@ -71,7 +78,6 @@ class AlgorithmDetail(BaseStepView, Ui_AlgorithmDetail, QtWidgets.QWidget):
         # If not, display an error message to the user and return False.
         # This is called just before the apply settings function.
         # Returning False will prevent the process from executing.
-        
         return True
 
     # Called when the user delete an instance of the plugin
