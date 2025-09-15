@@ -2,6 +2,8 @@
 @ Valorisation Recherche HSCM, Societe en Commandite – 2023
 See the file LICENCE for full license details.
 """
+import base64
+from qtpy.QtGui import QPixmap
 
 """
     Settings viewer of the Intro plugin
@@ -25,6 +27,7 @@ class IntroStep( BaseStepView,  Ui_IntroStep, QtWidgets.QWidget):
 
         # init UI
         self.setupUi(self)
+        self._load_embedded_image()
 
         # If necessary, init the context. The context is a memory space shared by 
         # all steps of a tool. It is used to share and notice other steps whenever
@@ -32,6 +35,15 @@ class IntroStep( BaseStepView,  Ui_IntroStep, QtWidgets.QWidget):
         # must have an impact in another step.
         #self._context_manager["context_AnnotIntroStep"] = {"the_data_I_want_to_share":"some_data"}
         
+    def _load_embedded_image(self):
+        """Load the embedded base64 image data into label_5."""
+        from .art_image_data import SLEEP_BOUTS_IMAGE_BASE64
+        
+        image_bytes = base64.b64decode(SLEEP_BOUTS_IMAGE_BASE64)
+        pixmap = QPixmap()
+        pixmap.loadFromData(image_bytes)
+        self.label_5.setPixmap(pixmap)
+
     def load_settings(self):
         # Load settings is called after the constructor of all steps has been executed.
         # From this point on, you can assume that all context has been set correctly.

@@ -102,9 +102,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
          <property name="text">
           <string/>
          </property>
-         <property name="pixmap">
-          <pixmap resource="sleep_bouts.qrc">:/sleep_bout/sleep_bouts.png</pixmap>
-         </property>
+         <property name="text"><string/></property>
          <property name="alignment">
           <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter</set>
          </property>
@@ -185,8 +183,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
  </widget>
  <resources>
   <include location="../../../../../snooz-toolbox/src/main/python/ui/themes/themes.qrc"/>
-  <include location="sleep_bouts.qrc"/>
- </resources>
+   </resources>
  <connections/>
  <slots>
   <slot>on_choose()</slot>
