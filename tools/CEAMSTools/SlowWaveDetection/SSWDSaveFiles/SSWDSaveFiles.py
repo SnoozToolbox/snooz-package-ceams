@@ -3,6 +3,8 @@
     SSWDSaveFiles
     Settings viewer of the save files plugin for the Slow Wave Detector tool
 """
+import base64
+from qtpy.QtGui import QPixmap
 from CEAMSTools.SlowWaveDetection.SSWDSaveFiles.Ui_SSWDSaveFiles import Ui_SSWDSaveFiles
 from commons.BaseStepView import BaseStepView
 from flowpipe.ActivationState import ActivationState
@@ -20,6 +22,7 @@ class SSWDSaveFiles( BaseStepView,  Ui_SSWDSaveFiles, QtWidgets.QWidget):
 
         # init UI
         self.setupUi(self)
+        self._load_embedded_image()
 
         # Define modules and nodes to talk to
         self._node_id_SWDetails = "0308c274-4216-4642-9093-0ac919e9a0de"
@@ -63,6 +66,15 @@ class SSWDSaveFiles( BaseStepView,  Ui_SSWDSaveFiles, QtWidgets.QWidget):
         self.lineEdit_cohort_report.setEnabled(self.checkBox_save_cohort.isChecked())
         self.pushButto_browse.setEnabled(self.checkBox_save_cohort.isChecked())
 
+
+    def _load_embedded_image(self):
+        """Load the embedded base64 image data into image."""
+        from .art_image_data import PHASE_SLOW_WAVE_SMALL_JPG_IMAGE_BASE64
+        
+        image_bytes = base64.b64decode(PHASE_SLOW_WAVE_SMALL_JPG_IMAGE_BASE64)
+        pixmap = QPixmap()
+        pixmap.loadFromData(image_bytes)
+        self.image.setPixmap(pixmap)
 
     def load_settings(self):
         """ Called when the settingsView is opened by the user

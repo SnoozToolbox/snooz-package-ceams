@@ -108,7 +108,7 @@
          </property>
          <property name="maximumSize">
           <size>
-           <width>16777215</width>
+           <width>600</width>
            <height>16777215</height>
           </size>
          </property>
@@ -166,9 +166,6 @@ li.checked::marker { content: &quot;\2612&quot;; }
        </property>
        <property name="text">
         <string/>
-       </property>
-       <property name="pixmap">
-        <pixmap resource="criteria.qrc">:/criteria/phase_slow_wave_small.jpg</pixmap>
        </property>
        <property name="alignment">
         <set>Qt::AlignmentFlag::AlignCenter</set>
@@ -435,7 +432,6 @@ li.checked::marker { content: &quot;\2612&quot;; }
  </widget>
  <resources>
   <include location="../../../../../snooz-toolbox/src/main/python/ui/themes/themes.qrc"/>
-  <include location="criteria.qrc"/>
  </resources>
  <connections>
   <connection>
