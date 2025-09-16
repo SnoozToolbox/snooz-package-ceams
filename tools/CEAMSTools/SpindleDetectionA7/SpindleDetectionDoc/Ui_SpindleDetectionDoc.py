@@ -17,7 +17,6 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QPalette, QPixmap, QRadialGradient, QTransform)
 from PySide6.QtWidgets import (QApplication, QFrame, QLabel, QSizePolicy,
     QSpacerItem, QTextEdit, QVBoxLayout, QWidget)
-from . import spindle_rc
 import themes_rc
 
 class Ui_SpindleDetectionDoc(object):
@@ -31,7 +30,6 @@ class Ui_SpindleDetectionDoc(object):
         self.spindle_image = QLabel(SpindleDetectionDoc)
         self.spindle_image.setObjectName(u"spindle_image")
         self.spindle_image.setMaximumSize(QSize(16777215, 100))
-        self.spindle_image.setPixmap(QPixmap(u":/spindle_moda/e0004-b1-01-05-0001-smp303751_res80.png"))
         self.spindle_image.setScaledContents(False)
         self.spindle_image.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
@@ -74,6 +72,7 @@ class Ui_SpindleDetectionDoc(object):
 
     def retranslateUi(self, SpindleDetectionDoc):
         SpindleDetectionDoc.setWindowTitle("")
+        self.spindle_image.setText("")
         self.spindle_image.setText("")
         self.label.setText(QCoreApplication.translate("SpindleDetectionDoc", u"<html><head/><body><p><span style=\" font-weight:600;\">Spindle detection</span></p></body></html>", None))
         self.textEdit.setHtml(QCoreApplication.translate("SpindleDetectionDoc", u"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"

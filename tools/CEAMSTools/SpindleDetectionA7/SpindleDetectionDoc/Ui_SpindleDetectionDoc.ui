@@ -28,9 +28,7 @@
      <property name="text">
       <string/>
      </property>
-     <property name="pixmap">
-      <pixmap resource="spindle.qrc">:/spindle_moda/e0004-b1-01-05-0001-smp303751_res80.png</pixmap>
-     </property>
+     <property name="text"><string/></property>
      <property name="scaledContents">
       <bool>false</bool>
      </property>
@@ -129,8 +127,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
   </layout>
  </widget>
  <resources>
-  <include location="spindle.qrc"/>
-  <include location="../../../../../snooz-toolbox/src/main/python/ui/themes/themes.qrc"/>
+    <include location="../../../../../snooz-toolbox/src/main/python/ui/themes/themes.qrc"/>
  </resources>
  <connections/>
 </ui>

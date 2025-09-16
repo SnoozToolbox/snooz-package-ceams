@@ -24,7 +24,7 @@ class Ui_OutputFilesStep(object):
     def setupUi(self, OutputFilesStep):
         if not OutputFilesStep.objectName():
             OutputFilesStep.setObjectName(u"OutputFilesStep")
-        OutputFilesStep.resize(786, 646)
+        OutputFilesStep.resize(850, 654)
         OutputFilesStep.setStyleSheet(u"font: 12pt \"Roboto\";")
         self.horizontalLayout_3 = QHBoxLayout(OutputFilesStep)
         self.horizontalLayout_3.setObjectName(u"horizontalLayout_3")
@@ -73,9 +73,15 @@ class Ui_OutputFilesStep(object):
 
         self.textEdit = QTextEdit(OutputFilesStep)
         self.textEdit.setObjectName(u"textEdit")
-        self.textEdit.setMinimumSize(QSize(0, 270))
+        sizePolicy = QSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.textEdit.sizePolicy().hasHeightForWidth())
+        self.textEdit.setSizePolicy(sizePolicy)
+        self.textEdit.setMinimumSize(QSize(0, 300))
         self.textEdit.setFrameShape(QFrame.Shape.NoFrame)
         self.textEdit.setFrameShadow(QFrame.Shadow.Plain)
+        self.textEdit.setLineWidth(0)
         self.textEdit.setReadOnly(True)
 
         self.verticalLayout_2.addWidget(self.textEdit)
@@ -109,6 +115,10 @@ class Ui_OutputFilesStep(object):
 
         self.horizontalLayout.addWidget(self.pushButton_cohort)
 
+        self.horizontalSpacer_2 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+
+        self.horizontalLayout.addItem(self.horizontalSpacer_2)
+
 
         self.verticalLayout_2.addLayout(self.horizontalLayout)
 
@@ -138,10 +148,6 @@ class Ui_OutputFilesStep(object):
 
 
         self.horizontalLayout_3.addLayout(self.verticalLayout_2)
-
-        self.horizontalSpacer_2 = QSpacerItem(175, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
-
-        self.horizontalLayout_3.addItem(self.horizontalSpacer_2)
 
 
         self.retranslateUi(OutputFilesStep)
