@@ -6,6 +6,8 @@ See the file LICENCE for full license details.
     SWImages
     TODO CLASS DESCRIPTION
 """
+import base64
+from qtpy.QtGui import QPixmap
 
 from qtpy import QtWidgets
 
@@ -22,6 +24,7 @@ class SWImages(BaseStepView, Ui_SWImages, QtWidgets.QWidget):
 
         # init UI
         self.setupUi(self)
+        self._load_embedded_images()
 
         # If necessary, init the context. The context is a memory space shared by 
         # all steps of a tool. It is used to share and notice other steps whenever
@@ -29,6 +32,18 @@ class SWImages(BaseStepView, Ui_SWImages, QtWidgets.QWidget):
         # must have an impact in another step.
         #self._context_manager["context_SWImages"] = {"the_data_I_want_to_share":"some_data"}
         
+    def _load_embedded_images(self):
+        """Load the embedded base64 image data into the QLabel widgets."""
+        from .art_image_data import SW_ALL_2CAT_1CHAN_70_IMAGE_BASE64, MEAN_STD_2CAT_70_IMAGE_BASE64
+        
+        image_mappings = {self.label: SW_ALL_2CAT_1CHAN_70_IMAGE_BASE64, self.label_3: MEAN_STD_2CAT_70_IMAGE_BASE64}
+        
+        for label, base64_data in image_mappings.items():
+            image_bytes = base64.b64decode(base64_data)
+            pixmap = QPixmap()
+            pixmap.loadFromData(image_bytes)
+            label.setPixmap(pixmap)
+
     def load_settings(self):
         # Load settings is called after the constructor of all steps has been executed.
         # From this point on, you can assume that all context has been set correctly.

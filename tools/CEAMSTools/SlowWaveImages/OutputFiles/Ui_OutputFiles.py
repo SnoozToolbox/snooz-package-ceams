@@ -20,7 +20,6 @@ from PySide6.QtWidgets import (QApplication, QButtonGroup, QCheckBox, QDoubleSpi
     QLineEdit, QPushButton, QRadioButton, QScrollArea,
     QSizePolicy, QSpacerItem, QVBoxLayout, QWidget)
 import themes_rc
-from . import sw_signal_curve_rc
 
 class Ui_OutputFiles(object):
     def setupUi(self, OutputFiles):
@@ -244,7 +243,6 @@ class Ui_OutputFiles(object):
         self.label_7.setLayoutDirection(Qt.LayoutDirection.LeftToRight)
         self.label_7.setAutoFillBackground(False)
         self.label_7.setLineWidth(0)
-        self.label_7.setPixmap(QPixmap(u":/sw_signal_curve/SW_signal_curve.png"))
         self.label_7.setScaledContents(False)
         self.label_7.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.label_7.setWordWrap(False)
@@ -469,6 +467,7 @@ class Ui_OutputFiles(object):
         self.radioButton_zc.setText(QCoreApplication.translate("OutputFiles", u"Zero-crossing point (ZC)", None))
         self.radioButton_np.setText(QCoreApplication.translate("OutputFiles", u"Negative peak (NP)", None))
         self.radioButton_pp.setText(QCoreApplication.translate("OutputFiles", u"Positive peak (PP)", None))
+        self.label_7.setText("")
         self.label_7.setText("")
         self.label.setText(QCoreApplication.translate("OutputFiles", u"<html><head/><body><p><span style=\" font-weight:600;\">Display Options</span></p></body></html>", None))
         self.radioButton_all.setText(QCoreApplication.translate("OutputFiles", u"Display all the SW signal curves on the picture.", None))

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file ''
+## Form generated from reading UI file 'Ui_SWImages.ui'
 ##
 ## Created by: Qt User Interface Compiler version 6.8.2
 ##
@@ -18,7 +18,6 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
 from PySide6.QtWidgets import (QApplication, QHBoxLayout, QLabel, QSizePolicy,
     QTextEdit, QVBoxLayout, QWidget)
 import themes_rc
-from . import sw_images_rc
 
 class Ui_SWImages(object):
     def setupUi(self, SWImages):
@@ -34,14 +33,12 @@ class Ui_SWImages(object):
         self.horizontalLayout.setObjectName(u"horizontalLayout")
         self.label = QLabel(SWImages)
         self.label.setObjectName(u"label")
-        self.label.setPixmap(QPixmap(u":/sw_images/SW_all_2cat_1chan_70.png"))
         self.label.setAlignment(Qt.AlignCenter)
 
         self.horizontalLayout.addWidget(self.label)
 
         self.label_3 = QLabel(SWImages)
         self.label_3.setObjectName(u"label_3")
-        self.label_3.setPixmap(QPixmap(u":/sw_images/mean_std_2cat_70.png"))
         self.label_3.setAlignment(Qt.AlignCenter)
 
         self.horizontalLayout.addWidget(self.label_3)
@@ -71,6 +68,8 @@ class Ui_SWImages(object):
     def retranslateUi(self, SWImages):
         SWImages.setWindowTitle("")
         self.label.setText("")
+        self.label.setText("")
+        self.label_3.setText("")
         self.label_3.setText("")
         self.textEdit.setHtml(QCoreApplication.translate("SWImages", u"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
