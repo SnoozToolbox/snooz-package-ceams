@@ -9,8 +9,9 @@ See the file LICENCE for full license details.
 
 from qtpy import QtWidgets
 from qtpy import QtCore
-from qtpy.QtGui import QRegularExpressionValidator # To validate waht the user enters in the interface
-from qtpy.QtCore import QRegularExpression  # To validate waht the user enters in the interface
+from qtpy.QtGui import QRegularExpressionValidator, QPixmap
+from qtpy.QtCore import QRegularExpression
+import base64
 
 from CEAMSTools.DetectArtifacts.BslVarStep.Ui_BslVarStep import Ui_BslVarStep
 from CEAMSTools.DetectArtifacts.DetectorsStep.DetectorsStep import DetectorsStep
@@ -31,6 +32,8 @@ class BslVarStep( BaseStepView,  Ui_BslVarStep, QtWidgets.QWidget):
 
         # init UI
         self.setupUi(self)
+        self._load_embedded_image()
+        
         # Subscribe to the proper topics to send/get data from the node
 
         # Events group 
@@ -49,6 +52,14 @@ class BslVarStep( BaseStepView,  Ui_BslVarStep, QtWidgets.QWidget):
         # Default value for the threshold [set 1 (precise-NREM), set 2 (sensitive-REM)]
         self.threshold_value = [4, 2.5] # STD of the main gaussian from 3 components
 
+    def _load_embedded_image(self):
+        """Load the embedded base64 image data into label_7."""
+        from .art_image_data import BSL_VAR_IMAGE_BASE64
+        
+        image_bytes = base64.b64decode(BSL_VAR_IMAGE_BASE64)
+        pixmap = QPixmap()
+        pixmap.loadFromData(image_bytes)
+        self.label_7.setPixmap(pixmap)
 
     # Called when the settingsView is opened by the user
     # The node asks to the publisher the settings

@@ -19,7 +19,6 @@ from PySide6.QtWidgets import (QApplication, QFrame, QHBoxLayout, QLabel,
     QSizePolicy, QSpacerItem, QTextEdit, QVBoxLayout,
     QWidget)
 import themes_rc
-from . import sleep_bouts_rc
 
 class Ui_IntroStep(object):
     def setupUi(self, IntroStep):
@@ -69,7 +68,6 @@ class Ui_IntroStep(object):
 
         self.label_5 = QLabel(IntroStep)
         self.label_5.setObjectName(u"label_5")
-        self.label_5.setPixmap(QPixmap(u":/sleep_bout/sleep_bouts.png"))
         self.label_5.setAlignment(Qt.AlignmentFlag.AlignLeading|Qt.AlignmentFlag.AlignLeft|Qt.AlignmentFlag.AlignVCenter)
 
         self.verticalLayout_2.addWidget(self.label_5)
@@ -130,6 +128,7 @@ class Ui_IntroStep(object):
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-in"
                         "dent:0px;\">   2. Continuous period of N2, N3 and REM stages</p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">   3. Continuous period of REM stage</p></body></html>", None))
+        self.label_5.setText("")
         self.label_5.setText("")
         self.label_6.setText(QCoreApplication.translate("IntroStep", u"<html><head/><body><p><span style=\" text-decoration: underline;\">Output file</span></p></body></html>", None))
         self.textEdit.setHtml(QCoreApplication.translate("IntroStep", u"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"

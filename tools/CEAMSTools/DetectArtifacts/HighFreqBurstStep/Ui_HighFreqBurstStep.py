@@ -19,7 +19,6 @@ from PySide6.QtWidgets import (QApplication, QFormLayout, QFrame, QGridLayout,
     QHBoxLayout, QLabel, QLayout, QLineEdit,
     QScrollArea, QSizePolicy, QSpacerItem, QTextEdit,
     QVBoxLayout, QWidget)
-from . import high_freq_noise_res_rc
 import themes_rc
 
 class Ui_HighFreqBurstStep(object):
@@ -45,7 +44,6 @@ class Ui_HighFreqBurstStep(object):
         self.horizontalLayout.setObjectName(u"horizontalLayout")
         self.label_10 = QLabel(self.scrollAreaWidgetContents)
         self.label_10.setObjectName(u"label_10")
-        self.label_10.setPixmap(QPixmap(u":/high_freq_noise/burst_noise.png"))
         self.label_10.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
         self.horizontalLayout.addWidget(self.label_10)

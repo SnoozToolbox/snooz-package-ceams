@@ -18,7 +18,6 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
 from PySide6.QtWidgets import (QApplication, QFrame, QGridLayout, QHBoxLayout,
     QLabel, QLineEdit, QScrollArea, QSizePolicy,
     QSpacerItem, QTextEdit, QVBoxLayout, QWidget)
-from . import high_freq_noise_res_rc
 import themes_rc
 
 class Ui_PersistentNoiseStep(object):
@@ -48,7 +47,6 @@ class Ui_PersistentNoiseStep(object):
         self.horizontalLayout.setObjectName(u"horizontalLayout")
         self.label_10 = QLabel(self.scrollAreaWidgetContents)
         self.label_10.setObjectName(u"label_10")
-        self.label_10.setPixmap(QPixmap(u":/high_freq_noise/persistent_noise.png"))
         self.label_10.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
         self.horizontalLayout.addWidget(self.label_10)

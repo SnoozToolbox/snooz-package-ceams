@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file ''
+## Form generated from reading UI file 'Ui_FlatlineStep.ui'
 ##
 ## Created by: Qt User Interface Compiler version 6.8.2
 ##
@@ -18,7 +18,6 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
 from PySide6.QtWidgets import (QApplication, QFormLayout, QFrame, QHBoxLayout,
     QLabel, QLineEdit, QScrollArea, QSizePolicy,
     QTextEdit, QVBoxLayout, QWidget)
-from . import FlatlineStep_res_rc
 import themes_rc
 
 class Ui_FlatlineStep(object):
@@ -43,7 +42,6 @@ class Ui_FlatlineStep(object):
         self.horizontalLayout.setObjectName(u"horizontalLayout")
         self.label_2 = QLabel(self.scrollAreaWidgetContents)
         self.label_2.setObjectName(u"label_2")
-        self.label_2.setPixmap(QPixmap(u":/flatline/flatlined.png"))
 
         self.horizontalLayout.addWidget(self.label_2)
 

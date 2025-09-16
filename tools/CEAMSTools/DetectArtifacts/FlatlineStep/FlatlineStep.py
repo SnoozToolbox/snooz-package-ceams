@@ -9,8 +9,9 @@ See the file LICENCE for full license details.
 
 from qtpy import QtWidgets
 from qtpy import QtCore
-from qtpy.QtGui import QRegularExpressionValidator # To validate waht the user enters in the interface
-from qtpy.QtCore import QRegularExpression # To validate waht the user enters in the interface
+from qtpy.QtGui import QRegularExpressionValidator, QPixmap
+from qtpy.QtCore import QRegularExpression
+import base64
 
 from CEAMSTools.DetectArtifacts.FlatlineStep.Ui_FlatlineStep import Ui_FlatlineStep
 from CEAMSTools.DetectArtifacts.DetectorsStep.DetectorsStep import DetectorsStep
@@ -31,6 +32,8 @@ class FlatlineStep( BaseStepView,  Ui_FlatlineStep, QtWidgets.QWidget):
 
         # init UI
         self.setupUi(self)
+        self._load_embedded_image()
+        
         # Subscribe to the proper topics to send/get data from the node
 
         # Events group 
@@ -48,8 +51,16 @@ class FlatlineStep( BaseStepView,  Ui_FlatlineStep, QtWidgets.QWidget):
         self._pub_sub_manager.subscribe(self, self._threshold_topic)
 
         # Subscribe to the context
-        self._pub_sub_manager.subscribe(self, self._context_manager.topic)  
+        self._pub_sub_manager.subscribe(self, self._context_manager.topic)
 
+    def _load_embedded_image(self):
+        """Load the embedded base64 image data into label_2."""
+        from .art_image_data import FLATLINED_IMAGE_BASE64
+        
+        image_bytes = base64.b64decode(FLATLINED_IMAGE_BASE64)
+        pixmap = QPixmap()
+        pixmap.loadFromData(image_bytes)
+        self.label_2.setPixmap(pixmap)
 
     # Called when the settingsView is opened by the user
     # The node asks to the publisher the settings
@@ -58,7 +69,6 @@ class FlatlineStep( BaseStepView,  Ui_FlatlineStep, QtWidgets.QWidget):
         self._pub_sub_manager.publish(self, self._group_topic, 'ping')
         self._pub_sub_manager.publish(self, self._name_topic, 'ping')
         self._pub_sub_manager.publish(self, self._threshold_topic, 'ping')
-
 
     # Called when the user clicks on "Apply"
     # Settings defined in the viewer are sent to the pub_sub_manager
@@ -73,7 +83,6 @@ class FlatlineStep( BaseStepView,  Ui_FlatlineStep, QtWidgets.QWidget):
             str(self.name_lineEdit.text()))            
         self._pub_sub_manager.publish(self, self._threshold_topic, \
             str(self.threshold_lineEdit.text()))
-
 
     # Called when a value listened is changed
     # No body asked for the value (no ping), but the value changed and
@@ -97,7 +106,6 @@ class FlatlineStep( BaseStepView,  Ui_FlatlineStep, QtWidgets.QWidget):
                 else: # Specific -> make it editable
                     self.name_lineEdit.setEnabled(True)
 
-
     # To init 
     # Called by a node in response to a ping request. 
     # Ping request are sent whenever we need to know the value of a parameter of a node.
@@ -117,7 +125,6 @@ class FlatlineStep( BaseStepView,  Ui_FlatlineStep, QtWidgets.QWidget):
         if topic == self._threshold_topic:
             self.threshold_lineEdit.setText(message)   
  
-
     # Called when the user delete an instance of the plugin
     def __del__(self):
         if self._pub_sub_manager is not None:

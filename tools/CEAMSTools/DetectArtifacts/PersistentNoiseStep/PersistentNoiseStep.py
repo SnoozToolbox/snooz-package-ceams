@@ -9,8 +9,9 @@ See the file LICENCE for full license details.
 
 from qtpy import QtWidgets
 from qtpy import QtCore
-from qtpy.QtGui import QRegularExpressionValidator # To validate waht the user enters in the interface
-from qtpy.QtCore import QRegularExpression # To validate waht the user enters in the interface
+from qtpy.QtGui import QRegularExpressionValidator, QPixmap
+from qtpy.QtCore import QRegularExpression
+import base64
 
 from CEAMSTools.DetectArtifacts.PersistentNoiseStep.Ui_PersistentNoiseStep import Ui_PersistentNoiseStep
 from CEAMSTools.DetectArtifacts.SleepStageSelStep.SleepStageSelStep import SleepStageSelStep
@@ -33,6 +34,8 @@ class PersistentNoiseStep( BaseStepView,  Ui_PersistentNoiseStep, QtWidgets.QWid
 
         # init UI
         self.setupUi(self)
+        self._load_embedded_image()
+        
         # Subscribe to the proper topics to send/get data from the node
         self._group_fixed_topic = f'{self._node_id_combine_event}.new_event_group'
         self._pub_sub_manager.subscribe(self, self._group_fixed_topic)        
@@ -49,6 +52,14 @@ class PersistentNoiseStep( BaseStepView,  Ui_PersistentNoiseStep, QtWidgets.QWid
         self.thresh_A_value = [4, 2]
         self.thresh_B_value = [0.1, 0.1]
 
+    def _load_embedded_image(self):
+        """Load the embedded base64 image data into label_10."""
+        from .art_image_data import PERSISTENT_NOISE_IMAGE_BASE64
+        
+        image_bytes = base64.b64decode(PERSISTENT_NOISE_IMAGE_BASE64)
+        pixmap = QPixmap()
+        pixmap.loadFromData(image_bytes)
+        self.label_10.setPixmap(pixmap)
 
     # Called when the settingsView is opened by the user
     # The node asks to the publisher the settings
@@ -58,7 +69,6 @@ class PersistentNoiseStep( BaseStepView,  Ui_PersistentNoiseStep, QtWidgets.QWid
         self._pub_sub_manager.publish(self, self._name_fixed_topic, 'ping')
         self._pub_sub_manager.publish(self, self._threshold_fixed_topic, 'ping')
         self._pub_sub_manager.publish(self, self._threshold_ratio_topic, 'ping')
-        
 
     # Called when the user clicks on "Apply"
     # Settings defined in the viewer are sent to the pub_sub_manager
@@ -71,7 +81,6 @@ class PersistentNoiseStep( BaseStepView,  Ui_PersistentNoiseStep, QtWidgets.QWid
             str(self.tresh_fixe_lineEdit.text()))
         self._pub_sub_manager.publish(self, self._threshold_ratio_topic, \
             str(self.thres_ratio_lineEdit.text()))
-        
 
     # Called when a value listened is changed
     # No body asked for the value (no ping), but the value changed and
@@ -97,7 +106,6 @@ class PersistentNoiseStep( BaseStepView,  Ui_PersistentNoiseStep, QtWidgets.QWid
             if message==SleepStageSelStep.context_threshold_set: # key of the context dict
                 self.threshold_context_changed()
 
-
     def threshold_context_changed(self):
         threshold_set = int(self._context_manager[SleepStageSelStep.context_threshold_set])
         self.tresh_fixe_lineEdit.setText(str(self.thresh_A_value[threshold_set-1]))
@@ -115,7 +123,6 @@ class PersistentNoiseStep( BaseStepView,  Ui_PersistentNoiseStep, QtWidgets.QWid
             self.tresh_fixe_lineEdit.setText(message)
         if topic == self._threshold_ratio_topic:
             self.thres_ratio_lineEdit.setText(message)
-        
 
     # Called when the user delete an instance of the plugin
     def __del__(self):

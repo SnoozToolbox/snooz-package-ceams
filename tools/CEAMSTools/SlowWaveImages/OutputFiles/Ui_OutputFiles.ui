@@ -452,9 +452,7 @@ with different transition frequency (if the information is available).</string>
              <property name="text">
               <string/>
              </property>
-             <property name="pixmap">
-              <pixmap resource="sw_signal_curve.qrc">:/sw_signal_curve/SW_signal_curve.png</pixmap>
-             </property>
+             <property name="text"><string/></property>
              <property name="scaledContents">
               <bool>false</bool>
              </property>
@@ -793,8 +791,7 @@ and the SW curve standard deviation in gray shaded area.</string>
  </widget>
  <resources>
   <include location="../../../../../snooz-toolbox/src/main/python/ui/themes/themes.qrc"/>
-  <include location="sw_signal_curve.qrc"/>
- </resources>
+   </resources>
  <connections>
   <connection>
    <sender>pushButton_choose</sender>

@@ -3,10 +3,11 @@
     SSWDCriterias
     Settings viewer of the save files plugin for the Slow Wave Detector tool
 """
+import base64
 
 from qtpy import QtWidgets
 from qtpy.QtCore import QRegularExpression
-from qtpy.QtGui import QRegularExpressionValidator
+from qtpy.QtGui import QPixmap, QRegularExpressionValidator
 
 from CEAMSTools.SlowWaveDetection.SSWDCriterias.Ui_SSWDCriterias import Ui_SSWDCriterias
 from commons.BaseStepView import BaseStepView
@@ -21,6 +22,7 @@ class SSWDCriterias( BaseStepView,  Ui_SSWDCriterias, QtWidgets.QWidget):
 
         # init UI
         self.setupUi(self)
+        self._load_embedded_image()
 
         # Set input validators
         # Create a QRegularExpressionValidator with the desired regular expression
@@ -133,6 +135,15 @@ class SSWDCriterias( BaseStepView,  Ui_SSWDCriterias, QtWidgets.QWidget):
             self.spinBox_min_pos.setEnabled(True)
             self.spinBox_max_pos.setEnabled(True)
 
+
+    def _load_embedded_image(self):
+        """Load the embedded base64 image data into SW_picture."""
+        from .art_image_data import PHASE_SLOW_WAVE_SMALL_JPG_IMAGE_BASE64
+        
+        image_bytes = base64.b64decode(PHASE_SLOW_WAVE_SMALL_JPG_IMAGE_BASE64)
+        pixmap = QPixmap()
+        pixmap.loadFromData(image_bytes)
+        self.SW_picture.setPixmap(pixmap)
 
     def load_settings(self):
         # Ask for the settings to the publisher to display on the SettingsView

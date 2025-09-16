@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file ''
+## Form generated from reading UI file 'Ui_DetectionSettings.ui'
 ##
 ## Created by: Qt User Interface Compiler version 6.8.2
 ##
@@ -18,7 +18,6 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
 from PySide6.QtWidgets import (QApplication, QButtonGroup, QGridLayout, QHBoxLayout,
     QLabel, QRadioButton, QSizePolicy, QSpacerItem,
     QVBoxLayout, QWidget)
-from . import desaturation_criteria_rc
 import themes_rc
 
 class Ui_DetectionSettings(object):
@@ -76,7 +75,6 @@ class Ui_DetectionSettings(object):
         self.label_pic = QLabel(DetectionSettings)
         self.label_pic.setObjectName(u"label_pic")
         self.label_pic.setMaximumSize(QSize(16777215, 185))
-        self.label_pic.setPixmap(QPixmap(u":/desat_critera/oxy_desaturation_small.png"))
 
         self.horizontalLayout_2.addWidget(self.label_pic)
 
@@ -291,6 +289,7 @@ class Ui_DetectionSettings(object):
 "IIR filter, order 6, applied forward and backward to cancel the phase delay. \n"
 "The order is divided by 2 when applied since is it applied twice.", None))
         self.label.setText(QCoreApplication.translate("DetectionSettings", u"<html><head/><body><p><span style=\" font-weight:600;\">Oxygen Desaturation Crtieria</span></p></body></html>", None))
+        self.label_pic.setText("")
         self.label_pic.setText("")
         self.label_7.setText(QCoreApplication.translate("DetectionSettings", u"AASM criteria [1]", None))
         self.label_13.setText(QCoreApplication.translate("DetectionSettings", u"Minimum oxygen desaturation drop : 3% or 4%", None))

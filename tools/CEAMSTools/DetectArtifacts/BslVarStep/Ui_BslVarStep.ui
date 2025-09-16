@@ -43,9 +43,6 @@
          <property name="text">
           <string/>
          </property>
-         <property name="pixmap">
-          <pixmap resource="BSLVar_res.qrc">:/BSLVar/BSLVar.png</pixmap>
-         </property>
          <property name="alignment">
           <set>Qt::AlignmentFlag::AlignCenter</set>
          </property>
@@ -446,7 +443,6 @@ It is also possible to deactivate this detector.</string>
   </layout>
  </widget>
  <resources>
-  <include location="BSLVar_res.qrc"/>
   <include location="../../../../../snooz-toolbox/src/main/python/ui/themes/themes.qrc"/>
  </resources>
  <connections/>

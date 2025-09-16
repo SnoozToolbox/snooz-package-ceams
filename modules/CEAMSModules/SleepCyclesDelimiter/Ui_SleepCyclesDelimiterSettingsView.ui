@@ -140,24 +140,9 @@ li.checked::marker { content: &quot;\2612&quot;; }
         </layout>
        </item>
        <item>
-        <widget class="QLabel" name="label">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="minimumSize">
-          <size>
-           <width>567</width>
-           <height>0</height>
-          </size>
-         </property>
+        <widget class="QLabel" name="image">
          <property name="text">
-          <string/>
-         </property>
-         <property name="pixmap">
-          <pixmap resource="SleepCycleDelimiter_rs.qrc">:/sleep_cycle_del/UI_v5_minimal.png</pixmap>
+          <string>TextLabel</string>
          </property>
          <property name="alignment">
           <set>Qt::AlignmentFlag::AlignCenter</set>
@@ -687,7 +672,6 @@ li.checked::marker { content: &quot;\2612&quot;; }
   </layout>
  </widget>
  <resources>
-  <include location="SleepCycleDelimiter_rs.qrc"/>
   <include location="../../../../snooz-toolbox-ceams/src/main/python/ui/themes/themes.qrc"/>
  </resources>
  <connections>

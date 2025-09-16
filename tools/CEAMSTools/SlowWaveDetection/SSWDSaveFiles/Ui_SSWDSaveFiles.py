@@ -19,7 +19,6 @@ from PySide6.QtWidgets import (QApplication, QCheckBox, QFrame, QHBoxLayout,
     QLabel, QLineEdit, QPushButton, QSizePolicy,
     QSpacerItem, QTextEdit, QVBoxLayout, QWidget)
 import themes_rc
-from . import criteria_rc
 
 class Ui_SSWDSaveFiles(object):
     def setupUi(self, SSWDSaveFiles):
@@ -76,7 +75,7 @@ class Ui_SSWDSaveFiles(object):
         sizePolicy1.setVerticalStretch(0)
         sizePolicy1.setHeightForWidth(self.textEdit.sizePolicy().hasHeightForWidth())
         self.textEdit.setSizePolicy(sizePolicy1)
-        self.textEdit.setMaximumSize(QSize(16777215, 16777215))
+        self.textEdit.setMaximumSize(QSize(600, 16777215))
         self.textEdit.setFrameShape(QFrame.Shape.NoFrame)
         self.textEdit.setFrameShadow(QFrame.Shadow.Plain)
         self.textEdit.setLineWidth(0)
@@ -95,7 +94,6 @@ class Ui_SSWDSaveFiles(object):
         self.image = QLabel(SSWDSaveFiles)
         self.image.setObjectName(u"image")
         self.image.setLineWidth(0)
-        self.image.setPixmap(QPixmap(u":/criteria/phase_slow_wave_small.jpg"))
         self.image.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
         self.horizontalLayout_2.addWidget(self.image)

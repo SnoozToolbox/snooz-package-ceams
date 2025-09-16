@@ -26,9 +26,7 @@
          <property name="text">
           <string/>
          </property>
-         <property name="pixmap">
-          <pixmap resource="sw_images.qrc">:/sw_images/SW_all_2cat_1chan_70.png</pixmap>
-         </property>
+         <property name="text"><string/></property>
          <property name="alignment">
           <set>Qt::AlignCenter</set>
          </property>
@@ -39,9 +37,7 @@
          <property name="text">
           <string/>
          </property>
-         <property name="pixmap">
-          <pixmap resource="sw_images.qrc">:/sw_images/mean_std_2cat_70.png</pixmap>
-         </property>
+         <property name="text"><string/></property>
          <property name="alignment">
           <set>Qt::AlignCenter</set>
          </property>
@@ -119,7 +115,6 @@ p, li { white-space: pre-wrap; }
  </widget>
  <resources>
   <include location="../../../../../snooz-toolbox/src/main/python/ui/themes/themes.qrc"/>
-  <include location="sw_images.qrc"/>
- </resources>
+   </resources>
  <connections/>
 </ui>

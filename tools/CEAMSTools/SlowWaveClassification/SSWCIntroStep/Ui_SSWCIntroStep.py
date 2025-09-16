@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file ''
+## Form generated from reading UI file 'Ui_SSWCIntroStep.ui'
 ##
 ## Created by: Qt User Interface Compiler version 6.8.2
 ##
@@ -17,8 +17,6 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QPalette, QPixmap, QRadialGradient, QTransform)
 from PySide6.QtWidgets import (QApplication, QFrame, QHBoxLayout, QLabel,
     QSizePolicy, QTextEdit, QVBoxLayout, QWidget)
-from . import imgs
-from . import hist_freq_transition_rc
 import themes_rc
 
 class Ui_SSWCIntroStep(object):
@@ -36,7 +34,6 @@ class Ui_SSWCIntroStep(object):
         self.image_hist = QLabel(SSWCIntroStep)
         self.image_hist.setObjectName(u"image_hist")
         self.image_hist.setLineWidth(0)
-        self.image_hist.setPixmap(QPixmap(u":/hist/transition_frequency.png"))
         self.image_hist.setAlignment(Qt.AlignCenter)
 
         self.text_layout.addWidget(self.image_hist)
@@ -71,6 +68,7 @@ class Ui_SSWCIntroStep(object):
     def retranslateUi(self, SSWCIntroStep):
         SSWCIntroStep.setWindowTitle("")
         SSWCIntroStep.setStyleSheet(QCoreApplication.translate("SSWCIntroStep", u"font: 12pt \"Roboto\";", None))
+        self.image_hist.setText("")
         self.image_hist.setText("")
         self.title_label.setText(QCoreApplication.translate("SSWCIntroStep", u"<html><head/><body><p><span style=\" font-weight:600;\">Slow Wave Classifier</span></p></body></html>", None))
         self.textEdit.setHtml(QCoreApplication.translate("SSWCIntroStep", u"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file ''
+## Form generated from reading UI file 'Ui_SSWDIntroStep.ui'
 ##
 ## Created by: Qt User Interface Compiler version 6.8.2
 ##
@@ -18,7 +18,6 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
 from PySide6.QtWidgets import (QApplication, QFrame, QLabel, QSizePolicy,
     QTextEdit, QVBoxLayout, QWidget)
 import themes_rc
-from . import slow_wave_pic_rc
 
 class Ui_SSWDIntroStep(object):
     def setupUi(self, SSWDIntroStep):
@@ -30,7 +29,6 @@ class Ui_SSWDIntroStep(object):
         self.verticalLayout.setObjectName(u"verticalLayout")
         self.label = QLabel(SSWDIntroStep)
         self.label.setObjectName(u"label")
-        self.label.setPixmap(QPixmap(u":/slow_wave_pic/onde_lente_ui_small.png"))
         self.label.setAlignment(Qt.AlignCenter)
 
         self.verticalLayout.addWidget(self.label)
@@ -57,6 +55,7 @@ class Ui_SSWDIntroStep(object):
     def retranslateUi(self, SSWDIntroStep):
         SSWDIntroStep.setWindowTitle("")
         SSWDIntroStep.setStyleSheet(QCoreApplication.translate("SSWDIntroStep", u"font: 12pt \"Roboto\";", None))
+        self.label.setText("")
         self.label.setText("")
         self.label_2.setText(QCoreApplication.translate("SSWDIntroStep", u"<html><head/><body><p><span style=\" font-weight:600;\">Slow wave detection</span></p></body></html>", None))
         self.textEdit.setHtml(QCoreApplication.translate("SSWDIntroStep", u"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"

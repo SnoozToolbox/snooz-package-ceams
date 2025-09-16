@@ -18,7 +18,6 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
 from PySide6.QtWidgets import (QApplication, QFrame, QGridLayout, QLabel,
     QLayout, QScrollArea, QSizePolicy, QTextEdit,
     QVBoxLayout, QWidget)
-from CEAMSTools.DetectREMsYASA.AlgorithmDetail import Detail_res_rc_rc
 
 class Ui_AlgorithmDetail(object):
     def setupUi(self, AlgorithmDetail):
@@ -84,7 +83,6 @@ class Ui_AlgorithmDetail(object):
         self.verticalLayout_5.setSizeConstraint(QLayout.SizeConstraint.SetNoConstraint)
         self.label_2 = QLabel(self.scrollAreaWidgetContents)
         self.label_2.setObjectName(u"label_2")
-        self.label_2.setPixmap(QPixmap(u":/image/Eyes_movement.PNG"))
 
         self.verticalLayout_5.addWidget(self.label_2)
 
@@ -127,6 +125,7 @@ class Ui_AlgorithmDetail(object):
 "<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:12pt; font-weight:600;\">Usage points</span></p>\n"
 "<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:12pt;\">- All output parameters of this algorithm are computed using the filtered LOC and ROC signals. The filtering process is based on the thresholds defined in the </span><span style=\" font-size:12pt; font-style:italic;\">DetectionStep</span><span style=\" font-size:12pt;\">.</span></p>\n"
 "<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:12pt;\">- For optimal results, the user should apply this detection only to artifact-free REM sleep data.</span></p></body></html>", None))
+        self.label_2.setText("")
         self.label_2.setText("")
     # retranslateUi
 

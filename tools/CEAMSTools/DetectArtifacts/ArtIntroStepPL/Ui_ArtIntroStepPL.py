@@ -19,7 +19,6 @@ from PySide6.QtWidgets import (QAbstractScrollArea, QApplication, QFrame, QHBoxL
     QLabel, QLayout, QScrollArea, QSizePolicy,
     QSpacerItem, QSplitter, QTextEdit, QVBoxLayout,
     QWidget)
-from . import intro_res_rc
 import themes_rc
 
 class Ui_ArtIntroStepPL(object):
@@ -122,14 +121,12 @@ class Ui_ArtIntroStepPL(object):
         self.verticalLayout.setObjectName(u"verticalLayout")
         self.label_6 = QLabel(self.scrollAreaWidgetContents)
         self.label_6.setObjectName(u"label_6")
-        self.label_6.setPixmap(QPixmap(u":/intro/2_amplitude_v2.png"))
         self.label_6.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
         self.verticalLayout.addWidget(self.label_6)
 
         self.label_8 = QLabel(self.scrollAreaWidgetContents)
         self.label_8.setObjectName(u"label_8")
-        self.label_8.setPixmap(QPixmap(u":/intro/3_burst_noise_v2.png"))
         self.label_8.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
         self.verticalLayout.addWidget(self.label_8)
@@ -141,28 +138,24 @@ class Ui_ArtIntroStepPL(object):
         sizePolicy4.setVerticalStretch(0)
         sizePolicy4.setHeightForWidth(self.label_5.sizePolicy().hasHeightForWidth())
         self.label_5.setSizePolicy(sizePolicy4)
-        self.label_5.setPixmap(QPixmap(u":/intro/3b_persistent_noise.png"))
         self.label_5.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
         self.verticalLayout.addWidget(self.label_5)
 
         self.label_9 = QLabel(self.scrollAreaWidgetContents)
         self.label_9.setObjectName(u"label_9")
-        self.label_9.setPixmap(QPixmap(u":/intro/4_powerLine_v2.png"))
         self.label_9.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
         self.verticalLayout.addWidget(self.label_9)
 
         self.label_10 = QLabel(self.scrollAreaWidgetContents)
         self.label_10.setObjectName(u"label_10")
-        self.label_10.setPixmap(QPixmap(u":/intro/5_BSLVar_v2.png"))
         self.label_10.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
         self.verticalLayout.addWidget(self.label_10)
 
         self.label_11 = QLabel(self.scrollAreaWidgetContents)
         self.label_11.setObjectName(u"label_11")
-        self.label_11.setPixmap(QPixmap(u":/intro/6_muscular_v2.png"))
         self.label_11.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
         self.verticalLayout.addWidget(self.label_11)

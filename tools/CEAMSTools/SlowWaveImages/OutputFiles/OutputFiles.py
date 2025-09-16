@@ -7,6 +7,8 @@ See the file LICENCE for full license details.
     Read the UI to send messages to the node of the slow wave pics generator plugin.
     Rezd a saved pipeline tp update the UI.
 """
+import base64
+from qtpy.QtGui import QPixmap
 
 from qtpy import QtWidgets
 
@@ -26,6 +28,7 @@ class OutputFiles(BaseStepView, Ui_OutputFiles, QtWidgets.QWidget):
 
         # init UI
         self.setupUi(self)
+        self._load_embedded_image()
 
         self._sw_wave_pics_node = "34950575-1519-44e1-852d-a7720eead65f" # identifier for slow wave pics generator
         # Subscribe to the proper topics to send/get data from the node
@@ -45,6 +48,15 @@ class OutputFiles(BaseStepView, Ui_OutputFiles, QtWidgets.QWidget):
             'force_axis': False, # False or [xmin, xmax, ymin, ymax]
             'output_folder': ''
         }
+
+    def _load_embedded_image(self):
+        """Load the embedded base64 image data into label_7."""
+        from .art_image_data import SW_SIGNAL_CURVE_IMAGE_BASE64
+        
+        image_bytes = base64.b64decode(SW_SIGNAL_CURVE_IMAGE_BASE64)
+        pixmap = QPixmap()
+        pixmap.loadFromData(image_bytes)
+        self.label_7.setPixmap(pixmap)
 
     def load_settings(self):
         # Load settings is called after the constructor of all steps has been executed.

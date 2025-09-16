@@ -127,9 +127,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
                  <property name="text">
                   <string/>
                  </property>
-                 <property name="pixmap">
-                  <pixmap resource="Detail_res_rc.qrc">:/image/Eyes_movement.PNG</pixmap>
-                 </property>
+                 <property name="text"><string/></property>
                 </widget>
                </item>
               </layout>
@@ -147,8 +145,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
   </layout>
  </widget>
  <resources>
-  <include location="Detail_res_rc.qrc"/>
- </resources>
+   </resources>
  <connections/>
  <slots>
   <slot>on_choose()</slot>
