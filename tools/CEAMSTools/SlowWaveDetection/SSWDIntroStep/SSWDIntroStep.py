@@ -3,6 +3,8 @@
     SSWDIntroStep
     Settings viewer of the intro plugin for the Slow Wave Detector tool
 """
+import base64
+from qtpy.QtGui import QPixmap
 
 from qtpy import QtWidgets
 
@@ -19,6 +21,16 @@ class SSWDIntroStep( BaseStepView,  Ui_SSWDIntroStep, QtWidgets.QWidget):
 
         # init UI
         self.setupUi(self)
+        self._load_embedded_image()
+
+    def _load_embedded_image(self):
+        """Load the embedded base64 image data into label."""
+        from .art_image_data import ONDE_LENTE_UI_SMALL_IMAGE_BASE64
+        
+        image_bytes = base64.b64decode(ONDE_LENTE_UI_SMALL_IMAGE_BASE64)
+        pixmap = QPixmap()
+        pixmap.loadFromData(image_bytes)
+        self.label.setPixmap(pixmap)
 
     def load_settings(self):
         pass

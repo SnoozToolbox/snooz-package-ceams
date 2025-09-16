@@ -20,7 +20,6 @@ from PySide6.QtWidgets import (QApplication, QButtonGroup, QCheckBox, QComboBox,
     QLabel, QLineEdit, QRadioButton, QSizePolicy,
     QSpacerItem, QSpinBox, QVBoxLayout, QWidget)
 import themes_rc
-from . import sw_pic_rc
 
 class Ui_SSWDCriterias(object):
     def setupUi(self, SSWDCriterias):
@@ -440,7 +439,6 @@ class Ui_SSWDCriterias(object):
 
         self.SW_picture = QLabel(SSWDCriterias)
         self.SW_picture.setObjectName(u"SW_picture")
-        self.SW_picture.setPixmap(QPixmap(u":/sw_pic/phase_slow_wave_small.jpg"))
 
         self.horizontalLayout_3.addWidget(self.SW_picture)
 
@@ -537,6 +535,7 @@ class Ui_SSWDCriterias(object):
         self.label_10.setText(QCoreApplication.translate("SSWDCriterias", u"between", None))
         self.label_15.setText(QCoreApplication.translate("SSWDCriterias", u"and", None))
         self.label_9.setText(QCoreApplication.translate("SSWDCriterias", u"Wave frequency Hz (1/T)", None))
+        self.SW_picture.setText("")
         self.SW_picture.setText("")
     # retranslateUi
 

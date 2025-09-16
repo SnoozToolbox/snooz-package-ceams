@@ -28,9 +28,7 @@
      <property name="text">
       <string/>
      </property>
-     <property name="pixmap">
-      <pixmap resource="slow_wave_pic.qrc">:/slow_wave_pic/onde_lente_ui_small.png</pixmap>
-     </property>
+     <property name="text"><string/></property>
      <property name="alignment">
       <set>Qt::AlignCenter</set>
      </property>
@@ -98,7 +96,6 @@ p, li { white-space: pre-wrap; }
  </widget>
  <resources>
   <include location="../../../../../snooz-toolbox/src/main/python/ui/themes/themes.qrc"/>
-  <include location="slow_wave_pic.qrc"/>
- </resources>
+   </resources>
  <connections/>
 </ui>
