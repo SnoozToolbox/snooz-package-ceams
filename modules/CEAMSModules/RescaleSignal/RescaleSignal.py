@@ -138,33 +138,63 @@ class RescaleSignal(SciNode):
 
         # Initialize new signals
         signals_rescale = [signal.clone(clone_samples=False) for signal in signals]
-        samples_events = np.transpose(SignalModel.get_attribute(signals, 'samples', None))
+        
+        # Handle signals of different lengths by processing each individually
+        rescaled_samples = []
 
         if scaling_approach == 'Normalization':
             feature_range = (parameters['min'], parameters['max'])
             copy_para = parameters['copy']
             clip = parameters['clip']
-            scaler = MinMaxScaler(feature_range=feature_range, copy=copy_para, clip=clip)
-            rescale = np.transpose(scaler.fit_transform(samples_events, y=None))
+            
+            for signal in signals:
+                scaler = MinMaxScaler(feature_range=feature_range, copy=copy_para, clip=clip)
+                # Store original shape and reshape for sklearn compatibility
+                original_shape = signal.samples.shape
+                signal_samples = signal.samples.reshape(-1, 1) if signal.samples.ndim == 1 else signal.samples
+                rescaled = scaler.fit_transform(signal_samples)
+                # Restore original shape
+                rescaled = rescaled.reshape(original_shape)
+                rescaled_samples.append(rescaled)
 
         elif scaling_approach == 'Standardization':
             copy_para = parameters['copy']
             with_mean = parameters['with_mean']
             with_std = parameters['with_std']
-            scaler = StandardScaler(copy=copy_para, with_mean=with_mean, with_std=with_std)
-            rescale = np.transpose(scaler.fit_transform(samples_events, y=None))
+            
+            for signal in signals:
+                scaler = StandardScaler(copy=copy_para, with_mean=with_mean, with_std=with_std)
+                # Store original shape and reshape for sklearn compatibility
+                original_shape = signal.samples.shape
+                signal_samples = signal.samples.reshape(-1, 1) if signal.samples.ndim == 1 else signal.samples
+                rescaled = scaler.fit_transform(signal_samples)
+                # Restore original shape
+                rescaled = rescaled.reshape(original_shape)
+                rescaled_samples.append(rescaled)
         
         elif scaling_approach == 'Discretization':
             n_bins = parameters['n_bins']
             encode = parameters['encode']
             strategy = parameters['strategy']
             dtype = parameters['dtype']
-            scaler = KBinsDiscretizer(n_bins=n_bins, encode=encode, strategy=strategy, dtype=dtype)
-            rescale = np.transpose(scaler.fit_transform(samples_events, y=None))
+            
+            for signal in signals:
+                scaler = KBinsDiscretizer(n_bins=n_bins, encode=encode, strategy=strategy, dtype=dtype)
+                # Store original shape and reshape for sklearn compatibility
+                original_shape = signal.samples.shape
+                signal_samples = signal.samples.reshape(-1, 1) if signal.samples.ndim == 1 else signal.samples
+                rescaled = scaler.fit_transform(signal_samples)
+                # Handle different encoding outputs
+                if encode == 'onehot' and hasattr(rescaled, 'toarray'):
+                    rescaled = rescaled.toarray()
+                # Restore original shape (note: discretization might change dimensions for onehot)
+                if encode == 'ordinal':
+                    rescaled = rescaled.reshape(original_shape)
+                rescaled_samples.append(rescaled)
 
         # Extract signal from each event
         for i, signal in enumerate(signals_rescale):
-            signal.samples = rescale[i,:]
+            signal.samples = rescaled_samples[i]
 
         # Write the cache
         cache = {}
