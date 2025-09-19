@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>765</width>
-    <height>590</height>
+    <width>934</width>
+    <height>719</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -68,7 +68,7 @@
         <item>
          <widget class="QLabel" name="label_18">
           <property name="text">
-           <string>Min:</string>
+           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;Min:&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
           </property>
          </widget>
         </item>
@@ -82,7 +82,7 @@
         <item>
          <widget class="QLabel" name="label_17">
           <property name="text">
-           <string>Max:</string>
+           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;Max:&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
           </property>
          </widget>
         </item>
@@ -115,7 +115,7 @@
         <number>-3</number>
        </property>
        <property name="text">
-        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;REMs Event Group&lt;/span&gt;&lt;br/&gt;The group category in the annotation file.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt; font-weight:700;&quot;&gt;REMs Event Group&lt;/span&gt;&lt;br/&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;The group category in the annotation file.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
        </property>
       </widget>
      </item>
@@ -133,6 +133,9 @@
        <layout class="QHBoxLayout" name="horizontalLayout_5">
         <item>
          <widget class="QCheckBox" name="checkBox">
+          <property name="styleSheet">
+           <string notr="true">font: 12pt &quot;Roboto&quot;;</string>
+          </property>
           <property name="text">
            <string>Yes</string>
           </property>
@@ -161,7 +164,7 @@
         <number>0</number>
        </property>
        <property name="text">
-        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;Duration (s)&lt;/span&gt;&lt;br/&gt;Minimum and maximum duration of the REMs.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt; font-weight:700;&quot;&gt;Duration (s)&lt;/span&gt;&lt;br/&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;Minimum and maximum duration of the REMs.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
        </property>
       </widget>
      </item>
@@ -177,7 +180,7 @@
         <number>0</number>
        </property>
        <property name="text">
-        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;REMs Event Name&lt;/span&gt;&lt;br/&gt;The event name in the annotation file.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt; font-weight:700;&quot;&gt;REMs Event Name&lt;/span&gt;&lt;br/&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;The event name in the annotation file.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
        </property>
       </widget>
      </item>
@@ -208,6 +211,17 @@
        <layout class="QHBoxLayout" name="horizontalLayout_9">
         <item>
          <widget class="QCheckBox" name="checkBox_2">
+          <property name="font">
+           <font>
+            <family>Roboto</family>
+            <pointsize>12</pointsize>
+            <italic>false</italic>
+            <bold>false</bold>
+           </font>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">font: 12pt &quot;Roboto&quot;;</string>
+          </property>
           <property name="text">
            <string>Yes</string>
           </property>
@@ -262,7 +276,7 @@
         <number>0</number>
        </property>
        <property name="text">
-        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;There are 6 main parameters for this tool:&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt; font-weight:700;&quot;&gt;There are 6 main parameters for this tool:&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
        </property>
        <property name="wordWrap">
         <bool>true</bool>
@@ -297,7 +311,7 @@
         <item>
          <widget class="QLabel" name="label_13">
           <property name="text">
-           <string>Min:</string>
+           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;Min:&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
           </property>
          </widget>
         </item>
@@ -311,7 +325,7 @@
         <item>
          <widget class="QLabel" name="label_14">
           <property name="text">
-           <string>Max:</string>
+           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;Max:&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
           </property>
          </widget>
         </item>
@@ -401,7 +415,7 @@
      <item row="2" column="0">
       <widget class="QLabel" name="label_6">
        <property name="text">
-        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;Hypnogram Loaded&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt; font-weight:700;&quot;&gt;Hypnogram Loaded&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
        </property>
       </widget>
      </item>
@@ -420,7 +434,7 @@
         <item>
          <widget class="QLabel" name="label_5">
           <property name="text">
-           <string>Value:</string>
+           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;Value:&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
           </property>
          </widget>
         </item>
@@ -479,8 +493,16 @@
        <layout class="QHBoxLayout" name="horizontalLayout_2">
         <item>
          <widget class="QLabel" name="label_11">
+          <property name="font">
+           <font>
+            <family>Roboto-Regular</family>
+            <pointsize>10</pointsize>
+            <italic>false</italic>
+            <bold>false</bold>
+           </font>
+          </property>
           <property name="text">
-           <string>Min:</string>
+           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;Min:&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
           </property>
          </widget>
         </item>
@@ -494,7 +516,7 @@
         <item>
          <widget class="QLabel" name="label_12">
           <property name="text">
-           <string>Max:</string>
+           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;Max:&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
           </property>
          </widget>
         </item>
@@ -535,7 +557,7 @@
         <number>0</number>
        </property>
        <property name="text">
-        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;Amplitude (uV)&lt;/span&gt;&lt;br/&gt;Minimum and maximum amplitude of the peak of the REMs.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt; font-weight:700;&quot;&gt;Amplitude (uV)&lt;/span&gt;&lt;br/&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;Minimum and maximum amplitude of the peak of the REMs.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
        </property>
       </widget>
      </item>
@@ -559,7 +581,7 @@
         <number>0</number>
        </property>
        <property name="text">
-        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;REM Frequency (Hz)&lt;/span&gt;&lt;br/&gt;Frequency range of REMs.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt; font-weight:700;&quot;&gt;REM Frequency (Hz)&lt;/span&gt;&lt;br/&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;Frequency range of REMs.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
        </property>
        <property name="wordWrap">
         <bool>true</bool>
@@ -599,7 +621,7 @@
         <number>0</number>
        </property>
        <property name="text">
-        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;Relative Prominence&lt;/span&gt;&lt;br/&gt;scales the minimum prominence threshold as a fraction of minimum amplitude.&lt;br/&gt;(e.g., relative prominence = 0.5 means peaks must stand out by at least 50%&lt;br/&gt;of the minimum amplitude.)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt; font-weight:700;&quot;&gt;Relative Prominence&lt;/span&gt;&lt;br/&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;scales the minimum prominence threshold as a fraction of minimum amplitude.&lt;br/&gt;(e.g., relative prominence = 0.5 means peaks must stand out by at least 50%&lt;br/&gt;of the minimum amplitude.)&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
        </property>
       </widget>
      </item>
@@ -609,7 +631,7 @@
         <number>0</number>
        </property>
        <property name="text">
-        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;Sleep Stages&lt;/span&gt;&lt;br/&gt;If the hypnogram is loaded, the detection will only be applied&lt;br/&gt;to the values defined in &amp;quot;Sleep Stages&amp;quot;: Default = 5 (REM)&lt;br/&gt;Format for multiple sleep stages, e.g., &amp;quot;Sleep Stages&amp;quot; : [5, 3, ...]&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt; font-weight:700;&quot;&gt;Sleep Stages&lt;/span&gt;&lt;br/&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;If the hypnogram is loaded, the detection will only be applied&lt;br/&gt;to the values defined in &amp;quot;Sleep Stages&amp;quot;: Default = 5 (REM)&lt;br/&gt;Format for multiple sleep stages, e.g., &amp;quot;Sleep Stages&amp;quot; : [5, 3, ...]&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
        </property>
       </widget>
      </item>
@@ -619,7 +641,7 @@
         <number>0</number>
        </property>
        <property name="text">
-        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;Remove Outliers&lt;/span&gt;&lt;br/&gt;If &amp;quot;Yes&amp;quot;, YASA will automatically detect and remove REMs outliers using&lt;br/&gt;its algorithm. &lt;span style=&quot; font-weight:600;&quot;&gt;Note&lt;/span&gt; that this step will only be applied if there are more&lt;br/&gt;than 50 detected REMs in the first place.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt; font-weight:700;&quot;&gt;Remove Outliers&lt;/span&gt;&lt;br/&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;If &amp;quot;Yes&amp;quot;, YASA will automatically detect and remove REMs outliers using&lt;br/&gt;its algorithm. &lt;/span&gt;&lt;span style=&quot; font-size:12pt; font-weight:600;&quot;&gt;Note&lt;/span&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt; that this step will only be applied if there are more&lt;br/&gt;than 50 detected REMs in the first place.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
        </property>
       </widget>
      </item>
