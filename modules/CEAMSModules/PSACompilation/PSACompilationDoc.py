@@ -58,8 +58,8 @@ def _get_doc(N_HOURS, N_CYCLES):
         'total_N2_fft_win_valid_count' : 'Total - The number of valid fft windows in N2.',
         'total_N3_fft_win_count' : 'Total - The number of fft windows in N3.',
         'total_N3_fft_win_valid_count' : 'Total - The number of valid fft windows in N3.',
-        'total_NREM_fft_win_count' : 'Total - The number of fft windows in NREM.',
-        'total_NREM_fft_win_valid_count' : 'Total - The number of valid fft windows in NREM.',
+        'total_NREM_fft_win_count' : 'Total - The number of fft windows in NREM (N1, N2 and N3).',
+        'total_NREM_fft_win_valid_count' : 'Total - The number of valid fft windows in NREM (N1, N2 and N3).',
         'total_R_fft_win_count' : 'Total - The number of fft windows in R.',
         'total_R_fft_win_valid_count' : 'Total - The number of valid fft windows in R.',
         'total_Unscored_fft_win_count' : 'Total - The number of fft windows unscored.',
@@ -68,50 +68,75 @@ def _get_doc(N_HOURS, N_CYCLES):
         'total_fft_win_valid_count' : 'Total - The total number of valid fft windows.'
     }
 
-    hour_len_dict = {}
+    clock_hour_len_dict = {}
     for i_hour in range(N_HOURS):
-        current_hour_len_dict = \
+        current_clock_hour_len_dict = \
         {
-            f'hour{i_hour+1}_W_fft_win_count' : f'Hour {i_hour+1} - The number of valid fft windows in awake.',
-            f'hour{i_hour+1}_W_fft_win_valid_count' : f'Hour {i_hour+1} - The number of valid fft windows in awake.',
-            f'hour{i_hour+1}_N1_fft_win_count' : f'Hour {i_hour+1} - The number of valid fft windows in N1.',
-            f'hour{i_hour+1}_N1_fft_win_valid_count' : f'Hour {i_hour+1} - The number of valid fft windows in N1.',
-            f'hour{i_hour+1}_N2_fft_win_count' : f'Hour {i_hour+1} - The number of valid fft windows in N2.',
-            f'hour{i_hour+1}_N2_fft_win_valid_count' : f'Hour {i_hour+1} - The number of valid fft windows in N2.',
-            f'hour{i_hour+1}_N3_fft_win_count' : f'Hour {i_hour+1} - The number of valid fft windows in N3.',
-            f'hour{i_hour+1}_N3_fft_win_valid_count' : f'Hour {i_hour+1} - The number of valid fft windows in N3.',
-            f'hour{i_hour+1}_NREM_fft_win_count' : f'Hour {i_hour+1} - The number of valid fft windows in NREM.',
-            f'hour{i_hour+1}_NREM_fft_win_valid_count' : f'Hour {i_hour+1} - The number ofhour1 valid fft windows in NREM.',
-            f'hour{i_hour+1}_R_fft_win_count' : f'Hour {i_hour+1} - The number of valid fft windows in rem.',
-            f'hour{i_hour+1}_R_fft_win_valid_count' : f'Hour {i_hour+1} - The number of valid fft windows in rem.',
-            f'hour{i_hour+1}_Unscored_fft_win_count' : f'Hour {i_hour+1} - The number of valid fft windows unscored.',
-            f'hour{i_hour+1}_Unscored_fft_win_valid_count' : f'Hour {i_hour+1} - The number of valid fft windows unscored.',
-            f'hour{i_hour+1}_fft_win_count' : f'Hour {i_hour+1} - The total number of valid fft windows.',
-            f'hour{i_hour+1}_fft_win_valid_count' : f'Hour {i_hour+1} - The total number of valid fft windows.'
+            f'clock_h{i_hour+1}_W_fft_win_count' : f'Real Clock Hour {i_hour+1} - The number of FFT windows in Wake during the first real clock hour.',
+            f'clock_h{i_hour+1}_W_fft_win_valid_count' : f'Real Clock Hour {i_hour+1} - The number of valid FFT windows in Wake during the first real clock hour.',
+            f'clock_h{i_hour+1}_N1_fft_win_count' : f'Real Clock Hour {i_hour+1} - The number of FFT windows in N1 during the first real clock hour.',
+            f'clock_h{i_hour+1}_N1_fft_win_valid_count' : f'Real Clock Hour {i_hour+1} - The number of valid FFT windows in N1 during the first real clock hour.',
+            f'clock_h{i_hour+1}_N2_fft_win_count' : f'Real Clock Hour {i_hour+1} - The number of FFT windows in N2 during the first real clock hour.',
+            f'clock_h{i_hour+1}_N2_fft_win_valid_count' : f'Real Clock Hour {i_hour+1} - The number of valid FFT windows in N2 during the first real clock hour.',
+            f'clock_h{i_hour+1}_N3_fft_win_count' : f'Real Clock Hour {i_hour+1} - The number of FFT windows in N3 during the first real clock hour.',
+            f'clock_h{i_hour+1}_N3_fft_win_valid_count' : f'Real Clock Hour {i_hour+1} - The number of valid FFT windows in N3 during the first real clock hour.',
+            f'clock_h{i_hour+1}_NREM_fft_win_count' : f'Real Clock Hour {i_hour+1} - The number of FFT windows in NREM (N1, N2 and N3) during the first real clock hour.',
+            f'clock_h{i_hour+1}_NREM_fft_win_valid_count' : f'Real Clock Hour {i_hour+1} - The number of valid FFT windows in NREM (N1, N2 and N3) during the first real clock hour.',
+            f'clock_h{i_hour+1}_R_fft_win_count' : f'Real Clock Hour {i_hour+1} - The number of FFT windows in REM during the first real clock hour.',
+            f'clock_h{i_hour+1}_R_fft_win_valid_count' : f'Real Clock Hour {i_hour+1} - The number of valid FFT windows in REM during the first real clock hour.',
+            f'clock_h{i_hour+1}_Unscored_fft_win_count' : f'Real Clock Hour {i_hour+1} - The number of FFT windows unscored during the first real clock hour.',
+            f'clock_h{i_hour+1}_Unscored_fft_win_valid_count' : f'Real Clock Hour {i_hour+1} - The number of valid FFT windows unscored during the first real clock hour.',
+            f'clock_h{i_hour+1}_fft_win_count' : f'Real Clock Hour {i_hour+1} - The total number of FFT windows during the first real clock hour.',
+            f'clock_h{i_hour+1}_fft_win_valid_count' : f'Real Clock Hour {i_hour+1} - The total number of valid FFT windows during the first real clock hour.'
         }
-        hour_len_dict = hour_len_dict | current_hour_len_dict
+        clock_hour_len_dict = clock_hour_len_dict | current_clock_hour_len_dict
+
+    stage_hour_len_dict = {}
+    for i_hour in range(N_HOURS):
+        current_stage_hour_len_dict = \
+        {
+            f'stage_h{i_hour+1}_W_fft_win_count' : f'Selected sleep Stage Hour {i_hour+1} - The number of FFT windows in Wake during the first hour spent in that stage.',
+            f'stage_h{i_hour+1}_W_fft_win_valid_count' : f'Selected sleep Stage Hour {i_hour+1} - The number of valid FFT windows in Wake during the first hour spent in that stage.',
+            f'stage_h{i_hour+1}_N1_fft_win_count' : f'Selected sleep Stage Hour {i_hour+1} - The number of FFT windows in N1 during the first hour spent in that stage.',
+            f'stage_h{i_hour+1}_N1_fft_win_valid_count' : f'Selected sleep Stage Hour {i_hour+1} - The number of valid FFT windows in N1 during the first hour spent in that stage.',
+            f'stage_h{i_hour+1}_N2_fft_win_count' : f'Selected sleep Stage Hour {i_hour+1} - The number of FFT windows in N2 during the first hour spent in that stage.',
+            f'stage_h{i_hour+1}_N2_fft_win_valid_count' : f'Selected sleep Stage Hour {i_hour+1} - The number of valid FFT windows in N2 during the first hour spent in that stage.',
+            f'stage_h{i_hour+1}_N3_fft_win_count' : f'Selected sleep Stage Hour {i_hour+1} - The number of FFT windows in N3 during the first hour spent in that stage.',
+            f'stage_h{i_hour+1}_N3_fft_win_valid_count' : f'Selected sleep Stage Hour {i_hour+1} - The number of valid FFT windows in N3 during the first hour spent in that stage.',
+            f'stage_h{i_hour+1}_N2N3_fft_win_count' : f'Selected sleep Stage Hour {i_hour+1} - The number of FFT windows in N2N3 during the first hour spent in that stage.',
+            f'stage_h{i_hour+1}_N2N3_fft_win_valid_count' : f'Selected sleep Stage Hour {i_hour+1} - The number of valid FFT windows in N2N3 during the first hour spent in that stage.',
+            f'stage_h{i_hour+1}_NREM_fft_win_count' : f'Selected sleep Stage Hour {i_hour+1} - The number of FFT windows in NREM (N1, N2 and N3) during the first hour spent in that stage.',
+            f'stage_h{i_hour+1}_NREM_fft_win_valid_count' : f'Selected sleep Stage Hour {i_hour+1} - The number of valid FFT windows in NREM (N1, N2 and N3) during the first hour spent in that stage.',
+            f'stage_h{i_hour+1}_R_fft_win_count' : f'Selected sleep Stage Hour {i_hour+1} - The number of FFT windows in REM during the first hour spent in that stage.',
+            f'stage_h{i_hour+1}_R_fft_win_valid_count' : f'Selected sleep Stage Hour {i_hour+1} - The number of valid FFT windows in REM during the first hour spent in that stage.',
+            f'stage_h{i_hour+1}_Unscored_fft_win_count' : f'Selected sleep Stage Hour {i_hour+1} - The number of FFT windows unscored during the first hour spent in that stage.',
+            f'stage_h{i_hour+1}_Unscored_fft_win_valid_count' : f'Selected sleep Stage Hour {i_hour+1} - The number of valid FFT windows unscored during the first hour spent in that stage.',
+            f'stage_h{i_hour+1}_fft_win_count' : f'Selected sleep Stage Hour {i_hour+1} - The total number of FFT windows during the first hour spent in that stage.',
+            f'stage_h{i_hour+1}_fft_win_valid_count' : f'Selected sleep Stage Hour {i_hour+1} - The total number of valid FFT windows during the first hour spent in that stage.'
+        }
+        stage_hour_len_dict = stage_hour_len_dict | current_stage_hour_len_dict
 
     cyc_len_dict = {}
     for i_cycle in range(N_CYCLES):
         current_cycle_len_dict = \
         {        
-        f'cyc{i_cycle+1}_length_min' : f'Cycle {i_cycle+1} - Duration of the cycle 1 in minutes.',
-        f'cyc{i_cycle+1}_W_fft_win_count' : f'Cycle {i_cycle+1} - The number of valid fft windows in awake.',
-        f'cyc{i_cycle+1}_W_fft_win_valid_count' : f'Cycle {i_cycle+1} - The number of valid fft windows in awake.',
-        f'cyc{i_cycle+1}_N1_fft_win_count' : f'Cycle {i_cycle+1} - The number of valid fft windows in N1.',
-        f'cyc{i_cycle+1}_N1_fft_win_valid_count' : f'Cycle {i_cycle+1} - The number of valid fft windows in N1.',
-        f'cyc{i_cycle+1}_N2_fft_win_count' : f'Cycle {i_cycle+1} - The number of valid fft windows in N2.',
-        f'cyc{i_cycle+1}_N2_fft_win_valid_count' : f'Cycle {i_cycle+1} - The number of valid fft windows in N2.',
-        f'cyc{i_cycle+1}_N3_fft_win_count' : f'Cycle {i_cycle+1} - The number of valid fft windows in N3.',
-        f'cyc{i_cycle+1}_N3_fft_win_valid_count' : f'Cycle {i_cycle+1} - The number of valid fft windows in N3.',
-        f'cyc{i_cycle+1}_NREM_fft_win_count' : f'Cycle {i_cycle+1} - The number of valid fft windows in NREM.',
-        f'cyc{i_cycle+1}_NREM_fft_win_valid_count' : f'Cycle {i_cycle+1} - The number of valid fft windows in NREM.',
-        f'cyc{i_cycle+1}_R_fft_win_count' : f'Cycle {i_cycle+1} - The number of valid fft windows in rem.',
-        f'cyc{i_cycle+1}_R_fft_win_valid_count' : f'Cycle {i_cycle+1} - The number of valid fft windows in rem.',
-        f'cyc{i_cycle+1}_Unscored_fft_win_count' : f'Cycle {i_cycle+1} - The number of valid fft windows unscored.',
-        f'cyc{i_cycle+1}_Unscored_fft_win_valid_count' : f'Cycle {i_cycle+1} - The number of valid fft windows unscored.',
-        f'cyc{i_cycle+1}_fft_win_count' : f'Cycle {i_cycle+1} - The total number of valid fft windows.',
-        f'cyc{i_cycle+1}_fft_win_valid_count' : f'Cycle {i_cycle+1} - The total number of valid fft windows.'
+            f'cyc{i_cycle+1}_length_min' : f'Cycle {i_cycle+1} - Duration of the cycle 1 in minutes.',
+            f'cyc{i_cycle+1}_W_fft_win_count' : f'Cycle {i_cycle+1} - The number of fft windows in awake.',
+            f'cyc{i_cycle+1}_W_fft_win_valid_count' : f'Cycle {i_cycle+1} - The number of valid fft windows in awake.',
+            f'cyc{i_cycle+1}_N1_fft_win_count' : f'Cycle {i_cycle+1} - The number of valid fft windows in N1.',
+            f'cyc{i_cycle+1}_N1_fft_win_valid_count' : f'Cycle {i_cycle+1} - The number of valid fft windows in N1.',
+            f'cyc{i_cycle+1}_N2_fft_win_count' : f'Cycle {i_cycle+1} - The number of valid fft windows in N2.',
+            f'cyc{i_cycle+1}_N2_fft_win_valid_count' : f'Cycle {i_cycle+1} - The number of valid fft windows in N2.',
+            f'cyc{i_cycle+1}_N3_fft_win_count' : f'Cycle {i_cycle+1} - The number of valid fft windows in N3.',
+            f'cyc{i_cycle+1}_N3_fft_win_valid_count' : f'Cycle {i_cycle+1} - The number of valid fft windows in N3.',
+            f'cyc{i_cycle+1}_NREM_fft_win_count' : f'Cycle {i_cycle+1} - The number of valid fft windows in NREM (N1, N2 and N3).',
+            f'cyc{i_cycle+1}_NREM_fft_win_valid_count' : f'Cycle {i_cycle+1} - The number of valid fft windows in NREM (N1, N2 and N3).',
+            f'cyc{i_cycle+1}_R_fft_win_count' : f'Cycle {i_cycle+1} - The number of valid fft windows in rem.',
+            f'cyc{i_cycle+1}_R_fft_win_valid_count' : f'Cycle {i_cycle+1} - The number of valid fft windows in rem.',
+            f'cyc{i_cycle+1}_Unscored_fft_win_count' : f'Cycle {i_cycle+1} - The number of valid fft windows unscored.',
+            f'cyc{i_cycle+1}_Unscored_fft_win_valid_count' : f'Cycle {i_cycle+1} - The number of valid fft windows unscored.',
+            f'cyc{i_cycle+1}_fft_win_count' : f'Cycle {i_cycle+1} - The total number of valid fft windows.',
+            f'cyc{i_cycle+1}_fft_win_valid_count' : f'Cycle {i_cycle+1} - The total number of valid fft windows.'
         }
         cyc_len_dict = cyc_len_dict | current_cycle_len_dict
 
@@ -127,20 +152,20 @@ def _get_doc(N_HOURS, N_CYCLES):
             'total_Unscored_act' : 'Total - The total spectral power (uV^2) unscored.'
         }
 
-    hour_act_dict = {}
+    clock_h_act_dict = {}
     for i_hour in range(N_HOURS):
-        current_hour_act_dict = \
+        current_clock_h_act_dict = \
         {
-            f'hour{i_hour+1}_act' : f'Hour {i_hour+1} - The spectral power (uV^2)', 
-            f'hour{i_hour+1}_W_act' : f'Hour {i_hour+1} - The spectral power (uV^2) in awake.',
-            f'hour{i_hour+1}_N1_act' : f'Hour {i_hour+1} - The spectral power (uV^2) in N1.',
-            f'hour{i_hour+1}_N2_act' : f'Hour {i_hour+1} - The spectral power (uV^2) in N2.',
-            f'hour{i_hour+1}_N3_act' : f'Hour {i_hour+1} - The spectral power (uV^2) in N3.',
-            f'hour{i_hour+1}_NREM_act' : f'Hour {i_hour+1} - The spectral power (uV^2) in NREM.',
-            f'hour{i_hour+1}_R_act' : f'Hour {i_hour+1} - The spectral power (uV^2) in rem.',
-            f'hour{i_hour+1}_Unscored_act' : f'Hour {i_hour+1} - The spectral power (uV^2) unscored.'
+            f'clock_h{i_hour+1}_act' : f'Hour {i_hour+1} - The spectral power (uV^2)', 
+            f'clock_h{i_hour+1}_W_act' : f'Hour {i_hour+1} - The spectral power (uV^2) in awake.',
+            f'clock_h{i_hour+1}_N1_act' : f'Hour {i_hour+1} - The spectral power (uV^2) in N1.',
+            f'clock_h{i_hour+1}_N2_act' : f'Hour {i_hour+1} - The spectral power (uV^2) in N2.',
+            f'clock_h{i_hour+1}_N3_act' : f'Hour {i_hour+1} - The spectral power (uV^2) in N3.',
+            f'clock_h{i_hour+1}_NREM_act' : f'Hour {i_hour+1} - The spectral power (uV^2) in NREM.',
+            f'clock_h{i_hour+1}_R_act' : f'Hour {i_hour+1} - The spectral power (uV^2) in rem.',
+            f'clock_h{i_hour+1}_Unscored_act' : f'Hour {i_hour+1} - The spectral power (uV^2) unscored.'
         }
-        hour_act_dict = hour_act_dict | current_hour_act_dict
+        clock_h_act_dict = clock_h_act_dict | current_clock_h_act_dict
 
     cyc_act_dict = {}
     for i_cycle in range(N_CYCLES):
@@ -157,4 +182,4 @@ def _get_doc(N_HOURS, N_CYCLES):
         }
         cyc_act_dict = cyc_act_dict | current_cycle_act_dict
 
-    return general_dict | total_len_dict | total_act_dict | hour_len_dict | hour_act_dict | cyc_len_dict | cyc_act_dict
+    return general_dict | total_len_dict | total_act_dict | clock_hour_len_dict | clock_h_act_dict | cyc_len_dict | cyc_act_dict | stage_hour_len_dict
