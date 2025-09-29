@@ -167,6 +167,22 @@ def _get_doc(N_HOURS, N_CYCLES):
         }
         clock_h_act_dict = clock_h_act_dict | current_clock_h_act_dict
 
+    stage_h_act_dict = {}
+    for i_hour in range(N_HOURS):
+        current_stage_h_act_dict = \
+        {
+            f'stage_h{i_hour+1}_act' : f'Hour {i_hour+1} - The spectral power (uV^2)', 
+            f'stage_h{i_hour+1}_W_act' : f'Hour {i_hour+1} - The spectral power (uV^2) in awake.',
+            f'stage_h{i_hour+1}_N1_act' : f'Hour {i_hour+1} - The spectral power (uV^2) in N1.',
+            f'stage_h{i_hour+1}_N2_act' : f'Hour {i_hour+1} - The spectral power (uV^2) in N2.',
+            f'stage_h{i_hour+1}_N3_act' : f'Hour {i_hour+1} - The spectral power (uV^2) in N3.',
+            f'stage_h{i_hour+1}_N2N3_act' : f'Hour {i_hour+1} - The spectral power (uV^2) in N2N3.',
+            f'stage_h{i_hour+1}_NREM_act' : f'Hour {i_hour+1} - The spectral power (uV^2) in NREM.',
+            f'stage_h{i_hour+1}_R_act' : f'Hour {i_hour+1} - The spectral power (uV^2) in rem.',
+            f'stage_h{i_hour+1}_Unscored_act' : f'Hour {i_hour+1} - The spectral power (uV^2) unscored.'
+        }
+        stage_h_act_dict = stage_h_act_dict | current_stage_h_act_dict
+
     cyc_act_dict = {}
     for i_cycle in range(N_CYCLES):
         current_cycle_act_dict = \
@@ -182,4 +198,4 @@ def _get_doc(N_HOURS, N_CYCLES):
         }
         cyc_act_dict = cyc_act_dict | current_cycle_act_dict
 
-    return general_dict | total_len_dict | total_act_dict | clock_hour_len_dict | clock_h_act_dict | cyc_len_dict | cyc_act_dict | stage_hour_len_dict
+    return general_dict | total_len_dict | total_act_dict | clock_hour_len_dict | clock_h_act_dict | cyc_len_dict | cyc_act_dict | stage_hour_len_dict | stage_h_act_dict

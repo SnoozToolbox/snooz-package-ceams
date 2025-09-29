@@ -378,7 +378,23 @@ class PSACompilation(SciNode):
                         else:
                             self.PSD_act_param[f"clock_h{cur_div+1}_{stage_label}_act"] = np.array([np.NaN]*len(miniband_indices))  
                     
-                    self.compute_fft_win_per_hour_stage(psd_data, psd_stage, win_len, hour_label = cur_div)
+                    # Calculate FFT window counts and PSD averages for stage_h data
+                    PSD_avg_stage_hour, PSD_stage_avg_stage_hour = self.compute_fft_win_per_hour_stage(psd_data, psd_stage, win_len, hour_label = cur_div)
+                    
+                    # Calculate spectral activity for stage_h columns using the returned PSD averages
+                    # Apply miniband summation to the PSD averages from compute_fft_win_per_hour_stage
+                    if self.PSD_act_param[f'stage_h{cur_div+1}_fft_win_count']>0:
+                        self.PSD_act_param[f"stage_h{cur_div+1}_act"] = \
+                            [np.nansum(PSD_avg_stage_hour[miniband_index[0]:miniband_index[1]+1]) for miniband_index in miniband_indices]
+                    else:
+                        self.PSD_act_param[f"stage_h{cur_div+1}_act"] = np.array([np.NaN]*len(miniband_indices))               
+                    for i, stage_label in enumerate(self.stage_stats_labels):
+                        if (self.PSD_act_param[f'stage_h{cur_div+1}_{stage_label}_fft_win_count']>0):
+                            # The fft normalisation is made to integrate (sum) through frequency bins
+                            self.PSD_act_param[f"stage_h{cur_div+1}_{stage_label}_act"] = \
+                                [np.nansum(PSD_stage_avg_stage_hour[i][miniband_index[0]:miniband_index[1]+1]) for miniband_index in miniband_indices]
+                        else:
+                            self.PSD_act_param[f"stage_h{cur_div+1}_{stage_label}_act"] = np.array([np.NaN]*len(miniband_indices))
 
             # PSD data per sleep cycle
             if int(dist_cycle)==1:
@@ -625,11 +641,11 @@ class PSACompilation(SciNode):
         """
         Calculate the accumulated number of FFT windows for each sleep stage when they reach 
         1 hour (3600 seconds) of cumulative duration within the current hour period
-        and store results in PSD_act_param.
+        and store results in PSD_act_param. Also calculates PSD averages for the selected windows.
         
         This function accumulates FFT windows for each sleep stage during the specified hour
         until 3600 seconds of data is reached for that stage, then reports the number of 
-        windows. Each hour period is processed independently.
+        windows and calculates PSD averages for exactly the same selected windows.
         
         Parameters:
         -----------
@@ -644,8 +660,13 @@ class PSACompilation(SciNode):
             
         Returns:
         --------
-        None
-            Results are stored directly in self.PSD_act_param as:
+        tuple: (PSD_avg_total, PSD_avg_per_stage)
+            PSD_avg_total : array
+                The total average PSD across all selected windows (len of frequency bins)
+            PSD_avg_per_stage : list
+                The average PSD per sleep stage for selected windows (len of frequency bins)
+            
+        Also stores in self.PSD_act_param:
             - stage_h{hour+1}_{stage}_fft_win_count for total windows per stage
             - stage_h{hour+1}_{stage}_fft_win_valid_count for valid windows per stage (non-NaN)
             - stage_h{hour+1}_NREM_fft_win_count and stage_h{hour+1}_NREM_fft_win_valid_count for combined NREM stages
@@ -663,6 +684,7 @@ class PSACompilation(SciNode):
         stage_window_count = {}
         stage_valid_window_count = {}
         stage_fft_win_at_hour = {}
+        stage_selected_psd_data = {}  # Store selected PSD data for averaging
         
         # Get unique stages from the data
         # Flatten the list of arrays and get unique stages
@@ -678,6 +700,7 @@ class PSACompilation(SciNode):
             stage_window_count[stage] = 0
             stage_valid_window_count[stage] = 0
             stage_fft_win_at_hour[stage] = stage_window_count[stage]  # Store current count, will update when hour reached
+            stage_selected_psd_data[stage] = []  # Initialize PSD data collection
         
         # Process each FFT window
         for stage, data in zip(psd_stage, psd_data):
@@ -688,6 +711,9 @@ class PSACompilation(SciNode):
             
             # Check if window is valid (not NaN) - similar logic to compute_fft_win_div
             is_valid_window = not np.any(np.isnan(data))
+            
+            # Always collect PSD data for selected windows (regardless of validity for counting purposes)
+            stage_selected_psd_data[stage].append(data)
             
             if is_valid_window:
                 # Count valid windows and add duration only for valid windows
@@ -754,6 +780,37 @@ class PSACompilation(SciNode):
                 self.PSD_act_param[f'stage_h{hour_label+1}_fft_win_valid_count'] = total_valid_windows_this_hour - (hour_label * expected_windows_per_hour)
             else:
                 self.PSD_act_param[f'stage_h{hour_label+1}_fft_win_valid_count'] = 0
+
+        # Calculate PSD averages for the selected windows (similar to compute_fft_win_div)
+        PSD_avg_per_stage = []
+        psd_data_tot = []
+        
+        # Process each stage defined in self.sleep_stage_to_stats and self.stage_stats_labels
+        for i_list, cur_stage_list in enumerate(self.sleep_stage_to_stats):
+            # Extract PSD data for current stage(s) from selected windows
+            psd_data_cur_stage = []
+            for stage_code in cur_stage_list:
+                if stage_code in stage_selected_psd_data:
+                    psd_data_cur_stage.extend(stage_selected_psd_data[stage_code])
+            
+            # Calculate average PSD for this stage
+            if len(psd_data_cur_stage) > 0:
+                # Accumulate data for total calculation (avoid counting grouped stages twice)
+                if len(cur_stage_list) == 1:  # Only individual stages contribute to total
+                    psd_data_tot.extend(psd_data_cur_stage)
+                # Calculate stage average
+                PSD_avg_per_stage.append(np.nanmean(psd_data_cur_stage, axis=0))
+            else:
+                # No data for this stage
+                PSD_avg_per_stage.append(np.array([np.NaN] * len(psd_data[0]) if len(psd_data) > 0 else []))
+        
+        # Calculate total average PSD across all selected windows
+        if len(psd_data_tot) > 0:
+            PSD_avg_total = np.nanmean(psd_data_tot, axis=0)
+        else:
+            PSD_avg_total = np.array([np.NaN] * len(psd_data[0]) if len(psd_data) > 0 else [])
+        
+        return PSD_avg_total, PSD_avg_per_stage
 
     # Compute the number of artefacts for the current channel and selected sleep stage
     def get_n_artefact_sel(self, art_selected, channel, sleep_stages):
