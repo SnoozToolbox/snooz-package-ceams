@@ -127,8 +127,9 @@ class PSACompilation(SciNode):
         self._is_master = False 
 
         # Define the sleep stage to analyse
-        self.sleep_stage_to_stats = [ ['0'], ['1'], ['2'], ['3'], ['2', '3'], ['1', '2', '3'], ['5'], ['9'] ]
-        self.stage_stats_labels = [ 'W', 'N1', 'N2', 'N3', 'N2N3', 'NREM', 'R', 'Unscored'] 
+        self.sleep_stage_to_stats = [ ['0'], ['1'], ['2'], ['3'], ['2', '3'], ['1', '2', '3'], ['5'], ['9'] ] # Becareful the order must match the stage_stats_labels
+        self.stage_stats_labels = [ 'W', 'N1', 'N2', 'N3', 'N2N3', 'NREM', 'R', 'Unscored']
+        self.stage_mapping = {'0':'W', '1':'N1', '2':'N2', '3':'N3', '5':'R', '9':'Unscored'}
 
         # Dict to accumulate the act per stage, hour and cycle.
         self.PSD_act_param = {}
@@ -696,16 +697,21 @@ class PSACompilation(SciNode):
                 flattened_stages.append(stage_array)
         unique_stages = list(set(flattened_stages))
         for stage in unique_stages:
+            stage_label = self.stage_mapping.get(stage, None)
             stage_cumulative_duration[stage] = 0.0
             stage_window_count[stage] = 0
             stage_valid_window_count[stage] = 0
             stage_fft_win_at_hour[stage] = stage_window_count[stage]  # Store current count, will update when hour reached
-            stage_selected_psd_data[stage] = []  # Initialize PSD data collection
+            stage_selected_psd_data[stage_label] = []  # Initialize PSD data collection
+        
+        # Initialize grouped stage data collections
+        stage_selected_psd_data['N2N3'] = []  # For stages '2' and '3'
+        stage_selected_psd_data['NREM'] = []  # For stages '1', '2' and '3'
         
         # Process each FFT window
         for stage, data in zip(psd_stage, psd_data):
             stage = stage[0] if isinstance(stage, np.ndarray) else stage
-            
+            stage_label = self.stage_mapping.get(stage, None)
             # Count total windows for this stage
             stage_window_count[stage] += 1
             
@@ -713,7 +719,13 @@ class PSACompilation(SciNode):
             is_valid_window = not np.any(np.isnan(data))
             
             # Always collect PSD data for selected windows (regardless of validity for counting purposes)
-            stage_selected_psd_data[stage].append(data)
+            stage_selected_psd_data[stage_label].append(data)
+            
+            # Also collect data for grouped stages based on individual stage membership
+            if stage in ['2', '3']:  # N2 or N3
+                stage_selected_psd_data['N2N3'].append(data)
+            if stage in ['1', '2', '3']:  # N1, N2, or N3  
+                stage_selected_psd_data['NREM'].append(data)
             
             if is_valid_window:
                 # Count valid windows and add duration only for valid windows
@@ -726,85 +738,81 @@ class PSACompilation(SciNode):
         # Store results in PSD_act_param using global stage mappings
         # Ensure all stages (including those not present in data) get values
         expected_windows_per_hour = 3600.0/win_len
-        
-        # Process each stage defined in self.sleep_stage_to_stats and self.stage_stats_labels
-        for i_list, cur_stage_list in enumerate(self.sleep_stage_to_stats):
-            stage_label = self.stage_stats_labels[i_list]
-                
-            # Collect data for current stage(s) - handle both individual stages and grouped stages
-            total_win_count = 0
-            total_valid_count = 0
-            
-            for stage_code in cur_stage_list:
-                if stage_code in stage_window_count:
-                    total_win_count += stage_window_count[stage_code]
-                if stage_code in stage_valid_window_count:
-                    total_valid_count += stage_valid_window_count[stage_code]
-            
-            # Apply hour segmentation logic for total windows
-            if total_win_count // ((hour_label + 1) * expected_windows_per_hour) > 0:
-                self.PSD_act_param[f'stage_h{hour_label+1}_{stage_label}_fft_win_count'] = expected_windows_per_hour
-            else:
-                if total_win_count > hour_label * expected_windows_per_hour:
-                    self.PSD_act_param[f'stage_h{hour_label+1}_{stage_label}_fft_win_count'] = total_win_count - (hour_label * expected_windows_per_hour)
-                else:
-                    self.PSD_act_param[f'stage_h{hour_label+1}_{stage_label}_fft_win_count'] = 0
-            
-            # Apply hour segmentation logic for valid windows
-            if total_valid_count // ((hour_label + 1) * expected_windows_per_hour) > 0:
-                self.PSD_act_param[f'stage_h{hour_label+1}_{stage_label}_fft_win_valid_count'] = expected_windows_per_hour
-            else:
-                if total_valid_count > hour_label * expected_windows_per_hour:
-                    self.PSD_act_param[f'stage_h{hour_label+1}_{stage_label}_fft_win_valid_count'] = total_valid_count - (hour_label * expected_windows_per_hour)
-                else:
-                    self.PSD_act_param[f'stage_h{hour_label+1}_{stage_label}_fft_win_valid_count'] = 0
-        
-        # Compute the total number of valid fft windows for this hour (similar to compute_fft_win_div)
-        total_windows_this_hour = sum(stage_window_count.values())
-        total_valid_windows_this_hour = sum(stage_valid_window_count.values())
-        
-        # Apply hour segmentation logic to total counts
-        if total_windows_this_hour // ((hour_label + 1) * expected_windows_per_hour) > 0:
-            self.PSD_act_param[f'stage_h{hour_label+1}_fft_win_count'] = expected_windows_per_hour
-        else:
-            if total_windows_this_hour > hour_label * expected_windows_per_hour:
-                self.PSD_act_param[f'stage_h{hour_label+1}_fft_win_count'] = total_windows_this_hour - (hour_label * expected_windows_per_hour)
-            else:
-                self.PSD_act_param[f'stage_h{hour_label+1}_fft_win_count'] = 0
-        
-        # Apply hour segmentation logic to valid counts
-        if total_valid_windows_this_hour // ((hour_label + 1) * expected_windows_per_hour) > 0:
-            self.PSD_act_param[f'stage_h{hour_label+1}_fft_win_valid_count'] = expected_windows_per_hour
-        else:
-            if total_valid_windows_this_hour > hour_label * expected_windows_per_hour:
-                self.PSD_act_param[f'stage_h{hour_label+1}_fft_win_valid_count'] = total_valid_windows_this_hour - (hour_label * expected_windows_per_hour)
-            else:
-                self.PSD_act_param[f'stage_h{hour_label+1}_fft_win_valid_count'] = 0
-
         # Calculate PSD averages for the selected windows (similar to compute_fft_win_div)
         PSD_avg_per_stage = []
         psd_data_tot = []
         
         # Process each stage defined in self.sleep_stage_to_stats and self.stage_stats_labels
         for i_list, cur_stage_list in enumerate(self.sleep_stage_to_stats):
-            # Extract PSD data for current stage(s) from selected windows
-            psd_data_cur_stage = []
+            stage_label = self.stage_stats_labels[i_list]
+            psd_data_cur_stage = stage_selected_psd_data.get(stage_label, [])
+            # Collect data for current stage(s) - handle both individual stages and grouped stages
+            cur_stage_win_count = 0
+            valid_cur_stage_win_count = 0
+
             for stage_code in cur_stage_list:
-                if stage_code in stage_selected_psd_data:
-                    psd_data_cur_stage.extend(stage_selected_psd_data[stage_code])
+                if stage_code in stage_window_count:
+                    cur_stage_win_count += stage_window_count[stage_code]
+                if stage_code in stage_valid_window_count:
+                    valid_cur_stage_win_count += stage_valid_window_count[stage_code]
+            
+            psd_data_cur_stage_cur_hour = []
+            # Apply hour segmentation logic for stage windows
+            if cur_stage_win_count // ((hour_label + 1) * expected_windows_per_hour) > 0:
+                self.PSD_act_param[f'stage_h{hour_label+1}_{stage_label}_fft_win_count'] = expected_windows_per_hour
+                psd_data_cur_stage_cur_hour = psd_data_cur_stage[int(hour_label * expected_windows_per_hour):int((hour_label + 1) * expected_windows_per_hour)]
+
+            else:
+                if cur_stage_win_count > hour_label * expected_windows_per_hour:
+                    self.PSD_act_param[f'stage_h{hour_label+1}_{stage_label}_fft_win_count'] = cur_stage_win_count - (hour_label * expected_windows_per_hour)
+                    psd_data_cur_stage_cur_hour = psd_data_cur_stage[int(hour_label * expected_windows_per_hour):]
+
+                else:
+                    self.PSD_act_param[f'stage_h{hour_label+1}_{stage_label}_fft_win_count'] = 0
+            
+            # Apply hour segmentation logic for valid stage windows
+            if valid_cur_stage_win_count // ((hour_label + 1) * expected_windows_per_hour) > 0:
+                self.PSD_act_param[f'stage_h{hour_label+1}_{stage_label}_fft_win_valid_count'] = expected_windows_per_hour
+
+            else:
+                if valid_cur_stage_win_count > hour_label * expected_windows_per_hour:
+                    self.PSD_act_param[f'stage_h{hour_label+1}_{stage_label}_fft_win_valid_count'] = valid_cur_stage_win_count - (hour_label * expected_windows_per_hour)
+
+                else:
+                    self.PSD_act_param[f'stage_h{hour_label+1}_{stage_label}_fft_win_valid_count'] = 0
             
             # Calculate average PSD for this stage
-            if len(psd_data_cur_stage) > 0:
-                # Accumulate data for total calculation (avoid counting grouped stages twice)
-                if len(cur_stage_list) == 1:  # Only individual stages contribute to total
-                    psd_data_tot.extend(psd_data_cur_stage)
+            if len(psd_data_cur_stage_cur_hour) > 0:
                 # Calculate stage average
-                PSD_avg_per_stage.append(np.nanmean(psd_data_cur_stage, axis=0))
+                PSD_avg_per_stage.append(np.nanmean(psd_data_cur_stage_cur_hour, axis=0))
             else:
                 # No data for this stage
                 PSD_avg_per_stage.append(np.array([np.NaN] * len(psd_data[0]) if len(psd_data) > 0 else []))
+
+        # Compute the total number of valid fft windows for this hour (similar to compute_fft_win_div)
+        total_windows = sum(stage_window_count.values())
+        total_valid_windows = sum(stage_valid_window_count.values())
+
+        if total_windows // ((hour_label + 1) * expected_windows_per_hour) > 0:
+            self.PSD_act_param[f'stage_h{hour_label+1}_fft_win_count'] = expected_windows_per_hour
+            psd_data_tot = psd_data[int(hour_label * expected_windows_per_hour):int((hour_label + 1) * expected_windows_per_hour)]
+        else:
+            if total_windows > hour_label * expected_windows_per_hour:
+                self.PSD_act_param[f'stage_h{hour_label+1}_fft_win_count'] = total_windows - (hour_label * expected_windows_per_hour)
+                psd_data_tot = psd_data[int(hour_label * expected_windows_per_hour):]
+            else:
+                self.PSD_act_param[f'stage_h{hour_label+1}_fft_win_count'] = 0
         
-        # Calculate total average PSD across all selected windows
+        # Apply hour segmentation logic to valid counts
+        if total_valid_windows // ((hour_label + 1) * expected_windows_per_hour) > 0:
+            self.PSD_act_param[f'stage_h{hour_label+1}_fft_win_valid_count'] = expected_windows_per_hour
+        else:
+            if total_valid_windows > hour_label * expected_windows_per_hour:
+                self.PSD_act_param[f'stage_h{hour_label+1}_fft_win_valid_count'] = total_valid_windows - (hour_label * expected_windows_per_hour)
+            else:
+                self.PSD_act_param[f'stage_h{hour_label+1}_fft_win_valid_count'] = 0
+        
+        # Calculate total average PSD for this hour
         if len(psd_data_tot) > 0:
             PSD_avg_total = np.nanmean(psd_data_tot, axis=0)
         else:

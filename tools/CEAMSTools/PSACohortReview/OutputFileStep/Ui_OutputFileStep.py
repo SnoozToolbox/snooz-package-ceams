@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file ''
+## Form generated from reading UI file 'Ui_OutputFileStep.ui'
 ##
 ## Created by: Qt User Interface Compiler version 6.8.2
 ##
@@ -24,7 +24,7 @@ class Ui_OutputFileStep(object):
     def setupUi(self, OutputFileStep):
         if not OutputFileStep.objectName():
             OutputFileStep.setObjectName(u"OutputFileStep")
-        OutputFileStep.resize(1021, 642)
+        OutputFileStep.resize(1090, 642)
         self.horizontalLayout_3 = QHBoxLayout(OutputFileStep)
         self.horizontalLayout_3.setObjectName(u"horizontalLayout_3")
         self.verticalLayout = QVBoxLayout()
@@ -76,41 +76,11 @@ class Ui_OutputFileStep(object):
 
         self.gridLayout = QGridLayout()
         self.gridLayout.setObjectName(u"gridLayout")
-        self.activity_comboBox = QComboBox(OutputFileStep)
-        self.activity_comboBox.setObjectName(u"activity_comboBox")
-        self.activity_comboBox.setMaximumSize(QSize(16777215, 16777215))
-
-        self.gridLayout.addWidget(self.activity_comboBox, 6, 1, 1, 1)
-
         self.label_5 = QLabel(OutputFileStep)
         self.label_5.setObjectName(u"label_5")
         self.label_5.setMinimumSize(QSize(0, 20))
 
         self.gridLayout.addWidget(self.label_5, 1, 0, 1, 2)
-
-        self.label_9 = QLabel(OutputFileStep)
-        self.label_9.setObjectName(u"label_9")
-
-        self.gridLayout.addWidget(self.label_9, 4, 0, 1, 2)
-
-        self.label_7 = QLabel(OutputFileStep)
-        self.label_7.setObjectName(u"label_7")
-        self.label_7.setMinimumSize(QSize(0, 20))
-
-        self.gridLayout.addWidget(self.label_7, 3, 0, 1, 2)
-
-        self.label_6 = QLabel(OutputFileStep)
-        self.label_6.setObjectName(u"label_6")
-        self.label_6.setMinimumSize(QSize(0, 20))
-
-        self.gridLayout.addWidget(self.label_6, 2, 0, 1, 2)
-
-        self.label = QLabel(OutputFileStep)
-        self.label.setObjectName(u"label")
-        self.label.setMinimumSize(QSize(0, 20))
-        self.label.setMaximumSize(QSize(16777215, 16777215))
-
-        self.gridLayout.addWidget(self.label, 6, 0, 1, 1)
 
         self.label_4 = QLabel(OutputFileStep)
         self.label_4.setObjectName(u"label_4")
@@ -118,10 +88,45 @@ class Ui_OutputFileStep(object):
 
         self.gridLayout.addWidget(self.label_4, 0, 0, 1, 2)
 
+        self.label_9 = QLabel(OutputFileStep)
+        self.label_9.setObjectName(u"label_9")
+
+        self.gridLayout.addWidget(self.label_9, 5, 0, 1, 2)
+
+        self.label_7 = QLabel(OutputFileStep)
+        self.label_7.setObjectName(u"label_7")
+        self.label_7.setMinimumSize(QSize(0, 20))
+
+        self.gridLayout.addWidget(self.label_7, 4, 0, 1, 2)
+
+        self.activity_comboBox = QComboBox(OutputFileStep)
+        self.activity_comboBox.setObjectName(u"activity_comboBox")
+        self.activity_comboBox.setMaximumSize(QSize(16777215, 16777215))
+
+        self.gridLayout.addWidget(self.activity_comboBox, 7, 1, 1, 1)
+
         self.label_10 = QLabel(OutputFileStep)
         self.label_10.setObjectName(u"label_10")
 
-        self.gridLayout.addWidget(self.label_10, 5, 0, 1, 2)
+        self.gridLayout.addWidget(self.label_10, 6, 0, 1, 2)
+
+        self.label = QLabel(OutputFileStep)
+        self.label.setObjectName(u"label")
+        self.label.setMinimumSize(QSize(0, 20))
+        self.label.setMaximumSize(QSize(16777215, 16777215))
+
+        self.gridLayout.addWidget(self.label, 7, 0, 1, 1)
+
+        self.label_11 = QLabel(OutputFileStep)
+        self.label_11.setObjectName(u"label_11")
+
+        self.gridLayout.addWidget(self.label_11, 3, 0, 1, 1)
+
+        self.label_6 = QLabel(OutputFileStep)
+        self.label_6.setObjectName(u"label_6")
+        self.label_6.setMinimumSize(QSize(0, 20))
+
+        self.gridLayout.addWidget(self.label_6, 2, 0, 1, 2)
 
 
         self.verticalLayout.addLayout(self.gridLayout)
@@ -181,12 +186,13 @@ class Ui_OutputFileStep(object):
 #endif // QT_CONFIG(tooltip)
         self.export_transpose_checkBox.setText(QCoreApplication.translate("OutputFileStep", u"Export transposed PSA file", None))
         self.label_5.setText(QCoreApplication.translate("OutputFileStep", u" - Select \"Total\" to output the average through the whole recording.", None))
+        self.label_4.setText(QCoreApplication.translate("OutputFileStep", u"When the PSA activity is computed per frequency band and sleep stage :", None))
         self.label_9.setText(QCoreApplication.translate("OutputFileStep", u"When the PSA activity is computed per frequency band and annotation : ", None))
         self.label_7.setText(QCoreApplication.translate("OutputFileStep", u" - Select \"Distribution per sleep cycle\" to output the average power per sleep cycle,  based on the variables included in the input PSA file.", None))
-        self.label_6.setText(QCoreApplication.translate("OutputFileStep", u" - Select \"Distribution per hour\" to output the average power for each real clock hour, based on the variables included in the input PSA file.", None))
-        self.label.setText(QCoreApplication.translate("OutputFileStep", u"Activity variables exported in the transposed PSA file", None))
-        self.label_4.setText(QCoreApplication.translate("OutputFileStep", u"When the PSA activity is computed per frequency band and sleep stage :", None))
         self.label_10.setText(QCoreApplication.translate("OutputFileStep", u" - Select \"Distribution per annotation\" to output the average per annotation. No cycle or hour information here.", None))
+        self.label.setText(QCoreApplication.translate("OutputFileStep", u"Activity variables exported in the transposed PSA file", None))
+        self.label_11.setText(QCoreApplication.translate("OutputFileStep", u" - Select \"Distribution per hour spent in each sleep stage\" to output the average power for each stage hour, based on the variables included in the input PSA file.", None))
+        self.label_6.setText(QCoreApplication.translate("OutputFileStep", u" - Select \"Distribution per clock hour\" to output the average power for each real clock hour, based on the variables included in the input PSA file.", None))
         self.label_2.setText(QCoreApplication.translate("OutputFileStep", u"Define the filename to save the exported files (the sufix _clean.tsv or _transposed.tsv will be added to the filename)", None))
         self.filename_lineEdit.setInputMask("")
         self.filename_lineEdit.setText("")

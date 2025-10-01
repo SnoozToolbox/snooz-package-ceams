@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1021</width>
+    <width>1090</width>
     <height>642</height>
    </rect>
   </property>
@@ -61,10 +61,10 @@
      <item>
       <spacer name="verticalSpacer">
        <property name="orientation">
-        <enum>Qt::Vertical</enum>
+        <enum>Qt::Orientation::Vertical</enum>
        </property>
        <property name="sizeType">
-        <enum>QSizePolicy::Fixed</enum>
+        <enum>QSizePolicy::Policy::Fixed</enum>
        </property>
        <property name="sizeHint" stdset="0">
         <size>
@@ -119,10 +119,10 @@
      <item>
       <spacer name="verticalSpacer_4">
        <property name="orientation">
-        <enum>Qt::Vertical</enum>
+        <enum>Qt::Orientation::Vertical</enum>
        </property>
        <property name="sizeType">
-        <enum>QSizePolicy::Fixed</enum>
+        <enum>QSizePolicy::Policy::Fixed</enum>
        </property>
        <property name="sizeHint" stdset="0">
         <size>
@@ -134,16 +134,6 @@
      </item>
      <item>
       <layout class="QGridLayout" name="gridLayout">
-       <item row="6" column="1">
-        <widget class="QComboBox" name="activity_comboBox">
-         <property name="maximumSize">
-          <size>
-           <width>16777215</width>
-           <height>16777215</height>
-          </size>
-         </property>
-        </widget>
-       </item>
        <item row="1" column="0" colspan="2">
         <widget class="QLabel" name="label_5">
          <property name="minimumSize">
@@ -157,14 +147,27 @@
          </property>
         </widget>
        </item>
-       <item row="4" column="0" colspan="2">
+       <item row="0" column="0" colspan="2">
+        <widget class="QLabel" name="label_4">
+         <property name="minimumSize">
+          <size>
+           <width>0</width>
+           <height>20</height>
+          </size>
+         </property>
+         <property name="text">
+          <string>When the PSA activity is computed per frequency band and sleep stage :</string>
+         </property>
+        </widget>
+       </item>
+       <item row="5" column="0" colspan="2">
         <widget class="QLabel" name="label_9">
          <property name="text">
           <string>When the PSA activity is computed per frequency band and annotation : </string>
          </property>
         </widget>
        </item>
-       <item row="3" column="0" colspan="2">
+       <item row="4" column="0" colspan="2">
         <widget class="QLabel" name="label_7">
          <property name="minimumSize">
           <size>
@@ -177,20 +180,24 @@
          </property>
         </widget>
        </item>
-       <item row="2" column="0" colspan="2">
-        <widget class="QLabel" name="label_6">
-         <property name="minimumSize">
+       <item row="7" column="1">
+        <widget class="QComboBox" name="activity_comboBox">
+         <property name="maximumSize">
           <size>
-           <width>0</width>
-           <height>20</height>
+           <width>16777215</width>
+           <height>16777215</height>
           </size>
-         </property>
-         <property name="text">
-          <string> - Select &quot;Distribution per hour&quot; to output the average power for each real clock hour, based on the variables included in the input PSA file.</string>
          </property>
         </widget>
        </item>
-       <item row="6" column="0">
+       <item row="6" column="0" colspan="2">
+        <widget class="QLabel" name="label_10">
+         <property name="text">
+          <string> - Select &quot;Distribution per annotation&quot; to output the average per annotation. No cycle or hour information here.</string>
+         </property>
+        </widget>
+       </item>
+       <item row="7" column="0">
         <widget class="QLabel" name="label">
          <property name="minimumSize">
           <size>
@@ -209,8 +216,15 @@
          </property>
         </widget>
        </item>
-       <item row="0" column="0" colspan="2">
-        <widget class="QLabel" name="label_4">
+       <item row="3" column="0">
+        <widget class="QLabel" name="label_11">
+         <property name="text">
+          <string> - Select &quot;Distribution per hour spent in each sleep stage&quot; to output the average power for each stage hour, based on the variables included in the input PSA file.</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="0" colspan="2">
+        <widget class="QLabel" name="label_6">
          <property name="minimumSize">
           <size>
            <width>0</width>
@@ -218,14 +232,7 @@
           </size>
          </property>
          <property name="text">
-          <string>When the PSA activity is computed per frequency band and sleep stage :</string>
-         </property>
-        </widget>
-       </item>
-       <item row="5" column="0" colspan="2">
-        <widget class="QLabel" name="label_10">
-         <property name="text">
-          <string> - Select &quot;Distribution per annotation&quot; to output the average per annotation. No cycle or hour information here.</string>
+          <string> - Select &quot;Distribution per clock hour&quot; to output the average power for each real clock hour, based on the variables included in the input PSA file.</string>
          </property>
         </widget>
        </item>
@@ -234,10 +241,10 @@
      <item>
       <spacer name="verticalSpacer_2">
        <property name="orientation">
-        <enum>Qt::Vertical</enum>
+        <enum>Qt::Orientation::Vertical</enum>
        </property>
        <property name="sizeType">
-        <enum>QSizePolicy::Fixed</enum>
+        <enum>QSizePolicy::Policy::Fixed</enum>
        </property>
        <property name="sizeHint" stdset="0">
         <size>
@@ -293,10 +300,10 @@
      <item>
       <spacer name="verticalSpacer_3">
        <property name="orientation">
-        <enum>Qt::Vertical</enum>
+        <enum>Qt::Orientation::Vertical</enum>
        </property>
        <property name="sizeType">
-        <enum>QSizePolicy::Expanding</enum>
+        <enum>QSizePolicy::Policy::Expanding</enum>
        </property>
        <property name="sizeHint" stdset="0">
         <size>
