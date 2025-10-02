@@ -834,9 +834,9 @@ class PSGReaderSettingsView( BaseSettingsView,  Ui_PSGReaderSettingsView, QtWidg
                         sleep_stages = self._psg_reader_manager.get_sleep_stages()
                         if sleep_stages is not None and 'name' in sleep_stages.columns:
                             if (sleep_stages['name'] == '4').any():
-                                WarningDialog(f"Sleep stage '4' detected in annotation file {file}. It will be converted to '3' automatically.")
+                                WarningDialog(f"Sleep stage 'N4' detected in annotation file {file}. It will be converted to 'N3' automatically.")
         else:
-            WarningDialog(f"Add files before running the pipeline.")    
+            WarningDialog(f"Add files before running the pipeline.")
             return False
         return True   
 
