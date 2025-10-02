@@ -353,7 +353,7 @@ class PSACompilation(SciNode):
                         start_hour = cycle_labelled.iloc[0]['start_sec']+cur_div*3600
                         end_hour = start_hour+3600
                         #psd_start_div = psd_start_time[(psd_start_time<end_hour) & (psd_start_time>=start_hour)]
-                        psd_stage_div = [psd_stage[i] for i in np.where( (psd_start_time<end_hour) & (psd_start_time>=start_hour))[0]]   
+                        psd_stage_div = [psd_stage[i] for i in np.where((psd_start_time<end_hour) & (psd_start_time>=start_hour))[0]]   
                         psd_data_div = [data for (start_time, data) in zip(psd_start_time, psd_data) if ((start_time<end_hour) & (start_time>=start_hour))]
                     else:
                         psd_data_div = []
