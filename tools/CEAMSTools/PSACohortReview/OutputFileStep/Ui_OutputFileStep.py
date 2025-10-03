@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file ''
+## Form generated from reading UI file 'Ui_OutputFileStep.ui'
 ##
 ## Created by: Qt User Interface Compiler version 6.8.2
 ##
@@ -15,19 +15,18 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QFont, QFontDatabase, QGradient, QIcon,
     QImage, QKeySequence, QLinearGradient, QPainter,
     QPalette, QPixmap, QRadialGradient, QTransform)
-from PySide6.QtWidgets import (QApplication, QCheckBox, QComboBox, QGridLayout,
-    QHBoxLayout, QLabel, QLineEdit, QPushButton,
-    QSizePolicy, QSpacerItem, QVBoxLayout, QWidget)
+from PySide6.QtWidgets import (QApplication, QCheckBox, QComboBox, QFrame,
+    QGridLayout, QHBoxLayout, QLabel, QLineEdit,
+    QPushButton, QSizePolicy, QSpacerItem, QTextEdit,
+    QVBoxLayout, QWidget)
 import themes_rc
 
 class Ui_OutputFileStep(object):
     def setupUi(self, OutputFileStep):
         if not OutputFileStep.objectName():
             OutputFileStep.setObjectName(u"OutputFileStep")
-        OutputFileStep.resize(1021, 642)
-        self.horizontalLayout_3 = QHBoxLayout(OutputFileStep)
-        self.horizontalLayout_3.setObjectName(u"horizontalLayout_3")
-        self.verticalLayout = QVBoxLayout()
+        OutputFileStep.resize(837, 732)
+        self.verticalLayout = QVBoxLayout(OutputFileStep)
         self.verticalLayout.setObjectName(u"verticalLayout")
         self.horizontalLayout = QHBoxLayout()
         self.horizontalLayout.setObjectName(u"horizontalLayout")
@@ -74,57 +73,46 @@ class Ui_OutputFileStep(object):
 
         self.verticalLayout.addItem(self.verticalSpacer_4)
 
-        self.gridLayout = QGridLayout()
-        self.gridLayout.setObjectName(u"gridLayout")
-        self.activity_comboBox = QComboBox(OutputFileStep)
-        self.activity_comboBox.setObjectName(u"activity_comboBox")
-        self.activity_comboBox.setMaximumSize(QSize(16777215, 16777215))
+        self.label_4 = QLabel(OutputFileStep)
+        self.label_4.setObjectName(u"label_4")
+        self.label_4.setMinimumSize(QSize(0, 20))
 
-        self.gridLayout.addWidget(self.activity_comboBox, 6, 1, 1, 1)
+        self.verticalLayout.addWidget(self.label_4)
 
-        self.label_5 = QLabel(OutputFileStep)
-        self.label_5.setObjectName(u"label_5")
-        self.label_5.setMinimumSize(QSize(0, 20))
+        self.horizontalLayout_4 = QHBoxLayout()
+        self.horizontalLayout_4.setObjectName(u"horizontalLayout_4")
+        self.horizontalSpacer = QSpacerItem(40, 20, QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Minimum)
 
-        self.gridLayout.addWidget(self.label_5, 1, 0, 1, 2)
+        self.horizontalLayout_4.addItem(self.horizontalSpacer)
 
-        self.label_9 = QLabel(OutputFileStep)
-        self.label_9.setObjectName(u"label_9")
+        self.textEdit = QTextEdit(OutputFileStep)
+        self.textEdit.setObjectName(u"textEdit")
+        self.textEdit.setMinimumSize(QSize(0, 200))
+        self.textEdit.setMaximumSize(QSize(16777215, 250))
+        self.textEdit.setFrameShape(QFrame.Shape.NoFrame)
 
-        self.gridLayout.addWidget(self.label_9, 4, 0, 1, 2)
+        self.horizontalLayout_4.addWidget(self.textEdit)
 
-        self.label_7 = QLabel(OutputFileStep)
-        self.label_7.setObjectName(u"label_7")
-        self.label_7.setMinimumSize(QSize(0, 20))
 
-        self.gridLayout.addWidget(self.label_7, 3, 0, 1, 2)
+        self.verticalLayout.addLayout(self.horizontalLayout_4)
 
-        self.label_6 = QLabel(OutputFileStep)
-        self.label_6.setObjectName(u"label_6")
-        self.label_6.setMinimumSize(QSize(0, 20))
-
-        self.gridLayout.addWidget(self.label_6, 2, 0, 1, 2)
-
+        self.horizontalLayout_3 = QHBoxLayout()
+        self.horizontalLayout_3.setObjectName(u"horizontalLayout_3")
         self.label = QLabel(OutputFileStep)
         self.label.setObjectName(u"label")
         self.label.setMinimumSize(QSize(0, 20))
         self.label.setMaximumSize(QSize(16777215, 16777215))
 
-        self.gridLayout.addWidget(self.label, 6, 0, 1, 1)
+        self.horizontalLayout_3.addWidget(self.label)
 
-        self.label_4 = QLabel(OutputFileStep)
-        self.label_4.setObjectName(u"label_4")
-        self.label_4.setMinimumSize(QSize(0, 20))
+        self.activity_comboBox = QComboBox(OutputFileStep)
+        self.activity_comboBox.setObjectName(u"activity_comboBox")
+        self.activity_comboBox.setMaximumSize(QSize(16777215, 16777215))
 
-        self.gridLayout.addWidget(self.label_4, 0, 0, 1, 2)
-
-        self.label_10 = QLabel(OutputFileStep)
-        self.label_10.setObjectName(u"label_10")
-
-        self.gridLayout.addWidget(self.label_10, 5, 0, 1, 2)
+        self.horizontalLayout_3.addWidget(self.activity_comboBox)
 
 
-        self.verticalLayout.addLayout(self.gridLayout)
+        self.verticalLayout.addLayout(self.horizontalLayout_3)
 
         self.verticalSpacer_2 = QSpacerItem(20, 50, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Fixed)
 
@@ -152,12 +140,9 @@ class Ui_OutputFileStep(object):
 
         self.verticalLayout.addLayout(self.gridLayout_3)
 
-        self.verticalSpacer_3 = QSpacerItem(20, 10, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
+        self.verticalSpacer_3 = QSpacerItem(20, 12, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
 
         self.verticalLayout.addItem(self.verticalSpacer_3)
-
-
-        self.horizontalLayout_3.addLayout(self.verticalLayout)
 
 
         self.retranslateUi(OutputFileStep)
@@ -180,13 +165,25 @@ class Ui_OutputFileStep(object):
         self.export_transpose_checkBox.setToolTip(QCoreApplication.translate("OutputFileStep", u"Check to export the transposed PSA file. The format is one sujet per row and the selected channels (including ROIs) and frequency bands are packed as additional columns. ", None))
 #endif // QT_CONFIG(tooltip)
         self.export_transpose_checkBox.setText(QCoreApplication.translate("OutputFileStep", u"Export transposed PSA file", None))
-        self.label_5.setText(QCoreApplication.translate("OutputFileStep", u" - Select \"Total\" to output the average through the whole recording.", None))
-        self.label_9.setText(QCoreApplication.translate("OutputFileStep", u"When the PSA activity is computed per frequency band and annotation : ", None))
-        self.label_7.setText(QCoreApplication.translate("OutputFileStep", u" - Select \"Distribution per sleep cycle\" to output the average power per sleep cycle,  based on the variables included in the input PSA file.", None))
-        self.label_6.setText(QCoreApplication.translate("OutputFileStep", u" - Select \"Distribution per hour\" to output the average power for each real clock hour, based on the variables included in the input PSA file.", None))
-        self.label.setText(QCoreApplication.translate("OutputFileStep", u"Activity variables exported in the transposed PSA file", None))
         self.label_4.setText(QCoreApplication.translate("OutputFileStep", u"When the PSA activity is computed per frequency band and sleep stage :", None))
-        self.label_10.setText(QCoreApplication.translate("OutputFileStep", u" - Select \"Distribution per annotation\" to output the average per annotation. No cycle or hour information here.", None))
+        self.textEdit.setHtml(QCoreApplication.translate("OutputFileStep", u"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
+"<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset=\"utf-8\" /><style type=\"text/css\">\n"
+"p, li { white-space: pre-wrap; }\n"
+"hr { height: 1px; border-width: 0; }\n"
+"li.unchecked::marker { content: \"\\2610\"; }\n"
+"li.checked::marker { content: \"\\2612\"; }\n"
+"</style></head><body style=\" font-family:'Roboto'; font-size:12pt; font-weight:400; font-style:normal;\">\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Select<span style=\" font-weight:700;\"> Total </span>to output the average through the whole recording.</p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Select <span style=\" font-weight:700;\">Distribution per clock hour</span> to output the average power for each real clock hour.</p>\n"
+"<p style=\" margin-top:0px; margi"
+                        "n-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Select <span style=\" font-weight:700;\">Distribution per hour spent in each sleep stage </span>to output the average power for each stage hour.</p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Select <span style=\" font-weight:700;\">Distribution per sleep cycle </span>to output the average power per sleep cycle</p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">When the PSA activity is computed per frequency band and annotation : </p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Select <span style=\" font-weight:700;\">Distributio"
+                        "n per annotation</span> to output the average per annotation. </p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">No cycle or hour information here.</p></body></html>", None))
+        self.label.setText(QCoreApplication.translate("OutputFileStep", u"Activity variables exported in the transposed PSA file", None))
         self.label_2.setText(QCoreApplication.translate("OutputFileStep", u"Define the filename to save the exported files (the sufix _clean.tsv or _transposed.tsv will be added to the filename)", None))
         self.filename_lineEdit.setInputMask("")
         self.filename_lineEdit.setText("")

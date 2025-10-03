@@ -21,6 +21,9 @@ class Outputfiles(BaseStepView, Ui_Outputfiles, QtWidgets.QWidget):
 
         # init UI
         self.setupUi(self)
+        # The PSA output does not support Total unchecked
+        self.total_checkBox.setChecked(True)
+        self.total_checkBox.setEnabled(False)
 
         # Define modules and nodes to talk to
         self._node_id_PSA_std = "4bb8c9ac-64e8-4cec-9c2c-5a00c80b4eae" # provide the output filename to the PSA Compilation
@@ -135,7 +138,7 @@ class Outputfiles(BaseStepView, Ui_Outputfiles, QtWidgets.QWidget):
 
     # To enable/disable the PSA on annotations widget
     def _enable_annot_widget(self, annot_label):
-        self.total_checkBox.setEnabled(not annot_label)
+        #self.total_checkBox.setEnabled(not annot_label)
         self.hour_checkBox.setEnabled(not annot_label)
         self.cycle_checkBox.setEnabled(not annot_label)
         self.textEdit_tot.setEnabled(not annot_label)

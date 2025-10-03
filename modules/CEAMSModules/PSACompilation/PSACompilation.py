@@ -127,8 +127,9 @@ class PSACompilation(SciNode):
         self._is_master = False 
 
         # Define the sleep stage to analyse
-        self.sleep_stage_to_stats = [ ['0'], ['1'], ['2'], ['3'], ['1', '2', '3'], ['5'], ['9'] ]
-        self.stage_stats_labels = [ 'W', 'N1', 'N2', 'N3', 'NREM', 'R', 'Unscored'] 
+        self.sleep_stage_to_stats = [ ['0'], ['1'], ['2'], ['3'], ['2', '3'], ['1', '2', '3'], ['5'], ['9'] ] # Becareful the order must match the stage_stats_labels
+        self.stage_stats_labels = ['W', 'N1', 'N2', 'N3', 'N2N3', 'NREM', 'R', 'Unscored']
+        self.stage_mapping = {code: ('Unscored' if code == '9' else label) for label, code in commons.sleep_stages_name.items()}
 
         # Dict to accumulate the act per stage, hour and cycle.
         self.PSD_act_param = {}
@@ -308,7 +309,8 @@ class PSACompilation(SciNode):
             PSD_freq_params = {}
             PSD_freq_params['freq_low_Hz'] = [freq_bin_chan[miniband_index[0]] for miniband_index in miniband_indices]
             PSD_freq_params['freq_high_Hz'] = [freq_bin_chan[miniband_index[1]+1] for miniband_index in miniband_indices] 
-
+            
+            win_len = np.unique(PSA.get_attribute(PSD, 'win_len'))[0]
             # --------------------------------------------------------------------------
             # Compute the total and the valid number of fft windows and 
             # average the activity across windows through the recording 
@@ -325,6 +327,7 @@ class PSACompilation(SciNode):
                 #     total_act : narray [1 x n_freq_bins]
                 #     for each sleep stage
                 #         i.e. total_act_W, total_act_N1 ...
+
             if int(dist_total)==1:
                 my_label = 'total'
                 PSD_avg_total, PSD_avg_per_stage = self.compute_fft_win_div(psd_data, psd_stage, my_label)
@@ -342,39 +345,69 @@ class PSACompilation(SciNode):
 
             # PSD data per hour
             if int(dist_hour)==1: 
-                my_label = 'hour'
+
+                # Collect and organize FFT windows by stage ONCE before the hour loop
+                stage_window_data, stage_window_counts, stage_valid_counts = self.collect_fft_windows_by_stage(psd_data, psd_stage, win_len)
+
+                my_label1 = 'clock_h'
+                my_label2 = 'stage_h'
+
                 for cur_div in range(self.N_HOURS):
+                    # This part is commented since it was selecting the start time based on the start of the first cycle, while the corresponding choice was not selected.
                     # Verify if the cycle is valid (at least the start of the first cycle)
-                    if isinstance(cycle_labelled.iloc[0]['start_sec'],float):
+                    '''if isinstance(cycle_labelled.iloc[0]['start_sec'],float):
                         # Extract the psd_stage and psd_start_time for the current hour
                         start_hour = cycle_labelled.iloc[0]['start_sec']+cur_div*3600
                         end_hour = start_hour+3600
                         #psd_start_div = psd_start_time[(psd_start_time<end_hour) & (psd_start_time>=start_hour)]
-                        psd_stage_div = [psd_stage[i] for i in np.where( (psd_start_time<end_hour) & (psd_start_time>=start_hour))[0]]   
+                        psd_stage_div = [psd_stage[i] for i in np.where((psd_start_time<end_hour) & (psd_start_time>=start_hour))[0]]   
                         psd_data_div = [data for (start_time, data) in zip(psd_start_time, psd_data) if ((start_time<end_hour) & (start_time>=start_hour))]
                     else:
                         psd_data_div = []
-                        psd_stage_div = []
-                    
+                        psd_stage_div = []'''
+                    # Now the start time is based on the start of the sleep stages
+                    start_hour = sleep_stages['start_sec'][0]+cur_div*3600
+                    end_hour = start_hour+3600
+                    psd_stage_div = [psd_stage[i] for i in np.where((psd_start_time<end_hour) & (psd_start_time>=start_hour))[0]]   
+                    psd_data_div = [data for (start_time, data) in zip(psd_start_time, psd_data) if ((start_time<end_hour) & (start_time>=start_hour))]
                     # self.PSD_avg_per_stage : dict
                     #   psd data average through the recording for each stage and hour
                     #     hour1_act : narray [1 x n_freq_bins]
                     #     for each sleep stage
                     #         i.e. hour1_act_W, hour1_act_N1 ...
-                    PSD_avg_hour, PSD_stage_avg_hour = self.compute_fft_win_div(psd_data_div, psd_stage_div, f'{my_label}{cur_div+1}')
+                    PSD_avg_hour, PSD_stage_avg_hour = self.compute_fft_win_div(psd_data_div, psd_stage_div, f'{my_label1}{cur_div+1}')
 
-                    if self.PSD_act_param[f'hour{cur_div+1}_fft_win_count']>0:
-                        self.PSD_act_param[f"hour{cur_div+1}_act"] = \
+                    if self.PSD_act_param[f'{my_label1}{cur_div+1}_fft_win_count']>0:
+                        self.PSD_act_param[f"{my_label1}{cur_div+1}_act"] = \
                             [np.nansum(PSD_avg_hour[miniband_index[0]:miniband_index[1]+1]) for miniband_index in miniband_indices]
                     else:
-                        self.PSD_act_param[f"hour{cur_div+1}_act"] = np.array([np.NaN]*len(miniband_indices))               
+                        self.PSD_act_param[f"{my_label1}{cur_div+1}_act"] = np.array([np.NaN]*len(miniband_indices))               
                     for i, stage_label in enumerate(self.stage_stats_labels):
-                        if (self.PSD_act_param[f'hour{cur_div+1}_{stage_label}_fft_win_count']>0):
+                        if (self.PSD_act_param[f'{my_label1}{cur_div+1}_{stage_label}_fft_win_count']>0):
                             # The fft normalisation is made to integrate (sum) through frequency bins
-                            self.PSD_act_param[f"hour{cur_div+1}_{stage_label}_act"] = \
+                            self.PSD_act_param[f"{my_label1}{cur_div+1}_{stage_label}_act"] = \
                                 [np.nansum(PSD_stage_avg_hour[i][miniband_index[0]:miniband_index[1]+1]) for miniband_index in miniband_indices]
                         else:
-                            self.PSD_act_param[f"hour{cur_div+1}_{stage_label}_act"] = np.array([np.NaN]*len(miniband_indices))  
+                            self.PSD_act_param[f"{my_label1}{cur_div+1}_{stage_label}_act"] = np.array([np.NaN]*len(miniband_indices))  
+                    
+                    # Calculate FFT window counts and PSD averages for stage_h data
+                    PSD_avg_stage_hour, PSD_stage_avg_stage_hour = self.compute_stage_hour_statistics(\
+                        psd_data, stage_window_data, stage_window_counts, stage_valid_counts, win_len, cur_div)
+                    
+                    # Calculate spectral activity for stage_h columns using the returned PSD averages
+                    # Apply miniband summation to the PSD averages from compute_fft_win_per_hour_stage
+                    if self.PSD_act_param[f'{my_label2}{cur_div+1}_fft_win_count']>0:
+                        self.PSD_act_param[f"{my_label2}{cur_div+1}_act"] = \
+                            [np.nansum(PSD_avg_stage_hour[miniband_index[0]:miniband_index[1]+1]) for miniband_index in miniband_indices]
+                    else:
+                        self.PSD_act_param[f"{my_label2}{cur_div+1}_act"] = np.array([np.NaN]*len(miniband_indices))               
+                    for i, stage_label in enumerate(self.stage_stats_labels):
+                        if (self.PSD_act_param[f'{my_label2}{cur_div+1}_{stage_label}_fft_win_count']>0):
+                            # The fft normalisation is made to integrate (sum) through frequency bins
+                            self.PSD_act_param[f"{my_label2}{cur_div+1}_{stage_label}_act"] = \
+                                [np.nansum(PSD_stage_avg_stage_hour[i][miniband_index[0]:miniband_index[1]+1]) for miniband_index in miniband_indices]
+                        else:
+                            self.PSD_act_param[f"{my_label2}{cur_div+1}_{stage_label}_act"] = np.array([np.NaN]*len(miniband_indices))
 
             # PSD data per sleep cycle
             if int(dist_cycle)==1:
@@ -447,7 +480,8 @@ class PSACompilation(SciNode):
             out_columns = list(_get_doc(0, self.N_CYCLES).keys())
         else:
             out_columns = list(_get_doc(0, 0).keys())
-        report_df = report_df[out_columns]
+        
+        report_df = report_df[out_columns] # To ensure the column order
 
         # Write the current report for the current subject into the tsv file
         write_header = not os.path.exists(filename)
@@ -616,6 +650,7 @@ class PSACompilation(SciNode):
 
         return PSD_avg_total, PSD_avg_per_stage
 
+
     # Compute the number of artefacts for the current channel and selected sleep stage
     def get_n_artefact_sel(self, art_selected, channel, sleep_stages):
         # Extract sleep stage info
@@ -643,3 +678,179 @@ class PSACompilation(SciNode):
                 # if any( (stage_start_all<=start) & (stage_end_all>=(start+dur)) ):
                 #    n_arts += 1
         return n_arts
+
+    def collect_fft_windows_by_stage(self, psd_data, psd_stage, win_len):
+        """
+        Collect and organize all FFT windows by sleep stage from the entire recording.
+        
+        Parameters:
+        -----------
+        psd_data : list
+            List of PSD data arrays for each FFT window (whole recording)
+        psd_stage : list
+            List of sleep stage labels corresponding to each FFT window (whole recording)
+        win_len : float
+            Window length in seconds (duration represented by each FFT window)
+
+        Returns:
+        --------
+        stage_window_data : dict
+            Dictionary with stage labels as keys and lists of PSD data as values
+            Also includes grouped stages like 'N2N3', 'NREM'
+        stage_window_counts : dict
+            Dictionary with stage codes as keys and total window counts as values
+        stage_valid_counts : dict
+            Dictionary with stage codes as keys and valid (non-NaN) window counts as values
+        """
+        # Initialize data structures
+        stage_window_counts = {}
+        stage_valid_counts = {}
+        stage_window_data = {}
+        
+        # Get unique stages from the data
+        flattened_stages = []
+        for stage_array in psd_stage:
+            if isinstance(stage_array, np.ndarray):
+                flattened_stages.extend(stage_array.tolist())
+            else:
+                flattened_stages.append(stage_array)
+        unique_stages = list(set(flattened_stages))
+        
+        # Initialize collections for all stages
+        for stage in unique_stages:
+            stage_label = self.stage_mapping.get(stage, None)
+            stage_window_counts[stage] = 0
+            stage_valid_counts[stage] = 0
+            stage_window_data[stage_label] = []
+        
+        # Initialize grouped stage collections
+        stage_window_data['N2N3'] = []  # For stages '2' and '3'
+        stage_window_data['NREM'] = []  # For stages '1', '2' and '3'
+        
+        # Process each FFT window
+        for stage, data in zip(psd_stage, psd_data):
+            stage = stage[0] if isinstance(stage, np.ndarray) else stage
+            stage_label = self.stage_mapping.get(stage, None)
+            
+            # Count total windows for this stage
+            stage_window_counts[stage] += 1
+            
+            # Check if window is valid (not NaN)
+            is_valid_window = not np.any(np.isnan(data))
+            if is_valid_window:
+                stage_valid_counts[stage] += 1
+            
+            # Collect PSD data for individual stages
+            stage_window_data[stage_label].append(data)
+            
+            # Collect data for grouped stages
+            if stage in ['2', '3']:  # N2 or N3
+                stage_window_data['N2N3'].append(data)
+            if stage in ['1', '2', '3']:  # N1, N2, or N3  
+                stage_window_data['NREM'].append(data)
+        
+        return stage_window_data, stage_window_counts, stage_valid_counts
+
+
+    def compute_stage_hour_statistics(self, psd_data, stage_window_data, stage_window_counts, stage_valid_counts, win_len, hour_label):
+        """
+        Calculate FFT window statistics and PSD averages for a specific hour based on 
+        pre-collected stage data.
+        
+        Parameters:
+        -----------
+        psd_data : list
+            List of PSD data arrays for each FFT window (whole recording)
+        stage_window_data : dict
+            Dictionary with stage labels as keys and lists of PSD data as values
+        stage_window_counts : dict
+            Dictionary with stage codes as keys and total window counts as values
+        stage_valid_counts : dict
+            Dictionary with stage codes as keys and valid window counts as values
+        win_len : float
+            Window length in seconds
+        hour_label : int
+            Label for the current hour (0-based: 0, 1, 2, etc.)
+
+        Returns:
+        --------
+        PSD_avg_total : array
+            The total average PSD across all selected windows for this hour
+        PSD_avg_per_stage : list
+            The average PSD per sleep stage for selected windows for this hour
+        """
+        expected_windows_per_hour = 3600.0 / win_len
+        PSD_avg_per_stage = []
+        psd_data_tot = []
+        
+        # Process each stage defined in self.sleep_stage_to_stats and self.stage_stats_labels
+        for i_list, cur_stage_list in enumerate(self.sleep_stage_to_stats):
+            stage_label = self.stage_stats_labels[i_list]
+            psd_data_cur_stage = stage_window_data.get(stage_label, [])
+            
+            # Calculate total counts for current stage(s)
+            cur_stage_win_count = 0
+            valid_cur_stage_win_count = 0
+            for stage_code in cur_stage_list:
+                if stage_code in stage_window_counts:
+                    cur_stage_win_count += stage_window_counts[stage_code]
+                if stage_code in stage_valid_counts:
+                    valid_cur_stage_win_count += stage_valid_counts[stage_code]
+            
+            # Apply hour segmentation logic
+            psd_data_cur_stage_cur_hour = []
+            if cur_stage_win_count // ((hour_label + 1) * expected_windows_per_hour) > 0:
+                self.PSD_act_param[f'stage_h{hour_label+1}_{stage_label}_fft_win_count'] = expected_windows_per_hour
+                start_idx = int(hour_label * expected_windows_per_hour)
+                end_idx = int((hour_label + 1) * expected_windows_per_hour)
+                psd_data_cur_stage_cur_hour = psd_data_cur_stage[start_idx:end_idx]
+            elif cur_stage_win_count > hour_label * expected_windows_per_hour:
+                self.PSD_act_param[f'stage_h{hour_label+1}_{stage_label}_fft_win_count'] = cur_stage_win_count - (hour_label * expected_windows_per_hour)
+                start_idx = int(hour_label * expected_windows_per_hour)
+                psd_data_cur_stage_cur_hour = psd_data_cur_stage[start_idx:]
+            else:
+                self.PSD_act_param[f'stage_h{hour_label+1}_{stage_label}_fft_win_count'] = 0
+            
+            # Apply hour segmentation logic for valid stage windows
+            if valid_cur_stage_win_count // ((hour_label + 1) * expected_windows_per_hour) > 0:
+                self.PSD_act_param[f'stage_h{hour_label+1}_{stage_label}_fft_win_valid_count'] = expected_windows_per_hour
+            elif valid_cur_stage_win_count > hour_label * expected_windows_per_hour:
+                self.PSD_act_param[f'stage_h{hour_label+1}_{stage_label}_fft_win_valid_count'] = valid_cur_stage_win_count - (hour_label * expected_windows_per_hour)
+            else:
+                self.PSD_act_param[f'stage_h{hour_label+1}_{stage_label}_fft_win_valid_count'] = 0
+            
+            # Calculate average PSD for this stage and hour
+            if len(psd_data_cur_stage_cur_hour) > 0:
+                PSD_avg_per_stage.append(np.nanmean(psd_data_cur_stage_cur_hour, axis=0))
+            else:
+                PSD_avg_per_stage.append(np.array([np.NaN] * len(psd_data_cur_stage[0]) if len(psd_data_cur_stage) > 0 else []))
+        
+        # Calculate total statistics for this hour
+        total_windows = sum(stage_window_counts.values())
+        total_valid_windows = sum(stage_valid_counts.values())
+        
+        # Apply hour segmentation for totals
+        if total_windows // ((hour_label + 1) * expected_windows_per_hour) > 0:
+            self.PSD_act_param[f'stage_h{hour_label+1}_fft_win_count'] = expected_windows_per_hour
+            psd_data_tot = psd_data[int(hour_label * expected_windows_per_hour):int((hour_label + 1) * expected_windows_per_hour)]
+        elif total_windows > (hour_label * expected_windows_per_hour):
+            self.PSD_act_param[f'stage_h{hour_label+1}_fft_win_count'] = total_windows - (hour_label * expected_windows_per_hour)
+            psd_data_tot = psd_data[int(hour_label * expected_windows_per_hour):]
+        else:
+            self.PSD_act_param[f'stage_h{hour_label+1}_fft_win_count'] = 0
+        
+        # Similar logic for valid counts
+        if total_valid_windows // ((hour_label + 1) * expected_windows_per_hour) > 0:
+            self.PSD_act_param[f'stage_h{hour_label+1}_fft_win_valid_count'] = expected_windows_per_hour
+        elif total_valid_windows > hour_label * expected_windows_per_hour:
+            self.PSD_act_param[f'stage_h{hour_label+1}_fft_win_valid_count'] = total_valid_windows - (hour_label * expected_windows_per_hour)
+        else:
+            self.PSD_act_param[f'stage_h{hour_label+1}_fft_win_valid_count'] = 0
+
+        # Calculate total average PSD for this hour
+        if len(psd_data_tot) > 0:
+            PSD_avg_total = np.nanmean(psd_data_tot, axis=0)
+        else: # fill all the freq bins with NaN
+            PSD_avg_total = np.array([np.NaN] * len(psd_data[0]) if len(psd_data) > 0 else [])
+        
+        return PSD_avg_total, PSD_avg_per_stage

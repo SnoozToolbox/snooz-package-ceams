@@ -25,9 +25,9 @@ class Ui_Outputfiles(object):
     def setupUi(self, Outputfiles):
         if not Outputfiles.objectName():
             Outputfiles.setObjectName(u"Outputfiles")
-        Outputfiles.resize(1141, 786)
-        self.verticalLayout_4 = QVBoxLayout(Outputfiles)
-        self.verticalLayout_4.setObjectName(u"verticalLayout_4")
+        Outputfiles.resize(861, 876)
+        self.verticalLayout_3 = QVBoxLayout(Outputfiles)
+        self.verticalLayout_3.setObjectName(u"verticalLayout_3")
         self.label = QLabel(Outputfiles)
         self.label.setObjectName(u"label")
         font = QFont()
@@ -37,16 +37,8 @@ class Ui_Outputfiles(object):
         font.setItalic(False)
         self.label.setFont(font)
 
-        self.verticalLayout_4.addWidget(self.label)
+        self.verticalLayout_3.addWidget(self.label)
 
-        self.horizontalLayout_5 = QHBoxLayout()
-        self.horizontalLayout_5.setObjectName(u"horizontalLayout_5")
-        self.horizontalSpacer = QSpacerItem(40, 20, QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Minimum)
-
-        self.horizontalLayout_5.addItem(self.horizontalSpacer)
-
-        self.verticalLayout_3 = QVBoxLayout()
-        self.verticalLayout_3.setObjectName(u"verticalLayout_3")
         self.verticalSpacer_4 = QSpacerItem(20, 13, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Fixed)
 
         self.verticalLayout_3.addItem(self.verticalSpacer_4)
@@ -58,30 +50,41 @@ class Ui_Outputfiles(object):
 
         self.verticalLayout_3.addWidget(self.radioButton_stage)
 
+        self.horizontalLayout_5 = QHBoxLayout()
+        self.horizontalLayout_5.setObjectName(u"horizontalLayout_5")
+        self.horizontalSpacer_2 = QSpacerItem(30, 13, QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Minimum)
+
+        self.horizontalLayout_5.addItem(self.horizontalSpacer_2)
+
         self.verticalLayout = QVBoxLayout()
         self.verticalLayout.setObjectName(u"verticalLayout")
-        self.horizontalLayout = QHBoxLayout()
+        self.frame = QFrame(Outputfiles)
+        self.frame.setObjectName(u"frame")
+        self.frame.setFrameShape(QFrame.Shape.StyledPanel)
+        self.frame.setFrameShadow(QFrame.Shadow.Raised)
+        self.horizontalLayout = QHBoxLayout(self.frame)
         self.horizontalLayout.setObjectName(u"horizontalLayout")
         self.horizontalSpacer_3 = QSpacerItem(30, 20, QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Minimum)
 
         self.horizontalLayout.addItem(self.horizontalSpacer_3)
 
-        self.total_checkBox = QCheckBox(Outputfiles)
+        self.total_checkBox = QCheckBox(self.frame)
         self.total_checkBox.setObjectName(u"total_checkBox")
+        self.total_checkBox.setEnabled(False)
         self.total_checkBox.setMinimumSize(QSize(210, 0))
         self.total_checkBox.setMaximumSize(QSize(210, 16777215))
         self.total_checkBox.setChecked(True)
 
         self.horizontalLayout.addWidget(self.total_checkBox)
 
-        self.textEdit_tot = QTextEdit(Outputfiles)
+        self.textEdit_tot = QTextEdit(self.frame)
         self.textEdit_tot.setObjectName(u"textEdit_tot")
-        sizePolicy = QSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+        sizePolicy = QSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Preferred)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.textEdit_tot.sizePolicy().hasHeightForWidth())
         self.textEdit_tot.setSizePolicy(sizePolicy)
-        self.textEdit_tot.setMaximumSize(QSize(16777215, 16777215))
+        self.textEdit_tot.setMaximumSize(QSize(16777215, 140))
         self.textEdit_tot.setFrameShape(QFrame.Shape.NoFrame)
         self.textEdit_tot.setFrameShadow(QFrame.Shadow.Plain)
         self.textEdit_tot.setLineWidth(0)
@@ -90,15 +93,19 @@ class Ui_Outputfiles(object):
         self.horizontalLayout.addWidget(self.textEdit_tot)
 
 
-        self.verticalLayout.addLayout(self.horizontalLayout)
+        self.verticalLayout.addWidget(self.frame)
 
-        self.horizontalLayout_3 = QHBoxLayout()
+        self.frame_2 = QFrame(Outputfiles)
+        self.frame_2.setObjectName(u"frame_2")
+        self.frame_2.setFrameShape(QFrame.Shape.StyledPanel)
+        self.frame_2.setFrameShadow(QFrame.Shadow.Raised)
+        self.horizontalLayout_3 = QHBoxLayout(self.frame_2)
         self.horizontalLayout_3.setObjectName(u"horizontalLayout_3")
-        self.horizontalSpacer_2 = QSpacerItem(30, 5, QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Minimum)
+        self.horizontalSpacer = QSpacerItem(40, 20, QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Minimum)
 
-        self.horizontalLayout_3.addItem(self.horizontalSpacer_2)
+        self.horizontalLayout_3.addItem(self.horizontalSpacer)
 
-        self.hour_checkBox = QCheckBox(Outputfiles)
+        self.hour_checkBox = QCheckBox(self.frame_2)
         self.hour_checkBox.setObjectName(u"hour_checkBox")
         self.hour_checkBox.setMinimumSize(QSize(210, 0))
         self.hour_checkBox.setMaximumSize(QSize(210, 16777215))
@@ -106,9 +113,9 @@ class Ui_Outputfiles(object):
 
         self.horizontalLayout_3.addWidget(self.hour_checkBox)
 
-        self.textEdit_hour = QTextEdit(Outputfiles)
+        self.textEdit_hour = QTextEdit(self.frame_2)
         self.textEdit_hour.setObjectName(u"textEdit_hour")
-        sizePolicy1 = QSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Maximum)
+        sizePolicy1 = QSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
         sizePolicy1.setHorizontalStretch(0)
         sizePolicy1.setVerticalStretch(0)
         sizePolicy1.setHeightForWidth(self.textEdit_hour.sizePolicy().hasHeightForWidth())
@@ -123,15 +130,19 @@ class Ui_Outputfiles(object):
         self.horizontalLayout_3.addWidget(self.textEdit_hour)
 
 
-        self.verticalLayout.addLayout(self.horizontalLayout_3)
+        self.verticalLayout.addWidget(self.frame_2)
 
-        self.horizontalLayout_4 = QHBoxLayout()
+        self.frame_3 = QFrame(Outputfiles)
+        self.frame_3.setObjectName(u"frame_3")
+        self.frame_3.setFrameShape(QFrame.Shape.StyledPanel)
+        self.frame_3.setFrameShadow(QFrame.Shadow.Raised)
+        self.horizontalLayout_4 = QHBoxLayout(self.frame_3)
         self.horizontalLayout_4.setObjectName(u"horizontalLayout_4")
         self.horizontalSpacer_4 = QSpacerItem(30, 20, QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Minimum)
 
         self.horizontalLayout_4.addItem(self.horizontalSpacer_4)
 
-        self.cycle_checkBox = QCheckBox(Outputfiles)
+        self.cycle_checkBox = QCheckBox(self.frame_3)
         self.cycle_checkBox.setObjectName(u"cycle_checkBox")
         self.cycle_checkBox.setMinimumSize(QSize(210, 0))
         self.cycle_checkBox.setMaximumSize(QSize(210, 16777215))
@@ -139,12 +150,12 @@ class Ui_Outputfiles(object):
 
         self.horizontalLayout_4.addWidget(self.cycle_checkBox)
 
-        self.textEdit_cycle = QTextEdit(Outputfiles)
+        self.textEdit_cycle = QTextEdit(self.frame_3)
         self.textEdit_cycle.setObjectName(u"textEdit_cycle")
         sizePolicy1.setHeightForWidth(self.textEdit_cycle.sizePolicy().hasHeightForWidth())
         self.textEdit_cycle.setSizePolicy(sizePolicy1)
         self.textEdit_cycle.setMinimumSize(QSize(0, 0))
-        self.textEdit_cycle.setMaximumSize(QSize(16777215, 16777215))
+        self.textEdit_cycle.setMaximumSize(QSize(16777215, 135))
         self.textEdit_cycle.setFrameShape(QFrame.Shape.NoFrame)
         self.textEdit_cycle.setFrameShadow(QFrame.Shadow.Plain)
         self.textEdit_cycle.setLineWidth(0)
@@ -153,30 +164,27 @@ class Ui_Outputfiles(object):
         self.horizontalLayout_4.addWidget(self.textEdit_cycle)
 
 
-        self.verticalLayout.addLayout(self.horizontalLayout_4)
-
-
-        self.verticalLayout_3.addLayout(self.verticalLayout)
+        self.verticalLayout.addWidget(self.frame_3)
 
         self.verticalSpacer_3 = QSpacerItem(20, 13, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Fixed)
 
-        self.verticalLayout_3.addItem(self.verticalSpacer_3)
+        self.verticalLayout.addItem(self.verticalSpacer_3)
 
         self.radioButton_annot = QRadioButton(Outputfiles)
         self.radioButton_annot.setObjectName(u"radioButton_annot")
         self.radioButton_annot.setEnabled(False)
 
-        self.verticalLayout_3.addWidget(self.radioButton_annot)
+        self.verticalLayout.addWidget(self.radioButton_annot)
 
 
-        self.horizontalLayout_5.addLayout(self.verticalLayout_3)
+        self.horizontalLayout_5.addLayout(self.verticalLayout)
 
 
-        self.verticalLayout_4.addLayout(self.horizontalLayout_5)
+        self.verticalLayout_3.addLayout(self.horizontalLayout_5)
 
         self.verticalSpacer = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Preferred)
 
-        self.verticalLayout_4.addItem(self.verticalSpacer)
+        self.verticalLayout_3.addItem(self.verticalSpacer)
 
         self.verticalLayout_2 = QVBoxLayout()
         self.verticalLayout_2.setObjectName(u"verticalLayout_2")
@@ -223,7 +231,7 @@ class Ui_Outputfiles(object):
         self.verticalLayout_2.addLayout(self.horizontalLayout_2)
 
 
-        self.verticalLayout_4.addLayout(self.verticalLayout_2)
+        self.verticalLayout_3.addLayout(self.verticalLayout_2)
 
 
         self.retranslateUi(Outputfiles)
@@ -254,9 +262,7 @@ class Ui_Outputfiles(object):
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Check &quot;<span style=\" font-weight:600;\">Total</span>&quot; to output the avearge spectral power for the whole recording. <br />The average power includes only valid FFT windows (clean windows of selected stages or periods).</p>\n"
 "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
 "<p sty"
-                        "le=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">   Warning : If &quot;Analyse power in sleep cycle only&quot; in the step &quot;4-Section Selection&quot; is checked, </p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">   the spectral power is computed on epochs included in a sleep cycle, so the gap between cycles are not analysed.</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">   Otherwise all the recording is analysed, even before the sleep onset and after the last asleep epoch.</p></body></html>", None))
+                        "le=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-style:italic;\">If &quot;Analyse power in sleep cycle only&quot; in the step &quot;4-Section Selection&quot; is checked, <br />the starting point is the sleep onset and gabs between cycles are not analysed.<br />Otherwise all the recording is analysed, even before the sleep onset and after the last asleep epoch.</span></p></body></html>", None))
 #if QT_CONFIG(tooltip)
         self.hour_checkBox.setToolTip("")
 #endif // QT_CONFIG(tooltip)
@@ -268,12 +274,14 @@ class Ui_Outputfiles(object):
 "li.unchecked::marker { content: \"\\2610\"; }\n"
 "li.checked::marker { content: \"\\2612\"; }\n"
 "</style></head><body style=\" font-family:'Roboto'; font-size:12pt; font-weight:400; font-style:normal;\">\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Check &quot;<span style=\" font-weight:600;\">Distribution per hour</span>&quot; to output the average spectral power for each real clock hour, starting from hour 1. <br />The average power includes only valid FFT windows (clean windows of selected stages or periods).</p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; t"
-                        "ext-indent:0px;\"><br /></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">The starting point is sleep onset.</p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Check &quot;<span style=\" font-weight:600;\">Distribution per hour</span>&quot; to output the average spectral power for each real clock hour and stage hour, starting from hour 1. <br />The average power includes only valid FFT windows (clean windows of selected stages or periods).</p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-bl"
+                        "ock-indent:0; text-indent:0px;\"><br /></p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">The spectral power value will be empty if no data is available for a given hour <br />(e.g., if only N2 is selected and there are no N2 stages in the first hour, the reported power will be empty).</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">The maximum clock hour included in the report is defined in the optional settings under &quot;<span style=\" font-weight:600;\">Hours and Cycles</span>&quot;.</p></body></html>", None))
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">The maximum clock hour included in the report is defined in the optional settings under &quot;<span style=\" font-weight:600;\">Hours and Cycles</span>&quot;.</p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-style:italic;\">If &quot;Analyse power in sleep cycle only&qu"
+                        "ot; in the step &quot;4-Section Selection&quot; is checked, <br />the starting point is the sleep onset and gabs between cycles are not analysed.<br />Otherwise all the recording is analysed, even before the sleep onset and after the last asleep epoch.</span></p></body></html>", None))
 #if QT_CONFIG(tooltip)
         self.cycle_checkBox.setToolTip("")
 #endif // QT_CONFIG(tooltip)

@@ -15,7 +15,7 @@ import numpy as np
 import os
 import pandas as pd
 
-DEBUG = True
+DEBUG = False
 
 class PSACohortReview(SciNode):
     """
@@ -41,7 +41,7 @@ class PSACohortReview(SciNode):
         "freq_band" : pandas DataFrame 
             frequency bands to average, columns=['num-start(Hz)','num-end(Hz)','den-start(Hz)','den-end(Hz)'])) 
         "activity_label" : string
-            The activity variable to export/save i.e. 'Total', 'distribution per hour' or 'distribution per sleep cycle'.        
+            The activity variable to export/save i.e. 'Total', 'distribution per clock hour', 'distribution per hour spent in each sleep stage' or 'distribution per sleep cycle'.        
         "PSA_clean_flag" : bool
             Flag to generate and save the PSA file with only selected channels.
         "PSA_transposed_flag" : bool
@@ -107,7 +107,7 @@ class PSACohortReview(SciNode):
             "freq_band" : string of pandas DataFrame 
                 frequency bands to average, columns=['num-start(Hz)','num-end(Hz)','den-start(Hz)','den-end(Hz)'])) 
             "activity_label" : string
-                The activity variable to export/save i.e. 'Total', 'distribution per hour' or 'distribution per sleep cycle'.
+                The activity variable to export/save i.e. 'Total', 'distribution per clock hour', 'distribution per hour spent in each sleep stage' or 'distribution per sleep cycle'.
             "PSA_clean_flag" : bool"
                 Flag to generate and save the PSA file with only selected channels.
             "PSA_transposed_flag" : bool
@@ -184,8 +184,10 @@ class PSACohortReview(SciNode):
         if PSA_transposed_flag==1:
             
             # Find out the regular expression to extract the right PSA activity based on the activity_label
-            if activity_label.lower()=="distribution per hour":
-                activity_2_export = "hour\d(?:_[A-Za-z0-9+]+)?_act"
+            if activity_label.lower()=="distribution per clock hour":
+                activity_2_export = "clock_h\d(?:_[A-Za-z0-9+]+)?_act"
+            elif activity_label.lower()=="distribution per hour spent in each sleep stage":
+                activity_2_export = "stage_h\d(?:_[A-Za-z0-9+]+)?_act"
             elif activity_label.lower()=="distribution per sleep cycle":
                 activity_2_export = "cyc\d(?:_[A-Za-z0-9+]+)?_act"
             else:

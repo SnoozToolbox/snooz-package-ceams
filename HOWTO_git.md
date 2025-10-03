@@ -3,87 +3,28 @@
 ## Install git for windows
 * Download and install gitforwindows from : https://gitforwindows.org/
 
-## Manage your credentials
-### Create an App password from Bitbucket
-Select your avatar (Your profile and settings) from the navigation bar at the top of the screen.
-Under Settings, select Personal settings.
-	i.e. when you are logged in : https://bitbucket.org/account/settings/
-On the sidebar, select App passwords.
-Select Create app password.
-Give the App password a name, usually related to the application that will use the password.
--> copy the password generated
-### Store locally the password
-In the git bash command window
-$ git config --global user.name "your_user_name" 
-	ex. git config --global user.name "klacourse"
-$ git config --global user.email "your_email"
-	ex. git config --global user.email "karine.lacourse.cnmtl@ssss.gouv.qc.ca"
-$ git config --global user.password "the_copied_password"
-$ git config --global credential.helper store
-A popup window shouls ask you to login into Atlassian Bitbucket
-	Fill the username and password
-	Authorize the access
-You should be set for a while.
-
-Sometime (when you work on a station with multiple users)
-You have to set the remote url
-$ git remote set-url origin "the remote url"
-	ex. git remote set-url origin https://klacourse@bitbucket.org/ceamscarsm/scinodes_poc.git
-
-
-## Clone the Snooz repository (scinode_poc)
-This will install the source code for Snooz.
-> Make sure you have a bitbucket account: https://bitbucket.org
-> Make sure your are added as a team worker (collaborator) on the scinodes_poc repository : 
-	https://bitbucket.org/ceamscarsm/workspace/settings/groups
-
-### Download the source code for Snooz (from scinode_poc)
+## Clone the Snooz repository (snooz-toolbox)
 * Launch Git Bash
-* In the git bash terminal create your local repository, clone the repository:
-	* Go to the remote repository on BitBucket : https://bitbucket.org/ceamscarsm/scinodes_poc/src/master/
-	* Click on Clone on the top right corner.
-	* Copy the https command line and paste it on the git bash prompt examples : 
 
-			$ cd /c/Users/klacourse/Documents
-			$ git clone https://klacourse@bitbucket.org/ceamscarsm/scinodes_poc.git
+			$ git clone https://github.com/SnoozToolbox/snooz-toolbox.git
 
 * Run the script to add the local settings to your git ignore.
 		
-		$ ./gitignore_local_settings.sh
+			$ ./gitignore_local_settings.sh
 
 ### Download the source code for plugins in development for Snooz (from ceams_package)
 * Launch Git Bash
-* In the git bash terminal create your local repository, clone the repository:
-	* Go to the remote repository on BitBucket : https://bitbucket.org/ceamscarsm/ceams_package/src/master/
-	* Click on Clone on the top right corner.
-	* Copy the https command line and paste it on the git bash prompt examples : 
 
-			$ cd /c/Users/klacourse/Documents
-			$ git clone https://klacourse@bitbucket.org/ceamscarsm/ceams_package.git
-
-## Setup your work repository for your own Modules and Tools package
-You need to create another repository with your own modules and packages and link Snooz to them.
-
-* Fork the "snooz_package_template" repository
-	go to : https://bitbucket.org/ceamscarsm/snooz_package_template/src/master/
-	click on the ... and fork this repository
-	You can rename the repository
-* Clone your forked "snooz_package_template" repository
-	go to : https://bitbucket.org/[YOUR_USERNAME]/snooz_package_template/src/master/
-	* Click on Clone on the top right corner.
-	* Copy the https command line and paste it on the git bash prompt examples : 
-		$ cd /c/Users/klacourse/Documents
-		$ git clone https://klacourse@bitbucket.org/klacourse/snooz_package_template.git
-
+			$ git clone https://github.com/SnoozToolbox/snooz-package-ceams.git
 
 # The proposed Git strategy 
-We propose to work on a feature or debug branch in order to keep the master always in a working state.
+We propose to work on a feature or debug branch in order to keep the main always in a working state.
 	Add/commit/push your local modifications from your branch as often as possible.
 	This allows to save your last modification on the remote server.
 	Enter a log message for each commit to make your changes trackable.
-	Once your feature is validated you add it to the master.
+	Once your feature is validated you add it to the main.
 	There are many techniques available, use the one you prefer.
-	Here we describe how to squash multiple commits from a feature branch into one clean commit in the master.
+	Here we describe how to squash multiple commits from a feature branch into one clean commit in the main.
 
 ### Create your branch
 	$ git branch branch_name
@@ -102,22 +43,22 @@ The first time you push on a new branch you have to push with the option --set-u
 otherwise
 	$ git push
 
-### Squash multiple commits from a feature branch into the master
-Once your feature is validated and you want to add it to the master.
+### Squash multiple commits from a feature branch into the main
+Once your feature is validated and you want to add it to the main.
 	https://makandracards.com/makandra/527-squash-several-git-commits-into-a-single-commit
 	https://gist.github.com/patik/b8a9dc5cd356f9f6f980
-Switch to the master branch and make sure you are up to date
-	$ git checkout master
+Switch to the main branch and make sure you are up to date
+	$ git checkout main
 	$ git pull
-Merge your feature branch into the master branch locally
+Merge your feature branch into the main branch locally
 	$ git merge branch_name
 To solve conflicts
 	To get the file from the feature branch
 		$ git checkout --theirs path_to_file
-	To get the file from the master 
+	To get the file from the main 
 		$ git checkout --ours path_to_file
-Reset the local master branch to origin's state:
-	$ git reset origin/master
+Reset the local main branch to origin's state:
+	$ git reset origin/main
 Now all of your changes are considered as unstaged changes. 
 You can test snooz, run pipeline, validate and modify the files if needed.
 You can add/commit/push them into one clean commit that includes the whole code for a feature.
@@ -148,7 +89,7 @@ To delete branch locally
 To delete branch remotely
 	$ git push origin --delete branch_name
 To delete all local branches
-	$ git branch | grep -v "master" | xargs git branch -D 
+	$ git branch | grep -v "main" | xargs git branch -D 
 To rename a remote branch
 	$ git checkout <old_name>
 	$ git branch -m <new_name>
@@ -161,25 +102,25 @@ Ours is the current branch (destination of the merge)
 Theirs is the branch to merge into (source of the merge)
 You have to checkout the destination branch
 
-	To merge the feature branch (source) into the master (destination)
-		$ git checkout master
+	To merge the feature branch (source) into the main (destination)
+		$ git checkout main
 		$ git merge branch_name
-	To select the changes done in master (destination)
+	To select the changes done in main (destination)
 		$ git checkout --ours /path/to/file
 	To select the changes done in the feature branch (source)
 		$ git checkout --theirs /path/to/file
 
-	To merge the master (source) into the feature branch (destination)
+	To merge the main (source) into the feature branch (destination)
 		$ git checkout branch_name
-		$ git merge master
-	To select the changes done in master (source)
+		$ git merge main
+	To select the changes done in main (source)
 		$ git checkout --theirs /path/to/file
 	To select the changes done in feature (destination)
 		$ git checkout --ours /path/to/file
 
 ## To TAG
-Example to tag the master
-	$ git checkout master
+Example to tag the main
+	$ git checkout main
 	$ git tag -a v1.0.0 -m "first version distributed v1.0.0"
 	$ git push origin v1.0.0
 To checkout a tagged version
