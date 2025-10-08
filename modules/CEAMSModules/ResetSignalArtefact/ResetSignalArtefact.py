@@ -75,7 +75,36 @@ class ResetSignalArtefact(SciNode):
         # There can only be 1 master module per process.
         self._is_master = False 
         #self.alpha_turkey = 0.4 it does not make any sens on 30 sec
+        
+        # Track signals_out for memory cleanup
+        self._signals_out = None
     
+
+    def __del__(self):
+        """Destructor to explicitly release memory references"""
+        try:
+            if DEBUG: print('ResetSignalArtefact.__del__ - Cleaning up memory')
+            
+            # Explicit cleanup of signals_out and its references
+            if hasattr(self, '_signals_out') and self._signals_out is not None:
+                # Clear the signal samples which can be large numpy arrays
+                for signal in self._signals_out:
+                    # Use getattr with None default for safe attribute access
+                    if getattr(signal, 'samples', None) is not None:
+                        signal.samples = None
+                    # Clear other attributes safely
+                    for attr in ['channel', 'start_time', 'duration', 'sample_rate']:
+                        if hasattr(signal, attr):
+                            setattr(signal, attr, None)
+                
+                # Clear the list itself
+                self._signals_out.clear()
+                self._signals_out = None
+                
+        except Exception as e:
+            # Silent cleanup failure to avoid issues during destruction
+            if DEBUG: print(f'ResetSignalArtefact.__del__ cleanup error: {e}')
+            pass
 
     def compute(self, signals, events, artefact_group, artefact_name, signal_values):
         """
@@ -118,7 +147,10 @@ class ResetSignalArtefact(SciNode):
                 f"ResetSignalArtefact input of wrong type. Expected: <class 'pd.DataFrame'> received: {type(events)}")            
 
         #signals_out = copy.deepcopy(signals)
-        signals_out = signals
+        signals_out = signals.copy()
+        
+        # Store signals_out for memory cleanup in destructor
+        self._signals_out = signals_out
 
         # It is possible to bypass the "ResetSignalArtefact" by passing the input signals directly
         # to the output signals without any modification

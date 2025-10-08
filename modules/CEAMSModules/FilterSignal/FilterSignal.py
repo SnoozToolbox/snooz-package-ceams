@@ -36,7 +36,7 @@ from flowpipe import SciNode, InputPlug, OutputPlug
 from commons.NodeInputException import NodeInputException
 from commons.NodeRuntimeException import NodeRuntimeException
 
-DEBUG = False
+DEBUG = True
 
 class FilterSignal(SciNode):
     """
@@ -76,9 +76,35 @@ class FilterSignal(SciNode):
         InputPlug('cutoff', self)
         InputPlug('window', self)
         OutputPlug('signals', self)
+        
+        # Track signals for memory cleanup
+        self._output_signals = None
 
     def __del__(self):
-        if DEBUG: print('FilterSignal.__del__')
+        """Destructor to explicitly release memory references"""
+        try:
+            if DEBUG: print('FilterSignal.__del__ - Cleaning up memory')
+            
+            # Explicit cleanup of signals list and its references
+            if hasattr(self, '_output_signals') and self._output_signals is not None:
+                # Clear the signal samples which can be large numpy arrays
+                for signal in self._output_signals:
+                    # Use getattr with None default for safe attribute access
+                    if getattr(signal, 'samples', None) is not None:
+                        signal.samples = None
+                    # Clear other attributes safely
+                    for attr in ['channel', 'start_time', 'duration', 'sample_rate']:
+                        if hasattr(signal, attr):
+                            setattr(signal, attr, None)
+                
+                # Clear the list itself
+                self._output_signals.clear()
+                self._output_signals = None
+                
+        except Exception as e:
+            # Silent cleanup failure to avoid issues during destruction
+            if DEBUG: print(f'FilterSignal.__del__ cleanup error: {e}')
+            pass
 
     def subscribe_topics(self):
         pass
@@ -135,7 +161,7 @@ class FilterSignal(SciNode):
         map_object = map(float, cutoff.split())
         freqs = list(map_object)
         
-        output_signals = []
+        self._output_signals = []
 
         # Filter all channel
         for i, signal_model in enumerate(signals):
@@ -200,18 +226,18 @@ class FilterSignal(SciNode):
             if len(non_nan_indices) > 0:
                 s.samples[non_nan_indices] = filtered_signal
             s.is_modified = True
-            output_signals.append(s)
+            self._output_signals.append(s)
 
             # Write the cache
             cache = {}
             if config.is_dev: # Avoid save of the recording when not developping
                 # Extract the number of channels
-                channel_lst = [signal.channel for signal in output_signals]
+                channel_lst = [signal.channel for signal in self._output_signals]
                 n_chan = len(np.unique(np.array(channel_lst)))
                 cache['n_chan'] = n_chan
-                cache['signals'] = output_signals
+                cache['signals'] = self._output_signals
                 self._cache_manager.write_mem_cache(self.identifier, cache)
 
         return {
-            'signals': output_signals
+            'signals': self._output_signals
         }

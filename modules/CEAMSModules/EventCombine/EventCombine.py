@@ -132,9 +132,35 @@ class EventCombine(SciNode):
         InputPlug('new_event_name', self)
         InputPlug('new_event_chan', self)
         OutputPlug('events', self)
+        
+        # Track events DataFrames for memory cleanup
+        self._events_output = None
+        self._events1_copy = None
+        self._events2_copy = None
 
     def __del__(self):
-        if DEBUG: print('EventCombine.__del__')
+        """Destructor to explicitly release memory references"""
+        try:
+            if DEBUG: print('EventCombine.__del__ - Cleaning up memory')
+            
+            # Explicit cleanup of DataFrame references
+            if hasattr(self, '_events_output') and self._events_output is not None:
+                # Clear DataFrame data
+                self._events_output.drop(self._events_output.index, inplace=True)
+                self._events_output = None
+                
+            if hasattr(self, '_events1_copy') and self._events1_copy is not None:
+                self._events1_copy.drop(self._events1_copy.index, inplace=True)
+                self._events1_copy = None
+                
+            if hasattr(self, '_events2_copy') and self._events2_copy is not None:
+                self._events2_copy.drop(self._events2_copy.index, inplace=True)
+                self._events2_copy = None
+                
+        except Exception as e:
+            # Silent cleanup failure to avoid issues during destruction
+            if DEBUG: print(f'EventCombine.__del__ cleanup error: {e}')
+            pass
 
     def subscribe_topics(self):
         pass
@@ -180,16 +206,16 @@ class EventCombine(SciNode):
         self.clear_cache() # It  makes the cache=None        
 
         if isinstance(events1, pd.DataFrame):
-            events1 = events1.copy() # otherwise following instance of events are also modified
+            self._events1_copy = events1.copy() # otherwise following instance of events are also modified
             # If the user wants to filter for a specific event name
             if len(event1_name)>0:
-                events1 = events1[events1.name==event1_name]
+                self._events1_copy = self._events1_copy[self._events1_copy.name==event1_name]
 
             if isinstance(events2, pd.DataFrame):
-                events2 = events2.copy() # otherwise followinf instance of events are also modified
+                self._events2_copy = events2.copy() # otherwise followinf instance of events are also modified
                 # If the user wants to filter for a specific event name
                 if len(event2_name)>0:
-                    events2 = events2[events2.name==event2_name]                
+                    self._events2_copy = self._events2_copy[self._events2_copy.name==event2_name]                
 
             # Simply append both dataframes events
             if behavior == "append":
@@ -204,47 +230,47 @@ class EventCombine(SciNode):
                         'events': ''
                     } 
 
-                events_df = manage_events.create_event_dataframe(None)
+                self._events_output = manage_events.create_event_dataframe(None)
                 # Append events
-                if isinstance(events1, pd.DataFrame) and isinstance(events2, pd.DataFrame):
-                    events_df = pd.concat([events1,events2],ignore_index=True)
-                elif isinstance(events1, pd.DataFrame):
-                    events_df = events1
-                elif isinstance(events2, pd.DataFrame):
-                    events_df = events1
+                if isinstance(self._events1_copy, pd.DataFrame) and isinstance(self._events2_copy, pd.DataFrame):
+                    self._events_output = pd.concat([self._events1_copy,self._events2_copy],ignore_index=True)
+                elif isinstance(self._events1_copy, pd.DataFrame):
+                    self._events_output = self._events1_copy
+                elif isinstance(self._events2_copy, pd.DataFrame):
+                    self._events_output = self._events2_copy
                 else:
                     raise NodeInputException(self.identifier, "events", \
                         f"EventCombine : events1 or events2 must be connected to append events")                    
                 # Sort events based on the start_sec
-                events_df.sort_values('start_sec', axis=0, inplace=True, ignore_index='True')
+                self._events_output.sort_values('start_sec', axis=0, inplace=True, ignore_index='True')
 
                 # If user want to modify the combined events
                 if (len(new_event_group)>0) and (len(new_event_group)>0):
-                    events_df.loc[:,'group']=new_event_group
-                    events_df.loc[:,'name']=new_event_name
+                    self._events_output.loc[:,'group']=new_event_group
+                    self._events_output.loc[:,'name']=new_event_name
                 if len(new_event_chan)>0:
-                    events_df.loc[:,'channels']=new_event_chan
+                    self._events_output.loc[:,'channels']=new_event_chan
 
                 # Write the cache
                 cache = {}
-                cache['events'] = events_df
+                cache['events'] = self._events_output
                 self._cache_manager.write_mem_cache(self.identifier, cache)
 
                 # Output the new list of events
                 return {
-                    'events': events_df
+                    'events': self._events_output
                 } 
             else:
                 # Drop any event without channel information
                 # Probably not event, but sleep stages
-                events1_chan = events1.dropna(axis=0, how='any', inplace=False)
+                events1_chan = self._events1_copy.dropna(axis=0, how='any', inplace=False)
                 events1_chan.reset_index(inplace=True, drop=True)
                 channel1_lst = pd.unique(events1_chan.channels)
 
-                if isinstance(events2, pd.DataFrame):
+                if isinstance(self._events2_copy, pd.DataFrame):
                     # Drop any event without channel information
                     # Probably not event, but sleep stages
-                    events2_chan = events2.dropna(axis=0, how='any', inplace=False)
+                    events2_chan = self._events2_copy.dropna(axis=0, how='any', inplace=False)
                     events2_chan.reset_index(inplace=True, drop=True)
         else:
             print("ERROR : EventCombine, Events1 is not connected")
@@ -281,7 +307,7 @@ class EventCombine(SciNode):
         elif isinstance(channel1_name, list):
             channel_lst = channel1_name
         # Channels are not filtered in events1
-        elif isinstance(events2, pd.DataFrame):
+        elif isinstance(self._events2_copy, pd.DataFrame):
             channel2_lst = pd.unique(events2_chan.channels)
             # Create the master list of unique channels
             channel_lst = [item for sublist in [channel1_lst,channel2_lst] for item in sublist]
@@ -290,14 +316,14 @@ class EventCombine(SciNode):
             channel_lst = channel1_lst
 
         # Loop accross all channels
-        events_df = manage_events.create_event_dataframe(None)
+        self._events_output = manage_events.create_event_dataframe(None)
         for i_chan in channel_lst:
             # Filter for the current channel
             events1_chan_cur = events1_chan[events1_chan['channels']==i_chan]
             # Reset index of the events
             events1_chan_cur.reset_index(inplace=True, drop=True)
 
-            if isinstance(events2, pd.DataFrame):
+            if isinstance(self._events2_copy, pd.DataFrame):
                 # If the user wants to filter for a specific event name           
                 if len(channel2_name)>0:
                     events2_chan_cur = events2_chan[events2_chan['channels']==channel2_name]
@@ -320,7 +346,7 @@ class EventCombine(SciNode):
                 events_cur = pd.DataFrame(columns=['group','name','start_sec','duration_sec','channels']) 
                 # Append events    
                 events_cur = pd.concat([events_cur,events1_chan_cur],ignore_index=True) 
-                if isinstance(events2, pd.DataFrame):
+                if isinstance(self._events2_copy, pd.DataFrame):
                     events_cur = pd.concat([events_cur,events2_chan_cur],ignore_index=True) 
                 # Reset index of the events
                 events_cur.reset_index(inplace=True, drop=True)
@@ -329,7 +355,7 @@ class EventCombine(SciNode):
                 (event_list, bin_event_cur) = perf.evt_df_to_bin(events_cur, fs=256)
 
             # Keep detection that are concurrent only
-            elif 'intersection' in behavior and isinstance(events2, pd.DataFrame):
+            elif 'intersection' in behavior and isinstance(self._events2_copy, pd.DataFrame):
                 #if event1_name=='' or event2_name=='':
                     # print("WARNING : EventCombine, Intersection of non selected events")
                     # war_message = "WARNING : Intersection of non selected events"
@@ -406,7 +432,7 @@ class EventCombine(SciNode):
                 else:
                     longest_evt1 = np.zeros((len(event_list_smp),2))
                     longest_evt1[:] = np.NaN
-                if isinstance(events2, pd.DataFrame) and len(events2_chan_cur)>0:
+                if isinstance(self._events2_copy, pd.DataFrame) and len(events2_chan_cur)>0:
                     longest_evt2 = perf.compute_longest_est(\
                         event_list_smp, bin_event_cur, events2_chan_cur, fs=256)
                 else:
@@ -416,7 +442,7 @@ class EventCombine(SciNode):
                 # Look for the biggest intersection between event1 and event2
                 events_lst = []
                 for i_evt_comb in range(len(longest_evt1)):
-                    if isinstance(events2, pd.DataFrame):
+                    if isinstance(self._events2_copy, pd.DataFrame):
                         if np.nanargmax((longest_evt1[i_evt_comb,1],\
                             longest_evt2[i_evt_comb,1])) == 0:
                             event_name = events1_chan_cur.name[longest_evt1[i_evt_comb,0]]
@@ -450,18 +476,18 @@ class EventCombine(SciNode):
                 events_df_cur = events_cur
             
             # Append the events across all channels
-            events_df = pd.concat([events_df,events_df_cur],ignore_index=True)
+            self._events_output = pd.concat([self._events_output,events_df_cur],ignore_index=True)
 
         # Sort events based on the start_sec
-        events_df.sort_values('start_sec', axis=0, inplace=True, ignore_index='True')
+        self._events_output.sort_values('start_sec', axis=0, inplace=True, ignore_index='True')
 
         # Write the cache
         cache = {}
-        cache['events'] = events_df
+        cache['events'] = self._events_output
         self._cache_manager.write_mem_cache(self.identifier, cache)
 
         # Output the new list of events
         return {
-            'events': events_df
+            'events': self._events_output
         } 
 
