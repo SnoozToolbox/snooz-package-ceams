@@ -4,11 +4,11 @@ See the file LICENCE for full license details.
 """
 import csv
 
-def write_doc_file(filepath, N_CYCLE, spindle_event_name):
+def write_doc_file(filepath, N_CYCLE, spindle_event_name, N_HOURS=0):
     with open(filepath, 'w', newline='', encoding='utf-8') as csvfile:
         docwriter = csv.writer(csvfile, delimiter='\t')
 
-        doc = _get_doc(N_CYCLE, spindle_event_name)
+        doc = _get_doc(N_CYCLE, spindle_event_name, N_HOURS)
 
         for i, (k, v) in enumerate(doc.items()):
             row_name = excel_column_name(i+1)
@@ -24,7 +24,7 @@ def excel_column_name(number):
     return column_name
 
 
-def _get_doc(N_CYCLE, spindle_event_name):
+def _get_doc(N_CYCLE, spindle_event_name, N_HOURS=0):
     general_dict_1 = \
     {
             'filename' : 'PSG filename',
@@ -91,6 +91,7 @@ def _get_doc(N_CYCLE, spindle_event_name):
             'total_N2_valid_min' : 'Valid (no artifact) period for detection - Valid duration (min) of the sleep period in N2 stage minus the REM periods if excluded.',
             'total_N3_valid_min' : 'Valid (no artifact) period for detection - Valid duration (min) of the sleep period in N3 stage minus the REM periods if excluded.',
             'total_N2N3_valid_min' : 'Valid (no artifact) period for detection - Valid duration (min) of the sleep period in N2 and N3 stage minus the REM periods if excluded.',
+            'total_NREM_valid_min' : 'Valid (no artifact) period for detection - Valid duration (min) of the sleep period in NREM stage (N1, N2, N3) minus the REM periods if excluded.',
             'total_R_valid_min' : 'Valid (no artifact) period for detection - Valid duration (min) of the sleep period in REM stage.',
             'total_valid_min' : 'Valid (no artifact) period for detection - Valid duration (min) of the sleep stage selected minus thoses included in REM periods if remps are excluded.',
 
@@ -98,6 +99,7 @@ def _get_doc(N_CYCLE, spindle_event_name):
             'total_N2_spindle_count' : 'Total - Sleep spindle count in N2 stage.',
             'total_N3_spindle_count' : 'Total - Sleep spindle count in N3 stage.',
             'total_N2N3_spindle_count' : 'Total - Sleep spindle count in N2 and N3 stage.',
+            'total_NREM_spindle_count' : 'Total - Sleep spindle count in NREM stage (N1, N2, N3).',
             'total_R_spindle_count' : 'Total - Sleep spindle count in REM stage.',
             'total_spindle_count' : 'Total - Sleep spindle count in all stages.',
 
@@ -105,6 +107,7 @@ def _get_doc(N_CYCLE, spindle_event_name):
             'total_N2_density' : 'Total - Spindle density (count/min) in N2 stage.',
             'total_N3_density' : 'Total - Spindle density (count/min) in N3 stage.',
             'total_N2N3_density' : 'Total - Spindle density (count/min) in N2 and N3 stage.',
+            'total_NREM_density' : 'Total - Spindle density (count/min) in NREM stage (N1, N2, N3).',
             'total_R_density' : 'Total - Spindle density (count/min) in REM stage.',
             'total_density' : 'Total - Spindle density (count/min)',
             
@@ -112,6 +115,7 @@ def _get_doc(N_CYCLE, spindle_event_name):
             'total_N2_spindle_sec' : 'Total - Average spindle duration (s) in N2 stage.',
             'total_N3_spindle_sec' : 'Total - Average spindle duration (s) in N3 stage.',
             'total_N2N3_spindle_sec' : 'Total - Average spindle duration (s) in N2 and N3 stage.',
+            'total_NREM_spindle_sec' : 'Total - Average spindle duration (s) in NREM stage (N1, N2, N3).',
             'total_R_spindle_sec' : 'Total - Average spindle duration (s) in REM stage.',
             'total_spindle_sec' : 'Total - Average spindle duration (s)',
 
@@ -119,6 +123,7 @@ def _get_doc(N_CYCLE, spindle_event_name):
             'total_N2_dom_freq_Hz' : 'Total - Spindle dominant frequency (Hz) where spectral energy is maximum in N2 stage.',
             'total_N3_dom_freq_Hz' : 'Total - Spindle dominant frequency (Hz) where spectral energy is maximum in N3 stage.',
             'total_N2N3_dom_freq_Hz' : 'Total - Spindle dominant frequency (Hz) where spectral energy is maximum in N2 and N3 stage.',
+            'total_NREM_dom_freq_Hz' : 'Total - Spindle dominant frequency (Hz) where spectral energy is maximum in NREM stage (N1, N2, N3).',
             'total_R_dom_freq_Hz' : 'Total - Spindle dominant frequency (Hz) where spectral energy is maximum in REM stage.',
             'total_dom_freq_Hz' : 'Total - Spindle dominant frequency (Hz) where spectral energy is maximum.',
 
@@ -126,6 +131,7 @@ def _get_doc(N_CYCLE, spindle_event_name):
             'total_N2_avg_freq_Hz' : 'Total - Spindle average frequency (Hz) counting peaks in N2 stage.',
             'total_N3_avg_freq_Hz' : 'Total - Spindle average frequency (Hz) counting peaks in N3 stage.',
             'total_N2N3_avg_freq_Hz' : 'Total - Spindle average frequency (Hz) counting peaks in N2 and N3 stage.',
+            'total_NREM_avg_freq_Hz' : 'Total - Spindle average frequency (Hz) counting peaks in NREM stage (N1, N2, N3).',
             'total_R_avg_freq_Hz' : 'Total - Spindle average frequency (Hz) counting peaks in REM stage.',
             'total_avg_freq_Hz' : 'Total - Spindle average frequency (Hz) counting peaks.',
 
@@ -133,6 +139,7 @@ def _get_doc(N_CYCLE, spindle_event_name):
             'total_N2_amp_pkpk_uV' : 'Total - Average peak-to-peak amplitude (µV) in N2 stage.',
             'total_N3_amp_pkpk_uV' : 'Total - Average peak-to-peak amplitude (µV) in N3 stage.',
             'total_N2N3_amp_pkpk_uV' : 'Total - Average peak-to-peak amplitude (µV) in N2 and N3 stage.',
+            'total_NREM_amp_pkpk_uV' : 'Total - Average peak-to-peak amplitude (µV) in NREM stage (N1, N2, N3).',
             'total_R_amp_pkpk_uV' : 'Total - Average peak-to-peak amplitude (µV) in REM stage.',
             'total_amp_pkpk_uV' : 'Total - Average peak-to-peak amplitude (µV)',
 
@@ -140,6 +147,7 @@ def _get_doc(N_CYCLE, spindle_event_name):
             'total_N2_amp_rms_uV' : 'Total - Average rms amplitude (µV) in N2 stage.',
             'total_N3_amp_rms_uV' : 'Total - Average rms amplitude (µV) in N3 stage.',
             'total_N2N3_amp_rms_uV' : 'Total - Average rms amplitude (µV) in N2 and N3 stage.',
+            'total_NREM_amp_rms_uV' : 'Total - Average rms amplitude (µV) in NREM stage (N1, N2, N3).',
             'total_R_amp_rms_uV' : 'Total - Average rms amplitude (µV) in REM stage.',
             'total_amp_rms_uV' : 'Total - Average rms (Root Mean Square) amplitude (µV)'}
     cycle_dict = {}
@@ -151,6 +159,7 @@ def _get_doc(N_CYCLE, spindle_event_name):
             f'cyc{i_cycle+1}_N2_valid_min' : f'Cycle {i_cycle+1} - Valid (no artifact) duration (min) in N2 stage available for detection minus the REM periods if excluded.',
             f'cyc{i_cycle+1}_N3_valid_min' : f'Cycle {i_cycle+1} - Valid (no artifact) duration (min) in N3 stage available for detection minus the REM periods if excluded.',
             f'cyc{i_cycle+1}_N2N3_valid_min' : f'Cycle {i_cycle+1} - Valid (no artifact) duration (min) in N2 and N3 stage available for detection minus the REM periods if excluded.',
+            f'cyc{i_cycle+1}_NREM_valid_min' : f'Cycle {i_cycle+1} - Valid (no artifact) duration (min) in NREM stage (N1, N2, N3) available for detection minus the REM periods if excluded.',
             f'cyc{i_cycle+1}_R_valid_min' : f'Cycle {i_cycle+1} - Valid (no artifact) duration (min) in REM stage available for detection.',
             f'cyc{i_cycle+1}_min' : f'Cycle {i_cycle+1} duration (min) minus the REM periods if excluded.',
 
@@ -158,6 +167,7 @@ def _get_doc(N_CYCLE, spindle_event_name):
             f'cyc{i_cycle+1}_N2_spindle_count' : f'Cycle {i_cycle+1} - Sleep spindle count in N2 stage.',
             f'cyc{i_cycle+1}_N3_spindle_count' : f'Cycle {i_cycle+1} - Sleep spindle count in N3 stage.',
             f'cyc{i_cycle+1}_N2N3_spindle_count' : f'Cycle {i_cycle+1} - Sleep spindle count in N2 and N3 stage.',
+            f'cyc{i_cycle+1}_NREM_spindle_count' : f'Cycle {i_cycle+1} - Sleep spindle count in NREM stage (N1, N2, N3).',
             f'cyc{i_cycle+1}_R_spindle_count' : f'Cycle {i_cycle+1} - Sleep spindle count in REM stage.',
             f'cyc{i_cycle+1}_spindle_count' : f'Cycle {i_cycle+1} - Sleep spindle count in all stages.',
 
@@ -165,6 +175,7 @@ def _get_doc(N_CYCLE, spindle_event_name):
             f'cyc{i_cycle+1}_N2_density' : f'Cycle {i_cycle+1} - Spindle density (count/min) in N2 stage.',
             f'cyc{i_cycle+1}_N3_density' : f'Cycle {i_cycle+1} - Spindle density (count/min) in N3 stage.',
             f'cyc{i_cycle+1}_N2N3_density' : f'Cycle {i_cycle+1} - Spindle density (count/min) in N2 and N3 stage.',
+            f'cyc{i_cycle+1}_NREM_density' : f'Cycle {i_cycle+1} - Spindle density (count/min) in NREM stage (N1, N2, N3).',
             f'cyc{i_cycle+1}_R_density' : f'Cycle {i_cycle+1} - Spindle density (count/min) in REM stage.',
             f'cyc{i_cycle+1}_density' : f'Cycle {i_cycle+1} - Spindle density (count/min) in all stages.',
             
@@ -172,6 +183,7 @@ def _get_doc(N_CYCLE, spindle_event_name):
             f'cyc{i_cycle+1}_N2_spindle_sec' : f'Cycle {i_cycle+1} - Average spindle duration (s) in N2 stage.',
             f'cyc{i_cycle+1}_N3_spindle_sec' : f'Cycle {i_cycle+1} - Average spindle duration (s) in N3 stage.',
             f'cyc{i_cycle+1}_N2N3_spindle_sec' : f'Cycle {i_cycle+1} - Average spindle duration (s) in N2 and N3 stage.',
+            f'cyc{i_cycle+1}_NREM_spindle_sec' : f'Cycle {i_cycle+1} - Average spindle duration (s) in NREM stage (N1, N2, N3).',
             f'cyc{i_cycle+1}_R_spindle_sec' : f'Cycle {i_cycle+1} - Average spindle duration (s) in REM stage.',
             f'cyc{i_cycle+1}_spindle_sec' : f'Cycle {i_cycle+1} - Average spindle duration (s) in all stages.',
 
@@ -179,6 +191,7 @@ def _get_doc(N_CYCLE, spindle_event_name):
             f'cyc{i_cycle+1}_N2_dom_freq_Hz' : f'Cycle {i_cycle+1} - Spindle dominant frequency (Hz) where spectral energy is maximum in N2 stage.',
             f'cyc{i_cycle+1}_N3_dom_freq_Hz' : f'Cycle {i_cycle+1} - Spindle dominant frequency (Hz) where spectral energy is maximum in N3 stage.',
             f'cyc{i_cycle+1}_N2N3_dom_freq_Hz' : f'Cycle {i_cycle+1} - Spindle dominant frequency (Hz) where spectral energy is maximum in N2 and N3 stage.',
+            f'cyc{i_cycle+1}_NREM_dom_freq_Hz' : f'Cycle {i_cycle+1} - Spindle dominant frequency (Hz) where spectral energy is maximum in NREM stage (N1, N2, N3).',
             f'cyc{i_cycle+1}_R_dom_freq_Hz' : f'Cycle {i_cycle+1} - Spindle dominant frequency (Hz) where spectral energy is maximum in REM stage.',
             f'cyc{i_cycle+1}_dom_freq_Hz' : f'Cycle {i_cycle+1} - Spindle dominant frequency (Hz) where spectral energy is maximum in all stages.',
 
@@ -186,6 +199,7 @@ def _get_doc(N_CYCLE, spindle_event_name):
             f'cyc{i_cycle+1}_N2_avg_freq_Hz' : f'Cycle {i_cycle+1} - Spindle average frequency (Hz) counting peaks in N2 stage.',
             f'cyc{i_cycle+1}_N3_avg_freq_Hz' : f'Cycle {i_cycle+1} - Spindle average frequency (Hz) counting peaks in N3 stage.',
             f'cyc{i_cycle+1}_N2N3_avg_freq_Hz' : f'Cycle {i_cycle+1} - Spindle average frequency (Hz) counting peaks in N2 and N3 stage.',
+            f'cyc{i_cycle+1}_NREM_avg_freq_Hz' : f'Cycle {i_cycle+1} - Spindle average frequency (Hz) counting peaks in NREM stage (N1, N2, N3).',
             f'cyc{i_cycle+1}_R_avg_freq_Hz' : f'Cycle {i_cycle+1} - Spindle average frequency (Hz) counting peaks in REM stage.',
             f'cyc{i_cycle+1}_avg_freq_Hz' : f'Cycle {i_cycle+1} - Spindle average frequency (Hz) counting peaks in all stages.',            
 
@@ -193,6 +207,7 @@ def _get_doc(N_CYCLE, spindle_event_name):
             f'cyc{i_cycle+1}_N2_amp_pkpk_uV' : f'Cycle {i_cycle+1} - Average peak-to-peak amplitude (µV) in N2 stage.',
             f'cyc{i_cycle+1}_N3_amp_pkpk_uV' : f'Cycle {i_cycle+1} - Average peak-to-peak amplitude (µV) in N3 stage.',
             f'cyc{i_cycle+1}_N2N3_amp_pkpk_uV' : f'Cycle {i_cycle+1} - Average peak-to-peak amplitude (µV) in N2 and N3 stage.',
+            f'cyc{i_cycle+1}_NREM_amp_pkpk_uV' : f'Cycle {i_cycle+1} - Average peak-to-peak amplitude (µV) in NREM stage (N1, N2, N3).',
             f'cyc{i_cycle+1}_R_amp_pkpk_uV' : f'Cycle {i_cycle+1} - Average peak-to-peak amplitude (µV) in REM stage.',
             f'cyc{i_cycle+1}_amp_pkpk_uV' : f'Cycle {i_cycle+1} - Average peak-to-peak amplitude (µV) in all stages',
 
@@ -200,8 +215,152 @@ def _get_doc(N_CYCLE, spindle_event_name):
             f'cyc{i_cycle+1}_N2_amp_rms_uV' : f'Cycle {i_cycle+1} - Average rms amplitude (µV) in N2 stage.',
             f'cyc{i_cycle+1}_N3_amp_rms_uV' : f'Cycle {i_cycle+1} - Average rms amplitude (µV) in N3 stage.',
             f'cyc{i_cycle+1}_N2N3_amp_rms_uV' : f'Cycle {i_cycle+1} - Average rms amplitude (µV) in N2 and N3 stage.',
+            f'cyc{i_cycle+1}_NREM_amp_rms_uV' : f'Cycle {i_cycle+1} - Average rms amplitude (µV) in NREM stage (N1, N2, N3).',
             f'cyc{i_cycle+1}_R_amp_rms_uV' : f'Cycle {i_cycle+1} - Average rms amplitude (µV) in REM stage.',
             f'cyc{i_cycle+1}_amp_rms_uV' : f'Cycle {i_cycle+1} - Average rms (Root Mean Square) amplitude (µV) in all stages'}
         cycle_dict = cycle_dict | current_cycle_dict
-    complete_dict = general_dict | total_dict | cycle_dict
+    
+    # Add clock hour documentation
+    clock_hour_dict = {}
+    for i_hour in range(N_HOURS):
+        current_hour_dict = \
+            {
+            f'clock_h{i_hour+1}_valid_min' : f'Hour {i_hour+1} - Valid (no artifact) duration (min) available for detection minus the REM periods if excluded.',
+            f'clock_h{i_hour+1}_N1_valid_min' : f'Hour {i_hour+1} - Valid (no artifact) duration (min) in N1 stage available for detection minus the REM periods if excluded.',
+            f'clock_h{i_hour+1}_N2_valid_min' : f'Hour {i_hour+1} - Valid (no artifact) duration (min) in N2 stage available for detection minus the REM periods if excluded.',
+            f'clock_h{i_hour+1}_N3_valid_min' : f'Hour {i_hour+1} - Valid (no artifact) duration (min) in N3 stage available for detection minus the REM periods if excluded.',
+            f'clock_h{i_hour+1}_N2N3_valid_min' : f'Hour {i_hour+1} - Valid (no artifact) duration (min) in N2 and N3 stage available for detection minus the REM periods if excluded.',
+            f'clock_h{i_hour+1}_NREM_valid_min' : f'Hour {i_hour+1} - Valid (no artifact) duration (min) in NREM stage (N1, N2, N3) available for detection minus the REM periods if excluded.',
+            f'clock_h{i_hour+1}_R_valid_min' : f'Hour {i_hour+1} - Valid (no artifact) duration (min) in REM stage available for detection.',
+            f'clock_h{i_hour+1}_min' : f'Hour {i_hour+1} duration (min) minus the REM periods if excluded.',
+
+            f'clock_h{i_hour+1}_N1_spindle_count' : f'Hour {i_hour+1} - Sleep spindle count in N1 stage.',
+            f'clock_h{i_hour+1}_N2_spindle_count' : f'Hour {i_hour+1} - Sleep spindle count in N2 stage.',
+            f'clock_h{i_hour+1}_N3_spindle_count' : f'Hour {i_hour+1} - Sleep spindle count in N3 stage.',
+            f'clock_h{i_hour+1}_N2N3_spindle_count' : f'Hour {i_hour+1} - Sleep spindle count in N2 and N3 stage.',
+            f'clock_h{i_hour+1}_NREM_spindle_count' : f'Hour {i_hour+1} - Sleep spindle count in NREM stage (N1, N2, N3).',
+            f'clock_h{i_hour+1}_R_spindle_count' : f'Hour {i_hour+1} - Sleep spindle count in REM stage.',
+            f'clock_h{i_hour+1}_spindle_count' : f'Hour {i_hour+1} - Sleep spindle count in all stages.',
+
+            f'clock_h{i_hour+1}_N1_density' : f'Hour {i_hour+1} - Spindle density (count/min) in N1 stage.',
+            f'clock_h{i_hour+1}_N2_density' : f'Hour {i_hour+1} - Spindle density (count/min) in N2 stage.',
+            f'clock_h{i_hour+1}_N3_density' : f'Hour {i_hour+1} - Spindle density (count/min) in N3 stage.',
+            f'clock_h{i_hour+1}_N2N3_density' : f'Hour {i_hour+1} - Spindle density (count/min) in N2 and N3 stage.',
+            f'clock_h{i_hour+1}_NREM_density' : f'Hour {i_hour+1} - Spindle density (count/min) in NREM stage (N1, N2, N3).',
+            f'clock_h{i_hour+1}_R_density' : f'Hour {i_hour+1} - Spindle density (count/min) in REM stage.',
+            f'clock_h{i_hour+1}_density' : f'Hour {i_hour+1} - Spindle density (count/min) in all stages.',
+            
+            f'clock_h{i_hour+1}_N1_spindle_sec' : f'Hour {i_hour+1} - Average spindle duration (s) in N1 stage.',
+            f'clock_h{i_hour+1}_N2_spindle_sec' : f'Hour {i_hour+1} - Average spindle duration (s) in N2 stage.',
+            f'clock_h{i_hour+1}_N3_spindle_sec' : f'Hour {i_hour+1} - Average spindle duration (s) in N3 stage.',
+            f'clock_h{i_hour+1}_N2N3_spindle_sec' : f'Hour {i_hour+1} - Average spindle duration (s) in N2 and N3 stage.',
+            f'clock_h{i_hour+1}_NREM_spindle_sec' : f'Hour {i_hour+1} - Average spindle duration (s) in NREM stage (N1, N2, N3).',
+            f'clock_h{i_hour+1}_R_spindle_sec' : f'Hour {i_hour+1} - Average spindle duration (s) in REM stage.',
+            f'clock_h{i_hour+1}_spindle_sec' : f'Hour {i_hour+1} - Average spindle duration (s) in all stages.',
+
+            f'clock_h{i_hour+1}_N1_dom_freq_Hz' : f'Hour {i_hour+1} - Spindle dominant frequency (Hz) where spectral energy is maximum in N1 stage.',
+            f'clock_h{i_hour+1}_N2_dom_freq_Hz' : f'Hour {i_hour+1} - Spindle dominant frequency (Hz) where spectral energy is maximum in N2 stage.',
+            f'clock_h{i_hour+1}_N3_dom_freq_Hz' : f'Hour {i_hour+1} - Spindle dominant frequency (Hz) where spectral energy is maximum in N3 stage.',
+            f'clock_h{i_hour+1}_N2N3_dom_freq_Hz' : f'Hour {i_hour+1} - Spindle dominant frequency (Hz) where spectral energy is maximum in N2 and N3 stage.',
+            f'clock_h{i_hour+1}_NREM_dom_freq_Hz' : f'Hour {i_hour+1} - Spindle dominant frequency (Hz) where spectral energy is maximum in NREM stage (N1, N2, N3).',
+            f'clock_h{i_hour+1}_R_dom_freq_Hz' : f'Hour {i_hour+1} - Spindle dominant frequency (Hz) where spectral energy is maximum in REM stage.',
+            f'clock_h{i_hour+1}_dom_freq_Hz' : f'Hour {i_hour+1} - Spindle dominant frequency (Hz) where spectral energy is maximum in all stages.',
+
+            f'clock_h{i_hour+1}_N1_avg_freq_Hz' : f'Hour {i_hour+1} - Spindle average frequency (Hz) counting peaks in N1 stage.',
+            f'clock_h{i_hour+1}_N2_avg_freq_Hz' : f'Hour {i_hour+1} - Spindle average frequency (Hz) counting peaks in N2 stage.',
+            f'clock_h{i_hour+1}_N3_avg_freq_Hz' : f'Hour {i_hour+1} - Spindle average frequency (Hz) counting peaks in N3 stage.',
+            f'clock_h{i_hour+1}_N2N3_avg_freq_Hz' : f'Hour {i_hour+1} - Spindle average frequency (Hz) counting peaks in N2 and N3 stage.',
+            f'clock_h{i_hour+1}_NREM_avg_freq_Hz' : f'Hour {i_hour+1} - Spindle average frequency (Hz) counting peaks in NREM stage (N1, N2, N3).',
+            f'clock_h{i_hour+1}_R_avg_freq_Hz' : f'Hour {i_hour+1} - Spindle average frequency (Hz) counting peaks in REM stage.',
+            f'clock_h{i_hour+1}_avg_freq_Hz' : f'Hour {i_hour+1} - Spindle average frequency (Hz) counting peaks in all stages.',            
+
+            f'clock_h{i_hour+1}_N1_amp_pkpk_uV' : f'Hour {i_hour+1} - Average peak-to-peak amplitude (µV) in N1 stage.',
+            f'clock_h{i_hour+1}_N2_amp_pkpk_uV' : f'Hour {i_hour+1} - Average peak-to-peak amplitude (µV) in N2 stage.',
+            f'clock_h{i_hour+1}_N3_amp_pkpk_uV' : f'Hour {i_hour+1} - Average peak-to-peak amplitude (µV) in N3 stage.',
+            f'clock_h{i_hour+1}_N2N3_amp_pkpk_uV' : f'Hour {i_hour+1} - Average peak-to-peak amplitude (µV) in N2 and N3 stage.',
+            f'clock_h{i_hour+1}_NREM_amp_pkpk_uV' : f'Hour {i_hour+1} - Average peak-to-peak amplitude (µV) in NREM stage (N1, N2, N3).',
+            f'clock_h{i_hour+1}_R_amp_pkpk_uV' : f'Hour {i_hour+1} - Average peak-to-peak amplitude (µV) in REM stage.',
+            f'clock_h{i_hour+1}_amp_pkpk_uV' : f'Hour {i_hour+1} - Average peak-to-peak amplitude (µV) in all stages',
+
+            f'clock_h{i_hour+1}_N1_amp_rms_uV' : f'Hour {i_hour+1} - Average rms amplitude (µV) in N1 stage.',
+            f'clock_h{i_hour+1}_N2_amp_rms_uV' : f'Hour {i_hour+1} - Average rms amplitude (µV) in N2 stage.',
+            f'clock_h{i_hour+1}_N3_amp_rms_uV' : f'Hour {i_hour+1} - Average rms amplitude (µV) in N3 stage.',
+            f'clock_h{i_hour+1}_N2N3_amp_rms_uV' : f'Hour {i_hour+1} - Average rms amplitude (µV) in N2 and N3 stage.',
+            f'clock_h{i_hour+1}_NREM_amp_rms_uV' : f'Hour {i_hour+1} - Average rms amplitude (µV) in NREM stage (N1, N2, N3).',
+            f'clock_h{i_hour+1}_R_amp_rms_uV' : f'Hour {i_hour+1} - Average rms amplitude (µV) in REM stage.',
+            f'clock_h{i_hour+1}_amp_rms_uV' : f'Hour {i_hour+1} - Average rms (Root Mean Square) amplitude (µV) in all stages'}
+        clock_hour_dict = clock_hour_dict | current_hour_dict
+    
+    # Add stage hour documentation
+    stage_hour_dict = {}
+    for i_hour in range(N_HOURS):
+        current_stage_hour_dict = \
+            {
+            f'stage_h{i_hour+1}_valid_min' : f'Stage Hour {i_hour+1} - Valid (no artifact) duration (min) available for detection minus the REM periods if excluded.',
+            f'stage_h{i_hour+1}_N1_valid_min' : f'Stage Hour {i_hour+1} - Valid (no artifact) duration (min) in N1 stage available for detection minus the REM periods if excluded.',
+            f'stage_h{i_hour+1}_N2_valid_min' : f'Stage Hour {i_hour+1} - Valid (no artifact) duration (min) in N2 stage available for detection minus the REM periods if excluded.',
+            f'stage_h{i_hour+1}_N3_valid_min' : f'Stage Hour {i_hour+1} - Valid (no artifact) duration (min) in N3 stage available for detection minus the REM periods if excluded.',
+            f'stage_h{i_hour+1}_N2N3_valid_min' : f'Stage Hour {i_hour+1} - Valid (no artifact) duration (min) in N2 and N3 stage available for detection minus the REM periods if excluded.',
+            f'stage_h{i_hour+1}_NREM_valid_min' : f'Stage Hour {i_hour+1} - Valid (no artifact) duration (min) in NREM stage (N1, N2, N3) available for detection minus the REM periods if excluded.',
+            f'stage_h{i_hour+1}_R_valid_min' : f'Stage Hour {i_hour+1} - Valid (no artifact) duration (min) in REM stage available for detection.',
+            f'stage_h{i_hour+1}_min' : f'Stage Hour {i_hour+1} duration (min) minus the REM periods if excluded.',
+
+            f'stage_h{i_hour+1}_N1_spindle_count' : f'Stage Hour {i_hour+1} - Sleep spindle count in N1 stage.',
+            f'stage_h{i_hour+1}_N2_spindle_count' : f'Stage Hour {i_hour+1} - Sleep spindle count in N2 stage.',
+            f'stage_h{i_hour+1}_N3_spindle_count' : f'Stage Hour {i_hour+1} - Sleep spindle count in N3 stage.',
+            f'stage_h{i_hour+1}_N2N3_spindle_count' : f'Stage Hour {i_hour+1} - Sleep spindle count in N2 and N3 stage.',
+            f'stage_h{i_hour+1}_NREM_spindle_count' : f'Stage Hour {i_hour+1} - Sleep spindle count in NREM stage (N1, N2, N3).',
+            f'stage_h{i_hour+1}_R_spindle_count' : f'Stage Hour {i_hour+1} - Sleep spindle count in REM stage.',
+            f'stage_h{i_hour+1}_spindle_count' : f'Stage Hour {i_hour+1} - Sleep spindle count in all stages.',
+
+            f'stage_h{i_hour+1}_N1_density' : f'Stage Hour {i_hour+1} - Spindle density (count/min) in N1 stage.',
+            f'stage_h{i_hour+1}_N2_density' : f'Stage Hour {i_hour+1} - Spindle density (count/min) in N2 stage.',
+            f'stage_h{i_hour+1}_N3_density' : f'Stage Hour {i_hour+1} - Spindle density (count/min) in N3 stage.',
+            f'stage_h{i_hour+1}_N2N3_density' : f'Stage Hour {i_hour+1} - Spindle density (count/min) in N2 and N3 stage.',
+            f'stage_h{i_hour+1}_NREM_density' : f'Stage Hour {i_hour+1} - Spindle density (count/min) in NREM stage (N1, N2, N3).',
+            f'stage_h{i_hour+1}_R_density' : f'Stage Hour {i_hour+1} - Spindle density (count/min) in REM stage.',
+            f'stage_h{i_hour+1}_density' : f'Stage Hour {i_hour+1} - Spindle density (count/min) in all stages.',
+            
+            f'stage_h{i_hour+1}_N1_spindle_sec' : f'Stage Hour {i_hour+1} - Average spindle duration (s) in N1 stage.',
+            f'stage_h{i_hour+1}_N2_spindle_sec' : f'Stage Hour {i_hour+1} - Average spindle duration (s) in N2 stage.',
+            f'stage_h{i_hour+1}_N3_spindle_sec' : f'Stage Hour {i_hour+1} - Average spindle duration (s) in N3 stage.',
+            f'stage_h{i_hour+1}_N2N3_spindle_sec' : f'Stage Hour {i_hour+1} - Average spindle duration (s) in N2 and N3 stage.',
+            f'stage_h{i_hour+1}_NREM_spindle_sec' : f'Stage Hour {i_hour+1} - Average spindle duration (s) in NREM stage (N1, N2, N3).',
+            f'stage_h{i_hour+1}_R_spindle_sec' : f'Stage Hour {i_hour+1} - Average spindle duration (s) in REM stage.',
+            f'stage_h{i_hour+1}_spindle_sec' : f'Stage Hour {i_hour+1} - Average spindle duration (s) in all stages.',
+
+            f'stage_h{i_hour+1}_N1_dom_freq_Hz' : f'Stage Hour {i_hour+1} - Spindle dominant frequency (Hz) where spectral energy is maximum in N1 stage.',
+            f'stage_h{i_hour+1}_N2_dom_freq_Hz' : f'Stage Hour {i_hour+1} - Spindle dominant frequency (Hz) where spectral energy is maximum in N2 stage.',
+            f'stage_h{i_hour+1}_N3_dom_freq_Hz' : f'Stage Hour {i_hour+1} - Spindle dominant frequency (Hz) where spectral energy is maximum in N3 stage.',
+            f'stage_h{i_hour+1}_N2N3_dom_freq_Hz' : f'Stage Hour {i_hour+1} - Spindle dominant frequency (Hz) where spectral energy is maximum in N2 and N3 stage.',
+            f'stage_h{i_hour+1}_NREM_dom_freq_Hz' : f'Stage Hour {i_hour+1} - Spindle dominant frequency (Hz) where spectral energy is maximum in NREM stage (N1, N2, N3).',
+            f'stage_h{i_hour+1}_R_dom_freq_Hz' : f'Stage Hour {i_hour+1} - Spindle dominant frequency (Hz) where spectral energy is maximum in REM stage.',
+            f'stage_h{i_hour+1}_dom_freq_Hz' : f'Stage Hour {i_hour+1} - Spindle dominant frequency (Hz) where spectral energy is maximum in all stages.',
+
+            f'stage_h{i_hour+1}_N1_avg_freq_Hz' : f'Stage Hour {i_hour+1} - Spindle average frequency (Hz) counting peaks in N1 stage.',
+            f'stage_h{i_hour+1}_N2_avg_freq_Hz' : f'Stage Hour {i_hour+1} - Spindle average frequency (Hz) counting peaks in N2 stage.',
+            f'stage_h{i_hour+1}_N3_avg_freq_Hz' : f'Stage Hour {i_hour+1} - Spindle average frequency (Hz) counting peaks in N3 stage.',
+            f'stage_h{i_hour+1}_N2N3_avg_freq_Hz' : f'Stage Hour {i_hour+1} - Spindle average frequency (Hz) counting peaks in N2 and N3 stage.',
+            f'stage_h{i_hour+1}_NREM_avg_freq_Hz' : f'Stage Hour {i_hour+1} - Spindle average frequency (Hz) counting peaks in NREM stage (N1, N2, N3).',
+            f'stage_h{i_hour+1}_R_avg_freq_Hz' : f'Stage Hour {i_hour+1} - Spindle average frequency (Hz) counting peaks in REM stage.',
+            f'stage_h{i_hour+1}_avg_freq_Hz' : f'Stage Hour {i_hour+1} - Spindle average frequency (Hz) counting peaks in all stages.',            
+
+            f'stage_h{i_hour+1}_N1_amp_pkpk_uV' : f'Stage Hour {i_hour+1} - Average peak-to-peak amplitude (µV) in N1 stage.',
+            f'stage_h{i_hour+1}_N2_amp_pkpk_uV' : f'Stage Hour {i_hour+1} - Average peak-to-peak amplitude (µV) in N2 stage.',
+            f'stage_h{i_hour+1}_N3_amp_pkpk_uV' : f'Stage Hour {i_hour+1} - Average peak-to-peak amplitude (µV) in N3 stage.',
+            f'stage_h{i_hour+1}_N2N3_amp_pkpk_uV' : f'Stage Hour {i_hour+1} - Average peak-to-peak amplitude (µV) in N2 and N3 stage.',
+            f'stage_h{i_hour+1}_NREM_amp_pkpk_uV' : f'Stage Hour {i_hour+1} - Average peak-to-peak amplitude (µV) in NREM stage (N1, N2, N3).',
+            f'stage_h{i_hour+1}_R_amp_pkpk_uV' : f'Stage Hour {i_hour+1} - Average peak-to-peak amplitude (µV) in REM stage.',
+            f'stage_h{i_hour+1}_amp_pkpk_uV' : f'Stage Hour {i_hour+1} - Average peak-to-peak amplitude (µV) in all stages',
+
+            f'stage_h{i_hour+1}_N1_amp_rms_uV' : f'Stage Hour {i_hour+1} - Average rms amplitude (µV) in N1 stage.',
+            f'stage_h{i_hour+1}_N2_amp_rms_uV' : f'Stage Hour {i_hour+1} - Average rms amplitude (µV) in N2 stage.',
+            f'stage_h{i_hour+1}_N3_amp_rms_uV' : f'Stage Hour {i_hour+1} - Average rms amplitude (µV) in N3 stage.',
+            f'stage_h{i_hour+1}_N2N3_amp_rms_uV' : f'Stage Hour {i_hour+1} - Average rms amplitude (µV) in N2 and N3 stage.',
+            f'stage_h{i_hour+1}_NREM_amp_rms_uV' : f'Stage Hour {i_hour+1} - Average rms amplitude (µV) in NREM stage (N1, N2, N3).',
+            f'stage_h{i_hour+1}_R_amp_rms_uV' : f'Stage Hour {i_hour+1} - Average rms amplitude (µV) in REM stage.',
+            f'stage_h{i_hour+1}_amp_rms_uV' : f'Stage Hour {i_hour+1} - Average rms (Root Mean Square) amplitude (µV) in all stages'}
+        stage_hour_dict = stage_hour_dict | current_stage_hour_dict
+    
+    complete_dict = general_dict | total_dict | cycle_dict | clock_hour_dict | stage_hour_dict
     return complete_dict

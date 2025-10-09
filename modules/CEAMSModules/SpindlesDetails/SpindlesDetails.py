@@ -135,7 +135,7 @@ class SpindlesDetails(SciNode):
         InputPlug('export_spindles',self)
 
         # Init module variables
-        self.stage_stats_labels = ['N1', 'N2', 'N3', 'N2N3', 'R']
+        self.stage_stats_labels = ['N1', 'N2', 'N3', 'N2N3', 'NREM', 'R']
 
         # A master module allows the process to be reexcuted multiple time.
         self._is_master = False 
@@ -465,6 +465,20 @@ class SpindlesDetails(SciNode):
             cycle_stats = self.compute_stats_for_cycles(spindle_cur_chan_df, sleep_cycles_df, \
                 stage_in_cycle_df, artifact_cur_chan_df, sleep_stage_sel, label_stats)      
 
+            #-----------------------------------------------------------------------------------
+            # CLOCK_H statistics from the spindle events
+            #-----------------------------------------------------------------------------------
+            label_stats = 'clock_h'
+            clock_h_stats = self.compute_stats_for_clock_h(spindle_cur_chan_df, \
+                stage_in_cycle_df, artifact_cur_chan_df, sleep_stage_sel, label_stats)      
+
+            #-----------------------------------------------------------------------------------
+            # STAGE_H statistics from the spindle events
+            #-----------------------------------------------------------------------------------
+            label_stats = 'stage_h'
+            stage_h_stats = self.compute_stats_for_stage_h(spindle_cur_chan_df, \
+                stage_in_cycle_df, artifact_cur_chan_df, sleep_stage_sel, label_stats)     
+
             # --------------------------------------------------------------------------
             # Organize data to Write the file
             # --------------------------------------------------------------------------
@@ -478,7 +492,7 @@ class SpindlesDetails(SciNode):
             # Organize data to write the cohort spindle report
             # Construction of the pandas dataframe that will be used to create the TSV file
             # There is a new line for each channel and mini band
-            cur_chan_dict = cur_chan_general_dict | total_stats | cycle_stats
+            cur_chan_dict = cur_chan_general_dict | total_stats | cycle_stats | clock_h_stats | stage_h_stats
             cur_chan_df = pd.DataFrame.from_records([cur_chan_dict])
             if len(cohort_characteristics_df):
                 cohort_characteristics_df = pd.concat([cohort_characteristics_df, cur_chan_df])
@@ -495,7 +509,7 @@ class SpindlesDetails(SciNode):
                 sel_spindle_param | artifact_info_param | channel_info_param | sleep_cycle_count   
             cohort_characteristics_df = pd.DataFrame.from_records([cur_chan_general_dict])
             # extract columns from the doc
-            out_columns = list(_get_doc(self.N_CYCLES, sel_spindle_param['spindle_event_name']).keys())
+            out_columns = list(_get_doc(self.N_CYCLES, sel_spindle_param['spindle_event_name'], self.N_HOURS).keys())
             for col in out_columns:
                 if col not in cohort_characteristics_df.columns:
                     cohort_characteristics_df[col] = np.NaN
@@ -507,7 +521,7 @@ class SpindlesDetails(SciNode):
             # Write the current report for the current subject into the cohort tsv file
             write_header = not os.path.exists(cohort_filename)
             # Order columns as the doc file
-            out_columns = list(_get_doc(self.N_CYCLES, sel_spindle_param['spindle_event_name']).keys())
+            out_columns = list(_get_doc(self.N_CYCLES, sel_spindle_param['spindle_event_name'], self.N_HOURS).keys())
 
             cohort_characteristics_df = cohort_characteristics_df[out_columns]
             try : 
@@ -524,7 +538,7 @@ class SpindlesDetails(SciNode):
                 file_name, file_extension = os.path.splitext(cohort_filename)
                 doc_filepath = file_name+"_info"+file_extension
                 if not os.path.exists(doc_filepath):
-                    write_doc_file(doc_filepath, self.N_CYCLES, sel_spindle_param['spindle_event_name'])
+                    write_doc_file(doc_filepath, self.N_CYCLES, sel_spindle_param['spindle_event_name'], self.N_HOURS)
                     # Log message for the Logs tab
                     self._log_manager.log(self.identifier, f"The file {doc_filepath} has been created.")
 
@@ -806,6 +820,7 @@ class SpindlesDetails(SciNode):
 
         # Added to manage NREM
         sleep_stages_name['N2N3'] = ['2', '3']
+        sleep_stages_name['NREM'] = ['1', '2', '3']
 
         for stage in stage_stats_labels:
             inv_dur_sec_cur_stage = 0
@@ -1318,3 +1333,457 @@ class SpindlesDetails(SciNode):
 
         # Organize data for the output
         return cyc_rec_dur_stats | cyc_valid_dur_stats | cyc_ss_stats
+
+    def compute_stats_for_clock_h(self, spindle_cur_chan_df, \
+        stage_in_cycle_df, artifact_cur_chan_df, sleep_stage_sel, label_stats):
+        """""
+            Compute statistics for each clock hour
+
+            Parameters
+            -----------
+                spindle_cur_chan_df : pandas DataFrame
+                    spindle events including the characteristics
+                stage_in_cycle_df   : pandas DataFrame
+                    List of sleep stages included in the cycles.
+                artifact_cur_chan_df : pandas DataFrame
+                    List of artifacts events
+                sleep_stage_sel     : list
+                    List of sleep stage number selected (ex. ['2', '3'])
+                label_stats         : str
+                    The label of the statistics to export. I.e. : 'clock_h', ...
+
+            Returns
+            -----------  
+                stats   : dict
+                    List of statistics for each clock hour.
+        """""
+        # Spindle events
+        ss_start_times = spindle_cur_chan_df['start_sec'].to_numpy().astype(float)   # numpy array
+        ss_dur_times = spindle_cur_chan_df['duration_sec'].to_numpy().astype(float)  # numpy array
+        ss_end_times = ss_start_times+ss_dur_times
+
+        # Stage events
+        stage_starts = stage_in_cycle_df['start_sec'].values
+        stage_durations = stage_in_cycle_df['duration_sec'].values
+        stage_ends = stage_starts+stage_durations    
+
+        # For each clock hour
+        hour_valid_dur_stats = {}
+        hour_ss_stats = {}
+        hour_rec_dur_stats = {}
+        
+        # Get the start time of the recording (first sleep stage)
+        recording_start_time = stage_in_cycle_df['start_sec'].iloc[0] if len(stage_in_cycle_df) > 0 else 0
+        
+        for i_hour in range(self.N_HOURS):
+            hour_label = label_stats+str(i_hour+1)
+            
+            # Calculate hour boundaries (similar to PSACompilation approach)
+            start_hour = recording_start_time + i_hour * 3600  # 3600 seconds = 1 hour
+            end_hour = start_hour + 3600
+            
+            # Select the stages from the current hour
+            stages_bool = (stage_starts >= start_hour) & (stage_ends <= end_hour)
+            stages_i_sel = np.nonzero(stages_bool)[0]
+            stage_sel_df = stage_in_cycle_df.iloc[stages_i_sel] if len(stages_i_sel) > 0 else pd.DataFrame()
+
+            # Select the spindles from the current hour
+            spindle_bool = (ss_start_times >= start_hour) & (ss_end_times <= end_hour)
+            spindle_sel_i = np.nonzero(spindle_bool)[0]
+            # To know in which sleep stage the spindle occurs
+            spindle_sel_df = spindle_cur_chan_df.iloc[spindle_sel_i]
+
+            # Compute recording duration (min) for this hour
+            hour_duration = min(3600, end_hour - start_hour) if end_hour > start_hour else 0
+            hour_rec_dur_stats[f'{hour_label}_min'] = hour_duration / 60
+
+            # Compute valid duration (min) for this hour
+            # For each sleep stage included in stage_sel_df, compute the duration without artifact (valid_min).
+            if len(stage_sel_df) > 0:
+                valid_dur_stats_cur = self.compute_valid_dur_min(artifact_cur_chan_df, stage_sel_df, \
+                    commons.sleep_stages_name, sleep_stage_sel, hour_label, self.stage_stats_labels)
+                hour_valid_dur_stats = hour_valid_dur_stats | valid_dur_stats_cur
+
+                # Compute the spindle count, density, duration and all the characteristics per stage
+                ss_stats_cur = self.compute_stats_spindle_gen_char(valid_dur_stats_cur, spindle_sel_df, sleep_stage_sel, hour_label)
+                hour_ss_stats = hour_ss_stats | ss_stats_cur
+            else:
+                # No stages in this hour - set all values to NaN
+                hour_valid_dur_stats[f'{hour_label}_valid_min'] = np.NaN
+                hour_ss_stats[f'{hour_label}_spindle_count'] = np.NaN
+                hour_ss_stats[f'{hour_label}_density'] = np.NaN
+                hour_ss_stats[f'{hour_label}_spindle_sec'] = np.NaN
+                hour_ss_stats[f'{hour_label}_dom_freq_Hz'] = np.NaN
+                hour_ss_stats[f'{hour_label}_avg_freq_Hz'] = np.NaN
+                hour_ss_stats[f'{hour_label}_amp_pkpk_uV'] = np.NaN
+                hour_ss_stats[f'{hour_label}_amp_rms_uV'] = np.NaN
+                
+                for stage in self.stage_stats_labels:
+                    hour_valid_dur_stats[f'{hour_label}_{stage}_valid_min'] = np.NaN
+                    hour_ss_stats[f'{hour_label}_{stage}_spindle_count'] = np.NaN
+                    hour_ss_stats[f'{hour_label}_{stage}_density'] = np.NaN
+                    hour_ss_stats[f'{hour_label}_{stage}_spindle_sec'] = np.NaN
+                    hour_ss_stats[f'{hour_label}_{stage}_dom_freq_Hz'] = np.NaN
+                    hour_ss_stats[f'{hour_label}_{stage}_avg_freq_Hz'] = np.NaN
+                    hour_ss_stats[f'{hour_label}_{stage}_amp_pkpk_uV'] = np.NaN
+                    hour_ss_stats[f'{hour_label}_{stage}_amp_rms_uV'] = np.NaN
+
+        # Organize data for the output
+        return hour_rec_dur_stats | hour_valid_dur_stats | hour_ss_stats
+
+    def compute_stats_for_stage_h(self, spindle_cur_chan_df, \
+        stage_in_cycle_df, artifact_cur_chan_df, sleep_stage_sel, label_stats):
+        """""
+            Compute statistics for each stage hour (window-based segmentation)
+
+            Parameters
+            -----------
+                spindle_cur_chan_df : pandas DataFrame
+                    spindle events including the characteristics
+                stage_in_cycle_df   : pandas DataFrame
+                    List of sleep stages included in the cycles.
+                artifact_cur_chan_df : pandas DataFrame
+                    List of artifacts events
+                sleep_stage_sel     : list
+                    List of sleep stage number selected (ex. ['2', '3'])
+                label_stats         : str
+                    The label of the statistics to export. I.e. : 'stage_h', ...
+
+            Returns
+            -----------  
+                stats   : dict
+                    List of statistics for each stage hour.
+        """""
+        # Spindle events
+        ss_start_times = spindle_cur_chan_df['start_sec'].to_numpy().astype(float)   # numpy array
+        ss_dur_times = spindle_cur_chan_df['duration_sec'].to_numpy().astype(float)  # numpy array
+        ss_end_times = ss_start_times+ss_dur_times
+
+        # Stage events
+        stage_starts = stage_in_cycle_df['start_sec'].values
+        stage_durations = stage_in_cycle_df['duration_sec'].values
+        stage_ends = stage_starts+stage_durations    
+
+        # For each stage hour (window-based segmentation)
+        stage_hour_valid_dur_stats = {}
+        stage_hour_ss_stats = {}
+        stage_hour_rec_dur_stats = {}
+        
+        # Calculate expected windows per hour (assuming 30-second epochs)
+        epoch_duration = 30  # seconds per epoch
+        expected_windows_per_hour = 3600.0 / epoch_duration  # 120 windows per hour
+        
+        # Collect all stages and spindles by stage type
+        stage_data = {}
+        spindle_data = {}
+        
+        # Group stages by stage type
+        for stage_label in self.stage_stats_labels:
+            stage_data[stage_label] = []
+            spindle_data[stage_label] = []
+            
+            # Handle special case for N2N3
+            if stage_label == 'N2N3':
+                stage_numbers = ['2', '3']
+            elif stage_label == 'NREM':
+                stage_numbers = ['1', '2', '3']
+            else:
+                stage_numbers = [commons.sleep_stages_name[stage_label]]
+            
+            # Collect stages of this type
+            for i, stage_num in enumerate(stage_numbers):
+                stage_mask = stage_in_cycle_df['name'] == int(stage_num)
+                if stage_mask.any():
+                    stage_data[stage_label].extend(stage_in_cycle_df[stage_mask].to_dict('records'))
+            
+            # Collect spindles of this type
+            spindle_mask = spindle_cur_chan_df['stage'].isin([int(sn) for sn in stage_numbers])
+            if spindle_mask.any():
+                spindle_data[stage_label].extend(spindle_cur_chan_df[spindle_mask].to_dict('records'))
+        
+        # Process each hour
+        for i_hour in range(self.N_HOURS):
+            hour_label = label_stats+str(i_hour+1)
+            
+            # Calculate window indices for this hour
+            start_window = int(i_hour * expected_windows_per_hour)
+            end_window = int((i_hour + 1) * expected_windows_per_hour)
+            
+            # Process each stage type
+            for stage_label in self.stage_stats_labels:
+                # Get stages and spindles for this stage type
+                stages_cur = stage_data[stage_label]
+                spindles_cur = spindle_data[stage_label]
+                
+                # Apply window-based segmentation
+                stages_cur_hour = []
+                spindles_cur_hour = []
+                
+                if len(stages_cur) > start_window:
+                    stages_cur_hour = stages_cur[start_window:min(end_window, len(stages_cur))]
+                
+                if len(spindles_cur) > start_window:
+                    spindles_cur_hour = spindles_cur[start_window:min(end_window, len(spindles_cur))]
+                
+                # Convert back to DataFrames for processing
+                if stages_cur_hour:
+                    stage_sel_df = pd.DataFrame(stages_cur_hour)
+                else:
+                    stage_sel_df = pd.DataFrame()
+                
+                if spindles_cur_hour:
+                    spindle_sel_df = pd.DataFrame(spindles_cur_hour)
+                else:
+                    spindle_sel_df = pd.DataFrame()
+                
+                # Compute valid duration and spindle statistics for this stage and hour
+                if len(stage_sel_df) > 0:
+                    valid_dur_stats_cur = self.compute_stage_duration_for_single_stage(stage_sel_df, \
+                        stage_label, hour_label)
+                    stage_hour_valid_dur_stats = stage_hour_valid_dur_stats | valid_dur_stats_cur
+
+                    # Only compute spindle statistics if we have spindles
+                    if len(spindle_sel_df) > 0:
+                        # Compute statistics for this specific stage type only
+                        ss_stats_cur = self.compute_stats_for_single_stage(valid_dur_stats_cur, spindle_sel_df, stage_label, hour_label)
+                        stage_hour_ss_stats = stage_hour_ss_stats | ss_stats_cur
+                    else:
+                        # No spindles in this hour - set all spindle values to NaN
+                        stage_hour_ss_stats[f'{hour_label}_{stage_label}_spindle_count'] = np.NaN
+                        stage_hour_ss_stats[f'{hour_label}_{stage_label}_density'] = np.NaN
+                        stage_hour_ss_stats[f'{hour_label}_{stage_label}_spindle_sec'] = np.NaN
+                        stage_hour_ss_stats[f'{hour_label}_{stage_label}_dom_freq_Hz'] = np.NaN
+                        stage_hour_ss_stats[f'{hour_label}_{stage_label}_avg_freq_Hz'] = np.NaN
+                        stage_hour_ss_stats[f'{hour_label}_{stage_label}_amp_pkpk_uV'] = np.NaN
+                        stage_hour_ss_stats[f'{hour_label}_{stage_label}_amp_rms_uV'] = np.NaN
+                else:
+                    # No stages in this hour - set all values to NaN
+                    stage_hour_valid_dur_stats[f'{hour_label}_{stage_label}_valid_min'] = np.NaN
+                    stage_hour_ss_stats[f'{hour_label}_{stage_label}_spindle_count'] = np.NaN
+                    stage_hour_ss_stats[f'{hour_label}_{stage_label}_density'] = np.NaN
+                    stage_hour_ss_stats[f'{hour_label}_{stage_label}_spindle_sec'] = np.NaN
+                    stage_hour_ss_stats[f'{hour_label}_{stage_label}_dom_freq_Hz'] = np.NaN
+                    stage_hour_ss_stats[f'{hour_label}_{stage_label}_avg_freq_Hz'] = np.NaN
+                    stage_hour_ss_stats[f'{hour_label}_{stage_label}_amp_pkpk_uV'] = np.NaN
+                    stage_hour_ss_stats[f'{hour_label}_{stage_label}_amp_rms_uV'] = np.NaN
+            
+            # Compute total statistics for this hour
+            total_stages = sum(len(stage_data[label]) for label in self.stage_stats_labels)
+            total_spindles = sum(len(spindle_data[label]) for label in self.stage_stats_labels)
+            
+            # Apply window segmentation for totals
+            if total_stages > start_window:
+                total_stages_hour = total_stages - start_window
+                stage_hour_rec_dur_stats[f'{hour_label}_min'] = min(total_stages_hour * epoch_duration / 60, 60)  # Max 60 minutes
+            else:
+                stage_hour_rec_dur_stats[f'{hour_label}_min'] = 0
+            
+            # Compute totals for this hour (aggregate across all stages)
+            self.compute_stage_hour_totals(hour_label, stage_hour_valid_dur_stats, stage_hour_ss_stats)
+
+        # Organize data for the output
+        return stage_hour_rec_dur_stats | stage_hour_valid_dur_stats | stage_hour_ss_stats
+
+    def compute_stats_for_single_stage(self, valid_dur, spindle_cur_chan_df, stage_label, label_stats):
+        """""
+        Compute statistics for a single stage type (e.g., N1, N2, N3, N2N3, NREM, R).
+        This is a simplified version of compute_stats_spindle_gen_char for single stage processing.
+
+        Parameters
+        -----------
+            valid_dur : dict
+                Dictionary containing valid duration information
+            spindle_cur_chan_df : pandas DataFrame
+                Spindle events for the current stage type
+            stage_label : str
+                The stage label (N1, N2, N3, N2N3, NREM, R)
+            label_stats : str
+                The label for the statistics (e.g., "stage_h1_N1")
+                
+        Returns
+        -----------  
+            spindle_stats : dict
+                Dictionary containing statistics for the single stage
+        """""
+        # Get the valid duration for this specific stage
+        valid_dur_key = f'{label_stats}_{stage_label}_valid_min'
+        if valid_dur_key not in valid_dur:
+            valid_dur_key = f'{label_stats}_valid_min'  # fallback to general valid duration
+        
+        valid_duration = valid_dur.get(valid_dur_key, 0)
+        
+        # Count spindles
+        spindle_count = len(spindle_cur_chan_df)
+        
+        # Initialize result dictionary
+        result = {}
+        
+        # Spindle count
+        if valid_duration > 0:
+            result[f'{label_stats}_{stage_label}_spindle_count'] = spindle_count
+        else:
+            result[f'{label_stats}_{stage_label}_spindle_count'] = np.nan
+            
+        # Density
+        if valid_duration > 0:
+            result[f'{label_stats}_{stage_label}_density'] = spindle_count / valid_duration
+        else:
+            result[f'{label_stats}_{stage_label}_density'] = np.nan
+            
+        # Other characteristics (only if we have spindles) - using same approach as original
+        if spindle_count > 0:
+            # Use the same calculation method as compute_stats_spindle_gen_char
+            result[f'{label_stats}_{stage_label}_spindle_sec'] = spindle_cur_chan_df['duration_sec'].sum() / spindle_count
+            result[f'{label_stats}_{stage_label}_dom_freq_Hz'] = spindle_cur_chan_df['dom_freq_Hz'].sum() / spindle_count
+            result[f'{label_stats}_{stage_label}_avg_freq_Hz'] = spindle_cur_chan_df['avg_freq_Hz'].sum() / spindle_count
+            result[f'{label_stats}_{stage_label}_amp_pkpk_uV'] = spindle_cur_chan_df['amp_pkpk_uV'].sum() / spindle_count
+            result[f'{label_stats}_{stage_label}_amp_rms_uV'] = spindle_cur_chan_df['amp_rms_uV'].sum() / spindle_count
+        else:
+            result[f'{label_stats}_{stage_label}_spindle_sec'] = np.nan
+            result[f'{label_stats}_{stage_label}_dom_freq_Hz'] = np.nan
+            result[f'{label_stats}_{stage_label}_avg_freq_Hz'] = np.nan
+            result[f'{label_stats}_{stage_label}_amp_pkpk_uV'] = np.nan
+            result[f'{label_stats}_{stage_label}_amp_rms_uV'] = np.nan
+            
+        return result
+
+    def compute_stage_duration_for_single_stage(self, stage_in_cycle_df, stage_label, label_stats):
+        """""
+        Compute total stage duration for a single stage type (e.g., N1, N2, N3, N2N3, NREM, R).
+        Simple function that computes stage duration without artifact handling.
+
+        Parameters
+        -----------
+            stage_in_cycle_df : Pandas DataFrame
+                Sleep stage events for the current stage type
+            stage_label : str
+                The stage label (N1, N2, N3, N2N3, NREM, R)
+            label_stats : str
+                The label for the statistics (e.g., "stage_h1")
+                
+        Returns
+        -----------  
+            stage_dur : dict
+                Dictionary containing total stage duration for the single stage
+        """""
+        # Handle grouped stages (N2N3, NREM) that are not in commons.sleep_stages_name
+        if stage_label == 'N2N3':
+            stage_numbers = ['2', '3']
+        elif stage_label == 'NREM':
+            stage_numbers = ['1', '2', '3']
+        else:
+            stage_numbers = [commons.sleep_stages_name[stage_label]]
+        
+        # Manage sleep stage data
+        stage_dur_in_cycle = stage_in_cycle_df['duration_sec'].to_numpy()
+        stage_label_in_cycle = stage_in_cycle_df['name'].to_numpy()
+        stage_label_in_cycle = stage_label_in_cycle.astype(int)
+
+        # Select stages for this specific stage type
+        stage_sel = np.isin(stage_label_in_cycle, list(map(int, stage_numbers)))
+        stage_dur_cur = stage_dur_in_cycle[stage_sel]
+
+        # Compute the total stage duration (without artifact subtraction)
+        stage_dur = {}
+        stage_dur[f'{label_stats}_{stage_label}_valid_min'] = stage_dur_cur.sum() / 60
+        
+        return stage_dur
+
+    def compute_stage_hour_totals(self, hour_label, valid_dur_stats, ss_stats):
+        """""
+        Compute total statistics for a stage hour by aggregating across all stages.
+        Uses the same approach as compute_stats_spindle_gen_char: concatenate individual values and take mean.
+        
+        Parameters
+        -----------
+            hour_label : str
+                The hour label (e.g., "stage_h1")
+            valid_dur_stats : dict
+                Dictionary containing valid duration statistics (will be modified)
+            ss_stats : dict
+                Dictionary containing spindle statistics (will be modified)
+        """""
+        # Initialize totals
+        total_valid_dur = 0
+        total_spindle_count = 0
+        
+        # For weighted averages (since we only have per-stage averages, not raw data)
+        weighted_duration_sum = 0
+        weighted_dom_freq_sum = 0
+        weighted_avg_freq_sum = 0
+        weighted_amp_pkpk_sum = 0
+        weighted_amp_rms_sum = 0
+        
+        # Create local sleep_stages_name to check stage length (same as original function)
+        local_sleep_stages_name = commons.sleep_stages_name.copy()
+        local_sleep_stages_name['N2N3'] = ['2', '3']
+        local_sleep_stages_name['NREM'] = ['1', '2', '3']
+        
+        # Aggregate across all stages for this hour
+        for stage_label in self.stage_stats_labels:
+            # Only include individual stages in totals (same logic as original function)
+            if len(local_sleep_stages_name[stage_label]) == 1:
+                # Valid duration
+                valid_dur_key = f'{hour_label}_{stage_label}_valid_min'
+                if valid_dur_key in valid_dur_stats and not np.isnan(valid_dur_stats[valid_dur_key]):
+                    total_valid_dur += valid_dur_stats[valid_dur_key]
+                
+                # Spindle count
+                count_key = f'{hour_label}_{stage_label}_spindle_count'
+                if count_key in ss_stats and not np.isnan(ss_stats[count_key]):
+                    total_spindle_count += ss_stats[count_key]
+                
+                # Collect values for weighted averaging (only if we have spindles)
+                if count_key in ss_stats and not np.isnan(ss_stats[count_key]) and ss_stats[count_key] > 0:
+                    stage_count = int(ss_stats[count_key])
+                    
+                    # Duration
+                    duration_key = f'{hour_label}_{stage_label}_spindle_sec'
+                    if duration_key in ss_stats and not np.isnan(ss_stats[duration_key]):
+                        weighted_duration_sum += ss_stats[duration_key] * stage_count
+                    
+                    # Dominant frequency
+                    dom_freq_key = f'{hour_label}_{stage_label}_dom_freq_Hz'
+                    if dom_freq_key in ss_stats and not np.isnan(ss_stats[dom_freq_key]):
+                        weighted_dom_freq_sum += ss_stats[dom_freq_key] * stage_count
+                    
+                    # Average frequency
+                    avg_freq_key = f'{hour_label}_{stage_label}_avg_freq_Hz'
+                    if avg_freq_key in ss_stats and not np.isnan(ss_stats[avg_freq_key]):
+                        weighted_avg_freq_sum += ss_stats[avg_freq_key] * stage_count
+                    
+                    # Peak-to-peak amplitude
+                    amp_pkpk_key = f'{hour_label}_{stage_label}_amp_pkpk_uV'
+                    if amp_pkpk_key in ss_stats and not np.isnan(ss_stats[amp_pkpk_key]):
+                        weighted_amp_pkpk_sum += ss_stats[amp_pkpk_key] * stage_count
+                    
+                    # RMS amplitude
+                    amp_rms_key = f'{hour_label}_{stage_label}_amp_rms_uV'
+                    if amp_rms_key in ss_stats and not np.isnan(ss_stats[amp_rms_key]):
+                        weighted_amp_rms_sum += ss_stats[amp_rms_key] * stage_count
+        
+        # Add total valid duration
+        valid_dur_stats[f'{hour_label}_valid_min'] = total_valid_dur
+        
+        # Add total spindle count
+        ss_stats[f'{hour_label}_spindle_count'] = total_spindle_count
+        
+        # Add total density
+        if total_valid_dur > 0:
+            ss_stats[f'{hour_label}_density'] = total_spindle_count / total_valid_dur
+        else:
+            ss_stats[f'{hour_label}_density'] = np.nan
+        
+        # Add total averages using weighted averages (mathematically equivalent to original method)
+        if total_spindle_count > 0:
+            ss_stats[f'{hour_label}_spindle_sec'] = weighted_duration_sum / total_spindle_count
+            ss_stats[f'{hour_label}_dom_freq_Hz'] = weighted_dom_freq_sum / total_spindle_count
+            ss_stats[f'{hour_label}_avg_freq_Hz'] = weighted_avg_freq_sum / total_spindle_count
+            ss_stats[f'{hour_label}_amp_pkpk_uV'] = weighted_amp_pkpk_sum / total_spindle_count
+            ss_stats[f'{hour_label}_amp_rms_uV'] = weighted_amp_rms_sum / total_spindle_count
+        else:
+            ss_stats[f'{hour_label}_spindle_sec'] = np.nan
+            ss_stats[f'{hour_label}_dom_freq_Hz'] = np.nan
+            ss_stats[f'{hour_label}_avg_freq_Hz'] = np.nan
+            ss_stats[f'{hour_label}_amp_pkpk_uV'] = np.nan
+            ss_stats[f'{hour_label}_amp_rms_uV'] = np.nan
