@@ -296,7 +296,6 @@ def _get_doc(N_CYCLE, spindle_event_name, N_HOURS=0):
     for i_hour in range(N_HOURS):
         current_stage_hour_dict = \
             {
-            f'stage_h{i_hour+1}_valid_min' : f'Stage Hour {i_hour+1} - Valid (no artifact) duration (min) available for detection minus the REM periods if excluded.',
             f'stage_h{i_hour+1}_N1_valid_min' : f'Stage Hour {i_hour+1} - Valid (no artifact) duration (min) in N1 stage available for detection minus the REM periods if excluded.',
             f'stage_h{i_hour+1}_N2_valid_min' : f'Stage Hour {i_hour+1} - Valid (no artifact) duration (min) in N2 stage available for detection minus the REM periods if excluded.',
             f'stage_h{i_hour+1}_N3_valid_min' : f'Stage Hour {i_hour+1} - Valid (no artifact) duration (min) in N3 stage available for detection minus the REM periods if excluded.',
@@ -319,7 +318,6 @@ def _get_doc(N_CYCLE, spindle_event_name, N_HOURS=0):
             f'stage_h{i_hour+1}_N2N3_density' : f'Stage Hour {i_hour+1} - Spindle density (count/min) in N2 and N3 stage.',
             f'stage_h{i_hour+1}_NREM_density' : f'Stage Hour {i_hour+1} - Spindle density (count/min) in NREM stage (N1, N2, N3).',
             f'stage_h{i_hour+1}_R_density' : f'Stage Hour {i_hour+1} - Spindle density (count/min) in REM stage.',
-            f'stage_h{i_hour+1}_density' : f'Stage Hour {i_hour+1} - Spindle density (count/min) in all stages.',
             
             f'stage_h{i_hour+1}_N1_spindle_sec' : f'Stage Hour {i_hour+1} - Average spindle duration (s) in N1 stage.',
             f'stage_h{i_hour+1}_N2_spindle_sec' : f'Stage Hour {i_hour+1} - Average spindle duration (s) in N2 stage.',

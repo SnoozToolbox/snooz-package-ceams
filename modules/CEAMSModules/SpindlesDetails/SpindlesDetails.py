@@ -1704,7 +1704,6 @@ class SpindlesDetails(SciNode):
                 Dictionary containing spindle statistics (will be modified)
         """""
         # Initialize totals
-        total_valid_dur = 0
         total_spindle_count = 0
         
         # For weighted averages (since we only have per-stage averages, not raw data)
@@ -1723,10 +1722,6 @@ class SpindlesDetails(SciNode):
         for stage_label in self.stage_stats_labels:
             # Only include individual stages in totals (same logic as original function)
             if len(local_sleep_stages_name[stage_label]) == 1:
-                # Valid duration
-                valid_dur_key = f'{hour_label}_{stage_label}_valid_min'
-                if valid_dur_key in valid_dur_stats and not np.isnan(valid_dur_stats[valid_dur_key]):
-                    total_valid_dur += valid_dur_stats[valid_dur_key]
                 
                 # Spindle count
                 count_key = f'{hour_label}_{stage_label}_spindle_count'
@@ -1762,17 +1757,8 @@ class SpindlesDetails(SciNode):
                     if amp_rms_key in ss_stats and not np.isnan(ss_stats[amp_rms_key]):
                         weighted_amp_rms_sum += ss_stats[amp_rms_key] * stage_count
         
-        # Add total valid duration
-        valid_dur_stats[f'{hour_label}_valid_min'] = total_valid_dur
-        
         # Add total spindle count
         ss_stats[f'{hour_label}_spindle_count'] = total_spindle_count
-        
-        # Add total density
-        if total_valid_dur > 0:
-            ss_stats[f'{hour_label}_density'] = total_spindle_count / total_valid_dur
-        else:
-            ss_stats[f'{hour_label}_density'] = np.nan
         
         # Add total averages using weighted averages (mathematically equivalent to original method)
         if total_spindle_count > 0:
