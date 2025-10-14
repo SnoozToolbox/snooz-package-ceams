@@ -824,6 +824,8 @@ class SpindlesDetails(SciNode):
 
         for stage in stage_stats_labels:
             inv_dur_sec_cur_stage = 0
+            if type(sleep_stage_sel) is str:
+                sleep_stage_sel = sleep_stage_sel.split(',')
             if sleep_stages_name[stage] in sleep_stage_sel or (isinstance(sleep_stages_name[stage], list) and all(item in sleep_stage_sel for item in sleep_stages_name[stage])):  
                 
                 stage_sel = np.isin(stage_label_in_cycle, list(map(int, sleep_stages_name[stage])))
