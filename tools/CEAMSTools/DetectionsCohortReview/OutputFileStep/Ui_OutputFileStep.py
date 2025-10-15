@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file ''
+## Form generated from reading UI file 'Ui_OutputFileStep.ui'
 ##
 ## Created by: Qt User Interface Compiler version 6.8.2
 ##
@@ -24,8 +24,8 @@ class Ui_OutputFileStep(object):
     def setupUi(self, OutputFileStep):
         if not OutputFileStep.objectName():
             OutputFileStep.setObjectName(u"OutputFileStep")
-        OutputFileStep.resize(980, 642)
-        OutputFileStep.setLayoutDirection(Qt.LeftToRight)
+        OutputFileStep.resize(979, 578)
+        OutputFileStep.setLayoutDirection(Qt.LayoutDirection.LeftToRight)
         self.horizontalLayout_3 = QHBoxLayout(OutputFileStep)
         self.horizontalLayout_3.setObjectName(u"horizontalLayout_3")
         self.verticalLayout = QVBoxLayout()
@@ -77,18 +77,6 @@ class Ui_OutputFileStep(object):
 
         self.gridLayout = QGridLayout()
         self.gridLayout.setObjectName(u"gridLayout")
-        self.label_5 = QLabel(OutputFileStep)
-        self.label_5.setObjectName(u"label_5")
-        self.label_5.setMinimumSize(QSize(0, 20))
-
-        self.gridLayout.addWidget(self.label_5, 2, 0, 1, 2)
-
-        self.label_7 = QLabel(OutputFileStep)
-        self.label_7.setObjectName(u"label_7")
-        self.label_7.setMinimumSize(QSize(0, 20))
-
-        self.gridLayout.addWidget(self.label_7, 3, 0, 1, 2)
-
         self.label = QLabel(OutputFileStep)
         self.label.setObjectName(u"label")
         self.label.setMinimumSize(QSize(0, 20))
@@ -96,11 +84,33 @@ class Ui_OutputFileStep(object):
 
         self.gridLayout.addWidget(self.label, 0, 0, 1, 1)
 
+        self.label_6 = QLabel(OutputFileStep)
+        self.label_6.setObjectName(u"label_6")
+
+        self.gridLayout.addWidget(self.label_6, 4, 0, 1, 2)
+
         self.activity_comboBox = QComboBox(OutputFileStep)
         self.activity_comboBox.setObjectName(u"activity_comboBox")
         self.activity_comboBox.setMaximumSize(QSize(16777215, 16777215))
 
         self.gridLayout.addWidget(self.activity_comboBox, 0, 1, 1, 1)
+
+        self.label_7 = QLabel(OutputFileStep)
+        self.label_7.setObjectName(u"label_7")
+        self.label_7.setMinimumSize(QSize(0, 20))
+
+        self.gridLayout.addWidget(self.label_7, 3, 0, 1, 2)
+
+        self.label_9 = QLabel(OutputFileStep)
+        self.label_9.setObjectName(u"label_9")
+
+        self.gridLayout.addWidget(self.label_9, 5, 0, 1, 2)
+
+        self.label_5 = QLabel(OutputFileStep)
+        self.label_5.setObjectName(u"label_5")
+        self.label_5.setMinimumSize(QSize(0, 20))
+
+        self.gridLayout.addWidget(self.label_5, 2, 0, 1, 2)
 
 
         self.verticalLayout.addLayout(self.gridLayout)
@@ -164,9 +174,11 @@ class Ui_OutputFileStep(object):
         self.export_transpose_checkBox.setToolTip(QCoreApplication.translate("OutputFileStep", u"Check to export the transposed PSA file. The format is one sujet per row and the selected channels (including ROIs) and frequency bands are packed as additional columns. ", None))
 #endif // QT_CONFIG(tooltip)
         self.export_transpose_checkBox.setText(QCoreApplication.translate("OutputFileStep", u"Export transposed report", None))
-        self.label_5.setText(QCoreApplication.translate("OutputFileStep", u" - Select \"Total\" to output the average through the whole recording.", None))
-        self.label_7.setText(QCoreApplication.translate("OutputFileStep", u" - Select \"Distribution per sleep cycle\" to output the average per sleep cycle, from sleep cycle 1 to 9.  The start point is the sleep onset.", None))
         self.label.setText(QCoreApplication.translate("OutputFileStep", u"Activity variables exported in the transposed PSA file", None))
+        self.label_6.setText(QCoreApplication.translate("OutputFileStep", u"<html><head/><body><p>- Select &quot;Distribution per hour spent in each sleep stage&quot; to output the average for each stage hour.</p></body></html>", None))
+        self.label_7.setText(QCoreApplication.translate("OutputFileStep", u"<html><head/><body><p>- Select &quot;Distribution per clock hour&quot; to output the average for each real clock hour.</p></body></html>", None))
+        self.label_9.setText(QCoreApplication.translate("OutputFileStep", u"<html><head/><body><p>- Select &quot;Distribution per sleep cycle&quot; to output the average per sleep cycle, from sleep cycle 1 to 9. The start point is the sleep onset.</p></body></html>", None))
+        self.label_5.setText(QCoreApplication.translate("OutputFileStep", u"<html><head/><body><p>- Select &quot;Total&quot; to output the average through the whole recording.</p></body></html>", None))
         self.label_2.setText(QCoreApplication.translate("OutputFileStep", u"Define the filename to save the exported files (the sufix _clean.tsv or _transposed.tsv will be added to the filename)", None))
         self.filename_lineEdit.setInputMask("")
         self.filename_lineEdit.setText("")
