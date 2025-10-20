@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file ''
+## Form generated from reading UI file 'Ui_HoursCyclesStep.ui'
 ##
 ## Created by: Qt User Interface Compiler version 6.8.2
 ##
@@ -64,7 +64,7 @@ class Ui_HoursCyclesStep(object):
 
         self.label = QLabel(HoursCyclesStep)
         self.label.setObjectName(u"label")
-        self.label.setEnabled(False)
+        self.label.setEnabled(True)
 
         self.verticalLayout.addWidget(self.label)
 
@@ -76,7 +76,7 @@ class Ui_HoursCyclesStep(object):
         self.horizontalLayout.setObjectName(u"horizontalLayout")
         self.spinBox_hours = QSpinBox(HoursCyclesStep)
         self.spinBox_hours.setObjectName(u"spinBox_hours")
-        self.spinBox_hours.setEnabled(False)
+        self.spinBox_hours.setEnabled(True)
         self.spinBox_hours.setMinimum(1)
         self.spinBox_hours.setMaximum(48)
         self.spinBox_hours.setValue(8)
@@ -85,7 +85,7 @@ class Ui_HoursCyclesStep(object):
 
         self.label_3 = QLabel(HoursCyclesStep)
         self.label_3.setObjectName(u"label_3")
-        self.label_3.setEnabled(False)
+        self.label_3.setEnabled(True)
 
         self.horizontalLayout.addWidget(self.label_3)
 

@@ -86,11 +86,13 @@ class Ui_IntroStep(object):
                         "in-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; text-decoration: underline;\"><br /></p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">	If you want to export the transposed report, define how to average the events characteristics across the recording.</p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">	-Select &quot;Total&quot; to output the average through the whole recording.</p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">	-Select &quot;Distribution per clock hour&quot; to output the average per real clock hour (from hour 1 to 12.  The start point is the sleep onset).</p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">	- Select &quot;Distribution per hour spent in each sleep st"
+                        "age&quot; to output the average per stage when it reaches an hour (from hour 1 to 12.  The start point is the sleep onset).</p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">	-Select &quot;Distribution per sleep cycle&quot; to output the average per sleep cycle, from sleep cycle 1 to 9.  The start point is the sleep onset.</p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
-"<p style=\" margin"
-                        "-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">	Define the filename to save the exported files (the sufix _clean or _transposed will be added to the filename)</p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">	Define the filename to save the exported files (the sufix _clean or _transposed will be added to the filename)</p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">	The output file is a .tsv (tab separated values) file. </p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">	*Warning : the current output is added (appended) to the existing output file.</p></body></html>", None))
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">	*Warning : the current output is added (appended) to the existin"
+                        "g output file.</p></body></html>", None))
     # retranslateUi
 
