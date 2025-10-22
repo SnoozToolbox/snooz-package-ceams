@@ -772,7 +772,8 @@ class SpindlesDetails(SciNode):
         return spindle_stats
 
 
-    def compute_valid_dur_min(self, art_cur_chan_df, stage_in_cycle_df, sleep_stages_name, sleep_stage_sel, label_stats, stage_stats_labels):
+    @staticmethod
+    def compute_valid_dur_min(art_cur_chan_df, stage_in_cycle_df, sleep_stages_name, sleep_stage_sel, label_stats, stage_stats_labels):
         """""
         For each sleep stage included in stage_in_cycle_df, compute the duration without artifact (valid_min).
 
@@ -839,39 +840,14 @@ class SpindlesDetails(SciNode):
                 stage_start_cur = stage_start_in_cycle[stage_sel]
                 stage_dur_cur = stage_dur_in_cycle[stage_sel]
                 stage_end_cur = stage_end_in_cycle[stage_sel]
-                i_stage = 0
-                # For all epochs from the current sleep stage
-                for start_epoch, end_epoch in zip(stage_start_cur, stage_end_cur):
-                    if any((art_start_np<end_epoch) & (art_end_np>start_epoch)):
-
-                        # To compute the invalide duration because of artifact (defined by art_start_np, 
-                        # art_dur_np, art_end_np) for the current epoch defined by start_epoch and end_epoch.
-                        # Each value of the numpy array (art_start_np, art_dur_np, art_end_np) corresponds to an artifact.
-
-                        inv_dur_sec_cur_epoch = 0
-                        # Manage the artifacts that start before the sleep onset, end after SO but before the end of the last cycle
-                            # The duration is the difference between the end of the artifact and the SO
-                        art_dur_before_SO = art_end_np[(art_start_np < start_epoch) & (art_end_np > start_epoch) & (art_end_np < end_epoch )]-start_epoch
-                        inv_dur_sec_cur_epoch = inv_dur_sec_cur_epoch + art_dur_before_SO.sum()
-                        # Manage the artifacts that start after the sleep onset but end before the end of the last cycle
-                            # The duration is the sum of the duration of all the artifacts
-                        art_sel_in_cycles = (art_start_np >= start_epoch) & (art_end_np <= end_epoch)
-                        inv_dur_sec_cur_epoch = inv_dur_sec_cur_epoch + art_dur_np[art_sel_in_cycles].sum()
-                        # Manage the artifact that end after the end of the last cycle, but start after the start_epoch
-                            # The duration is the difference between the end of the last cycle and the artifact start
-                        art_sel_after_last_cycle = (art_start_np < end_epoch) & (art_end_np > end_epoch) & (art_start_np >= start_epoch)
-                        art_dur_after_last_cycle = end_epoch-art_start_np[art_sel_after_last_cycle]
-                        inv_dur_sec_cur_epoch = inv_dur_sec_cur_epoch + art_dur_after_last_cycle.sum()
-                        # Manage the artifact that start before the SO and end after the last cycle.
-                        art_sel_all_time = (art_start_np < start_epoch) & (art_end_np > end_epoch)
-                        if any(art_sel_all_time):
-                            inv_dur_sec_cur_epoch = inv_dur_sec_cur_epoch + end_epoch-start_epoch
-                    else:
-                        inv_dur_sec_cur_epoch=0
-                    inv_dur_sec_cur_stage = inv_dur_sec_cur_stage + inv_dur_sec_cur_epoch
-                    i_stage = i_stage +1 
+                
+                # Compute the invalid duration caused by artifacts for the current stage
+                inv_dur_sec_cur_stage = SpindlesDetails._compute_artifact_duration_for_epochs(
+                    stage_start_cur, stage_end_cur, art_start_np, art_dur_np, art_end_np
+                )
+                
                 # Compute the valid duration for the current stage
-                valid_dur[f'{label_stats}_{stage}_valid_min'] = (stage_dur_cur.sum()-inv_dur_sec_cur_stage)/60
+                valid_dur[f'{label_stats}_{stage}_valid_min'] = (stage_dur_cur.sum() - inv_dur_sec_cur_stage) / 60
 
                 # Compute the total valid duration
                 if len(sleep_stages_name[stage]) == 1:  # condition added to avoid summation for group of stages (ex: for NREM)
@@ -1499,7 +1475,7 @@ class SpindlesDetails(SciNode):
             else:
                 stage_numbers = [commons.sleep_stages_name[stage_label]]
 
-            # Select stages for this specific stage type icitte
+            # Select stages for this specific stage type
             if type(sleep_stage_sel) is str:
                 sleep_stage_sel = sleep_stage_sel.split(',')
         
@@ -1555,8 +1531,8 @@ class SpindlesDetails(SciNode):
                 
                 # Compute valid duration and spindle statistics for this stage and hour
                 if len(stage_sel_df) > 0:
-                    valid_dur_stats_cur = self.compute_stage_duration_for_single_stage(stage_sel_df, \
-                        stage_label, hour_label, sleep_stage_sel)
+                    valid_dur_stats_cur = SpindlesDetails.compute_stage_duration_for_single_stage(stage_sel_df, \
+                        artifact_cur_chan_df, stage_label, hour_label, sleep_stage_sel)
                     stage_hour_valid_dur_stats = stage_hour_valid_dur_stats | valid_dur_stats_cur
 
                     # Only compute spindle statistics if we have spindles
@@ -1664,7 +1640,8 @@ class SpindlesDetails(SciNode):
             
         return result
 
-    def compute_stage_duration_for_single_stage(self, stage_in_cycle_df, stage_label, label_stats, sleep_stage_sel):
+    @staticmethod
+    def compute_stage_duration_for_single_stage(stage_in_cycle_df, art_cur_chan_df, stage_label, label_stats, sleep_stage_sel):
         """""
         Compute total stage duration for a single stage type (e.g., N1, N2, N3, N2N3, NREM, R).
         Simple function that computes stage duration without artifact handling.
@@ -1694,7 +1671,9 @@ class SpindlesDetails(SciNode):
             stage_numbers = [commons.sleep_stages_name[stage_label]]
         
         # Manage sleep stage data
+        stage_start_in_cycle = stage_in_cycle_df['start_sec'].to_numpy()
         stage_dur_in_cycle = stage_in_cycle_df['duration_sec'].to_numpy()
+        stage_end_in_cycle = stage_start_in_cycle+stage_dur_in_cycle
         stage_label_in_cycle = stage_in_cycle_df['name'].to_numpy()
         stage_label_in_cycle = stage_label_in_cycle.astype(int)
 
@@ -1703,20 +1682,36 @@ class SpindlesDetails(SciNode):
             sleep_stage_sel = sleep_stage_sel.split(',')
     
         # Remove the artifacts to compute the valid duration
-        # icitte
+        # Extract artifact for the current channel
+        art_start_np = art_cur_chan_df['start_sec'].to_numpy()
+        art_dur_np = art_cur_chan_df['duration_sec'].to_numpy()
+        art_end_np = art_start_np + art_dur_np  
 
         # Extract the index of epochs corresponding to the current sleep stage to report
         stage_to_report_int = list(map(int, stage_numbers))
         stage_to_report_sel_int = [item for item in list(map(int, sleep_stage_sel)) if item in stage_to_report_int]
         stage_sel = np.isin(stage_label_in_cycle, stage_to_report_sel_int)  
-
-        stage_dur_cur = stage_dur_in_cycle[stage_sel]
-
-        # Compute the total stage duration (without artifact subtraction)
-        stage_dur = {}
-        stage_dur[f'{label_stats}_{stage_label}_valid_min'] = stage_dur_cur.sum() / 60
         
-        return stage_dur
+        valid_dur = {}
+        if any(stage_sel):             
+
+            # Extract start, duration and end of the epochs corresponding to the current sleep stage selection
+            stage_start_cur = stage_start_in_cycle[stage_sel]
+            stage_dur_cur = stage_dur_in_cycle[stage_sel]
+            stage_end_cur = stage_end_in_cycle[stage_sel]
+            
+            # Compute the invalid duration caused by artifacts for the current stage
+            inv_dur_sec_cur_stage = SpindlesDetails._compute_artifact_duration_for_epochs(
+                stage_start_cur, stage_end_cur, art_start_np, art_dur_np, art_end_np
+            )
+            
+            # Compute the valid duration for the current stage
+            valid_dur[f'{label_stats}_{stage_label}_valid_min'] = (stage_dur_cur.sum() - inv_dur_sec_cur_stage) / 60
+        else:
+            valid_dur[f'{label_stats}_{stage_label}_valid_min'] = 0
+        
+        return valid_dur
+
 
     def compute_stage_hour_totals(self, hour_label, valid_dur_stats, ss_stats):
         """""
@@ -1802,3 +1797,60 @@ class SpindlesDetails(SciNode):
             ss_stats[f'{hour_label}_avg_freq_Hz'] = np.nan
             ss_stats[f'{hour_label}_amp_pkpk_uV'] = np.nan
             ss_stats[f'{hour_label}_amp_rms_uV'] = np.nan
+
+    @staticmethod
+    def _compute_artifact_duration_for_epochs(stage_start_cur, stage_end_cur, art_start_np, art_dur_np, art_end_np):
+        """
+        Compute the invalid duration caused by artifacts for a set of epochs.
+
+        Parameters
+        -----------
+            stage_start_cur : numpy array
+                Start times (in seconds) of the epochs for the current stage selection.
+            stage_end_cur : numpy array
+                End times (in seconds) of the epochs for the current stage selection.
+            art_start_np : numpy array
+                Start times (in seconds) of all artifacts.
+            art_dur_np : numpy array
+                Durations (in seconds) of all artifacts.
+            art_end_np : numpy array
+                End times (in seconds) of all artifacts.
+
+        Returns
+        -----------
+            inv_dur_sec_total : float
+                Total invalid duration (in seconds) caused by artifacts across all epochs.
+        """
+        inv_dur_sec_total = 0
+        
+        # For all epochs from the current sleep stage
+        for start_epoch, end_epoch in zip(stage_start_cur, stage_end_cur):
+            if any((art_start_np < end_epoch) & (art_end_np > start_epoch)):
+                
+                # To compute the invalid duration because of artifact (defined by art_start_np, 
+                # art_dur_np, art_end_np) for the current epoch defined by start_epoch and end_epoch.
+                # Each value of the numpy array (art_start_np, art_dur_np, art_end_np) corresponds to an artifact.
+
+                inv_dur_sec_cur_epoch = 0
+                # Manage the artifacts that start before the epoch start, end after epoch start but before the epoch end
+                # The duration is the difference between the end of the artifact and the epoch start
+                art_dur_before_epoch = art_end_np[(art_start_np < start_epoch) & (art_end_np > start_epoch) & (art_end_np < end_epoch)] - start_epoch
+                inv_dur_sec_cur_epoch = inv_dur_sec_cur_epoch + art_dur_before_epoch.sum()
+                # Manage the artifacts that start after the epoch start but end before the epoch end
+                # The duration is the sum of the duration of all the artifacts
+                art_sel_in_epoch = (art_start_np >= start_epoch) & (art_end_np <= end_epoch)
+                inv_dur_sec_cur_epoch = inv_dur_sec_cur_epoch + art_dur_np[art_sel_in_epoch].sum()
+                # Manage the artifact that end after the epoch end, but start after the epoch start
+                # The duration is the difference between the epoch end and the artifact start
+                art_sel_after_epoch = (art_start_np < end_epoch) & (art_end_np > end_epoch) & (art_start_np >= start_epoch)
+                art_dur_after_epoch = end_epoch - art_start_np[art_sel_after_epoch]
+                inv_dur_sec_cur_epoch = inv_dur_sec_cur_epoch + art_dur_after_epoch.sum()
+                # Manage the artifact that start before the epoch start and end after the epoch end
+                art_sel_all_time = (art_start_np < start_epoch) & (art_end_np > end_epoch)
+                if any(art_sel_all_time):
+                    inv_dur_sec_cur_epoch = inv_dur_sec_cur_epoch + end_epoch - start_epoch
+            else:
+                inv_dur_sec_cur_epoch=0
+            inv_dur_sec_total = inv_dur_sec_total + inv_dur_sec_cur_epoch
+        
+        return inv_dur_sec_total

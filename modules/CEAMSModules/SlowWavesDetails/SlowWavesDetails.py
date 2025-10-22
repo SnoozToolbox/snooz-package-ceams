@@ -500,10 +500,12 @@ class SlowWavesDetails(SciNode):
         }
 
 
-    def compute_tot_stats_per_stage(self, sw_cur_chan_sort, artifact_cur_chan_df, stage_in_cycle_df, sleep_stages_name, stage_sel, label_stats, stage_stats_labels):
+    def compute_tot_stats_per_stage(self, sw_cur_chan_sort, artifact_cur_chan_df, \
+        stage_in_cycle_df, sleep_stages_name, stage_sel, label_stats, stage_stats_labels):
         # Compute valid duration (min)
         #   Return a dict as valid_dur[f'{label_stats}_valid_min_{stage}']
-        valid_dur = EventsDetails.compute_valid_dur_min(EventsDetails, artifact_cur_chan_df, stage_in_cycle_df, sleep_stages_name, stage_sel, label_stats, stage_stats_labels)
+        valid_dur = EventsDetails.compute_valid_dur_min(artifact_cur_chan_df, \
+            stage_in_cycle_df, sleep_stages_name, stage_sel, label_stats, stage_stats_labels)
 
         # Extract characteristics to average
         sw_cur_chan_tot = sw_cur_chan_sort[self.sw_characteristics]
@@ -524,7 +526,6 @@ class SlowWavesDetails(SciNode):
         mean_stage = {}
         sw_count_stage = {}
         for stage in stage_stats_labels:
-#            if sleep_stages_name[stage] in stage_sel:
             # Extract sw for the current stage
             if len(sleep_stages_name[stage]) == 1:
                 sw_cur_chan_stage = sw_cur_chan_sort[sw_cur_chan_sort['stage']==int(sleep_stages_name[stage])]
@@ -621,7 +622,7 @@ class SlowWavesDetails(SciNode):
 
             # Compute valid duration (min)
             #   For each sleep stage included in stage_sel_df, compute the duration without artifact (valid_min).
-            valid_dur_cur = EventsDetails.compute_valid_dur_min(EventsDetails, artifact_cur_chan_df, stage_sel_df, \
+            valid_dur_cur = EventsDetails.compute_valid_dur_min(artifact_cur_chan_df, stage_sel_df, \
                 commons.sleep_stages_name, stage_sel, cycle_label, self.stage_stats_labels)
             # Accumulate for each cycle
             valid_dur = valid_dur | valid_dur_cur
@@ -756,7 +757,7 @@ class SlowWavesDetails(SciNode):
             # Compute valid duration (min) for this hour
             # For each sleep stage included in stage_sel_df, compute the duration without artifact (valid_min).
             if len(stage_sel_df) > 0:
-                valid_dur_stats_cur = EventsDetails.compute_valid_dur_min(EventsDetails, artifact_cur_chan_df, stage_sel_df, \
+                valid_dur_stats_cur = EventsDetails.compute_valid_dur_min(artifact_cur_chan_df, stage_sel_df, \
                     sleep_stages_name, stage_sel, hour_label, stage_stats_labels)
                 hour_valid_dur_stats = hour_valid_dur_stats | valid_dur_stats_cur
 
@@ -907,8 +908,8 @@ class SlowWavesDetails(SciNode):
                 
                 # Compute valid duration and sw statistics for this stage and hour
                 if len(stage_sel_df) > 0:
-                    valid_dur_stats_cur = self.compute_stage_duration_for_single_stage(stage_sel_df, \
-                        stage_label, hour_label)
+                    valid_dur_stats_cur = EventsDetails.compute_stage_duration_for_single_stage(stage_sel_df, \
+                        artifact_cur_chan_df, stage_label, hour_label, stage_sel)
                     stage_hour_valid_dur_stats = stage_hour_valid_dur_stats | valid_dur_stats_cur
 
                     # Only compute sw statistics if we have sw
@@ -1207,48 +1208,6 @@ class SlowWavesDetails(SciNode):
             result[f'{label_stats}_{stage_label}_trans_freq_Hz'] = np.nan
             
         return result
-
-    def compute_stage_duration_for_single_stage(self, stage_in_cycle_df, stage_label, label_stats):
-        """""
-        Compute total stage duration for a single stage type (e.g., N1, N2, N3, N2N3, NREM, R).
-        Simple function that computes stage duration without artifact handling.
-
-        Parameters
-        -----------
-            stage_in_cycle_df : Pandas DataFrame
-                Sleep stage events for the current stage type
-            stage_label : str
-                The stage label (N1, N2, N3, N2N3, NREM, R)
-            label_stats : str
-                The label for the statistics (e.g., "stage_h1")
-                
-        Returns
-        -----------  
-            stage_dur : dict
-                Dictionary containing total stage duration for the single stage
-        """""
-        # Handle grouped stages (N2N3, NREM) that are not in commons.sleep_stages_name
-        if stage_label == 'N2N3':
-            stage_numbers = ['2', '3']
-        elif stage_label == 'NREM':
-            stage_numbers = ['1', '2', '3']
-        else:
-            stage_numbers = [commons.sleep_stages_name[stage_label]]
-        
-        # Manage sleep stage data
-        stage_dur_in_cycle = stage_in_cycle_df['duration_sec'].to_numpy()
-        stage_label_in_cycle = stage_in_cycle_df['name'].to_numpy()
-        stage_label_in_cycle = stage_label_in_cycle.astype(int)
-
-        # Select stages for this specific stage type
-        stage_sel = np.isin(stage_label_in_cycle, list(map(int, stage_numbers)))
-        stage_dur_cur = stage_dur_in_cycle[stage_sel]
-
-        # Compute the total stage duration (without artifact subtraction)
-        stage_dur = {}
-        stage_dur[f'{label_stats}_{stage_label}_valid_min'] = stage_dur_cur.sum() / 60
-        
-        return stage_dur
 
     def compute_stage_hour_totals(self, hour_label, valid_dur_stats, sw_stats):
         """""
