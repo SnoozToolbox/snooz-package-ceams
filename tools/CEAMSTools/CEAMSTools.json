@@ -370,7 +370,7 @@
                 }
             ]
         },
-                {
+        {
             "item_name": "DetectREMsYASA",
             "item_type": "tool",
             "item_version": "0.0.0",
@@ -394,6 +394,20 @@
                     "parameters": {
                         "menu_category": "1-Preprocessing",
                         "menu_label": "Edit Paths In Snooz Workspace"
+                    }
+                }
+            ]
+        },
+        {
+            "item_name": "PSAImages",
+            "item_type": "tool",
+            "item_version": "0.0.0",
+            "item_hooks": [
+                {
+                    "endpoint_name": "menu_endpoint",
+                    "parameters": {
+                        "menu_category": "3-Postprocessing",
+                        "menu_label": "PSA Images"
                     }
                 }
             ]

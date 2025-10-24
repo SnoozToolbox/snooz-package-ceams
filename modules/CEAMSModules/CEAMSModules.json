@@ -1069,6 +1069,20 @@
                     }
                 }
             ]
+        },
+        {
+            "item_name": "PSAPicsGenerator",
+            "item_type": "module",
+            "item_version": "0.0.0",
+            "item_hooks": [
+                {
+                    "endpoint_name": "module_endpoint",
+                    "parameters": {
+                        "module_category": "Events Utilities",
+                        "module_label": "PSA Pics Generator"
+                    }
+                }
+            ]
         }
     ]
 }
