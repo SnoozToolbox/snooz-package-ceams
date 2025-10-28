@@ -439,6 +439,7 @@ class PSAPicsGeneratorSettingsView(BaseSettingsView, Ui_PSAPicsGeneratorSettings
         subject_item = QStandardItem(subject_id)
         for chan_i, chan_label in enumerate(chan_lst):
             chan_item = QStandardItem(chan_label)
+            chan_item.setEditable(False)
             chan_item.setCheckable(True)
             if chan_state is None:
                 chan_item.setCheckState(Qt.Checked)
@@ -666,7 +667,7 @@ class PSAPicsGeneratorSettingsView(BaseSettingsView, Ui_PSAPicsGeneratorSettings
             if 'ROI' in chan:
                 chan_item.setFlags(Qt.ItemIsEnabled | Qt.ItemIsSelectable | Qt.ItemIsAutoTristate | Qt.ItemIsUserCheckable)
             else:
-                chan_item.setFlags(Qt.ItemIsEditable | Qt.ItemIsEnabled | Qt.ItemIsSelectable | Qt.ItemIsAutoTristate | Qt.ItemIsUserCheckable)
+                chan_item.setFlags(Qt.ItemIsEnabled | Qt.ItemIsSelectable | Qt.ItemIsAutoTristate | Qt.ItemIsUserCheckable)
             self.chan_cohort_listWidget.addItem(chan_item) 
  
 

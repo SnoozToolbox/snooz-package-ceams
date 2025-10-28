@@ -994,15 +994,42 @@ class PSAPicsGenerator(SciNode):
                                  linestyle=self.linestyles[stage_idx % len(self.linestyles)], label=f'{stage}-{cohort_group}')
                             if 'std' in pics_param['display']:
                                 # Plot standard deviation as shaded area
-                                ax.fill_between(freq_array, signal_to_plot_mean - signal_to_plot_std, 
-                                              signal_to_plot_mean + signal_to_plot_std, color=colors[i_grp], 
-                                              linestyle=self.linestyles[stage_idx % len(self.linestyles)], alpha=0.3)
+                                if log_scale:
+                                    # For log scale, use multiplicative std (more appropriate for log-transformed data)
+                                    # Convert to log space, add/subtract std, then convert back
+                                    log_mean = np.log10(signal_to_plot_mean + 1e-10)  # Add small epsilon to avoid log(0)
+                                    log_std = signal_to_plot_std / (signal_to_plot_mean + 1e-10) / np.log(10)
+                                    lower_bound = 10 ** (log_mean - log_std)
+                                    upper_bound = 10 ** (log_mean + log_std)
+                                    ax.fill_between(freq_array, lower_bound, upper_bound, 
+                                                  color=colors[i_grp], alpha=0.3,
+                                                  edgecolor=colors[i_grp], linestyle=self.linestyles[stage_idx % len(self.linestyles)],
+                                                  linewidth=1.5)
+                                else:
+                                    # For linear scale, use additive std
+                                    ax.fill_between(freq_array, signal_to_plot_mean - signal_to_plot_std, 
+                                                  signal_to_plot_mean + signal_to_plot_std, color=colors[i_grp], 
+                                                  alpha=0.3, edgecolor=colors[i_grp],
+                                                  linestyle=self.linestyles[stage_idx % len(self.linestyles)], linewidth=1.5)
                         else:
                             ax.plot(freq_array, signal_to_plot_mean, color=colors[i_grp], label=f'{cohort_group}')
                             if 'std' in pics_param['display']:
                                 # Plot standard deviation as shaded area
-                                ax.fill_between(freq_array, signal_to_plot_mean - signal_to_plot_std, 
-                                              signal_to_plot_mean + signal_to_plot_std, color=colors[i_grp], alpha=0.3)
+                                if log_scale:
+                                    # For log scale, use multiplicative std (more appropriate for log-transformed data)
+                                    # Convert to log space, add/subtract std, then convert back
+                                    log_mean = np.log10(signal_to_plot_mean + 1e-10)  # Add small epsilon to avoid log(0)
+                                    log_std = signal_to_plot_std / (signal_to_plot_mean + 1e-10) / np.log(10)
+                                    lower_bound = 10 ** (log_mean - log_std)
+                                    upper_bound = 10 ** (log_mean + log_std)
+                                    ax.fill_between(freq_array, lower_bound, upper_bound, 
+                                                  color=colors[i_grp], alpha=0.3,
+                                                  edgecolor=colors[i_grp], linestyle='-', linewidth=1.5)
+                                else:
+                                    # For linear scale, use additive std
+                                    ax.fill_between(freq_array, signal_to_plot_mean - signal_to_plot_std, 
+                                                  signal_to_plot_mean + signal_to_plot_std, color=colors[i_grp], 
+                                                  alpha=0.3, edgecolor=colors[i_grp], linestyle='-', linewidth=1.5)
 
         # Set the limits of the axes
         if pics_param['force_axis']:

@@ -23,7 +23,7 @@ class Ui_IntroStep(object):
     def setupUi(self, IntroStep):
         if not IntroStep.objectName():
             IntroStep.setObjectName(u"IntroStep")
-        IntroStep.resize(1117, 729)
+        IntroStep.resize(1117, 731)
         IntroStep.setStyleSheet(u"font: 12pt \"Roboto\";")
         self.verticalLayout = QVBoxLayout(IntroStep)
         self.verticalLayout.setSpacing(25)
@@ -32,6 +32,7 @@ class Ui_IntroStep(object):
         self.verticalLayout_2.setObjectName(u"verticalLayout_2")
         self.textEdit = QTextEdit(IntroStep)
         self.textEdit.setObjectName(u"textEdit")
+        self.textEdit.setReadOnly(True)
 
         self.verticalLayout_2.addWidget(self.textEdit)
 
@@ -66,22 +67,26 @@ class Ui_IntroStep(object):
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" text-decoration: underline;\">	- ROIs :</span></p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">	Add ROIs and select them. <br />	You can create ROIs to group channels with similar labels (e.g., C3-A2, C3-M2, C3) together.  <br />	You can choose to analyze either channels or ROIs, or both.</p>\n"
 "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" text-decoration: underline;\">2 - Group Definition :</span></p>\n"
-"<p style=\" margi"
-                        "n-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">	Assign a condition group to each report file.  Any condition group label is accepted.  <br />	The number of condition groups is unlimited.</p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-weight:700;\">NOTE: </span>To modify the channel names displayed on the plot, we"
+                        " recommend first using the &quot;PSA Cohort Review&quot; tool. Customize the names in the generated report, then use that report in this tool for visualization purposes.</p>\n"
 "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" text-decoration: underline;\">2 - Group Definition :</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">	Assign a condition group to each report file.  Any condition group label is accepted.  <br />	The number of condition groups is unlimited.</p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px;"
+                        " margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" text-decoration: underline;\">3 - Output Files :</span></p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">	Define the parameters for generating the images. </p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">	Images can be generated at either the subject level or the cohort level, or both.</p>\n"
-"<p style=\"-qt-parag"
-                        "raph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">	You have the option to generate individual pictures <br />	for each channel/ROI or combine them into a single picture.</p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">	You have the option to generate individua"
+                        "l pictures <br />	for each channel/ROI or combine them into a single picture.</p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">	</p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">	Select the prefered sleep stages, and section to display the PSA images.</p>\n"
 "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">	Specify desired di"
-                        "splay options, <br />	such as plotting the mean PSA signal curve and setting axis limits. <br />	(For more options look at the &quot;Colors&quot; settings page in the left panel).<br /></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">	Select the output folder to save the images.</p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">	Specify desired display options, <br />	such as plotting the mean PSA signal curve and setting axis limits. <br />	(For more options look at the &quot;Colors&quot; settings page in the left panel).<br /></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-ind"
+                        "ent:0px;\">	Select the output folder to save the images.</p>\n"
 "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
 "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p></body></html>", None))
     # retranslateUi
