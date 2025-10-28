@@ -3,7 +3,7 @@
 See the file LICENCE for full license details.
 
     PSAPicsGenerator
-    Class to generate pictures of PSA (Power Spectral Analysis) data from TSV filenames.
+    Class to generate pictures of PSA (Power Spectral Analysis) data from PSA report files.
 """
 import os
 import pandas as pd
@@ -22,11 +22,11 @@ DEBUG = True
 
 class PSAPicsGenerator(SciNode):
     """
-    Class to generate pictures of PSA data from TSV filenames.
+    Class to generate pictures of PSA data from PSA report files.
 
     Parameters
     ----------
-                     if                        if 'mean_std' in pics_param['display']:
+                            if 'mean_std' in pics_param['display']:
                             # Plot standard deviation as shaded area (std across subjects in the cohort)
                             ax.fill_between(common_freq, mean_power - std_power, 
                                           mean_power + std_power, color=colors[i_grp], alpha=0.3,
@@ -111,7 +111,7 @@ class PSAPicsGenerator(SciNode):
     
     def compute(self, filenames, file_group, ROIs_def, chans_ROIs_sel, pics_param, colors_param):
         """
-        Load PSA data from TSV filenames, process ROIs and groups, and generate PSA pictures.
+        Load PSA data from PSA report files, process ROIs and groups, and generate PSA pictures.
 
         Parameters
         ----------
@@ -269,7 +269,8 @@ class PSAPicsGenerator(SciNode):
                         n_cats = max(n_cats, max_cats)
 
                     if pics_param['subject_avg'] | pics_param['cohort_avg']:
-                        psa_data_all_chan.append(psa_data_ch_sel)
+                        if psa_data_ch_sel is not None and len(psa_data_ch_sel) > 0:
+                            psa_data_all_chan.append(psa_data_ch_sel)
 
             # **********************************************
             # One figure for the current subject : one picture for all channels
@@ -437,7 +438,7 @@ class PSAPicsGenerator(SciNode):
             # Single channel - find matching channel in the data
             channel_found = False
             for existing_ch in psa_data_subject['channel_label'].unique():
-                if ch.lower() in existing_ch.lower():
+                if ch.lower() == existing_ch.lower():
                     psa_data_ch_sel = psa_data_subject[psa_data_subject['channel_label'] == existing_ch].copy()
                     channel_found = True
                     break
@@ -513,85 +514,163 @@ class PSAPicsGenerator(SciNode):
             psa_data_cur_chan = psa_data_all_chan[i_chan]
             
             if psa_data_cur_chan is not None and len(psa_data_cur_chan) > 0:
-                # Get frequency bands and power data from Snooz format
-                freq_low = psa_data_cur_chan['freq_low_Hz'].values
-                freq_high = psa_data_cur_chan['freq_high_Hz'].values
-                freq_center = (freq_low + freq_high) / 2  # Use center frequency for plotting
+                # Check if there are multiple filenames in the data
+                unique_filenames = []
+                if 'filename' in psa_data_cur_chan.columns:
+                    unique_filenames = psa_data_cur_chan['filename'].unique()
+                    if DEBUG and len(unique_filenames) > 1:
+                        print(f"Found {len(unique_filenames)} unique filenames in channel {chan_label[i_chan]}: {unique_filenames}")
                 
-                # Filter frequency range
-                freq_mask = (freq_center >= freq_range[0]) & (freq_center <= freq_range[1])
-                freq_filtered = freq_center[freq_mask]
-                
-                # Get power columns (stage-specific activity) based on stage selection
-                power_columns = []
-                for stage in sleep_stage_selection:
-                    if stage == 'All' and pics_param['activity_var'] == 'total':
-                        stage_col = f"{pics_param['activity_var']}_act"
-                    elif stage == 'All' and (pics_param['activity_var'] == 'clock_h' or pics_param['activity_var'] == 'stage_h'):
-                        stage_col = f"{pics_param['activity_var']}{pics_param['hour']}_act"
-                    elif stage == 'All' and pics_param['activity_var'] == 'cyc':
-                        stage_col = f"{pics_param['activity_var']}{pics_param['cycle']}_act"
-                    elif stage != 'All' and pics_param['activity_var'] == 'total':
-                        stage_col = f"{pics_param['activity_var']}_{stage}_act"
-                    elif stage != 'All' and (pics_param['activity_var'] == 'clock_h' or pics_param['activity_var'] == 'stage_h'):
-                        stage_col = f"{pics_param['activity_var']}{pics_param['hour']}_{stage}_act"
-                    elif stage != 'All' and pics_param['activity_var'] == 'cyc':
-                        stage_col = f"{pics_param['activity_var']}{pics_param['cycle']}_{stage}_act"
+                # If there are multiple filenames, process each separately
+                if len(unique_filenames) > 1:
+                    # Determine total number of items to plot (filenames * channels)
+                    total_items = len(unique_filenames) * n_channels
+                    # Expand colors if needed
+                    expanded_colors = self._expand_colors(colors, total_items)
+                    for filename_idx, filename_val in enumerate(unique_filenames):
+                        # Filter data for this specific filename
+                        psa_data_for_file = psa_data_cur_chan[psa_data_cur_chan['filename'] == filename_val]
+                        
+                        # Get frequency bands and power data from Snooz format
+                        freq_low = psa_data_for_file['freq_low_Hz'].values
+                        freq_high = psa_data_for_file['freq_high_Hz'].values
+                        freq_center = (freq_low + freq_high) / 2  # Use center frequency for plotting
+                        
+                        # Filter frequency range
+                        freq_mask = (freq_center >= freq_range[0]) & (freq_center <= freq_range[1])
+                        freq_filtered = freq_center[freq_mask]
+                        
+                        # Get power columns (stage-specific activity) based on stage selection
+                        power_columns = []
+                        for stage in sleep_stage_selection:
+                            if stage == 'All' and pics_param['activity_var'] == 'total':
+                                stage_col = f"{pics_param['activity_var']}_act"
+                            elif stage == 'All' and (pics_param['activity_var'] == 'clock_h' or pics_param['activity_var'] == 'stage_h'):
+                                stage_col = f"{pics_param['activity_var']}{pics_param['hour']}_act"
+                            elif stage == 'All' and pics_param['activity_var'] == 'cyc':
+                                stage_col = f"{pics_param['activity_var']}{pics_param['cycle']}_act"
+                            elif stage != 'All' and pics_param['activity_var'] == 'total':
+                                stage_col = f"{pics_param['activity_var']}_{stage}_act"
+                            elif stage != 'All' and (pics_param['activity_var'] == 'clock_h' or pics_param['activity_var'] == 'stage_h'):
+                                stage_col = f"{pics_param['activity_var']}{pics_param['hour']}_{stage}_act"
+                            elif stage != 'All' and pics_param['activity_var'] == 'cyc':
+                                stage_col = f"{pics_param['activity_var']}{pics_param['cycle']}_{stage}_act"
 
-                    if stage_col in psa_data_cur_chan.columns:
-                        power_columns.append(stage_col)
-                
-                if power_columns:
-                    # Plot each stage-specific power with different linestyles when colors are the same
-                    for stage_idx, stage_col in enumerate(power_columns):
-                        # Cycle through all available linestyles
-                        linestyle_idx = stage_idx % len(self.linestyles)
-                        power_data = psa_data_cur_chan[stage_col].values
-                        power_filtered = power_data[freq_mask]
+                            if stage_col in psa_data_for_file.columns:
+                                power_columns.append(stage_col)
                         
-                        # Accumulate data for cohort averaging if enabled
-                        if pics_param.get('cohort_avg', False):
-                            all_freq_data.append(freq_filtered)
-                            all_power_data.append(power_filtered)
-                        
-                        if fig_save:
-                            # Check if the label has already been added to the legend
-                            stage_name = stage_col.replace('_act', '')
-                            label_name = f'{chan_label[i_chan]}_{stage_name}'
-                            if label_name not in legend_labels:
-                                # Plot the PSA with a specific color and linestyle
-                                ax.plot(freq_filtered, power_filtered, color=colors[i_chan], 
-                                       label=label_name, linewidth=2, linestyle=self.linestyles[linestyle_idx])
-                                # Add the label to the legend
-                                legend_labels[label_name] = True
-                            else:
-                                ax.plot(freq_filtered, power_filtered, color=colors[i_chan], 
-                                       linewidth=2, linestyle=self.linestyles[linestyle_idx])
+                        if power_columns:
+                            # Plot each stage-specific power with different linestyles
+                            for stage_idx, stage_col in enumerate(power_columns):
+                                # Use different colors for different filenames
+                                # Calculate unique index for this filename+channel combination
+                                color_idx = (i_chan * len(unique_filenames) + filename_idx) % len(expanded_colors)
+                                linestyle_idx = stage_idx % len(self.linestyles)
+                                power_data = psa_data_for_file[stage_col].values
+                                power_filtered = power_data[freq_mask]
+                                
+                                # Accumulate data for cohort averaging if enabled
+                                if pics_param.get('cohort_avg', False):
+                                    all_freq_data.append(freq_filtered)
+                                    all_power_data.append(power_filtered)
+                                
+                                if fig_save:
+                                    # Create label with filename
+                                    stage_name = stage_col.replace('_act', '')
+                                    filename_short = os.path.basename(filename_val).split('.')[0] if isinstance(filename_val, str) else f"file_{filename_idx}"
+                                    if n_channels > 1:
+                                        label_name = f'{chan_label[i_chan]}_{filename_short}_{stage_name}'
+                                    else:
+                                        label_name = f'{filename_short}_{stage_name}'
+                                    
+                                    if label_name not in legend_labels:
+                                        ax.plot(freq_filtered, power_filtered, color=expanded_colors[color_idx], 
+                                               label=label_name, linewidth=2, linestyle=self.linestyles[linestyle_idx])
+                                        legend_labels[label_name] = True
+                                    else:
+                                        ax.plot(freq_filtered, power_filtered, color=expanded_colors[color_idx], 
+                                               linewidth=2, linestyle=self.linestyles[linestyle_idx])
                 else:
-                    # Fallback: try to find any numeric columns that might be power
-                    numeric_cols = psa_data_cur_chan.select_dtypes(include=[np.number]).columns
-                    power_cols = [col for col in numeric_cols if col not in ['freq_low_Hz', 'freq_high_Hz']]
+                    # Single filename or no filename column - process as before
+                    # Get frequency bands and power data from Snooz format
+                    freq_low = psa_data_cur_chan['freq_low_Hz'].values
+                    freq_high = psa_data_cur_chan['freq_high_Hz'].values
+                    freq_center = (freq_low + freq_high) / 2  # Use center frequency for plotting
                     
-                    if power_cols:
-                        # Use the first power column found
-                        power_data = psa_data_cur_chan[power_cols[0]].values
-                        power_filtered = power_data[freq_mask]
+                    # Filter frequency range
+                    freq_mask = (freq_center >= freq_range[0]) & (freq_center <= freq_range[1])
+                    freq_filtered = freq_center[freq_mask]
+                    
+                    # Get power columns (stage-specific activity) based on stage selection
+                    power_columns = []
+                    for stage in sleep_stage_selection:
+                        if stage == 'All' and pics_param['activity_var'] == 'total':
+                            stage_col = f"{pics_param['activity_var']}_act"
+                        elif stage == 'All' and (pics_param['activity_var'] == 'clock_h' or pics_param['activity_var'] == 'stage_h'):
+                            stage_col = f"{pics_param['activity_var']}{pics_param['hour']}_act"
+                        elif stage == 'All' and pics_param['activity_var'] == 'cyc':
+                            stage_col = f"{pics_param['activity_var']}{pics_param['cycle']}_act"
+                        elif stage != 'All' and pics_param['activity_var'] == 'total':
+                            stage_col = f"{pics_param['activity_var']}_{stage}_act"
+                        elif stage != 'All' and (pics_param['activity_var'] == 'clock_h' or pics_param['activity_var'] == 'stage_h'):
+                            stage_col = f"{pics_param['activity_var']}{pics_param['hour']}_{stage}_act"
+                        elif stage != 'All' and pics_param['activity_var'] == 'cyc':
+                            stage_col = f"{pics_param['activity_var']}{pics_param['cycle']}_{stage}_act"
+
+                        if stage_col in psa_data_cur_chan.columns:
+                            power_columns.append(stage_col)
+                    
+                    if power_columns:
+                        # Plot each stage-specific power with different linestyles when colors are the same
+                        for stage_idx, stage_col in enumerate(power_columns):
+                            # Cycle through all available linestyles
+                            linestyle_idx = stage_idx % len(self.linestyles)
+                            power_data = psa_data_cur_chan[stage_col].values
+                            power_filtered = power_data[freq_mask]
+                            
+                            # Accumulate data for cohort averaging if enabled
+                            if pics_param.get('cohort_avg', False):
+                                all_freq_data.append(freq_filtered)
+                                all_power_data.append(power_filtered)
+                            
+                            if fig_save:
+                                # Check if the label has already been added to the legend
+                                stage_name = stage_col.replace('_act', '')
+                                label_name = f'{chan_label[i_chan]}_{stage_name}'
+                                if label_name not in legend_labels:
+                                    # Plot the PSA with a specific color and linestyle
+                                    ax.plot(freq_filtered, power_filtered, color=colors[i_chan], 
+                                           label=label_name, linewidth=2, linestyle=self.linestyles[linestyle_idx])
+                                    # Add the label to the legend
+                                    legend_labels[label_name] = True
+                                else:
+                                    ax.plot(freq_filtered, power_filtered, color=colors[i_chan], 
+                                           linewidth=2, linestyle=self.linestyles[linestyle_idx])
+                    else:
+                        # Fallback: try to find any numeric columns that might be power
+                        numeric_cols = psa_data_cur_chan.select_dtypes(include=[np.number]).columns
+                        power_cols = [col for col in numeric_cols if col not in ['freq_low_Hz', 'freq_high_Hz']]
                         
-                        # Accumulate data for cohort averaging if enabled
-                        if pics_param.get('cohort_avg', False):
-                            all_freq_data.append(freq_filtered)
-                            all_power_data.append(power_filtered)
-                        
-                        if fig_save:
-                            # Check if the label has already been added to the legend
-                            if f'{chan_label[i_chan]}' not in legend_labels:
-                                # Plot the PSA with a specific color
-                                ax.plot(freq_filtered, power_filtered, color=colors[i_chan], 
-                                       label=f'{chan_label[i_chan]}', linewidth=2)
-                                # Add the label to the legend
-                                legend_labels[f'{chan_label[i_chan]}'] = True
-                            else:
-                                ax.plot(freq_filtered, power_filtered, color=colors[i_chan], linewidth=2)
+                        if power_cols:
+                            # Use the first power column found
+                            power_data = psa_data_cur_chan[power_cols[0]].values
+                            power_filtered = power_data[freq_mask]
+                            
+                            # Accumulate data for cohort averaging if enabled
+                            if pics_param.get('cohort_avg', False):
+                                all_freq_data.append(freq_filtered)
+                                all_power_data.append(power_filtered)
+                            
+                            if fig_save:
+                                # Check if the label has already been added to the legend
+                                if f'{chan_label[i_chan]}' not in legend_labels:
+                                    # Plot the PSA with a specific color
+                                    ax.plot(freq_filtered, power_filtered, color=colors[i_chan], 
+                                           label=f'{chan_label[i_chan]}', linewidth=2)
+                                    # Add the label to the legend
+                                    legend_labels[f'{chan_label[i_chan]}'] = True
+                                else:
+                                    ax.plot(freq_filtered, power_filtered, color=colors[i_chan], linewidth=2)
 
         # If the function is used to generate pictures
         if fig_save:
@@ -614,7 +693,7 @@ class PSAPicsGenerator(SciNode):
                     ax.set_xlim(freq_range[0], freq_range[1])
 
                 if log_scale:
-                    ax.set_xscale('log')
+                    ax.set_yscale('log')
 
                 ax.set_xlabel('Frequency (Hz)')
                 ax.set_ylabel('Power (μV²/Hz)')
@@ -674,11 +753,25 @@ class PSAPicsGenerator(SciNode):
         """
         # Define the figure name
         if chan_label=='':
-            fig_name = pics_param['output_folder']+'/cohort_psa_'+ pics_param['display']+'.pdf'
-            fig_title = 'Cohort PSA'
+            if pics_param['activity_var']=='total':
+                fig_name = pics_param['output_folder']+'/cohort_psa_'+ pics_param['display']+ '_' + pics_param['activity_var']+'.pdf'
+                fig_title = 'Cohort PSA_total'
+            elif pics_param['activity_var']=='clock_h' or pics_param['activity_var']=='stage_h':
+                fig_name = pics_param['output_folder']+'/cohort_psa_'+ pics_param['display']+ '_' + pics_param['activity_var']+str(pics_param['hour'])+'.pdf'
+                fig_title = 'Cohort PSA_'+pics_param['activity_var']+str(pics_param['hour'])
+            elif pics_param['activity_var']=='cyc':
+                fig_name = pics_param['output_folder']+'/cohort_psa_'+ pics_param['display']+ '_' + pics_param['activity_var']+str(pics_param['cycle'])+'.pdf'
+                fig_title = 'Cohort PSA_'+pics_param['activity_var']+str(pics_param['cycle'])
         else:
-            fig_name = pics_param['output_folder']+'/cohort_psa_'+chan_label+'_'+ pics_param['display']+'.pdf'
-            fig_title = 'Cohort PSA_'+chan_label
+            if pics_param['activity_var']=='total':
+                fig_name = pics_param['output_folder']+'/cohort_psa_'+ pics_param['display']+ '_' + pics_param['activity_var'] +chan_label+'.pdf'
+                fig_title = 'Cohort PSA_total_'+chan_label
+            elif pics_param['activity_var']=='clock_h' or pics_param['activity_var']=='stage_h':
+                fig_name = pics_param['output_folder']+'/cohort_psa_'+ pics_param['display']+ '_' + pics_param['activity_var']+str(pics_param['hour'])+'_'+chan_label+'.pdf'
+                fig_title = 'Cohort PSA_'+pics_param['activity_var']+str(pics_param['hour'])+'_'+chan_label
+            elif pics_param['activity_var']=='cyc':
+                fig_name = pics_param['output_folder']+'/cohort_psa_'+ pics_param['display']+ '_' + pics_param['activity_var']+str(pics_param['cycle'])+'_'+chan_label+'.pdf'
+                fig_title = 'Cohort PSA_'+pics_param['activity_var']+str(pics_param['cycle'])+'_'+chan_label
 
         # Create the figure
         fig = Figure()
@@ -919,7 +1012,7 @@ class PSAPicsGenerator(SciNode):
             ax.set_xlim(freq_range[0], freq_range[1])
 
         if log_scale:
-            ax.set_xscale('log')
+            ax.set_yscale('log')
 
         ax.grid(which='both', axis='both')
         ax.set_xlabel('Frequency (Hz)')
@@ -935,3 +1028,72 @@ class PSAPicsGenerator(SciNode):
             if DEBUG:
                 print(f"{fig_name} is saved...")
             fig.clf()
+
+    def _expand_colors(self, base_colors, n_needed):
+        """
+        Expand the color palette when more than 10 colors are needed.
+        Uses maximally distinct colors in HSV space for better visual separation.
+        
+        Parameters
+        ----------
+        base_colors : list
+            Base color palette (typically 10 colors)
+        n_needed : int
+            Number of colors needed
+            
+        Returns
+        -------
+        list
+            Extended color list with well-separated colors
+        """
+        if n_needed <= 10:
+            # Use base colors as-is
+            return base_colors
+        
+        # Need to generate more distinct colors
+        import matplotlib.colors as mcolors
+        import colorsys
+        
+        extended_colors = []
+        
+        # Strategy: Distribute colors evenly in HSV space for maximum distinction
+        # Use golden ratio for better color distribution
+        golden_ratio = 0.618033988749895
+        
+        # Start with base colors converted to HSV to understand their distribution
+        base_hues = []
+        for base_color in base_colors:
+            rgb = mcolors.to_rgb(base_color)
+            hsv = colorsys.rgb_to_hsv(*rgb)
+            base_hues.append(hsv[0])
+        
+        # Generate new colors by:
+        # 1. Distributing hues evenly across the color wheel
+        # 2. Varying saturation and value to create distinctions
+        hue_start = 0.0
+        for i in range(n_needed):
+            # Use golden ratio to get maximally distinct hues
+            hue = (hue_start + i * golden_ratio) % 1.0
+            
+            # Vary saturation and value to create more distinction
+            # Use different saturation levels (high/medium) and value levels (bright/medium)
+            sat_level = i % 3  # 3 saturation levels
+            val_level = (i // 3) % 2  # 2 value levels
+            
+            if sat_level == 0:
+                saturation = 0.9  # High saturation
+            elif sat_level == 1:
+                saturation = 0.65  # Medium saturation
+            else:
+                saturation = 0.45  # Lower saturation
+            
+            if val_level == 0:
+                value = 0.95  # Bright
+            else:
+                value = 0.7  # Medium brightness
+            
+            # Convert HSV to RGB
+            rgb = colorsys.hsv_to_rgb(hue, saturation, value)
+            extended_colors.append(rgb)
+        
+        return extended_colors[:n_needed] 

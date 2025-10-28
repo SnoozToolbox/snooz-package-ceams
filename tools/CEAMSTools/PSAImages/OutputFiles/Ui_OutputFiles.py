@@ -49,7 +49,7 @@ class Ui_OutputFiles(object):
         self.scrollArea.setAlignment(Qt.AlignmentFlag.AlignLeading|Qt.AlignmentFlag.AlignLeft|Qt.AlignmentFlag.AlignTop)
         self.scrollAreaWidgetContents = QWidget()
         self.scrollAreaWidgetContents.setObjectName(u"scrollAreaWidgetContents")
-        self.scrollAreaWidgetContents.setGeometry(QRect(0, -617, 862, 1200))
+        self.scrollAreaWidgetContents.setGeometry(QRect(0, 0, 862, 1200))
         sizePolicy1 = QSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Maximum)
         sizePolicy1.setHorizontalStretch(0)
         sizePolicy1.setVerticalStretch(1)
@@ -487,12 +487,12 @@ class Ui_OutputFiles(object):
     def retranslateUi(self, OutputFiles):
         OutputFiles.setWindowTitle("")
         self.label_3.setText(QCoreApplication.translate("OutputFiles", u"<html><head/><body><p><span style=\" font-weight:600;\">Subject level : to generate pictures for each individual subject.</span></p></body></html>", None))
-        self.label_9.setText(QCoreApplication.translate("OutputFiles", u"<html><head/><body><p><span style=\" font-weight:600;\">One picture per subject</span></p></body></html>", None))
+        self.label_9.setText(QCoreApplication.translate("OutputFiles", u"<html><head/><body><p><span style=\" font-weight:600;\">One picture per report</span></p></body></html>", None))
 #if QT_CONFIG(tooltip)
         self.checkBox_subject_avg.setToolTip(QCoreApplication.translate("OutputFiles", u"Check the display option 'MEAN' in order to check this option.", None))
 #endif // QT_CONFIG(tooltip)
         self.checkBox_subject_avg.setText(QCoreApplication.translate("OutputFiles", u"All the channels or ROIs are illustrated on the same picture.\n"
-"*Useful to explore topographic differences (with the option to display mean).", None))
+"*Useful to explore topographic differences.", None))
         self.label_10.setText(QCoreApplication.translate("OutputFiles", u"<html><head/><body><p><span style=\" font-weight:600;\">One picture per channel or ROI</span></p></body></html>", None))
 #if QT_CONFIG(tooltip)
         self.checkBox_subject_sel.setToolTip(QCoreApplication.translate("OutputFiles", u"Check the display option 'Display all the SW' in order to check this option.", None))

@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>790</width>
+    <width>792</width>
     <height>679</height>
    </rect>
   </property>
@@ -35,10 +35,10 @@ Note that the condition groups and channels are not limited to four; ten colors 
    <item>
     <spacer name="verticalSpacer_7">
      <property name="orientation">
-      <enum>Qt::Vertical</enum>
+      <enum>Qt::Orientation::Vertical</enum>
      </property>
      <property name="sizeType">
-      <enum>QSizePolicy::Fixed</enum>
+      <enum>QSizePolicy::Policy::Fixed</enum>
      </property>
      <property name="sizeHint" stdset="0">
       <size>
@@ -58,10 +58,10 @@ Note that the condition groups and channels are not limited to four; ten colors 
    <item>
     <spacer name="verticalSpacer_2">
      <property name="orientation">
-      <enum>Qt::Vertical</enum>
+      <enum>Qt::Orientation::Vertical</enum>
      </property>
      <property name="sizeType">
-      <enum>QSizePolicy::Fixed</enum>
+      <enum>QSizePolicy::Policy::Fixed</enum>
      </property>
      <property name="sizeHint" stdset="0">
       <size>
@@ -76,10 +76,10 @@ Note that the condition groups and channels are not limited to four; ten colors 
      <item>
       <spacer name="horizontalSpacer_2">
        <property name="orientation">
-        <enum>Qt::Horizontal</enum>
+        <enum>Qt::Orientation::Horizontal</enum>
        </property>
        <property name="sizeType">
-        <enum>QSizePolicy::Fixed</enum>
+        <enum>QSizePolicy::Policy::Fixed</enum>
        </property>
        <property name="sizeHint" stdset="0">
         <size>
@@ -403,8 +403,8 @@ Note that the condition groups and channels are not limited to four; ten colors 
        <item>
         <widget class="QLabel" name="label_15">
          <property name="text">
-          <string>SW categories are distinguished by the line style when multiple channels are displayed.
-The lower colors (for SW categories) are used when there is only a single channel to display.</string>
+          <string>PSA groups are distinguished by the line style when multiple channels are displayed.
+The lower colors (for PSA groups) are used when there is only a single channel to display.</string>
          </property>
         </widget>
        </item>
@@ -415,10 +415,10 @@ The lower colors (for SW categories) are used when there is only a single channe
    <item>
     <spacer name="verticalSpacer">
      <property name="orientation">
-      <enum>Qt::Vertical</enum>
+      <enum>Qt::Orientation::Vertical</enum>
      </property>
      <property name="sizeType">
-      <enum>QSizePolicy::Fixed</enum>
+      <enum>QSizePolicy::Policy::Fixed</enum>
      </property>
      <property name="sizeHint" stdset="0">
       <size>
@@ -433,10 +433,10 @@ The lower colors (for SW categories) are used when there is only a single channe
      <item>
       <spacer name="horizontalSpacer">
        <property name="orientation">
-        <enum>Qt::Horizontal</enum>
+        <enum>Qt::Orientation::Horizontal</enum>
        </property>
        <property name="sizeType">
-        <enum>QSizePolicy::Fixed</enum>
+        <enum>QSizePolicy::Policy::Fixed</enum>
        </property>
        <property name="sizeHint" stdset="0">
         <size>
@@ -475,14 +475,14 @@ The lower colors (for SW categories) are used when there is only a single channe
          <item>
           <widget class="QLabel" name="label_2">
            <property name="text">
-            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;One picture per channel&lt;/span&gt; (available when displaying all sw signal curves).&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;One picture per channel&lt;/span&gt; (available when displaying all PSA signal curves).&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
            </property>
           </widget>
          </item>
          <item>
           <widget class="QLabel" name="label_3">
            <property name="text">
-            <string>Colors are used to differentiate SW categories.</string>
+            <string>Colors are used to differentiate PSA groups.</string>
            </property>
           </widget>
          </item>
@@ -493,28 +493,28 @@ The lower colors (for SW categories) are used when there is only a single channe
          <item row="0" column="0">
           <widget class="QLabel" name="label_4">
            <property name="text">
-            <string>SW category #1</string>
+            <string>PSA group #1</string>
            </property>
           </widget>
          </item>
          <item row="0" column="1">
           <widget class="QLabel" name="label_5">
            <property name="text">
-            <string>SW category #2</string>
+            <string>PSA group #2</string>
            </property>
           </widget>
          </item>
          <item row="0" column="2">
           <widget class="QLabel" name="label_6">
            <property name="text">
-            <string>SW category #3</string>
+            <string>PSA group #3</string>
            </property>
           </widget>
          </item>
          <item row="0" column="3">
           <widget class="QLabel" name="label_7">
            <property name="text">
-            <string>SW category #4</string>
+            <string>PSA group #4</string>
            </property>
           </widget>
          </item>
@@ -764,10 +764,10 @@ The lower colors (for SW categories) are used when there is only a single channe
    <item>
     <spacer name="verticalSpacer_3">
      <property name="orientation">
-      <enum>Qt::Vertical</enum>
+      <enum>Qt::Orientation::Vertical</enum>
      </property>
      <property name="sizeType">
-      <enum>QSizePolicy::Fixed</enum>
+      <enum>QSizePolicy::Policy::Fixed</enum>
      </property>
      <property name="sizeHint" stdset="0">
       <size>
@@ -787,10 +787,10 @@ The lower colors (for SW categories) are used when there is only a single channe
    <item>
     <spacer name="verticalSpacer_4">
      <property name="orientation">
-      <enum>Qt::Vertical</enum>
+      <enum>Qt::Orientation::Vertical</enum>
      </property>
      <property name="sizeType">
-      <enum>QSizePolicy::Fixed</enum>
+      <enum>QSizePolicy::Policy::Fixed</enum>
      </property>
      <property name="sizeHint" stdset="0">
       <size>
@@ -805,10 +805,10 @@ The lower colors (for SW categories) are used when there is only a single channe
      <item>
       <spacer name="horizontalSpacer_3">
        <property name="orientation">
-        <enum>Qt::Horizontal</enum>
+        <enum>Qt::Orientation::Horizontal</enum>
        </property>
        <property name="sizeType">
-        <enum>QSizePolicy::Fixed</enum>
+        <enum>QSizePolicy::Policy::Fixed</enum>
        </property>
        <property name="sizeHint" stdset="0">
         <size>
@@ -1125,7 +1125,7 @@ The lower colors (for SW categories) are used when there is only a single channe
        <item>
         <widget class="QLabel" name="label_22">
          <property name="text">
-          <string>SW categories are differentiated with the line style.</string>
+          <string>PSA groups are differentiated with the line style.</string>
          </property>
         </widget>
        </item>
@@ -1136,7 +1136,7 @@ The lower colors (for SW categories) are used when there is only a single channe
    <item>
     <spacer name="verticalSpacer_5">
      <property name="orientation">
-      <enum>Qt::Vertical</enum>
+      <enum>Qt::Orientation::Vertical</enum>
      </property>
      <property name="sizeHint" stdset="0">
       <size>

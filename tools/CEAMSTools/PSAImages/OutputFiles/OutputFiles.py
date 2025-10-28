@@ -130,12 +130,12 @@ class OutputFiles(BaseStepView, Ui_OutputFiles, QtWidgets.QWidget):
         if not (self.checkBox_cohort_avg.isChecked() or self.checkBox_cohort_sel.isChecked() or\
                 self.checkBox_subject_avg.isChecked() or self.checkBox_subject_sel.isChecked()):
             # Open the warning dialog
-            WarningDialog(f"Make sure to select at the least one output in the step '6-Output Files'.")
+            WarningDialog(f"Make sure to select at the least one output in the step '3-Output Files'.")
             return False
 
         # Make sure that the output folder is set
         if self.lineEdit_output.text() == "":
-            WarningDialog("Make sure to set the output folder in the step '6-Output Files'.")
+            WarningDialog("Make sure to set the output folder in the step '3-Output Files'.")
             return False
 
         return True

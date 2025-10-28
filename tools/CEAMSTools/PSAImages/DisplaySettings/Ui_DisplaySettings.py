@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file ''
+## Form generated from reading UI file 'Ui_DisplaySettings.ui'
 ##
 ## Created by: Qt User Interface Compiler version 6.8.2
 ##
@@ -24,7 +24,7 @@ class Ui_DisplaySettings(object):
     def setupUi(self, DisplaySettings):
         if not DisplaySettings.objectName():
             DisplaySettings.setObjectName(u"DisplaySettings")
-        DisplaySettings.resize(790, 679)
+        DisplaySettings.resize(792, 679)
         DisplaySettings.setStyleSheet(u"font: 12pt \"Roboto\";")
         self.verticalLayout_7 = QVBoxLayout(DisplaySettings)
         self.verticalLayout_7.setObjectName(u"verticalLayout_7")
@@ -536,15 +536,15 @@ class Ui_DisplaySettings(object):
         self.comboBox_subject_avg_chan4.setItemText(9, QCoreApplication.translate("DisplaySettings", u"cyan", None))
 
         self.comboBox_subject_avg_chan4.setCurrentText(QCoreApplication.translate("DisplaySettings", u"blue", None))
-        self.label_15.setText(QCoreApplication.translate("DisplaySettings", u"SW categories are distinguished by the line style when multiple channels are displayed.\n"
-"The lower colors (for SW categories) are used when there is only a single channel to display.", None))
+        self.label_15.setText(QCoreApplication.translate("DisplaySettings", u"PSA groups are distinguished by the line style when multiple channels are displayed.\n"
+"The lower colors (for PSA groups) are used when there is only a single channel to display.", None))
         self.checkBox_subject_sel_auto.setText(QCoreApplication.translate("DisplaySettings", u"Auto", None))
-        self.label_2.setText(QCoreApplication.translate("DisplaySettings", u"<html><head/><body><p><span style=\" font-weight:600;\">One picture per channel</span> (available when displaying all sw signal curves).</p></body></html>", None))
-        self.label_3.setText(QCoreApplication.translate("DisplaySettings", u"Colors are used to differentiate SW categories.", None))
-        self.label_4.setText(QCoreApplication.translate("DisplaySettings", u"SW category #1", None))
-        self.label_5.setText(QCoreApplication.translate("DisplaySettings", u"SW category #2", None))
-        self.label_6.setText(QCoreApplication.translate("DisplaySettings", u"SW category #3", None))
-        self.label_7.setText(QCoreApplication.translate("DisplaySettings", u"SW category #4", None))
+        self.label_2.setText(QCoreApplication.translate("DisplaySettings", u"<html><head/><body><p><span style=\" font-weight:600;\">One picture per channel</span> (available when displaying all PSA signal curves).</p></body></html>", None))
+        self.label_3.setText(QCoreApplication.translate("DisplaySettings", u"Colors are used to differentiate PSA groups.", None))
+        self.label_4.setText(QCoreApplication.translate("DisplaySettings", u"PSA group #1", None))
+        self.label_5.setText(QCoreApplication.translate("DisplaySettings", u"PSA group #2", None))
+        self.label_6.setText(QCoreApplication.translate("DisplaySettings", u"PSA group #3", None))
+        self.label_7.setText(QCoreApplication.translate("DisplaySettings", u"PSA group #4", None))
         self.comboBox_subject_sel_cat1.setItemText(0, QCoreApplication.translate("DisplaySettings", u"blue", None))
         self.comboBox_subject_sel_cat1.setItemText(1, QCoreApplication.translate("DisplaySettings", u"red", None))
         self.comboBox_subject_sel_cat1.setItemText(2, QCoreApplication.translate("DisplaySettings", u"green", None))
@@ -646,6 +646,6 @@ class Ui_DisplaySettings(object):
         self.comboBox_cohort_group3.setItemText(9, QCoreApplication.translate("DisplaySettings", u"cyan", None))
 
         self.comboBox_cohort_group3.setCurrentText(QCoreApplication.translate("DisplaySettings", u"blue", None))
-        self.label_22.setText(QCoreApplication.translate("DisplaySettings", u"SW categories are differentiated with the line style.", None))
+        self.label_22.setText(QCoreApplication.translate("DisplaySettings", u"PSA groups are differentiated with the line style.", None))
     # retranslateUi
 

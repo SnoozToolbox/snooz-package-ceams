@@ -65,7 +65,7 @@
       <property name="geometry">
        <rect>
         <x>0</x>
-        <y>-617</y>
+        <y>0</y>
         <width>862</width>
         <height>1200</height>
        </rect>
@@ -124,7 +124,7 @@
              <item>
               <widget class="QLabel" name="label_9">
                <property name="text">
-                <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;One picture per subject&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;One picture per report&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                </property>
               </widget>
              </item>
@@ -135,7 +135,7 @@
                </property>
                <property name="text">
                 <string>All the channels or ROIs are illustrated on the same picture.
-*Useful to explore topographic differences (with the option to display mean).</string>
+*Useful to explore topographic differences.</string>
                </property>
               </widget>
              </item>
@@ -927,7 +927,7 @@ and the PSA curve standard deviation in gray shaded area.</string>
   <slot>out_options_slot()</slot>
  </slots>
  <buttongroups>
-  <buttongroup name="buttonGroup_align"/>
   <buttongroup name="buttonGroup_mean"/>
+  <buttongroup name="buttonGroup_align"/>
  </buttongroups>
 </ui>
