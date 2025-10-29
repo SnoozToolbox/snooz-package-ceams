@@ -1488,12 +1488,14 @@ class SpindlesDetails(SciNode):
                 stage_mask = stage_in_cycle_df['name'] == stage_num
                 if stage_mask.any():
                     stage_data[stage_label].extend(stage_in_cycle_df[stage_mask].to_dict('records'))
-            
+            # Sort stages by start time
+            stage_data[stage_label].sort(key=lambda x: x['start_sec'])
             # Collect spindles of this type
             spindle_mask = spindle_cur_chan_df['stage'].isin([sn for sn in stage_to_report_sel_int])
             if spindle_mask.any():
                 spindle_data[stage_label].extend(spindle_cur_chan_df[spindle_mask].to_dict('records'))
-        
+            # Sort spindles by start time
+            spindle_data[stage_label].sort(key=lambda x: x['start_sec'])
         # Process each hour
         for i_hour in range(self.N_HOURS):
             hour_label = label_stats+str(i_hour+1)
@@ -1514,9 +1516,10 @@ class SpindlesDetails(SciNode):
                 
                 if len(stages_cur) > start_window:
                     stages_cur_hour = stages_cur[start_window:min(end_window, len(stages_cur))]
-                
-                if len(spindles_cur) > start_window:
-                    spindles_cur_hour = spindles_cur[start_window:min(end_window, len(spindles_cur))]
+                    # Filter spindles_cur_hour to only include slow waves within the stage time range
+                    stage_start_time = stages_cur_hour[0]['start_sec']
+                    stage_end_time = stages_cur_hour[-1]['start_sec'] + stages_cur_hour[-1]['duration_sec']
+                    spindles_cur_hour = [s for s in spindles_cur if stage_start_time <= s['start_sec'] <= stage_end_time]
                 
                 # Convert back to DataFrames for processing
                 if stages_cur_hour:

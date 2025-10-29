@@ -865,12 +865,14 @@ class SlowWavesDetails(SciNode):
                 stage_mask = stage_in_cycle_df['name'] == int(stage_num)
                 if stage_mask.any():
                     stage_data[stage_label].extend(stage_in_cycle_df[stage_mask].to_dict('records'))
-            
+            # Sort stages by start time
+            stage_data[stage_label].sort(key=lambda x: x['start_sec'])
             # Collect sw of this type
             sw_mask = sw_cur_chan_sort['stage'].isin([int(sn) for sn in stage_numbers])
             if sw_mask.any():
                 sw_data[stage_label].extend(sw_cur_chan_sort[sw_mask].to_dict('records'))
-        
+            # Sort sw by start time
+            sw_data[stage_label].sort(key=lambda x: x['start_sec'])
         # Process each hour
         for i_hour in range(self.N_HOURS):
             hour_label = label_stats+str(i_hour+1)
@@ -890,11 +892,12 @@ class SlowWavesDetails(SciNode):
                 sw_cur_hour = []
                 
                 if len(stages_cur) > start_window:
-                    stages_cur_hour = stages_cur[start_window:min(end_window, len(stages_cur))]
-                
-                if len(sw_cur) > start_window:
-                    sw_cur_hour = sw_cur[start_window:min(end_window, len(sw_cur))]
-                
+                    stages_cur_hour = stages_cur[start_window:min(end_window, len(stages_cur))]           
+                    # Filter sw_cur_hour to only include slow waves within the stage time range
+                    stage_start_time = stages_cur_hour[0]['start_sec']
+                    stage_end_time = stages_cur_hour[-1]['start_sec'] + stages_cur_hour[-1]['duration_sec']
+                    sw_cur_hour = [sw for sw in sw_cur if stage_start_time <= sw['start_sec'] <= stage_end_time]
+
                 # Convert back to DataFrames for processing
                 if stages_cur_hour:
                     stage_sel_df = pd.DataFrame(stages_cur_hour)
