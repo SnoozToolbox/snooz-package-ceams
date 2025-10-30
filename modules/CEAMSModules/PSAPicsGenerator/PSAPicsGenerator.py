@@ -22,59 +22,46 @@ DEBUG = True
 
 class PSAPicsGenerator(SciNode):
     """
-    Class to generate pictures of PSA data from PSA report files.
+    Class to generate pictures of PSA (Power Spectral Analysis) data from PSA report files.
 
-    Parameters
-    ----------
-                            if 'mean_std' in pics_param['display']:
-                            # Plot standard deviation as shaded area (std across subjects in the cohort)
-                            ax.fill_between(common_freq, mean_power - std_power, 
-                                          mean_power + std_power, color=colors[i_grp], alpha=0.3,
-                                          label=f'{cohort_group} ±1 SD')
+    This module processes PSA data files and generates various types of plots including:
+    - Subject-level plots (individual subjects, single or all channels)
+    - Cohort-level plots (group averages with standard deviation bands)
+    - Support for multiple sleep stages, frequency ranges, and log/linear scales
+    - Automatic color expansion for scenarios with many recordings
 
-        # Set the limits of the axespolated_power:
-                        # Compute mean and std
-                        mean_power = np.mean(interpolated_power, axis=0)
-                        std_power = np.std(interpolated_power, axis=0)
-                        
-                        # Plot mean
-                        ax.plot(common_freq, mean_power, color=colors[i_grp], 
-                               label=f'{cohort_group}', linewidth=2)
-                        
-                        if 'mean_std' in pics_param['display']:
-                            # Plot standard deviation as shaded area
-                            ax.fill_between(common_freq, mean_power - std_power, 
-                                          mean_power + std_power, color=colors[i_grp], alpha=0.3)ames": dict
-            Keys are filenames. Each file contains a TSV file with PSA data.
-        "file_group": dict
-            Keys are filenames. Values are the group label.
-        "ROIs_def": dict
-            Keys are ROI names and values are the channels list and the blank flag.
-        "chans_ROIs_sel": dict
-            Keys are channel labels or ROI names and values are the selection flag.
-        "pics_param": dict
-            Each key is a parameter to generate pictures.
-            The default values are : 
-                'cohort_avg': True,
-                'cohort_sel': False,
-                'subject_avg': False,
-                'subject_sel': False,
-                'display': "mean_std", # all, mean, mean_std
-                'force_axis': False, # False or [xmin, xmax, ymin, ymax]
-                'output_folder': '',
-                'freq_range': [0.5, 30], # Frequency range to display
-                'log_scale': False, # Use log scale for frequency axis
-                'sleep_stage_selection': ['N2', 'N3'] # Sleep stages to include in plots
-        "colors_param": dict
-            Each key is a parameter to generate pictures.
-            The default values are : 
-                'subjectavg': ['tab:blue', 'tab:red', 'tab:green', 'tab:purple', 'tab:orange', 'tab:brown', 'tab:pink', 'tab:gray', 'tab:olive', 'tab:cyan'],
-                'subjectsel': ['tab:blue', 'tab:red', 'tab:green', 'tab:purple', 'tab:orange', 'tab:brown', 'tab:pink', 'tab:gray', 'tab:olive', 'tab:cyan'],
-                'cohortavg': ['tab:blue', 'tab:red', 'tab:green', 'tab:purple', 'tab:orange', 'tab:brown', 'tab:pink', 'tab:gray', 'tab:olive', 'tab:cyan'],
+    Input Parameters
+    ----------------
+    filenames : dict
+        Keys are filenames. Each file contains a TSV file with PSA data.
+    file_group : dict
+        Keys are filenames. Values are the group label for cohort analysis.
+    ROIs_def : dict
+        Keys are ROI names and values are [channels_list, blank_flag].
+        blank_flag=True requires all channels to be present.
+    chans_ROIs_sel : dict
+        Keys are channel labels or ROI names. Values are boolean selection flags.
+    pics_param : dict
+        Plotting parameters with keys:
+        - 'cohort_avg', 'cohort_sel', 'subject_avg', 'subject_sel': bool flags for plot types
+        - 'display': str, display mode ('all', 'mean', 'mean_std')
+        - 'force_axis': bool or [xmin, xmax, ymin, ymax]
+        - 'output_folder': str, path to save figures
+        - 'freq_range': [float, float], frequency range to display
+        - 'log_scale': bool, use log scale for y-axis
+        - 'sleep_stage_selection': list of str, sleep stages to include
+        - 'activity_var': str, variable for activity ('total', 'clock_h', 'stage_h', 'cyc')
+        - 'hour': int, hour for 'clock_h' and 'stage_h' variables
+        - 'cycle': int, cycle for 'cyc' variable
+        
+    colors_param : dict
+        Color palettes for different plot types with keys:
+        - 'subject_avg', 'subject_sel', 'cohort': list of color strings
 
     Returns
     -------
-        
+    dict
+        Empty dictionary (no outputs - figures are saved to files)
     """
     def __init__(self, **kwargs):
         """ Initialize module PSAPicsGenerator """
@@ -102,11 +89,6 @@ class PSAPicsGenerator(SciNode):
         # Associate a linestyle to each PSA categories
         self.linestyles = ['-', '--', '-.', ':','dotted'] # 5 different linestyles for distinguishing stages when colors are the same
 
-        # A master module allows the process to be reexcuted multiple time.
-        # For exemple, this is useful when the process must be repeated over multiple
-        # filenames. When the master module is done, ie when all the filenames were process, 
-        # The compute function must set self.is_done = True
-        # There can only be 1 master module per process.
         self._is_master = False 
     
     def compute(self, filenames, file_group, ROIs_def, chans_ROIs_sel, pics_param, colors_param):
@@ -115,30 +97,30 @@ class PSAPicsGenerator(SciNode):
 
         Parameters
         ----------
-            filenames: dict
-                Keys are filenames. Each file contains a TSV file with PSA data.
-            file_group: dict
-                Keys are filenames. Values are the group label.
-            ROIs_def: dict
-                Keys are ROI names and values are the channels list and the blank flag.
-            chans_ROIs_sel: dict
-                Keys are channel labels or ROI names and values are the selection flag.
-            pics_param: dict
-                Each key is a parameter to generate pictures.
-            colors_param: dict
-                Each key is a parameter to generate pictures.
+        filenames : dict
+            Keys are filenames. Each file contains a TSV file with PSA data.
+        file_group : dict
+            Keys are filenames. Values are the group label for cohort analysis.
+        ROIs_def : dict
+            Keys are ROI names and values are [channels_list, blank_flag].
+        chans_ROIs_sel : dict
+            Keys are channel labels or ROI names. Values are boolean selection flags.
+        pics_param : dict
+            Plotting parameters (see class docstring for details).
+        colors_param : dict
+            Color palettes for different plot types (see class docstring for details).
 
         Returns
         -------
-            dict
-                Empty dictionary (no outputs)
+        dict
+            Empty dictionary (figures are saved to files specified in pics_param['output_folder']).
 
         Raises
         ------
-            NodeInputException
-                If any of the input parameters have invalid types or missing keys.
-            NodeRuntimeException
-                If an error occurs during the execution of the function.
+        NodeInputException
+            If any input parameters have invalid types or missing required keys.
+        NodeRuntimeException
+            If file operations fail or data validation errors occur.
         """
 
         # Input validation
