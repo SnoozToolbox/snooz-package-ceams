@@ -426,8 +426,12 @@ class Stft(SciNode):
         # (2) Apply the window scaling function (ie hanning window)
         # Window Scaling Function - weight the values in the analysis window 
         # ie hann = w(n)=0.5−0.5cos(2πn/(M−1)) 0≤n≤M−1
-        win_scale_coeff = signal.windows.get_window(window_name, nsample_win)
-            #win_scale_last = signal.windows.get_window(window_name,len(ts_last_win))
+        if window_name == 'tukey':
+            # To match the original tool, use tukey with r=0.4
+            win_scale_coeff = signal.windows.get_window(('tukey', 0.4), nsample_win)
+        else:
+            win_scale_coeff = signal.windows.get_window(window_name, nsample_win)
+
         # Reference : Hanspeter Schmid, 2012
         # Coherent gain for reading signal RMS values
         coherent_gain = sum(win_scale_coeff)/len(win_scale_coeff)
