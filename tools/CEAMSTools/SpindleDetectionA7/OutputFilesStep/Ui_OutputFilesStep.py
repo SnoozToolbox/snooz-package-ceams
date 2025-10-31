@@ -186,12 +186,12 @@ class Ui_OutputFilesStep(object):
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">    - spindle count</p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">    - spindle density (spinde count per minute)</p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">    - the average spindle characteristics listed above</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">        - total (all selected stages)</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">        - per sleep stage</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">        - per sleep cycle</p>\n"
-"<p style="
-                        "\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">        - per clock hour</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">        - per hour spent in each stage</p></body></html>", None))
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">        - total (all selected stages) - Start time is the sleep onset</p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">        - per sleep stage - Only the time spent in each individual sleep stage is considered.</p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; "
+                        "margin-right:0px; -qt-block-indent:0; text-indent:0px;\">        - per sleep cycle - Start time is the sleep onset</p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">        - per clock hour - Start time is the sleep onset</p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">        - per hour spent in each stage - Start time is when each specific stage first begins in the timeline.</p></body></html>", None))
         self.checkBox_cohort_file.setText(QCoreApplication.translate("OutputFilesStep", u"To save the detailed events report for the cohort (cohort report)", None))
         self.label_8.setText(QCoreApplication.translate("OutputFilesStep", u"* The spindle details are appended at the end of the cohort report if it exists.", None))
         self.cohort_lineedit.setPlaceholderText(QCoreApplication.translate("OutputFilesStep", u"Select the file to save detailed cohort report...", None))

@@ -135,13 +135,6 @@ class Ui_SSWDCriterias(object):
 
         self.verticalLayout.addWidget(self.radioButton_det)
 
-        self.radioButton_anal = QRadioButton(SSWDCriterias)
-        self.buttonGroup.addButton(self.radioButton_anal)
-        self.radioButton_anal.setObjectName(u"radioButton_anal")
-        self.radioButton_anal.setEnabled(False)
-
-        self.verticalLayout.addWidget(self.radioButton_anal)
-
 
         self.horizontalLayout_4.addLayout(self.verticalLayout)
 
@@ -482,10 +475,6 @@ class Ui_SSWDCriterias(object):
         self.label_3.setText(QCoreApplication.translate("SSWDCriterias", u"Event group", None))
         self.label_17.setText(QCoreApplication.translate("SSWDCriterias", u"<html><head/><body><p><span style=\" font-weight:600;\">Detections and/or analyses</span></p></body></html>", None))
         self.radioButton_det.setText(QCoreApplication.translate("SSWDCriterias", u"Detect slow waves.", None))
-#if QT_CONFIG(tooltip)
-        self.radioButton_anal.setToolTip(QCoreApplication.translate("SSWDCriterias", u"Avoiding the detection is currently not available.", None))
-#endif // QT_CONFIG(tooltip)
-        self.radioButton_anal.setText(QCoreApplication.translate("SSWDCriterias", u"Do not detect slow waves, just analyze slow waves previously detected and saved in the accessory file.", None))
         self.label_19.setText(QCoreApplication.translate("SSWDCriterias", u"<html><head/><body><p><span style=\" font-weight:600;\">Sleep stages and periods selection</span></p></body></html>", None))
         self.checkBox_n1.setText(QCoreApplication.translate("SSWDCriterias", u"N1", None))
         self.checkBox_n2.setText(QCoreApplication.translate("SSWDCriterias", u"N2", None))
@@ -535,7 +524,6 @@ class Ui_SSWDCriterias(object):
         self.label_10.setText(QCoreApplication.translate("SSWDCriterias", u"between", None))
         self.label_15.setText(QCoreApplication.translate("SSWDCriterias", u"and", None))
         self.label_9.setText(QCoreApplication.translate("SSWDCriterias", u"Wave frequency Hz (1/T)", None))
-        self.SW_picture.setText("")
         self.SW_picture.setText("")
     # retranslateUi
 

@@ -237,9 +237,9 @@ class SleepCyclesDelimiterSettingsView( BaseSettingsView,  Ui_SleepCyclesDelimit
         elif self.radioButton_Aesch.isChecked():
             self._load_embedded_pixmap('aeschbach')
             # Include incomplete cycle
-            self.checkBox_incl_SOREMP.setChecked(0)
-            self.checkBox_incl_last.setChecked(0)
-            self.checkBox_incl_all.setChecked(0)
+            self.checkBox_incl_SOREMP.setChecked(1)
+            self.checkBox_incl_last.setChecked(1)
+            self.checkBox_incl_all.setChecked(1)
             # NREM Periods Init
             self.minL_NREM_first = 15
             self.minL_NREM_mid = 15
@@ -264,9 +264,9 @@ class SleepCyclesDelimiterSettingsView( BaseSettingsView,  Ui_SleepCyclesDelimit
         elif self.radioButton_Floyd.isChecked():
             self._load_embedded_pixmap('feinberg_floyd')
             # Include incomplete cycle
-            self.checkBox_incl_SOREMP.setChecked(0)
-            self.checkBox_incl_last.setChecked(0)
-            self.checkBox_incl_all.setChecked(0)
+            self.checkBox_incl_SOREMP.setChecked(1)
+            self.checkBox_incl_last.setChecked(1)
+            self.checkBox_incl_all.setChecked(1)
             # NREM Periods Init
             self.minL_NREM_first = 15
             self.minL_NREM_mid = 15
