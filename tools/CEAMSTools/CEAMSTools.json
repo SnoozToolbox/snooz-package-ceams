@@ -149,7 +149,7 @@
         {
             "item_name": "SleepReport",
             "item_type": "tool",
-            "item_version": "2.2.0",
+            "item_version": "2.3.0",
             "item_hooks": [
                 {
                     "endpoint_name": "menu_endpoint",
@@ -163,7 +163,7 @@
         {
             "item_name": "SlowWaveDetection",
             "item_type": "tool",
-            "item_version": "2.2.0",
+            "item_version": "2.3.0",
             "item_hooks": [
                 {
                     "endpoint_name": "menu_endpoint",
@@ -177,7 +177,7 @@
         {
             "item_name": "SpindleDetectionA7",
             "item_type": "tool",
-            "item_version": "3.1.0",
+            "item_version": "3.2.0",
             "item_hooks": [
                 {
                     "endpoint_name": "menu_endpoint",
@@ -191,7 +191,7 @@
         {
             "item_name": "SpindleDetectionMartin",
             "item_type": "tool",
-            "item_version": "2.3.0",
+            "item_version": "2.4.0",
             "item_hooks": [
                 {
                     "endpoint_name": "menu_endpoint",
@@ -219,7 +219,7 @@
         {
             "item_name": "SleepCycleExport",
             "item_type": "tool",
-            "item_version": "2.2.0",
+            "item_version": "2.3.0",
             "item_hooks": [
                 {
                     "endpoint_name": "menu_endpoint",
@@ -233,7 +233,7 @@
         {
             "item_name": "PowerSpectralAnalysis",
             "item_type": "tool",
-            "item_version": "2.3.0",
+            "item_version": "2.4.0",
             "item_hooks": [
                 {
                     "endpoint_name": "menu_endpoint",
@@ -289,7 +289,7 @@
         {
             "item_name": "OxygenSaturationReport",
             "item_type": "tool",
-            "item_version": "2.2.0",
+            "item_version": "2.3.0",
             "item_hooks": [
                 {
                     "endpoint_name": "menu_endpoint",
@@ -331,7 +331,7 @@
         {
             "item_name": "SpindleDetectionSumo",
             "item_type": "tool",
-            "item_version": "2.4.0",
+            "item_version": "2.5.0",
             "item_hooks": [
                 {
                     "endpoint_name": "menu_endpoint",

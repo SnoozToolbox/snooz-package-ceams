@@ -270,8 +270,6 @@ class SleepCyclesDelimiter(SciNode):
         if isinstance(events_in, pd.DataFrame) and len(events_in) == 0:
             war_message = "WARNING : events_in parameter is empty."
             self._log_manager.log(self.identifier, war_message)
-            #raise NodeInputException(self.identifier, "events_in", \
-                #"SleepCyclesDelimiter events_in parameter is empty.")
 
         # It is important to make a copy otherwise other instance of events
         # will also be modified.
@@ -363,10 +361,6 @@ class SleepCyclesDelimiter(SciNode):
 
         # Compute start of the NREM and REM periods
         # REM end periods are updated in case the recording ends in NREM
-        # Remove the use of nrem_rem_df
-        # nremper_start_lst, remper_start_lst, remper_end_lst = \
-        #     self._compute_period_start(first_asleep_event, last_asleep_event, \
-        #         nrem_rem_df, remper_end_lst, parameters_dict)  
         nremper_start_lst, remper_start_lst, remper_end_lst = \
             self._compute_period_start(first_asleep_event, last_asleep_event, \
                 sleep_stage_scored, remper_end_lst, parameters_dict)                    
@@ -418,8 +412,6 @@ class SleepCyclesDelimiter(SciNode):
             self._incomplete_cycle_evaluation(\
                 parameters_dict, nremper_start_lst, remper_start_lst, remper_end_lst)
 
-        # TODO Miss the metadata
-
         #----------------------------------------------------------------------
         # Create an dataframe event for each NREM and REM period.
         #----------------------------------------------------------------------
@@ -429,7 +421,6 @@ class SleepCyclesDelimiter(SciNode):
             cycle_event = []
         elif len(remper_end_lst)==0:
             nremper_dur = remper_start_lst[0] - nremper_start_lst[0]
-            #nremper_dur = nrem_rem_df['duration_sec'][0]
             nrem_cycle_event = [[commons.nrem_period_group, commons.nrem_period_group, nremper_start_lst[0], nremper_dur, '']]
             cycle_event = [[commons.sleep_cycle_group, commons.sleep_cycle_group, nremper_start_lst[0], nremper_dur, '']]
         else:            
@@ -447,8 +438,6 @@ class SleepCyclesDelimiter(SciNode):
             # The last REMP can be missing (when the last NREMP is < NREM_min_len_val_last)
             # In that case the cycle is always incomplete, but can be showed
             if len(remper_end_lst)<len(cycle_complete):
-                #last_nrem_end = int(nrem_rem_df['duration_sec'].iloc[-1])+int(nrem_rem_df['start_sec'].iloc[-1])
-                # remove the use of the nrem_rem_df
                 last_nrem_end = sleep_stage_scored['start_sec'].values[-1]+sleep_stage_scored['duration_sec'].values[-1]
                 nremper_dur = last_nrem_end-nremper_start_lst[-1]
                 nrem_cycle_event.append([commons.nrem_period_group, commons.nrem_period_group, nremper_start_lst[-1], nremper_dur, ''])
@@ -461,7 +450,6 @@ class SleepCyclesDelimiter(SciNode):
         cycle_event_df = pd.concat([cycle_event_df,pd.DataFrame(\
                 data=cycle_event, columns=['group','name','start_sec','duration_sec','channels'])])
         
-        #events_out = events_out.append(cycle_event_df)
         events_out = pd.concat([events_out, cycle_event_df])
         events_out.sort_values(by=['start_sec'],inplace=True)
         events_out = events_out.reset_index(drop=True)     
@@ -489,8 +477,6 @@ class SleepCyclesDelimiter(SciNode):
         if len(nremper_start_lst)>0:
             nremper_start_epoch = np.round((nremper_start_lst-sleep_stage_events.start_sec[0]) / epoch_length_sec)
             if len(remper_start_lst)==0:
-                # remove the use of the nrem_rem_df
-                #remper_start_lst = [nrem_rem_df['start_sec'][0] + nrem_rem_df['duration_sec'][0]]
                 remper_start_lst = [sleep_stage_scored['start_sec'].values[-1]+sleep_stage_scored['duration_sec'].values[-1]]
                 remper_end_lst = remper_start_lst
                 remper_start_epoch = [np.round((remper_start_lst-sleep_stage_events.start_sec[0]) / epoch_length_sec)]
@@ -507,8 +493,6 @@ class SleepCyclesDelimiter(SciNode):
             # In that case the cycle is always incomplete, but can be showed
             if len(remper_end_lst)<len(cycle_complete):
                 nremper_start_epoch = np.round((nremper_start_lst[-1]-sleep_stage_events.start_sec[0]) / epoch_length_sec)
-                # remove the use of the nrem_rem_df
-                #last_nrem_end = int(nrem_rem_df['duration_sec'].iloc[-1])+int(nrem_rem_df['start_sec'].iloc[-1])-sleep_stage_events.start_sec[0]
                 last_nrem_end = int(sleep_stage_scored['start_sec'].values[-1]+sleep_stage_scored['duration_sec'].values[-1])
                 last_nrem_end_epoch = np.round((last_nrem_end-sleep_stage_events.start_sec[0]) / epoch_length_sec)
                 cycle_def.append([(int(nremper_start_epoch),int(last_nrem_end_epoch)-1),\
@@ -543,8 +527,6 @@ class SleepCyclesDelimiter(SciNode):
             remper_end_lst : list
                 List of end of REM period.
         """
-        # TODO revise this !!!
-        # it is possible to have 2 consecutive REM bouts (without nrem bout between i.e. only awake)
         remper_end_lst = []
         current_nor_dur = 0
         possible_REM_period = 0
@@ -602,8 +584,6 @@ class SleepCyclesDelimiter(SciNode):
         return remper_end_lst
 
 
-    # def _compute_period_start(self, first_asleep_event, last_asleep_event, \
-    #     nrem_rem_df, remper_end_lst, parameters_dict):
     def _compute_period_start(self, first_asleep_event, last_asleep_event, \
         sleep_stage_scored, remper_end_lst, parameters_dict):
         """
@@ -655,7 +635,6 @@ class SleepCyclesDelimiter(SciNode):
             war_message = "WARNING : events_in parameter does not include any R stages."
             self._log_manager.log(self.identifier, war_message)
             return nremper_start_lst, remper_end_lst, remper_end_lst
-        #remper_start_lst.append(rem_extract.iloc[first_rem_epoch_i].start_sec)
         remper_start_lst.append(rem_extract.loc[first_rem_epoch_i].start_sec)
         # For each additional cycle
         for remper_end in remper_end_lst:
@@ -663,7 +642,6 @@ class SleepCyclesDelimiter(SciNode):
             cur_nrem_rem_df = sleep_stage_scored[round(sleep_stage_scored.start_sec)>=round(remper_end)]
             if not cur_nrem_rem_df.empty:
                 cur_nrem_rem_df.reset_index(drop=True,inplace=True)
-                #first_nrem_epoch_i = cur_nrem_rem_df[cur_nrem_rem_df['name']=='nrem'].first_valid_index() 
                 if 'N1' in parameters_dict['sleep_stages']:
                     NREM_event_df, first_ori_idx, last_ori_idx = \
                         self._select_stage(cur_nrem_rem_df, 'N1,N2,N3')
@@ -676,14 +654,13 @@ class SleepCyclesDelimiter(SciNode):
                 first_nrem_epoch_i = None
                 first_rem_epoch_i = None
             if not first_rem_epoch_i == None:
-                #rem_start_sec = cur_nrem_rem_df.iloc[first_rem_epoch_i].start_sec
                 rem_start_sec = cur_nrem_rem_df.loc[first_rem_epoch_i].start_sec
             if not first_nrem_epoch_i == None:
-                #nrem_start_sec = cur_nrem_rem_df.iloc[first_nrem_epoch_i].start_sec
                 nrem_start_sec = cur_nrem_rem_df.loc[first_nrem_epoch_i].start_sec
                 if not first_rem_epoch_i == None:
                     # if any which one is first (REMP or NREMP)
-                    if rem_start_sec<nrem_start_sec: # if there is a NREMP of 0 min (incomplete cycle but still)
+                    # if there is a NREMP of 0 min (incomplete cycle but still)
+                    if nrem_start_sec.empty or (rem_start_sec<nrem_start_sec): 
                         nremper_start_lst.append(rem_start_sec)
                         remper_start_lst.append(rem_start_sec)
                     else:
@@ -703,7 +680,6 @@ class SleepCyclesDelimiter(SciNode):
                     nremper_start_lst.append(nrem_start_sec)
                     first_rem_epoch_i = rem_extract[rem_extract['start_sec']>=nrem_start_sec].first_valid_index()
                     if not first_rem_epoch_i == None:
-                        #remper_start_lst.append(rem_extract.iloc[first_rem_epoch_i].start_sec)
                         remper_start_lst.append(rem_extract.loc[first_rem_epoch_i].start_sec)
                     # Recording ends in NREMP 
                     else:
@@ -823,7 +799,6 @@ class SleepCyclesDelimiter(SciNode):
         # Find the first occurrence of the stages
         last_epoch_i = stage_event_df[stage_event_df['name'].isin(stages_num)].last_valid_index()
         # Extract the last valid epoch
-        #last_event_df = stage_event_df.iloc[last_epoch_i]
         last_event_df = stage_event_df.loc[last_epoch_i]
         return last_event_df
 
@@ -871,8 +846,6 @@ class SleepCyclesDelimiter(SciNode):
             return cycle_complete, nremper_start_lst, remper_start_lst, remper_end_lst
         else:
             cycle_complete = np.ones(len(remper_end_lst)) # incomplete cycles may be discarded
-            
-#            if parameters_dict['Include_all_incompl']==0:
 
             # Compute period duration in order to discard cycle
             # The last REMP can be missing (when the last NREMP is < NREM_min_len_val_last)
