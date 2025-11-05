@@ -115,8 +115,7 @@ class SlowWavesDetails(SciNode):
         InputPlug('export_slow_wave',self)
         
         # Init module variables
-        self.stage_stats_labels = ['N1', 'N2', 'N3', 'R']
-        #self.N_CYCLES = 8
+        self.stage_stats_labels = ['N1', 'N2', 'N3', 'N2N3', 'NREM', 'R']
 
         # A master module allows the process to be reexcuted multiple time.
         self._is_master = False 
@@ -242,6 +241,7 @@ class SlowWavesDetails(SciNode):
             raise NodeInputException(self.identifier, "report_constants",\
                 "SlowWavesDetails report_constants expected type is dict and received type is " + str(type(report_constants)))   
         self.N_CYCLES = int(float(report_constants['N_CYCLES']))
+        self.N_HOURS = int(float(report_constants['N_HOURS']))
 
         # To convert string to dict
         if isinstance(sleep_cycle_param, str):
@@ -394,10 +394,24 @@ class SlowWavesDetails(SciNode):
             cyc_stats = self.compute_cyc_stats_per_stage(sw_cur_chan_sort, artifact_cur_chan_df, stage_in_cycle_df, sleep_cycles_df,\
                 commons.sleep_stages_name, sw_det_param['stage_sel'], label_stats, self.stage_stats_labels)
 
+            # ---------------------------------------------------------------------------------------------------------
+            # Compute the stats for clock_h
+            # ---------------------------------------------------------------------------------------------------------
+            label_stats = 'clock_h'
+            clock_h_stats = self.compute_clock_h_stats_per_stage(sw_cur_chan_sort, artifact_cur_chan_df, stage_in_cycle_df,\
+                commons.sleep_stages_name, sw_det_param['stage_sel'], label_stats, self.stage_stats_labels)
+
+            # ---------------------------------------------------------------------------------------------------------
+            # Compute the stats for stage_h
+            # ---------------------------------------------------------------------------------------------------------
+            label_stats = 'stage_h'
+            stage_h_stats = self.compute_stage_h_stats_per_stage(sw_cur_chan_sort, artifact_cur_chan_df, stage_in_cycle_df,\
+                commons.sleep_stages_name, sw_det_param['stage_sel'], label_stats, self.stage_stats_labels)
+
             # Organize data to write the cohort spindle report
             # Construction of the pandas dataframe that will be used to create the TSV file
             # There is a new line for each channel and mini band
-            cur_chan_dict = cur_chan_general_dict | tot_stats | cyc_stats
+            cur_chan_dict = cur_chan_general_dict | tot_stats | cyc_stats | clock_h_stats | stage_h_stats
             cur_chan_df = pd.DataFrame.from_records([cur_chan_dict])
 
             # --------------------------------------------------------------------------
@@ -459,7 +473,7 @@ class SlowWavesDetails(SciNode):
             # Write the current report for the current subject into the cohort tsv file
             write_header = not os.path.exists(cohort_filename)
             # Order columns as the doc file
-            out_columns = list(_get_doc(self.N_CYCLES).keys())
+            out_columns = list(_get_doc(self.N_CYCLES, self.N_HOURS).keys())
             cohort_characteristics_df = cohort_characteristics_df[out_columns]
             try : 
                 cohort_characteristics_df.to_csv(path_or_buf=cohort_filename, sep='\t', \
@@ -475,7 +489,7 @@ class SlowWavesDetails(SciNode):
                 file_name, file_extension = os.path.splitext(cohort_filename)
                 doc_filepath = file_name+"_info"+file_extension
                 if not os.path.exists(doc_filepath):
-                    write_doc_file(doc_filepath, self.N_CYCLES)
+                    write_doc_file(doc_filepath, self.N_CYCLES, self.N_HOURS)
                     # Log message for the Logs tab
                     self._log_manager.log(self.identifier, f"The file {doc_filepath} has been created.")
 
@@ -486,10 +500,12 @@ class SlowWavesDetails(SciNode):
         }
 
 
-    def compute_tot_stats_per_stage(self, sw_cur_chan_sort, artifact_cur_chan_df, stage_in_cycle_df, sleep_stages_name, stage_sel, label_stats, stage_stats_labels):
+    def compute_tot_stats_per_stage(self, sw_cur_chan_sort, artifact_cur_chan_df, \
+        stage_in_cycle_df, sleep_stages_name, stage_sel, label_stats, stage_stats_labels):
         # Compute valid duration (min)
         #   Return a dict as valid_dur[f'{label_stats}_valid_min_{stage}']
-        valid_dur = EventsDetails.compute_valid_dur_min(EventsDetails, artifact_cur_chan_df, stage_in_cycle_df, sleep_stages_name, stage_sel, label_stats, stage_stats_labels)
+        valid_dur = EventsDetails.compute_valid_dur_min(artifact_cur_chan_df, \
+            stage_in_cycle_df, sleep_stages_name, stage_sel, label_stats, stage_stats_labels)
 
         # Extract characteristics to average
         sw_cur_chan_tot = sw_cur_chan_sort[self.sw_characteristics]
@@ -510,9 +526,14 @@ class SlowWavesDetails(SciNode):
         mean_stage = {}
         sw_count_stage = {}
         for stage in stage_stats_labels:
-#            if sleep_stages_name[stage] in stage_sel:
             # Extract sw for the current stage
-            sw_cur_chan_stage = sw_cur_chan_sort[sw_cur_chan_sort['stage']==int(sleep_stages_name[stage])]
+            if len(sleep_stages_name[stage]) == 1:
+                sw_cur_chan_stage = sw_cur_chan_sort[sw_cur_chan_sort['stage']==int(sleep_stages_name[stage])]
+            else:
+                sw_cur_chan_stage = pd.DataFrame()
+                for stage_num in sleep_stages_name[stage]:
+                    sw_cur_chan_sub_stage = sw_cur_chan_sort[sw_cur_chan_sort['stage']==int(stage_num)]
+                    sw_cur_chan_stage = pd.concat([sw_cur_chan_stage, sw_cur_chan_sub_stage])
             sw_cur_chan_stage = sw_cur_chan_stage[self.sw_characteristics]
             # Format the sw_cur_chan_stage dataframe values into float
             sw_cur_chan_stage = sw_cur_chan_stage.applymap(float)
@@ -601,7 +622,7 @@ class SlowWavesDetails(SciNode):
 
             # Compute valid duration (min)
             #   For each sleep stage included in stage_sel_df, compute the duration without artifact (valid_min).
-            valid_dur_cur = EventsDetails.compute_valid_dur_min(EventsDetails, artifact_cur_chan_df, stage_sel_df, \
+            valid_dur_cur = EventsDetails.compute_valid_dur_min(artifact_cur_chan_df, stage_sel_df, \
                 commons.sleep_stages_name, stage_sel, cycle_label, self.stage_stats_labels)
             # Accumulate for each cycle
             valid_dur = valid_dur | valid_dur_cur
@@ -629,7 +650,14 @@ class SlowWavesDetails(SciNode):
             for stage in stage_stats_labels:
                 #if sleep_stages_name[stage] in stage_sel:
                 # Extract sw for the current stage
-                sw_cur_chan_stage = sw_sel_df[sw_cur_chan_sort['stage']==int(sleep_stages_name[stage])]
+                if len(sleep_stages_name[stage]) == 1:
+                    sw_cur_chan_stage = sw_sel_df[sw_cur_chan_sort['stage']==int(sleep_stages_name[stage])]
+                else:
+                    sw_cur_chan_stage = pd.DataFrame()
+                    for stage_num in sleep_stages_name[stage]:
+                        sw_cur_chan_sub_stage = sw_sel_df[sw_sel_df['stage']==int(stage_num)]
+                        sw_cur_chan_stage = pd.concat([sw_cur_chan_stage, sw_cur_chan_sub_stage])
+
                 sw_cur_to_mean = sw_cur_chan_stage[self.sw_characteristics]
                 # Format the sw_cur_chan_stage dataframe values into float
                 sw_cur_to_mean = sw_cur_to_mean.applymap(float)
@@ -658,3 +686,653 @@ class SlowWavesDetails(SciNode):
 
             cyc_stats =  valid_dur | rec_dur | sw_count_stage | mean_stage | sw_count_cyc | mean_cyc
         return cyc_stats
+
+    def compute_clock_h_stats_per_stage(self, sw_cur_chan_sort, artifact_cur_chan_df, stage_in_cycle_df, \
+        sleep_stages_name, stage_sel, label_stats, stage_stats_labels):
+        """""
+        Compute statistics for each clock hour
+
+        Parameters
+        -----------
+            sw_cur_chan_sort : pandas DataFrame
+                slow wave events including the characteristics
+            artifact_cur_chan_df : pandas DataFrame
+                List of artifacts events
+            stage_in_cycle_df   : pandas DataFrame
+                List of sleep stages included in the cycles.
+            sleep_stages_name : dict
+                Dict of sleep stage label to number (commons.sleep_stages_name)
+            stage_sel     : list
+                List of sleep stage number selected (ex. ['2', '3'])
+            label_stats         : str
+                The label of the statistics to export. I.e. : 'clock_h', ...
+            stage_stats_labels : list
+                List of label to use for the stages.
+
+        Returns
+        -----------  
+            stats   : dict
+                List of statistics for each clock hour.
+        """""
+        # SW events
+        sw_start_times = sw_cur_chan_sort['start_sec'].to_numpy().astype(float)   # numpy array
+        sw_duration_times = sw_cur_chan_sort['duration_sec'].to_numpy().astype(float)  # numpy array
+        sw_end_times = sw_start_times+sw_duration_times        
+
+        # Stage events
+        stage_starts = stage_in_cycle_df['start_sec'].values
+        stage_durations = stage_in_cycle_df['duration_sec'].values
+        stage_ends = stage_starts+stage_durations    
+
+        # For each clock hour
+        hour_valid_dur_stats = {}
+        hour_sw_stats = {}
+        hour_rec_dur_stats = {}
+        
+        # Get the start time of the recording (first sleep stage)
+        recording_start_time = stage_in_cycle_df['start_sec'].iloc[0] if len(stage_in_cycle_df) > 0 else 0
+        
+        for i_hour in range(self.N_HOURS):
+            hour_label = label_stats+str(i_hour+1)
+            
+            # Calculate hour boundaries (similar to PSACompilation approach)
+            start_hour = recording_start_time + i_hour * 3600  # 3600 seconds = 1 hour
+            end_hour = start_hour + 3600
+            
+            # Select the stages from the current hour
+            stages_bool = (stage_starts >= start_hour) & (stage_ends <= end_hour)
+            stages_i_sel = np.nonzero(stages_bool)[0]
+            stage_sel_df = stage_in_cycle_df.iloc[stages_i_sel] if len(stages_i_sel) > 0 else pd.DataFrame()
+
+            # Select the sw from the current hour
+            sw_bool = (sw_start_times >= start_hour) & (sw_end_times <= end_hour)
+            sw_sel_i = np.nonzero(sw_bool)[0]
+            # To know in which sleep stage the sw occurs
+            sw_sel_df = sw_cur_chan_sort.iloc[sw_sel_i]
+
+            # Compute recording duration (min) for this hour
+            hour_duration = min(3600, end_hour - start_hour) if end_hour > start_hour else 0
+            hour_rec_dur_stats[f'{hour_label}_min'] = hour_duration / 60
+
+            # Compute valid duration (min) for this hour
+            # For each sleep stage included in stage_sel_df, compute the duration without artifact (valid_min).
+            if len(stage_sel_df) > 0:
+                valid_dur_stats_cur = EventsDetails.compute_valid_dur_min(artifact_cur_chan_df, stage_sel_df, \
+                    sleep_stages_name, stage_sel, hour_label, stage_stats_labels)
+                hour_valid_dur_stats = hour_valid_dur_stats | valid_dur_stats_cur
+
+                # Compute the sw count and characteristics per stage
+                sw_stats_cur = self.compute_sw_stats_per_stage(valid_dur_stats_cur, sw_sel_df, stage_sel, hour_label, stage_stats_labels)
+                hour_sw_stats = hour_sw_stats | sw_stats_cur
+            else:
+                # No stages in this hour - set all values to NaN
+                hour_valid_dur_stats[f'{hour_label}_valid_min'] = np.NaN
+                hour_sw_stats[f'{hour_label}_sw_count'] = np.NaN
+                hour_sw_stats[f'{hour_label}_sw_sec'] = np.NaN
+                hour_sw_stats[f'{hour_label}_pkpk_amp_uV'] = np.NaN
+                hour_sw_stats[f'{hour_label}_freq_Hz'] = np.NaN
+                hour_sw_stats[f'{hour_label}_neg_amp_uV'] = np.NaN
+                hour_sw_stats[f'{hour_label}_neg_sec'] = np.NaN
+                hour_sw_stats[f'{hour_label}_pos_sec'] = np.NaN
+                hour_sw_stats[f'{hour_label}_slope_0_min'] = np.NaN
+                hour_sw_stats[f'{hour_label}_slope_min_max'] = np.NaN
+                hour_sw_stats[f'{hour_label}_slope_max_0'] = np.NaN
+                hour_sw_stats[f'{hour_label}_trans_freq_Hz'] = np.NaN
+                
+                for stage in stage_stats_labels:
+                    hour_valid_dur_stats[f'{hour_label}_{stage}_valid_min'] = np.NaN
+                    hour_sw_stats[f'{hour_label}_{stage}_sw_count'] = np.NaN
+                    hour_sw_stats[f'{hour_label}_{stage}_sw_sec'] = np.NaN
+                    hour_sw_stats[f'{hour_label}_{stage}_pkpk_amp_uV'] = np.NaN
+                    hour_sw_stats[f'{hour_label}_{stage}_freq_Hz'] = np.NaN
+                    hour_sw_stats[f'{hour_label}_{stage}_neg_amp_uV'] = np.NaN
+                    hour_sw_stats[f'{hour_label}_{stage}_neg_sec'] = np.NaN
+                    hour_sw_stats[f'{hour_label}_{stage}_pos_sec'] = np.NaN
+                    hour_sw_stats[f'{hour_label}_{stage}_slope_0_min'] = np.NaN
+                    hour_sw_stats[f'{hour_label}_{stage}_slope_min_max'] = np.NaN
+                    hour_sw_stats[f'{hour_label}_{stage}_slope_max_0'] = np.NaN
+                    hour_sw_stats[f'{hour_label}_{stage}_trans_freq_Hz'] = np.NaN
+
+        # Organize data for the output
+        return hour_rec_dur_stats | hour_valid_dur_stats | hour_sw_stats
+
+    def compute_stage_h_stats_per_stage(self, sw_cur_chan_sort, artifact_cur_chan_df, stage_in_cycle_df, \
+        sleep_stages_name, stage_sel, label_stats, stage_stats_labels):
+        """""
+        Compute statistics for each stage hour (window-based segmentation)
+
+        Parameters
+        -----------
+            sw_cur_chan_sort : pandas DataFrame
+                slow wave events including the characteristics
+            artifact_cur_chan_df : pandas DataFrame
+                List of artifacts events
+            stage_in_cycle_df   : pandas DataFrame
+                List of sleep stages included in the cycles.
+            sleep_stages_name : dict
+                Dict of sleep stage label to number (commons.sleep_stages_name)
+            stage_sel     : list
+                List of sleep stage number selected (ex. ['2', '3'])
+            label_stats         : str
+                The label of the statistics to export. I.e. : 'stage_h', ...
+            stage_stats_labels : list
+                List of label to use for the stages.
+
+        Returns
+        -----------  
+            stats   : dict
+                List of statistics for each stage hour.
+        """""
+        # SW events
+        sw_start_times = sw_cur_chan_sort['start_sec'].to_numpy().astype(float)   # numpy array
+        sw_duration_times = sw_cur_chan_sort['duration_sec'].to_numpy().astype(float)  # numpy array
+        sw_end_times = sw_start_times+sw_duration_times        
+
+        # Stage events
+        stage_starts = stage_in_cycle_df['start_sec'].values
+        stage_durations = stage_in_cycle_df['duration_sec'].values
+        stage_ends = stage_starts+stage_durations    
+
+        # For each stage hour (window-based segmentation)
+        stage_hour_valid_dur_stats = {}
+        stage_hour_sw_stats = {}
+        stage_hour_rec_dur_stats = {}
+        
+        # Calculate expected windows per hour (assuming 30-second epochs)
+        # Extract the first value of the unique list of duration_sec in stage_in_cycle_df
+        epoch_duration = round(np.unique(stage_durations)[0])
+        expected_windows_per_hour = 3600.0 / epoch_duration  # 120 windows per hour
+        
+        # Collect all stages and sw by stage type
+        stage_data = {}
+        sw_data = {}
+        
+        # Group stages by stage type
+        for stage_label in stage_stats_labels:
+            stage_data[stage_label] = []
+            sw_data[stage_label] = []
+            
+            # Handle special case for N2N3 and NREM
+            if stage_label == 'N2N3':
+                stage_numbers = ['2', '3']
+            elif stage_label == 'NREM':
+                stage_numbers = ['1', '2', '3']
+            else:
+                stage_numbers = [sleep_stages_name[stage_label]]
+            
+            # Collect stages of this type
+            for i, stage_num in enumerate(stage_numbers):
+                stage_mask = stage_in_cycle_df['name'] == int(stage_num)
+                if stage_mask.any():
+                    stage_data[stage_label].extend(stage_in_cycle_df[stage_mask].to_dict('records'))
+            # Sort stages by start time
+            stage_data[stage_label].sort(key=lambda x: x['start_sec'])
+            # Collect sw of this type
+            sw_mask = sw_cur_chan_sort['stage'].isin([int(sn) for sn in stage_numbers])
+            if sw_mask.any():
+                sw_data[stage_label].extend(sw_cur_chan_sort[sw_mask].to_dict('records'))
+            # Sort sw by start time
+            sw_data[stage_label].sort(key=lambda x: x['start_sec'])
+        # Process each hour
+        for i_hour in range(self.N_HOURS):
+            hour_label = label_stats+str(i_hour+1)
+            
+            # Calculate window indices for this hour
+            start_window = int(i_hour * expected_windows_per_hour)
+            end_window = int((i_hour + 1) * expected_windows_per_hour)
+            
+            # Process each stage type
+            for stage_label in stage_stats_labels:
+                # Get stages and sw for this stage type
+                stages_cur = stage_data[stage_label]
+                sw_cur = sw_data[stage_label]
+                
+                # Apply window-based segmentation
+                stages_cur_hour = []
+                sw_cur_hour = []
+                
+                if len(stages_cur) > start_window:
+                    stages_cur_hour = stages_cur[start_window:min(end_window, len(stages_cur))]           
+                    # Filter sw_cur_hour to only include slow waves within the stage time range
+                    stage_start_time = stages_cur_hour[0]['start_sec']
+                    stage_end_time = stages_cur_hour[-1]['start_sec'] + stages_cur_hour[-1]['duration_sec']
+                    sw_cur_hour = [sw for sw in sw_cur if stage_start_time <= sw['start_sec'] <= stage_end_time]
+
+                # Convert back to DataFrames for processing
+                if stages_cur_hour:
+                    stage_sel_df = pd.DataFrame(stages_cur_hour)
+                else:
+                    stage_sel_df = pd.DataFrame()
+                
+                if sw_cur_hour:
+                    sw_sel_df = pd.DataFrame(sw_cur_hour)
+                else:
+                    sw_sel_df = pd.DataFrame()
+                
+                # Compute valid duration and sw statistics for this stage and hour
+                if len(stage_sel_df) > 0:
+                    valid_dur_stats_cur = EventsDetails.compute_stage_duration_for_single_stage(stage_sel_df, \
+                        artifact_cur_chan_df, stage_label, hour_label, stage_sel)
+                    stage_hour_valid_dur_stats = stage_hour_valid_dur_stats | valid_dur_stats_cur
+
+                    # Only compute sw statistics if we have sw
+                    if len(sw_sel_df) > 0:
+                        # Compute statistics for this specific stage type only
+                        sw_stats_cur = self.compute_sw_stats_for_single_stage(valid_dur_stats_cur, sw_sel_df, stage_label, hour_label)
+                        stage_hour_sw_stats = stage_hour_sw_stats | sw_stats_cur
+                    else:
+                        # No sw in this hour - set all sw values to NaN
+                        stage_hour_sw_stats[f'{hour_label}_{stage_label}_sw_count'] = np.NaN
+                        stage_hour_sw_stats[f'{hour_label}_{stage_label}_sw_sec'] = np.NaN
+                        stage_hour_sw_stats[f'{hour_label}_{stage_label}_pkpk_amp_uV'] = np.NaN
+                        stage_hour_sw_stats[f'{hour_label}_{stage_label}_freq_Hz'] = np.NaN
+                        stage_hour_sw_stats[f'{hour_label}_{stage_label}_neg_amp_uV'] = np.NaN
+                        stage_hour_sw_stats[f'{hour_label}_{stage_label}_neg_sec'] = np.NaN
+                        stage_hour_sw_stats[f'{hour_label}_{stage_label}_pos_sec'] = np.NaN
+                        stage_hour_sw_stats[f'{hour_label}_{stage_label}_slope_0_min'] = np.NaN
+                        stage_hour_sw_stats[f'{hour_label}_{stage_label}_slope_min_max'] = np.NaN
+                        stage_hour_sw_stats[f'{hour_label}_{stage_label}_slope_max_0'] = np.NaN
+                        stage_hour_sw_stats[f'{hour_label}_{stage_label}_trans_freq_Hz'] = np.NaN
+                else:
+                    # No stages in this hour - set all values to NaN
+                    stage_hour_valid_dur_stats[f'{hour_label}_{stage_label}_valid_min'] = np.NaN
+                    stage_hour_sw_stats[f'{hour_label}_{stage_label}_sw_count'] = np.NaN
+                    stage_hour_sw_stats[f'{hour_label}_{stage_label}_sw_sec'] = np.NaN
+                    stage_hour_sw_stats[f'{hour_label}_{stage_label}_pkpk_amp_uV'] = np.NaN
+                    stage_hour_sw_stats[f'{hour_label}_{stage_label}_freq_Hz'] = np.NaN
+                    stage_hour_sw_stats[f'{hour_label}_{stage_label}_neg_amp_uV'] = np.NaN
+                    stage_hour_sw_stats[f'{hour_label}_{stage_label}_neg_sec'] = np.NaN
+                    stage_hour_sw_stats[f'{hour_label}_{stage_label}_pos_sec'] = np.NaN
+                    stage_hour_sw_stats[f'{hour_label}_{stage_label}_slope_0_min'] = np.NaN
+                    stage_hour_sw_stats[f'{hour_label}_{stage_label}_slope_min_max'] = np.NaN
+                    stage_hour_sw_stats[f'{hour_label}_{stage_label}_slope_max_0'] = np.NaN
+                    stage_hour_sw_stats[f'{hour_label}_{stage_label}_trans_freq_Hz'] = np.NaN
+            
+            # Compute total statistics for this hour
+            total_stages = sum(len(stage_data[label]) for label in stage_stats_labels if len(sleep_stages_name[label]) == 1)
+            total_sw = sum(len(sw_data[label]) for label in stage_stats_labels if len(sleep_stages_name[label]) == 1)
+            
+            # Apply window segmentation for totals
+            if total_stages > start_window:
+                total_stages_hour = total_stages - start_window
+                stage_hour_rec_dur_stats[f'{hour_label}_min'] = min(total_stages_hour * epoch_duration / 60, 60)  # Max 60 minutes
+            else:
+                stage_hour_rec_dur_stats[f'{hour_label}_min'] = 0
+            
+            # Compute totals for this hour (aggregate across all stages)
+            self.compute_stage_hour_totals(hour_label, stage_hour_valid_dur_stats, stage_hour_sw_stats)
+
+        # Organize data for the output
+        return stage_hour_rec_dur_stats | stage_hour_valid_dur_stats | stage_hour_sw_stats
+
+    def compute_sw_stats_per_stage(self, valid_dur, sw_cur_chan_df, sleep_stage_sel, label_stats, stage_stats_labels):
+        """""
+        Compute the general slow wave characteristics such as count and average characteristics 
+        for all slow waves in sw_cur_chan_df.
+
+        Parameters
+        -----------
+            valid_dur : dict
+                Dictionary containing valid duration information
+            sw_cur_chan_df : pandas DataFrame
+                Slow wave events for the current stage type
+            sleep_stage_sel     : list of string
+                List of sleep stage number selected (ex. ['2', '3'])
+            label_stats : string
+                The label of the statistics to export. I.e. : 'total', 'cycle1', 'cycle2', ...
+            stage_stats_labels : list
+                List of label to use for the stages.
+        Returns
+        -----------  
+            sw_stats   : dict
+                Dictionary containing statistics for the slow waves
+        """""
+        sw_count = {}
+        sw_sec = {}
+        pkpk_amp_uV = {}
+        freq_Hz = {}
+        neg_amp_uV = {}
+        neg_sec = {}
+        pos_sec = {}
+        slope_0_min = {}
+        slope_min_max = {}
+        slope_max_0 = {}
+        trans_freq_Hz = {}
+        sw_count_total = 0
+        sw_sec_all = []
+        pkpk_amp_uV_all = []
+        freq_Hz_all = []
+        neg_amp_uV_all = []
+        neg_sec_all = []
+        pos_sec_all = []
+        slope_0_min_all = []
+        slope_min_max_all = []
+        slope_max_0_all = []
+        trans_freq_Hz_all = []
+        
+        # Create local sleep_stages_name to handle N2N3 and NREM
+        local_sleep_stages_name = commons.sleep_stages_name.copy()
+        local_sleep_stages_name['N2N3'] = ['2', '3']
+        local_sleep_stages_name['NREM'] = ['1', '2', '3']
+        
+        for stage in stage_stats_labels:
+            if type(sleep_stage_sel) is str:
+                sleep_stage_sel = sleep_stage_sel.split(',')
+            # If selected
+            if local_sleep_stages_name[stage] in sleep_stage_sel or (isinstance(local_sleep_stages_name[stage], list) and all(item in sleep_stage_sel for item in local_sleep_stages_name[stage])): 
+                
+                # Count the number of slow wave for the current stage
+                sw_cur_stage = sw_cur_chan_df[sw_cur_chan_df['stage'].isin(list(map(int, local_sleep_stages_name[stage])))]
+
+                sw_count_cur_stage = len(sw_cur_stage)
+
+                if len(local_sleep_stages_name[stage]) == 1:  # condition added to avoid summation for group of stages (ex: for NREM)
+                    sw_count_total = sw_count_total + sw_count_cur_stage
+
+                if valid_dur[f'{label_stats}_{stage}_valid_min']>0:
+                    sw_count[f'{label_stats}_{stage}_sw_count'] = sw_count_cur_stage
+                else:
+                    sw_count[f'{label_stats}_{stage}_sw_count'] = np.nan
+
+                if sw_count_cur_stage>0:
+                    sw_sec[f'{label_stats}_{stage}_sw_sec'] = sw_cur_stage['duration_sec'].sum()/sw_count_cur_stage
+                    pkpk_amp_uV[f'{label_stats}_{stage}_pkpk_amp_uV'] = sw_cur_stage['pkpk_amp_uV'].sum()/sw_count_cur_stage
+                    freq_Hz[f'{label_stats}_{stage}_freq_Hz'] = sw_cur_stage['freq_Hz'].sum()/sw_count_cur_stage
+                    neg_amp_uV[f'{label_stats}_{stage}_neg_amp_uV'] = sw_cur_stage['neg_amp_uV'].sum()/sw_count_cur_stage
+                    neg_sec[f'{label_stats}_{stage}_neg_sec'] = sw_cur_stage['neg_sec'].sum()/sw_count_cur_stage
+                    pos_sec[f'{label_stats}_{stage}_pos_sec'] = sw_cur_stage['pos_sec'].sum()/sw_count_cur_stage
+                    slope_0_min[f'{label_stats}_{stage}_slope_0_min'] = sw_cur_stage['slope_0_min'].sum()/sw_count_cur_stage
+                    slope_min_max[f'{label_stats}_{stage}_slope_min_max'] = sw_cur_stage['slope_min_max'].sum()/sw_count_cur_stage
+                    slope_max_0[f'{label_stats}_{stage}_slope_max_0'] = sw_cur_stage['slope_max_0'].sum()/sw_count_cur_stage
+                    trans_freq_Hz[f'{label_stats}_{stage}_trans_freq_Hz'] = sw_cur_stage['trans_freq_Hz'].sum()/sw_count_cur_stage
+                else:
+                    sw_sec[f'{label_stats}_{stage}_sw_sec'] = np.NaN
+                    pkpk_amp_uV[f'{label_stats}_{stage}_pkpk_amp_uV'] = np.NaN
+                    freq_Hz[f'{label_stats}_{stage}_freq_Hz'] = np.NaN
+                    neg_amp_uV[f'{label_stats}_{stage}_neg_amp_uV'] = np.NaN
+                    neg_sec[f'{label_stats}_{stage}_neg_sec'] = np.NaN
+                    pos_sec[f'{label_stats}_{stage}_pos_sec'] = np.NaN
+                    slope_0_min[f'{label_stats}_{stage}_slope_0_min'] = np.NaN
+                    slope_min_max[f'{label_stats}_{stage}_slope_min_max'] = np.NaN
+                    slope_max_0[f'{label_stats}_{stage}_slope_max_0'] = np.NaN
+                    trans_freq_Hz[f'{label_stats}_{stage}_trans_freq_Hz'] = np.NaN
+
+                if len(sw_sec_all)==0:
+                    sw_sec_all = sw_cur_stage['duration_sec'].values
+                else:
+                    if len(local_sleep_stages_name[stage]) == 1: # condition added to avoid concatenation for group of stages
+                        sw_sec_all = np.concatenate((sw_sec_all,sw_cur_stage['duration_sec'].values), axis=0)
+
+                if len(pkpk_amp_uV_all)==0:
+                    pkpk_amp_uV_all = sw_cur_stage['pkpk_amp_uV'].values
+                else:
+                    if len(local_sleep_stages_name[stage]) == 1: 
+                        pkpk_amp_uV_all = np.concatenate((pkpk_amp_uV_all,sw_cur_stage['pkpk_amp_uV'].values), axis=0)
+
+                if len(freq_Hz_all)==0:
+                    freq_Hz_all = sw_cur_stage['freq_Hz'].values
+                else:
+                    if len(local_sleep_stages_name[stage]) == 1:
+                        freq_Hz_all = np.concatenate((freq_Hz_all,sw_cur_stage['freq_Hz'].values), axis=0)
+
+                if len(neg_amp_uV_all)==0:
+                    neg_amp_uV_all = sw_cur_stage['neg_amp_uV'].values
+                else:
+                    if len(local_sleep_stages_name[stage]) == 1: 
+                        neg_amp_uV_all = np.concatenate((neg_amp_uV_all,sw_cur_stage['neg_amp_uV'].values), axis=0)
+
+                if len(neg_sec_all)==0:
+                    neg_sec_all = sw_cur_stage['neg_sec'].values
+                else:
+                    if len(local_sleep_stages_name[stage]) == 1: 
+                        neg_sec_all = np.concatenate((neg_sec_all,sw_cur_stage['neg_sec'].values), axis=0)
+
+                if len(pos_sec_all)==0:
+                    pos_sec_all = sw_cur_stage['pos_sec'].values
+                else:
+                    if len(local_sleep_stages_name[stage]) == 1: 
+                        pos_sec_all = np.concatenate((pos_sec_all,sw_cur_stage['pos_sec'].values), axis=0)
+
+                if len(slope_0_min_all)==0:
+                    slope_0_min_all = sw_cur_stage['slope_0_min'].values
+                else:
+                    if len(local_sleep_stages_name[stage]) == 1: 
+                        slope_0_min_all = np.concatenate((slope_0_min_all,sw_cur_stage['slope_0_min'].values), axis=0)
+
+                if len(slope_min_max_all)==0:
+                    slope_min_max_all = sw_cur_stage['slope_min_max'].values
+                else:
+                    if len(local_sleep_stages_name[stage]) == 1: 
+                        slope_min_max_all = np.concatenate((slope_min_max_all,sw_cur_stage['slope_min_max'].values), axis=0)
+
+                if len(slope_max_0_all)==0:
+                    slope_max_0_all = sw_cur_stage['slope_max_0'].values
+                else:
+                    if len(local_sleep_stages_name[stage]) == 1: 
+                        slope_max_0_all = np.concatenate((slope_max_0_all,sw_cur_stage['slope_max_0'].values), axis=0)
+
+                if len(trans_freq_Hz_all)==0:
+                    trans_freq_Hz_all = sw_cur_stage['trans_freq_Hz'].values
+                else:
+                    if len(local_sleep_stages_name[stage]) == 1: 
+                        trans_freq_Hz_all = np.concatenate((trans_freq_Hz_all,sw_cur_stage['trans_freq_Hz'].values), axis=0)
+            else:
+                sw_count[f'{label_stats}_{stage}_sw_count'] = np.NaN
+                sw_sec[f'{label_stats}_{stage}_sw_sec'] = np.NaN
+                pkpk_amp_uV[f'{label_stats}_{stage}_pkpk_amp_uV'] = np.NaN
+                freq_Hz[f'{label_stats}_{stage}_freq_Hz'] = np.NaN
+                neg_amp_uV[f'{label_stats}_{stage}_neg_amp_uV'] = np.NaN
+                neg_sec[f'{label_stats}_{stage}_neg_sec'] = np.NaN
+                pos_sec[f'{label_stats}_{stage}_pos_sec'] = np.NaN
+                slope_0_min[f'{label_stats}_{stage}_slope_0_min'] = np.NaN
+                slope_min_max[f'{label_stats}_{stage}_slope_min_max'] = np.NaN
+                slope_max_0[f'{label_stats}_{stage}_slope_max_0'] = np.NaN
+                trans_freq_Hz[f'{label_stats}_{stage}_trans_freq_Hz'] = np.NaN
+
+        # Total stats on the accumulated data
+        sw_count[f'{label_stats}_sw_count'] = sw_count_total
+        sw_sec[f'{label_stats}_sw_sec'] = np.mean(sw_sec_all)
+        pkpk_amp_uV[f'{label_stats}_pkpk_amp_uV'] = np.mean(pkpk_amp_uV_all)
+        freq_Hz[f'{label_stats}_freq_Hz'] = np.mean(freq_Hz_all)
+        neg_amp_uV[f'{label_stats}_neg_amp_uV'] = np.mean(neg_amp_uV_all)
+        neg_sec[f'{label_stats}_neg_sec'] = np.mean(neg_sec_all)
+        pos_sec[f'{label_stats}_pos_sec'] = np.mean(pos_sec_all)
+        slope_0_min[f'{label_stats}_slope_0_min'] = np.mean(slope_0_min_all)
+        slope_min_max[f'{label_stats}_slope_min_max'] = np.mean(slope_min_max_all)
+        slope_max_0[f'{label_stats}_slope_max_0'] = np.mean(slope_max_0_all)
+        trans_freq_Hz[f'{label_stats}_trans_freq_Hz'] = np.mean(trans_freq_Hz_all)
+
+        sw_stats = sw_count | sw_sec | pkpk_amp_uV | freq_Hz | neg_amp_uV | neg_sec | pos_sec | slope_0_min | slope_min_max | slope_max_0 | trans_freq_Hz
+        return sw_stats
+
+    def compute_sw_stats_for_single_stage(self, valid_dur, sw_cur_chan_df, stage_label, label_stats):
+        """""
+        Compute statistics for a single stage type (e.g., N1, N2, N3, N2N3, NREM, R).
+        This is a simplified version of compute_sw_stats_per_stage for single stage processing.
+
+        Parameters
+        -----------
+            valid_dur : dict
+                Dictionary containing valid duration information
+            sw_cur_chan_df : pandas DataFrame
+                Slow wave events for the current stage type
+            stage_label : str
+                The stage label (N1, N2, N3, N2N3, NREM, R)
+            label_stats : str
+                The label for the statistics (e.g., "stage_h1")
+                
+        Returns
+        -----------  
+            sw_stats : dict
+                Dictionary containing statistics for the single stage
+        """""
+        # Get the valid duration for this specific stage
+        valid_dur_key = f'{label_stats}_{stage_label}_valid_min'
+        if valid_dur_key not in valid_dur:
+            valid_dur_key = f'{label_stats}_valid_min'  # fallback to general valid duration
+        
+        valid_duration = valid_dur.get(valid_dur_key, 0)
+        
+        # Count slow waves
+        sw_count = len(sw_cur_chan_df)
+        
+        # Initialize result dictionary
+        result = {}
+        
+        # Slow wave count
+        if valid_duration > 0:
+            result[f'{label_stats}_{stage_label}_sw_count'] = sw_count
+        else:
+            result[f'{label_stats}_{stage_label}_sw_count'] = np.nan
+            
+        # Other characteristics (only if we have slow waves) - using same approach as original
+        if sw_count > 0:
+            # Use the same calculation method as compute_sw_stats_per_stage
+            result[f'{label_stats}_{stage_label}_sw_sec'] = sw_cur_chan_df['duration_sec'].sum() / sw_count
+            result[f'{label_stats}_{stage_label}_pkpk_amp_uV'] = sw_cur_chan_df['pkpk_amp_uV'].sum() / sw_count
+            result[f'{label_stats}_{stage_label}_freq_Hz'] = sw_cur_chan_df['freq_Hz'].sum() / sw_count
+            result[f'{label_stats}_{stage_label}_neg_amp_uV'] = sw_cur_chan_df['neg_amp_uV'].sum() / sw_count
+            result[f'{label_stats}_{stage_label}_neg_sec'] = sw_cur_chan_df['neg_sec'].sum() / sw_count
+            result[f'{label_stats}_{stage_label}_pos_sec'] = sw_cur_chan_df['pos_sec'].sum() / sw_count
+            result[f'{label_stats}_{stage_label}_slope_0_min'] = sw_cur_chan_df['slope_0_min'].sum() / sw_count
+            result[f'{label_stats}_{stage_label}_slope_min_max'] = sw_cur_chan_df['slope_min_max'].sum() / sw_count
+            result[f'{label_stats}_{stage_label}_slope_max_0'] = sw_cur_chan_df['slope_max_0'].sum() / sw_count
+            result[f'{label_stats}_{stage_label}_trans_freq_Hz'] = sw_cur_chan_df['trans_freq_Hz'].sum() / sw_count
+        else:
+            result[f'{label_stats}_{stage_label}_sw_sec'] = np.nan
+            result[f'{label_stats}_{stage_label}_pkpk_amp_uV'] = np.nan
+            result[f'{label_stats}_{stage_label}_freq_Hz'] = np.nan
+            result[f'{label_stats}_{stage_label}_neg_amp_uV'] = np.nan
+            result[f'{label_stats}_{stage_label}_neg_sec'] = np.nan
+            result[f'{label_stats}_{stage_label}_pos_sec'] = np.nan
+            result[f'{label_stats}_{stage_label}_slope_0_min'] = np.nan
+            result[f'{label_stats}_{stage_label}_slope_min_max'] = np.nan
+            result[f'{label_stats}_{stage_label}_slope_max_0'] = np.nan
+            result[f'{label_stats}_{stage_label}_trans_freq_Hz'] = np.nan
+            
+        return result
+
+    def compute_stage_hour_totals(self, hour_label, valid_dur_stats, sw_stats):
+        """""
+        Compute total statistics for a stage hour by aggregating across all stages.
+        Uses the same approach as compute_sw_stats_per_stage: concatenate individual values and take mean.
+        
+        Parameters
+        -----------
+            hour_label : str
+                The hour label (e.g., "stage_h1")
+            valid_dur_stats : dict
+                Dictionary containing valid duration statistics (will be modified)
+            sw_stats : dict
+                Dictionary containing slow wave statistics (will be modified)
+        """""
+        # Initialize totals
+        total_sw_count = 0
+        
+        # For weighted averages (since we only have per-stage averages, not raw data)
+        weighted_sw_sec_sum = 0
+        weighted_pkpk_amp_uV_sum = 0
+        weighted_freq_Hz_sum = 0
+        weighted_neg_amp_uV_sum = 0
+        weighted_neg_sec_sum = 0
+        weighted_pos_sec_sum = 0
+        weighted_slope_0_min_sum = 0
+        weighted_slope_min_max_sum = 0
+        weighted_slope_max_0_sum = 0
+        weighted_trans_freq_Hz_sum = 0
+        
+        # Create local sleep_stages_name to check stage length (same as original function)
+        local_sleep_stages_name = commons.sleep_stages_name.copy()
+        local_sleep_stages_name['N2N3'] = ['2', '3']
+        local_sleep_stages_name['NREM'] = ['1', '2', '3']
+        
+        # Aggregate across all stages for this hour
+        for stage_label in self.stage_stats_labels:
+            # Only include individual stages in totals (same logic as original function)
+            if len(local_sleep_stages_name[stage_label]) == 1:
+                
+                # Slow wave count
+                count_key = f'{hour_label}_{stage_label}_sw_count'
+                if count_key in sw_stats and not np.isnan(sw_stats[count_key]):
+                    total_sw_count += sw_stats[count_key]
+                
+                # Collect values for weighted averaging (only if we have slow waves)
+                if count_key in sw_stats and not np.isnan(sw_stats[count_key]) and sw_stats[count_key] > 0:
+                    stage_count = int(sw_stats[count_key])
+                    
+                    # Duration
+                    duration_key = f'{hour_label}_{stage_label}_sw_sec'
+                    if duration_key in sw_stats and not np.isnan(sw_stats[duration_key]):
+                        weighted_sw_sec_sum += sw_stats[duration_key] * stage_count
+                    
+                    # Peak-to-peak amplitude
+                    pkpk_amp_key = f'{hour_label}_{stage_label}_pkpk_amp_uV'
+                    if pkpk_amp_key in sw_stats and not np.isnan(sw_stats[pkpk_amp_key]):
+                        weighted_pkpk_amp_uV_sum += sw_stats[pkpk_amp_key] * stage_count
+                    
+                    # Frequency
+                    freq_key = f'{hour_label}_{stage_label}_freq_Hz'
+                    if freq_key in sw_stats and not np.isnan(sw_stats[freq_key]):
+                        weighted_freq_Hz_sum += sw_stats[freq_key] * stage_count
+                    
+                    # Negative amplitude
+                    neg_amp_key = f'{hour_label}_{stage_label}_neg_amp_uV'
+                    if neg_amp_key in sw_stats and not np.isnan(sw_stats[neg_amp_key]):
+                        weighted_neg_amp_uV_sum += sw_stats[neg_amp_key] * stage_count
+                    
+                    # Negative duration
+                    neg_sec_key = f'{hour_label}_{stage_label}_neg_sec'
+                    if neg_sec_key in sw_stats and not np.isnan(sw_stats[neg_sec_key]):
+                        weighted_neg_sec_sum += sw_stats[neg_sec_key] * stage_count
+                    
+                    # Positive duration
+                    pos_sec_key = f'{hour_label}_{stage_label}_pos_sec'
+                    if pos_sec_key in sw_stats and not np.isnan(sw_stats[pos_sec_key]):
+                        weighted_pos_sec_sum += sw_stats[pos_sec_key] * stage_count
+                    
+                    # Slope 0 to min
+                    slope_0_min_key = f'{hour_label}_{stage_label}_slope_0_min'
+                    if slope_0_min_key in sw_stats and not np.isnan(sw_stats[slope_0_min_key]):
+                        weighted_slope_0_min_sum += sw_stats[slope_0_min_key] * stage_count
+                    
+                    # Slope min to max
+                    slope_min_max_key = f'{hour_label}_{stage_label}_slope_min_max'
+                    if slope_min_max_key in sw_stats and not np.isnan(sw_stats[slope_min_max_key]):
+                        weighted_slope_min_max_sum += sw_stats[slope_min_max_key] * stage_count
+                    
+                    # Slope max to 0
+                    slope_max_0_key = f'{hour_label}_{stage_label}_slope_max_0'
+                    if slope_max_0_key in sw_stats and not np.isnan(sw_stats[slope_max_0_key]):
+                        weighted_slope_max_0_sum += sw_stats[slope_max_0_key] * stage_count
+                    
+                    # Transition frequency
+                    trans_freq_key = f'{hour_label}_{stage_label}_trans_freq_Hz'
+                    if trans_freq_key in sw_stats and not np.isnan(sw_stats[trans_freq_key]):
+                        weighted_trans_freq_Hz_sum += sw_stats[trans_freq_key] * stage_count
+        
+        # Add total slow wave count
+        sw_stats[f'{hour_label}_sw_count'] = total_sw_count
+        
+        # Add total averages using weighted averages (mathematically equivalent to original method)
+        if total_sw_count > 0:
+            sw_stats[f'{hour_label}_sw_sec'] = weighted_sw_sec_sum / total_sw_count
+            sw_stats[f'{hour_label}_pkpk_amp_uV'] = weighted_pkpk_amp_uV_sum / total_sw_count
+            sw_stats[f'{hour_label}_freq_Hz'] = weighted_freq_Hz_sum / total_sw_count
+            sw_stats[f'{hour_label}_neg_amp_uV'] = weighted_neg_amp_uV_sum / total_sw_count
+            sw_stats[f'{hour_label}_neg_sec'] = weighted_neg_sec_sum / total_sw_count
+            sw_stats[f'{hour_label}_pos_sec'] = weighted_pos_sec_sum / total_sw_count
+            sw_stats[f'{hour_label}_slope_0_min'] = weighted_slope_0_min_sum / total_sw_count
+            sw_stats[f'{hour_label}_slope_min_max'] = weighted_slope_min_max_sum / total_sw_count
+            sw_stats[f'{hour_label}_slope_max_0'] = weighted_slope_max_0_sum / total_sw_count
+            sw_stats[f'{hour_label}_trans_freq_Hz'] = weighted_trans_freq_Hz_sum / total_sw_count
+        else:
+            sw_stats[f'{hour_label}_sw_sec'] = np.nan
+            sw_stats[f'{hour_label}_pkpk_amp_uV'] = np.nan
+            sw_stats[f'{hour_label}_freq_Hz'] = np.nan
+            sw_stats[f'{hour_label}_neg_amp_uV'] = np.nan
+            sw_stats[f'{hour_label}_neg_sec'] = np.nan
+            sw_stats[f'{hour_label}_pos_sec'] = np.nan
+            sw_stats[f'{hour_label}_slope_0_min'] = np.nan
+            sw_stats[f'{hour_label}_slope_min_max'] = np.nan
+            sw_stats[f'{hour_label}_slope_max_0'] = np.nan
+            sw_stats[f'{hour_label}_trans_freq_Hz'] = np.nan

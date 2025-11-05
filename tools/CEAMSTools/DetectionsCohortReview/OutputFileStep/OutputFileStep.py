@@ -37,7 +37,7 @@ class OutputFileStep(BaseStepView, Ui_OutputFileStep, QtWidgets.QWidget):
         self._pub_sub_manager.subscribe(self, self._output_topic)   
 
         # Populate the comboBox (add choices)
-        self.activity_label = ['Total', 'Distribution per sleep cycle']
+        self.activity_label = ['Total', 'Distribution per clock hour', 'Distribution per hour spent in each sleep stage', 'Distribution per sleep cycle']
         for label in self.activity_label:
             self.activity_comboBox.addItem(label)
         self.activity_comboBox.setCurrentText(self.activity_label[0])
@@ -85,9 +85,15 @@ class OutputFileStep(BaseStepView, Ui_OutputFileStep, QtWidgets.QWidget):
                 activity_2_export = "total_"
                 if any(self.det_df.columns.str.contains(activity_2_export,regex=True)):
                     self.activity_comboBox.addItem(self.activity_label[0])
+                    activity_2_export = "clock_h\d_"
+                    if any(self.det_df.columns.str.contains(activity_2_export,regex=True)):
+                        self.activity_comboBox.addItem(self.activity_label[1])
+                    activity_2_export = "stage_h\d_"
+                    if any(self.det_df.columns.str.contains(activity_2_export,regex=True)):
+                        self.activity_comboBox.addItem(self.activity_label[2])
                     activity_2_export = "cyc\d_"
                     if any(self.det_df.columns.str.contains(activity_2_export,regex=True)):
-                        self.activity_comboBox.addItem(self.activity_label[1])       
+                        self.activity_comboBox.addItem(self.activity_label[3])
 
 
     def on_validate_settings(self):

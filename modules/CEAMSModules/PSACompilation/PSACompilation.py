@@ -353,9 +353,8 @@ class PSACompilation(SciNode):
                 my_label2 = 'stage_h'
 
                 for cur_div in range(self.N_HOURS):
-                    # This part is commented since it was selecting the start time based on the start of the first cycle, while the corresponding choice was not selected.
                     # Verify if the cycle is valid (at least the start of the first cycle)
-                    '''if isinstance(cycle_labelled.iloc[0]['start_sec'],float):
+                    if isinstance(cycle_labelled.iloc[0]['start_sec'],float):
                         # Extract the psd_stage and psd_start_time for the current hour
                         start_hour = cycle_labelled.iloc[0]['start_sec']+cur_div*3600
                         end_hour = start_hour+3600
@@ -364,12 +363,7 @@ class PSACompilation(SciNode):
                         psd_data_div = [data for (start_time, data) in zip(psd_start_time, psd_data) if ((start_time<end_hour) & (start_time>=start_hour))]
                     else:
                         psd_data_div = []
-                        psd_stage_div = []'''
-                    # Now the start time is based on the start of the sleep stages
-                    start_hour = sleep_stages['start_sec'][0]+cur_div*3600
-                    end_hour = start_hour+3600
-                    psd_stage_div = [psd_stage[i] for i in np.where((psd_start_time<end_hour) & (psd_start_time>=start_hour))[0]]   
-                    psd_data_div = [data for (start_time, data) in zip(psd_start_time, psd_data) if ((start_time<end_hour) & (start_time>=start_hour))]
+                        psd_stage_div = []
                     # self.PSD_avg_per_stage : dict
                     #   psd data average through the recording for each stage and hour
                     #     hour1_act : narray [1 x n_freq_bins]

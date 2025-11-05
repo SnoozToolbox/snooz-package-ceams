@@ -208,22 +208,6 @@
                </attribute>
               </widget>
              </item>
-             <item>
-              <widget class="QRadioButton" name="radioButton_anal">
-               <property name="enabled">
-                <bool>false</bool>
-               </property>
-               <property name="toolTip">
-                <string>Avoiding the detection is currently not available.</string>
-               </property>
-               <property name="text">
-                <string>Do not detect slow waves, just analyze slow waves previously detected and saved in the accessory file.</string>
-               </property>
-               <attribute name="buttonGroup">
-                <string notr="true">buttonGroup</string>
-               </attribute>
-              </widget>
-             </item>
             </layout>
            </item>
           </layout>
@@ -758,7 +742,6 @@
              <property name="text">
               <string/>
              </property>
-             <property name="text"><string/></property>
             </widget>
            </item>
           </layout>
@@ -799,7 +782,7 @@
  </widget>
  <resources>
   <include location="../../../../../snooz-toolbox/src/main/python/ui/themes/themes.qrc"/>
-   </resources>
+ </resources>
  <connections>
   <connection>
    <sender>buttonGroup_2</sender>
