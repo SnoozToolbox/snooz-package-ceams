@@ -99,6 +99,13 @@ class HypnogramResultsView( Ui_HypnogramResultsView, QtWidgets.QWidget):
             "7":0,
         }
 
+        # Hypnogram color definition
+        #                           R           G       B
+        fill_color_complete_NREM =  [0/255, 128/255, 64/255] # Colors values are between 0 and 1
+        fill_color_complete_REM =   [50/255, 50/255, 50/255] # Colors values are between 0 and 1
+        fill_color_incomplete =     [128/255, 0/255, 0/255]  # Colors values are between 0 and 1
+        alpha = 0.5
+        
         stages = []
         sleep_stages_nocycle = sleep_stages[sleep_stages.group == commons.sleep_stages_group].copy()
         sleep_stages_nocycle.reset_index(inplace=True, drop=True)
@@ -117,7 +124,8 @@ class HypnogramResultsView( Ui_HypnogramResultsView, QtWidgets.QWidget):
             stages.append(stage)
 
         # Plot the hypnogram
-        self.hypno_ax.bar(range(len(stages)),stages, width=1,align='edge')
+        self.hypno_ax.bar(range(len(stages)),stages, width=1,align='edge', color='blue', alpha=alpha)
+        #self.hypno_ax.bar(range(len(stages)),stages, width=1,align='edge')
         self.hypno_ax.set_yticks(range(len(hypno_y_label)))
         self.hypno_ax.set_yticklabels([])
         self.hypno_ax.set_yticklabels(hypno_y_label)
@@ -134,11 +142,22 @@ class HypnogramResultsView( Ui_HypnogramResultsView, QtWidgets.QWidget):
             self.hypno_ax.set_xlabel('Elapsed Time (h)')
 
         if sleep_cycles is not None:
-            HypnogramResultsView.draw_sleep_cycles(self, sleep_cycles, scoring_start)
+            HypnogramResultsView.draw_sleep_cycles(self, sleep_cycles, scoring_start, 
+                fill_color_complete_NREM, fill_color_complete_REM, fill_color_incomplete, alpha)
+            
+            # Add legend for sleep cycle patches
+            legend_patches = [
+                Rectangle((0, 0), 1, 1, facecolor='blue', alpha=alpha, label='Sleep Stages'),
+                Rectangle((0, 0), 1, 1, facecolor=fill_color_complete_NREM, alpha=alpha, label='NREM'),
+                Rectangle((0, 0), 1, 1, facecolor=fill_color_complete_REM, alpha=alpha, label='REM'),
+                Rectangle((0, 0), 1, 1, facecolor=fill_color_incomplete, alpha=alpha, label='Incomplete')
+            ]
+            self.hypno_ax.legend(handles=legend_patches, loc='upper left', bbox_to_anchor=(1.02, 1), fontsize=8, framealpha=0.9)
 
 
     #def draw_sleep_cycles(self, hypno_ax, sleep_cycles, scoring_start):
-    def draw_sleep_cycles(self, sleep_cycles, scoring_start):
+    def draw_sleep_cycles(self, sleep_cycles, scoring_start, 
+        fill_color_complete_NREM, fill_color_complete_REM, fill_color_incomplete, alpha):
         """ Draw sleep cycles over the hypnogram.
         A sleep cycle is compose of two period, the NREM and REM period. The NREM period is identified
         by a rectangle that cover the stages 1,2,3 and the REM period is identified by a rectangle that
@@ -160,12 +179,7 @@ class HypnogramResultsView( Ui_HypnogramResultsView, QtWidgets.QWidget):
         """
         # Plot the sleep cycles
         for index, (nrem, rem, is_complete) in enumerate(sleep_cycles):
-            # Hypnogram color definition
-            #                           R           G       B
-            fill_color_complete_NREM =  [0/255, 128/255, 64/255] # Colors values are between 0 and 1
-            fill_color_complete_REM =   [50/255, 50/255, 50/255] # Colors values are between 0 and 1
-            fill_color_incomplete =     [128/255, 0/255, 0/255]  # Colors values are between 0 and 1
-            alpha = 0.5
+
             # NREM
             width = nrem[1] - nrem[0] +1  # the bounderies are inclusive
             if width >= 0:
@@ -200,3 +214,37 @@ class HypnogramResultsView( Ui_HypnogramResultsView, QtWidgets.QWidget):
                 edgecolor = 'black',
                 fill=False,
                 linewidth=0.5))
+
+        # Draw horizontal arrows for complete sleep cycles
+        for index, (nrem, rem, is_complete) in enumerate(sleep_cycles):
+            if is_complete:
+                # Calculate the full cycle span (from NREM start to REM end)
+                cycle_start = min(nrem[0], rem[0]) - scoring_start
+                cycle_end = max(nrem[1], rem[1]) - scoring_start
+                cycle_width = cycle_end - cycle_start
+                
+                # Draw horizontal arrow at Wake level (y=5)
+                # Arrow from cycle_start to cycle_end, centered vertically at y=5
+                arrow_y = 4.5
+                arrow_length = cycle_width
+                
+                # Use annotate for better arrow control
+                self.hypno_ax.annotate('',
+                    xy=(cycle_end, arrow_y),  # Arrow head position
+                    xytext=(cycle_start, arrow_y),  # Arrow tail position
+                    arrowprops=dict(
+                        arrowstyle='<->',  # Double-headed arrow
+                        color='black',
+                        linewidth=1,
+                        shrinkA=0,
+                        shrinkB=0
+                    ),
+                    annotation_clip=False
+                )
+                
+                # Add cycle label (C1, C2, etc.) above the arrow
+                cycle_center_x = (cycle_start + cycle_end) / 2
+                cycle_label = f'C{index + 1}'
+                self.hypno_ax.text(cycle_center_x, arrow_y, cycle_label,
+                    ha='center', va='bottom', fontsize=10, fontweight='bold',
+                    bbox=dict(boxstyle='round,pad=0.2', facecolor='white', alpha=0.8))
