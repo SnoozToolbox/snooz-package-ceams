@@ -24,7 +24,7 @@ class Ui_AlgoIntroStep(object):
     def setupUi(self, AlgoIntroStep):
         if not AlgoIntroStep.objectName():
             AlgoIntroStep.setObjectName(u"AlgoIntroStep")
-        AlgoIntroStep.resize(1315, 732)
+        AlgoIntroStep.resize(1351, 688)
         AlgoIntroStep.setStyleSheet(u"font: 12pt \"Roboto\";")
         self.verticalLayout_7 = QVBoxLayout(AlgoIntroStep)
         self.verticalLayout_7.setObjectName(u"verticalLayout_7")
@@ -91,7 +91,7 @@ class Ui_AlgoIntroStep(object):
         self.scrollArea.setWidgetResizable(True)
         self.scrollAreaWidgetContents = QWidget()
         self.scrollAreaWidgetContents.setObjectName(u"scrollAreaWidgetContents")
-        self.scrollAreaWidgetContents.setGeometry(QRect(0, 0, 1265, 390))
+        self.scrollAreaWidgetContents.setGeometry(QRect(0, 0, 1301, 390))
         self.horizontalLayout = QHBoxLayout(self.scrollAreaWidgetContents)
         self.horizontalLayout.setObjectName(u"horizontalLayout")
         self.label_4 = QLabel(self.scrollAreaWidgetContents)
@@ -161,6 +161,6 @@ class Ui_AlgoIntroStep(object):
         self.label_4.setText(QCoreApplication.translate("AlgoIntroStep", u"<html><head/><body><p>The sleep staging algorithm, YASA, is an open-source tool that has been trained,<br/>using over 30,000 hours of polysomnographic (PSG) sleep data across diverse populations. </p><p>-&gt;<span style=\" font-weight:600;\"> Data processing:</span> The algorithm uses a central EEG channel, along with EOG, and EMG channels.<br/>These signals are downsampled to 100 Hz and bandpassed-filtered between 0.4 Hz and 30 Hz. </p><p>-&gt; <span style=\" font-weight:600;\">Feature Extraction:</span> The algorithm extracts a set of time and frequency domain features from the EEG signal, and optionaly from the EOG and EMG signals.<br/>These features are calculated for each 30-second epoch of raw data. </p><p>-&gt; <span style=\" font-weight:600;\">Smoothing and Normalization:</span> The algorithm uses a smoothing approach across all the aformentioned features to incorporate contextual infromation.<br/>All the smoothed features are then z-scored across each night. </p><p>-&gt; <span style=\" font-weight:600"
                         ";\">Machine Learning Classification:</span> A lightGBM classifier, a tree-based gradient-boosting classifier, is used. </p><p>-&gt; <span style=\" font-weight:600;\">Performance Evaluation:</span> The algorithm's performance is evaluated using standardized guidelines,<br/>including accuracy, Cohen's kappa, Matthews correlation coefficient, confusion matrices, and F1-scores. </p><p><span style=\" text-decoration: underline;\">Reference</span>: <br/>Vallat, Raphael, and Matthew P. Walker. \u201cAn open-source, high-performance tool for automated sleep staging.\u201d Elife 10 (2021). <br/>doi: https://doi.org/10.7554/eLife.70092 (Documentation: <a href=\"https://raphaelvallat.com/yasa/\"><span style=\" text-decoration: underline; color:#0000ff;\">https://raphaelvallat.com/yasa/)<br/></span></a></p></body></html>", None))
         self.label_5.setText(QCoreApplication.translate("AlgoIntroStep", u"<html><head/><body><p><span style=\" font-weight:600;\">Output</span></p></body></html>", None))
-        self.label_6.setText(QCoreApplication.translate("AlgoIntroStep", u"<html><head/><body><p>The YASA sleep scoring tool is compatible with different input files including, EDF, NATUS, and STS. </p><p>The output of the automatic scoring algorithm is an accessory file that saves the predicted sleep stages.</p></body></html>", None))
+        self.label_6.setText(QCoreApplication.translate("AlgoIntroStep", u"<html><head/><body><p>The YASA sleep scoring tool is compatible with different input files including, EDF, NATUS, and STS.</p><p>NOTE: For proper functionality with discontinuous files, the tool requires at least one EEG channel along with one EOG or EMG channel.</p><p>The output of the automatic scoring algorithm is an accessory file that saves the predicted sleep stages.</p></body></html>", None))
     # retranslateUi
 

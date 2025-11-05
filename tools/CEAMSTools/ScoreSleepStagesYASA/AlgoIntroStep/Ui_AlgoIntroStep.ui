@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1315</width>
-    <height>732</height>
+    <width>1351</width>
+    <height>688</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -130,7 +130,7 @@
               <rect>
                <x>0</x>
                <y>0</y>
-               <width>1265</width>
+               <width>1301</width>
                <height>390</height>
               </rect>
              </property>
@@ -207,7 +207,7 @@
              <string notr="true"/>
             </property>
             <property name="text">
-             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;The YASA sleep scoring tool is compatible with different input files including, EDF, NATUS, and STS. &lt;/p&gt;&lt;p&gt;The output of the automatic scoring algorithm is an accessory file that saves the predicted sleep stages.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;The YASA sleep scoring tool is compatible with different input files including, EDF, NATUS, and STS.&lt;/p&gt;&lt;p&gt;NOTE: For proper functionality with discontinuous files, the tool requires at least one EEG channel along with one EOG or EMG channel.&lt;/p&gt;&lt;p&gt;The output of the automatic scoring algorithm is an accessory file that saves the predicted sleep stages.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
             </property>
             <property name="alignment">
              <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignTop</set>
