@@ -19,7 +19,6 @@ import matplotlib
 from numpy import ceil
 matplotlib.use('QtAgg')
 import matplotlib.pyplot as plt
-#from matplotlib.backends.backend_qtagg import (FigureCanvas, NavigationToolbar2QT as NavigationToolbar)
 from matplotlib.backends.backend_qtagg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.backends.backend_qtagg import NavigationToolbar2QT as NavigationToolbar
 from matplotlib.figure import Figure
@@ -85,21 +84,22 @@ class HypnogramResultsView( Ui_HypnogramResultsView, QtWidgets.QWidget):
             None
         """
 
-        stages = []
+        hypno_y_label = ["Unscored", "N3","N2","N1","R","Wake"]
 
         # Map each stage number to the proper value so they show at the right place
         # in the hypnogram.
         stage_to_plot_number = {
-            "0":6,
-            "5":5,
-            "1":4,
-            "2":3,
-            "3":2,
-            "9":1,
+            "0":5,
+            "5":4,
+            "1":3,
+            "2":2,
+            "3":1,
+            "9":0,
             "8":0,
             "7":0,
         }
 
+        stages = []
         sleep_stages_nocycle = sleep_stages[sleep_stages.group == commons.sleep_stages_group].copy()
         sleep_stages_nocycle.reset_index(inplace=True, drop=True)
         sleep_stages_nocycle.sort_values('start_sec', axis=0, inplace=True, ignore_index='True')
@@ -118,9 +118,9 @@ class HypnogramResultsView( Ui_HypnogramResultsView, QtWidgets.QWidget):
 
         # Plot the hypnogram
         self.hypno_ax.bar(range(len(stages)),stages, width=1,align='edge')
-        self.hypno_ax.set_yticks(range(7))
+        self.hypno_ax.set_yticks(range(len(hypno_y_label)))
         self.hypno_ax.set_yticklabels([])
-        self.hypno_ax.set_yticklabels(["Undefined", "Unscored", "N3","N2","N1","R","Wake"])
+        self.hypno_ax.set_yticklabels(hypno_y_label)
         self.hypno_ax.set_xlabel('Elapsed Time (epoch)')
         # If the epoch length is defined, change the x axis for hour instead of epoch
         if isinstance(epoch_len, int) or isinstance(epoch_len, float):
@@ -169,7 +169,7 @@ class HypnogramResultsView( Ui_HypnogramResultsView, QtWidgets.QWidget):
             # NREM
             width = nrem[1] - nrem[0] +1  # the bounderies are inclusive
             if width >= 0:
-                self.hypno_ax.add_patch(Rectangle((nrem[0]-scoring_start, 0), width, 4,
+                self.hypno_ax.add_patch(Rectangle((nrem[0]-scoring_start, 0), width, 3,
                 linestyle = '-' if is_complete else '--',
                 facecolor = fill_color_complete_NREM if is_complete else fill_color_incomplete,
                 alpha = alpha,
@@ -177,7 +177,7 @@ class HypnogramResultsView( Ui_HypnogramResultsView, QtWidgets.QWidget):
                 linewidth=0.5))
 
                 # Draw a black outline
-                self.hypno_ax.add_patch(Rectangle((nrem[0]-scoring_start, 0), width, 4,
+                self.hypno_ax.add_patch(Rectangle((nrem[0]-scoring_start, 0), width, 3,
                 linestyle = '-' if is_complete else '--',
                 edgecolor = 'black',
                 fill=False,
@@ -186,7 +186,7 @@ class HypnogramResultsView( Ui_HypnogramResultsView, QtWidgets.QWidget):
             # REM
             width = rem[1] - rem[0] +1 # the bounderies are inclusive 
             if width >= 0:
-                self.hypno_ax.add_patch(Rectangle((rem[0]-scoring_start, 4), width, 1,
+                self.hypno_ax.add_patch(Rectangle((rem[0]-scoring_start, 0), width, 4,
                 linestyle = '-' if is_complete else '--',
                 facecolor = fill_color_complete_REM if is_complete else fill_color_incomplete,
                 alpha = alpha,
@@ -195,7 +195,7 @@ class HypnogramResultsView( Ui_HypnogramResultsView, QtWidgets.QWidget):
                 linewidth=0.5))
 
                 # Draw a black outline
-                self.hypno_ax.add_patch(Rectangle((rem[0]-scoring_start, 4), width, 1,
+                self.hypno_ax.add_patch(Rectangle((rem[0]-scoring_start, 0), width, 4,
                 linestyle = '-' if is_complete else '--',
                 edgecolor = 'black',
                 fill=False,
