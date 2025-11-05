@@ -180,7 +180,7 @@ class SleepStagingExportResults(SciNode):
 
             #NOTE: Plot the hypnogram and confusion matrix and save to a PDF file
             self.figure.clear() # reset the hold on
-            self.figure.set_size_inches(15,4)
+            self.figure.set_size_inches(10, 6)  # Set aspect ratio
             ### Plot the hypnogram
             # Define the layout for the plots
             gs = gridspec.GridSpec(2, 2, height_ratios=[1, 1])  # Three equal-height plots
@@ -188,12 +188,12 @@ class SleepStagingExportResults(SciNode):
             #confidence = cache['y_pred_new'].proba.max(axis=1)
             #print(confidence)
             # Adjust the layout to make each subplot bigger
-            gs.update(wspace=0.4, hspace=0.6)
+            gs.update(wspace=0.01, hspace=0.4)
             # First subplot - Hypnogram
             labels_new = info[0]
             ax1 = self.figure.add_subplot(gs[0])
             ax1 = labels_new.plot_hypnogram(fill_color="gainsboro", ax=ax1)
-            ax1.set_title('Expert Annotated Hypnogram')
+            ax1.set_title('Expert Annotated Hypnogram', fontsize=12, fontweight='bold')
             ax1.set_xlabel('Time (h)')
             ax1.set_ylabel('Sleep stage')
             ax1.grid()
@@ -202,7 +202,7 @@ class SleepStagingExportResults(SciNode):
             y_pred_new = info[1]
             ax2 = self.figure.add_subplot(gs[2])
             ax2 = y_pred_new.plot_hypnogram(fill_color="blue", ax=ax2)
-            ax2.set_title('Estimated Hypnogram')
+            ax2.set_title('Estimated Hypnogram', fontsize=12, fontweight='bold')
             ax2.set_xlabel('Time (h)')
             ax2.set_ylabel('Sleep stage')
             ax2.grid()
@@ -218,21 +218,29 @@ class SleepStagingExportResults(SciNode):
             tick_marks = np.arange(len(class_labels))
             # Third subplot - Confusion Matrix
             ax3 = self.figure.add_subplot(gs[1])
-            sns.heatmap(cm_normalized, annot=True, fmt='.2f', cmap='Blues', ax=ax3)
-            ax3.set_title('Confusion Matrix')
-            ax3.set_xlabel('Predicted')
-            ax3.set_ylabel('True')
+            # Create heatmap with improved readability
+            heatmap = sns.heatmap(cm_normalized, annot=True, fmt='.1f',
+                                cmap='Blues', ax=ax3, cbar=True,
+                                annot_kws={"size": 10, "weight": "regular"},
+                                square=True, linewidths=0.6, linecolor='white')
+            ax3.set_title('Confusion Matrix (%)', fontsize=12, fontweight='bold')
+            ax3.set_xlabel('Predicted Label', fontsize=10)
+            ax3.set_ylabel('True Label', fontsize=10)
             ax3.set_xticks(tick_marks)
-            ax3.set_xticklabels(class_labels)
+            ax3.set_xticklabels(class_labels, fontsize=9, rotation=45, ha='right')
             ax3.set_yticks(tick_marks)
-            ax3.set_yticklabels(class_labels)
+            ax3.set_yticklabels(class_labels, fontsize=9, rotation=0)
+
+            # Improve colorbar
+            cbar = heatmap.collections[0].colorbar
+            cbar.set_label('Percentage (%)', fontsize=8)
             # Fourth subplot - Accuracy and Average Confidence
             ax4 = self.figure.add_subplot(gs[3])
             ax4.axis('off')
             # Add accuracy and average confidence text next to the subplots
-            ax4.text(0.5, 0.5, f"Accuracy: {ResultsDataframe['Accuracy'].iloc[0]:.2f}%", transform=ax4.transAxes, fontsize=12, verticalalignment='center', horizontalalignment='center')
-            ax4.text(0.5, 0.3, f"Avg Confidence: {ResultsDataframe['Average Confidence'].iloc[0]:.2f}%", transform=ax4.transAxes, fontsize=12, verticalalignment='center', horizontalalignment='center')
-            ax4.text(0.5, 0.1, f"Kappa: {ResultsDataframe['kappa'].iloc[0]:.2f}", transform=ax4.transAxes, fontsize=12, verticalalignment='center', horizontalalignment='center')
+            ax4.text(0.5, 0.5, f"Accuracy: {ResultsDataframe['Accuracy'].iloc[0]:.2f}%", transform=ax4.transAxes, fontsize=12, verticalalignment='center', horizontalalignment='center', fontweight='bold')
+            ax4.text(0.5, 0.3, f"Avg Confidence: {ResultsDataframe['Average Confidence'].iloc[0]:.2f}%", transform=ax4.transAxes, fontsize=12, verticalalignment='center', horizontalalignment='center', fontweight='bold')
+            ax4.text(0.5, 0.1, f"Kappa: {ResultsDataframe['kappa'].iloc[0]:.2f}", transform=ax4.transAxes, fontsize=12, verticalalignment='center', horizontalalignment='center', fontweight='bold')
                                 # Adjust layout to add more space between subplots
             self.figure.tight_layout(pad=10.0)
 

@@ -1,8 +1,6 @@
 """
 @ CIUSSS DU NORD-DE-L'ILE-DE-MONTREAL – 2024
 See the file LICENCE for full license details.
-
-    Results viewer of the YasaSleepStaging plugin
 """
 
 import matplotlib
@@ -51,7 +49,7 @@ class YasaSleepStagingResultsView(Ui_YasaSleepStagingResultsView, QtWidgets.QWid
     def load_results(self):
 
         self.figure.clear() # reset the hold on 
-        self.figure.set_size_inches(15,4)
+        self.figure.set_size_inches(10, 6)  # Set aspect ratio
          # Read result cache
         cache = self._cache_manager.read_mem_cache(self._parent_node.identifier)
         
@@ -73,11 +71,11 @@ class YasaSleepStagingResultsView(Ui_YasaSleepStagingResultsView, QtWidgets.QWid
             #confidence = cache['y_pred_new'].proba.max(axis=1)
             #print(confidence)
             # Adjust the layout to make each subplot bigger
-            gs.update(wspace=0.4, hspace=0.6)
+            gs.update(wspace=0.01, hspace=0.4)
             # First subplot - Hypnogram
             ax1 = self.figure.add_subplot(gs[0])
             ax1 = cache['labels_new'].plot_hypnogram(fill_color="gainsboro", ax=ax1)
-            ax1.set_title('Expert Annotated Hypnogram')
+            ax1.set_title('Expert Annotated Hypnogram', fontsize=12, fontweight='bold')
             ax1.set_xlabel('Time (h)')
             ax1.set_ylabel('Sleep stage')
             ax1.grid()
@@ -85,7 +83,7 @@ class YasaSleepStagingResultsView(Ui_YasaSleepStagingResultsView, QtWidgets.QWid
             # Second subplot - Estimated Hypnogram
             ax2 = self.figure.add_subplot(gs[2])
             ax2 = cache['y_pred_new'].plot_hypnogram(fill_color="blue", ax=ax2)
-            ax2.set_title('Estimated Hypnogram')
+            ax2.set_title('Estimated Hypnogram', fontsize=12, fontweight='bold')
             ax2.set_xlabel('Time (h)')
             ax2.set_ylabel('Sleep stage')
             ax2.grid()
@@ -100,14 +98,22 @@ class YasaSleepStagingResultsView(Ui_YasaSleepStagingResultsView, QtWidgets.QWid
             tick_marks = np.arange(len(class_labels))
             # Third subplot - Confusion Matrix
             ax3 = self.figure.add_subplot(gs[1])
-            sns.heatmap(cm_normalized, annot=True, fmt='.2f', cmap='Blues', ax=ax3)
-            ax3.set_title('Confusion Matrix')
-            ax3.set_xlabel('Predicted')
-            ax3.set_ylabel('True')
+            # Create heatmap with improved readability
+            heatmap = sns.heatmap(cm_normalized, annot=True, fmt='.1f',
+                                cmap='Blues', ax=ax3, cbar=True,
+                                annot_kws={"size": 10, "weight": "regular"},
+                                square=True, linewidths=0.5, linecolor='white')
+            ax3.set_title('Confusion Matrix (%)', fontsize=12, fontweight='bold')
+            ax3.set_xlabel('Predicted Label', fontsize=10)
+            ax3.set_ylabel('True Label', fontsize=10)
             ax3.set_xticks(tick_marks)
-            ax3.set_xticklabels(class_labels)
+            ax3.set_xticklabels(class_labels, fontsize=9, rotation=45, ha='right')
             ax3.set_yticks(tick_marks)
-            ax3.set_yticklabels(class_labels)
+            ax3.set_yticklabels(class_labels, fontsize=9, rotation=0)
+
+            # Improve colorbar
+            cbar = heatmap.collections[0].colorbar
+            cbar.set_label('Percentage (%)', fontsize=8)
             # Save the figure to a PDF file
             '''file_name = cache['file_name']
             if isinstance(file_name, str) and (len(file_name)>0):
