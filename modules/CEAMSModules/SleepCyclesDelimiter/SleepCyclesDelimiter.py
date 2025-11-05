@@ -660,7 +660,8 @@ class SleepCyclesDelimiter(SciNode):
                 if not first_rem_epoch_i == None:
                     # if any which one is first (REMP or NREMP)
                     # if there is a NREMP of 0 min (incomplete cycle but still)
-                    if nrem_start_sec.empty or (rem_start_sec<nrem_start_sec): 
+                    if (isinstance(nrem_start_sec, list) and nrem_start_sec.empty) \
+                            or (isinstance(nrem_start_sec, float) and rem_start_sec<nrem_start_sec):
                         nremper_start_lst.append(rem_start_sec)
                         remper_start_lst.append(rem_start_sec)
                     else:
