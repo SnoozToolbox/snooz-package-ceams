@@ -104,7 +104,7 @@ class Hypnogram(SciNode):
             # Plot and save Hypnogram
             if sleep_stages is not None:
                 self.figure, self.hypno_ax = plt.subplots()
-                self.figure.set_size_inches(15,4)
+                self.figure.set_size_inches(16,4)
                 self.hypno_ax.clear()
                 HypnogramResultsView.plot_hypnogram(self, sleep_stages, sleep_cycles, epoch_len=epoch_len_sec)
                 if not '.' in fig_name:
