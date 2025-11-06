@@ -86,36 +86,30 @@ class HypnogramResultsView( Ui_HypnogramResultsView, QtWidgets.QWidget):
 
         hypno_y_label = ["Unscored", "N3","N2","N1","R","Wake", "Cycles"]
 
-        # Map each stage number to the proper value so they show at the right place
-        # in the hypnogram.
-        stage_to_plot_number = {
-            "0":5,
-            "5":4,
-            "1":3,
-            "2":2,
-            "3":1,
-            "9":0,
-            "8":0,
-            "7":0,
+        # Combined configuration for sleep stages: plot position and color
+        stage_config = {
+            "0": {"plot_pos": 5, "color": "white"},        # Awake
+            "5": {"plot_pos": 4, "color": "green"},       # REM
+            "1": {"plot_pos": 3, "color": "cornflowerblue"}, # N1
+            "2": {"plot_pos": 2, "color": "blue"},        # N2
+            "3": {"plot_pos": 1, "color": "darkblue"},    # N3
+            "9": {"plot_pos": 0, "color": "gray"},   # Unscored
+            "8": {"plot_pos": 0, "color": "gray"},   # etc.
+            "7": {"plot_pos": 0, "color": "gray"},
         }
 
-        # Hypnogram color definition
+        # Derive level colors from stage config
+        level_colors = {}
+        for stage, config in stage_config.items():
+            level_colors[config["plot_pos"]] = config["color"]
+
+        # Hypnogram color definition for sleep cycles
         #                           R           G       B
-        fill_color_complete_NREM =  [0/255, 64/255, 128/255] # Colors values are between 0 and 1
-        fill_color_complete_REM =   [50/255, 128/255, 50/255] # Colors values are between 0 and 1
+        fill_color_complete_NREM =  [0/255, 32/255, 128/255] # Colors values are between 0 and 1
+        fill_color_complete_REM =   [0/255, 64/255, 0/255] # Colors values are between 0 and 1
         fill_color_incomplete =     [150/255, 0/255, 0/255]  # Colors values are between 0 and 1
-        alpha = 0.8
+        alpha = 0.3
 
-        # Define colors for each sleep stage
-        stage_colors = {
-            "0": "gray",
-            "1": "cornflowerblue",
-            "2": "blue",
-            "3": "darkblue",
-            "5": "green",
-            "9": "goldenrod"
-        }
-        
         stages = []
         sleep_stages_nocycle = sleep_stages[sleep_stages.group == commons.sleep_stages_group].copy()
         sleep_stages_nocycle.reset_index(inplace=True, drop=True)
@@ -130,14 +124,20 @@ class HypnogramResultsView( Ui_HypnogramResultsView, QtWidgets.QWidget):
 
         # Convert all stages to they plot value
         for s in scored_stages:
-            stage = stage_to_plot_number[s]
+            stage = stage_config.get(s, {"plot_pos": 0})["plot_pos"]
             stages.append(stage)
         
         # Create color list based on original stage values
-        colors = [stage_colors.get(s, 'blue') for s in scored_stages]
+        colors = [stage_config.get(s, {"color": 'blue'})["color"] for s in scored_stages]
 
-        # Plot the hypnogram
-        self.hypno_ax.bar(range(len(stages)),stages, width=1,align='edge', color=colors, alpha=alpha)
+        
+        # Draw background rectangles for each level
+        for level in range(6):
+            self.hypno_ax.add_patch(Rectangle((0, level - 0.5), len(stages), 1,
+                facecolor=level_colors[level], alpha=alpha, edgecolor='none'))
+
+        # Plot the hypnogram contour (black line)
+        self.hypno_ax.plot(range(len(stages)), stages, color='black', linewidth=1)
         #self.hypno_ax.bar(range(len(stages)),stages, width=1,align='edge')
         self.hypno_ax.set_yticks(range(len(hypno_y_label)))
         self.hypno_ax.set_yticklabels([])
@@ -160,7 +160,7 @@ class HypnogramResultsView( Ui_HypnogramResultsView, QtWidgets.QWidget):
             
             # Add legend for sleep cycle patches
             legend_patches = [
-                Rectangle((0, 0), 1, 1, facecolor='blue', alpha=alpha, label='Sleep Stages'),
+                Rectangle((0, 0), 1, 1, facecolor='black', label='Sleep Stages'),
                 Rectangle((0, 0), 1, 1, facecolor=fill_color_complete_NREM, alpha=alpha, label='NREM Period'),
                 Rectangle((0, 0), 1, 1, facecolor=fill_color_complete_REM, alpha=alpha, label='REM Period'),
                 Rectangle((0, 0), 1, 1, facecolor=fill_color_incomplete, alpha=alpha, label='Incompl. Period')
@@ -196,24 +196,25 @@ class HypnogramResultsView( Ui_HypnogramResultsView, QtWidgets.QWidget):
             # NREM
             width = nrem[1] - nrem[0] +1  # the bounderies are inclusive
             if width >= 0:
-                self.hypno_ax.add_patch(Rectangle((nrem[0]-scoring_start, 5), width, 6,
+                self.hypno_ax.add_patch(Rectangle((nrem[0]-scoring_start, 5.2), width, 6,
                 linestyle = '-' if is_complete else '--',
                 facecolor = fill_color_complete_NREM if is_complete else fill_color_incomplete,
                 alpha = alpha,
+                edgecolor = 'black',
                 fill=True,
                 linewidth=0.5))
 
                 # Draw a black outline
-                self.hypno_ax.add_patch(Rectangle((nrem[0]-scoring_start, 5), width, 6,
+                self.hypno_ax.add_patch(Rectangle((nrem[0]-scoring_start, 5.2), width, 6,
                 linestyle = '-' if is_complete else '--',
-                edgecolor = 'blue',
+                edgecolor = 'black',
                 fill=False,
                 linewidth=0.5))
 
             # REM
             width = rem[1] - rem[0] +1 # the bounderies are inclusive 
             if width >= 0:
-                self.hypno_ax.add_patch(Rectangle((rem[0]-scoring_start, 5), width, 6,
+                self.hypno_ax.add_patch(Rectangle((rem[0]-scoring_start, 5.2), width, 6,
                 linestyle = '-' if is_complete else '--',
                 facecolor = fill_color_complete_REM if is_complete else fill_color_incomplete,
                 alpha = alpha,
@@ -222,7 +223,7 @@ class HypnogramResultsView( Ui_HypnogramResultsView, QtWidgets.QWidget):
                 linewidth=0.5))
 
                 # Draw a black outline
-                self.hypno_ax.add_patch(Rectangle((rem[0]-scoring_start, 5), width, 6,
+                self.hypno_ax.add_patch(Rectangle((rem[0]-scoring_start, 5.2), width, 6,
                 linestyle = '-' if is_complete else '--',
                 edgecolor = 'black',
                 fill=False,
@@ -238,7 +239,7 @@ class HypnogramResultsView( Ui_HypnogramResultsView, QtWidgets.QWidget):
                 
                 # Draw horizontal arrow at Wake level (y=5)
                 # Arrow from cycle_start to cycle_end, centered vertically at y=5
-                arrow_y = 5.5
+                arrow_y = 5.6
                 arrow_length = cycle_width
                 
                 # Use annotate for better arrow control
@@ -259,5 +260,5 @@ class HypnogramResultsView( Ui_HypnogramResultsView, QtWidgets.QWidget):
                 cycle_center_x = (cycle_start + cycle_end) / 2
                 cycle_label = f'C{index + 1}'
                 self.hypno_ax.text(cycle_center_x, arrow_y, cycle_label,
-                    ha='center', va='bottom', fontsize=10, fontweight='bold',
+                    ha='center', va='center', fontsize=10, fontweight='bold',
                     bbox=dict(boxstyle='round,pad=0.2', facecolor='white', alpha=0.8))
