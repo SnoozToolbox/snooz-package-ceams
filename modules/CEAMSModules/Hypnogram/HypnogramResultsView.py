@@ -132,7 +132,7 @@ class HypnogramResultsView( Ui_HypnogramResultsView, QtWidgets.QWidget):
         colors = [stage_config.get(s, {"color": 'blue'})["color"] for s in scored_stages]
         
         # Draw background rectangles for each level (corresponding to sleep stages)
-        for level in range(6):
+        for level in range(6): # From the number of unique values to plot (the 7 levels for stages)
             self.hypno_ax.add_patch(Rectangle((0, level - 0.5), len(stages), 1,
                 facecolor=level_colors[level], alpha=alpha, edgecolor='none'))
 
@@ -145,7 +145,7 @@ class HypnogramResultsView( Ui_HypnogramResultsView, QtWidgets.QWidget):
         self.hypno_ax.set_xlabel('Elapsed Time (epoch)')
         # If the epoch length is defined, change the x axis for hour instead of epoch
         if isinstance(epoch_len, int) or isinstance(epoch_len, float):
-            max_sec = len(sleep_stages) * epoch_len
+            max_sec = len(scored_stages) * epoch_len
             max_hour = math.ceil(max_sec/3600)
             self.hypno_ax.set_xticks(np.arange(max_hour)*3600/epoch_len)
             lst_hour = range(max_hour)

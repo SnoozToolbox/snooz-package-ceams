@@ -15,22 +15,34 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QFont, QFontDatabase, QGradient, QIcon,
     QImage, QKeySequence, QLinearGradient, QPainter,
     QPalette, QPixmap, QRadialGradient, QTransform)
-from PySide6.QtWidgets import (QApplication, QFrame, QLabel, QSizePolicy,
-    QTextBrowser, QVBoxLayout, QWidget)
+from PySide6.QtWidgets import (QApplication, QFrame, QLabel, QScrollArea,
+    QSizePolicy, QTextBrowser, QVBoxLayout, QWidget)
 import themes_rc
 
 class Ui_SleepCycleDoc(object):
     def setupUi(self, SleepCycleDoc):
         if not SleepCycleDoc.objectName():
             SleepCycleDoc.setObjectName(u"SleepCycleDoc")
-        SleepCycleDoc.resize(1015, 859)
+        SleepCycleDoc.resize(1015, 215)
         self.verticalLayout = QVBoxLayout(SleepCycleDoc)
         self.verticalLayout.setSpacing(25)
         self.verticalLayout.setObjectName(u"verticalLayout")
-        self.hypnogram_pic = QLabel(SleepCycleDoc)
+        self.scrollArea = QScrollArea(SleepCycleDoc)
+        self.scrollArea.setObjectName(u"scrollArea")
+        self.scrollArea.setWidgetResizable(True)
+        self.scrollAreaWidgetContents = QWidget()
+        self.scrollAreaWidgetContents.setObjectName(u"scrollAreaWidgetContents")
+        self.scrollAreaWidgetContents.setGeometry(QRect(0, 0, 995, 54))
+        self.verticalLayout_2 = QVBoxLayout(self.scrollAreaWidgetContents)
+        self.verticalLayout_2.setObjectName(u"verticalLayout_2")
+        self.hypnogram_pic = QLabel(self.scrollAreaWidgetContents)
         self.hypnogram_pic.setObjectName(u"hypnogram_pic")
 
-        self.verticalLayout.addWidget(self.hypnogram_pic)
+        self.verticalLayout_2.addWidget(self.hypnogram_pic)
+
+        self.scrollArea.setWidget(self.scrollAreaWidgetContents)
+
+        self.verticalLayout.addWidget(self.scrollArea)
 
         self.textBrowser = QTextBrowser(SleepCycleDoc)
         self.textBrowser.setObjectName(u"textBrowser")
