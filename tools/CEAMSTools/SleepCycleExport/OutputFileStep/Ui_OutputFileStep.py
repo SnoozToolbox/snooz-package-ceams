@@ -24,9 +24,19 @@ class Ui_OutputFileStep(object):
     def setupUi(self, OutputFileStep):
         if not OutputFileStep.objectName():
             OutputFileStep.setObjectName(u"OutputFileStep")
-        OutputFileStep.resize(843, 697)
+        OutputFileStep.resize(990, 603)
         self.verticalLayout = QVBoxLayout(OutputFileStep)
         self.verticalLayout.setObjectName(u"verticalLayout")
+        self.label_16 = QLabel(OutputFileStep)
+        self.label_16.setObjectName(u"label_16")
+
+        self.verticalLayout.addWidget(self.label_16)
+
+        self.label_15 = QLabel(OutputFileStep)
+        self.label_15.setObjectName(u"label_15")
+
+        self.verticalLayout.addWidget(self.label_15)
+
         self.verticalSpacer_3 = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
 
         self.verticalLayout.addItem(self.verticalSpacer_3)
@@ -60,7 +70,7 @@ class Ui_OutputFileStep(object):
 
         self.horizontalLayout.addWidget(self.choose_pushButton)
 
-        self.horizontalSpacer = QSpacerItem(40, 20, QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Minimum)
+        self.horizontalSpacer = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
 
         self.horizontalLayout.addItem(self.horizontalSpacer)
 
@@ -72,9 +82,28 @@ class Ui_OutputFileStep(object):
 
         self.verticalLayout.addWidget(self.label_5)
 
-        self.verticalSpacer_4 = QSpacerItem(20, 20, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Fixed)
+        self.verticalSpacer_4 = QSpacerItem(20, 20, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
 
         self.verticalLayout.addItem(self.verticalSpacer_4)
+
+        self.label_11 = QLabel(OutputFileStep)
+        self.label_11.setObjectName(u"label_11")
+
+        self.verticalLayout.addWidget(self.label_11)
+
+        self.label_13 = QLabel(OutputFileStep)
+        self.label_13.setObjectName(u"label_13")
+
+        self.verticalLayout.addWidget(self.label_13)
+
+        self.label_14 = QLabel(OutputFileStep)
+        self.label_14.setObjectName(u"label_14")
+
+        self.verticalLayout.addWidget(self.label_14)
+
+        self.verticalSpacer_2 = QSpacerItem(20, 20, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
+
+        self.verticalLayout.addItem(self.verticalSpacer_2)
 
         self.label_7 = QLabel(OutputFileStep)
         self.label_7.setObjectName(u"label_7")
@@ -100,7 +129,7 @@ class Ui_OutputFileStep(object):
 
         self.horizontalLayout_2.addWidget(self.Hyp_suffix_lineEdit)
 
-        self.horizontalSpacer_2 = QSpacerItem(40, 20, QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Minimum)
+        self.horizontalSpacer_2 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
 
         self.horizontalLayout_2.addItem(self.horizontalSpacer_2)
 
@@ -112,7 +141,7 @@ class Ui_OutputFileStep(object):
 
         self.verticalLayout.addWidget(self.label_9)
 
-        self.verticalSpacer_5 = QSpacerItem(20, 20, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Fixed)
+        self.verticalSpacer_5 = QSpacerItem(20, 20, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
 
         self.verticalLayout.addItem(self.verticalSpacer_5)
 
@@ -131,7 +160,7 @@ class Ui_OutputFileStep(object):
 
         self.verticalLayout.addWidget(self.label_12)
 
-        self.verticalSpacer = QSpacerItem(20, 555, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
+        self.verticalSpacer = QSpacerItem(20, 20, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.MinimumExpanding)
 
         self.verticalLayout.addItem(self.verticalSpacer)
 
@@ -145,19 +174,24 @@ class Ui_OutputFileStep(object):
     def retranslateUi(self, OutputFileStep):
         OutputFileStep.setWindowTitle("")
         OutputFileStep.setStyleSheet(QCoreApplication.translate("OutputFileStep", u"font: 12pt \"Roboto\";", None))
-        self.label_6.setText(QCoreApplication.translate("OutputFileStep", u"<html><head/><body><p><span style=\" font-weight:700;\">Report</span></p></body></html>", None))
-        self.label_2.setText(QCoreApplication.translate("OutputFileStep", u"TSV file where the start time and duration (s) of each NREM and REM period are saved.", None))
+        self.label_16.setText(QCoreApplication.translate("OutputFileStep", u"<html><head/><body><p><span style=\" font-weight:700;\">Outputs</span></p></body></html>", None))
+        self.label_15.setText(QCoreApplication.translate("OutputFileStep", u"Four outputs can be generated:", None))
+        self.label_6.setText(QCoreApplication.translate("OutputFileStep", u"<html><head/><body><p><span style=\" font-weight:700;\">1- Cohort-level report </span>(.tsv)</p></body></html>", None))
+        self.label_2.setText(QCoreApplication.translate("OutputFileStep", u"Lists the start time and duration (s) of each NREM and REM period across all recordings.", None))
         self.label.setText(QCoreApplication.translate("OutputFileStep", u"Filename", None))
         self.tsv_file_lineEdit.setText("")
         self.tsv_file_lineEdit.setPlaceholderText(QCoreApplication.translate("OutputFileStep", u"To save cycles for the cohort...", None))
         self.choose_pushButton.setText(QCoreApplication.translate("OutputFileStep", u"Choose", None))
         self.label_5.setText(QCoreApplication.translate("OutputFileStep", u"* The cycles are appended at the end of the file if it exists. ", None))
-        self.label_7.setText(QCoreApplication.translate("OutputFileStep", u"<html><head/><body><p><span style=\" font-weight:700;\">Picture</span></p></body></html>", None))
-        self.label_3.setText(QCoreApplication.translate("OutputFileStep", u"Image file where the hypnogram of each recording is saved.", None))
+        self.label_11.setText(QCoreApplication.translate("OutputFileStep", u"<html><head/><body><p><span style=\" font-weight:700;\">2- Sleep stages and periods</span> (.tsv):</p></body></html>", None))
+        self.label_13.setText(QCoreApplication.translate("OutputFileStep", u"Text file containing the sleep stages and NREM/REM periods for each recording is generated automatically. ", None))
+        self.label_14.setText(QCoreApplication.translate("OutputFileStep", u"It is saved in the same folder as the input PSG file and named after it, with the suffix \"_stage_cycle.tsv\".", None))
+        self.label_7.setText(QCoreApplication.translate("OutputFileStep", u"<html><head/><body><p><span style=\" font-weight:700;\">3- Hypnogram image </span>(.pdf)</p></body></html>", None))
+        self.label_3.setText(QCoreApplication.translate("OutputFileStep", u"Image file where the hypnogram with sleep cycles of each recording is saved.", None))
         self.label_4.setText(QCoreApplication.translate("OutputFileStep", u"Suffix", None))
         self.Hyp_suffix_lineEdit.setPlaceholderText(QCoreApplication.translate("OutputFileStep", u"Suffix to add to the file saved along the recording (ex _Hyp.pdf).", None))
-        self.label_9.setText(QCoreApplication.translate("OutputFileStep", u"* If no extension is specified in the filename when saving the picture, the .pdf extension is added automatically.", None))
-        self.label_8.setText(QCoreApplication.translate("OutputFileStep", u"<html><head/><body><p><span style=\" font-weight:700;\">Log</span></p></body></html>", None))
+        self.label_9.setText(QCoreApplication.translate("OutputFileStep", u"* If no extension is specified in the filename, the .pdf extension is added automatically.  PNG is also supported.", None))
+        self.label_8.setText(QCoreApplication.translate("OutputFileStep", u"<html><head/><body><p><span style=\" font-weight:700;\">4- Log Files </span>(.txt)</p></body></html>", None))
         self.label_10.setText(QCoreApplication.translate("OutputFileStep", u"A log file including warnings encountered during sleep cycle delimitation is generated automatically. ", None))
         self.label_12.setText(QCoreApplication.translate("OutputFileStep", u"It is saved in the same folder as the input PSG file and named after it, with the suffix \"_Cycle_WARNING.txt\".", None))
     # retranslateUi
