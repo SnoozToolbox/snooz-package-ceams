@@ -173,7 +173,16 @@ def _get_doc(N_CYCLE, N_HOURS=0):
             'total_N2N3_trans_freq_Hz' : 'Total -  Average slow wave transition frequency (Hz) in N2 and N3 stage.',
             'total_NREM_trans_freq_Hz' : 'Total -  Average slow wave transition frequency (Hz) in NREM stage (N1, N2, N3).',
             'total_R_trans_freq_Hz' : 'Total -  Average slow wave transition frequency (Hz) in REM stage.',
-            'total_trans_freq_Hz' : 'Total -   Average slow wave transition frequency (Hz)'
+            'total_trans_freq_Hz' : 'Total -   Average slow wave transition frequency (Hz)',
+
+            'total_N1_sw_density' : 'Total - Slow wave density (count/min) in N1 stage.',
+            'total_N2_sw_density' : 'Total - Slow wave density (count/min) in N2 stage.',
+            'total_N3_sw_density' : 'Total - Slow wave density (count/min) in N3 stage.',
+            'total_N2N3_sw_density' : 'Total - Slow wave density (count/min) in N2 and N3 stage.',
+            'total_NREM_sw_density' : 'Total - Slow wave density (count/min) in NREM stage (N1, N2, N3).',
+            'total_R_sw_density' : 'Total - Slow wave density (count/min) in REM stage.',
+            'total_sw_density' : 'Total - Slow wave density (count/min)'
+
     }
 
     cycle_dict = {}
@@ -275,7 +284,15 @@ def _get_doc(N_CYCLE, N_HOURS=0):
             f'cyc{i_cycle+1}_N2N3_trans_freq_Hz' : f'Cycle {i_cycle+1} -  Average slow wave transition frequency (Hz) in N2 and N3 stage.',
             f'cyc{i_cycle+1}_NREM_trans_freq_Hz' : f'Cycle {i_cycle+1} -  Average slow wave transition frequency (Hz) in NREM stage (N1, N2, N3).',
             f'cyc{i_cycle+1}_R_trans_freq_Hz' : f'Cycle {i_cycle+1} -  Average slow wave transition frequency (Hz) in REM stage.',
-            f'cyc{i_cycle+1}_trans_freq_Hz' : f'Cycle {i_cycle+1} -   Average slow wave transition frequency (Hz)'
+            f'cyc{i_cycle+1}_trans_freq_Hz' : f'Cycle {i_cycle+1} -   Average slow wave transition frequency (Hz)',
+
+            f'cyc{i_cycle+1}_N1_sw_density' : f'Cycle {i_cycle+1} - Slow wave density (count/min) in N1 stage.',
+            f'cyc{i_cycle+1}_N2_sw_density' : f'Cycle {i_cycle+1} - Slow wave density (count/min) in N2 stage.',
+            f'cyc{i_cycle+1}_N3_sw_density' : f'Cycle {i_cycle+1} - Slow wave density (count/min) in N3 stage.',
+            f'cyc{i_cycle+1}_N2N3_sw_density' : f'Cycle {i_cycle+1} - Slow wave density (count/min) in N2 and N3 stage.',
+            f'cyc{i_cycle+1}_NREM_sw_density' : f'Cycle {i_cycle+1} - Slow wave density (count/min) in NREM stage (N1, N2, N3).',
+            f'cyc{i_cycle+1}_R_sw_density' : f'Cycle {i_cycle+1} - Slow wave density (count/min) in REM stage.',
+            f'cyc{i_cycle+1}_sw_density' : f'Cycle {i_cycle+1} - Slow wave density (count/min)'
             }
         cycle_dict = cycle_dict | current_cycle_dict
     
@@ -379,7 +396,15 @@ def _get_doc(N_CYCLE, N_HOURS=0):
             f'clock_h{i_hour+1}_N2N3_trans_freq_Hz' : f'Hour {i_hour+1} - Average slow wave transition frequency (Hz) in N2 and N3 stage.',
             f'clock_h{i_hour+1}_NREM_trans_freq_Hz' : f'Hour {i_hour+1} - Average slow wave transition frequency (Hz) in NREM stage (N1, N2, N3).',
             f'clock_h{i_hour+1}_R_trans_freq_Hz' : f'Hour {i_hour+1} - Average slow wave transition frequency (Hz) in REM stage.',
-            f'clock_h{i_hour+1}_trans_freq_Hz' : f'Hour {i_hour+1} - Average slow wave transition frequency (Hz) in all stages.'
+            f'clock_h{i_hour+1}_trans_freq_Hz' : f'Hour {i_hour+1} - Average slow wave transition frequency (Hz) in all stages.',
+
+            f'clock_h{i_hour+1}_N1_sw_density' : f'Hour {i_hour+1} - Slow wave density (count/min) in N1 stage.',
+            f'clock_h{i_hour+1}_N2_sw_density' : f'Hour {i_hour+1} - Slow wave density (count/min) in N2 stage.',
+            f'clock_h{i_hour+1}_N3_sw_density' : f'Hour {i_hour+1} - Slow wave density (count/min) in N3 stage.',
+            f'clock_h{i_hour+1}_N2N3_sw_density' : f'Hour {i_hour+1} - Slow wave density (count/min) in N2 and N3 stage.',
+            f'clock_h{i_hour+1}_NREM_sw_density' : f'Hour {i_hour+1} - Slow wave density (count/min) in NREM stage (N1, N2, N3).',
+            f'clock_h{i_hour+1}_R_sw_density' : f'Hour {i_hour+1} - Slow wave density (count/min) in REM stage.',
+            f'clock_h{i_hour+1}_sw_density' : f'Hour {i_hour+1} - Slow wave density (count/min)'
             }
         clock_hour_dict = clock_hour_dict | current_hour_dict
     
@@ -482,7 +507,15 @@ def _get_doc(N_CYCLE, N_HOURS=0):
             f'stage_h{i_hour+1}_N2N3_trans_freq_Hz' : f'Stage Hour {i_hour+1} - Average slow wave transition frequency (Hz) in N2 and N3 stage.',
             f'stage_h{i_hour+1}_NREM_trans_freq_Hz' : f'Stage Hour {i_hour+1} - Average slow wave transition frequency (Hz) in NREM stage (N1, N2, N3).',
             f'stage_h{i_hour+1}_R_trans_freq_Hz' : f'Stage Hour {i_hour+1} - Average slow wave transition frequency (Hz) in REM stage.',
-            f'stage_h{i_hour+1}_trans_freq_Hz' : f'Stage Hour {i_hour+1} - Average slow wave transition frequency (Hz) in all stages.'
+            f'stage_h{i_hour+1}_trans_freq_Hz' : f'Stage Hour {i_hour+1} - Average slow wave transition frequency (Hz) in all stages.',
+
+            f'stage_h{i_hour+1}_N1_sw_density' : f'Stage Hour {i_hour+1} - Slow wave density (count/min) in N1 stage.',
+            f'stage_h{i_hour+1}_N2_sw_density' : f'Stage Hour {i_hour+1} - Slow wave density (count/min) in N2 stage.',
+            f'stage_h{i_hour+1}_N3_sw_density' : f'Stage Hour {i_hour+1} - Slow wave density (count/min) in N3 stage.',
+            f'stage_h{i_hour+1}_N2N3_sw_density' : f'Stage Hour {i_hour+1} - Slow wave density (count/min) in N2 and N3 stage.',
+            f'stage_h{i_hour+1}_NREM_sw_density' : f'Stage Hour {i_hour+1} - Slow wave density (count/min) in NREM stage (N1, N2, N3).',
+            f'stage_h{i_hour+1}_R_sw_density' : f'Stage Hour {i_hour+1} - Slow wave density (count/min) in REM stage.',
+            f'stage_h{i_hour+1}_sw_density' : f'Stage Hour {i_hour+1} - Slow wave density (count/min) in all stages.'
             }
         stage_hour_dict = stage_hour_dict | current_stage_hour_dict
     

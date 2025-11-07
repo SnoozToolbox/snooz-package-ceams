@@ -525,6 +525,7 @@ class SlowWavesDetails(SciNode):
         # Average characteristique per stage
         mean_stage = {}
         sw_count_stage = {}
+        sw_density_stage = {}
         for stage in stage_stats_labels:
             # Extract sw for the current stage
             if len(sleep_stages_name[stage]) == 1:
@@ -540,6 +541,11 @@ class SlowWavesDetails(SciNode):
             # Compute the number of detection per stage
             n_sw = len(sw_cur_chan_stage)
             sw_count_stage[f'{label_stats}_{stage}_sw_count'] = n_sw
+            # Compute the density
+            if valid_dur[f'{label_stats}_{stage}_valid_min']>0:
+                sw_density_stage[f'{label_stats}_{stage}_sw_density'] = n_sw/valid_dur[f'{label_stats}_{stage}_valid_min']
+            else:
+                sw_density_stage[f'{label_stats}_{stage}_sw_density'] = np.nan
             # Average the characteristiques for the current recording and stage
             mean_char_series = sw_cur_chan_stage.mean(axis=0, skipna=True, numeric_only=True)
             mean_char_series = mean_char_series.round(decimals=2)
@@ -557,7 +563,13 @@ class SlowWavesDetails(SciNode):
                         mean_stage[f'{label_stats}_{stage}_sw_sec'] = value
                     else:
                         mean_stage[f'{label_stats}_{stage}_{key}'] = value              
-        tot_stats =  valid_dur | sw_count_stage | mean_stage | sw_count_tot | mean_tot
+        # Compute total density
+        sw_density_tot = {}
+        if valid_dur[f'{label_stats}_valid_min']>0:
+            sw_density_tot[f'{label_stats}_sw_density'] = sw_count_tot[f'{label_stats}_sw_count']/valid_dur[f'{label_stats}_valid_min']
+        else:
+            sw_density_tot[f'{label_stats}_sw_density'] = np.nan
+        tot_stats =  valid_dur | sw_count_stage | mean_stage | sw_count_tot | mean_tot | sw_density_stage | sw_density_tot
         return tot_stats
 
 
@@ -588,6 +600,8 @@ class SlowWavesDetails(SciNode):
         mean_cyc = {}
         mean_stage = {}
         sw_count_stage = {}
+        sw_density_cyc = {}
+        sw_density_stage = {}
         # For each sleep cycle
         for i_cycle in range(self.N_CYCLES):
             cycle_label = label_stats+str(i_cycle+1)
@@ -629,6 +643,11 @@ class SlowWavesDetails(SciNode):
             # Compute the number of detection per cycle
             n_sw = len(sw_sel_to_mean)
             sw_count_cyc[f'{cycle_label}_sw_count'] = n_sw
+            # Compute the density for the current cycle
+            if valid_dur_cur[f'{cycle_label}_valid_min']>0:
+                sw_density_cyc[f'{cycle_label}_sw_density'] = n_sw/valid_dur_cur[f'{cycle_label}_valid_min']
+            else:
+                sw_density_cyc[f'{cycle_label}_sw_density'] = np.nan
             # Average characteristique for the current cycle
             mean_char_series = sw_sel_to_mean.mean(axis=0, skipna=True, numeric_only=True)
             mean_char_series = mean_char_series.round(decimals=2)
@@ -665,6 +684,11 @@ class SlowWavesDetails(SciNode):
                 # Compute the number of detection per stage
                 n_sw = len(sw_cur_chan_stage)
                 sw_count_stage[f'{cycle_label}_{stage}_sw_count'] = n_sw
+                # Compute the density
+                if valid_dur_cur[f'{cycle_label}_{stage}_valid_min']>0:
+                    sw_density_stage[f'{cycle_label}_{stage}_sw_density'] = n_sw/valid_dur_cur[f'{cycle_label}_{stage}_valid_min']
+                else:
+                    sw_density_stage[f'{cycle_label}_{stage}_sw_density'] = np.nan
 
                 # Average the characteristiques for the current recording and stage
                 mean_char_series = sw_cur_to_mean.mean(axis=0, skipna=True, numeric_only=True)
@@ -684,7 +708,7 @@ class SlowWavesDetails(SciNode):
                         else:
                             mean_stage[f'{cycle_label}_{stage}_{key}'] = value
 
-            cyc_stats =  valid_dur | rec_dur | sw_count_stage | mean_stage | sw_count_cyc | mean_cyc
+            cyc_stats =  valid_dur | rec_dur | sw_count_stage | mean_stage | sw_count_cyc | mean_cyc | sw_density_stage | sw_density_cyc
         return cyc_stats
 
     def compute_clock_h_stats_per_stage(self, sw_cur_chan_sort, artifact_cur_chan_df, stage_in_cycle_df, \
@@ -778,6 +802,7 @@ class SlowWavesDetails(SciNode):
                 hour_sw_stats[f'{hour_label}_slope_min_max'] = np.NaN
                 hour_sw_stats[f'{hour_label}_slope_max_0'] = np.NaN
                 hour_sw_stats[f'{hour_label}_trans_freq_Hz'] = np.NaN
+                hour_sw_stats[f'{hour_label}_sw_density'] = np.NaN
                 
                 for stage in stage_stats_labels:
                     hour_valid_dur_stats[f'{hour_label}_{stage}_valid_min'] = np.NaN
@@ -792,6 +817,7 @@ class SlowWavesDetails(SciNode):
                     hour_sw_stats[f'{hour_label}_{stage}_slope_min_max'] = np.NaN
                     hour_sw_stats[f'{hour_label}_{stage}_slope_max_0'] = np.NaN
                     hour_sw_stats[f'{hour_label}_{stage}_trans_freq_Hz'] = np.NaN
+                    hour_sw_stats[f'{hour_label}_{stage}_sw_density'] = np.NaN
 
         # Organize data for the output
         return hour_rec_dur_stats | hour_valid_dur_stats | hour_sw_stats
@@ -933,6 +959,7 @@ class SlowWavesDetails(SciNode):
                         stage_hour_sw_stats[f'{hour_label}_{stage_label}_slope_min_max'] = np.NaN
                         stage_hour_sw_stats[f'{hour_label}_{stage_label}_slope_max_0'] = np.NaN
                         stage_hour_sw_stats[f'{hour_label}_{stage_label}_trans_freq_Hz'] = np.NaN
+                        stage_hour_sw_stats[f'{hour_label}_{stage_label}_sw_density'] = np.NaN
                 else:
                     # No stages in this hour - set all values to NaN
                     stage_hour_valid_dur_stats[f'{hour_label}_{stage_label}_valid_min'] = np.NaN
@@ -947,6 +974,7 @@ class SlowWavesDetails(SciNode):
                     stage_hour_sw_stats[f'{hour_label}_{stage_label}_slope_min_max'] = np.NaN
                     stage_hour_sw_stats[f'{hour_label}_{stage_label}_slope_max_0'] = np.NaN
                     stage_hour_sw_stats[f'{hour_label}_{stage_label}_trans_freq_Hz'] = np.NaN
+                    stage_hour_sw_stats[f'{hour_label}_{stage_label}_sw_density'] = np.NaN
             
             # Compute total statistics for this hour
             total_stages = sum(len(stage_data[label]) for label in stage_stats_labels if len(sleep_stages_name[label]) == 1)
@@ -998,6 +1026,7 @@ class SlowWavesDetails(SciNode):
         slope_min_max = {}
         slope_max_0 = {}
         trans_freq_Hz = {}
+        sw_density = {}
         sw_count_total = 0
         sw_sec_all = []
         pkpk_amp_uV_all = []
@@ -1033,6 +1062,11 @@ class SlowWavesDetails(SciNode):
                     sw_count[f'{label_stats}_{stage}_sw_count'] = sw_count_cur_stage
                 else:
                     sw_count[f'{label_stats}_{stage}_sw_count'] = np.nan
+                # Compute the density
+                if valid_dur[f'{label_stats}_{stage}_valid_min']>0:
+                    sw_density[f'{label_stats}_{stage}_sw_density'] = sw_count_cur_stage/valid_dur[f'{label_stats}_{stage}_valid_min']
+                else:
+                    sw_density[f'{label_stats}_{stage}_sw_density'] = np.nan
 
                 if sw_count_cur_stage>0:
                     sw_sec[f'{label_stats}_{stage}_sw_sec'] = sw_cur_stage['duration_sec'].sum()/sw_count_cur_stage
@@ -1128,6 +1162,7 @@ class SlowWavesDetails(SciNode):
                 slope_min_max[f'{label_stats}_{stage}_slope_min_max'] = np.NaN
                 slope_max_0[f'{label_stats}_{stage}_slope_max_0'] = np.NaN
                 trans_freq_Hz[f'{label_stats}_{stage}_trans_freq_Hz'] = np.NaN
+                sw_density[f'{label_stats}_{stage}_sw_density'] = np.NaN
 
         # Total stats on the accumulated data
         sw_count[f'{label_stats}_sw_count'] = sw_count_total
@@ -1141,8 +1176,13 @@ class SlowWavesDetails(SciNode):
         slope_min_max[f'{label_stats}_slope_min_max'] = np.mean(slope_min_max_all)
         slope_max_0[f'{label_stats}_slope_max_0'] = np.mean(slope_max_0_all)
         trans_freq_Hz[f'{label_stats}_trans_freq_Hz'] = np.mean(trans_freq_Hz_all)
+        # Compute total density
+        if valid_dur[f'{label_stats}_valid_min']>0:
+            sw_density[f'{label_stats}_sw_density'] = sw_count_total/valid_dur[f'{label_stats}_valid_min']
+        else:
+            sw_density[f'{label_stats}_sw_density'] = np.nan
 
-        sw_stats = sw_count | sw_sec | pkpk_amp_uV | freq_Hz | neg_amp_uV | neg_sec | pos_sec | slope_0_min | slope_min_max | slope_max_0 | trans_freq_Hz
+        sw_stats = sw_count | sw_sec | pkpk_amp_uV | freq_Hz | neg_amp_uV | neg_sec | pos_sec | slope_0_min | slope_min_max | slope_max_0 | trans_freq_Hz | sw_density
         return sw_stats
 
     def compute_sw_stats_for_single_stage(self, valid_dur, sw_cur_chan_df, stage_label, label_stats):
@@ -1184,6 +1224,11 @@ class SlowWavesDetails(SciNode):
             result[f'{label_stats}_{stage_label}_sw_count'] = sw_count
         else:
             result[f'{label_stats}_{stage_label}_sw_count'] = np.nan
+        # Compute the density
+        if valid_duration > 0:
+            result[f'{label_stats}_{stage_label}_sw_density'] = sw_count/valid_duration
+        else:
+            result[f'{label_stats}_{stage_label}_sw_density'] = np.nan
             
         # Other characteristics (only if we have slow waves) - using same approach as original
         if sw_count > 0:
@@ -1312,6 +1357,20 @@ class SlowWavesDetails(SciNode):
         
         # Add total slow wave count
         sw_stats[f'{hour_label}_sw_count'] = total_sw_count
+        
+        # Compute total valid_min for density calculation
+        total_valid_min = 0
+        for stage_label in self.stage_stats_labels:
+            if len(local_sleep_stages_name[stage_label]) == 1:
+                valid_min_key = f'{hour_label}_{stage_label}_valid_min'
+                if valid_min_key in valid_dur_stats and not np.isnan(valid_dur_stats[valid_min_key]):
+                    total_valid_min += valid_dur_stats[valid_min_key]
+        
+        # Compute total density
+        if total_valid_min > 0:
+            sw_stats[f'{hour_label}_sw_density'] = total_sw_count / total_valid_min
+        else:
+            sw_stats[f'{hour_label}_sw_density'] = np.nan
         
         # Add total averages using weighted averages (mathematically equivalent to original method)
         if total_sw_count > 0:
