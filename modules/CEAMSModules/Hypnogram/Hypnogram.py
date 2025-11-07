@@ -27,20 +27,13 @@ See the file LICENCE for full license details.
     -----------
         None
 """
+import os
 
-from ..PSGReader import commons
-from flowpipe import SciNode, InputPlug, OutputPlug
-from .HypnogramResultsView import HypnogramResultsView
-
-# Take the the result view from the CsvReader
-# CsvReader results view show a dataframe of events
-#from CEAMSModules.Hypnogram.Ui_HypnogramResultsView import Ui_HypnogramResultsView
-
-import pandas as pd
-import shutil
-from scipy import signal
 import matplotlib.pyplot as plt
 plt.switch_backend('agg')  # turn off gui
+
+from flowpipe import SciNode, InputPlug
+from .HypnogramResultsView import HypnogramResultsView
 
 DEBUG = False
 
@@ -106,6 +99,11 @@ class Hypnogram(SciNode):
                 self.figure, self.hypno_ax = plt.subplots()
                 self.figure.set_size_inches(16,4)
                 self.hypno_ax.clear()
+                # Extract filename from path
+                PSG_filename = os.path.basename(fig_name)
+                if '.' in PSG_filename:
+                    PSG_filename = PSG_filename.split('.')[0]
+                self.subject_id = PSG_filename
                 HypnogramResultsView.plot_hypnogram(self, sleep_stages, sleep_cycles, epoch_len=epoch_len_sec)
                 if not '.' in fig_name:
                     fig_name = fig_name + '.pdf'

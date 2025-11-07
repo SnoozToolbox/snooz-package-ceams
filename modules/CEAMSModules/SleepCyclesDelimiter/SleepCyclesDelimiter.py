@@ -1047,11 +1047,9 @@ class SleepCyclesDelimiter(SciNode):
                     if remper_dur[cycle_i]>0:
                         if remper_dur[cycle_i] < (float(parameters_dict['REM_min_len_last'])*60):
                             cycle_valid[cycle_i] = 0
-                            war_message = "Cycle " + str(cycle_i+1) + \
-                                ": REMP lasts less than " + parameters_dict['REM_min_len_last'] + " min, then is it joined to the preceding REMP"
+                            war_message = f"WARNING : Possible Cycle {cycle_i+1}: REMP lasts {remper_dur[cycle_i]/60} min, it's less than {parameters_dict['REM_min_len_last']} min, then is it joined to the preceding REMP (Cycle {cycle_i})."
                             self._log_manager.log(self.identifier, war_message)
                             # Write the warning also in the log file
-                            war_message = f"WARNING : Cycle {cycle_i+1}: REMP lasts {remper_dur[cycle_i]/60} min, it's less than {parameters_dict['REM_min_len_last']} min."
                             with open(self._log_filename, 'a') as log_file:
                                 log_file.write(war_message + '\n')
             # Middle cycle
@@ -1060,11 +1058,9 @@ class SleepCyclesDelimiter(SciNode):
                     if remper_dur[cycle_i]>0:
                         if remper_dur[cycle_i] < (float(parameters_dict['REM_min_len_mid'])*60):
                             cycle_valid[cycle_i] = 0
-                            war_message = "Cycle " + str(cycle_i+1) + \
-                                ": REMP lasts less than " + parameters_dict['REM_min_len_mid'] + " min, then is it joined to the preceding REMP"
+                            war_message = f"WARNING : Possible Cycle {cycle_i+1}: REMP lasts {remper_dur[cycle_i]/60} min, it's less than {parameters_dict['REM_min_len_mid']} min, then is it joined to the preceding REMP (Cycle {cycle_i})."
                             self._log_manager.log(self.identifier, war_message)
                             # Write the warning also in the log file
-                            war_message = f"WARNING : Cycle {cycle_i+1}: REMP lasts {remper_dur[cycle_i]/60} min, it's less than {parameters_dict['REM_min_len_mid']} min, then is it joined to the preceding REMP."
                             with open(self._log_filename, 'a') as log_file:
                                 log_file.write(war_message + '\n')
         
