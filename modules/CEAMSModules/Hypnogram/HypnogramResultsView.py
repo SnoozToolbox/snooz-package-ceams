@@ -88,13 +88,13 @@ class HypnogramResultsView( Ui_HypnogramResultsView, QtWidgets.QWidget):
 
         # Combined configuration for sleep stages: plot position and color
         stage_config = {
-            "0": {"plot_pos": 5, "color": "white"},        # Awake
-            "5": {"plot_pos": 4, "color": "green"},       # REM
+            "0": {"plot_pos": 5, "color": "white"},         # Awake
+            "5": {"plot_pos": 4, "color": "green"},         # REM
             "1": {"plot_pos": 3, "color": "cornflowerblue"}, # N1
-            "2": {"plot_pos": 2, "color": "blue"},        # N2
-            "3": {"plot_pos": 1, "color": "darkblue"},    # N3
-            "9": {"plot_pos": 0, "color": "gray"},   # Unscored
-            "8": {"plot_pos": 0, "color": "gray"},   # etc.
+            "2": {"plot_pos": 2, "color": "blue"},          # N2
+            "3": {"plot_pos": 1, "color": "darkblue"},      # N3
+            "9": {"plot_pos": 0, "color": "gray"},          # Unscored
+            "8": {"plot_pos": 0, "color": "gray"},          # etc.
             "7": {"plot_pos": 0, "color": "gray"},
         }
 
@@ -105,11 +105,12 @@ class HypnogramResultsView( Ui_HypnogramResultsView, QtWidgets.QWidget):
 
         # Hypnogram color definition for sleep cycles
         #                           R           G       B
-        fill_color_complete_NREM =  [0/255, 32/255, 128/255] # Colors values are between 0 and 1
-        fill_color_complete_REM =   [0/255, 64/255, 0/255] # Colors values are between 0 and 1
-        fill_color_incomplete =     [150/255, 0/255, 0/255]  # Colors values are between 0 and 1
+        fill_color_complete_NREM =  [0/255, 32/255, 128/255]    # Colors values are between 0 and 1
+        fill_color_complete_REM =   [0/255, 64/255, 0/255]      # Colors values are between 0 and 1
+        fill_color_incomplete =     [150/255, 0/255, 0/255]     # Colors values are between 0 and 1
         alpha = 0.3
 
+        # Remove unscored stages at the beginning and the end
         stages = []
         sleep_stages_nocycle = sleep_stages[sleep_stages.group == commons.sleep_stages_group].copy()
         sleep_stages_nocycle.reset_index(inplace=True, drop=True)
@@ -129,10 +130,9 @@ class HypnogramResultsView( Ui_HypnogramResultsView, QtWidgets.QWidget):
         
         # Create color list based on original stage values
         colors = [stage_config.get(s, {"color": 'blue'})["color"] for s in scored_stages]
-
         
-        # Draw background rectangles for each level
-        for level in range(6):
+        # Draw background rectangles for each level (corresponding to sleep stages)
+        for level in range(6): # From the number of unique values to plot (the 7 levels for stages)
             self.hypno_ax.add_patch(Rectangle((0, level - 0.5), len(stages), 1,
                 facecolor=level_colors[level], alpha=alpha, edgecolor='none'))
 
@@ -142,10 +142,11 @@ class HypnogramResultsView( Ui_HypnogramResultsView, QtWidgets.QWidget):
         self.hypno_ax.set_yticks(range(len(hypno_y_label)))
         self.hypno_ax.set_yticklabels([])
         self.hypno_ax.set_yticklabels(hypno_y_label)
+        self.hypno_ax.set_ylabel('Sleep Stage')
         self.hypno_ax.set_xlabel('Elapsed Time (epoch)')
         # If the epoch length is defined, change the x axis for hour instead of epoch
         if isinstance(epoch_len, int) or isinstance(epoch_len, float):
-            max_sec = len(sleep_stages) * epoch_len
+            max_sec = len(scored_stages) * epoch_len
             max_hour = math.ceil(max_sec/3600)
             self.hypno_ax.set_xticks(np.arange(max_hour)*3600/epoch_len)
             lst_hour = range(max_hour)
@@ -153,6 +154,9 @@ class HypnogramResultsView( Ui_HypnogramResultsView, QtWidgets.QWidget):
             self.hypno_ax.set_xticklabels([])
             self.hypno_ax.set_xticklabels(xticklabels)
             self.hypno_ax.set_xlabel('Elapsed Time (h)')
+            # Path to generate the picture
+            #self.hypno_ax.set_title(f'Hypnogram with Sleep Cycles')
+            self.hypno_ax.set_title(f'Hypnogram with Sleep Cycles - {self.subject_id}')
 
         if sleep_cycles is not None:
             HypnogramResultsView.draw_sleep_cycles(self, sleep_cycles, scoring_start, 

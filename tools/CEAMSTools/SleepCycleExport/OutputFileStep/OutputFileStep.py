@@ -66,21 +66,13 @@ class OutputFileStep( BaseStepView,  Ui_OutputFileStep, QtWidgets.QWidget):
         # Returning False will prevent the process from executing.
         if len(self.tsv_file_lineEdit.text())==0:
             WarningDialog("Define the file to save the sleep cycles for the cohort in step '3-Output Files'")
-            return False
-        # if len(self.Hyp_suffix_lineEdit.text())==0:
-        #     WarningDialog("Define the suffix to add to the file saved along the recording in step '3-Output Files'")
-        #     return False            
+            return False        
         return True
 
 
     # Called when the user clicks on "Apply"
     # Settings defined in the viewer are sent to the pub_sub_manager
     def on_apply_settings(self):
-        # If there is no ext -> add .pdf
-        # if not ("." in str(self.Hyp_suffix_lineEdit.text())):
-        #     self._pub_sub_manager.publish(self, self._suffix_hyp_topic, \
-        #         str(self.Hyp_suffix_lineEdit.text())+".pdf")
-        # else:
         self._pub_sub_manager.publish(self, self._suffix_hyp_topic, \
             str(self.Hyp_suffix_lineEdit.text()))       
 
