@@ -2,7 +2,7 @@ import base64
 import os
 
 # List of artifact example images to convert
-image_files = ['cycle_min_learn-nsrr01_hyp.png']
+image_files = ['cycle_min_learn-nsrr01_75.png']
 
 # Variable names for each image
 variable_names = ['HYP_IMAGE_BASE64']

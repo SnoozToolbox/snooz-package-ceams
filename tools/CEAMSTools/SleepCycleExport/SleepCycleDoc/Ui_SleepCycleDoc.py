@@ -15,42 +15,72 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QFont, QFontDatabase, QGradient, QIcon,
     QImage, QKeySequence, QLinearGradient, QPainter,
     QPalette, QPixmap, QRadialGradient, QTransform)
-from PySide6.QtWidgets import (QApplication, QFrame, QLabel, QScrollArea,
-    QSizePolicy, QTextBrowser, QVBoxLayout, QWidget)
+from PySide6.QtWidgets import (QAbstractScrollArea, QApplication, QFrame, QLabel,
+    QLayout, QScrollArea, QSizePolicy, QTextBrowser,
+    QVBoxLayout, QWidget)
 import themes_rc
 
 class Ui_SleepCycleDoc(object):
     def setupUi(self, SleepCycleDoc):
         if not SleepCycleDoc.objectName():
             SleepCycleDoc.setObjectName(u"SleepCycleDoc")
-        SleepCycleDoc.resize(1015, 215)
-        self.verticalLayout = QVBoxLayout(SleepCycleDoc)
-        self.verticalLayout.setSpacing(25)
-        self.verticalLayout.setObjectName(u"verticalLayout")
+        SleepCycleDoc.resize(929, 798)
+        SleepCycleDoc.setMaximumSize(QSize(16777215, 16777215))
+        self.verticalLayout_3 = QVBoxLayout(SleepCycleDoc)
+        self.verticalLayout_3.setObjectName(u"verticalLayout_3")
         self.scrollArea = QScrollArea(SleepCycleDoc)
         self.scrollArea.setObjectName(u"scrollArea")
+        self.scrollArea.setFrameShape(QFrame.Shape.NoFrame)
+        self.scrollArea.setFrameShadow(QFrame.Shadow.Plain)
+        self.scrollArea.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOn)
+        self.scrollArea.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOn)
+        self.scrollArea.setSizeAdjustPolicy(QAbstractScrollArea.SizeAdjustPolicy.AdjustToContents)
         self.scrollArea.setWidgetResizable(True)
         self.scrollAreaWidgetContents = QWidget()
         self.scrollAreaWidgetContents.setObjectName(u"scrollAreaWidgetContents")
-        self.scrollAreaWidgetContents.setGeometry(QRect(0, 0, 995, 54))
+        self.scrollAreaWidgetContents.setGeometry(QRect(0, 0, 899, 768))
+        sizePolicy = QSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Expanding)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.scrollAreaWidgetContents.sizePolicy().hasHeightForWidth())
+        self.scrollAreaWidgetContents.setSizePolicy(sizePolicy)
         self.verticalLayout_2 = QVBoxLayout(self.scrollAreaWidgetContents)
         self.verticalLayout_2.setObjectName(u"verticalLayout_2")
+        self.verticalLayout_2.setSizeConstraint(QLayout.SizeConstraint.SetMaximumSize)
+        self.verticalLayout = QVBoxLayout()
+        self.verticalLayout.setObjectName(u"verticalLayout")
+        self.verticalLayout.setSizeConstraint(QLayout.SizeConstraint.SetMaximumSize)
         self.hypnogram_pic = QLabel(self.scrollAreaWidgetContents)
         self.hypnogram_pic.setObjectName(u"hypnogram_pic")
+        sizePolicy1 = QSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Preferred)
+        sizePolicy1.setHorizontalStretch(0)
+        sizePolicy1.setVerticalStretch(0)
+        sizePolicy1.setHeightForWidth(self.hypnogram_pic.sizePolicy().hasHeightForWidth())
+        self.hypnogram_pic.setSizePolicy(sizePolicy1)
+        self.hypnogram_pic.setScaledContents(False)
+        self.hypnogram_pic.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
-        self.verticalLayout_2.addWidget(self.hypnogram_pic)
+        self.verticalLayout.addWidget(self.hypnogram_pic)
 
-        self.scrollArea.setWidget(self.scrollAreaWidgetContents)
-
-        self.verticalLayout.addWidget(self.scrollArea)
-
-        self.textBrowser = QTextBrowser(SleepCycleDoc)
+        self.textBrowser = QTextBrowser(self.scrollAreaWidgetContents)
         self.textBrowser.setObjectName(u"textBrowser")
+        sizePolicy.setHeightForWidth(self.textBrowser.sizePolicy().hasHeightForWidth())
+        self.textBrowser.setSizePolicy(sizePolicy)
         self.textBrowser.setFrameShape(QFrame.Shape.NoFrame)
         self.textBrowser.setFrameShadow(QFrame.Shadow.Plain)
         self.textBrowser.setLineWidth(0)
+        self.textBrowser.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
+        self.textBrowser.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
+        self.textBrowser.setSizeAdjustPolicy(QAbstractScrollArea.SizeAdjustPolicy.AdjustIgnored)
 
         self.verticalLayout.addWidget(self.textBrowser)
+
+
+        self.verticalLayout_2.addLayout(self.verticalLayout)
+
+        self.scrollArea.setWidget(self.scrollAreaWidgetContents)
+
+        self.verticalLayout_3.addWidget(self.scrollArea)
 
 
         self.retranslateUi(SleepCycleDoc)
@@ -61,7 +91,7 @@ class Ui_SleepCycleDoc(object):
     def retranslateUi(self, SleepCycleDoc):
         SleepCycleDoc.setWindowTitle("")
         SleepCycleDoc.setStyleSheet(QCoreApplication.translate("SleepCycleDoc", u"font: 12pt \"Roboto\";", None))
-        self.hypnogram_pic.setText("")
+        self.hypnogram_pic.setText(QCoreApplication.translate("SleepCycleDoc", u"TextLabel", None))
         self.textBrowser.setHtml(QCoreApplication.translate("SleepCycleDoc", u"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset=\"utf-8\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"

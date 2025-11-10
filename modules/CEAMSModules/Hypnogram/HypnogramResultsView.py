@@ -142,6 +142,7 @@ class HypnogramResultsView( Ui_HypnogramResultsView, QtWidgets.QWidget):
         self.hypno_ax.set_yticks(range(len(hypno_y_label)))
         self.hypno_ax.set_yticklabels([])
         self.hypno_ax.set_yticklabels(hypno_y_label)
+        self.hypno_ax.set_ylabel('Sleep Stage')
         self.hypno_ax.set_xlabel('Elapsed Time (epoch)')
         # If the epoch length is defined, change the x axis for hour instead of epoch
         if isinstance(epoch_len, int) or isinstance(epoch_len, float):
@@ -153,6 +154,8 @@ class HypnogramResultsView( Ui_HypnogramResultsView, QtWidgets.QWidget):
             self.hypno_ax.set_xticklabels([])
             self.hypno_ax.set_xticklabels(xticklabels)
             self.hypno_ax.set_xlabel('Elapsed Time (h)')
+            # Path to generate the picture
+            #self.hypno_ax.set_title(f'Hypnogram with Sleep Cycles')
             self.hypno_ax.set_title(f'Hypnogram with Sleep Cycles - {self.subject_id}')
 
         if sleep_cycles is not None:
