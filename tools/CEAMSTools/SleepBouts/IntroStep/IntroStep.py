@@ -37,7 +37,7 @@ class IntroStep( BaseStepView,  Ui_IntroStep, QtWidgets.QWidget):
         
     def _load_embedded_image(self):
         """Load the embedded base64 image data into label_5."""
-        from .hyp_image_data import HYP_IMAGE_BASE64
+        from .art_image_data import SLEEP_BOUTS_IMAGE_BASE64
         
         image_bytes = base64.b64decode(SLEEP_BOUTS_IMAGE_BASE64)
         pixmap = QPixmap()
