@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>895</width>
-    <height>650</height>
+    <width>766</width>
+    <height>540</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -31,7 +31,7 @@
        <item>
         <widget class="QLabel" name="label_2">
          <property name="text">
-          <string>This tool detects sleep bouts from PSG files.</string>
+          <string>This tool reports statistics about sleep bouts from PSG files.</string>
          </property>
         </widget>
        </item>
@@ -67,7 +67,7 @@
          <property name="maximumSize">
           <size>
            <width>16777215</width>
-           <height>120</height>
+           <height>130</height>
           </size>
          </property>
          <property name="frameShape">
@@ -90,10 +90,10 @@ hr { height: 1px; border-width: 0; }
 li.unchecked::marker { content: &quot;\2610&quot;; }
 li.checked::marker { content: &quot;\2612&quot;; }
 &lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Roboto'; font-size:12pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Sleep bouts are defined as continuous periods of sleep stages. This tool detects three types of sleep bouts:&lt;br /&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Sleep bouts are defined as continuous periods of three sleep stage combinations : &lt;br /&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;   1. Continuous period of N2 and N3 stages&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;   2. Continuous period of N2, N3 and REM stages&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;   3. Continuous period of REM stage&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;   3. Continuous period of REM stage alone&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
          </property>
         </widget>
        </item>
@@ -102,7 +102,6 @@ li.checked::marker { content: &quot;\2612&quot;; }
          <property name="text">
           <string/>
          </property>
-         <property name="text"><string/></property>
          <property name="alignment">
           <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter</set>
          </property>
@@ -137,6 +136,12 @@ li.checked::marker { content: &quot;\2612&quot;; }
        </item>
        <item>
         <widget class="QTextEdit" name="textEdit">
+         <property name="maximumSize">
+          <size>
+           <width>16777215</width>
+           <height>120</height>
+          </size>
+         </property>
          <property name="frameShape">
           <enum>QFrame::Shape::NoFrame</enum>
          </property>
@@ -157,8 +162,7 @@ hr { height: 1px; border-width: 0; }
 li.unchecked::marker { content: &quot;\2610&quot;; }
 li.checked::marker { content: &quot;\2612&quot;; }
 &lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Roboto'; font-size:12pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:13px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;The output is a TSV (Tab Separated Values) file. A new row is added for every file analyzed. The columns of the file are as follows:&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:13px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;* The name of the PSG file&lt;br /&gt;* The ten longest sleep bouts of type 1&lt;br /&gt;* The mean value of the ten longest sleep bouts of type 1&lt;br /&gt;* The standard deviation value the ten longest sleep bouts of type 1&lt;br /&gt;* The mean value of all sleep bouts of type 1&lt;br /&gt;* The standard deviation value of all sleep bouts of type 1&lt;br /&gt;* Repeat for type 2 and 3.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+&lt;p style=&quot; margin-top:0px; margin-bottom:13px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;The output is a TSV (Tab Separated Values) file containing one row per recording, &lt;br /&gt;including the ten longest sleep bouts, as well as the mean and standard deviation of both the ten longest and all sleep bouts for each combination. &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
          </property>
         </widget>
        </item>
@@ -183,7 +187,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
  </widget>
  <resources>
   <include location="../../../../../snooz-toolbox/src/main/python/ui/themes/themes.qrc"/>
-   </resources>
+ </resources>
  <connections/>
  <slots>
   <slot>on_choose()</slot>
