@@ -9,7 +9,7 @@ import numpy as np
 import pandas as pd
 
 
-DEBUG = True
+DEBUG = False
 
 def adp_compute(signal, pad_sec, threshold, above_thresh_det,\
         baseline_win_len, median_use, log10_data, fs, art_events=None):

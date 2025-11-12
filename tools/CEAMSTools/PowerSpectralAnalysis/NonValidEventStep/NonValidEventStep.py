@@ -22,7 +22,7 @@ from CEAMSTools.PowerSpectralAnalysis.InputFilesStep.InputFilesStep import Input
 from CEAMSTools.PowerSpectralAnalysis.NonValidEventStep.Ui_NonValidEventStep import Ui_NonValidEventStep
 from CEAMSTools.PowerSpectralAnalysis.NonValidEventStep.EventsProxyModel import EventsProxyModel
 
-DEBUG = True
+DEBUG = False
 
 class NonValidEventStep( BaseStepView,  Ui_NonValidEventStep, QtWidgets.QWidget):
 

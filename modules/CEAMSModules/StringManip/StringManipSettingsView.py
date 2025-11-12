@@ -12,7 +12,7 @@ from qtpy import QtWidgets
 from CEAMSModules.StringManip.Ui_StringManipSettingsView import Ui_StringManipSettingsView
 from commons.BaseSettingsView import BaseSettingsView
 
-DEBUG = True
+DEBUG = False
 
 class StringManipSettingsView( BaseSettingsView,  Ui_StringManipSettingsView, QtWidgets.QWidget):
     """

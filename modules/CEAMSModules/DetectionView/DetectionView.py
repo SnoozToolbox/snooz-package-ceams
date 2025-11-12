@@ -59,7 +59,7 @@ import pandas as pd
 from scipy import signal
 import os
 
-DEBUG = True
+DEBUG = False
 
 class DetectionView(SciNode):
     """

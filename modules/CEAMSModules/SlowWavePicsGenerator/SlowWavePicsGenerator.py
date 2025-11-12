@@ -23,7 +23,7 @@ from CEAMSModules.PSGReader.SignalModel import SignalModel
 from CEAMSModules.PSGReader.PSGReaderManager import PSGReaderManager
 from CEAMSModules.SignalsFromEvents.SignalsFromEvents import SignalsFromEvents
 
-DEBUG = True
+DEBUG = False
 
 class SlowWavePicsGenerator(SciNode):
     """

@@ -16,7 +16,7 @@ from CEAMSTools.EditAnnotations.InputFileAnnotStep.InputFileAnnotStep import Inp
 from commons.BaseStepView import BaseStepView
 from widgets.TableDialog import TableDialog
 
-DEBUG = True
+DEBUG = False
 
 class EditorStep(BaseStepView, Ui_EditorStep, QtWidgets.QWidget):
     """

@@ -15,7 +15,7 @@ import numpy as np
 import os
 import pandas as pd
 
-DEBUG = True
+DEBUG = False
 
 class DetectionsCohortReview(SciNode):
     """
