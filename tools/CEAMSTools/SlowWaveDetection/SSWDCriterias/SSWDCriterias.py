@@ -190,7 +190,7 @@ class SSWDCriterias( BaseStepView,  Ui_SSWDCriterias, QtWidgets.QWidget):
             else:
                 stages_str = stages_str+',5'                
         self._pub_sub_manager.publish(self, self._stages_topic, str(stages_str))
-        self._pub_sub_manager.publish(self, self._exclude_remp_topic, str(int(self.checkBox_excl_remp.isChecked())))
+        self._pub_sub_manager.publish(self, self._exclude_remp_topic, str(int(self.radioButton_excl_remp.isChecked())))
         # Send the settings to the publisher for inputs to SlowWaveDetector
         self._pub_sub_manager.publish(self, self._group_topic, \
             str(self.group_lineedit.text()))
@@ -226,7 +226,7 @@ class SSWDCriterias( BaseStepView,  Ui_SSWDCriterias, QtWidgets.QWidget):
         # Build the dictionary of section selection to run detector and the detector parameters
         det_param = {}
         det_param["stage_sel"] = stages_str
-        det_param["detect_excl_remp"] = int(self.checkBox_excl_remp.isChecked())
+        det_param["detect_excl_remp"] = int(self.radioButton_excl_remp.isChecked())
         det_param["sw_event_name"] = str(self.event_name_lineedit.text())
         det_param['filt_low_Hz'] = self.doubleSpinBox_f_min.value()
         det_param['filt_high_Hz'] = self.doubleSpinBox_f_max.value()
@@ -260,7 +260,7 @@ class SSWDCriterias( BaseStepView,  Ui_SSWDCriterias, QtWidgets.QWidget):
             self.checkBox_n3.setChecked('3' in stages_lst)
             self.checkBox_r.setChecked('5' in stages_lst)
         if topic == self._exclude_remp_topic:
-            self.checkBox_excl_remp.setChecked(int(message))
+            self.radioButton_excl_remp.setChecked(int(message))
         if topic == self._group_topic:
             self.group_lineedit.setText(str(message))
         if topic == self._name_topic:
