@@ -272,18 +272,22 @@ class SleepCyclesDelimiter(SciNode):
             self._log_manager.log(self.identifier, war_message)
             # Write the warning also in the log file
             war_message = "WARNING : No sleep stages."
-            with open(self._log_filename, 'a') as log_file:
-                log_file.write(war_message + '\n')
+            if not self._log_filename is None:
+                with open(self._log_filename, 'a') as log_file:
+                    log_file.write(war_message + '\n')
 
-        self._filename = label
-        # remove the extension if any
-        if '.' in self._filename:
-            filename_path = self._filename.split('.')[0]
+        if isinstance(label, str) and len(label) > 0:
+            self._filename = label
+            # remove the extension if any
+            if '.' in self._filename:
+                filename_path = self._filename.split('.')[0]
+            else:
+                filename_path = self._filename
+            self._log_filename = f"{filename_path}_Cycle_WARNING.txt"
         else:
-            filename_path = self._filename
-        self._log_filename = f"{filename_path}_Cycle_WARNING.txt"
+            self._log_filename = None
 
-        # It is important to make a copy otherwise other instance of events
+            # It is important to make a copy otherwise other instance of events
         # will also be modified.
         events_out = events_in.copy()
 
@@ -300,8 +304,9 @@ class SleepCyclesDelimiter(SciNode):
             self._log_manager.log(self.identifier, war_message)
             # Write the warning also in the log file
             war_message = "WARNING : No sleep stages."
-            with open(self._log_filename, 'a') as log_file:
-                log_file.write(war_message + '\n')
+            if not self._log_filename is None:
+                with open(self._log_filename, 'a') as log_file:
+                    log_file.write(war_message + '\n')
             # Write the cache
             cache = {}
             cache['events'] = events_out
@@ -331,8 +336,9 @@ class SleepCyclesDelimiter(SciNode):
             self._log_manager.log(self.identifier, war_message)
             # Write the warning also in the log file
             war_message = "WARNING : No sleep stages."
-            with open(self._log_filename, 'a') as log_file:
-                log_file.write(war_message + '\n')
+            if not self._log_filename is None:
+                with open(self._log_filename, 'a') as log_file:
+                    log_file.write(war_message + '\n')
             # Write the cache
             cache = {}
             cache['events'] = events_out
@@ -360,8 +366,9 @@ class SleepCyclesDelimiter(SciNode):
             self._log_manager.log(self.identifier, war_message)
             # Write the warning also in the log file
             war_message = "WARNING : No sleep stages."
-            with open(self._log_filename, 'a') as log_file:
-                log_file.write(war_message + '\n')
+            if not self._log_filename is None:
+                with open(self._log_filename, 'a') as log_file:
+                    log_file.write(war_message + '\n')
             # Write the cache
             cache = {}
             cache['events'] = events_out
@@ -660,8 +667,9 @@ class SleepCyclesDelimiter(SciNode):
             self._log_manager.log(self.identifier, war_message)
             # Write the warning also in the log file
             war_message = "WARNING : No R stages."
-            with open(self._log_filename, 'a') as log_file:
-                log_file.write(war_message + '\n')
+            if not self._log_filename is None:
+                with open(self._log_filename, 'a') as log_file:
+                    log_file.write(war_message + '\n')
             return nremper_start_lst, remper_end_lst, remper_end_lst
         remper_start_lst.append(rem_extract.loc[first_rem_epoch_i].start_sec)
         # For each additional cycle
@@ -697,8 +705,9 @@ class SleepCyclesDelimiter(SciNode):
                         self._log_manager.log(self.identifier, war_message)
                         # Write the warning also in the log file
                         war_message = "WARNING : missing NREMP between two possible REMPs: NREMP lasts 0 min."
-                        with open(self._log_filename, 'a') as log_file:
-                            log_file.write(war_message + '\n')
+                        if not self._log_filename is None:
+                            with open(self._log_filename, 'a') as log_file:
+                                log_file.write(war_message + '\n')
                     else:
                         nremper_start_lst.append(nrem_start_sec)
                         first_rem_epoch_i = rem_extract[rem_extract['start_sec']>=nrem_start_sec].first_valid_index()
@@ -804,8 +813,9 @@ class SleepCyclesDelimiter(SciNode):
             self._log_manager.log(self.identifier, war_message)
             # Write the warning also in the log file
             war_message = "WARNING : No sleep stages."
-            with open(self._log_filename, 'a') as log_file:
-                log_file.write(war_message + '\n')
+            if not self._log_filename is None:
+                with open(self._log_filename, 'a') as log_file:
+                    log_file.write(war_message + '\n')
             return pd.DataFrame(columns=['group','name','start_sec','duration_sec','channels'])
         else:
             # Remove all the previous epochs
@@ -913,8 +923,9 @@ class SleepCyclesDelimiter(SciNode):
                         self._log_manager.log(self.identifier, war_message)
                         # Write the warning also in the log file
                         war_message = f"WARNING : Cycle {cycle_i+1}: NREMP lasts {nremper_dur[cycle_i]/60} min, it's less than {parameters_dict['NREM_min_len_first']} min."
-                        with open(self._log_filename, 'a') as log_file:
-                            log_file.write(war_message + '\n')
+                        if not self._log_filename is None:
+                            with open(self._log_filename, 'a') as log_file:
+                                log_file.write(war_message + '\n')
                 # Middle cycle
                 else:
                     # REM periods can be shorter than 15 mins when there 
@@ -928,8 +939,9 @@ class SleepCyclesDelimiter(SciNode):
                         self._log_manager.log(self.identifier, war_message)
                         # Write the warning also in the log file
                         war_message = f"WARNING : Cycle {cycle_i+1}: NREMP lasts {nremper_dur[cycle_i]/60} min, it's less than {parameters_dict['NREM_min_len_mid_last']} min."
-                        with open(self._log_filename, 'a') as log_file:
-                            log_file.write(war_message + '\n')
+                        if not self._log_filename is None:
+                            with open(self._log_filename, 'a') as log_file:
+                                log_file.write(war_message + '\n')
 
             # Middle cycles are incomplete if they last less than 15 min.
             # It is possible with Aeschbach and Floyd when there are awake or n1
@@ -974,8 +986,10 @@ class SleepCyclesDelimiter(SciNode):
             if len(cycle_complete)>0 and cycle_complete[0]==0:
                 # Write the warning also in the log file
                 war_message = f"WARNING : Sleep-Onset REM Period (SOREMP)."
-                with open(self._log_filename, 'a') as log_file:
-                    log_file.write(war_message + '\n')
+                self._log_manager.log(self.identifier, war_message)
+                if not self._log_filename is None:
+                    with open(self._log_filename, 'a') as log_file:
+                        log_file.write(war_message + '\n')
 
             # Remove SOREMP if requested
             if int(parameters_dict['Include_SOREMP'])==0 :
@@ -1039,8 +1053,9 @@ class SleepCyclesDelimiter(SciNode):
                             self._log_manager.log(self.identifier, war_message)
                             # Write the warning also in the log file
                             war_message = f"WARNING : Cycle {cycle_i+1}: REMP lasts {remper_dur_val/60} min, it's less than {parameters_dict['REM_min_len_first']} min."
-                            with open(self._log_filename, 'a') as log_file:
-                                log_file.write(war_message + '\n')
+                            if not self._log_filename is None:
+                                with open(self._log_filename, 'a') as log_file:
+                                    log_file.write(war_message + '\n')
             # Last cycle
             elif cycle_i==len(remper_dur)-1:
                 if float(parameters_dict['REM_min_len_last'])>0:
@@ -1050,8 +1065,9 @@ class SleepCyclesDelimiter(SciNode):
                             war_message = f"WARNING : Possible Cycle {cycle_i+1}: REMP lasts {remper_dur[cycle_i]/60} min, it's less than {parameters_dict['REM_min_len_last']} min, then is it joined to the preceding REMP (Cycle {cycle_i})."
                             self._log_manager.log(self.identifier, war_message)
                             # Write the warning also in the log file
-                            with open(self._log_filename, 'a') as log_file:
-                                log_file.write(war_message + '\n')
+                            if not self._log_filename is None:
+                                with open(self._log_filename, 'a') as log_file:
+                                    log_file.write(war_message + '\n')
             # Middle cycle
             else:
                 if float(parameters_dict['REM_min_len_mid'])>0:
@@ -1061,9 +1077,10 @@ class SleepCyclesDelimiter(SciNode):
                             war_message = f"WARNING : Possible Cycle {cycle_i+1}: REMP lasts {remper_dur[cycle_i]/60} min, it's less than {parameters_dict['REM_min_len_mid']} min, then is it joined to the preceding REMP (Cycle {cycle_i})."
                             self._log_manager.log(self.identifier, war_message)
                             # Write the warning also in the log file
-                            with open(self._log_filename, 'a') as log_file:
-                                log_file.write(war_message + '\n')
-        
+                            if not self._log_filename is None:
+                                with open(self._log_filename, 'a') as log_file:
+                                    log_file.write(war_message + '\n')
+
         # The last REMP can be missing (when the last NREMP is < NREM_min_len_val_last)
         # In that case the cycle is always incomplete
         if len(remper_end_lst)<len(nremper_start_lst):
