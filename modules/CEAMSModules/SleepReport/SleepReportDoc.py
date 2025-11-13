@@ -174,7 +174,7 @@ def _get_doc(N_CYCLES):
         'total_R_percent':'Percentage of time spent in REM stage during the sleep period.',
         'total_Unscored_percent':'Percentage of time spent in an unscored stage during the sleep period.',
         'total_N1N2N3_percent':'Percentage of time spent in NREM stages during the sleep period.',
-        'total_sleep_percent':'Percentage of time spent in a sleep stage (N1,N2,N3, REM) during the sleep.',
+        #'total_sleep_percent':'Percentage of time spent in a sleep stage (N1,N2,N3, REM) during the sleep.', useless variable
         'third1_W_percent':'The percentage of the total Wake stage spent during the first third of the sleep period.',
         'third1_N1_percent':'The percentage of the total N1 stage spent during the first third of the sleep period.',
         'third1_N2_percent':'The percentage of the total N2 stage spent during the first third of the sleep period.',
