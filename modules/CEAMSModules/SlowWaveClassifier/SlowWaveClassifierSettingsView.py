@@ -29,6 +29,9 @@ class SlowWaveClassifierSettingsView( BaseSettingsView,  Ui_SlowWaveClassifierSe
         self._num_categories_topic = f'{self._parent_node.identifier}.num_categories'
         self._pub_sub_manager.subscribe(self, self._num_categories_topic)
         
+        # Connect radio button signal to slot
+        self.radioButton_automatic_classification.toggled.connect(self.on_input_format_changed)
+        
 
     def load_settings(self):
         """ Called when the settingsView is opened by the user
@@ -36,12 +39,9 @@ class SlowWaveClassifierSettingsView( BaseSettingsView,  Ui_SlowWaveClassifierSe
         """
         
         self._pub_sub_manager.publish(self, self._automatic_classification_topic, 'ping')
-        self._pub_sub_manager.publish(self, self._num_categories_topic, 'ping')
-
-
-    # Slot called when user changes the checkbox to activate age or sex parameters
-    def on_input_format_changed(self, int):
-        if self.automatic_classification_checkBox.isChecked():
+    # Slot called when user changes the radiobutton to activate categories selection
+    def on_input_format_changed(self, checked):
+        if self.radioButton_automatic_classification.isChecked():
             self.num_categories_spinBox.setEnabled(False)
             self.categories_label.setEnabled(False)
         else:
@@ -54,7 +54,7 @@ class SlowWaveClassifierSettingsView( BaseSettingsView,  Ui_SlowWaveClassifierSe
         """
         
         # Send the settings to the publisher for inputs to SlowWaveClassifier
-        self._pub_sub_manager.publish(self, self._automatic_classification_topic, str(self.automatic_classification_checkBox.isChecked()))
+        self._pub_sub_manager.publish(self, self._automatic_classification_topic, str(self.radioButton_automatic_classification.isChecked()))
         self._pub_sub_manager.publish(self, self._num_categories_topic, str(self.num_categories_spinBox.value()))
         
 
@@ -62,11 +62,13 @@ class SlowWaveClassifierSettingsView( BaseSettingsView,  Ui_SlowWaveClassifierSe
         pass
 
     def on_topic_response(self, topic, message, sender):
-        """ Called by the publisher to init settings in the SettingsView 
-        """
-
         if topic == self._automatic_classification_topic:
-            self.automatic_classification_checkBox.setChecked(eval(message))
+            self.radioButton_automatic_classification.setChecked(eval(message))
+            # Update UI state after setting the radio button
+            self.on_input_format_changed(None)
+        if topic == self._num_categories_topic:
+            self.num_categories_spinBox.setValue(int(message))
+            self.radioButton_automatic_classification.setChecked(eval(message))
         if topic == self._num_categories_topic:
             self.num_categories_spinBox.setValue(int(message))
         
