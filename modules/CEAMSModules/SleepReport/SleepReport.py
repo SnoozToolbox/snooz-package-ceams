@@ -52,7 +52,7 @@ from flowpipe import SciNode, InputPlug, OutputPlug
 from ..PSGReader import commons
 from commons.NodeInputException import NodeInputException
 from commons.NodeRuntimeException import NodeRuntimeException
-from CEAMSModules.SleepReport.SleepReportDoc import write_doc_file
+from CEAMSModules.SleepReport.SleepReportDoc import _get_doc, write_doc_file
 
 DEBUG = False
 
@@ -278,6 +278,10 @@ class SleepReport(SciNode):
            thirds_dis_stats | halves_dis_stats | \
            cycles_stats     | rem_stats        | transition_stats
         report = pd.DataFrame.from_records([output])
+        
+        # Order columns as the doc file
+        out_columns = list(_get_doc(self.max_cycles_count).keys())
+        report = report[out_columns]
 
         if isinstance(csv_report, str):
             try : 
