@@ -6,14 +6,14 @@
     "item_author": "Karine Lacourse",
     "item_description": "Compare 2 sets of events (experts and detections) to evaluate the performance of detections. ",
     "tool_params": {
-        "tool_label": "Compare Events from PSG",
+        "tool_label": "Evaluate Detected Events",
         "tool_category": "3-Postprocessing",
         "asset_directory": "",
         "package_name": "CEAMSTools",
         "steps": [
             {
-                "name": "Compare Events from PSG",
-                "description": "Description of the tool to compare events from PSG files.",
+                "name": "Evaluate Detected Events",
+                "description": "Description of the tool to compare 2 sets of events.",
                 "custom_step_name": "IntroStep",
                 "show_index": false
             },

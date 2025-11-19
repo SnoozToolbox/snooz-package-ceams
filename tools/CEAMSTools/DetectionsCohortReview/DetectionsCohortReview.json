@@ -6,7 +6,7 @@
     "item_author": "Karine Lacourse",
     "item_description": "To clean and transpose the Spindle/Slow wave detector output.",
     "tool_params": {
-        "tool_label": "Detections Cohort Review",
+        "tool_label": "Review Detections for the Cohort",
         "tool_category": "3-Postprocessing",
         "asset_directory": "",
         "package_name": "CEAMSTools",

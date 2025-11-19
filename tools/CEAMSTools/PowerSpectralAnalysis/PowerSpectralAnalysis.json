@@ -6,7 +6,7 @@
     "item_author": "Karine Lacourse",
     "item_description": "To analyze the spectral power in sleep stages, periods, cycles, hours according to your needs.",
     "tool_params": {
-        "tool_label": "Power Spectral Analysis (PSA)",
+        "tool_label": "Analyze EEG Spectral Power",
         "tool_category": "2-Processing",
         "asset_directory": "",
         "package_name": "CEAMSTools",

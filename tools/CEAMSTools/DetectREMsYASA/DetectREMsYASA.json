@@ -4,7 +4,7 @@
     "item_api_version": "2.0.0",
     "item_url": "https://snooz-toolbox-documentation.readthedocs.io/latest/user_guide/tools/Preprocessing/DetectREMsYASA.html",
     "tool_params": {
-        "tool_label": "REMs Detector YASA",
+        "tool_label": "Detect REM events with YASA",
         "tool_category": "1-Preprocessing",
         "tool_author": "Mohammad Hasan Azad",
         "tool_url": "",

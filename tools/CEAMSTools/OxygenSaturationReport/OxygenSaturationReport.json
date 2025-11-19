@@ -6,7 +6,7 @@
     "item_author": "CEAMS",
     "item_description": "To generate oxygen saturation report.",
     "tool_params": {
-        "tool_label": "Oxygen Saturation Report",
+        "tool_label": "Report Oxygen Saturation",
         "tool_category": "2-Processing",
         "asset_directory": "",
         "package_name": "CEAMSTools",
