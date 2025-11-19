@@ -6,7 +6,7 @@
     "item_author": "Karine Lacourse",
     "item_description": "To clean and transpose the PSA output.",
     "tool_params": {
-        "tool_label": "PSA Cohort Review",
+        "tool_label": "Review EEG Spectral Power for the cohort",
         "tool_category": "3-Postprocessing",
         "asset_directory": "",
         "package_name": "CEAMSTools",

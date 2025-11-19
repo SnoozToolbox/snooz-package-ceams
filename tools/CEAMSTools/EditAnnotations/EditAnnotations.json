@@ -12,7 +12,7 @@
         "package_name": "CEAMSTools",
         "steps": [
             {
-                "name": "Annotations Editor",
+                "name": "Edit Snooz Annotations",
                 "description": "To remove or rename annotations.",
                 "custom_step_name": "AnnotIntroStep",
                 "show_index": false

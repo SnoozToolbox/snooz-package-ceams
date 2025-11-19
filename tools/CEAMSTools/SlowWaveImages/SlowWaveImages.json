@@ -6,7 +6,7 @@
     "item_author": "Karine Lacourse",
     "item_description": "",
     "tool_params": {
-        "tool_label": "Slow Wave Images",
+        "tool_label": "Visualize Slow Waves",
         "tool_category": "3-Postprocessing",
         "asset_directory": "",
         "package_name": "CEAMSTools",

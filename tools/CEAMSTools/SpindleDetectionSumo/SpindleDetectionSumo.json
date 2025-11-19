@@ -4,7 +4,7 @@
     "item_url": "https://snooz-toolbox-documentation.readthedocs.io/latest/user_guide/tools/Processing/Spindle_detection_SUMO.html#spindle-detection-sumo",
     "item_api_version": "2.0.0",
     "tool_params": {
-        "tool_label": "Spindle Detection SUMO",
+        "tool_label": "Detect Spindles with SUMO",
         "tool_category": "2-Processing",
         "tool_author": "",
         "tool_url": "",
