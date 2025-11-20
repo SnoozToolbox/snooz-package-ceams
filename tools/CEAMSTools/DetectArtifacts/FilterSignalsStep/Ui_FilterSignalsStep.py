@@ -16,7 +16,7 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QImage, QKeySequence, QLinearGradient, QPainter,
     QPalette, QPixmap, QRadialGradient, QTransform)
 from PySide6.QtWidgets import (QApplication, QCheckBox, QFrame, QGridLayout,
-    QHBoxLayout, QLabel, QLineEdit, QRadioButton,
+    QLabel, QLayout, QLineEdit, QRadioButton,
     QSizePolicy, QSpacerItem, QTextBrowser, QVBoxLayout,
     QWidget)
 import themes_rc
@@ -25,26 +25,29 @@ class Ui_FilterSignalsStep(object):
     def setupUi(self, FilterSignalsStep):
         if not FilterSignalsStep.objectName():
             FilterSignalsStep.setObjectName(u"FilterSignalsStep")
-        FilterSignalsStep.resize(817, 343)
+        FilterSignalsStep.resize(1050, 613)
         FilterSignalsStep.setStyleSheet(u"font: 12pt \"Roboto\";")
-        self.horizontalLayout = QHBoxLayout(FilterSignalsStep)
-        self.horizontalLayout.setObjectName(u"horizontalLayout")
+        self.verticalLayout_2 = QVBoxLayout(FilterSignalsStep)
+        self.verticalLayout_2.setObjectName(u"verticalLayout_2")
         self.verticalLayout = QVBoxLayout()
         self.verticalLayout.setObjectName(u"verticalLayout")
+        self.verticalLayout.setSizeConstraint(QLayout.SizeConstraint.SetFixedSize)
         self.textBrowser = QTextBrowser(FilterSignalsStep)
         self.textBrowser.setObjectName(u"textBrowser")
+        self.textBrowser.setMaximumSize(QSize(16777215, 440))
         self.textBrowser.setFrameShape(QFrame.Shape.NoFrame)
         self.textBrowser.setFrameShadow(QFrame.Shadow.Plain)
         self.textBrowser.setLineWidth(0)
 
         self.verticalLayout.addWidget(self.textBrowser)
 
-        self.verticalSpacer_2 = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Minimum)
+        self.verticalSpacer_2 = QSpacerItem(20, 10, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Fixed)
 
         self.verticalLayout.addItem(self.verticalSpacer_2)
 
         self.gridLayout = QGridLayout()
         self.gridLayout.setObjectName(u"gridLayout")
+        self.gridLayout.setSizeConstraint(QLayout.SizeConstraint.SetFixedSize)
         self.notch_checkBox = QCheckBox(FilterSignalsStep)
         self.notch_checkBox.setObjectName(u"notch_checkBox")
         font = QFont()
@@ -116,12 +119,12 @@ class Ui_FilterSignalsStep(object):
 
         self.verticalLayout.addLayout(self.gridLayout)
 
-        self.verticalSpacer = QSpacerItem(20, 52, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
+        self.verticalSpacer = QSpacerItem(20, 52, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Minimum)
 
         self.verticalLayout.addItem(self.verticalSpacer)
 
 
-        self.horizontalLayout.addLayout(self.verticalLayout)
+        self.verticalLayout_2.addLayout(self.verticalLayout)
 
 
         self.retranslateUi(FilterSignalsStep)
@@ -147,13 +150,29 @@ class Ui_FilterSignalsStep(object):
 "li.unchecked::marker { content: \"\\2610\"; }\n"
 "li.checked::marker { content: \"\\2612\"; }\n"
 "</style></head><body style=\" font-family:'Roboto'; font-size:12pt; font-weight:400; font-style:normal;\">\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">The EEG signals are downsampled to 256 Hz (if the sampling rate is above 256 Hz) to reduce the processing time.</p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-weight:700;\">Sampling Rate</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">The EEG signals are downsampled to 256 Hz (if higher) to reduce the processing time.</p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Note : "
+                        "Noise &gt; 128 Hz will not be detected because a 128 Hz low pass filter is applied before downsampling.</p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Warning : The bandpass high cutoff must be &lt;= sampling rate / 2.  (e.g. 128 Hz for a sampling rate of 256 Hz.)</p>\n"
 "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Not"
-                        "e that very high frequency noise &gt; 128 Hz will not be detected as artifact since a 128 Hz low pass filter is applied before downsampling.</p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-weight:700;\">PSG file not modified</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Filtering is applied only for detection; the original PSG signals remain unchanged.</p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0p"
+                        "x; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-weight:700;\">Filter Design</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">The filter is a Butterworth design implemented in second-order-section (SOS) form and applied using bidirectional zero-phase filtering. </p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">This approach preserves the requested magnitude response while eliminating phase distortion.</p>\n"
 "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Warning : The high cutoff of the bandpass filter can not be higher than the signal sampling rate / 2.  </p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">               I.e. 128 Hz for a sampling rate of 256 Hz.</p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">   Bandpass fi"
+                        "lter parameters:</p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">      - Type : IIR bandpass</p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">      - Order : 6 (internally halved before the forward/backward pass)</p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">   Notch filter parameters:</p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">      - Type : IIR stopband</p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">      - Order : 20 (internally halved before th"
+                        "e forward/backward pass)</p>\n"
 "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p></body></html>", None))
         self.notch_checkBox.setText(QCoreApplication.translate("FilterSignalsStep", u"Power line notch filter", None))
         self.radioButton_50Hz.setText(QCoreApplication.translate("FilterSignalsStep", u"50 Hz", None))
