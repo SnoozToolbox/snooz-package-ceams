@@ -12,8 +12,8 @@
         "package_name": "CEAMSTools",
         "steps": [
             {
-                "name": "Snooz Workspace Path Editor Description Step",
-                "description": "This tool loads Snooz workspaces and edits all the paths inside the file to be compatible with the new local system.",
+                "name": "Edit Paths In Snooz Workspace",
+                "description": "For details on editing paths in Snooz workspace, click <strong>Read more!</strong> below.",
                 "custom_step_name": "EditPathsInSnoozWorkspaceDescriptionStep",
                 "show_index": false
             },

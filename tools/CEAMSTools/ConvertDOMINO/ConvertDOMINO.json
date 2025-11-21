@@ -13,7 +13,7 @@
         "steps": [
             {
                 "name": "DOMINOScreen Converter",
-                "description": "Documentation of the DOMINO accessory file converter.",
+                "description": "For DOMINOScreen conversion details, click <strong>Read more!</strong> below.",
                 "custom_step_name": "IntroStep",
                 "show_index": false
             },

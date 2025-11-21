@@ -29,7 +29,7 @@
             },
             {
                 "name": "Input Files",
-                "description": "<div><div>Start by adding your PSG (.edf, .sts or .eeg) files&nbsp;to detect the REMs on.</div><div>&nbsp;</div><div>Select the <strong>EOG</strong> channels to run the REMs detector.</div></div>",
+                "description": "<div>Start by adding your PSG files (.edf, .sts or .eeg) to run the REM detection.<br><br><strong>EDF:</strong> The .edf and .tsv files must have the same filename and be in the same folder.<br><br><strong>Stellate:</strong> The .sig and .sts files must have the same filename and be in the same folder.<br><br><em>For CEAMS users</em><br><strong>NATUS:</strong> The entire NATUS subject folder is required.<br><br>Select the <strong>EOG</strong> channels to run the REM detector.</div>",
                 "custom_step_name": "InputFileStep",
                 "show_index": true
             },

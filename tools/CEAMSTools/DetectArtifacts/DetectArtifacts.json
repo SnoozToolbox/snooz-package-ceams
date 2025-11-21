@@ -13,7 +13,7 @@
         "steps": [
             {
                 "name": "Artifact",
-                "description": "Many types of Artifacts can be detected",
+                "description": "For details on EEG artifact detection, see <strong>Step 5 - Detectors Settings</strong>.",
                 "custom_step_name": "ArtIntroStepPL",
                 "show_index": false
             },

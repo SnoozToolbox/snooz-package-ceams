@@ -13,13 +13,13 @@
         "steps": [
             {
                 "name": "Extract Annotations",
-                "description": "Details of the Extract Annotations tool.",
+                "description": "For details on extracting Snooz annotations, click <strong>Read more!</strong> below.",
                 "custom_step_name": "IntroStep",
                 "show_index": false
             },
             {
                 "name": "Input Files",
-                "description": "Select the PSG files to extract annotations.",
+                "description": "<div>Start by adding your PSG files (.edf, .sts or .eeg) to extract annotations.<br><br><strong>EDF:</strong> The .edf and .tsv files must have the same filename and be in the same folder.<br><br><strong>Stellate:</strong> The .sig and .sts files must have the same filename and be in the same folder.<br><br><em>For CEAMS users</em><br><strong>NATUS:</strong> The entire NATUS subject folder is required.</div>",
                 "custom_step_name": "InputFiles",
                 "show_index": true
             },

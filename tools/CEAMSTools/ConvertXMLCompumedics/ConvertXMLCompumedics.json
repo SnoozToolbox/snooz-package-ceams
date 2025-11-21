@@ -13,13 +13,13 @@
         "steps": [
             {
                 "name": "XML converter",
-                "description": "Documentation of the XML (Compumedics format) accessory file converter.",
+                "description": "For XML conversion details, click <strong>Read more!</strong> below.",
                 "custom_step_name": "IntroStep",
                 "show_index": false
             },
             {
                 "name": "Input Files",
-                "description": "Select the files to convert.",
+                "description": "Select the xml files to convert.",
                 "custom_step_name": "InputFiles",
                 "show_index": true
             }

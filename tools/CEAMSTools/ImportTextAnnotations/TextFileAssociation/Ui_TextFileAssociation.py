@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file ''
+## Form generated from reading UI file 'Ui_TextFileAssociation.ui'
 ##
 ## Created by: Qt User Interface Compiler version 6.8.2
 ##
@@ -24,7 +24,7 @@ class Ui_TextFileAssociation(object):
     def setupUi(self, TextFileAssociation):
         if not TextFileAssociation.objectName():
             TextFileAssociation.setObjectName(u"TextFileAssociation")
-        TextFileAssociation.resize(730, 590)
+        TextFileAssociation.resize(904, 623)
         TextFileAssociation.setStyleSheet(u"font: 12pt \"Roboto\";")
         self.horizontalLayout = QHBoxLayout(TextFileAssociation)
         self.horizontalLayout.setObjectName(u"horizontalLayout")
@@ -94,10 +94,15 @@ class Ui_TextFileAssociation(object):
 
         self.textEdit = QTextEdit(TextFileAssociation)
         self.textEdit.setObjectName(u"textEdit")
-        self.textEdit.setFrameShape(QFrame.NoFrame)
+        self.textEdit.setFrameShape(QFrame.Shape.NoFrame)
         self.textEdit.setReadOnly(True)
 
         self.verticalLayout.addWidget(self.textEdit)
+
+        self.label_2 = QLabel(TextFileAssociation)
+        self.label_2.setObjectName(u"label_2")
+
+        self.verticalLayout.addWidget(self.label_2)
 
         self.verticalSpacer = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
 
@@ -135,17 +140,21 @@ class Ui_TextFileAssociation(object):
 #endif // QT_CONFIG(tooltip)
         self.checkBox_case_sensitive.setText(QCoreApplication.translate("TextFileAssociation", u"Filenames are case sensitive", None))
         self.textEdit.setHtml(QCoreApplication.translate("TextFileAssociation", u"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
-"<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
+"<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset=\"utf-8\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
+"hr { height: 1px; border-width: 0; }\n"
+"li.unchecked::marker { content: \"\\2610\"; }\n"
+"li.checked::marker { content: \"\\2612\"; }\n"
 "</style></head><body style=\" font-family:'Roboto'; font-size:12pt; font-weight:400; font-style:normal;\">\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Example )</p>\n"
 "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">    <span style=\" font-weight:600;\">prefix		</span>annot_</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">    <span style=\" font-weight:600;\">PSG filename	</span>subject1.edf</p>\n"
-"<p"
-                        " style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">    <span style=\" font-weight:600;\">suffix		</span> _expert1</p>\n"
+"<p style=\" margin-top:0px; margin-bo"
+                        "ttom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">    <span style=\" font-weight:600;\">PSG filename	</span>subject1.edf</p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">    <span style=\" font-weight:600;\">suffix		</span> _expert1</p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">    <span style=\" font-weight:600;\">extension</span> 	tsv</p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">    <span style=\" font-weight:600;\">text filename	</span>annot_subject1_expert1.tsv</p>\n"
 "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p></body></html>", None))
+        self.label_2.setText(QCoreApplication.translate("TextFileAssociation", u"<html><head/><body><p><span style=\" font-weight:700;\">Warning!</span></p><p>The annotation file must <span style=\" font-weight:700;\">not</span> have the same filename as the PSG file, otherwise Snooz will attempt to load it as a Snooz file.<br/>To prevent processing errors, please specify a prefix and/or suffix for the annotation file to import.</p></body></html>", None))
     # retranslateUi
 

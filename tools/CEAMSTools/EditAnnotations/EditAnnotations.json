@@ -13,13 +13,13 @@
         "steps": [
             {
                 "name": "Edit Snooz Annotations",
-                "description": "To remove or rename annotations.",
+                "description": "For details on editing Snooz annotations, click <strong>Read more!</strong> below.",
                 "custom_step_name": "AnnotIntroStep",
                 "show_index": false
             },
             {
                 "name": "Input Files",
-                "description": "Open your files (.edf, .eeg or .sts) you want to edit the annotations.\n\nThe .tsv file is also needed for the edf format.\n\nThe .sig file is also needed for Stellate format.\n\nThe whole NATUS subject folder is also needed for the .eeg format.",
+                "description": "<div>Start by adding your PSG files (.edf, .sts or .eeg) to edit the annotations.<br><br><strong>EDF:</strong> The .edf and .tsv files must have the same filename and be in the same folder.<br><br><strong>Stellate:</strong> The .sig and .sts files must have the same filename and be in the same folder.<br><br><em>For CEAMS users</em><br><strong>NATUS:</strong> The entire NATUS subject folder is required.<br><br>Select the <strong>EOG</strong> channels to run the REM detector.</div>",
                 "custom_step_name": "InputFileAnnotStep",
                 "show_index": true
             },
