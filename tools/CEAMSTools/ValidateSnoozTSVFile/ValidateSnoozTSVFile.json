@@ -13,7 +13,7 @@
         "steps": [
             {
                 "name": "Validate Snooz TSV File",
-                "description": "This tool validates the tsv annotation files to be compatible with Snooz format before utilizing it in other tools.",
+                "description": "For details on validating Snooz annotation files, click <strong>Read more!</strong> below.",
                 "custom_step_name": "DescriptionStep",
                 "show_index": false
             },
