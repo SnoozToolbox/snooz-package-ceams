@@ -13,13 +13,13 @@
         "steps": [
             {
                 "name": "Cycle Delimiter",
-                "description": "",
+                "description": "Click <strong>Read more!</strong> below for details.",
                 "custom_step_name": "SleepCycleDoc",
                 "show_index": false
             },
             {
                 "name": "Input Files",
-                "description": "Select and open your PSG files with the extension .edf, .eeg or .sts.\n\n- The .tsv (tab separated values) file is needed for the EDF format.\n\n- The whole NATUS subject folder is needed for the .eeg format.\n\n-The .sig file is needed for the Stellate format.",
+                "description": "<div>Add the PSG files you want to perform the analysis on.<br><br>The PSG file and the accessory file must share the same filename and folder.<br><br>Open your files:<br> <strong>.edf</strong> : .tsv file is mandatory.<br> <strong>.sts</strong> : .sig file is mandatory.<br> <strong>.eeg</strong> for CEAMS user : NATUS subject folder is mandatory.</div>",
                 "module_id": "04840c4b-cc36-4e0f-ba47-474807dec329",
                 "show_index": true
             },

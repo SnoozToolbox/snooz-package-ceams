@@ -14,7 +14,7 @@
         "steps": [
             {
                 "name": "Score Sleep Stages YASA",
-                "description": "This tool is used to score sleep stages automaticly using YASA algorithm.",
+                "description": "Click <strong>Read more!</strong> below for details.",
                 "custom_step_name": "AlgoIntroStep",
                 "show_index": false
             },

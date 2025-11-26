@@ -13,7 +13,7 @@
         "steps": [
             {
                 "name": "PSA",
-                "description": "How to define the PSA, how is performed and how to use the output.",
+                "description": "Click <strong>Read more!</strong> below for details.",
                 "custom_step_name": "IntroStep",
                 "show_index": false,
                 "configs": {
