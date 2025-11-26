@@ -12,8 +12,8 @@
         "package_name": "CEAMSTools",
         "steps": [
             {
-                "name": "Det. Cohort Review",
-                "description": "Description of the Detections Cohort Review",
+                "name": "Review Detections",
+                "description": "Click <strong>Read more!</strong> below for details.",
                 "custom_step_name": "IntroStep",
                 "show_index": false
             },

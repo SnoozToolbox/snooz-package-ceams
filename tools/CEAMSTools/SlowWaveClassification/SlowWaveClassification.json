@@ -13,7 +13,7 @@
         "steps": [
             {
                 "name": "Slow Wave",
-                "description": "Slow Wave classification",
+                "description": "Click <strong>Read more!</strong> below for details.",
                 "custom_step_name": "SSWCIntroStep",
                 "show_index": false
             },

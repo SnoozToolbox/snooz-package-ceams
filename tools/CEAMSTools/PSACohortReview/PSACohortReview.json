@@ -13,25 +13,25 @@
         "steps": [
             {
                 "name": "PSA Cohort Review",
-                "description": "Description of the PSA Cohort Review",
+                "description": "Click <strong>Read more!</strong> below for details.",
                 "custom_step_name": "IntroStep",
                 "show_index": false
             },
             {
                 "name": "Input Files",
-                "description": "To add your PSA files.\n\nThe channel label is editable by double-clicking on the name.",
+                "description": "Add your EEG Spectral Power reports.\n\nThe channel label is editable by double-clicking on the name.",
                 "custom_step_name": "InputFiles",
                 "show_index": true
             },
             {
                 "name": "Frequency Band",
-                "description": "To define the frequency band.",
+                "description": "<div>Define the frequency band.<br><br>For <strong>absolute power</strong>, num-start(Hz) and num-end(Hz) must be initialized and den-start(Hz) and den-end(Hz) should be left as NaN (not a number).<br><br>For <strong>relative power</strong>, both the numerator and denominator of the frequency band must be initialized.</div>",
                 "custom_step_name": "FrequencyBand",
                 "show_index": true
             },
             {
                 "name": "Output File",
-                "description": "To define the output file.",
+                "description": "Define the output file.",
                 "custom_step_name": "OutputFileStep",
                 "show_index": true
             }

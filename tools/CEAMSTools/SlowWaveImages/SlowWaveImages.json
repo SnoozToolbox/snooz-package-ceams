@@ -12,14 +12,14 @@
         "package_name": "CEAMSTools",
         "steps": [
             {
-                "name": "SW Images",
-                "description": "Slow wave signal images",
+                "name": "Visualize Slow Waves",
+                "description": "Click <strong>Read more!</strong> below for details.",
                 "custom_step_name": "SWImages",
                 "show_index": false
             },
             {
                 "name": "Input Files",
-                "description": "Open your files (.edf, .eeg or .sts).\n\nSelect the montage and channels you want to detect the slow waves on.\n\nThe .sig file is also needed for Stellate format.\nThe whole NATUS subject folder is also needed for the .eeg format.",
+                "description": "<div>Add the PSG files you want to perform the analysis on.<br><br>The PSG file and the accessory file must share the same filename and folder.<br><br>Open your files:<br> <strong>.edf</strong> : .tsv file is mandatory.<br> <strong>.sts</strong> : .sig file is mandatory.<br> <strong>.eeg</strong> for CEAMS user : NATUS subject folder is mandatory.</div>",
                 "custom_step_name": "InputFilesStep",
                 "show_index": true
             },
