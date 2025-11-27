@@ -14,7 +14,7 @@ class EventManager:
     def save_annotations(self, selected_non_brain_channels, marked_bad_chs, bad_epoch_idxs, 
                         input_dir, save_path, same_file_checked, overwrite_checked, 
                         start_time, duration, epoch_dur, epochs, selected_montage):
-        """Save artifact annotations to file with proper incomplete epoch handling"""
+        """Save artifact annotations to file with proper incomplete epoch handling""" 
         
         # Calculate proper durations for bad epochs
         epoch_durations = []
@@ -46,7 +46,7 @@ class EventManager:
             output_file = save_path
             self.parent._psg_reader_manager.copy_file(input_dir, output_file)
         else:
-            output_file = input_dir
+            output_file = input_dir    
 
         # Create DataFrames for different artifact types
         artifact_df_non_brain = pd.DataFrame({
@@ -85,25 +85,26 @@ class EventManager:
         else:
             new_events = pd.DataFrame()
 
-        # Continue with existing save logic...
-        if not new_events.empty:
+        if not new_events.empty or overwrite_checked:
             # Open file for writing
             is_opened = self.parent._psg_reader_manager.open_file(output_file)
             if not is_opened:
                 self._show_error_message(f'ERROR PSGWriter could not open file: {output_file}')
                 return
 
-            # Remove existing events if overwrite is checked
-            if overwrite_checked:
-                events_to_replace = set()
-                for index, event in new_events.iterrows():
-                    event_name = event['name']
-                    group_name = event['group']
-                    events_to_replace.add((group_name, event_name))
-                
-                for (group_name, event_name) in events_to_replace:
-                    self.parent._psg_reader_manager.remove_events_by_name(event_name, group_name)
+        # Remove EEG inspector events if overwrite is checked
+        # Remove any existing event with the group EVENT_GROUP_NAME, 
+        #   and the name EVENT_NAME_NON_BRAIN = 'non_brain', EVENT_NAME_BAD_CHANNEL = 'art_channel' or EVENT_NAME_BAD_EPOCH = 'art_epoch'
+        if overwrite_checked:
+            events_to_remove = set()
+            events_to_remove.add((EVENT_GROUP_NAME, EVENT_NAME_NON_BRAIN))
+            events_to_remove.add((EVENT_GROUP_NAME, EVENT_NAME_BAD_CHANNEL))
+            events_to_remove.add((EVENT_GROUP_NAME, EVENT_NAME_BAD_EPOCH))
+            for (group_name, event_name) in events_to_remove:
+                self.parent._psg_reader_manager.remove_events_by_name(event_name, group_name)   
 
+        # Continue with existing save logic...
+        if not new_events.empty:
             # Add new events (still need to handle duplicated events)
             for index, event in new_events.iterrows():
                 self.parent._psg_reader_manager.add_event(

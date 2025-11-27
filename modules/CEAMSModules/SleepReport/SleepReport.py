@@ -52,7 +52,7 @@ from flowpipe import SciNode, InputPlug, OutputPlug
 from ..PSGReader import commons
 from commons.NodeInputException import NodeInputException
 from commons.NodeRuntimeException import NodeRuntimeException
-from CEAMSModules.SleepReport.SleepReportDoc import write_doc_file
+from CEAMSModules.SleepReport.SleepReportDoc import _get_doc, write_doc_file
 
 DEBUG = False
 
@@ -278,6 +278,10 @@ class SleepReport(SciNode):
            thirds_dis_stats | halves_dis_stats | \
            cycles_stats     | rem_stats        | transition_stats
         report = pd.DataFrame.from_records([output])
+        
+        # Order columns as the doc file
+        out_columns = list(_get_doc(self.max_cycles_count).keys())
+        report = report[out_columns]
 
         if isinstance(csv_report, str):
             try : 
@@ -470,7 +474,7 @@ class SleepReport(SciNode):
             "epoch_sec":self.epoch_length,
             "first_epoch_time_win":first_epoch_time,
             "last_epoch_time_win":last_epoch_time,
-            "record_min":self.recording_duration
+            "time_in_bed_min":self.recording_duration
         }
 
     def compute_cycles_stats(self, sleep_cycles):
@@ -1016,10 +1020,16 @@ class SleepReport(SciNode):
         undefined_duration =  (sleep_period_stages.count("9"))* self.epo_to_min
         
         # Sleep efficiency is defined as how long you slept during the sleep period
-        if sleep_period_duration > 0:
-            sleep_efficiency = self.get_actual_sleep_duration(sleep_period_stages)/sleep_period_duration
+        if self.recording_duration > 0:
+            sleep_efficiency = self.get_actual_sleep_duration(sleep_period_stages)/self.recording_duration
         else:
             sleep_efficiency = 0
+
+        # Sleep efficiency is defined as how long you slept during the sleep period
+        if sleep_period_duration > 0:
+            sleep_maintenance_efficiency  = self.get_actual_sleep_duration(sleep_period_stages)/sleep_period_duration
+        else:
+            sleep_maintenance_efficiency  = 0
 
         # Calcul how long is the last wake period.
         last_wake = 0
@@ -1041,7 +1051,8 @@ class SleepReport(SciNode):
             #"total_sleep_length_min":sleep_period_duration - wake_duration - movement_duration - undefined_duration,
             "total_sleep_min":sleep_period_duration - wake_duration - undefined_duration,
             "last_wake_min":last_wake * self.epo_to_min,
-            "sleep_efficiency_percent":sleep_efficiency * 100, # Percent from decimal to %
+            "sleep_efficiency":sleep_efficiency * 100, # Percent from decimal to %
+            "sleep_maintenance_efficiency":sleep_maintenance_efficiency * 100, # Percent from decimal to %
             "sleep_period_min":sleep_period_duration,
             "Unscored_min":undefined_duration
         }

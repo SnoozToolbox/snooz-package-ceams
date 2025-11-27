@@ -26,7 +26,7 @@ class Ui_TextFileDefinition(object):
     def setupUi(self, TextFileDefinition):
         if not TextFileDefinition.objectName():
             TextFileDefinition.setObjectName(u"TextFileDefinition")
-        TextFileDefinition.resize(752, 741)
+        TextFileDefinition.resize(755, 699)
         TextFileDefinition.setStyleSheet(u"font: 12pt \"Roboto\";")
         TextFileDefinition.setInputMethodHints(Qt.InputMethodHint.ImhNone)
         self.horizontalLayout_3 = QHBoxLayout(TextFileDefinition)
@@ -428,9 +428,12 @@ class Ui_TextFileDefinition(object):
 "li.checked::marker { content: \"\\2612\"; }\n"
 "</style></head><body style=\" font-family:'Roboto'; font-size:12pt; font-weight:400; font-style:normal;\">\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">For the complete definition see : https://strftime.org/</p>\n"
-"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Examples of string format code for time :</p>\n"
-"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">%H:%M:%S             for 14:30:45<br />%H.%M."
-                        "%S             for 14.30.45<br />%H:%M:%S.%f        for 14:30:45.123456<br />%I:%M:%S %p        for 02:30:45 PM</p></body></html>", None))
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Examples of string format code for time :</p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">	%H:%M:%S             for 14:30:45</p>\n"
+"<p sty"
+                        "le=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">	%H.%M.%S             for 14.30.45</p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">	%H:%M:%S.%f        for 14:30:45.123456</p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">	%I:%M:%S %p        for 02:30:45 PM</p></body></html>", None))
 #if QT_CONFIG(tooltip)
         self.lineEdit_onset_time_format.setToolTip(QCoreApplication.translate("TextFileDefinition", u"Let empty to define the time elapsed in seconds. Otherwise define the string format (see https://strftime.org/). ", None))
 #endif // QT_CONFIG(tooltip)

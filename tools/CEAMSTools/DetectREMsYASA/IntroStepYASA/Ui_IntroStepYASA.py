@@ -24,14 +24,14 @@ class Ui_IntroStepYASA(object):
     def setupUi(self, IntroStepYASA):
         if not IntroStepYASA.objectName():
             IntroStepYASA.setObjectName(u"IntroStepYASA")
-        IntroStepYASA.resize(736, 568)
+        IntroStepYASA.resize(995, 541)
         IntroStepYASA.setStyleSheet(u"font: 10pt \"Roboto-Regular\"; QLabel {background-color: rgb(255, 255, 255);}")
         self.verticalLayout_4 = QVBoxLayout(IntroStepYASA)
         self.verticalLayout_4.setObjectName(u"verticalLayout_4")
         self.label_2 = QLabel(IntroStepYASA)
         self.label_2.setObjectName(u"label_2")
         self.label_2.setMinimumSize(QSize(0, 100))
-        self.label_2.setMaximumSize(QSize(500, 60))
+        self.label_2.setMaximumSize(QSize(16777215, 16777215))
         font = QFont()
         font.setFamilies([u"Roboto-Regular"])
         font.setPointSize(10)
@@ -47,7 +47,7 @@ class Ui_IntroStepYASA(object):
 
         self.verticalLayout_3 = QVBoxLayout()
         self.verticalLayout_3.setObjectName(u"verticalLayout_3")
-        self.verticalLayout_3.setSizeConstraint(QLayout.SizeConstraint.SetDefaultConstraint)
+        self.verticalLayout_3.setSizeConstraint(QLayout.SizeConstraint.SetMaximumSize)
         self.label = QLabel(IntroStepYASA)
         self.label.setObjectName(u"label")
         self.label.setMinimumSize(QSize(0, 20))
@@ -81,7 +81,7 @@ class Ui_IntroStepYASA(object):
 
         self.verticalLayout_2 = QVBoxLayout()
         self.verticalLayout_2.setObjectName(u"verticalLayout_2")
-        self.verticalLayout_2.setSizeConstraint(QLayout.SizeConstraint.SetFixedSize)
+        self.verticalLayout_2.setSizeConstraint(QLayout.SizeConstraint.SetMaximumSize)
         self.label_4 = QLabel(IntroStepYASA)
         self.label_4.setObjectName(u"label_4")
         self.label_4.setMaximumSize(QSize(16777215, 20))
@@ -110,16 +110,21 @@ class Ui_IntroStepYASA(object):
 
         self.verticalLayout = QVBoxLayout()
         self.verticalLayout.setObjectName(u"verticalLayout")
-        self.verticalLayout.setSizeConstraint(QLayout.SizeConstraint.SetDefaultConstraint)
+        self.verticalLayout.setSizeConstraint(QLayout.SizeConstraint.SetMinimumSize)
         self.label_3 = QLabel(IntroStepYASA)
         self.label_3.setObjectName(u"label_3")
+        sizePolicy1 = QSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Fixed)
+        sizePolicy1.setHorizontalStretch(0)
+        sizePolicy1.setVerticalStretch(0)
+        sizePolicy1.setHeightForWidth(self.label_3.sizePolicy().hasHeightForWidth())
+        self.label_3.setSizePolicy(sizePolicy1)
         self.label_3.setMaximumSize(QSize(16777215, 20))
 
         self.verticalLayout.addWidget(self.label_3)
 
         self.textEdit_3 = QTextEdit(IntroStepYASA)
         self.textEdit_3.setObjectName(u"textEdit_3")
-        self.textEdit_3.setMaximumSize(QSize(16777215, 16777215))
+        self.textEdit_3.setMaximumSize(QSize(16777215, 105))
         self.textEdit_3.setFrameShape(QFrame.Shape.NoFrame)
         self.textEdit_3.setLineWidth(0)
         self.textEdit_3.setSizeAdjustPolicy(QAbstractScrollArea.SizeAdjustPolicy.AdjustToContents)
@@ -130,7 +135,7 @@ class Ui_IntroStepYASA(object):
 
         self.verticalLayout_4.addLayout(self.verticalLayout)
 
-        self.verticalSpacer_2 = QSpacerItem(715, 10, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Minimum)
+        self.verticalSpacer_2 = QSpacerItem(715, 10, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Ignored)
 
         self.verticalLayout_4.addItem(self.verticalSpacer_2)
 
@@ -152,17 +157,18 @@ class Ui_IntroStepYASA(object):
 "li.checked::marker { content: \"\\2612\"; }\n"
 "</style></head><body style=\" font-family:'Roboto-Regular'; font-size:10pt; font-weight:400; font-style:normal;\">\n"
 "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Ubuntu';\"><br /></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:12pt;\">PSG files including header and events are needed (all saved in the same directory).</span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; "
-                        "-qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:12pt;\">-&gt; European Data Format (EDF) : .edf and .tsv files with the exact same filename.</span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:12pt;\">-&gt; Stellate : .sig and .sts files with the exact same filename.</span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:12pt;\">-&gt; NATUS : </span><span style=\" font-family:'MS Shell Dlg 2'; font-size:12pt;\"> the whole NATUS subject folder</span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'MS Shell Dlg 2'; font-size:12pt;\">The annotations files have to include the sleep staging.</span></p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; marg"
-                        "in-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:12pt;\"><br /></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:12pt;\">PSG files including the header and event annotations, are required:</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent"
+                        ":0; text-indent:0px;\"><span style=\" font-size:12pt;\">   - European Data Format (EDF) : The .edf and .tsv files must have the exact same filename and be stored in the same directory.</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:12pt;\">   - Stellate : The .sig and .sts files must have the exact same filename and be stored in the same directory.</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:12pt;\">   - NATUS (</span><span style=\" font-size:12pt; font-style:italic;\">for CEAMS users</span><span style=\" font-size:12pt;\">) : </span><span style=\" font-family:'MS Shell Dlg 2'; font-size:12pt;\"> The entire NATUS subject folder is required.</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span sty"
+                        "le=\" font-family:'MS Shell Dlg 2'; font-size:12pt;\">* The annotations files must include the sleep staging.</span></p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:12pt;\"><br /></p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:12pt;\">Channels:</span></p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:12pt;\">This tool requires the selection of </span><span style=\" font-size:12pt; font-weight:600;\">2</span><span style=\" font-size:12pt;\"> </span><span style=\" font-size:12pt; font-weight:600;\">EOG</span><span style=\" font-size:12pt;\"> </span><span style=\" font-size:12pt; font-weight:600;\">channels</span><span style=\" font-size:12pt;\"> per recording for REMs detection.</span></p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:12pt;\"><br /></p></body></html>", None))
+""
+                        "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:12pt;\"><br /></p></body></html>", None))
         self.label_4.setText(QCoreApplication.translate("IntroStepYASA", u"<html><head/><body><p><span style=\" font-size:12pt; font-weight:600;\">Output</span></p></body></html>", None))
         self.textEdit_2.setHtml(QCoreApplication.translate("IntroStepYASA", u"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset=\"utf-8\" /><style type=\"text/css\">\n"
@@ -173,7 +179,7 @@ class Ui_IntroStepYASA(object):
 "</style></head><body style=\" font-family:'Roboto-Regular'; font-size:10pt; font-weight:400; font-style:normal;\">\n"
 "<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'MS Shell Dlg 2'; font-size:12pt;\">The REMs detected events are added in the annotations files (.tsv, .sts or .ent) depending of the format used.<br /></span><span style=\" font-size:12pt;\">If the annotations file already includes the group event to be added, the existing entries will be removed before adding the new ones.</span></p>\n"
 "<p style=\" margin-top:0px"
-                        "; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'MS Shell Dlg 2'; font-size:12pt;\">Each events is defined by : </span><span style=\" font-size:12pt;\"><br />-&gt; 1. group : The group where the events are added (i.e. REM).<br />-&gt; 2. name : The name of the event (i.e. YASA_REM)<br />-&gt; 3. start_sec : The onset of the event in second. <br />-&gt; 4. duration_sec : The duration of the event in second.<br />-&gt; 5. channels : The list of channels on which the event occurs.<br /><br /></span></p></body></html>", None))
+                        "; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'MS Shell Dlg 2'; font-size:12pt;\">Each events is defined by : </span><span style=\" font-size:12pt;\"><br />     1. group : The group where the events are added (i.e. REM).<br />     2. name : The name of the event (i.e. YASA_REM)<br />     3. start_sec : The onset of the event in second. <br />     4. duration_sec : The duration of the event in second.<br />     5. channels : The list of channels on which the event occurs.<br /><br /></span></p></body></html>", None))
         self.label_3.setText(QCoreApplication.translate("IntroStepYASA", u"<html><head/><body><p><span style=\" font-size:12pt; font-weight:600;\">References</span></p></body></html>", None))
         self.textEdit_3.setHtml(QCoreApplication.translate("IntroStepYASA", u"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset=\"utf-8\" /><style type=\"text/css\">\n"

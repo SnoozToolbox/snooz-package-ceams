@@ -25,7 +25,7 @@ from CEAMSTools.SlowWaveImages.InputFilesStep.InputFilesStep import InputFilesSt
 from CEAMSTools.PowerSpectralAnalysis.NonValidEventStep.Ui_NonValidEventStep import Ui_NonValidEventStep
 from CEAMSTools.PowerSpectralAnalysis.NonValidEventStep.EventsProxyModel import EventsProxyModel
 
-DEBUG = True
+DEBUG = False
 
 class AnnotationsSelection( BaseStepView,  Ui_NonValidEventStep, QtWidgets.QWidget):
     

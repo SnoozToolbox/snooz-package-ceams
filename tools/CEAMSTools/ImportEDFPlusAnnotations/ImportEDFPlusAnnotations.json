@@ -14,7 +14,7 @@
         "steps": [
             {
                 "name": "EDF Annotations Importer",
-                "description": "Documentation of the EDF Annotations Importer.",
+                "description": "For details on importing EDF+ annotations, click <strong>Read more!</strong> below.",
                 "custom_step_name": "IntroStep",
                 "show_index": false
             },

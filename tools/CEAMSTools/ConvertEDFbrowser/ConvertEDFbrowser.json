@@ -13,7 +13,7 @@
         "steps": [
             {
                 "name": "EDFbrowser converter",
-                "description": "Documentation of the EDFbrowser accessory file converter.",
+                "description": "For EDFbrowser conversion details, click <strong>Read more!</strong> below.",
                 "custom_step_name": "IntroStep",
                 "show_index": false
             },

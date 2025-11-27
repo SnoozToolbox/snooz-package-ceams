@@ -6,31 +6,31 @@
         "tool_label": "Import Annotations from Text",
         "tool_category": "1-Preprocessing",
         "tool_author": "CEAMS",
-        "tool_url": "",
+        "tool_url": "https://snooz-toolbox-documentation.readthedocs.io/latest/user_guide/tools/Preprocessing/Import_Annotations_from_Text.html#import-annotations-from-text",
         "tool_description": "To import annotations from a text file into the Snooz annotations file.",
         "tool_version": "0.3.0",
         "package_name": "CEAMSTools",
         "steps": [
             {
-                "name": "Import Text Annotations",
-                "description": "Documentation of the text annotations importer.",
+                "name": "Import Text Files",
+                "description": "For details on importing annotations from text file, click <strong>Read more!</strong> below.",
                 "custom_step_name": "IntroStep",
                 "show_index": false
             },
             {
                 "name": "Input PSG Files",
-                "description": "Select the PSG files to import the annotations.",
+                "description": "Select the PSG files to import the annotations.\n\nThe only supported format is .edf.",
                 "module_id": "134e1371-8cd7-4362-bf33-92ce14d187c0"
             },
             {
                 "name": "Link PSG and Text file",
-                "description": "Define how to link the text file with the PSG file. \nWARNING!\nThe annotation file must not have the exact same name as the PSG file. To avoid errors during processing, please specify a prefix and/or suffix for the annotation file in this step.",
+                "description": "Define how to link the text file with the PSG file.",
                 "custom_step_name": "TextFileAssociation",
                 "show_index": true
             },
             {
                 "name": "Text File Format",
-                "description": "Define the Text file format.\n\nFor the complete definition of annotation time format see : https://strftime.org/ \n\nExamples of string format code for time :\n\n%H:%M:%S for 14:30:45\n%H.%M.%S for 14.30.45\n%H:%M:%S.%f for 14:30:45.123456\n%I:%M:%S %p for 02:30:45 PM",
+                "description": "Define the Text file format.",
                 "custom_step_name": "TextFileDefinition",
                 "show_index": true
             }

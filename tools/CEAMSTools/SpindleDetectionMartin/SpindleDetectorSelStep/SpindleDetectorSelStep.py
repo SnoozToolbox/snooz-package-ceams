@@ -78,6 +78,13 @@ class SpindleDetectorSelStep( BaseStepView,  Ui_SpindleDetectorSelStep, QtWidget
 
         self._spindle_det_param = {}
 
+        # Connect checkbox signals for mutual exclusion
+        self.checkBox_r.toggled.connect(self.on_checkbox_r_toggled)
+        self.checkBox_excl_remp.toggled.connect(self.on_checkbox_excl_remp_toggled)
+        
+        # Initialize the toggle state
+        self._update_checkbox_states()
+
 
     def load_settings(self):
         # Ask for the settings to the publisher to display on the SettingsView
@@ -175,10 +182,12 @@ class SpindleDetectorSelStep( BaseStepView,  Ui_SpindleDetectorSelStep, QtWidget
             self.checkBox_n2.setChecked('2' in stages_lst)
             self.checkBox_n3.setChecked('3' in stages_lst)
             self.checkBox_r.setChecked('5' in stages_lst)
+            self._update_checkbox_states()
         if topic == self._exclude_nremp_topic:
             self.checkBox_excl_nremp.setChecked(int(message))
         if topic == self._exclude_remp_topic:
             self.checkBox_excl_remp.setChecked(int(message))
+            self._update_checkbox_states()
         if topic == self._in_cycle_topic:
             self.checkBox_only_cycles.setChecked(int(message))
         if topic == self._min_len_topic:
@@ -229,6 +238,36 @@ class SpindleDetectorSelStep( BaseStepView,  Ui_SpindleDetectorSelStep, QtWidget
         else:
             self._context_manager[SpindleDetectorSelStep.context_spindle_det] = False
 
+
+    # Called when checkBox_r is toggled
+    def on_checkbox_r_toggled(self, checked):
+        """Handle checkBox_r toggle - disable checkBox_excl_remp when checked"""
+        if checked:
+            self.checkBox_excl_remp.setEnabled(False)
+            self.checkBox_excl_remp.setChecked(False)
+        else:
+            self.checkBox_excl_remp.setEnabled(True)
+    
+    # Called when checkBox_excl_remp is toggled
+    def on_checkbox_excl_remp_toggled(self, checked):
+        """Handle checkBox_excl_remp toggle - disable checkBox_r when checked"""
+        if checked:
+            self.checkBox_r.setEnabled(False)
+            self.checkBox_r.setChecked(False)
+        else:
+            self.checkBox_r.setEnabled(True)
+    
+    def _update_checkbox_states(self):
+        """Initialize the checkbox states based on current values"""
+        if self.checkBox_excl_remp.isChecked():
+            self.checkBox_r.setEnabled(False)
+        else:
+            self.checkBox_r.setEnabled(True)
+            
+        if self.checkBox_r.isChecked():
+            self.checkBox_excl_remp.setEnabled(False)
+        else:
+            self.checkBox_excl_remp.setEnabled(True)
 
     # Called when the user delete an instance of the plugin
     def __del__(self):

@@ -23,7 +23,7 @@ class Ui_IntroStep(object):
     def setupUi(self, IntroStep):
         if not IntroStep.objectName():
             IntroStep.setObjectName(u"IntroStep")
-        IntroStep.resize(769, 722)
+        IntroStep.resize(1008, 773)
         self.horizontalLayout = QHBoxLayout(IntroStep)
         self.horizontalLayout.setObjectName(u"horizontalLayout")
         self.textEdit = QTextEdit(IntroStep)
@@ -57,33 +57,38 @@ class Ui_IntroStep(object):
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">A tool to analyze the oxygen saturation, detect o"
                         "xygen desaturations and export oxygen saturation report.</p>\n"
 "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" text-decoration: underline;\">1 - Input Files :</span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Add your PSG files (.edf, .sts or .eeg). The acessory file is mandatory.</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">You can append more than one file. </p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Select the montage and the oxygen channel you want to analyze for oxygen desaturation.</p>\n"
-"<p style=\" margi"
-                        "n-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Sleep staging is essential because oxygen saturation is particularly relevant during sleep.</p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Common settings : </p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-weight:700; color:#ff0000;\">    NOTE:</span><span style=\" color:#ff0000;\"> Please define the sleep cycle configuration you wish to use for the analysis using the blue panel on the left.</span></p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" text-deco"
+                        "ration: underline;\">1 - Input Files :</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Add the PSG files to analyze.</p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Roboto-Regular';\">- European Data Format (EDF) : The .edf and .tsv files must have the exact same filename and be stored in the same directory.</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Roboto-Regular';\">- Stellate : The .sig and .sts files must have the exact same filename and be stored in the same directory.</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Roboto-Regular';\">- NATUS (</span><span style=\" font-family:'"
+                        "Roboto-Regular'; font-style:italic;\">for CEAMS users</span><span style=\" font-family:'Roboto-Regular';\">) : </span><span style=\" font-family:'MS Shell Dlg 2';\"> The entire NATUS subject folder is required.</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Define the montage and channels for each open file you want to run the tool on.</p>\n"
 "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" text-decoration: underline;\">2 - Invalid sections :</span></p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Invalid sections must be annotated in the accessory file before running this tool.</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">The user needs to select the annotations to be removed from the oxygen saturation analysis.</p>\n"
-"<p style=\"-qt-paragrap"
-                        "h-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
+"<p style=\" m"
+                        "argin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">The user needs to select the annotations to be removed from the oxygen saturation analysis.</p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" text-decoration: underline;\">3 - Detection Settings : </span></p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">The user needs to define the criteria for the oxygen desaturation, including the level drop, <br />maximum duration of the drop, and the minimum time the drop is maintained.</p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">"
+                        "<br /></p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" text-decoration: underline;\">4 - Output Files :</span></p>\n"
-"<p style=\" marg"
-                        "in-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Saturation report</p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Saturation report</p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">    The Oxygen Saturation Report comprises 2 main categories:</p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">        1. Oxygen saturation variables : minumim, maximum and average oxygen saturation per thirds, halves, <br />            sleep cycles and sleep stages.</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">        2. Oxygen desaturation drop variables : oxygen desaturation count, average duration (sec), <br />            percentage of sleep time and index (count per sleep hour) for the total sleep time and each sleep stage.</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; ma"
-                        "rgin-right:0px; -qt-block-indent:0; text-indent:0px;\">    These variables are stored in the Oxygen Saturation Report, with one line per recording. <br />    Each new recording is appended to the report file.</p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">        2. Oxygen desaturation drop variables : oxygen desaturati"
+                        "on count, average duration (sec), <br />            percentage of sleep time and index (count per sleep hour) for the total sleep time and each sleep stage.</p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">    These variables are stored in the Oxygen Saturation Report, with one line per recording. <br />    Each new recording is appended to the report file.</p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">    The user needs to define the file to save the Oxygen Saturation Report.</p>\n"
 "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Saturation graph</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">    Optionally, the user can choose to save the oxygen saturation graph for each continuous recording session. <br />    The user must select a directory to store the saturati"
-                        "on graphs.</p></body></html>", None))
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; m"
+                        "argin-right:0px; -qt-block-indent:0; text-indent:0px;\">    Optionally, the user can choose to save the oxygen saturation graph for each continuous recording session. <br />    The user must select a directory to store the saturation graphs.</p></body></html>", None))
     # retranslateUi
 

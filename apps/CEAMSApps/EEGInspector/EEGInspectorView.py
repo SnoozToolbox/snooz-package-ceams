@@ -244,6 +244,10 @@ class EEGInspectorView(Ui_EEGInspectorView, QWidget):
         try:
             """Start data loading thread"""
             self.desc_label13.setText('Loading...')
+            # The "Confirm Selection" button is disabled after clicking on "Next"
+            self.channel_selector.confirm_button.setEnabled(False)
+            # The list of channels is disabled after clicking on "Next" to prevent changes
+            self.channel_selector.channel_list_widget.setEnabled(False)
             self.NextButton1.setEnabled(False)
             self.SkipButton1.setEnabled(False)
             
@@ -376,10 +380,7 @@ class EEGInspectorView(Ui_EEGInspectorView, QWidget):
     def on_back_page2(self):
         """Navigate back to channel selection"""
         self.StackedWidget.setCurrentIndex(0)
-        # Removed by claude
-        #self.confirm_channels_button.setEnabled(True)
-        #self.channel_list_widget.setEnabled(True)
-        #self.channel_selection_layout.setEnabled(True)
+        self.desc_label13.setText(u"Click on \"Next\" once your selection is finished or click on \"skip\" if you want to skip this step.")
         self.NextButton1.setEnabled(True)
         self.SkipButton1.setEnabled(True)
 

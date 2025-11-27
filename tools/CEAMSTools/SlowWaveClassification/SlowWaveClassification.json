@@ -6,14 +6,14 @@
     "item_author": "",
     "item_description": "",
     "tool_params": {
-        "tool_label": "Slow Wave classification",
+        "tool_label": "Classify Slow Waves",
         "tool_category": "3-Postprocessing",
         "asset_directory": "",
         "package_name": "CEAMSTools",
         "steps": [
             {
                 "name": "Slow Wave",
-                "description": "Slow Wave classification",
+                "description": "Click <strong>Read more!</strong> below for details.",
                 "custom_step_name": "SSWCIntroStep",
                 "show_index": false
             },
@@ -24,7 +24,7 @@
             },
             {
                 "name": "Classification Criterias",
-                "description": "Select the criterias that will be used to classify sleep slow waves.\n\nFor an automatic classification, you can keep the parameters as they are. If you want to specify the number of categories, please uncheck the automatic classification option and change the number in the box for the number of categories desired.",
+                "description": "Select the criterias that will be used to classify sleep slow waves.",
                 "module_id": "d59d94d1-11dc-4e06-9716-f749a3647843"
             },
             {

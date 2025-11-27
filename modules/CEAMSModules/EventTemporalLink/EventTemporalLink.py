@@ -136,9 +136,9 @@ class EventTemporalLink(SciNode):
 
             # Get event definition
             info_cur_report.append(['record_min','Duration of the recording (min) used to compute the temporal link index.'])
-            
-            event_info_params, info_cur_report = self.get_event_definition(\
-                events1, events2, info_cur_report)
+
+            event_info_params, info_cur_report = \
+                self.get_event_definition(temporal_link, info_cur_report)
 
             if "recording time" in event_report_label_1 + event_report_label_2:
                 record_len_min = sleep_report["record_min"].values[0]
@@ -442,14 +442,14 @@ class EventTemporalLink(SciNode):
         return result_links_start, info_cur_report, i_evt1_unique, i_evt2_unique
 
 
-    def get_event_definition(self, events1, events2, info_cur_report):
+    def get_event_definition(self, temporal_link, info_cur_report):
         event_info_params = {
             "event1_class": None,   
-            "event1_group": events1.loc[0]['group'] if len(events1)>0 else None,
-            "event1_name" : events1.loc[0]['name'] if len(events1)>0 else None,
+            "event1_group": temporal_link[1]['group_name'],
+            "event1_name" : temporal_link[1]['event_name'],
             "event2_class": None,   
-            "event2_group": events2.loc[0]['group'] if len(events2)>0 else None,
-            "event2_name" : events2.loc[0]['name'] if len(events2)>0 else None,
+            "event2_group": temporal_link[2]['group_name'],
+            "event2_name" : temporal_link[2]['event_name'],
         }
         info_cur_report.append(["event1_class", "events 1 : the class of the events (currently undefined)"])
         info_cur_report.append(["event1_group", "events 1 : the group of the events"])

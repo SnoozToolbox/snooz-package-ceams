@@ -25,7 +25,7 @@ class Ui_SSWDCriterias(object):
     def setupUi(self, SSWDCriterias):
         if not SSWDCriterias.objectName():
             SSWDCriterias.setObjectName(u"SSWDCriterias")
-        SSWDCriterias.resize(887, 806)
+        SSWDCriterias.resize(883, 798)
         SSWDCriterias.setStyleSheet(u"font: 12pt \"Roboto\";")
         self.verticalLayout_9 = QVBoxLayout(SSWDCriterias)
         self.verticalLayout_9.setObjectName(u"verticalLayout_9")
@@ -135,13 +135,6 @@ class Ui_SSWDCriterias(object):
 
         self.verticalLayout.addWidget(self.radioButton_det)
 
-        self.radioButton_anal = QRadioButton(SSWDCriterias)
-        self.buttonGroup.addButton(self.radioButton_anal)
-        self.radioButton_anal.setObjectName(u"radioButton_anal")
-        self.radioButton_anal.setEnabled(False)
-
-        self.verticalLayout.addWidget(self.radioButton_anal)
-
 
         self.horizontalLayout_4.addLayout(self.verticalLayout)
 
@@ -191,13 +184,38 @@ class Ui_SSWDCriterias(object):
 
         self.horizontalLayout_2.addWidget(self.checkBox_r)
 
-        self.checkBox_excl_remp = QCheckBox(SSWDCriterias)
-        self.checkBox_excl_remp.setObjectName(u"checkBox_excl_remp")
-
-        self.horizontalLayout_2.addWidget(self.checkBox_excl_remp)
-
 
         self.verticalLayout_4.addLayout(self.horizontalLayout_2)
+
+        self.label_20 = QLabel(SSWDCriterias)
+        self.label_20.setObjectName(u"label_20")
+
+        self.verticalLayout_4.addWidget(self.label_20)
+
+        self.horizontalLayout_12 = QHBoxLayout()
+        self.horizontalLayout_12.setObjectName(u"horizontalLayout_12")
+        self.label_21 = QLabel(SSWDCriterias)
+        self.label_21.setObjectName(u"label_21")
+
+        self.horizontalLayout_12.addWidget(self.label_21)
+
+        self.radioButton_excl_remp = QRadioButton(SSWDCriterias)
+        self.radioButton_excl_remp.setObjectName(u"radioButton_excl_remp")
+
+        self.horizontalLayout_12.addWidget(self.radioButton_excl_remp)
+
+        self.radioButton_incl_remp = QRadioButton(SSWDCriterias)
+        self.radioButton_incl_remp.setObjectName(u"radioButton_incl_remp")
+        self.radioButton_incl_remp.setChecked(True)
+
+        self.horizontalLayout_12.addWidget(self.radioButton_incl_remp)
+
+        self.horizontalSpacer_3 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+
+        self.horizontalLayout_12.addItem(self.horizontalSpacer_3)
+
+
+        self.verticalLayout_4.addLayout(self.horizontalLayout_12)
 
 
         self.verticalLayout_8.addLayout(self.verticalLayout_4)
@@ -481,20 +499,16 @@ class Ui_SSWDCriterias(object):
         self.label.setText(QCoreApplication.translate("SSWDCriterias", u"Event name", None))
         self.label_3.setText(QCoreApplication.translate("SSWDCriterias", u"Event group", None))
         self.label_17.setText(QCoreApplication.translate("SSWDCriterias", u"<html><head/><body><p><span style=\" font-weight:600;\">Detections and/or analyses</span></p></body></html>", None))
-        self.radioButton_det.setText(QCoreApplication.translate("SSWDCriterias", u"Detect slow waves.", None))
-#if QT_CONFIG(tooltip)
-        self.radioButton_anal.setToolTip(QCoreApplication.translate("SSWDCriterias", u"Avoiding the detection is currently not available.", None))
-#endif // QT_CONFIG(tooltip)
-        self.radioButton_anal.setText(QCoreApplication.translate("SSWDCriterias", u"Do not detect slow waves, just analyze slow waves previously detected and saved in the accessory file.", None))
-        self.label_19.setText(QCoreApplication.translate("SSWDCriterias", u"<html><head/><body><p><span style=\" font-weight:600;\">Sleep stages and periods selection</span></p></body></html>", None))
+        self.radioButton_det.setText(QCoreApplication.translate("SSWDCriterias", u"Detect slow waves", None))
+        self.label_19.setText(QCoreApplication.translate("SSWDCriterias", u"<html><head/><body><p><span style=\" font-weight:600;\">Sleep stages</span></p></body></html>", None))
         self.checkBox_n1.setText(QCoreApplication.translate("SSWDCriterias", u"N1", None))
         self.checkBox_n2.setText(QCoreApplication.translate("SSWDCriterias", u"N2", None))
         self.checkBox_n3.setText(QCoreApplication.translate("SSWDCriterias", u"N3", None))
         self.checkBox_r.setText(QCoreApplication.translate("SSWDCriterias", u"R", None))
-#if QT_CONFIG(tooltip)
-        self.checkBox_excl_remp.setToolTip(QCoreApplication.translate("SSWDCriterias", u"Useful to detect on NREM stages included in NREM periods only (not in REM periods).", None))
-#endif // QT_CONFIG(tooltip)
-        self.checkBox_excl_remp.setText(QCoreApplication.translate("SSWDCriterias", u"Exclude REM Periods", None))
+        self.label_20.setText(QCoreApplication.translate("SSWDCriterias", u"<html><head/><body><p><span style=\" font-weight:700;\">Periods selection</span></p></body></html>", None))
+        self.label_21.setText(QCoreApplication.translate("SSWDCriterias", u"Exclude REM Periods:             ", None))
+        self.radioButton_excl_remp.setText(QCoreApplication.translate("SSWDCriterias", u"Yes", None))
+        self.radioButton_incl_remp.setText(QCoreApplication.translate("SSWDCriterias", u"No", None))
         self.label_5.setText(QCoreApplication.translate("SSWDCriterias", u"<html><head/><body><p><span style=\" font-weight:600;\">Slow Wave Detector Criteria</span></p></body></html>", None))
         self.label_8.setText(QCoreApplication.translate("SSWDCriterias", u"Criterias", None))
         self.carrier_radioButton.setText(QCoreApplication.translate("SSWDCriterias", u"Carrier", None))
@@ -535,7 +549,6 @@ class Ui_SSWDCriterias(object):
         self.label_10.setText(QCoreApplication.translate("SSWDCriterias", u"between", None))
         self.label_15.setText(QCoreApplication.translate("SSWDCriterias", u"and", None))
         self.label_9.setText(QCoreApplication.translate("SSWDCriterias", u"Wave frequency Hz (1/T)", None))
-        self.SW_picture.setText("")
         self.SW_picture.setText("")
     # retranslateUi
 

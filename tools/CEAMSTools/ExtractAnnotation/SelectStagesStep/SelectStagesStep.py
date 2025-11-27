@@ -22,7 +22,7 @@ from CEAMSTools.ExtractAnnotation.InputFiles.InputFiles import InputFiles
 from CEAMSTools.ExtractAnnotation.SelectStagesStep.Ui_SelectStagesStep import Ui_SelectStagesStep
 from CEAMSTools.ExtractAnnotation.SelectStagesStep.EventsProxyModel import EventsProxyModel
 
-DEBUG = True
+DEBUG = False
 
 class SelectStagesStep( BaseStepView,  Ui_SelectStagesStep, QtWidgets.QWidget):
 

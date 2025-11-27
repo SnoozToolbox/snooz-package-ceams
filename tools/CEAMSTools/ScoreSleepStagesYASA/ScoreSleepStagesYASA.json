@@ -4,7 +4,7 @@
     "item_api_version": "2.0.0",
     "item_url": "https://snooz-toolbox-documentation.readthedocs.io/latest/user_guide/tools/Preprocessing/YASA_Automatic_Sleep_Scoring.html",
     "tool_params": {
-        "tool_label": "Score Sleep Stages YASA",
+        "tool_label": "Score Sleep Stages with YASA",
         "tool_category": "1-Preprocessing",
         "tool_author": "Mohammad Hasan Azad",
         "tool_url": "https://snooz-toolbox-documentation.readthedocs.io/latest/user_guide/tools/Preprocessing/YASA_Automatic_Sleep_Scoring.html",
@@ -14,13 +14,13 @@
         "steps": [
             {
                 "name": "Score Sleep Stages YASA",
-                "description": "This tool is used to score sleep stages automaticly using YASA algorithm.",
+                "description": "Click <strong>Read more!</strong> below for details.",
                 "custom_step_name": "AlgoIntroStep",
                 "show_index": false
             },
             {
                 "name": "Input Files",
-                "description": "Add your files, select .edf, .sts or .eeg files.\n\n European Data Format : .edf and .tsv are mandatory. The .tsv must includes the sleep stages.\n\nStellate : .sig and .sts files are mandatory. The .sts must includes the sleep stages.\n\nNATUS : the whole NATUS subject folder is mandatory. The .ent must includes the sleep stages.\n\nSelect the montage and the channels you want to use for scoring.\n\nThe Alias are needed to distinguish EEG channels from EOG and EMG channels.\n\nEOG and EMG channels are not mandatory, but they can enhance the final accuracy.\n\nMake sure to add the selected channels into the Alias.\n\nOnly one EOG and EMG channel is sufficient.\n\n",
+                "description": "Add your files, select .edf, .sts or .eeg files.\n\nFor accepted PSG formats, click 'Read more!' below.\n\nSelect the montage and the channels you want to use for scoring.\n\nThe Alias are needed to distinguish EEG channels from EOG and EMG channels.\n\nEOG and EMG channels are not mandatory, but they can enhance the final accuracy.\n\nMake sure to add the selected channels into the Alias.\n\nOnly one EOG and EMG channel is sufficient.\n\n",
                 "custom_step_name": "InputFilesScoreStep"
             },
             {

@@ -6,20 +6,20 @@
     "item_author": "",
     "item_description": "Detect artifacts.",
     "tool_params": {
-        "tool_label": "Artifact detection",
+        "tool_label": "Detect EEG Artifacts",
         "tool_category": "1-Preprocessing",
         "asset_directory": "",
         "package_name": "CEAMSTools",
         "steps": [
             {
                 "name": "Artifact",
-                "description": "Many types of Artifacts can be detected",
+                "description": "For details on EEG artifact detection, see <strong>Step 5 - Detectors Settings</strong>.",
                 "custom_step_name": "ArtIntroStepPL",
                 "show_index": false
             },
             {
                 "name": "Input Files",
-                "description": "Add your files, select .edf, .sts or .eeg files.\n\n European Data Format : .edf and .tsv are mandatory. The .tsv must includes the sleep stages.\n\nStellate : .sig and .sts files are mandatory. The .sts must includes the sleep stages.\n\nNATUS : the whole NATUS subject folder is mandatory. The .ent must includes the sleep stages.\n\nSelect the montage and the channels to detect the artifact on.\n\nThe Alias are needed to distinguish EEG channels from EMG channels.\n\nEMG channels are only used to enhance the muscle artifact detection.\n\nMake sure to add the selected channels into the Alias.\n\nOnly one EMG channel is sufficient.\n\n*If you want to run the artifact detection without EMG channel, just type 'EMG' in the EMG Alias.\n\n",
+                "description":"Add your files, select .edf, .sts or .eeg files.\n\nFor accepted PSG formats, click 'Read more!' below.\n\nSelect the montage and channels for artifact detection.\n\nAliases are required to distinguish EEG from EMG channels.\n\nEMG is only used to improve muscle-artifact detection (one EMG channel is enough).\n\nIf no EMG channel is available, simply enter 'EMG' in the EMG Alias.",
                 "custom_step_name": "InputFilesArtStep"
             },
             {

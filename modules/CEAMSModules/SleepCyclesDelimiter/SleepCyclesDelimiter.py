@@ -17,7 +17,7 @@ See the file LICENCE for full license details.
     Parameters
     -----------
         events_in : pandas DataFrame
-            List of events to rename (columns=['group','name','start_sec','duration_sec','channels']).
+            List of events, including sleep stages (columns=['group','name','start_sec','duration_sec','channels']).
         parameters : String (dict converted into a string)
             "{
                 'defined_option':'Minimum Criteria'
@@ -103,7 +103,7 @@ class SleepCyclesDelimiter(SciNode):
     Parameters
     -----------
         events_in : pandas DataFrame
-            List of events to rename (columns=['group','name','start_sec','duration_sec','channels']).
+            List of events, including sleep stages (columns=['group','name','start_sec','duration_sec','channels']).
         parameters : String (dict converted into a string)
             "{
                 'defined_option':'Minimum Criteria'
@@ -196,7 +196,7 @@ class SleepCyclesDelimiter(SciNode):
         Parameters
         -----------
             events_in : pandas DataFrame
-                List of events to rename (columns=['group','name','start_sec','duration_sec','channels']).
+                List of events (columns=['group','name','start_sec','duration_sec','channels']).
             parameters : String (dict converted into a string)
                 "{
                     'defined_option':'Minimum Criteria'
@@ -270,10 +270,24 @@ class SleepCyclesDelimiter(SciNode):
         if isinstance(events_in, pd.DataFrame) and len(events_in) == 0:
             war_message = "WARNING : events_in parameter is empty."
             self._log_manager.log(self.identifier, war_message)
-            #raise NodeInputException(self.identifier, "events_in", \
-                #"SleepCyclesDelimiter events_in parameter is empty.")
+            # Write the warning also in the log file
+            war_message = "WARNING : No sleep stages."
+            if not self._log_filename is None:
+                with open(self._log_filename, 'a') as log_file:
+                    log_file.write(war_message + '\n')
 
-        # It is important to make a copy otherwise other instance of events
+        if isinstance(label, str) and len(label) > 0:
+            self._filename = label
+            # remove the extension if any
+            if '.' in self._filename:
+                filename_path = self._filename.split('.')[0]
+            else:
+                filename_path = self._filename
+            self._log_filename = f"{filename_path}_Cycle_WARNING.txt"
+        else:
+            self._log_filename = None
+
+            # It is important to make a copy otherwise other instance of events
         # will also be modified.
         events_out = events_in.copy()
 
@@ -288,6 +302,11 @@ class SleepCyclesDelimiter(SciNode):
         if sleep_stage_events.empty:
             war_message = "WARNING : events_in parameter does not include sleep stage scoring."
             self._log_manager.log(self.identifier, war_message)
+            # Write the warning also in the log file
+            war_message = "WARNING : No sleep stages."
+            if not self._log_filename is None:
+                with open(self._log_filename, 'a') as log_file:
+                    log_file.write(war_message + '\n')
             # Write the cache
             cache = {}
             cache['events'] = events_out
@@ -315,6 +334,11 @@ class SleepCyclesDelimiter(SciNode):
         if len(sleep_stage_scored)==0:
             war_message = "WARNING : events_in parameter must include the sleep stages."
             self._log_manager.log(self.identifier, war_message)
+            # Write the warning also in the log file
+            war_message = "WARNING : No sleep stages."
+            if not self._log_filename is None:
+                with open(self._log_filename, 'a') as log_file:
+                    log_file.write(war_message + '\n')
             # Write the cache
             cache = {}
             cache['events'] = events_out
@@ -340,6 +364,11 @@ class SleepCyclesDelimiter(SciNode):
         else:
             war_message = "WARNING : events_in parameter does not include any sleep stages."
             self._log_manager.log(self.identifier, war_message)
+            # Write the warning also in the log file
+            war_message = "WARNING : No sleep stages."
+            if not self._log_filename is None:
+                with open(self._log_filename, 'a') as log_file:
+                    log_file.write(war_message + '\n')
             # Write the cache
             cache = {}
             cache['events'] = events_out
@@ -363,10 +392,6 @@ class SleepCyclesDelimiter(SciNode):
 
         # Compute start of the NREM and REM periods
         # REM end periods are updated in case the recording ends in NREM
-        # Remove the use of nrem_rem_df
-        # nremper_start_lst, remper_start_lst, remper_end_lst = \
-        #     self._compute_period_start(first_asleep_event, last_asleep_event, \
-        #         nrem_rem_df, remper_end_lst, parameters_dict)  
         nremper_start_lst, remper_start_lst, remper_end_lst = \
             self._compute_period_start(first_asleep_event, last_asleep_event, \
                 sleep_stage_scored, remper_end_lst, parameters_dict)                    
@@ -418,8 +443,6 @@ class SleepCyclesDelimiter(SciNode):
             self._incomplete_cycle_evaluation(\
                 parameters_dict, nremper_start_lst, remper_start_lst, remper_end_lst)
 
-        # TODO Miss the metadata
-
         #----------------------------------------------------------------------
         # Create an dataframe event for each NREM and REM period.
         #----------------------------------------------------------------------
@@ -429,7 +452,6 @@ class SleepCyclesDelimiter(SciNode):
             cycle_event = []
         elif len(remper_end_lst)==0:
             nremper_dur = remper_start_lst[0] - nremper_start_lst[0]
-            #nremper_dur = nrem_rem_df['duration_sec'][0]
             nrem_cycle_event = [[commons.nrem_period_group, commons.nrem_period_group, nremper_start_lst[0], nremper_dur, '']]
             cycle_event = [[commons.sleep_cycle_group, commons.sleep_cycle_group, nremper_start_lst[0], nremper_dur, '']]
         else:            
@@ -447,8 +469,6 @@ class SleepCyclesDelimiter(SciNode):
             # The last REMP can be missing (when the last NREMP is < NREM_min_len_val_last)
             # In that case the cycle is always incomplete, but can be showed
             if len(remper_end_lst)<len(cycle_complete):
-                #last_nrem_end = int(nrem_rem_df['duration_sec'].iloc[-1])+int(nrem_rem_df['start_sec'].iloc[-1])
-                # remove the use of the nrem_rem_df
                 last_nrem_end = sleep_stage_scored['start_sec'].values[-1]+sleep_stage_scored['duration_sec'].values[-1]
                 nremper_dur = last_nrem_end-nremper_start_lst[-1]
                 nrem_cycle_event.append([commons.nrem_period_group, commons.nrem_period_group, nremper_start_lst[-1], nremper_dur, ''])
@@ -461,7 +481,6 @@ class SleepCyclesDelimiter(SciNode):
         cycle_event_df = pd.concat([cycle_event_df,pd.DataFrame(\
                 data=cycle_event, columns=['group','name','start_sec','duration_sec','channels'])])
         
-        #events_out = events_out.append(cycle_event_df)
         events_out = pd.concat([events_out, cycle_event_df])
         events_out.sort_values(by=['start_sec'],inplace=True)
         events_out = events_out.reset_index(drop=True)     
@@ -489,8 +508,6 @@ class SleepCyclesDelimiter(SciNode):
         if len(nremper_start_lst)>0:
             nremper_start_epoch = np.round((nremper_start_lst-sleep_stage_events.start_sec[0]) / epoch_length_sec)
             if len(remper_start_lst)==0:
-                # remove the use of the nrem_rem_df
-                #remper_start_lst = [nrem_rem_df['start_sec'][0] + nrem_rem_df['duration_sec'][0]]
                 remper_start_lst = [sleep_stage_scored['start_sec'].values[-1]+sleep_stage_scored['duration_sec'].values[-1]]
                 remper_end_lst = remper_start_lst
                 remper_start_epoch = [np.round((remper_start_lst-sleep_stage_events.start_sec[0]) / epoch_length_sec)]
@@ -507,8 +524,6 @@ class SleepCyclesDelimiter(SciNode):
             # In that case the cycle is always incomplete, but can be showed
             if len(remper_end_lst)<len(cycle_complete):
                 nremper_start_epoch = np.round((nremper_start_lst[-1]-sleep_stage_events.start_sec[0]) / epoch_length_sec)
-                # remove the use of the nrem_rem_df
-                #last_nrem_end = int(nrem_rem_df['duration_sec'].iloc[-1])+int(nrem_rem_df['start_sec'].iloc[-1])-sleep_stage_events.start_sec[0]
                 last_nrem_end = int(sleep_stage_scored['start_sec'].values[-1]+sleep_stage_scored['duration_sec'].values[-1])
                 last_nrem_end_epoch = np.round((last_nrem_end-sleep_stage_events.start_sec[0]) / epoch_length_sec)
                 cycle_def.append([(int(nremper_start_epoch),int(last_nrem_end_epoch)-1),\
@@ -543,8 +558,6 @@ class SleepCyclesDelimiter(SciNode):
             remper_end_lst : list
                 List of end of REM period.
         """
-        # TODO revise this !!!
-        # it is possible to have 2 consecutive REM bouts (without nrem bout between i.e. only awake)
         remper_end_lst = []
         current_nor_dur = 0
         possible_REM_period = 0
@@ -602,8 +615,6 @@ class SleepCyclesDelimiter(SciNode):
         return remper_end_lst
 
 
-    # def _compute_period_start(self, first_asleep_event, last_asleep_event, \
-    #     nrem_rem_df, remper_end_lst, parameters_dict):
     def _compute_period_start(self, first_asleep_event, last_asleep_event, \
         sleep_stage_scored, remper_end_lst, parameters_dict):
         """
@@ -654,8 +665,12 @@ class SleepCyclesDelimiter(SciNode):
         if first_rem_epoch_i==None:
             war_message = "WARNING : events_in parameter does not include any R stages."
             self._log_manager.log(self.identifier, war_message)
+            # Write the warning also in the log file
+            war_message = "WARNING : No R stages."
+            if not self._log_filename is None:
+                with open(self._log_filename, 'a') as log_file:
+                    log_file.write(war_message + '\n')
             return nremper_start_lst, remper_end_lst, remper_end_lst
-        #remper_start_lst.append(rem_extract.iloc[first_rem_epoch_i].start_sec)
         remper_start_lst.append(rem_extract.loc[first_rem_epoch_i].start_sec)
         # For each additional cycle
         for remper_end in remper_end_lst:
@@ -663,7 +678,6 @@ class SleepCyclesDelimiter(SciNode):
             cur_nrem_rem_df = sleep_stage_scored[round(sleep_stage_scored.start_sec)>=round(remper_end)]
             if not cur_nrem_rem_df.empty:
                 cur_nrem_rem_df.reset_index(drop=True,inplace=True)
-                #first_nrem_epoch_i = cur_nrem_rem_df[cur_nrem_rem_df['name']=='nrem'].first_valid_index() 
                 if 'N1' in parameters_dict['sleep_stages']:
                     NREM_event_df, first_ori_idx, last_ori_idx = \
                         self._select_stage(cur_nrem_rem_df, 'N1,N2,N3')
@@ -676,16 +690,24 @@ class SleepCyclesDelimiter(SciNode):
                 first_nrem_epoch_i = None
                 first_rem_epoch_i = None
             if not first_rem_epoch_i == None:
-                #rem_start_sec = cur_nrem_rem_df.iloc[first_rem_epoch_i].start_sec
                 rem_start_sec = cur_nrem_rem_df.loc[first_rem_epoch_i].start_sec
             if not first_nrem_epoch_i == None:
-                #nrem_start_sec = cur_nrem_rem_df.iloc[first_nrem_epoch_i].start_sec
                 nrem_start_sec = cur_nrem_rem_df.loc[first_nrem_epoch_i].start_sec
                 if not first_rem_epoch_i == None:
                     # if any which one is first (REMP or NREMP)
-                    if rem_start_sec<nrem_start_sec: # if there is a NREMP of 0 min (incomplete cycle but still)
+                    # if there is a NREMP of 0 min (incomplete cycle but still)
+                    if (isinstance(first_nrem_epoch_i, list) and len(first_nrem_epoch_i)==0) \
+                            or (isinstance(nrem_start_sec, float) and rem_start_sec<nrem_start_sec):
                         nremper_start_lst.append(rem_start_sec)
                         remper_start_lst.append(rem_start_sec)
+                        # Log the information
+                        war_message = f"Cycle Warning: missing NREMP between two possible REMPs: NREMP lasts 0 min"
+                        self._log_manager.log(self.identifier, war_message)
+                        # Write the warning also in the log file
+                        war_message = "WARNING : missing NREMP between two possible REMPs: NREMP lasts 0 min."
+                        if not self._log_filename is None:
+                            with open(self._log_filename, 'a') as log_file:
+                                log_file.write(war_message + '\n')
                     else:
                         nremper_start_lst.append(nrem_start_sec)
                         first_rem_epoch_i = rem_extract[rem_extract['start_sec']>=nrem_start_sec].first_valid_index()
@@ -703,7 +725,6 @@ class SleepCyclesDelimiter(SciNode):
                     nremper_start_lst.append(nrem_start_sec)
                     first_rem_epoch_i = rem_extract[rem_extract['start_sec']>=nrem_start_sec].first_valid_index()
                     if not first_rem_epoch_i == None:
-                        #remper_start_lst.append(rem_extract.iloc[first_rem_epoch_i].start_sec)
                         remper_start_lst.append(rem_extract.loc[first_rem_epoch_i].start_sec)
                     # Recording ends in NREMP 
                     else:
@@ -790,6 +811,11 @@ class SleepCyclesDelimiter(SciNode):
         if first_epoch_i==None:
             war_message = "WARNING : events_in parameter must include the sleep stage."
             self._log_manager.log(self.identifier, war_message)
+            # Write the warning also in the log file
+            war_message = "WARNING : No sleep stages."
+            if not self._log_filename is None:
+                with open(self._log_filename, 'a') as log_file:
+                    log_file.write(war_message + '\n')
             return pd.DataFrame(columns=['group','name','start_sec','duration_sec','channels'])
         else:
             # Remove all the previous epochs
@@ -823,7 +849,6 @@ class SleepCyclesDelimiter(SciNode):
         # Find the first occurrence of the stages
         last_epoch_i = stage_event_df[stage_event_df['name'].isin(stages_num)].last_valid_index()
         # Extract the last valid epoch
-        #last_event_df = stage_event_df.iloc[last_epoch_i]
         last_event_df = stage_event_df.loc[last_epoch_i]
         return last_event_df
 
@@ -871,8 +896,6 @@ class SleepCyclesDelimiter(SciNode):
             return cycle_complete, nremper_start_lst, remper_start_lst, remper_end_lst
         else:
             cycle_complete = np.ones(len(remper_end_lst)) # incomplete cycles may be discarded
-            
-#            if parameters_dict['Include_all_incompl']==0:
 
             # Compute period duration in order to discard cycle
             # The last REMP can be missing (when the last NREMP is < NREM_min_len_val_last)
@@ -895,9 +918,14 @@ class SleepCyclesDelimiter(SciNode):
                     #if float(parameters_dict['NREM_min_len_first'])>0:
                     if nremper_dur[cycle_i] < (float(parameters_dict['NREM_min_len_first'])*60):
                         cycle_complete[cycle_i] = 0
-                        war_message = "Cycle " + str(cycle_i) + \
+                        war_message = "Cycle " + str(cycle_i+1) + \
                             ": NREMP lasts less than " + parameters_dict['NREM_min_len_first'] + " min"
                         self._log_manager.log(self.identifier, war_message)
+                        # Write the warning also in the log file
+                        war_message = f"WARNING : Cycle {cycle_i+1}: NREMP lasts {nremper_dur[cycle_i]/60} min, it's less than {parameters_dict['NREM_min_len_first']} min."
+                        if not self._log_filename is None:
+                            with open(self._log_filename, 'a') as log_file:
+                                log_file.write(war_message + '\n')
                 # Middle cycle
                 else:
                     # REM periods can be shorter than 15 mins when there 
@@ -906,9 +934,14 @@ class SleepCyclesDelimiter(SciNode):
                     #if float(parameters_dict['NREM_min_len_mid_last'])>0:
                     if nremper_dur[cycle_i] < (float(parameters_dict['NREM_min_len_mid_last'])*60):
                         cycle_complete[cycle_i] = 0
-                        war_message = "Cycle " + str(cycle_i) + \
+                        war_message = "Cycle " + str(cycle_i+1) + \
                             ": NREMP lasts less than " + parameters_dict['NREM_min_len_mid_last'] + " min"
                         self._log_manager.log(self.identifier, war_message)
+                        # Write the warning also in the log file
+                        war_message = f"WARNING : Cycle {cycle_i+1}: NREMP lasts {nremper_dur[cycle_i]/60} min, it's less than {parameters_dict['NREM_min_len_mid_last']} min."
+                        if not self._log_filename is None:
+                            with open(self._log_filename, 'a') as log_file:
+                                log_file.write(war_message + '\n')
 
             # Middle cycles are incomplete if they last less than 15 min.
             # It is possible with Aeschbach and Floyd when there are awake or n1
@@ -948,6 +981,15 @@ class SleepCyclesDelimiter(SciNode):
                         remper_start_lst.pop(-1)
                         remper_end_lst.pop(-1)
                         cycle_complete = cycle_complete[0:-1] 
+
+            # Warn user of a SOREMP
+            if len(cycle_complete)>0 and cycle_complete[0]==0:
+                # Write the warning also in the log file
+                war_message = f"WARNING : Sleep-Onset REM Period (SOREMP)."
+                self._log_manager.log(self.identifier, war_message)
+                if not self._log_filename is None:
+                    with open(self._log_filename, 'a') as log_file:
+                        log_file.write(war_message + '\n')
 
             # Remove SOREMP if requested
             if int(parameters_dict['Include_SOREMP'])==0 :
@@ -1006,28 +1048,39 @@ class SleepCyclesDelimiter(SciNode):
                     if remper_dur[cycle_i]>0:
                         if remper_dur_val < (float(parameters_dict['REM_min_len_first'])*60):
                             cycle_valid[cycle_i] = 0
-                            war_message = "Cycle " + str(cycle_i) + \
+                            war_message = "Cycle " + str(cycle_i+1) + \
                                 ": REMP lasts less than " + parameters_dict['REM_min_len_first'] + " min"
                             self._log_manager.log(self.identifier, war_message)
+                            # Write the warning also in the log file
+                            war_message = f"WARNING : Cycle {cycle_i+1}: REMP lasts {remper_dur_val/60} min, it's less than {parameters_dict['REM_min_len_first']} min."
+                            if not self._log_filename is None:
+                                with open(self._log_filename, 'a') as log_file:
+                                    log_file.write(war_message + '\n')
             # Last cycle
             elif cycle_i==len(remper_dur)-1:
                 if float(parameters_dict['REM_min_len_last'])>0:
                     if remper_dur[cycle_i]>0:
                         if remper_dur[cycle_i] < (float(parameters_dict['REM_min_len_last'])*60):
                             cycle_valid[cycle_i] = 0
-                            war_message = "Cycle " + str(cycle_i) + \
-                                ": REMP lasts less than " + parameters_dict['REM_min_len_last'] + " min, then is it joined to the preceding REMP"
+                            war_message = f"WARNING : Possible Cycle {cycle_i+1}: REMP lasts {remper_dur[cycle_i]/60} min, it's less than {parameters_dict['REM_min_len_last']} min, then is it joined to the preceding REMP (Cycle {cycle_i})."
                             self._log_manager.log(self.identifier, war_message)
+                            # Write the warning also in the log file
+                            if not self._log_filename is None:
+                                with open(self._log_filename, 'a') as log_file:
+                                    log_file.write(war_message + '\n')
             # Middle cycle
             else:
                 if float(parameters_dict['REM_min_len_mid'])>0:
                     if remper_dur[cycle_i]>0:
                         if remper_dur[cycle_i] < (float(parameters_dict['REM_min_len_mid'])*60):
                             cycle_valid[cycle_i] = 0
-                            war_message = "Cycle " + str(cycle_i) + \
-                                ": REMP lasts less than " + parameters_dict['REM_min_len_mid'] + " min, then is it joined to the preceding REMP"
+                            war_message = f"WARNING : Possible Cycle {cycle_i+1}: REMP lasts {remper_dur[cycle_i]/60} min, it's less than {parameters_dict['REM_min_len_mid']} min, then is it joined to the preceding REMP (Cycle {cycle_i})."
                             self._log_manager.log(self.identifier, war_message)
-        
+                            # Write the warning also in the log file
+                            if not self._log_filename is None:
+                                with open(self._log_filename, 'a') as log_file:
+                                    log_file.write(war_message + '\n')
+
         # The last REMP can be missing (when the last NREMP is < NREM_min_len_val_last)
         # In that case the cycle is always incomplete
         if len(remper_end_lst)<len(nremper_start_lst):

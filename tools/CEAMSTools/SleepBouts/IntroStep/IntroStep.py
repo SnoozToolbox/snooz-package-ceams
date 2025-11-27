@@ -2,16 +2,16 @@
 @ Valorisation Recherche HSCM, Societe en Commandite – 2023
 See the file LICENCE for full license details.
 """
-import base64
-from qtpy.QtGui import QPixmap
 
 """
     Settings viewer of the Intro plugin
 """
+import base64
 import os
 
 from qtpy import QtWidgets
 from qtpy.QtCore import QUrl
+from qtpy.QtGui import QPixmap
 from qtpy.QtWebEngineWidgets import QWebEngineView
 
 from CEAMSTools.SleepBouts.IntroStep.Ui_IntroStep import Ui_IntroStep

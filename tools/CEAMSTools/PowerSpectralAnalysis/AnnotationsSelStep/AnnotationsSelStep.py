@@ -17,7 +17,7 @@ from flowpipe.ActivationState import ActivationState
 from CEAMSTools.PowerSpectralAnalysis.NonValidEventStep.NonValidEventStep import NonValidEventStep
 from CEAMSTools.PowerSpectralAnalysis.SelectionStep.SelectionStep import SelectionStep
 
-DEBUG = True
+DEBUG = False
 class AnnotationsSelStep( NonValidEventStep):
 
     # Define modules and nodes to talk to

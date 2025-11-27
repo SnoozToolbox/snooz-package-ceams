@@ -6,20 +6,20 @@
     "item_author": "Karine Lacourse",
     "item_description": "Compare 2 sets of events (experts and detections) to evaluate the performance of detections. ",
     "tool_params": {
-        "tool_label": "Compare Events from PSG",
+        "tool_label": "Evaluate Detected Events",
         "tool_category": "3-Postprocessing",
         "asset_directory": "",
         "package_name": "CEAMSTools",
         "steps": [
             {
-                "name": "Compare Events from PSG",
-                "description": "Description of the tool to compare events from PSG files.",
+                "name": "Evaluate Detected Events",
+                "description": "Click <strong>Read more!</strong> below for details.",
                 "custom_step_name": "IntroStep",
                 "show_index": false
             },
             {
                 "name": "PSG Input Files",
-                "description": "Add the PSG files that contain the events to compare.",
+                "description": "<div>Add the PSG files you want to perform the analysis on.<br><br>The PSG file and the accessory file must share the same filename and folder.<br><br>Open your files:<br> <strong>.edf</strong> : .tsv file is mandatory.<br> <strong>.sts</strong> : .sig file is mandatory.<br> <strong>.eeg</strong> for CEAMS user : NATUS subject folder is mandatory.</div>",
                 "custom_step_name": "InputFilesStepCmpPSG",
                 "show_index": true
             },

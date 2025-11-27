@@ -20,7 +20,7 @@ from CEAMSModules.EventReader import manage_events
 from CEAMSModules.PSGReader import commons
 
 
-DEBUG = True
+DEBUG = False
 
 class EDFAnnotationsReader(SciNode):
     """

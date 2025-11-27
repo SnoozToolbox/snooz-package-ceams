@@ -6,14 +6,14 @@
     "item_author": "CEAMS",
     "item_description": "To generate oxygen saturation report.",
     "tool_params": {
-        "tool_label": "Oxygen Saturation Report",
+        "tool_label": "Report Oxygen Saturation",
         "tool_category": "2-Processing",
         "asset_directory": "",
         "package_name": "CEAMSTools",
         "steps": [
             {
                 "name": "Oxygen saturation",
-                "description": "",
+                "description": "Click <strong>Read more!</strong> below for details.",
                 "custom_step_name": "IntroStep",
                 "show_index": false,
                 "configs": {
@@ -29,7 +29,7 @@
             },
             {
                 "name": "Input Files",
-                "description": "<p>Add your files, select .edf, .sts or .eeg files.</p><p>European Data Format : .edf and .tsv are mandatory.</p><p>Stellate : .sig and .sts files are mandatory.</p><p>NATUS : the whole NATUS subject folder is mandatory.</p><p>Select the montage and the oxygen channel (i.e. SpO2, OSAT).</p><p>",
+                "description": "<div>Add the PSG files you want to perform the analysis on.<br><br>The PSG file and the accessory file must share the same filename and folder.<br><br>Open your files:<br> <strong>.edf</strong> : .tsv file is mandatory.<br> <strong>.sts</strong> : .sig file is mandatory.<br> <strong>.eeg</strong> for CEAMS user : NATUS subject folder is mandatory<br><br>Select the montage and the oxygen channel (i.e. SpO2, OSAT).</div>",
                 "custom_step_name": "InputFiles",
                 "show_index": true
             },

@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>887</width>
-    <height>806</height>
+    <width>883</width>
+    <height>798</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -198,26 +198,10 @@
                 <bool>true</bool>
                </property>
                <property name="text">
-                <string>Detect slow waves.</string>
+                <string>Detect slow waves</string>
                </property>
                <property name="checked">
                 <bool>true</bool>
-               </property>
-               <attribute name="buttonGroup">
-                <string notr="true">buttonGroup</string>
-               </attribute>
-              </widget>
-             </item>
-             <item>
-              <widget class="QRadioButton" name="radioButton_anal">
-               <property name="enabled">
-                <bool>false</bool>
-               </property>
-               <property name="toolTip">
-                <string>Avoiding the detection is currently not available.</string>
-               </property>
-               <property name="text">
-                <string>Do not detect slow waves, just analyze slow waves previously detected and saved in the accessory file.</string>
                </property>
                <attribute name="buttonGroup">
                 <string notr="true">buttonGroup</string>
@@ -259,7 +243,7 @@
             </font>
            </property>
            <property name="text">
-            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Sleep stages and periods selection&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Sleep stages&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
            </property>
           </widget>
          </item>
@@ -315,15 +299,53 @@
              </property>
             </widget>
            </item>
+          </layout>
+         </item>
+         <item>
+          <widget class="QLabel" name="label_20">
+           <property name="text">
+            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Periods selection&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <layout class="QHBoxLayout" name="horizontalLayout_12">
            <item>
-            <widget class="QCheckBox" name="checkBox_excl_remp">
-             <property name="toolTip">
-              <string>Useful to detect on NREM stages included in NREM periods only (not in REM periods).</string>
-             </property>
+            <widget class="QLabel" name="label_21">
              <property name="text">
-              <string>Exclude REM Periods</string>
+              <string>Exclude REM Periods:             </string>
              </property>
             </widget>
+           </item>
+           <item>
+            <widget class="QRadioButton" name="radioButton_excl_remp">
+             <property name="text">
+              <string>Yes</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QRadioButton" name="radioButton_incl_remp">
+             <property name="text">
+              <string>No</string>
+             </property>
+             <property name="checked">
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <spacer name="horizontalSpacer_3">
+             <property name="orientation">
+              <enum>Qt::Orientation::Horizontal</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>40</width>
+               <height>20</height>
+              </size>
+             </property>
+            </spacer>
            </item>
           </layout>
          </item>
@@ -758,7 +780,6 @@
              <property name="text">
               <string/>
              </property>
-             <property name="text"><string/></property>
             </widget>
            </item>
           </layout>
@@ -799,7 +820,7 @@
  </widget>
  <resources>
   <include location="../../../../../snooz-toolbox/src/main/python/ui/themes/themes.qrc"/>
-   </resources>
+ </resources>
  <connections>
   <connection>
    <sender>buttonGroup_2</sender>

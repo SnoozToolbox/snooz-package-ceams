@@ -15,7 +15,7 @@ import numpy as np
 import os
 import pandas as pd
 
-DEBUG = True
+DEBUG = False
 
 class DetectionsCohortReview(SciNode):
     """
@@ -38,7 +38,7 @@ class DetectionsCohortReview(SciNode):
                                                                     [ROI#2 label, bool selection flag]
                                                                                 ...
         "activity_label" : string
-            The activity variable to export/save i.e. 'Total' or 'distribution per sleep cycle'.        
+            The activity variable to export/save i.e. 'Total', 'distribution per sleep cycle', 'distribution per clock hour', 'distribution per hour spent in each sleep stage'.        
         "clean_flag" : bool
             Flag to generate and save the output file with only selected channels.
         "transposed_flag" : bool
@@ -100,7 +100,7 @@ class DetectionsCohortReview(SciNode):
                                                                         [ROI#2 label, bool selection flag]
                                                                                     ...
             "activity_label" : string
-                The activity variable to export/save i.e. 'Total' or 'distribution per sleep cycle'.        
+                The activity variable to export/save i.e. 'Total', 'distribution per sleep cycle', 'distribution per clock hour', 'distribution per hour spent in each sleep stage'.        
             "clean_flag" : bool
                 Flag to generate and save the output file with only selected channels.
             "transposed_flag" : bool
@@ -176,6 +176,10 @@ class DetectionsCohortReview(SciNode):
             # Find out the regular expression to extract the right characteristics based on the activity_label
             if activity_label.lower()=="distribution per sleep cycle":
                 activity_2_export = "cyc\d_"
+            elif activity_label.lower()=="distribution per clock hour":
+                activity_2_export = "clock_h\d_"
+            elif activity_label.lower()=="distribution per hour spent in each sleep stage":
+                activity_2_export = "stage_h\d_"
             else:
                 activity_2_export = "total_"
             # Extract all the columns of the spectral data

@@ -159,7 +159,7 @@ class YasaSleepStaging(SciNode):
             confidence_list.append(confidence)
         # Perform majority vote for each element across all lists in y_pred_list
         # Merge the discontinuities to create a single prediction
-        if number_of_parts > 1:
+        if number_of_parts is not None and number_of_parts > 1:
             y_pred_list, part_lengths = self.merge_by_parts(y_pred_list, number_of_parts)
             confidence_list, part_lengths  = self.merge_by_parts(confidence_list, number_of_parts)
             proba_list, part_lengths = self.merge_by_parts(proba_list, number_of_parts)
@@ -363,7 +363,7 @@ class YasaSleepStaging(SciNode):
 
         # If no EOG and EMG, return EEGs individually
         if not raw_EOG and not raw_EMG:
-            return [[eeg] for eeg in raw_EEG]
+            return [[eeg] for eeg in raw_EEG], None
 
         # Infer number of parts from EOG or EMG
         num_parts = 0

@@ -74,28 +74,67 @@ class InputFilesScoreStep( InputFilesStep):
     
 
     def on_validate_settings(self):
-        # Check alias configurations for EOG, EMG, and EEG
+        if ((self.valid_selected_chan or self.valid_stage_mandatory) or self.valid_single_chan ):
+            file_list = self.my_PsgReaderSettingsView.get_files_list(self.my_PsgReaderSettingsView.files_model)
+
+        # If the file list is empty -> open a warning dialog
+        # If none of the channels is selected for a subject -> open a warning dialog
+                            # Check alias configurations for EOG, EMG, and EEG
         all_aliases = self.get_aliases()
-        eog_channels = self.get_alias_channels('EOG')
-        emg_channels = self.get_alias_channels('EMG')
-        eeg_channels = self.get_alias_channels('EEG')
-                
-        # Check if EEG alias is missing
-        if all_aliases['EEG'] == ['']:
-            WarningDialog(f"EEG alias is not configured. Please add an EEG alias for proper functioning of the algorithm.")
+        eog_alias_channels = self.get_alias_channels('EOG')
+        emg_alias_channels = self.get_alias_channels('EMG')
+        eeg_alias_channels = self.get_alias_channels('EEG')
+        if not (eog_alias_channels or emg_alias_channels or eeg_alias_channels):
+            WarningDialog(f"Configure the aliases corresponding to the selected channels: EOG, EMG, and EEG.")
             return False
-        
-        # Check if EOG has more than one channel
-        if len(eog_channels) > 1:
-            WarningDialog(f"EOG alias has {len(eog_channels)} channels configured: {', '.join(eog_channels)}. "
-                         f"Consider using only one EOG channel for proper functioning of the algorithm.")
-            return False
-        
-        # Check if EMG has more than one channel  
-        if len(emg_channels) > 1:
-            WarningDialog(f"EMG alias has {len(emg_channels)} channels configured: {', '.join(emg_channels)}. "
-                         f"Consider using only one EMG channel for proper functioning of the algorithm.")
-            return False
+        if self.valid_selected_chan:
+            channels_info_df = self.my_PsgReaderSettingsView.channels_table_model.get_data()
+            # For each subject
+            if len(file_list)>0:
+                for file in file_list:
+                    EEG_alias_counter = 0
+                    EOG_alias_counter = 0
+                    EMG_alias_counter = 0
+                    All_alias_counter = 0
+                    chans_used = channels_info_df[(channels_info_df['Filename']==file) & (channels_info_df['Use']==True)]
+                    if list(chans_used['Channel']):
+                        for chan in list(chans_used['Channel']):
+                            if chan in eeg_alias_channels:
+                                EEG_alias_counter += 1
+                            if chan in eog_alias_channels:
+                                EOG_alias_counter += 1
+                            if chan in emg_alias_channels:
+                                EMG_alias_counter += 1
+                    else:
+                        WarningDialog(f"At least one recording has no channel selected, start looking at {file} in step '1 - Input Files'.")
+                        return False
+                    All_alias_counter = EEG_alias_counter + EOG_alias_counter + EMG_alias_counter
+                    if All_alias_counter != len(list(chans_used['Channel'])):
+                        WarningDialog(f"At least one recording has a missing alias corresponding to the selected channels, start looking at {file} in step '1 - Input Files'.")
+                        return False
+                    # Check if EEG alias is missing
+                    if EEG_alias_counter == 0:
+                        WarningDialog(f"EEG channel is not selected or EEG alias is not configured. Please add the missing EEG alias or channel for proper functioning of the algorithm, start looking at {file} in step '1 - Input Files'.")
+                        return False
+                    
+                    if EEG_alias_counter > 4:
+                        WarningDialog(f"EEG channels are exceeding the maximum number of EEG channels allowed for this tool. "
+                                    f"Consider using up to four EEG channels for proper functioning of the algorithm, start looking at {file} in step '1 - Input Files'.")
+                        return False
+                    # Check if EOG has more than one channel
+                    if EOG_alias_counter > 1:
+                        WarningDialog(f"EOG channels are exceeding the maximum number of EOG channels allowed for this tool. "
+                                    f"Consider using only one EOG channel for proper functioning of the algorithm, start looking at {file} in step '1 - Input Files'.")
+                        return False
+                    
+                    # Check if EMG has more than one channel  
+                    if EMG_alias_counter > 1:
+                        WarningDialog(f"EMG channels are exceeding the maximum number of EMG channels allowed for this tool. "
+                                    f"Consider using only one EMG channel for proper functioning of the algorithm, start looking at {file} in step '1 - Input Files'.")
+                        return False
+            else:
+                WarningDialog(f"Add files in step '1 - Input Files'.")    
+                return False
         
         # Note: EEG can have multiple channels, so no check for multiple EEG channels
         

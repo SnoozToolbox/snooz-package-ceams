@@ -42,8 +42,6 @@ def butter_bandpass_filter(data, lowcut, highcut, sample_rate, order):
         non_nan_indices = np.squeeze(non_nan_indices)
         samples_without_nan = data[non_nan_indices]
         samples_filtered = sosfiltfilt(sos_low, sosfiltfilt(sos_high, samples_without_nan, padlen=3 * order), padlen=3 * order)
-    else:
-        toto=1
         
     # Reconstruct the matrix as the data
     filtered_signal = np.empty_like(data)

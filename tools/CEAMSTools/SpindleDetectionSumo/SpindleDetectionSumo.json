@@ -4,7 +4,7 @@
     "item_url": "https://snooz-toolbox-documentation.readthedocs.io/latest/user_guide/tools/Processing/Spindle_detection_SUMO.html#spindle-detection-sumo",
     "item_api_version": "2.0.0",
     "tool_params": {
-        "tool_label": "Spindle Detection SUMO",
+        "tool_label": "Detect Spindles with SUMO",
         "tool_category": "2-Processing",
         "tool_author": "",
         "tool_url": "",
@@ -14,7 +14,7 @@
         "steps": [
             {
                 "name": "SUMO Detector",
-                "description": "",
+                "description": "Click <strong>Read more!</strong> below for details.",
                 "custom_step_name": "SpindleDetectionDoc",
                 "show_index": false,
                 "configs": {
@@ -30,7 +30,7 @@
             },
             {
                 "name": "Input Files",
-                "description": "Open your files (.edf, .eeg or .sts) and select the montage and channels you want to detect the sleep spindles on.\n\nThe .tsv file is also needed for the edf format.\n\nThe .sig file is also needed for Stellate format.\n\nThe whole NATUS subject folder is also needed for the .eeg format.",
+                "description": "<div>Add the PSG files you want to perform the analysis on.<br><br>The PSG file and the accessory file must share the same filename and folder.<br><br>Open your files:<br> <strong>.edf</strong> : .tsv file is mandatory.<br> <strong>.sts</strong> : .sig file is mandatory.<br> <strong>.eeg</strong> for CEAMS user : NATUS subject folder is mandatory<br> <br><br>Select the montage and channels</div>",
                 "custom_step_name": "InputFileSpindleStep",
                 "show_index": true
             },

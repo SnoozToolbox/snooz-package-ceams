@@ -6,14 +6,14 @@
     "item_author": "",
     "item_description": "",
     "tool_params": {
-        "tool_label": "Sleep Report",
+        "tool_label": "Report Sleep Variables",
         "tool_category": "2-Processing",
         "asset_directory": "",
         "package_name": "CEAMSTools",
         "steps": [
             {
                 "name": "Sleep Report",
-                "description": "",
+                "description": "Click <strong>Read more!</strong> below for details.",
                 "custom_step_name": "SleepReportDoc",
                 "show_index": false,
                 "configs": {
@@ -29,7 +29,7 @@
             },
             {
                 "name": "Input Files",
-                "description": "Manage the PSG files you want to generate the report.\n\nThe PSG file and the accessory file must be in the same folder. \n\nAdd your files (.edf, .eeg or .sts)\n\n- .edf : the .tsv file is mandatory\n\n- .eeg format : the NATUS subject folder is mandatory\n\n- .sts format : the .sig file is mandatory ",
+                "description": "<div>Add the PSG files you want to perform the analysis on.<br><br>The PSG file and the accessory file must share the same filename and folder.<br><br>Open your files:<br> <strong>.edf</strong> : .tsv file is mandatory.<br> <strong>.sts</strong> : .sig file is mandatory.<br> <strong>.eeg</strong> for CEAMS user : NATUS subject folder is mandatory.</div>",
                 "custom_step_name": "InputFilesStep",
                 "show_index": true
             },

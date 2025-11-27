@@ -6,14 +6,14 @@
     "tool_params": {
         "tool_label": "Rename Files",
         "tool_category": "1-Preprocessing",
-        "tool_author": "C\u00c9AMS",
+        "tool_author": "CEAMS",
         "tool_url": "",
         "tool_description": "Renames files to match PSG recordings with their accessory files.",
         "package_name": "CEAMSTools",
         "steps": [
             {
                 "name": "Rename Files",
-                "description": "To rename a list of files to match PSG recordings with their accessory files.",
+                "description": "For details on renaming files, click <strong>Read more!</strong> below.",
                 "custom_step_name": "IntroStep",
                 "show_index": false
             },

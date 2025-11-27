@@ -24,7 +24,7 @@ class Ui_SSWDSaveFiles(object):
     def setupUi(self, SSWDSaveFiles):
         if not SSWDSaveFiles.objectName():
             SSWDSaveFiles.setObjectName(u"SSWDSaveFiles")
-        SSWDSaveFiles.resize(995, 742)
+        SSWDSaveFiles.resize(999, 750)
         SSWDSaveFiles.setMinimumSize(QSize(0, 0))
         SSWDSaveFiles.setStyleSheet(u"font: 12pt \"Roboto\";")
         self.verticalLayout_4 = QVBoxLayout(SSWDSaveFiles)
@@ -269,9 +269,12 @@ class Ui_SSWDSaveFiles(object):
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">    - slow wave count</p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">    - the average slow wave characteri"
                         "stics listed above</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">        - total (all selected stages)</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">        - per sleep stage</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">        - per sleep cycle</p></body></html>", None))
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">        - total (all selected stages) - Start time is the sleep onset</p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">        - per sleep stage - Only the time spent in each individual sleep stage is considered.</p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">        - per sleep cycle - Start time is the sleep onset</p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">        - per clock hour - Start time is the sleep onset</p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">        - per hour spent in each stage - Start time is when each specific stage fi"
+                        "rst begins in the timeline.</p></body></html>", None))
         self.checkBox_save_cohort.setText(QCoreApplication.translate("SSWDSaveFiles", u"To save the detailed events report for the cohort (cohort report)", None))
         self.lineEdit_cohort_report.setPlaceholderText(QCoreApplication.translate("SSWDSaveFiles", u"Select the file to save the detailed cohort report...", None))
         self.pushButto_browse.setText(QCoreApplication.translate("SSWDSaveFiles", u"Browse", None))
