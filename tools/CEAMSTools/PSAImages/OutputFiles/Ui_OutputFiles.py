@@ -26,7 +26,7 @@ class Ui_OutputFiles(object):
     def setupUi(self, OutputFiles):
         if not OutputFiles.objectName():
             OutputFiles.setObjectName(u"OutputFiles")
-        OutputFiles.resize(977, 733)
+        OutputFiles.resize(956, 764)
         OutputFiles.setStyleSheet(u"font: 12pt \"Roboto\";")
         self.verticalLayout_5 = QVBoxLayout(OutputFiles)
         self.verticalLayout_5.setObjectName(u"verticalLayout_5")
@@ -49,7 +49,7 @@ class Ui_OutputFiles(object):
         self.scrollArea.setAlignment(Qt.AlignmentFlag.AlignLeading|Qt.AlignmentFlag.AlignLeft|Qt.AlignmentFlag.AlignTop)
         self.scrollAreaWidgetContents = QWidget()
         self.scrollAreaWidgetContents.setObjectName(u"scrollAreaWidgetContents")
-        self.scrollAreaWidgetContents.setGeometry(QRect(0, -60, 900, 1200))
+        self.scrollAreaWidgetContents.setGeometry(QRect(0, 0, 900, 1200))
         sizePolicy1 = QSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Maximum)
         sizePolicy1.setHorizontalStretch(0)
         sizePolicy1.setVerticalStretch(1)
@@ -169,8 +169,16 @@ class Ui_OutputFiles(object):
 
         self.verticalLayout_7 = QVBoxLayout()
         self.verticalLayout_7.setObjectName(u"verticalLayout_7")
-        self.gridLayout = QGridLayout()
-        self.gridLayout.setObjectName(u"gridLayout")
+        self.label_8 = QLabel(self.scrollAreaWidgetContents)
+        self.label_8.setObjectName(u"label_8")
+        sizePolicy2 = QSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Fixed)
+        sizePolicy2.setHorizontalStretch(0)
+        sizePolicy2.setVerticalStretch(0)
+        sizePolicy2.setHeightForWidth(self.label_8.sizePolicy().hasHeightForWidth())
+        self.label_8.setSizePolicy(sizePolicy2)
+
+        self.verticalLayout_7.addWidget(self.label_8)
+
         self.textEdit = QTextEdit(self.scrollAreaWidgetContents)
         self.textEdit.setObjectName(u"textEdit")
         self.textEdit.setMinimumSize(QSize(0, 0))
@@ -180,19 +188,7 @@ class Ui_OutputFiles(object):
         self.textEdit.setLineWidth(0)
         self.textEdit.setReadOnly(True)
 
-        self.gridLayout.addWidget(self.textEdit, 2, 0, 1, 1)
-
-        self.label_8 = QLabel(self.scrollAreaWidgetContents)
-        self.label_8.setObjectName(u"label_8")
-
-        self.gridLayout.addWidget(self.label_8, 1, 0, 1, 1)
-
-        self.verticalSpacer = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
-
-        self.gridLayout.addItem(self.verticalSpacer, 0, 0, 1, 1)
-
-
-        self.verticalLayout_7.addLayout(self.gridLayout)
+        self.verticalLayout_7.addWidget(self.textEdit)
 
         self.horizontalLayout_4 = QHBoxLayout()
         self.horizontalLayout_4.setObjectName(u"horizontalLayout_4")
@@ -355,11 +351,11 @@ class Ui_OutputFiles(object):
         self.radioButton_meanstd = QRadioButton(self.scrollAreaWidgetContents)
         self.buttonGroup_mean.addButton(self.radioButton_meanstd)
         self.radioButton_meanstd.setObjectName(u"radioButton_meanstd")
-        sizePolicy2 = QSizePolicy(QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Fixed)
-        sizePolicy2.setHorizontalStretch(0)
-        sizePolicy2.setVerticalStretch(0)
-        sizePolicy2.setHeightForWidth(self.radioButton_meanstd.sizePolicy().hasHeightForWidth())
-        self.radioButton_meanstd.setSizePolicy(sizePolicy2)
+        sizePolicy3 = QSizePolicy(QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Fixed)
+        sizePolicy3.setHorizontalStretch(0)
+        sizePolicy3.setVerticalStretch(0)
+        sizePolicy3.setHeightForWidth(self.radioButton_meanstd.sizePolicy().hasHeightForWidth())
+        self.radioButton_meanstd.setSizePolicy(sizePolicy3)
         self.radioButton_meanstd.setMinimumSize(QSize(0, 0))
         self.radioButton_meanstd.setChecked(True)
 
@@ -486,6 +482,10 @@ class Ui_OutputFiles(object):
 
         self.verticalLayout_8.addLayout(self.verticalLayout_9)
 
+        self.verticalSpacer = QSpacerItem(20, 10, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
+
+        self.verticalLayout_8.addItem(self.verticalSpacer)
+
         self.scrollArea.setWidget(self.scrollAreaWidgetContents)
 
         self.verticalLayout_5.addWidget(self.scrollArea)
@@ -526,6 +526,7 @@ class Ui_OutputFiles(object):
         self.label_12.setText(QCoreApplication.translate("OutputFiles", u"<html><head/><body><p><span style=\" font-weight:600;\">One picture per channel or ROI</span></p></body></html>", None))
         self.checkBox_cohort_sel.setText(QCoreApplication.translate("OutputFiles", u"PSA per channel per group of subjects.\n"
 "Each PSA curve represents the signal for a selected channel or ROI for a group of subjects.", None))
+        self.label_8.setText(QCoreApplication.translate("OutputFiles", u"<html><head/><body><p><span style=\" font-weight:700;\">Sleep Stage Selection</span></p></body></html>", None))
         self.textEdit.setHtml(QCoreApplication.translate("OutputFiles", u"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset=\"utf-8\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
@@ -534,7 +535,6 @@ class Ui_OutputFiles(object):
 "li.checked::marker { content: \"\\2612\"; }\n"
 "</style></head><body style=\" font-family:'Roboto'; font-size:12pt; font-weight:400; font-style:normal;\">\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Note: When N2 and N3 stages are selected together, the generated figure displays only the PSA data corresponding to the &quot;N2N3&quot; column of the report. Similarly, when N1, N2, and N3 stages are all selected, the figure presents only the data from the &quot;NREM&quot; column.</p></body></html>", None))
-        self.label_8.setText(QCoreApplication.translate("OutputFiles", u"<html><head/><body><p><span style=\" font-weight:700;\">Sleep Stage Selection</span></p></body></html>", None))
         self.checkBox_Wake.setText(QCoreApplication.translate("OutputFiles", u"Wake", None))
         self.checkBox_N1.setText(QCoreApplication.translate("OutputFiles", u"N1", None))
         self.checkBox_N2.setText(QCoreApplication.translate("OutputFiles", u"N2", None))

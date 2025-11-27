@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file ''
+## Form generated from reading UI file 'Ui_GroupDefinition.ui'
 ##
 ## Created by: Qt User Interface Compiler version 6.8.2
 ##
@@ -100,12 +100,12 @@ class Ui_GroupDefinition(object):
 
     def retranslateUi(self, GroupDefinition):
         GroupDefinition.setWindowTitle("")
-        self.label.setText(QCoreApplication.translate("GroupDefinition", u"<html><head/><body><p><span style=\" font-weight:600;\">PSA files - Group </span></p></body></html>", None))
+        self.label.setText(QCoreApplication.translate("GroupDefinition", u"<html><head/><body><p><span style=\" font-weight:600;\">PSG files - Group </span></p></body></html>", None))
         self.pushButton_apply.setText(QCoreApplication.translate("GroupDefinition", u"Apply all selected", None))
         self.checkBox_SelectAll.setText(QCoreApplication.translate("GroupDefinition", u"Select/Unselect all", None))
         self.lineEdit_group.setPlaceholderText(QCoreApplication.translate("GroupDefinition", u"Define the group label", None))
-        self.lineEdit_search.setPlaceholderText(QCoreApplication.translate("GroupDefinition", u"Search PSA file", None))
-        self.label_2.setText(QCoreApplication.translate("GroupDefinition", u"Pattern to filter the PSA files list", None))
-        self.label_3.setText(QCoreApplication.translate("GroupDefinition", u"Group label to apply to the PSA files selected", None))
+        self.lineEdit_search.setPlaceholderText(QCoreApplication.translate("GroupDefinition", u"Search PSG file", None))
+        self.label_2.setText(QCoreApplication.translate("GroupDefinition", u"Pattern to filter the PSG files list", None))
+        self.label_3.setText(QCoreApplication.translate("GroupDefinition", u"Group label to apply to the PSG files selected", None))
     # retranslateUi
 

@@ -73,7 +73,7 @@
          <item>
           <widget class="QPushButton" name="add_pushButton">
            <property name="text">
-            <string>Add PSA File</string>
+            <string>Add Spectral Report</string>
            </property>
           </widget>
          </item>
@@ -117,7 +117,7 @@
        <item>
         <widget class="QLabel" name="label_4">
          <property name="text">
-          <string>PSA File information</string>
+          <string>EEG Spectral Power File Information</string>
          </property>
         </widget>
        </item>

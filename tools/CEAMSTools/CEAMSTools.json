@@ -385,6 +385,20 @@
             ]
         },
         {
+            "item_name": "PSAImages",
+            "item_type": "tool",
+            "item_version": "2.0.0",
+            "item_hooks": [
+                {
+                    "endpoint_name": "menu_endpoint",
+                    "parameters": {
+                        "menu_category": "3-Postprocessing",
+                        "menu_label": "Visualize EEG Spectral Power"
+                    }
+                }
+            ]
+        },
+        {
             "item_name": "SlowWaveImages",
             "item_type": "tool",
             "item_version": "2.2.0",
@@ -394,20 +408,6 @@
                     "parameters": {
                         "menu_category": "3-Postprocessing",
                         "menu_label": "Visualize Slow Waves"
-                    }
-                }
-            ]
-        },
-        {
-            "item_name": "PSAImages",
-            "item_type": "tool",
-            "item_version": "0.0.0",
-            "item_hooks": [
-                {
-                    "endpoint_name": "menu_endpoint",
-                    "parameters": {
-                        "menu_category": "3-Postprocessing",
-                        "menu_label": "PSA Images"
                     }
                 }
             ]

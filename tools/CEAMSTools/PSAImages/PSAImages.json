@@ -5,28 +5,28 @@
     "item_url": "https://snooz-toolbox-documentation.readthedocs.io/latest/user_guide/tools/Postprocessing/PSAImages.html",
     "item_author": "Mohammad Hasan Azad",
     "tool_params": {
-        "tool_label": "PSA Images",
+        "tool_label": "Visualize EEG Spectral Power",
         "tool_category": "Postprocessing",
         "tool_author": "Mohammad Hasan Azad",
         "tool_url": "",
-        "tool_description": "This tool generates the PSA images from the PSA report file",
+        "tool_description": "This tool generates EEG spectral power images.",
         "package_name": "CEAMSTools",
         "steps": [
             {
-                "name": "PSA Images",
-                "description": "Power Spectral Analysis Images",
+                "name": "EEG Spectral Power Images",
+                "description": "Click <strong>Read more!</strong> below for details.",
                 "custom_step_name": "IntroStep",
                 "show_index": false
             },
             {
                 "name": "Input Files",
-                "description": "Load your PSA reports generated in the PSA tool.",
+                "description": "Load your EEG spectral reports generated from the <strong>Analyze EEG Spectral Power</strong> tool.",
                 "custom_step_name": "InputFiles",
                 "show_index": true
             },
             {
                 "name": "Group Definition",
-                "description": "Assign a group for each file. \nAny group label is accepted. \nThe number of groups is unlimited.",
+                "description": "Assign a group for each file.\n\nAny group label is accepted.\n\nThe number of groups is unlimited.",
                 "custom_step_name": "GroupDefinition",
                 "show_index": true
             },
@@ -60,7 +60,7 @@
         }
     ],
     "process_params": {
-        "process_label": "PSA Images",
+        "process_label": "Visualize EEG Spectral Power",
         "subgraph_params": {},
         "nodes": [
             {

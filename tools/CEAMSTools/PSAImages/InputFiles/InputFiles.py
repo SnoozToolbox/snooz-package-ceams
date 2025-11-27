@@ -15,7 +15,7 @@ from widgets.WarningDialog import WarningDialog
 class InputFiles(BaseStepView, Ui_InputFiles, QtWidgets.QWidget):
     """
         InputFiles
-        Settings viewer of the PSACohortReview plugin are loaded.
+        Settings viewer of the PSAPicsGenerator plugin are loaded.
         The settings viewer allows to select and rename channels and add ROIs.
     """
     # Key for the context shared with other step of the preset

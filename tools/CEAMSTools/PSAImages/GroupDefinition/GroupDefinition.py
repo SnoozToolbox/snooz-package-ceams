@@ -29,6 +29,11 @@ class GroupDefinition(BaseStepView, Ui_GroupDefinition, QtWidgets.QWidget):
 
         # init UI
         self.setupUi(self)
+        # Adapt the text labels - the UI was copied from SWImages
+        self.label.setText("Spectral Report - Group")
+        self.label_2.setText("Pattern to filter the files list")
+        self.lineEdit_search.setPlaceholderText("Search File")
+        self.label_3.setText("Group Label to apply to selected files")
 
         # Key is the filename and the value is the group label
         self.group_dict = {}
