@@ -18,11 +18,12 @@ from flowpipe import SciNode, InputPlug, OutputPlug
 from commons.NodeInputException import NodeInputException
 from commons.NodeRuntimeException import NodeRuntimeException
 
-DEBUG = True
+DEBUG = False
 
 class PSAPicsGenerator(SciNode):
     """
     Class to generate pictures of PSA (Power Spectral Analysis) data from PSA report files.
+    * The PSA tool has been renamed "Analyze EEG Spectral Power" in Snooz CEAMS package 7.3.0.
 
     This module processes PSA data files and generates various types of plots including:
     - Subject-level plots (individual subjects, single or all channels)
@@ -58,10 +59,6 @@ class PSAPicsGenerator(SciNode):
         Color palettes for different plot types with keys:
         - 'subject_avg', 'subject_sel', 'cohort': list of color strings
 
-    Returns
-    -------
-    dict
-        Empty dictionary (no outputs - figures are saved to files)
     """
     def __init__(self, **kwargs):
         """ Initialize module PSAPicsGenerator """
@@ -83,8 +80,6 @@ class PSAPicsGenerator(SciNode):
         self.figsize = (8, 6) # in inches
         # Default frequency range for PSA plots (typical for sleep EEG)
         self.default_freq_range = [0.5, 30]
-        # Default frequency resolution
-        self.freq_resolution = 0.5
 
         # Associate a linestyle to each PSA categories
         self.linestyles = ['-', '--', '-.', ':','dotted'] # 5 different linestyles for distinguishing stages when colors are the same
@@ -112,8 +107,7 @@ class PSAPicsGenerator(SciNode):
 
         Returns
         -------
-        dict
-            Empty dictionary (figures are saved to files specified in pics_param['output_folder']).
+            No return value, figures are saved to files specified in pics_param['output_folder'].
 
         Raises
         ------
@@ -164,7 +158,7 @@ class PSAPicsGenerator(SciNode):
         psa_data_per_chan = {} # the key is the channel label and the value is the PSA data
         # the key is the group label and the value is the PSA data
         psa_data_cohort = {}
-        n_cats = 1
+        n_cats = 1 # useless
 
         for file_name in filenames.keys():
             file_group_name = file_group[file_name]
@@ -233,22 +227,20 @@ class PSAPicsGenerator(SciNode):
                         else:
                             fig_save = False
                         
-                        psa_avg_per_chan_cat, max_cats = \
+                        psa_avg_per_chan_cur = \
                             self._save_subject_chan_fig_psa(psa_data_ch_sel, \
                                 pics_param, file_name, chan_label, fig_save, colors_param['subject_sel'])
                         
                         if chan_label in psa_data_per_chan.keys():
                             psa_data_per_chan[chan_label].append(\
-                                [psa_avg_per_chan_cat, file_group_name])
+                                [psa_avg_per_chan_cur, file_group_name])
                         else:
                             psa_data_per_chan[chan_label] = \
-                                [[psa_avg_per_chan_cat, file_group_name]]
+                                [[psa_avg_per_chan_cur, file_group_name]]
                         
                         if fig_save:
                             self._log_manager.log(self.identifier, \
                                 f"Images are generated for the file {file_name} and channel/ROI {ch}.")
-
-                        n_cats = max(n_cats, max_cats)
 
                     if pics_param['subject_avg'] | pics_param['cohort_avg']:
                         if psa_data_ch_sel is not None and len(psa_data_ch_sel) > 0:
@@ -268,22 +260,14 @@ class PSAPicsGenerator(SciNode):
                     # If there is only one channel, differentiate the categories by color.
                     colors = colors_param['subject_sel']
                 if (len(psa_data_all_chan)>0):
-                    # psa_avg_per_cat : numpy array
-                    #     Average PSA for each category for the current subject
-                    # max_cat : int
-                    #     The number of categories for the current subject
-                    psa_avg_per_cat, max_cats = \
-                        self._save_subject_chan_fig_psa(psa_data_all_chan, \
-                            pics_param, file_name, chan_label_all_chan, fig_save, colors)
+                    # psa_avg : numpy array
+                    #     Average PSA for all channels for the current subject
+                    self._save_subject_chan_fig_psa(psa_data_all_chan, \
+                        pics_param, file_name, chan_label_all_chan, fig_save, colors)
 
                     if fig_save:
                         self._log_manager.log(self.identifier, \
                             f"The image is generated for the file {file_name} for all channels.")
-
-                    n_cats = max(n_cats, max_cats)
-                else:
-                    n_cats = 1
-                    psa_avg_per_cat = np.empty(0)
 
             # Accumulate data for cohort analysis (independent of subject_avg plotting)
             if pics_param['cohort_avg']:
@@ -307,23 +291,23 @@ class PSAPicsGenerator(SciNode):
                 psa_data = {}
                 for psa_data_cur_sjt, group_cur_sjt in psa_data_grp:
                     if not (group_cur_sjt in psa_data.keys()):
-                        if len(psa_data_cur_sjt)>0:
+                        if psa_data_cur_sjt is not None and len(psa_data_cur_sjt)>0:
                             psa_data[group_cur_sjt] = [psa_data_cur_sjt]
                     else:
-                        if len(psa_data_cur_sjt)>0:
+                        if psa_data_cur_sjt is not None and len(psa_data_cur_sjt)>0:
                             psa_data[group_cur_sjt].append(psa_data_cur_sjt)
             
                 # psa_data : for the current channel -> one PSA per subject,
                 #  they need to be aligned together
                 self._save_cohort_chan_fig_psa(psa_data, \
-                    pics_param, ch, n_cats, colors_param['cohort'])
+                    pics_param, ch, n_cats, colors_param['cohort']) # n_cats is useless
 
         # **********************************************
         # One figure for the cohort : one picture for all channels
         # **********************************************
         if pics_param['cohort_avg']:
             self._save_cohort_chan_fig_psa(psa_data_cohort, \
-                pics_param, '', n_cats, colors_param['cohort'])
+                pics_param, '', n_cats, colors_param['cohort']) # n_cats is useless
 
         return {
         }
@@ -380,11 +364,11 @@ class PSAPicsGenerator(SciNode):
             # Average PSA data across channels in ROI
             roi_data_list = []
             found_channels = []
-            for roi_ch in chan_lst:
+            for roi_ch in chan_lst: # chan_lst is the specific channels for the ROI
                 # Find matching channel in the data
                 channel_found = False
-                for existing_ch in psa_data_subject['channel_label'].unique():
-                    if roi_ch.lower() in existing_ch.lower():
+                for existing_ch in psa_data_subject['channel_label'].unique(): # Loop trhough all existing channels for the subject
+                    if roi_ch.lower() in existing_ch.lower(): # For all channels included in the ROI - extract data - but only once.
                         # Extract data for this channel
                         ch_data = psa_data_subject[psa_data_subject['channel_label'] == existing_ch]
                         roi_data_list.append(ch_data)
@@ -451,12 +435,7 @@ class PSAPicsGenerator(SciNode):
                 The type (label) of figure to save. If false, the figure is not saved.
             colors : list of str
                 List of colors.
-        Returns 
-        -------
-            psa_avg_per_cat : numpy array or pandas DataFrame
-                Average PSA for each category for the current subject, or DataFrame with averaged data for cohort accumulation
-            max_cat : int
-                The number of categories for the current subject
+
         """
         if fig_save:
             if 'subject' in fig_save:
@@ -471,7 +450,6 @@ class PSAPicsGenerator(SciNode):
             chan_label = [chan_label]
 
         n_channels = len(psa_data_all_chan)
-        max_cat = 1
         legend_labels = {}
         
         if DEBUG:
@@ -682,9 +660,9 @@ class PSAPicsGenerator(SciNode):
                 ax.grid(which='both', axis='both')
                 ax.set_title(fig_title)
                 
-                # Add legend after all plotting
+                # Add legend after all plotting # TODO : add the option to hide the legend
                 if n_channels > 1 or len(legend_labels) > 1:
-                    ax.legend(loc='upper right')
+                    ax.legend(loc='upper right') 
                 
                 try:
                     fig.savefig(fig_name)
@@ -693,25 +671,8 @@ class PSAPicsGenerator(SciNode):
                 if DEBUG:
                     print(f"{fig_name} is saved")
                 fig.clf()
-
-        # Compute average PSA data for cohort accumulation if enabled
-        if pics_param.get('cohort_avg', False) and all_power_data:
-            # For cohort analysis, we need to keep the raw channel data (not pre-averaged)
-            # so that we can compute proper std across subjects later
-            # Store all channel data as a list of DataFrames
-            
-            # Use the first channel's DataFrame as template for structure
-            if psa_data_all_chan and len(psa_data_all_chan) > 0:
-                # Just return the first channel's data as representative
-                # The cohort analysis will handle averaging across all subjects' channels
-                psa_avg_per_cat = psa_data_all_chan[0].copy()
-            else:
-                psa_avg_per_cat = pd.DataFrame()
-        else:
-            # Return dummy values for compatibility when cohort_avg is not enabled
-            psa_avg_per_cat = np.empty(0)
         
-        return psa_avg_per_cat, max_cat
+
 
     def _save_cohort_chan_fig_psa(self, psa_data, pics_param, chan_label, n_cats, colors):
         """
@@ -1027,7 +988,7 @@ class PSAPicsGenerator(SciNode):
         ax.set_xlabel('Frequency (Hz)')
         ax.set_ylabel('Power (μV²/Hz)')
         # set the legend to the upper right
-        ax.legend(loc="upper right")
+        ax.legend(loc="upper right") #TODO : add the option to hide the legend
         ax.set_title(fig_title)
         if pics_param['cohort_avg'] | pics_param['cohort_sel']:
             try:

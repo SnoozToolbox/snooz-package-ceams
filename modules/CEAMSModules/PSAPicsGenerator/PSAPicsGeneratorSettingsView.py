@@ -107,7 +107,6 @@ class PSAPicsGeneratorSettingsView(BaseSettingsView, Ui_PSAPicsGeneratorSettings
         """ Called when the settingsView is opened by the user
         Ask for the settings to the publisher to display on the SettingsView 
         """
-        self.message_textEdit.append("Loading settings...")
         self.ping_complete = 1
         self._pub_sub_manager.publish(self, self._filenames_topic, 'ping')
         self._pub_sub_manager.publish(self, self._file_group_topic, 'ping')
@@ -261,22 +260,26 @@ class PSAPicsGeneratorSettingsView(BaseSettingsView, Ui_PSAPicsGeneratorSettings
         #options |= QFileDialog.DontUseNativeDialog
         fileNames, _ = QFileDialog.getOpenFileNames(
                         None,
-                        "Open PSA File",
+                        "Open Spectral Report",
                         "",
-                        "PSA files (*.tsv)",
+                        "Spectral Reports (*.tsv)",
                         options=options)        
         if isinstance(fileNames,list):
             for fileName in fileNames:
                 try :
+                    self.message_textEdit.append(f'*** LOADING *** Spectral report : {fileName} ***')
                     self._read_PSA_file(fileName)
                     self.filenames.append(fileName)
                     # Generate a signal to inform that self.filenames has been updated
                     self.filenames_updated_signal.emit()
                     self.create_models_and_fill_views()
+                    # Update the number of files in the title
+                    self.label.setText(f"Subject List ({self.model_subject_chan.rowCount()})")
 
                 except (ValueError, KeyError) as e:     
                     self.message_textEdit.append( "Error when reading {} : {}".format(fileName,e) )
                     self.clear_subject_slot()  
+                self.message_textEdit.append(f'LOAD SUCCESSFUL for {fileName}\n')
         else:
             self.message_textEdit.append("No file selected")
 
@@ -430,7 +433,6 @@ class PSAPicsGeneratorSettingsView(BaseSettingsView, Ui_PSAPicsGeneratorSettings
         self.all_cohort_chan_checkBox.setChecked(True)
 
         # print info about the dataframe loaded
-        self.message_textEdit.append("PSA file loaded:")
         self.print_PSA_df_info(self.PSA_df)
 
 
@@ -543,8 +545,8 @@ class PSAPicsGeneratorSettingsView(BaseSettingsView, Ui_PSAPicsGeneratorSettings
         # Fill the channel cohort list widget
         self.create_channel_cohort_list(self.cohort_chan_list)
 
-        self.message_textEdit.append('\nTotal number of subjects : {}'.format(len(subject_list)))
-        self.message_textEdit.append(f'\n{len(self.cohort_chan_list)} channel labels available')
+        self.message_textEdit.append('Total number of subjects : {}'.format(len(subject_list)))
+        self.message_textEdit.append(f'{len(self.cohort_chan_list)} channel labels available')
 
 
     # Fill the model_subject_chan based on the self.subject_chans_label and update the channel cohort list widget.

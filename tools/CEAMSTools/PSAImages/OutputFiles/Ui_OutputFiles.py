@@ -49,7 +49,7 @@ class Ui_OutputFiles(object):
         self.scrollArea.setAlignment(Qt.AlignmentFlag.AlignLeading|Qt.AlignmentFlag.AlignLeft|Qt.AlignmentFlag.AlignTop)
         self.scrollAreaWidgetContents = QWidget()
         self.scrollAreaWidgetContents.setObjectName(u"scrollAreaWidgetContents")
-        self.scrollAreaWidgetContents.setGeometry(QRect(0, 0, 900, 1200))
+        self.scrollAreaWidgetContents.setGeometry(QRect(0, -454, 900, 1200))
         sizePolicy1 = QSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Maximum)
         sizePolicy1.setHorizontalStretch(0)
         sizePolicy1.setVerticalStretch(1)
@@ -520,12 +520,12 @@ class Ui_OutputFiles(object):
         self.checkBox_subject_sel.setText(QCoreApplication.translate("OutputFiles", u"Useful to explore the PSA events set (with the option to display all PSA signals).", None))
         self.label_2.setText(QCoreApplication.translate("OutputFiles", u"<html><head/><body><p><span style=\" font-weight:600;\">Cohort level : to generate pictures for the cohort.</span></p></body></html>", None))
         self.label_11.setText(QCoreApplication.translate("OutputFiles", u"<html><head/><body><p><span style=\" font-weight:600;\">One picture per cohort</span></p></body></html>", None))
-        self.checkBox_cohort_avg.setText(QCoreApplication.translate("OutputFiles", u"PSA averaged accross channels per group of subjects.\n"
-"Each PSA curve represents the signal averaged accross all the selected channels\n"
+        self.checkBox_cohort_avg.setText(QCoreApplication.translate("OutputFiles", u"Spectral power averaged accross channels per group of subjects.\n"
+"Each spectral curve represents the signal averaged accross all the selected channels\n"
 "or ROIs for a group of subjects.", None))
         self.label_12.setText(QCoreApplication.translate("OutputFiles", u"<html><head/><body><p><span style=\" font-weight:600;\">One picture per channel or ROI</span></p></body></html>", None))
-        self.checkBox_cohort_sel.setText(QCoreApplication.translate("OutputFiles", u"PSA per channel per group of subjects.\n"
-"Each PSA curve represents the signal for a selected channel or ROI for a group of subjects.", None))
+        self.checkBox_cohort_sel.setText(QCoreApplication.translate("OutputFiles", u"Spectral power per channel per group of subjects.\n"
+"Each spectral curve represents the signal for a selected channel or ROI for a group of subjects.", None))
         self.label_8.setText(QCoreApplication.translate("OutputFiles", u"<html><head/><body><p><span style=\" font-weight:700;\">Sleep Stage Selection</span></p></body></html>", None))
         self.textEdit.setHtml(QCoreApplication.translate("OutputFiles", u"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset=\"utf-8\" /><style type=\"text/css\">\n"
@@ -534,7 +534,7 @@ class Ui_OutputFiles(object):
 "li.unchecked::marker { content: \"\\2610\"; }\n"
 "li.checked::marker { content: \"\\2612\"; }\n"
 "</style></head><body style=\" font-family:'Roboto'; font-size:12pt; font-weight:400; font-style:normal;\">\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Note: When N2 and N3 stages are selected together, the generated figure displays only the PSA data corresponding to the &quot;N2N3&quot; column of the report. Similarly, when N1, N2, and N3 stages are all selected, the figure presents only the data from the &quot;NREM&quot; column.</p></body></html>", None))
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Note: When N2 and N3 stages are selected together, the generated figure displays only the spectral data corresponding to the &quot;N2N3&quot; column of the report. Similarly, when N1, N2, and N3 stages are all selected, the figure presents only the data from the &quot;NREM&quot; column.</p></body></html>", None))
         self.checkBox_Wake.setText(QCoreApplication.translate("OutputFiles", u"Wake", None))
         self.checkBox_N1.setText(QCoreApplication.translate("OutputFiles", u"N1", None))
         self.checkBox_N2.setText(QCoreApplication.translate("OutputFiles", u"N2", None))
@@ -551,10 +551,10 @@ class Ui_OutputFiles(object):
         self.label_17.setText(QCoreApplication.translate("OutputFiles", u"Desired Cycle", None))
         self.label_18.setText(QCoreApplication.translate("OutputFiles", u"Desired Hour", None))
         self.label.setText(QCoreApplication.translate("OutputFiles", u"<html><head/><body><p><span style=\" font-weight:600;\">Display Options</span></p></body></html>", None))
-        self.radioButton_all.setText(QCoreApplication.translate("OutputFiles", u"Display all the PSA signal curves on the picture.", None))
-        self.radioButton_mean.setText(QCoreApplication.translate("OutputFiles", u"MEAN : Display only the mean PSA curve", None))
-        self.radioButton_meanstd.setText(QCoreApplication.translate("OutputFiles", u"MEAN + STD : Display the mean PSA curve in bold line\n"
-"and the PSA curve standard deviation in gray shaded area.", None))
+        self.radioButton_all.setText(QCoreApplication.translate("OutputFiles", u"Display all the spectral power curves on the picture.", None))
+        self.radioButton_mean.setText(QCoreApplication.translate("OutputFiles", u"MEAN : Display only the mean spectral power curve", None))
+        self.radioButton_meanstd.setText(QCoreApplication.translate("OutputFiles", u"MEAN + STD : Display the mean spectral power curve in bold line\n"
+"and the spectral power curve standard deviation in gray shaded area.", None))
         self.checkBox_log.setText(QCoreApplication.translate("OutputFiles", u"Logarithmic Scale", None))
 #if QT_CONFIG(tooltip)
         self.checkBox_force_axis.setToolTip(QCoreApplication.translate("OutputFiles", u"Enable this option for consistent axes across all pictures and define the axes limits. Otherwise, the axes are automatically determined based on the data.", None))
@@ -567,6 +567,6 @@ class Ui_OutputFiles(object):
         self.label_4.setText(QCoreApplication.translate("OutputFiles", u"<html><head/><body><p><span style=\" font-weight:600;\">Ouput folder to save pictures</span></p></body></html>", None))
         self.lineEdit_output.setPlaceholderText(QCoreApplication.translate("OutputFiles", u"Select the folder where the pictures will be saved.", None))
         self.pushButton_choose.setText(QCoreApplication.translate("OutputFiles", u"Choose", None))
-        self.label_5.setText(QCoreApplication.translate("OutputFiles", u"Pictures are identified with the basename of the PSG recording and\\or channel label.", None))
+        self.label_5.setText(QCoreApplication.translate("OutputFiles", u"Pictures are identified with the basename of the spectral power report and\\or channel label.", None))
     # retranslateUi
 

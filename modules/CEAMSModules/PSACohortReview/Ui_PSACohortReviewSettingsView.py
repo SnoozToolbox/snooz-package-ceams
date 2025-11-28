@@ -144,13 +144,13 @@ class Ui_PSACohortReviewSettingsView(object):
         self.label_2.setText(QCoreApplication.translate("PSACohortReviewSettingsView", u"Subject Channel List", None))
         self.label_3.setText(QCoreApplication.translate("PSACohortReviewSettingsView", u"Cohort Channel List", None))
         self.clear_pushButton.setText(QCoreApplication.translate("PSACohortReviewSettingsView", u"Clear", None))
-        self.add_pushButton.setText(QCoreApplication.translate("PSACohortReviewSettingsView", u"Add PSA File", None))
+        self.add_pushButton.setText(QCoreApplication.translate("PSACohortReviewSettingsView", u"Add Spectral Power Report", None))
         self.all_subject_chan_checkBox.setText(QCoreApplication.translate("PSACohortReviewSettingsView", u"Select All", None))
         self.all_cohort_chan_checkBox.setText(QCoreApplication.translate("PSACohortReviewSettingsView", u"Select All", None))
 #if QT_CONFIG(tooltip)
         self.add_ROI_pushButton.setToolTip(QCoreApplication.translate("PSACohortReviewSettingsView", u"Rename your channel labels first. Adding the ROIs must be the final step.", None))
 #endif // QT_CONFIG(tooltip)
         self.add_ROI_pushButton.setText(QCoreApplication.translate("PSACohortReviewSettingsView", u"Add ROI", None))
-        self.label_4.setText(QCoreApplication.translate("PSACohortReviewSettingsView", u"PSA File information", None))
+        self.label_4.setText(QCoreApplication.translate("PSACohortReviewSettingsView", u"File Information", None))
     # retranslateUi
 

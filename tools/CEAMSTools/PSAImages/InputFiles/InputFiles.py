@@ -88,7 +88,7 @@ class InputFiles(BaseStepView, Ui_InputFiles, QtWidgets.QWidget):
                 roi_subject_used = []
                 for ROI_label, ROI_sel in all_ROIs_subject:
                     roi_subject_used.append(ROI_sel)
-                if sum(chan_subject_used)==0 and all(roi_subject_used):
+                if sum(chan_subject_used)==0 and sum(roi_subject_used)==0:
                     WarningDialog(f"At least one subject has no channel or ROI selected, start looking at {subject} in step '1-Input Files'")
                     return False
             else:
