@@ -4,7 +4,8 @@
 See the file LICENCE for full license details.
 
     InputFiles
-    TODO CLASS DESCRIPTION
+    Settings viewer of the PSAPicsGenerator plugin are loaded.
+    The settings viewer allows to select and rename channels and add ROIs.
 """
 
 from qtpy import QtWidgets, QtCore

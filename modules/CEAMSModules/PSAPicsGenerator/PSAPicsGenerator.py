@@ -243,7 +243,7 @@ class PSAPicsGenerator(SciNode):
 
                     if pics_param['subject_avg'] | pics_param['cohort_avg']:
                         if psa_data_ch_sel is not None and len(psa_data_ch_sel) > 0:
-                            psa_data_all_chan.append(psa_data_ch_sel)
+                            psa_data_all_chan.append(psa_data_ch_sel) # psa_data_all_chan is a list of DataFrame
 
             # **********************************************
             # One figure for the current subject : one picture for all channels
@@ -261,11 +261,9 @@ class PSAPicsGenerator(SciNode):
                 if (len(psa_data_all_chan)>0):
                     # psa_avg : numpy array
                     #     Average PSA for all channels for the current subject
-                    #psa_avg_per_chan_cur, freq_avg_per_chan_cur = \
-                    self._save_subject_chan_fig_psa(psa_data_all_chan, \
-                        pics_param, file_name, chan_label_all_chan, fig_save, colors)
-
                     if fig_save:
+                        self._save_subject_chan_fig_psa(psa_data_all_chan, \
+                            pics_param, file_name, chan_label_all_chan, fig_save, colors)
                         self._log_manager.log(self.identifier, \
                             f"The image is generated for the file {file_name} for all channels.")
 
@@ -299,6 +297,8 @@ class PSAPicsGenerator(SciNode):
             
                 # psa_data : for the current channel -> one PSA per subject,
                 #  they need to be aligned together
+                # psa_data : dict of list of numpy array
+                #   keys are the subject group and values are the PSA data for the current channel or ROI
                 self._save_cohort_chan_fig_psa(psa_data, \
                     pics_param, ch, colors_param['cohort']) # n_cats is useless
 

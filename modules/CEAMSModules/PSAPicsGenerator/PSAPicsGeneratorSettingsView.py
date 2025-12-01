@@ -19,6 +19,7 @@ from qtpy.QtCore import Qt
 from qtpy.QtWidgets import QFileDialog, QListWidgetItem
 from qtpy.QtGui import QStandardItemModel, QStandardItem
 
+DEBUG = False
 
 class PSAPicsGeneratorSettingsView(BaseSettingsView, Ui_PSAPicsGeneratorSettingsView, QtWidgets.QWidget):
     """
@@ -228,8 +229,9 @@ class PSAPicsGeneratorSettingsView(BaseSettingsView, Ui_PSAPicsGeneratorSettings
                     self._initialize_ROIs_from_cohort()
                 # Process stored chans_ROIs_sel data AFTER subject_chans_label is populated
                 self._process_stored_chans_ROIs_sel()
-                # Debug current state
-                self._debug_print_state()
+                if DEBUG:
+                    # Debug current state
+                    self._debug_print_state()
                 # Update the model based on the loaded data
                 self.update_items_from_subject_chans_label_and_ROIs_subjects()
                 # Generate a signal to inform that self.filenames has been updated
