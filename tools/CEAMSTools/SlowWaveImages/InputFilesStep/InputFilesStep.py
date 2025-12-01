@@ -8,19 +8,28 @@ See the file LICENCE for full license details.
     The settings viewer has been adapted because the SlowWaveImages plugin is 
     run without master process.  The whole list of PSG file is read and compiled
     in order to generate images of the cohort.
+    
+    Modifications : 
+    - BaseSettingsView changed for BaseStepView
+    - Alias management removed
+    - Replaced the Ui_PSGReaderSettingsView with SlowWaveImages.InputFilesStep.Ui_InputFilesStep
+    - Replaced the model_updated_signal for the context of the step
+    - Replaced the parent node with the _sw_wave_pics_node identifier
+    - Removed self._options
+
 """
+import datetime
 import numpy as np
 import os
 import pandas as pd
 from qtpy import QtWidgets
 from qtpy import QtCore
 from qtpy import QtGui
-from qtpy.QtCore import Qt, QTimer
-from qtpy.QtWidgets import QProgressDialog
+from qtpy.QtCore import Qt
 import sys
 
-from commons.BaseStepView import BaseStepView
 from commons.CheckBoxDelegate import CheckBoxDelegate
+from commons.BaseStepView import BaseStepView
 from widgets.WarningDialog import WarningDialog
 
 from CEAMSModules.PSGReader.PSGReaderManager import PSGReaderManager
@@ -35,6 +44,7 @@ DEBUG = False
 
 class InputFilesStep( BaseStepView,  Ui_InputFilesStep, QtWidgets.QWidget):
     
+    # Update the context each time the self.files_model is modified
     context_files_view      = "input_files_settings_view"
 
     """ InputFilesStep display the settings. """
@@ -55,7 +65,8 @@ class InputFilesStep( BaseStepView,  Ui_InputFilesStep, QtWidgets.QWidget):
         self._psg_reader_manager._init_readers()
 
         # Init table models
-        self.files_model = self.create_empty_files_model()
+        self.files_model = self.create_empty_files_model() # with events
+        self.files_stages_model = self.create_empty_files_model() # with stages
 
         self.files_listview.setModel(self.files_model)
         self.events_treeView.setModel(self.files_model)
@@ -64,21 +75,19 @@ class InputFilesStep( BaseStepView,  Ui_InputFilesStep, QtWidgets.QWidget):
 
         # itemChanged is a signal in QStandardItemModel Class
         # Connect itemChanged to the slot on_item_changed allows to perform 
-        self.files_model.itemChanged.connect(self.on_file_selection_changed)
+        self.files_model.itemChanged.connect(self.file_selection_changed_slot)
+        # Connect the custom signal to update the label
+        self.montages_table_model.dataChangedWithCheckState.connect(self.updateLabel_Montages)
+        self.channels_table_model.dataChangedWithCheckState.connect(self.updateLabel_Channels)
         
         # Subscribe to the proper topics to send/get data from the node
         self._files_topic = f'{self._sw_wave_pics_node}.files'
         self._pub_sub_manager.subscribe(self, self._files_topic)
 
+        # always self._options['file_selection_only']['value'] == "0":
         self.frame_montages.setVisible(True)
         self.frame_channels.setVisible(True)
-
-        self._context_manager[self.context_files_view] = self
-
-        self._emit_timer = QTimer()
-        self._emit_timer.setSingleShot(True)
-        self._emit_timer.timeout.connect(self._emit_timeout_reached)
-
+        
 
     def on_topic_update(self, topic, message, sender):
         """ Called by the publisher to init settings in the SettingsView 
@@ -102,9 +111,15 @@ class InputFilesStep( BaseStepView,  Ui_InputFilesStep, QtWidgets.QWidget):
              data is a dict with the parameters to init PSGReader.files input.
              Each key of the dict data is the filename of the PSG file loaded.
         """
+        # A model which includes files, events
         self.files_model.clear()
         self.files_model.setColumnCount(2)
         self.files_model.setHorizontalHeaderLabels(['Group-Name', 'Count'])
+
+        # A model which includes files and stages
+        self.files_stages_model.clear()
+        self.files_stages_model.setColumnCount(2)
+        self.files_stages_model.setHorizontalHeaderLabels(['Group-Name', 'Count'])
 
         # Clear old data
         self.montages_table_model._data = self.montages_table_model._data[0:0]
@@ -125,8 +140,9 @@ class InputFilesStep( BaseStepView,  Ui_InputFilesStep, QtWidgets.QWidget):
             }
             
             # tree item : parent=file, child=group and count, child=name and count
-            item = self.create_file_item_count(filename)
+            item, item_stages = self.create_file_item_count(filename)
             self.files_model.appendRow(item) 
+            self.files_stages_model.appendRow(item_stages) 
 
             # For each file, load its montages in the montages table model
             for montage in data[filename]['montages']:
@@ -171,6 +187,7 @@ class InputFilesStep( BaseStepView,  Ui_InputFilesStep, QtWidgets.QWidget):
             msg.setWindowTitle("File not found")
             msg.exec()
 
+
         # Invalide the models so it refreshes the UI
         self.montages_proxy_model.invalidate()
         self.montages_tableview.resizeColumnsToContents() # Especially important for the check mark column or it will not appear properly
@@ -178,9 +195,15 @@ class InputFilesStep( BaseStepView,  Ui_InputFilesStep, QtWidgets.QWidget):
         self.channels_tableview.resizeColumnsToContents() # Especially important for the check mark column or it will not appear properly
         self.on_montages_selection_changed()
 
-        # Update the context to notify that the files model has been updated
+        # Update the number of files in the title
+        self.label_PSG.setText(f"PSG files ({self.files_model.rowCount()})")
+        # To inform that self.files_model has been updated
         self._context_manager[self.context_files_view] = self
-        
+
+        # Generate signals to inform that Montage and Channel tables have been updated and the check state has changed
+        self.montages_table_model.dataChangedWithCheckState.emit(self.montages_table_model.checkedItemCount())
+        self.channels_table_model.dataChangedWithCheckState.emit(self.channels_table_model.checkedItemCount())      
+
 
     # Create an empty model based with the column Group-Name and Count
     def create_empty_files_model(self):
@@ -191,7 +214,7 @@ class InputFilesStep( BaseStepView,  Ui_InputFilesStep, QtWidgets.QWidget):
         return files_model
 
 
-    # Create an empty model based with the column Group-Name and Count
+    # Create an empty model based with the column 'Group-Name', 'Original label'
     def create_empty_edit_files_model(self):
         files_model = QtGui.QStandardItemModel(0, 2)
         files_model.setHeaderData(0, QtCore.Qt.Horizontal, 'Group-Name')
@@ -231,11 +254,9 @@ class InputFilesStep( BaseStepView,  Ui_InputFilesStep, QtWidgets.QWidget):
         self.channel_use_delegate = CheckBoxDelegate(None)
         self.channels_tableview.setItemDelegateForColumn(0, self.channel_use_delegate)
 
-        # Connect the data_changed signal from channels_table_model to the on_channels_selection_changed
-        self.channels_table_model.dataChanged.connect(self.on_channels_selection_changed)
 
 
-    def on_add_files(self):
+    def add_files_slot(self):
         dlg = QtWidgets.QFileDialog()
         #dlg.setOption(QtWidgets.QFileDialog.DontUseNativeDialog, True)
         dlg.setFileMode(QtWidgets.QFileDialog.ExistingFiles)
@@ -243,26 +264,44 @@ class InputFilesStep( BaseStepView,  Ui_InputFilesStep, QtWidgets.QWidget):
 
         if dlg.exec_():
             filenames = dlg.selectedFiles()
+
+            # Add a QProgressDialog to show the progression bar
+            n_files = len(filenames)
+            progress = QtWidgets.QProgressDialog("Loading files...", None, 0, n_files)
+            progress.setWindowModality(Qt.ApplicationModal)
+            progress.setMinimumDuration(0) # Settings a minimum time greater than 0 makes the UI update slower
+            progress.show()
+
             # Add the file only if is it not already added
-            for filename in filenames:
+            for i, filename in enumerate(filenames):
+                progress.setValue(i)
                 matches = self.files_model.findItems(os.path.basename(filename),QtCore.Qt.MatchExactly)
                 if len(matches) == 0:
                     success = self.load_file_info(filename) # self._psg_reader_manager is used
 
                     if success:
                         # tree item : parent=file, child=group and count, child=name and count
-                        item = self.create_file_item_count(filename) # The file is read
+                        item, item_stages = self.create_file_item_count(filename) # The file is read
                         self.files_model.setColumnCount(2)
-                        self.files_model.appendRow(item)           
-                    
-            # Update the context to notify that the files model has been updated
+                        self.files_model.appendRow(item)  
+                        self.files_stages_model.setColumnCount(2)
+                        self.files_stages_model.appendRow(item_stages)  
+
+            progress.setValue(n_files)
+            progress.close()
+                        
+            # Update the number of files in the title
+            self.label_PSG.setText(f"PSG files ({self.files_model.rowCount()})")
+            # To inform that self.files_model has been updated
             self._context_manager[self.context_files_view] = self
 
         for i in range(self.files_model.columnCount()):
             self.events_treeView.hideColumn(i)
 
 
-    # Return an tree item : parent=file, child=group and count, child=name and count
+    # Return 2 tree items : parent=file, child=group and count, child=name and count
+    # file_item includes events
+    # file_stages_item includes stages (Useful for NATUS and Stellate because the sleep stages are renamed within Snooz)
     def create_file_item_count(self, filename):
         """
         Create an file item as parent with its children : group and count, name and count.
@@ -278,15 +317,119 @@ class InputFilesStep( BaseStepView,  Ui_InputFilesStep, QtWidgets.QWidget):
                     A tree item : parent=file, child=group and count, child=name and count
             usage 
             -----------
-                file_item = create_file_item_count(filename)
+                file_item, file_stages_item = create_file_item_count(filename)
         """
 
         file_item = QtGui.QStandardItem(os.path.basename(filename))
         file_item.setToolTip(filename)
-        file_item.setData(filename, Qt.UserRole + 1)
+        file_item.setData(filename, Qt.UserRole + 1) # "file_item.setData(filename, 0)" overwrites file_item.text()
+
+        file_stages_item = QtGui.QStandardItem(os.path.basename(filename))
+        file_stages_item.setToolTip(filename)
+        file_stages_item.setData(filename, Qt.UserRole + 1) # "file_item.setData(filename, 0)" overwrites file_item.text()
+
         self._psg_reader_manager.open_file(filename)
-        stages = self._psg_reader_manager.get_sleep_stages()
+        stages = self._psg_reader_manager.get_sleep_stages() # need to make them visible from the settings view
         events = self._psg_reader_manager.get_events()
+        self._psg_reader_manager.close_file()
+
+        # First step, organize the list of events in a dictionary where the key
+        # is the name of group and the value is another dictionary for its
+        # list of items. The value of the second dictionary is the total count of
+        # event of this kind.
+        
+        # Initialize an empty dictionary to store the events and their counts for each group
+        events_groups = {}
+        stages_groups = {}
+
+        # Group the events by 'group' and 'name' columns, count the number of events in each group, and create a new dataframe with the count
+        group_df = events.groupby(['group', 'name']).size().reset_index(name='count')
+        # Group the events by 'group' and 'name' columns, count the number of events in each group, and create a new dataframe with the count
+        stage_df = stages.groupby(['group', 'name']).size().reset_index(name='count')
+
+        # Get a list of unique groups
+        groups_ext_evts = group_df['group'].unique().tolist()
+        groups_ext_stgs = stage_df['group'].unique().tolist()
+
+        # Iterate over the groups
+        for group in groups_ext_evts:
+            # Filter the group_df to only get the events for this group
+            list_of_event_for_this_group = group_df[group_df['group'] == group]
+            # Create a dictionary where the key is the event name and the value is the count
+            event_count_dict = list_of_event_for_this_group.set_index('name')['count'].to_dict()
+            # Add the dictionary for this group to the events_groups dictionary
+            events_groups[group] = event_count_dict
+
+        # Iterate over the groups of stages (only one)
+        for group in groups_ext_stgs:
+            # Filter the stage_df to only get the events for this group
+            list_of_event_for_this_group = stage_df[stage_df['group'] == group]
+            # Create a dictionary where the key is the event name and the value is the count
+            event_count_dict = list_of_event_for_this_group.set_index('name')['count'].to_dict()
+            # Add the dictionary for this group to the events_groups dictionary
+            stages_groups[group] = event_count_dict
+
+        # Second step, form a tree of standardItem for the group of events and their events
+        # from this dictionary.
+        for group in events_groups:
+            total_events_count = sum(events_groups[group].values())
+            group_item = QtGui.QStandardItem(group)
+            group_count_item = QtGui.QStandardItem(str(total_events_count))
+            for event in events_groups[group].items():
+                name_item = QtGui.QStandardItem(event[0])
+                count_item = QtGui.QStandardItem(str(event[1]))
+                group_item.appendRow([name_item, count_item])
+            file_item.appendRow([group_item,group_count_item])
+
+            # Set the scoring status
+            if len(stages)==0:
+                file_item.setData('unscored', Qt.UserRole + 2)
+            elif any(stages['name']!='9'):
+                file_item.setData('scored', Qt.UserRole + 2)
+            else:
+                file_item.setData('unscored', Qt.UserRole + 2)
+
+        # Second step, form a tree of standardItem for the group of events and their events
+        # from this dictionary.
+        for group in stages_groups:
+            total_events_count = sum(stages_groups[group].values())
+            group_item = QtGui.QStandardItem(group)
+            group_count_item = QtGui.QStandardItem(str(total_events_count))
+            for event in stages_groups[group].items():
+                name_item = QtGui.QStandardItem(event[0])
+                count_item = QtGui.QStandardItem(str(event[1]))
+                group_item.appendRow([name_item, count_item])
+            file_stages_item.appendRow([group_item,group_count_item])
+
+        return file_item, file_stages_item
+    
+
+    # Return an tree item : parent=file, child=group and count, child=name and count
+    #   Only the sleep stages are read (instead of the events)
+    def create_file_item_stage_count(self, filename):
+        """
+        Create an file item as parent with its children : group and count, name and count.
+        The file "filename" is opened and its sleep stages are read.
+            
+            Parameters
+            -----------
+                filename    : string
+                    filename as a text to add to the item.
+            Returns
+            ----------- 
+                file_item :  QtGui.QStandardItem
+                    A tree item : parent=file, child=group and count, child=name and count
+            usage 
+            -----------
+                file_item = create_file_item_stage_count(filename)
+        """
+
+        file_item = QtGui.QStandardItem(os.path.basename(filename))
+        file_item.setToolTip(filename)
+        file_item.setData(filename, Qt.UserRole + 1) # "file_item.setData(filename, 0)" overwrites file_item.text()
+        self._psg_reader_manager.open_file(filename)
+        stages = self._psg_reader_manager.get_sleep_stages() # need to make them visible from the settings view
+        #events = self._psg_reader_manager.get_events()
         self._psg_reader_manager.close_file()
 
         # First step, organize the list of events in a dictionary where the key
@@ -298,7 +441,7 @@ class InputFilesStep( BaseStepView,  Ui_InputFilesStep, QtWidgets.QWidget):
         events_groups = {}
 
         # Group the events by 'group' and 'name' columns, count the number of events in each group, and create a new dataframe with the count
-        group_df = events.groupby(['group', 'name']).size().reset_index(name='count')
+        group_df = stages.groupby(['group', 'name']).size().reset_index(name='count')
 
         # Get a list of unique groups
         groups = group_df['group'].unique().tolist()
@@ -325,13 +468,6 @@ class InputFilesStep( BaseStepView,  Ui_InputFilesStep, QtWidgets.QWidget):
 
             # Set the scoring status
             file_item.appendRow([group_item,group_count_item])
-            if len(stages)==0:
-                file_item.setData('unscored', Qt.UserRole + 2)
-            elif any(stages['name']!='9'):
-                file_item.setData('scored', Qt.UserRole + 2)
-            else:
-                file_item.setData('unscored', Qt.UserRole + 2)
-
         return file_item
 
 
@@ -356,6 +492,7 @@ class InputFilesStep( BaseStepView,  Ui_InputFilesStep, QtWidgets.QWidget):
                 # create a checkable item copied from self.files_model
                 file_item = make_checkable_file_item_count(filename, self.files_model) 
         """
+        
         ori_file_item =self.get_file_item(filename, model)
         if not isinstance(ori_file_item, QtGui.QStandardItem):
             return None
@@ -389,23 +526,85 @@ class InputFilesStep( BaseStepView,  Ui_InputFilesStep, QtWidgets.QWidget):
         return file_item
 
 
-    def on_channel_search_changed(self, search_pattern):
+
+    # Return an tree item : parent=file, child=group and original name, child=name and original label
+    def make_editable_file_item_count(self, filename, model, checkable=False): 
+        """
+        Make the file item children editable, checkable (if applied) (file item is copied from model).
+        Copy the file item from the model as parent and make its children editable : group and original label, name and original label.
+        If checkable, the items are checked when created.
+            
+            Parameters
+            -----------
+                filename    : string
+                    filename as a text to add to the item.
+                checkable : bool
+                    Bool flag to create a checkable item.
+                    Items are checked when created.
+            Returns
+            ----------- 
+                file_item :  QtGui.QStandardItem
+                    A tree item : parent=file, child=group and original label, child=name and original label
+            usage 
+            -----------
+                file_item = create_file_editable_item(filename, self.files_model, True)
+        """
+        ori_file_item =self.get_file_item(filename, model)
+
+        # Create a file item based on the original file item
+        file_item = QtGui.QStandardItem(ori_file_item.text())
+        file_item.setData(ori_file_item.data(Qt.UserRole + 1),Qt.UserRole + 1)
+
+        # For all group and count children of the original file item
+        for i_group in range(0, ori_file_item.rowCount()):
+            # Create a new checkable item
+            group_item = QtGui.QStandardItem(ori_file_item.child(i_group,0).text())
+            group_item.setEditable(True)
+            ori_group_item = QtGui.QStandardItem(ori_file_item.child(i_group,0).text())
+            ori_group_item.setCheckable(False)
+            ori_group_item.setEditable(False)
+            if checkable:
+                # Make checkable and check the state of the group_item
+                group_item.setCheckable(True)
+                group_item.setAutoTristate(True)
+                group_item.setCheckState(QtCore.Qt.CheckState.Checked)
+            # For each child of the group_item
+            for i_name in range(0, ori_file_item.child(i_group,0).rowCount()):
+                name_item = QtGui.QStandardItem(ori_file_item.child(i_group,0).child(i_name,0).text())
+                name_item.setEditable(True)
+                ori_name_item = QtGui.QStandardItem(ori_file_item.child(i_group,0).child(i_name,0).text())
+                ori_name_item.setCheckable(False)
+                ori_name_item.setEditable(False)
+                if checkable:
+                    # Make checkable and check the state of the name_item
+                    name_item.setCheckable(True)
+                    name_item.setAutoTristate(False)
+                    name_item.setCheckState(QtCore.Qt.CheckState.Checked)
+                group_item.appendRow([name_item, ori_name_item])
+            # Add the new checkable item to the file_item
+            file_item.appendRow([group_item, ori_group_item])
+        
+        # Copy the scoring status
+        file_item.setData(ori_file_item.data(Qt.UserRole + 2), Qt.UserRole + 2)
+
+        return file_item
+
+
+    def channel_search_changed_slot(self, search_pattern):
         self.update_channels_filter()
+    
 
-
-    def on_channel_search_changed(self, search_pattern):
-        self.update_channels_filter()
-
-
-    def on_add_folders(self):
+    def add_folders_slot(self):
         file_dialog = QtWidgets.QFileDialog()
         file_dialog.setFileMode(QtWidgets.QFileDialog.Directory) 
-        file_dialog.setOption(QtWidgets.QFileDialog.ShowDirsOnly, True)
-        # The native dialog does not support multiple folders selection in windows and macOS
+        file_dialog.setOption(QtWidgets.QFileDialog.ShowDirsOnly, True) # Allows the user to select only directories (folders).
+        # The non native QFileDialog supports only local files.
+            # So it is better to use the native dialog instead to see athena
+        # The native dialog does not support multiple folders selection in windows and macos
             # Natus needs the option to select multiple folders
+        #if not sys.platform.startswith("darwin"):
         file_dialog.setOption(QtWidgets.QFileDialog.DontUseNativeDialog, True)
         file_view = file_dialog.findChild(QtWidgets.QListView, 'listView')
-
         if file_view:
             file_view.setSelectionMode(QtWidgets.QAbstractItemView.ExtendedSelection)
         f_tree_view = file_dialog.findChild(QtWidgets.QTreeView)
@@ -415,10 +614,26 @@ class InputFilesStep( BaseStepView,  Ui_InputFilesStep, QtWidgets.QWidget):
         if file_dialog.exec():
             folders = file_dialog.selectedFiles()
 
-            for folder in folders:
+            # Add a QProgressDialog to show the progression bar
+            n_files = len(folders)
+            if n_files > 1:
+                progress = QtWidgets.QProgressDialog("Loading files...", None, 0, n_files)
+                progress.setWindowModality(Qt.ApplicationModal)
+                progress.setMinimumDuration(0) # Settings a minimum time greater than 0 makes the UI update slower
+                progress.show()
+            for i, folder in enumerate(folders):
                 filenames = self._psg_reader_manager.find_psg_within_folder(folder)
 
-                for filename in filenames:
+                if n_files > 1:
+                    progress.setValue(i)
+                else:
+                    progress = QtWidgets.QProgressDialog("Loading files...", None, 0, len(filenames))
+                    progress.setWindowModality(Qt.ApplicationModal)
+                    progress.setMinimumDuration(0) # Settings a minimum time greater than 0 makes the UI update slower
+                    progress.show()                    
+
+                for i_f, filename in enumerate(filenames):
+                    progress.setValue(i_f)
                     matches = self.files_model.findItems(os.path.basename(filename),QtCore.Qt.MatchExactly)
                     if len(matches) == 0:
                         if filename is not None:
@@ -426,19 +641,28 @@ class InputFilesStep( BaseStepView,  Ui_InputFilesStep, QtWidgets.QWidget):
 
                             if success:
                                 # tree item : parent=file, child=group and count, child=name and count
-                                item = self.create_file_item_count(filename) # The file is read
+                                item, item_stages = self.create_file_item_count(filename) # The file is read
                                 self.files_model.setColumnCount(2)
                                 self.files_model.appendRow(item)    
+                                self.files_stages_model.setColumnCount(2)
+                                self.files_stages_model.appendRow(item_stages)    
                         else:
                             #TODO Log empty folders
                             # Couldnt find PSG file in folder:{folder}
                             pass
-            # Update the context to notify that the files model has been updated
+            if n_files > 1:
+                progress.setValue(n_files)
+            else:
+                progress.setValue(len(filenames))
+            progress.close()
+            # Update the number of files in the title
+            self.label_PSG.setText(f"PSG files ({self.files_model.rowCount()})")
+            # To inform that self.files_model has been updated
             self._context_manager[self.context_files_view] = self
-
+    
     
     # Called when the user press on Remove push button
-    def on_remove_entries(self):
+    def remove_entries_slot(self):
         # The rows have to be removed once all the models are updated because
         # the self.files_listview.selectedIndexes() is not in sync with the model
         # With this technic the multiple selection from top to bottom or bottom up works
@@ -466,9 +690,16 @@ class InputFilesStep( BaseStepView,  Ui_InputFilesStep, QtWidgets.QWidget):
         row_selected.sort(reverse=True) 
         for row in row_selected:
             self.files_model.removeRow(row)
+            self.files_stages_model.removeRow(row)
 
-        # Update the context to notify that the files model has been updated
+        # Update the number of files in the title
+        self.label_PSG.setText(f"PSG files ({self.files_model.rowCount()})")
+        # To inform that self.files_model has been updated
         self._context_manager[self.context_files_view] = self
+
+        # Generate signals to inform that Montage and Channel tables have been updated and the check state has changed
+        self.montages_table_model.dataChangedWithCheckState.emit(self.montages_table_model.checkedItemCount())
+        self.channels_table_model.dataChangedWithCheckState.emit(self.channels_table_model.checkedItemCount())
 
 
     def on_validate_settings(self):
@@ -477,25 +708,40 @@ class InputFilesStep( BaseStepView,  Ui_InputFilesStep, QtWidgets.QWidget):
         # If not, display an error message to the user and return False.
         # This is called just before the apply settings function.
         # Returning False will prevent the process from executing.
-       
+
         channels_info_df = self.channels_table_model.get_data()
+        montages_info_df = self.montages_table_model.get_data()
         file_list = channels_info_df['Filename'].unique()
+
         if len(file_list)>0:
-            # For each recording check the channel selection
+
+            for file in file_list:
+                montage_used = montages_info_df[(montages_info_df['Filename']==file) & (montages_info_df['Use']==True)]
+                if len(montage_used) > 1:
+                    WarningDialog(f"Only one montage per recording is allowed. Check the montages selection of the file : {file}.")
+                    return False
+
+            # For each recording check the channel selection and sleep stage 4
             for file in file_list:
                 chans_used = channels_info_df[(channels_info_df['Filename']==file) & (channels_info_df['Use']==True)]
                 if len(chans_used)==0:
                     WarningDialog(f"At least one recording has no channel selected, check the channel selection of the file : {file}.")
                     return False
+                # Check for sleep stage 4 in annotations and warn user
+                success = self._psg_reader_manager.open_file(file)
+                if success:
+                    sleep_stages = self._psg_reader_manager.get_sleep_stages()
+                    if sleep_stages is not None and 'name' in sleep_stages.columns:
+                        if (sleep_stages['name'] == '4').any():
+                            WarningDialog(f"Sleep stage 'N4' detected in annotation file {file}. It will be converted to 'N3' automatically.")
         else:
-            WarningDialog(f"Add files before running the pipeline.")    
+            WarningDialog(f"Add files before running the pipeline.")
             return False
         return True   
 
 
-    # Called when the user save a tool that include the InputFilesStep or 
-    # press the "apply" push button of the settingsView
-    def on_apply_settings(self):
+    # Update the files selection (montage and channels) and return the dict of files
+    def update_files_selection(self):
 
         files = self.files_details.copy()
 
@@ -531,20 +777,108 @@ class InputFilesStep( BaseStepView,  Ui_InputFilesStep, QtWidgets.QWidget):
                 'is_selected':is_selected,
                 'sample_rate':sample_rate
             }
+        
+        return files
 
+
+    # Called when the user save a tool that include the InputFilesStep or 
+    # press the "apply" push button of the settingsView
+    def on_apply_settings(self):
+        # Update the files selection (montage and channels) and return the dict of files
+        files = self.update_files_selection()
         # Send the dictionary as an input to the PSGReader module
         self._pub_sub_manager.publish(self, self._files_topic, files)
 
 
-    def on_export(self):
-        filename, _ = QtWidgets.QFileDialog.getSaveFileName(None, 'Export channels selection as',filter="*.tsv,*.txt")
-        if filename is not None and filename:
+    # Called when the user click on the export button
+    def export_slot(self):
+
+        # Get the current date as a string YYYYMMDD
+        current_date = datetime.datetime.now().strftime("%Y%m%d")
+        # Create a dictionnary to store the data
+        data_to_export = {}
+        # Ask the user to select a folder
+        QtWidgets.QMessageBox.information(
+            None,
+            "Select Folder",
+            "Please select an existing folder where the file selection will be exported."
+        )
+        folder = QtWidgets.QFileDialog.getExistingDirectory(self, "Select a folder", "", QtWidgets.QFileDialog.ShowDirsOnly)
+        if folder is not None and folder:
+
+            # Export the log of the channel selection
+            filename = os.path.join(folder, f'Snooz-Chan-log-{current_date}.txt')
             with open(filename, 'w') as tsv_file:
                 export_df = self.channels_table_model._data.loc[self.channels_table_model._data['Use'] == True]
                 export_df.to_csv(tsv_file, sep='\t', encoding="utf_8")
             
+            # Create a dictionnary to store the files selection definition
+            # Update the files selection (montage and channels) and return the dict of files
+            files = self.update_files_selection()
+            data_to_export['files'] = files
 
-    def on_file_selection_changed(self):
+            # Save the dictionnary files in a text file
+            # Snooz_Files_{date}.tsv
+            filename = os.path.join(folder, f'Snooz-Files-{current_date}.txt')
+            try: 
+                with open(filename, 'w') as txt_file:
+                    # Write the dictionary converted to a string
+                    txt_file.write(str(data_to_export))
+                        # Ask the user to select a folder
+                QtWidgets.QMessageBox.information(
+                    None,
+                    "File Selection Exported",
+                    "The selection files were successufly exported."
+                )
+            except Exception as e:  
+                 QtWidgets.QMessageBox.critical(
+                    None,
+                    "File Selection Exported",
+                    "An error occured while exporting the selection files."
+                )               
+
+
+    # Called when the user click on the import button
+    def import_slot(self):
+
+        # Inform the user to select a file
+        QtWidgets.QMessageBox.information(
+            None,
+            "Select File",
+            "Please select the file selection (i.e. Previously exported as Snooz-Files-date.txt)."
+        )
+        # Open a file. Ask the user for a txt file
+        filename, _ = QtWidgets.QFileDialog.getOpenFileName(parent=None, \
+            caption ='Open files selection (i.e. Previously exported as Snooz-Files-date.txt)', \
+            filter ="*.txt")
+        if filename is not None and filename:
+            # Display a loading dialog
+            self._open_loading_dialog()
+            with open(filename, 'r') as txt_file:
+                information_read = txt_file.read()
+                try:
+                    information_dict = eval(information_read)
+                    if 'files' in information_dict:
+                        files = information_dict['files']
+                        self.load_files_from_data(files)
+                        self._close_loading_dialog()      
+                    else:
+                        self._close_loading_dialog()  
+                        QtWidgets.QMessageBox.critical(
+                                None,
+                                "File Selection Import",
+                                f"The file {filename} does not include the needed information."
+                            )  
+
+                except Exception as e:  
+                    self._close_loading_dialog()  
+                    QtWidgets.QMessageBox.critical(
+                        None,
+                        "File Selection Import",
+                        f"The file {filename} is not properly formated."
+                    )    
+
+    def file_selection_changed_slot(self):
         indexes = self.files_listview.selectedIndexes()
         files = []
         for index in indexes:
@@ -578,31 +912,35 @@ class InputFilesStep( BaseStepView,  Ui_InputFilesStep, QtWidgets.QWidget):
         self.channels_proxy_model.set_filename_montage_pair_filter(montage_filename_pairs)
 
 
-    def on_montage_seach_changed(self):
+    def montage_seach_changed_slot(self):
         self.montages_proxy_model.set_montages_search_pattern(self.montage_search_lineedit.text())
         # Update the montages selection to change the list of channels
         self.on_montages_selection_changed()
 
 
-    def on_montages_select_all(self):
+    def montages_select_all_slot(self):
         for row in range(self.montages_proxy_model.rowCount()):
             self.montages_proxy_model.setData(self.montages_proxy_model.index(row,0), True)
         self.on_montages_selection_changed()
         self.montages_proxy_model.invalidate()
+        # Update the title label_Montages to add in the title the number of selected montages
+        self.label_Montages.setText(f"Montages ({self.montages_proxy_model.rowCount()})")
         self.montages_tableview.resizeColumnsToContents() # Especially important for the check mark column or it will not appear properly
 
 
-    def on_montages_unselect_all(self):
+    def montages_unselect_all_slot(self):
         for row in range(self.montages_proxy_model.rowCount()):
             self.montages_proxy_model.setData(self.montages_proxy_model.index(row,0), False)
         self.on_montages_selection_changed()
         self.montages_proxy_model.invalidate()
+        # Update the title label_Montages to add in the title the number of selected montages
+        self.label_Montages.setText(f"Montages (0)")
         self.montages_tableview.resizeColumnsToContents() # Especially important for the check mark column or it will not appear properly
 
 
-    def on_channels_select_all(self):
+    def channels_select_all_slot(self):
         n_chans = self.channels_proxy_model.rowCount()
-        progress = QProgressDialog("Selecting all channels...", "Abort", 0, n_chans)
+        progress = QtWidgets.QProgressDialog("Selecting all channels...", None, 0, n_chans)
         progress.setWindowModality(Qt.ApplicationModal)
         progress.setMinimumDuration(0) # Settings a minimum time greater than 0 makes the UI update slower
         progress.show()
@@ -610,8 +948,6 @@ class InputFilesStep( BaseStepView,  Ui_InputFilesStep, QtWidgets.QWidget):
             # if the row is a multiple of 100, update the progress bar
             if row % 200 == 0:
                 progress.setValue(row)
-            if progress.wasCanceled():
-                break
             self.channels_proxy_model.setData(self.channels_proxy_model.index(row,0), True)
         progress.setValue(n_chans)
         self.channels_proxy_model.invalidate()
@@ -619,9 +955,9 @@ class InputFilesStep( BaseStepView,  Ui_InputFilesStep, QtWidgets.QWidget):
         progress.close()
 
 
-    def on_channels_unselect_all(self):
+    def channels_unselect_all_slot(self):
         n_chans = self.channels_proxy_model.rowCount()
-        progress = QProgressDialog("Unselecting all channels...", "Abort", 0, n_chans, self)
+        progress = QtWidgets.QProgressDialog("Unselecting all channels...", None, 0, n_chans, self)
         progress.setWindowModality(Qt.ApplicationModal)
         progress.setMinimumDuration(0)  # Settings a minimum time greater than 0 makes the UI update slower
         progress.show()
@@ -629,8 +965,6 @@ class InputFilesStep( BaseStepView,  Ui_InputFilesStep, QtWidgets.QWidget):
             # if the row is a multiple of 1000, update the progress bar
             if row % 200 == 0:
                 progress.setValue(row)
-            if progress.wasCanceled():
-                break
             self.channels_proxy_model.setData(self.channels_proxy_model.index(row,0), False)
         progress.setValue(n_chans)
         self.channels_proxy_model.invalidate()
@@ -647,83 +981,91 @@ class InputFilesStep( BaseStepView,  Ui_InputFilesStep, QtWidgets.QWidget):
             self.files_details[filename] = 
                 'event_groups':event_groups,
         """
-        success = self._psg_reader_manager.open_file(filename)
-
+        error = None
+        output = self._psg_reader_manager.open_file(filename)
+        if isinstance(output, tuple) and len(output) == 2:
+            success, error = output
+        else:
+            success = output
         if not success:
             msg = QtWidgets.QMessageBox()
             msg.setIcon(QtWidgets.QMessageBox.Critical)
-            msg.setText(f"Could not open file. The format is not valid: {filename}")
+            if error is not None:
+                msg.setText(error)
+            else:
+                msg.setText(f"Could not open the PSG or the accessory file. The format is not valid for {filename}")
             msg.setWindowTitle("File load error")
             msg.exec()
             return False
 
-        # For each montage get the list of channels
-        montages = self._psg_reader_manager.get_montages()
+        if True:
+            # For each montage get the list of channels
+            montages = self._psg_reader_manager.get_montages()
 
-        # count list size
-        count = 0
-        for montage in montages:
-            channels = self._psg_reader_manager.get_channels(montage.index)
-            count = count + len(channels)
+            # count list size
+            count = 0
+            for montage in montages:
+                channels = self._psg_reader_manager.get_channels(montage.index)
+                count = count + len(channels)
 
-        total_uses = np.full(count, False)
-        total_chs = np.empty(count, dtype=object)
-        total_sample_rates = np.empty(count, dtype=object)
-        total_montages = np.empty(count, dtype=object)
-        total_filenames = np.empty(count, dtype=object)
-        total_montage_indexes = np.empty(count, dtype=object)
+            total_uses = np.full(count, False)
+            total_chs = np.empty(count, dtype=object)
+            total_sample_rates = np.empty(count, dtype=object)
+            total_montages = np.empty(count, dtype=object)
+            total_filenames = np.empty(count, dtype=object)
+            total_montage_indexes = np.empty(count, dtype=object)
 
-        montage_uses = np.full(len(montages), False)
-        montage_names = np.empty(len(montages), dtype=object)
-        montage_filename = np.empty(len(montages), dtype=object)
-        montage_channels = np.empty(len(montages), dtype=object)
-        montage_indexes = np.empty(len(montages), dtype=object)
+            montage_uses = np.full(len(montages), False)
+            montage_names = np.empty(len(montages), dtype=object)
+            montage_filename = np.empty(len(montages), dtype=object)
+            montage_channels = np.empty(len(montages), dtype=object)
+            montage_indexes = np.empty(len(montages), dtype=object)
 
-        index = 0
-        for jdx, montage in enumerate(montages):
-            channels = self._psg_reader_manager.get_channels(montage.index)
-            channels_text = ','.join([ch.name for ch in channels])
-            
-            montage_uses[jdx] = False
-            montage_names[jdx] = montage.name
-            montage_filename[jdx] = filename
-            montage_channels[jdx] = channels_text
-            montage_indexes[jdx] = montage.index
+            index = 0
+            for jdx, montage in enumerate(montages):
+                channels = self._psg_reader_manager.get_channels(montage.index)
+                channels_text = ','.join([ch.name for ch in channels])
+                
+                montage_uses[jdx] = False
+                montage_names[jdx] = montage.name
+                montage_filename[jdx] = filename
+                montage_channels[jdx] = channels_text
+                montage_indexes[jdx] = montage.index
 
-            for channel in channels:
-                total_chs[index] = channel.name
-                total_sample_rates[index] = str(channel.sample_rate)
-                total_montages[index] = montage.name
-                total_filenames[index] = filename
-                total_montage_indexes[index] = montage.index
-                index = index + 1
+                for channel in channels:
+                    total_chs[index] = channel.name
+                    total_sample_rates[index] = str(channel.sample_rate)
+                    total_montages[index] = montage.name
+                    total_filenames[index] = filename
+                    total_montage_indexes[index] = montage.index
+                    index = index + 1
 
-        montage_dict = {
-                    'Use':montage_uses,
-                    'Montage':montage_names,
-                    'Filename':montage_filename,
-                    'Channels':montage_channels,
-                    'Index':montage_indexes
-                }
-        self.montages_table_model._data = pd.concat([self.montages_table_model._data, pd.DataFrame(montage_dict)], ignore_index=True)
-        data = {
-            'Use':total_uses,
-            'Channel':total_chs,
-            'Sample rate':total_sample_rates,
-            'Montage':total_montages,
-            'Filename':total_filenames,
-            'Montage Index':total_montage_indexes,
-        }
+            montage_dict = {
+                        'Use':montage_uses,
+                        'Montage':montage_names,
+                        'Filename':montage_filename,
+                        'Channels':montage_channels,
+                        'Index':montage_indexes
+                    }
+            self.montages_table_model._data = pd.concat([self.montages_table_model._data, pd.DataFrame(montage_dict)], ignore_index=True)
+            data = {
+                'Use':total_uses,
+                'Channel':total_chs,
+                'Sample rate':total_sample_rates,
+                'Montage':total_montages,
+                'Filename':total_filenames,
+                'Montage Index':total_montage_indexes,
+            }
 
-        self.channels_table_model._data = pd.concat([self.channels_table_model._data, pd.DataFrame(data)], ignore_index=True)
+            self.channels_table_model._data = pd.concat([self.channels_table_model._data, pd.DataFrame(data)], ignore_index=True)
 
-        self.montages_proxy_model.invalidate()
-        self.montages_tableview.resizeColumnsToContents() # Especially important for the check mark column or it will not appear properly
+            self.montages_proxy_model.invalidate()
+            self.montages_tableview.resizeColumnsToContents() # Especially important for the check mark column or it will not appear properly
 
-        self.on_montages_selection_changed()
+            self.on_montages_selection_changed()
 
-        self.channels_proxy_model.invalidate()
-        self.channels_tableview.resizeColumnsToContents() # Especially important for the check mark column or it will not appear properly
+            self.channels_proxy_model.invalidate()
+            self.channels_tableview.resizeColumnsToContents() # Especially important for the check mark column or it will not appear properly
 
         event_groups = []
         for event_group in self._psg_reader_manager.get_event_groups():
@@ -745,16 +1087,6 @@ class InputFilesStep( BaseStepView,  Ui_InputFilesStep, QtWidgets.QWidget):
         column_group = 0
         for i_f in range(model.rowCount()):
             item = model.item(i_f,column_group)
-            file_list.append(item.data())        
-        return file_list
-
-
-    # To get the files list in the list view.
-    def get_files_list(self, model):
-        file_list = []
-        column_group = 0
-        for i_f in range(model.rowCount()):
-            item = model.item(i_f,column_group)
             file_list.append(item.data(Qt.UserRole + 1))        
         return file_list
 
@@ -770,12 +1102,6 @@ class InputFilesStep( BaseStepView,  Ui_InputFilesStep, QtWidgets.QWidget):
             return []
 
 
-    # Return the ith group item for a filename
-    def get_group_item(self, filename, i_group, files_model):
-        file_item = self.get_file_item(filename, files_model)
-        return file_item.child(i_group)
-
-
     # Return the item of a filename
     def get_file_item(self, filename, files_model):
         file_item = files_model.findItems(os.path.basename(filename), flags=QtCore.Qt.MatchExactly, column=0)
@@ -786,7 +1112,12 @@ class InputFilesStep( BaseStepView,  Ui_InputFilesStep, QtWidgets.QWidget):
                 return file_item
         else:
             return None
-            
+
+    # Return the ith group item for a filename
+    def get_group_item(self, filename, i_group, files_model):
+        file_item = self.get_file_item(filename, files_model)
+        return file_item.child(i_group)
+
 
     # Return True if there is at least one valid sleep stage in the recording
     def is_stages_scored(self, filename, files_model):
@@ -799,6 +1130,14 @@ class InputFilesStep( BaseStepView,  Ui_InputFilesStep, QtWidgets.QWidget):
                 return False
         else:
             return False
+            
+    
+    # Get the list of alias
+    def get_alias(self):
+        alias = {}
+        for idx, a in enumerate(self._alias_line_edit):
+            alias[a] = self._alias_line_edit[a].text().split(';')
+        return alias
 
 
     # Called when a event name state is changed
@@ -975,6 +1314,22 @@ class InputFilesStep( BaseStepView,  Ui_InputFilesStep, QtWidgets.QWidget):
             item = self.make_checkable_file_item_count(filename, model)
             files_check_event_model.appendRow(item)
         return files_check_event_model
+
+    
+    # Create editable item based on a provided model
+    def create_files_model_editable(self, model, checkable=False):
+
+        # Create an empty model based with the column Group-Name and Count
+        files_editable_event_model = self.create_empty_edit_files_model()
+        files_lst = self.get_files_list(model)
+        # Create checkable item
+        for filename in files_lst:
+            # Make the file item children checkable (file item is copied from self.files_model)
+            # tree item : parent=file, child=group and count, child=name and count
+            item = self.make_editable_file_item_count(filename, model, checkable)
+            files_editable_event_model.appendRow(item)
+
+        return files_editable_event_model
 
 
     def rename_group_name(self, files_editable_model, file_index, group_name_tup):
@@ -1246,53 +1601,22 @@ class InputFilesStep( BaseStepView,  Ui_InputFilesStep, QtWidgets.QWidget):
             filename = None
         return filename, group_ori_text, name_ori_text
 
+    # Private functions
+    def _open_loading_dialog(self):
+        self._progress = QtWidgets.QMessageBox()
+        self._progress.setText("Loading ...\nPlease wait a moment.")
+        self._progress.setWindowTitle("Loading ... Please wait a moment.      ")
+        self._progress.setStandardButtons(QtWidgets.QMessageBox.NoButton)
+        self._progress.show()
 
-    # Called when the timout is reached
-    @QtCore.Slot()
-    def _emit_timeout_reached(self):
-        self._context_manager[self.context_files_view] = self
-
-
-    # Update the context to notify that the channel selection has been changed
-    # The ChannelsTableModel emit a dataChanged when the data is set
-    def on_channels_selection_changed(self):
-        # Add a timer delay to accumulate all the channel selection change before update the context
-        self._emit_timer.start(2)
-
-
-    # Called when the user click on the export button
-    def export_slot(self):
-        filename, _ = QtWidgets.QFileDialog.getSaveFileName(\
-            None, 'Export channels selection in a table format as',\
-                 'channel_selections.txt', filter="*.txt")
-        if filename is not None and filename:
-            with open(filename, 'w') as tsv_file:
-                export_df = self.channels_table_model._data.loc[self.channels_table_model._data['Use'] == True]
-                export_df.to_csv(tsv_file, sep='\t', encoding="utf_8")
-
-        files = self.files_details.copy()
-        if self._options['file_selection_only']['value'] == "0":
-            # Update the files selection (montage and channels) and return the dict of files
-            files = self.update_files_selection()
-
-        # Save the dictionnary files in a text file
-        filename, _ = QtWidgets.QFileDialog.getSaveFileName(None, \
-            'Save files selection as text file to import later in Snooz',\
-                'files.txt', filter="*.txt")
-        if filename is not None and filename:
-            with open(filename, 'w') as txt_file:
-                # Write the dictionary converted to a string
-                txt_file.write(str(files))
+    def _close_loading_dialog(self):
+        if self._progress is not None:
+            self._progress.close()
+            self._progress = None
 
 
-    # Called when the user click on the import button
-    def import_slot(self):
+    def updateLabel_Montages(self, count):
+        self.label_Montages.setText(f"Montages ({count})")
 
-        # Open a file. Ask the user for a txt file
-        filename, _ = QtWidgets.QFileDialog.getOpenFileName(None, \
-            'Open files selection if any', \
-                'files.txt', filter="*.txt")
-        if filename is not None and filename:
-            with open(filename, 'r') as txt_file:
-                files = eval(txt_file.read())
-                self.load_files_from_data(files)
+    def updateLabel_Channels(self, count):
+        self.label_Channels.setText(f"Channels ({count})")

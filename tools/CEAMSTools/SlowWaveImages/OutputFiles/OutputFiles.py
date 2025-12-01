@@ -152,15 +152,20 @@ class OutputFiles(BaseStepView, Ui_OutputFiles, QtWidgets.QWidget):
             self.checkBox_subject_sel.setChecked(False)
             self.checkBox_subject_sel.setEnabled(False)
             self.checkBox_subject_avg.setEnabled(True)
+            self.checkBox_cohort_sel.setChecked(False)
+            self.checkBox_cohort_sel.setEnabled(False)
         elif self.radioButton_all.isChecked():
             self.pics_param["display"] = "all"
             self.checkBox_subject_sel.setEnabled(True)
             self.checkBox_subject_avg.setChecked(False)
             self.checkBox_subject_avg.setEnabled(False)
+            self.checkBox_cohort_sel.setEnabled(True)
         elif self.radioButton_meanstd.isChecked():
             self.pics_param["display"] = "mean_std"
             self.checkBox_subject_sel.setChecked(False)
             self.checkBox_subject_sel.setEnabled(False)
+            self.checkBox_cohort_sel.setChecked(False)
+            self.checkBox_cohort_sel.setEnabled(False)
             self.checkBox_subject_avg.setEnabled(True)
         
         self.pics_param["neg_up"] = self.checkBox_inverse.isChecked()

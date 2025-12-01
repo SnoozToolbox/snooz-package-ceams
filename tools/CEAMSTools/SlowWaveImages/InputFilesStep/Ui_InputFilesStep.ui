@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>947</width>
-    <height>595</height>
+    <width>1208</width>
+    <height>778</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -27,8 +27,11 @@
      </property>
      <widget class="QWidget" name="layoutWidget">
       <layout class="QVBoxLayout" name="verticalLayout">
+       <property name="spacing">
+        <number>9</number>
+       </property>
        <item>
-        <widget class="QLabel" name="label">
+        <widget class="QLabel" name="label_PSG">
          <property name="font">
           <font>
            <family>Roboto</family>
@@ -127,8 +130,8 @@
            <rect>
             <x>0</x>
             <y>0</y>
-            <width>296</width>
-            <height>234</height>
+            <width>385</width>
+            <height>319</height>
            </rect>
           </property>
           <layout class="QVBoxLayout" name="verticalLayout_5">
@@ -153,7 +156,7 @@
       </property>
       <layout class="QVBoxLayout" name="verticalLayout_7">
        <property name="spacing">
-        <number>0</number>
+        <number>8</number>
        </property>
        <property name="leftMargin">
         <number>0</number>
@@ -170,7 +173,7 @@
        <item>
         <layout class="QVBoxLayout" name="verticalLayout_3">
          <item>
-          <widget class="QLabel" name="label_3">
+          <widget class="QLabel" name="label_Montages">
            <property name="font">
             <font>
              <family>Roboto</family>
@@ -187,9 +190,6 @@
          </item>
          <item>
           <widget class="QTableView" name="montages_tableview">
-           <property name="editTriggers">
-            <set>QAbstractItemView::NoEditTriggers</set>
-           </property>
            <property name="selectionMode">
             <enum>QAbstractItemView::MultiSelection</enum>
            </property>
@@ -240,7 +240,7 @@
       <property name="frameShadow">
        <enum>QFrame::Raised</enum>
       </property>
-      <layout class="QVBoxLayout" name="verticalLayout_8">
+      <layout class="QVBoxLayout" name="verticalLayout_2">
        <property name="spacing">
         <number>0</number>
        </property>
@@ -257,10 +257,36 @@
         <number>0</number>
        </property>
        <item>
-        <layout class="QVBoxLayout" name="verticalLayout_2" stretch="0,0,0,0">
-         <property name="spacing">
-          <number>6</number>
-         </property>
+        <layout class="QHBoxLayout" name="horizontalLayout_5">
+         <item>
+          <widget class="QLabel" name="label_Channels">
+           <property name="font">
+            <font>
+             <family>Roboto</family>
+             <pointsize>12</pointsize>
+             <weight>50</weight>
+             <italic>false</italic>
+             <bold>false</bold>
+            </font>
+           </property>
+           <property name="text">
+            <string>Channels</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <spacer name="horizontalSpacer">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>13</width>
+             <height>21</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
          <item>
           <widget class="QFrame" name="frame">
            <property name="frameShape">
@@ -269,116 +295,126 @@
            <property name="frameShadow">
             <enum>QFrame::Raised</enum>
            </property>
+           <layout class="QHBoxLayout" name="horizontalLayout_2">
+            <property name="spacing">
+             <number>0</number>
+            </property>
+            <property name="leftMargin">
+             <number>0</number>
+            </property>
+            <property name="topMargin">
+             <number>0</number>
+            </property>
+            <property name="rightMargin">
+             <number>0</number>
+            </property>
+            <property name="bottomMargin">
+             <number>0</number>
+            </property>
+            <item>
+             <widget class="QLabel" name="label_selection">
+              <property name="text">
+               <string>Selections</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <spacer name="horizontalSpacer_3">
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="sizeType">
+               <enum>QSizePolicy::Fixed</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>10</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+            <item>
+             <widget class="QPushButton" name="import_pushbutton">
+              <property name="toolTip">
+               <string>Press to import a saved selection of files with their montage and channels.</string>
+              </property>
+              <property name="text">
+               <string>Import</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="export_pushbutton">
+              <property name="toolTip">
+               <string>Press to export and save the current selection of files with their montage and channels.</string>
+              </property>
+              <property name="text">
+               <string>Export</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <widget class="QTableView" name="channels_tableview">
+         <property name="editTriggers">
+          <set>QAbstractItemView::SelectedClicked</set>
+         </property>
+         <property name="dragEnabled">
+          <bool>false</bool>
+         </property>
+         <property name="dragDropOverwriteMode">
+          <bool>false</bool>
+         </property>
+         <property name="dragDropMode">
+          <enum>QAbstractItemView::NoDragDrop</enum>
+         </property>
+         <property name="alternatingRowColors">
+          <bool>true</bool>
+         </property>
+         <property name="selectionBehavior">
+          <enum>QAbstractItemView::SelectRows</enum>
+         </property>
+         <property name="horizontalScrollMode">
+          <enum>QAbstractItemView::ScrollPerPixel</enum>
+         </property>
+         <property name="sortingEnabled">
+          <bool>false</bool>
+         </property>
+         <attribute name="horizontalHeaderStretchLastSection">
+          <bool>true</bool>
+         </attribute>
+        </widget>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayout_4">
+         <item>
+          <widget class="QPushButton" name="unselect_all_channels_pushbutton">
+           <property name="text">
+            <string>Unselect all</string>
+           </property>
           </widget>
          </item>
          <item>
-          <layout class="QHBoxLayout" name="horizontalLayout_2">
-           <property name="spacing">
-            <number>6</number>
+          <widget class="QPushButton" name="select_all_channels_pushbutton">
+           <property name="text">
+            <string>Select all</string>
            </property>
-           <item>
-            <widget class="QLabel" name="label_2">
-             <property name="font">
-              <font>
-               <family>Roboto</family>
-               <pointsize>12</pointsize>
-               <weight>50</weight>
-               <italic>false</italic>
-               <bold>false</bold>
-              </font>
-             </property>
-             <property name="text">
-              <string>Channels</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <spacer name="horizontalSpacer">
-             <property name="orientation">
-              <enum>Qt::Horizontal</enum>
-             </property>
-             <property name="sizeHint" stdset="0">
-              <size>
-               <width>40</width>
-               <height>20</height>
-              </size>
-             </property>
-            </spacer>
-           </item>
-           <item>
-            <widget class="QPushButton" name="import_pushButton">
-             <property name="text">
-              <string>Import</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QPushButton" name="export_pushbutton">
-             <property name="text">
-              <string>Export</string>
-             </property>
-            </widget>
-           </item>
-          </layout>
-         </item>
-         <item>
-          <widget class="QTableView" name="channels_tableview">
-           <property name="editTriggers">
-            <set>QAbstractItemView::NoEditTriggers</set>
-           </property>
-           <property name="dragEnabled">
-            <bool>false</bool>
-           </property>
-           <property name="dragDropOverwriteMode">
-            <bool>false</bool>
-           </property>
-           <property name="dragDropMode">
-            <enum>QAbstractItemView::NoDragDrop</enum>
-           </property>
-           <property name="alternatingRowColors">
-            <bool>true</bool>
-           </property>
-           <property name="selectionBehavior">
-            <enum>QAbstractItemView::SelectRows</enum>
-           </property>
-           <property name="horizontalScrollMode">
-            <enum>QAbstractItemView::ScrollPerPixel</enum>
-           </property>
-           <property name="sortingEnabled">
-            <bool>false</bool>
-           </property>
-           <attribute name="horizontalHeaderStretchLastSection">
-            <bool>true</bool>
-           </attribute>
           </widget>
          </item>
          <item>
-          <layout class="QHBoxLayout" name="horizontalLayout_4">
-           <item>
-            <widget class="QPushButton" name="unselect_all_channels_pushbutton">
-             <property name="text">
-              <string>Unselect all</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QPushButton" name="select_all_channels_pushbutton">
-             <property name="text">
-              <string>Select all</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QLineEdit" name="search_channels_lineedit">
-             <property name="inputMask">
-              <string/>
-             </property>
-             <property name="placeholderText">
-              <string>Search Channels</string>
-             </property>
-            </widget>
-           </item>
-          </layout>
+          <widget class="QLineEdit" name="search_channels_lineedit">
+           <property name="inputMask">
+            <string/>
+           </property>
+           <property name="placeholderText">
+            <string>Search Channels</string>
+           </property>
+          </widget>
          </item>
         </layout>
        </item>
@@ -396,7 +432,7 @@
    <sender>add_files_pushbutton</sender>
    <signal>clicked()</signal>
    <receiver>InputFilesStep</receiver>
-   <slot>on_add_files()</slot>
+   <slot>add_files_slot()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>203</x>
@@ -412,7 +448,7 @@
    <sender>remove_entries_pushbutton</sender>
    <signal>clicked()</signal>
    <receiver>InputFilesStep</receiver>
-   <slot>on_remove_entries()</slot>
+   <slot>remove_entries_slot()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>73</x>
@@ -428,7 +464,7 @@
    <sender>add_folders_pushbutton</sender>
    <signal>clicked()</signal>
    <receiver>InputFilesStep</receiver>
-   <slot>on_add_folders()</slot>
+   <slot>add_folders_slot()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>160</x>
@@ -444,7 +480,7 @@
    <sender>search_channels_lineedit</sender>
    <signal>textChanged(QString)</signal>
    <receiver>InputFilesStep</receiver>
-   <slot>on_channel_search_changed()</slot>
+   <slot>channel_search_changed_slot()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>871</x>
@@ -460,7 +496,7 @@
    <sender>montage_search_lineedit</sender>
    <signal>textChanged(QString)</signal>
    <receiver>InputFilesStep</receiver>
-   <slot>on_montage_seach_changed()</slot>
+   <slot>montage_seach_changed_slot()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>558</x>
@@ -476,7 +512,7 @@
    <sender>select_all_channels_pushbutton</sender>
    <signal>clicked()</signal>
    <receiver>InputFilesStep</receiver>
-   <slot>on_channels_select_all()</slot>
+   <slot>channels_select_all_slot()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>762</x>
@@ -492,7 +528,7 @@
    <sender>select_all_montage_pushbutton</sender>
    <signal>clicked()</signal>
    <receiver>InputFilesStep</receiver>
-   <slot>on_montages_select_all()</slot>
+   <slot>montages_select_all_slot()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>449</x>
@@ -508,7 +544,7 @@
    <sender>unselect_all_channels_pushbutton</sender>
    <signal>clicked()</signal>
    <receiver>InputFilesStep</receiver>
-   <slot>on_channels_unselect_all()</slot>
+   <slot>channels_unselect_all_slot()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>676</x>
@@ -524,7 +560,7 @@
    <sender>unselect_all_montage_pushbutton</sender>
    <signal>clicked()</signal>
    <receiver>InputFilesStep</receiver>
-   <slot>on_montages_unselect_all()</slot>
+   <slot>montages_unselect_all_slot()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>363</x>
@@ -540,7 +576,7 @@
    <sender>files_listview</sender>
    <signal>clicked(QModelIndex)</signal>
    <receiver>InputFilesStep</receiver>
-   <slot>on_file_selection_changed()</slot>
+   <slot>file_selection_changed_slot()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>168</x>
@@ -560,7 +596,7 @@
    <hints>
     <hint type="sourcelabel">
      <x>897</x>
-     <y>31</y>
+     <y>29</y>
     </hint>
     <hint type="destinationlabel">
      <x>473</x>
@@ -569,14 +605,14 @@
    </hints>
   </connection>
   <connection>
-   <sender>import_pushButton</sender>
+   <sender>import_pushbutton</sender>
    <signal>clicked()</signal>
    <receiver>InputFilesStep</receiver>
    <slot>import_slot()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>816</x>
-     <y>31</y>
+     <y>23</y>
     </hint>
     <hint type="destinationlabel">
      <x>473</x>
@@ -586,21 +622,20 @@
   </connection>
  </connections>
  <slots>
-  <slot>on_add_files()</slot>
-  <slot>on_remove_entries()</slot>
-  <slot>on_add_folders()</slot>
+  <slot>add_files_slot()</slot>
+  <slot>remove_entries_slot()</slot>
+  <slot>add_folders_slot()</slot>
   <slot>on_test_button()</slot>
-  <slot>on_channel_search_changed()</slot>
+  <slot>channel_search_changed_slot()</slot>
   <slot>on_apply()</slot>
   <slot>on_cancel()</slot>
-  <slot>on_file_selection_changed()</slot>
-  <slot>on_montage_seach_changed()</slot>
+  <slot>file_selection_changed_slot()</slot>
+  <slot>montage_seach_changed_slot()</slot>
   <slot>on_file_search_changed()</slot>
-  <slot>on_montages_select_all()</slot>
-  <slot>on_channels_select_all()</slot>
-  <slot>on_montages_unselect_all()</slot>
-  <slot>on_channels_unselect_all()</slot>
-  <slot>on_export()</slot>
+  <slot>montages_select_all_slot()</slot>
+  <slot>channels_select_all_slot()</slot>
+  <slot>montages_unselect_all_slot()</slot>
+  <slot>channels_unselect_all_slot()</slot>
   <slot>export_slot()</slot>
   <slot>import_slot()</slot>
  </slots>
