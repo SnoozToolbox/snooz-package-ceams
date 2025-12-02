@@ -12,7 +12,7 @@
         "package_name": "CEAMSTools",
         "steps": [
             {
-                "name": "PSA",
+                "name": "EEG Spectral Power",
                 "description": "Click <strong>Read more!</strong> below for details.",
                 "custom_step_name": "IntroStep",
                 "show_index": false,
