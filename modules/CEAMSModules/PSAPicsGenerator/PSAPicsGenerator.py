@@ -387,11 +387,15 @@ class PSAPicsGenerator(SciNode):
                 # Group by frequency bands and average power values
                 power_columns = [col for col in combined_data.columns if '_act' in col]
                 if power_columns:
-                    # Average power values for each frequency band
-                    averaged_data = combined_data.groupby(['freq_low_Hz', 'freq_high_Hz'])[power_columns].mean().reset_index()
+                    # Average power values for each frequency band WITHIN EACH FILENAME (subject)
+                    # Group by filename AND frequency bands to preserve per-subject ROI data
+                    grouping_cols = ['filename', 'freq_low_Hz', 'freq_high_Hz']
+                    averaged_data = combined_data.groupby(grouping_cols)[power_columns].mean().reset_index()
                     psa_data_ch_sel = averaged_data
                     if DEBUG:
                         print(f"ROI {ch} processed with {len(found_channels)} channels: {found_channels}")
+                        if 'filename' in averaged_data.columns:
+                            print(f"ROI {ch} preserved {averaged_data['filename'].nunique()} unique filenames")
                 else:
                     if DEBUG:
                         print(f"Warning: No power columns found for ROI {ch}")
@@ -635,16 +639,16 @@ class PSAPicsGenerator(SciNode):
         # If the function is used to generate pictures
         if fig_save:
             if pics_param['subject_avg'] | pics_param['subject_sel']:
-                fig_name = pics_param['output_folder']+'/'+os.path.basename(base_name)
+                fig_name = pics_param['output_folder']+'/'+os.path.splitext(os.path.basename(base_name))[0]
                 if pics_param['subject_sel']:
                     fig_name = fig_name + '_' + chan_label[0]
                 fig_name = fig_name + '_psa'
                 fig_name = fig_name + '.pdf'
 
                 if pics_param['subject_sel']:
-                    fig_title = os.path.basename(base_name)+ '_' + chan_label[0]
+                    fig_title = os.path.splitext(os.path.basename(base_name))[0]+ '_' + chan_label[0]
                 if pics_param['subject_avg']:
-                    fig_title = os.path.basename(base_name)
+                    fig_title = os.path.splitext(os.path.basename(base_name))[0]
 
                 if pics_param['force_axis']:
                     ax.set_xlim(pics_param['force_axis'][0], pics_param['force_axis'][1])
@@ -692,27 +696,18 @@ class PSAPicsGenerator(SciNode):
         -----------  
             None
         """
-        # Define the figure name
-        if chan_label=='':
-            if pics_param['activity_var']=='total':
-                fig_name = pics_param['output_folder']+'/cohort_psa_'+ pics_param['display']+ '_' + pics_param['activity_var']+'.pdf'
-                fig_title = 'Cohort PSA_total'
-            elif pics_param['activity_var']=='clock_h' or pics_param['activity_var']=='stage_h':
-                fig_name = pics_param['output_folder']+'/cohort_psa_'+ pics_param['display']+ '_' + pics_param['activity_var']+str(pics_param['hour'])+'.pdf'
-                fig_title = 'Cohort PSA_'+pics_param['activity_var']+str(pics_param['hour'])
-            elif pics_param['activity_var']=='cyc':
-                fig_name = pics_param['output_folder']+'/cohort_psa_'+ pics_param['display']+ '_' + pics_param['activity_var']+str(pics_param['cycle'])+'.pdf'
-                fig_title = 'Cohort PSA_'+pics_param['activity_var']+str(pics_param['cycle'])
-        else:
-            if pics_param['activity_var']=='total':
-                fig_name = pics_param['output_folder']+'/cohort_psa_'+ pics_param['display']+ '_' + pics_param['activity_var'] +chan_label+'.pdf'
-                fig_title = 'Cohort PSA_total_'+chan_label
-            elif pics_param['activity_var']=='clock_h' or pics_param['activity_var']=='stage_h':
-                fig_name = pics_param['output_folder']+'/cohort_psa_'+ pics_param['display']+ '_' + pics_param['activity_var']+str(pics_param['hour'])+'_'+chan_label+'.pdf'
-                fig_title = 'Cohort PSA_'+pics_param['activity_var']+str(pics_param['hour'])+'_'+chan_label
-            elif pics_param['activity_var']=='cyc':
-                fig_name = pics_param['output_folder']+'/cohort_psa_'+ pics_param['display']+ '_' + pics_param['activity_var']+str(pics_param['cycle'])+'_'+chan_label+'.pdf'
-                fig_title = 'Cohort PSA_'+pics_param['activity_var']+str(pics_param['cycle'])+'_'+chan_label
+        # Build activity variable string for filename and title
+        if pics_param['activity_var'] == 'total':
+            activity_str = 'Total'
+        elif pics_param['activity_var'] in ['clock_h', 'stage_h']:
+            activity_str = f"{pics_param['activity_var']}{pics_param['hour']}"
+        elif pics_param['activity_var'] == 'cyc':
+            activity_str = f"{pics_param['activity_var']}{pics_param['cycle']}"
+        
+        # Build filename and title with optional channel label
+        chan_suffix = f'_{chan_label}' if chan_label else ''
+        fig_name = f"{pics_param['output_folder']}/cohort_psa_{pics_param['display']}_{activity_str}{chan_suffix}.pdf"
+        fig_title = f"Cohort PSA {activity_str}{' ' + chan_label if chan_label else ''}"
 
         # Create the figure
         fig = Figure()
@@ -930,47 +925,27 @@ class PSAPicsGenerator(SciNode):
                         freq_array = np.linspace(freq_range[0], freq_range[1], len(signal_to_plot_mean))
                         
                         # Plot the channels with a specific linestyle and the stages with a specific color
-                        if len(sleep_stage_selection) > 1:
-                            ax.plot(freq_array, signal_to_plot_mean, color=colors[i_grp],
-                                 linestyle=self.linestyles[stage_idx % len(self.linestyles)], label=f'{stage}-{cohort_group}')
-                            if 'std' in pics_param['display']:
-                                # Plot standard deviation as shaded area
-                                if log_scale:
-                                    # For log scale, use multiplicative std (more appropriate for log-transformed data)
-                                    # Convert to log space, add/subtract std, then convert back
-                                    log_mean = np.log10(signal_to_plot_mean + 1e-10)  # Add small epsilon to avoid log(0)
-                                    log_std = signal_to_plot_std / (signal_to_plot_mean + 1e-10) / np.log(10)
-                                    lower_bound = 10 ** (log_mean - log_std)
-                                    upper_bound = 10 ** (log_mean + log_std)
-                                    ax.fill_between(freq_array, lower_bound, upper_bound, 
-                                                  color=colors[i_grp], alpha=0.3,
-                                                  edgecolor=colors[i_grp], linestyle=self.linestyles[stage_idx % len(self.linestyles)],
-                                                  linewidth=1.5)
-                                else:
-                                    # For linear scale, use additive std
-                                    ax.fill_between(freq_array, signal_to_plot_mean - signal_to_plot_std, 
-                                                  signal_to_plot_mean + signal_to_plot_std, color=colors[i_grp], 
-                                                  alpha=0.3, edgecolor=colors[i_grp],
-                                                  linestyle=self.linestyles[stage_idx % len(self.linestyles)], linewidth=1.5)
-                        else:
-                            ax.plot(freq_array, signal_to_plot_mean, color=colors[i_grp], label=f'{cohort_group}')
-                            if 'std' in pics_param['display']:
-                                # Plot standard deviation as shaded area
-                                if log_scale:
-                                    # For log scale, use multiplicative std (more appropriate for log-transformed data)
-                                    # Convert to log space, add/subtract std, then convert back
-                                    log_mean = np.log10(signal_to_plot_mean + 1e-10)  # Add small epsilon to avoid log(0)
-                                    log_std = signal_to_plot_std / (signal_to_plot_mean + 1e-10) / np.log(10)
-                                    lower_bound = 10 ** (log_mean - log_std)
-                                    upper_bound = 10 ** (log_mean + log_std)
-                                    ax.fill_between(freq_array, lower_bound, upper_bound, 
-                                                  color=colors[i_grp], alpha=0.3,
-                                                  edgecolor=colors[i_grp], linestyle='-', linewidth=1.5)
-                                else:
-                                    # For linear scale, use additive std
-                                    ax.fill_between(freq_array, signal_to_plot_mean - signal_to_plot_std, 
-                                                  signal_to_plot_mean + signal_to_plot_std, color=colors[i_grp], 
-                                                  alpha=0.3, edgecolor=colors[i_grp], linestyle='-', linewidth=1.5)
+                        ax.plot(freq_array, signal_to_plot_mean, color=colors[i_grp],
+                                linestyle=self.linestyles[stage_idx % len(self.linestyles)], label=f'{stage}-{cohort_group}')
+                        if 'std' in pics_param['display']:
+                            # Plot standard deviation as shaded area
+                            if log_scale:
+                                # For log scale, use multiplicative std (more appropriate for log-transformed data)
+                                # Convert to log space, add/subtract std, then convert back
+                                log_mean = np.log10(signal_to_plot_mean + 1e-10)  # Add small epsilon to avoid log(0)
+                                log_std = signal_to_plot_std / (signal_to_plot_mean + 1e-10) / np.log(10)
+                                lower_bound = 10 ** (log_mean - log_std)
+                                upper_bound = 10 ** (log_mean + log_std)
+                                ax.fill_between(freq_array, lower_bound, upper_bound, 
+                                                color=colors[i_grp], alpha=0.3,
+                                                edgecolor=colors[i_grp], linestyle=self.linestyles[stage_idx % len(self.linestyles)],
+                                                linewidth=1.5)
+                            else:
+                                # For linear scale, use additive std
+                                ax.fill_between(freq_array, signal_to_plot_mean - signal_to_plot_std, 
+                                                signal_to_plot_mean + signal_to_plot_std, color=colors[i_grp], 
+                                                alpha=0.3, edgecolor=colors[i_grp],
+                                                linestyle=self.linestyles[stage_idx % len(self.linestyles)], linewidth=1.5)
 
         # Set the limits of the axes
         if pics_param['force_axis']:
@@ -1064,4 +1039,4 @@ class PSAPicsGenerator(SciNode):
             rgb = colorsys.hsv_to_rgb(hue, saturation, value)
             extended_colors.append(rgb)
         
-        return extended_colors[:n_needed] 
+        return extended_colors[:n_needed]
