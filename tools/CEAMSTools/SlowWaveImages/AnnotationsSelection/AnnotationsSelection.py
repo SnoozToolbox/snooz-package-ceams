@@ -21,13 +21,13 @@ from qtpy.QtCore import Qt
 from commons.BaseStepView import BaseStepView
 from flowpipe.ActivationState import ActivationState
 
+from CEAMSTools.SlowWaveImages.AnnotationsSelection.Ui_AnnotationsSelection import Ui_AnnotationsSelection
+from CEAMSTools.SlowWaveImages.AnnotationsSelection.EventsProxyModel import EventsProxyModel
 from CEAMSTools.SlowWaveImages.InputFilesStep.InputFilesStep import InputFilesStep
-from CEAMSTools.PowerSpectralAnalysis.NonValidEventStep.Ui_NonValidEventStep import Ui_NonValidEventStep
-from CEAMSTools.PowerSpectralAnalysis.NonValidEventStep.EventsProxyModel import EventsProxyModel
 
 DEBUG = False
 
-class AnnotationsSelection( BaseStepView,  Ui_NonValidEventStep, QtWidgets.QWidget):
+class AnnotationsSelection( BaseStepView,  Ui_AnnotationsSelection, QtWidgets.QWidget):
     
     """
         AnnotationsSelection
@@ -104,6 +104,10 @@ class AnnotationsSelection( BaseStepView,  Ui_NonValidEventStep, QtWidgets.QWidg
         #   Each time a user changes the event selection, the model 
         #   and the group_name_dict is updated
         self.files_check_event_model.itemChanged.connect(self.on_item_changed)
+
+        # Update the label with the number of selected events
+        num_name_checked, num_group_checked = self.event_proxy_model.count_checked_items_cohort()
+        self.updateLabel_Events_cohort(num_name_checked, num_group_checked)
 
 
     def on_topic_update(self, topic, message, sender):
@@ -318,7 +322,7 @@ class AnnotationsSelection( BaseStepView,  Ui_NonValidEventStep, QtWidgets.QWidg
 
 
     # When the user checked/unchecked "Select all"
-    def on_select_all_groups(self):
+    def on_select_all_events(self):
         # Extract how many event groups or names are available
         # Need to extract info from the proxy model since only the visible group or names has been selected all
         # How many rows available at the file_model pointer
@@ -331,11 +335,15 @@ class AnnotationsSelection( BaseStepView,  Ui_NonValidEventStep, QtWidgets.QWidg
         # - group dictionary where the key is the filename and the item a string of groups
         # - name dictionary where the key is the filename and the item a string of names
         self.group_name_dict = self._store_event_dict()
+        num_name_checked, num_group_checked = self.event_proxy_model.count_checked_items_cohort()
+        self.updateLabel_Events_cohort(num_name_checked, num_group_checked)
             
 
     def set_check_state_file_via_proxy(self, file_index, check_state):
         """
-       Set the CheckState to all groups and names of a file index selected
+        Set the CheckState to all VISIBLE names first,
+        then let group states follow based on their children.
+        Groups will be fully checked only if all their names are visible.
         
         Parameters
         -----------
@@ -343,14 +351,38 @@ class AnnotationsSelection( BaseStepView,  Ui_NonValidEventStep, QtWidgets.QWidg
             check_state : QtCore.Qt.CheckState
         """
         n_groups = self.event_proxy_model.rowCount(file_index)
+        
+        # Disconnect signal to avoid multiple updates
+        self.files_check_event_model.itemChanged.disconnect(self.on_item_changed)
+        
         for group_row in range(n_groups):
             column = 0
             group_index = self.event_proxy_model.index(group_row, column, file_index)
-            source_index = self.event_proxy_model.mapToSource(group_index)
-            group_item = self.files_check_event_model.itemFromIndex(source_index)
-            group_item.setCheckState(check_state)
-            self.files_check_event_model = self.reader_settings_view.apply_state_to_child_item(\
-                group_item, self.files_check_event_model)
+            source_group_index = self.event_proxy_model.mapToSource(group_index)
+            group_item = self.files_check_event_model.itemFromIndex(source_group_index)
+            
+            # Get number of VISIBLE names under this group
+            n_names = self.event_proxy_model.rowCount(group_index)
+            
+            # Check all VISIBLE name items first
+            for name_row in range(n_names):
+                name_index = self.event_proxy_model.index(name_row, column, group_index)
+                source_name_index = self.event_proxy_model.mapToSource(name_index)
+                name_item = self.files_check_event_model.itemFromIndex(source_name_index)
+                name_item.setCheckState(check_state)
+            
+            # Now update the parent GROUP based on its children
+            # This will automatically set Checked/PartiallyChecked/Unchecked
+            if n_names > 0:  # Only if group has visible children
+                # Get any child item to call apply_state_to_parent_item
+                first_name_index = self.event_proxy_model.index(0, column, group_index)
+                source_first_name_index = self.event_proxy_model.mapToSource(first_name_index)
+                first_name_item = self.files_check_event_model.itemFromIndex(source_first_name_index)
+                self.files_check_event_model = self.reader_settings_view.apply_state_to_parent_item(
+                    first_name_item, self.files_check_event_model)
+        
+        # Reconnect signal
+        self.files_check_event_model.itemChanged.connect(self.on_item_changed)
             
 
     # Called when the user delete an instance of the plugin
