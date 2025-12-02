@@ -787,20 +787,23 @@ class SlowWavePicsGenerator(SciNode):
 
                     if fig_save:
                         # Check if the label has already been added to the legend
-                        if f'cat{i_cat}-{chan_label[i_chan]}' not in legend_labels:
+                        if (max_cat>1 and f'cat{i_cat}-{chan_label[i_chan]}' not in legend_labels) or (max_cat==1 and f'{chan_label[i_chan]}' not in legend_labels):
                             # Plot the mean with a specific color and linestyle
                             # Multiple channels and multiple categories
                             if (max_cat>1 and n_channels>1):
-                                #ax.plot(time, signal_avg_chan_cat, color=palette_list[i_cat-1][i_chan], linestyle=self.linestyles[i_cat-1], label=f'cat{i_cat}-{chan_label[i_chan]}')
                                 ax.plot(time, signal_avg_chan_cat, color=colors[i_chan], linestyle=self.linestyles[i_cat-1], label=f'cat{i_cat}-{chan_label[i_chan]}')
+                                # Add the label to the legend
+                                legend_labels[f'cat{i_cat}-{chan_label[i_chan]}']=True
                             # Only one channel to plot
                             elif max_cat>1:
                                 ax.plot(time, signal_avg_chan_cat, color=colors[i_cat-1], label=f'cat{i_cat}-{chan_label[i_chan]}')
+                                # Add the label to the legend
+                                legend_labels[f'cat{i_cat}-{chan_label[i_chan]}']=True
                             # Only one category to plot
                             else:
-                                ax.plot(time, signal_avg_chan_cat, color=colors[i_chan], label=f'cat{i_cat}-{chan_label[i_chan]}')
-                            # Add the label to the legend
-                            legend_labels[f'cat{i_cat}-{chan_label[i_chan]}']=True
+                                ax.plot(time, signal_avg_chan_cat, color=colors[i_chan], label=f'{chan_label[i_chan]}')
+                                # Add the label to the legend
+                                legend_labels[f'{chan_label[i_chan]}']=True
                         else:
                             # Plot the mean with a specific color and linestyle
                             # Multiple channels and multiple categories
@@ -877,10 +880,15 @@ class SlowWavePicsGenerator(SciNode):
                             
                             if fig_save:
                                 # Check if the label has already been added to the legend
-                                if f'cat{i_cat}-{chan_label[i_chan]}' not in legend_labels:
-                                    # Add the label to the legend
-                                    legend_labels[f'cat{i_cat}-{chan_label[i_chan]}']=True
-                                    ax.plot(time, signal_pad_end, color=colors[i_cat-1], alpha=0.5, label=f'cat{i_cat}-{chan_label[i_chan]}')
+                                if (max_cat>1 and f'cat{i_cat}-{chan_label[i_chan]}' not in legend_labels) or (max_cat==1 and f'{chan_label[i_chan]}' not in legend_labels):
+                                    if max_cat>1:
+                                        # Add the label to the legend
+                                        legend_labels[f'cat{i_cat}-{chan_label[i_chan]}']=True
+                                        ax.plot(time, signal_pad_end, color=colors[i_cat-1], alpha=0.5, label=f'cat{i_cat}-{chan_label[i_chan]}')
+                                    else:
+                                        # Add the label to the legend
+                                        legend_labels[f'{chan_label[i_chan]}']=True
+                                        ax.plot(time, signal_pad_end, color=colors[i_cat-1], alpha=0.5, label=f'{chan_label[i_chan]}')
                                 else:
                                     ax.plot(time, signal_pad_end, color=colors[i_cat-1],alpha=0.1)
                             # Compute the max index valid for all the sw events
@@ -1080,24 +1088,23 @@ class SlowWavePicsGenerator(SciNode):
                             signal_to_plot_grp[cohort_group][f'cat{i_cat+1}'] = signal_to_mean
                     else:
                         # Check if the label has already been added to the legend
-                        if f'cat{i_cat+1}-{cohort_group}' not in legend_labels:
-                            # Add the label to the legend
-                            legend_labels[f'cat{i_cat+1}-{cohort_group}']=True
-                            # Plot the channels with a specific linestyle and the categories with a specific color
+                        if ((n_cats>1) and f'cat{i_cat+1}-{cohort_group}' not in legend_labels) or (n_cats==1 and f'{cohort_group}' not in legend_labels):
                             if n_cats>1:
+                                # Add the label to the legend
+                                legend_labels[f'cat{i_cat+1}-{cohort_group}']=True
+                                # Plot the channels with a specific linestyle and the categories with a specific color
                                 ax.plot(time, signal_to_plot, color=colors[i_grp], linestyle=self.linestyles[i_cat], label=f'cat{i_cat+1}-{cohort_group}', alpha=0.5)
                             else:
-                                ax.plot(time, signal_to_plot, color=colors[i_grp], label=f'cat{i_cat+1}-{cohort_group}', alpha=0.5)
-                            #ax.plot(time, signal_to_plot, color=self.colors[i_cat*n_cats+i_grp], linestyle=self.linestyles[i_grp], label=f'cat{i_cat+1}-{cohort_group}', alpha=0.5)
+                                # Add the label to the legend
+                                legend_labels[f'{cohort_group}']=True
+                                # Plot the channels with a specific linestyle and the categories with a specific color
+                                ax.plot(time, signal_to_plot, color=colors[i_grp], label=f'{cohort_group}', alpha=0.5)
                         else:
                             # Plot the channels with a specific linestyle and the categories with a specific color
-                            #ax.plot(time, signal_to_plot, color=self.colors[i_cat], linestyle=self.linestyles[i_grp], alpha=0.5)
                             if n_cats>1:
-                                #ax.plot(time, signal_to_plot, color=palette_list[i_cat][i_grp], alpha=0.5)
                                 ax.plot(time, signal_to_plot, color=colors[i_grp], linestyle=self.linestyles[i_cat], alpha=0.5)
                             else:
                                 ax.plot(time, signal_to_plot, color=colors[i_grp], alpha=0.5)
-                            #ax.plot(time, signal_to_plot, color=self.colors[i_cat*n_cats+i_grp], linestyle=self.linestyles[i_grp], alpha=0.5)
 
         # Average signal to plot mean and gray area
         x_lim_max = 0
@@ -1110,7 +1117,6 @@ class SlowWavePicsGenerator(SciNode):
                     # Compute the standard deviation
                     signal_to_plot_std = np.nanstd(signal_to_plot_grp[cohort_group][f'cat{i_cat+1}'], axis=1)
                     # Plot the channels with a specific linestyle and the categories with a specific color
-                    #ax.plot(time, signal_to_plot_mean, color=self.colors[i_cat], linestyle=self.linestyles[i_grp], label=f'cat{i_cat+1}-{cohort_group}')
                     if n_cats>1:
                         ax.plot(time, signal_to_plot_mean, color=colors[i_grp],\
                          linestyle=self.linestyles[i_cat], label=f'cat{i_cat+1}-{cohort_group}')

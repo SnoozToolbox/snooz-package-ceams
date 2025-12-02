@@ -196,12 +196,6 @@ class OutputFiles(BaseStepView, Ui_OutputFiles, QtWidgets.QWidget):
 
     # Function to set the UI according to the settings self.pics_param loaded
     def init_ui_from_pics_param(self):
-        self.checkBox_cohort_avg.setChecked(self.pics_param["cohort_avg"])
-        self.checkBox_cohort_sel.setChecked(self.pics_param["cohort_sel"])
-        self.checkBox_subject_avg.setChecked(self.pics_param["subject_avg"])
-        self.checkBox_subject_sel.setChecked(self.pics_param["subject_sel"])
-
-        self.checkBox_category.setChecked(self.pics_param["show_sw_categories"])
 
         if self.pics_param["sw_aligment"] == "ZC":
             self.radioButton_zc.setChecked(True)
@@ -213,12 +207,28 @@ class OutputFiles(BaseStepView, Ui_OutputFiles, QtWidgets.QWidget):
         if self.pics_param["display"]=="mean":
             self.radioButton_mean.setChecked(True)
             self.checkBox_cohort_sel.setEnabled(False)
+            self.checkBox_cohort_avg.setEnabled(True)
+            self.checkBox_subject_avg.setEnabled(True)
+            self.checkBox_subject_sel.setChecked(False)
         elif self.pics_param["display"] == "all":
             self.radioButton_all.setChecked(True)
+            self.checkBox_cohort_avg.setEnabled(False)
             self.checkBox_cohort_sel.setEnabled(True)
+            self.checkBox_subject_avg.setEnabled(False)
+            self.checkBox_subject_sel.setEnabled(True)
         elif self.pics_param["display"] == "mean_std":
             self.radioButton_meanstd.setChecked(True)
             self.checkBox_cohort_sel.setEnabled(False)
+            self.checkBox_cohort_avg.setEnabled(True)
+            self.checkBox_subject_sel.setEnabled(False)
+            self.checkBox_subject_avg.setEnabled(True)
+
+        self.checkBox_cohort_avg.setChecked(self.pics_param["cohort_avg"])
+        self.checkBox_cohort_sel.setChecked(self.pics_param["cohort_sel"])
+        self.checkBox_subject_avg.setChecked(self.pics_param["subject_avg"])
+        self.checkBox_subject_sel.setChecked(self.pics_param["subject_sel"])
+
+        self.checkBox_category.setChecked(self.pics_param["show_sw_categories"])
 
         self.checkBox_inverse.setChecked(self.pics_param["neg_up"])
         
