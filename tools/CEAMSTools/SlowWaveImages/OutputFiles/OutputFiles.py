@@ -147,27 +147,30 @@ class OutputFiles(BaseStepView, Ui_OutputFiles, QtWidgets.QWidget):
             self.pics_param["sw_aligment"] = "PP"
 
         # Display option
-        if self.radioButton_mean.isChecked():
-            self.pics_param["display"] = "mean"
-            self.checkBox_subject_sel.setChecked(False)
-            self.checkBox_subject_sel.setEnabled(False)
-            self.checkBox_subject_avg.setEnabled(True)
-            self.checkBox_cohort_sel.setChecked(False)
-            self.checkBox_cohort_sel.setEnabled(False)
-        elif self.radioButton_all.isChecked():
+        # Depending of the display option, either subject average or selection will be available
+        if self.radioButton_all.isChecked():
             self.pics_param["display"] = "all"
+            # Subject options : only sel is available
             self.checkBox_subject_sel.setEnabled(True)
             self.checkBox_subject_avg.setChecked(False)
             self.checkBox_subject_avg.setEnabled(False)
-            self.checkBox_cohort_sel.setEnabled(True)
-        elif self.radioButton_meanstd.isChecked():
-            self.pics_param["display"] = "mean_std"
+        elif self.radioButton_mean.isChecked():
+            self.pics_param["display"] = "mean"
+             # Subject options : only average is available
             self.checkBox_subject_sel.setChecked(False)
             self.checkBox_subject_sel.setEnabled(False)
-            self.checkBox_cohort_sel.setChecked(False)
-            self.checkBox_cohort_sel.setEnabled(False)
             self.checkBox_subject_avg.setEnabled(True)
-        
+        elif self.radioButton_meanstd.isChecked():
+            self.pics_param["display"] = "mean_std"
+             # Subject options : only average is available
+            self.checkBox_subject_sel.setChecked(False)
+            self.checkBox_subject_sel.setEnabled(False)
+            self.checkBox_subject_avg.setEnabled(True)
+            
+        # Cohort options : always all available
+        self.checkBox_cohort_avg.setEnabled(True)
+        self.checkBox_cohort_sel.setEnabled(True)
+
         self.pics_param["neg_up"] = self.checkBox_inverse.isChecked()
 
         if self.checkBox_force_axis.isChecked():
@@ -204,24 +207,31 @@ class OutputFiles(BaseStepView, Ui_OutputFiles, QtWidgets.QWidget):
         elif self.pics_param["sw_aligment"] == "PP":
             self.radioButton_pp.setChecked(True)        
 
-        if self.pics_param["display"]=="mean":
-            self.radioButton_mean.setChecked(True)
-            self.checkBox_cohort_sel.setEnabled(False)
-            self.checkBox_cohort_avg.setEnabled(True)
-            self.checkBox_subject_avg.setEnabled(True)
-            self.checkBox_subject_sel.setChecked(False)
-        elif self.pics_param["display"] == "all":
+        # Depending of the display option, either subject average or selection will be available
+        if self.pics_param["display"] == "all":
             self.radioButton_all.setChecked(True)
-            self.checkBox_cohort_avg.setEnabled(False)
-            self.checkBox_cohort_sel.setEnabled(True)
+            # Subject options : only sel is available
+            self.checkBox_subject_avg.setChecked(False)
             self.checkBox_subject_avg.setEnabled(False)
             self.checkBox_subject_sel.setEnabled(True)
+
         elif self.pics_param["display"] == "mean_std":
             self.radioButton_meanstd.setChecked(True)
-            self.checkBox_cohort_sel.setEnabled(False)
-            self.checkBox_cohort_avg.setEnabled(True)
-            self.checkBox_subject_sel.setEnabled(False)
+            # Subject options : only average is available
             self.checkBox_subject_avg.setEnabled(True)
+            self.checkBox_subject_sel.setChecked(False)
+            self.checkBox_subject_sel.setEnabled(False)
+
+        elif self.pics_param["display"]=="mean":
+            self.radioButton_mean.setChecked(True)
+            # Subject options : only average is available
+            self.checkBox_subject_avg.setEnabled(True)
+            self.checkBox_subject_sel.setChecked(False)
+            self.checkBox_subject_sel.setEnabled(False)
+
+        # Cohort options : always all available
+        self.checkBox_cohort_avg.setEnabled(True)
+        self.checkBox_cohort_sel.setEnabled(True)
 
         self.checkBox_cohort_avg.setChecked(self.pics_param["cohort_avg"])
         self.checkBox_cohort_sel.setChecked(self.pics_param["cohort_sel"])
