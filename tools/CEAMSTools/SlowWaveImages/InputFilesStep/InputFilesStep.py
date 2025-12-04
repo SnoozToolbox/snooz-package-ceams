@@ -254,17 +254,11 @@ class InputFilesStep( BaseStepView,  Ui_InputFilesStep, QtWidgets.QWidget):
         self.channels_proxy_model.setFilterCaseSensitivity(Qt.CaseInsensitive)
 
         self.channels_tableview.setModel(self.channels_proxy_model)
-        self.channels_tableview.resizeColumnsToContents() # Especially important for the check mark column or it will not appear properly
+        self.channels_tableview.resizeColumnsToContents()
         
         self.channel_use_delegate = CheckBoxDelegate(None)
-        self.channel_use_delegate.set_on_change_callback(self._on_channel_checkbox_changed)
         self.channels_tableview.setItemDelegateForColumn(0, self.channel_use_delegate)
 
-
-    def _on_channel_checkbox_changed(self):
-        """Called when a channel checkbox is toggled. Debounces the context update."""
-        # Restart the timer each time a channel is selected (500ms delay)
-        self._channel_update_timer.start(500)
 
 
     def _on_channel_selection_update(self):
@@ -1636,3 +1630,5 @@ class InputFilesStep( BaseStepView,  Ui_InputFilesStep, QtWidgets.QWidget):
 
     def updateLabel_Channels(self, count):
         self.label_Channels.setText(f"Channels ({count})")
+        # Debounce context update when channel selection changes
+        self._channel_update_timer.start(500)
