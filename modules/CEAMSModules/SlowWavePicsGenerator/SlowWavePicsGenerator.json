@@ -62,6 +62,12 @@
                 "value": "",
                 "connections": {},
                 "sub_plugs": {}
+            },
+            "alignment_param": {
+                "name": "alignment_param",
+                "value": "",
+                "connections": {},
+                "sub_plugs": {}
             }
         },
         "outputs": {},

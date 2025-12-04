@@ -59,6 +59,11 @@
                             "name": "Colors",
                             "description": "Define the colors desired.",
                             "custom_step_name": "DisplaySettings"
+                        },
+                        {
+                            "name": "Slow Wave Alignment",
+                            "description": "Define the alignment of the slow waves to display.",
+                            "custom_step_name": "SlowWaveAlignment"
                         }
                     ]
                 }
@@ -187,6 +192,12 @@
                         },
                         "sub_plugs": {},
                         "connections": {}
+                    },
+                    "alignment_param": {
+                        "name": "alignment_param",
+                        "value": "ZC",
+                        "connections": {},
+                        "sub_plugs": {}
                     }
                 },
                 "outputs": {},

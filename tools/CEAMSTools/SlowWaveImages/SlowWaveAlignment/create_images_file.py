@@ -2,24 +2,20 @@ import base64
 import os
 
 # List of artifact example images to convert
-image_files = \
-    ['SW_SUBJECT_AVG-STD_35.png','SW_SUBJECT_ALL_35.png', \
-    'SW_COHORT_AVG_35.png', 'SW_COHORT_ALL_50.png']
+image_files = ['SW_signal_curve.png']
 
 # Variable names for each image
-variable_names = \
-    ['SW_SUBJECT_AVG_STD_IMAGE_BASE64', 'SW_SUBJECT_ALL_IMAGE_BASE64',\
-     'SW_COHORT_AVG_IMAGE_BASE64', 'SW_COHORT_ALL_IMAGE_BASE64']
+variable_names = ['SW_SIGNAL_CURVE_IMAGE_BASE64']
 
 # Get script directory
 script_dir = os.path.dirname(os.path.abspath(__file__))
 
 # Create the data file
-output_file = os.path.join(script_dir, 'sw_example_data.py')
+output_file = os.path.join(script_dir, 'sw_alignment_data.py')
 
 with open(output_file, 'w') as f:
     f.write('"""\n')
-    f.write('Base64 encoded sw example images\n')
+    f.write('Base64 encoded artifact example images\n')
     f.write('"""\n\n')
     
     for image_file, var_name in zip(image_files, variable_names):
