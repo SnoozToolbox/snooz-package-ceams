@@ -235,10 +235,16 @@ class OutputFiles(BaseStepView, Ui_OutputFiles, QtWidgets.QWidget):
 
         if self.pics_param["subject_avg"] or self.pics_param["subject_sel"]:
             self.checkBox_enable_subject.setChecked(True)
+            self.radioButton_subject_avg.setEnabled(True)
+            self.radioButton_subject_sel.setEnabled(True)
+        else:
+            self.checkBox_enable_subject.setChecked(False)
+            self.radioButton_subject_avg.setEnabled(False)
+            self.radioButton_subject_sel.setEnabled(False)
         if self.pics_param["subject_avg"]:
-            self.checkBox_subject_avg.setChecked(True)
+            self.radioButton_subject_avg.setChecked(True)
         if self.pics_param["subject_sel"]:
-            self.checkBox_subject_sel.setChecked(True)
+            self.radioButton_subject_sel.setChecked(True)
  
         self.checkBox_category.setChecked(self.pics_param["show_sw_categories"])
 
