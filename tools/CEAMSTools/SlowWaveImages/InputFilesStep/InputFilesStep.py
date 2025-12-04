@@ -260,11 +260,6 @@ class InputFilesStep( BaseStepView,  Ui_InputFilesStep, QtWidgets.QWidget):
         self.channels_tableview.setItemDelegateForColumn(0, self.channel_use_delegate)
 
 
-
-    def _on_channel_selection_update(self):
-        """Called after the debounce delay to update the context manager."""
-        self._context_manager[self.context_files_view] = self
-
     def add_files_slot(self):
         dlg = QtWidgets.QFileDialog()
         #dlg.setOption(QtWidgets.QFileDialog.DontUseNativeDialog, True)
@@ -962,6 +957,10 @@ class InputFilesStep( BaseStepView,  Ui_InputFilesStep, QtWidgets.QWidget):
         self.channels_proxy_model.invalidate()
         self.channels_tableview.resizeColumnsToContents() # Especially important for the check mark column or it will not appear properly
         progress.close()
+        # Generate signal to inform that Channel table has been updated and the check state has changed
+        self.channels_table_model.dataChangedWithCheckState.emit(self.channels_table_model.checkedItemCount())
+        # Generate signal to inform that Channel table has been updated and the check state has changed
+        self.channels_table_model.dataChangedWithCheckState.emit(self.channels_table_model.checkedItemCount())
 
 
     def channels_unselect_all_slot(self):
@@ -979,6 +978,10 @@ class InputFilesStep( BaseStepView,  Ui_InputFilesStep, QtWidgets.QWidget):
         self.channels_proxy_model.invalidate()
         self.channels_tableview.resizeColumnsToContents() # Especially important for the check mark column or it will not appear properly
         progress.close()
+        # Generate signal to inform that Channel table has been updated and the check state has changed
+        self.channels_table_model.dataChangedWithCheckState.emit(self.channels_table_model.checkedItemCount())
+        # Generate signal to inform that Channel table has been updated and the check state has changed
+        self.channels_table_model.dataChangedWithCheckState.emit(self.channels_table_model.checkedItemCount())
 
 
     def load_settings(self):
@@ -1632,3 +1635,7 @@ class InputFilesStep( BaseStepView,  Ui_InputFilesStep, QtWidgets.QWidget):
         self.label_Channels.setText(f"Channels ({count})")
         # Debounce context update when channel selection changes
         self._channel_update_timer.start(500)
+
+    def _on_channel_selection_update(self):
+        """Called after the debounce delay to update the context manager."""
+        self._context_manager[self.context_files_view] = self
