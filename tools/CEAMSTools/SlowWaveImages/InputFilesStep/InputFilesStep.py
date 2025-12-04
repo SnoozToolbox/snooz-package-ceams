@@ -22,11 +22,12 @@ import datetime
 import numpy as np
 import os
 import pandas as pd
-from qtpy import QtWidgets
-from qtpy import QtCore
-from qtpy import QtGui
-from qtpy.QtCore import Qt
 import sys
+
+from qtpy import QtCore
+from qtpy.QtCore import Qt, QTimer
+from qtpy import QtGui
+from qtpy import QtWidgets
 
 from commons.CheckBoxDelegate import CheckBoxDelegate
 from commons.BaseStepView import BaseStepView
@@ -38,7 +39,6 @@ from CEAMSModules.PSGReader.MontagesProxyModel import MontagesProxyModel
 from CEAMSModules.PSGReader.ChannelsTableModel import ChannelsTableModel
 from CEAMSModules.PSGReader.ChannelsProxyModel import ChannelsProxyModel
 from CEAMSTools.SlowWaveImages.InputFilesStep.Ui_InputFilesStep import Ui_InputFilesStep
-
 
 DEBUG = False
 
@@ -59,6 +59,11 @@ class InputFilesStep( BaseStepView,  Ui_InputFilesStep, QtWidgets.QWidget):
 
         # init 
         self.files_details = {}
+
+        # Timer for debouncing channel selection updates
+        self._channel_update_timer = QTimer()
+        self._channel_update_timer.setSingleShot(True)
+        self._channel_update_timer.timeout.connect(self._on_channel_selection_update)        
 
         # Init EEG reader modules
         self._psg_reader_manager = PSGReaderManager()
@@ -252,9 +257,19 @@ class InputFilesStep( BaseStepView,  Ui_InputFilesStep, QtWidgets.QWidget):
         self.channels_tableview.resizeColumnsToContents() # Especially important for the check mark column or it will not appear properly
         
         self.channel_use_delegate = CheckBoxDelegate(None)
+        self.channel_use_delegate.set_on_change_callback(self._on_channel_checkbox_changed)
         self.channels_tableview.setItemDelegateForColumn(0, self.channel_use_delegate)
 
 
+    def _on_channel_checkbox_changed(self):
+        """Called when a channel checkbox is toggled. Debounces the context update."""
+        # Restart the timer each time a channel is selected (500ms delay)
+        self._channel_update_timer.start(500)
+
+
+    def _on_channel_selection_update(self):
+        """Called after the debounce delay to update the context manager."""
+        self._context_manager[self.context_files_view] = self
 
     def add_files_slot(self):
         dlg = QtWidgets.QFileDialog()
@@ -1241,6 +1256,7 @@ class InputFilesStep( BaseStepView,  Ui_InputFilesStep, QtWidgets.QWidget):
                             # files_check_model.setItem(i_c, column, name_item)
                             # Set the parent state depending of children
                             files_check_model = self.apply_state_to_parent_item(name_item, files_check_model)                            
+
         return files_check_model, evt_found_tab
 
 
