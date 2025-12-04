@@ -53,7 +53,7 @@
       <enum>Qt::ScrollBarPolicy::ScrollBarAlwaysOn</enum>
      </property>
      <property name="horizontalScrollBarPolicy">
-      <enum>Qt::ScrollBarPolicy::ScrollBarAlwaysOff</enum>
+      <enum>Qt::ScrollBarPolicy::ScrollBarAsNeeded</enum>
      </property>
      <property name="widgetResizable">
       <bool>true</bool>
@@ -525,8 +525,7 @@ The average is across all the selected channels.</string>
             </sizepolicy>
            </property>
            <property name="text">
-            <string>Differentiate slow wave categories: use pattern/color to distinguish slow waves
-with different transition frequency (if the information is available).</string>
+            <string>Differentiate slow wave categories: use patterned colors to distinguish slow waves with different transition frequencies (when this information is available).</string>
            </property>
           </widget>
          </item>

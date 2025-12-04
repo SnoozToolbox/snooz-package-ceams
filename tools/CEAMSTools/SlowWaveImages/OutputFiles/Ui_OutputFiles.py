@@ -43,7 +43,7 @@ class Ui_OutputFiles(object):
         self.scrollArea.setFrameShadow(QFrame.Shadow.Plain)
         self.scrollArea.setLineWidth(0)
         self.scrollArea.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOn)
-        self.scrollArea.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
+        self.scrollArea.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAsNeeded)
         self.scrollArea.setWidgetResizable(True)
         self.scrollArea.setAlignment(Qt.AlignmentFlag.AlignLeading|Qt.AlignmentFlag.AlignLeft|Qt.AlignmentFlag.AlignTop)
         self.scrollAreaWidgetContents = QWidget()
@@ -498,8 +498,7 @@ class Ui_OutputFiles(object):
         self.label_12.setText(QCoreApplication.translate("OutputFiles", u"<html><head/><body><p><span style=\" font-weight:600;\">One picture per channel or ROI</span></p></body></html>", None))
         self.checkBox_cohort_sel.setText(QCoreApplication.translate("OutputFiles", u"SW per channel per group of subjects. Each SW curve represents the signal for a selected channel or ROI for a group of subjects.", None))
         self.label_8.setText(QCoreApplication.translate("OutputFiles", u"<html><head/><body><p><span style=\" font-weight:600;\">Slow wave category</span></p></body></html>", None))
-        self.checkBox_category.setText(QCoreApplication.translate("OutputFiles", u"Differentiate slow wave categories: use pattern/color to distinguish slow waves\n"
-"with different transition frequency (if the information is available).", None))
+        self.checkBox_category.setText(QCoreApplication.translate("OutputFiles", u"Differentiate slow wave categories: use patterned colors to distinguish slow waves with different transition frequencies (when this information is available).", None))
         self.label.setText(QCoreApplication.translate("OutputFiles", u"<html><head/><body><p><span style=\" font-weight:600;\">Axes Options</span></p></body></html>", None))
         self.checkBox_inverse.setText(QCoreApplication.translate("OutputFiles", u"Inverse the SW signal curves to display negative up.", None))
 #if QT_CONFIG(tooltip)
