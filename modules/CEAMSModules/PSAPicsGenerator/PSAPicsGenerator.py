@@ -463,11 +463,7 @@ class PSAPicsGenerator(SciNode):
             print(f"_save_subject_chan_fig_psa: Processing {n_channels} channels/ROIs")
             print(f"Channel labels: {chan_label}")
             print(f"Colors available: {len(colors)} colors")
-
-        # Initialize variables for cohort averaging
-        all_freq_data = []
-        all_power_data = []
-
+            
         # Get frequency range from parameters
         freq_range = pics_param.get('freq_range', self.default_freq_range)
         log_scale = pics_param.get('log_scale', False)

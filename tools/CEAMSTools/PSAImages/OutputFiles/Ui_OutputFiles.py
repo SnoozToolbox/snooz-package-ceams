@@ -49,7 +49,7 @@ class Ui_OutputFiles(object):
         self.scrollArea.setAlignment(Qt.AlignmentFlag.AlignLeading|Qt.AlignmentFlag.AlignLeft|Qt.AlignmentFlag.AlignTop)
         self.scrollAreaWidgetContents = QWidget()
         self.scrollAreaWidgetContents.setObjectName(u"scrollAreaWidgetContents")
-        self.scrollAreaWidgetContents.setGeometry(QRect(0, -420, 900, 1200))
+        self.scrollAreaWidgetContents.setGeometry(QRect(0, -485, 900, 1200))
         sizePolicy1 = QSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Maximum)
         sizePolicy1.setHorizontalStretch(0)
         sizePolicy1.setVerticalStretch(1)
@@ -381,10 +381,6 @@ class Ui_OutputFiles(object):
 
         self.horizontalLayout_12 = QHBoxLayout()
         self.horizontalLayout_12.setObjectName(u"horizontalLayout_12")
-        self.horizontalSpacer_8 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
-
-        self.horizontalLayout_12.addItem(self.horizontalSpacer_8)
-
         self.gridLayout_6 = QGridLayout()
         self.gridLayout_6.setObjectName(u"gridLayout_6")
         self.verticalLayout_13 = QVBoxLayout()
@@ -512,45 +508,9 @@ class Ui_OutputFiles(object):
 
         self.horizontalLayout_12.addLayout(self.gridLayout_6)
 
-        self.horizontalSpacer_17 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
-
-        self.horizontalLayout_12.addItem(self.horizontalSpacer_17)
-
-        self.horizontalSpacer_15 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
-
-        self.horizontalLayout_12.addItem(self.horizontalSpacer_15)
-
-        self.horizontalSpacer_16 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
-
-        self.horizontalLayout_12.addItem(self.horizontalSpacer_16)
-
-        self.horizontalSpacer_14 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
-
-        self.horizontalLayout_12.addItem(self.horizontalSpacer_14)
-
-        self.horizontalSpacer_13 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
-
-        self.horizontalLayout_12.addItem(self.horizontalSpacer_13)
-
-        self.horizontalSpacer_6 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
-
-        self.horizontalLayout_12.addItem(self.horizontalSpacer_6)
-
         self.horizontalSpacer_7 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
 
         self.horizontalLayout_12.addItem(self.horizontalSpacer_7)
-
-        self.horizontalSpacer_5 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
-
-        self.horizontalLayout_12.addItem(self.horizontalSpacer_5)
-
-        self.horizontalSpacer_12 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
-
-        self.horizontalLayout_12.addItem(self.horizontalSpacer_12)
-
-        self.horizontalSpacer_10 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
-
-        self.horizontalLayout_12.addItem(self.horizontalSpacer_10)
 
 
         self.verticalLayout_8.addLayout(self.horizontalLayout_12)
@@ -615,26 +575,26 @@ class Ui_OutputFiles(object):
 
     def retranslateUi(self, OutputFiles):
         OutputFiles.setWindowTitle("")
-        self.radioButton_report_level.setText(QCoreApplication.translate("OutputFiles", u"Report level : to generate pictures for each individual report.", None))
+        self.radioButton_report_level.setText(QCoreApplication.translate("OutputFiles", u"Group level : to generate pictures for each individual group.", None))
 #if QT_CONFIG(tooltip)
         self.checkBox_subject_avg.setToolTip("")
 #endif // QT_CONFIG(tooltip)
-        self.checkBox_subject_avg.setText(QCoreApplication.translate("OutputFiles", u"One picture per report", None))
+        self.checkBox_subject_avg.setText(QCoreApplication.translate("OutputFiles", u"One picture per group", None))
         self.label_9.setText(QCoreApplication.translate("OutputFiles", u"<html><head/><body><p>All the selected channels or ROIs are illustrated on the same picture.</p></body></html>", None))
-        self.label_2.setText(QCoreApplication.translate("OutputFiles", u"<html><head/><body><p>*The MEAN display option shows the average of all subjects in the report.</p></body></html>", None))
+        self.label_2.setText(QCoreApplication.translate("OutputFiles", u"<html><head/><body><p>*The MEAN display option shows the average of all subjects in the group.</p></body></html>", None))
 #if QT_CONFIG(tooltip)
         self.checkBox_subject_sel.setToolTip("")
 #endif // QT_CONFIG(tooltip)
-        self.checkBox_subject_sel.setText(QCoreApplication.translate("OutputFiles", u"One picture per channel or ROI per report", None))
-        self.label_3.setText(QCoreApplication.translate("OutputFiles", u"<html><head/><body><p>All the subjects in a report are illustrated on the same picture.</p></body></html>", None))
-        self.label_10.setText(QCoreApplication.translate("OutputFiles", u"<html><head/><body><p>*The MEAN display option shows the average of all subjects per report For each selected channel.</p></body></html>", None))
+        self.checkBox_subject_sel.setText(QCoreApplication.translate("OutputFiles", u"One picture per channel or ROI per group", None))
+        self.label_3.setText(QCoreApplication.translate("OutputFiles", u"<html><head/><body><p>All the subjects in a group are illustrated on the same picture.</p></body></html>", None))
+        self.label_10.setText(QCoreApplication.translate("OutputFiles", u"<html><head/><body><p>*The MEAN display option shows the average of all subjects per group For each selected channel.</p></body></html>", None))
         self.radioButton_cohort_level.setText(QCoreApplication.translate("OutputFiles", u"Cohort level : to generate pictures for the cohort.", None))
         self.checkBox_cohort_avg.setText(QCoreApplication.translate("OutputFiles", u"One picture per cohort", None))
-        self.label_11.setText(QCoreApplication.translate("OutputFiles", u"<html><head/><body><p>PSA averaged accross channels per group of subjects.</p></body></html>", None))
-        self.label_19.setText(QCoreApplication.translate("OutputFiles", u"<html><head/><body><p>Each PSA curve represents the signal averaged accross all the selected channels or ROIs for a group of subjects.</p></body></html>", None))
+        self.label_11.setText(QCoreApplication.translate("OutputFiles", u"<html><head/><body><p>EEG spectral power averaged accross channels per group of subjects.</p></body></html>", None))
+        self.label_19.setText(QCoreApplication.translate("OutputFiles", u"<html><head/><body><p>Each spectral power curve represents the signal averaged accross the selected channels or ROIs for a group of subjects.</p></body></html>", None))
         self.checkBox_cohort_sel.setText(QCoreApplication.translate("OutputFiles", u"One picture per channel or ROI", None))
-        self.label_12.setText(QCoreApplication.translate("OutputFiles", u"<html><head/><body><p>PSA per channel per group of subjects.</p></body></html>", None))
-        self.label_20.setText(QCoreApplication.translate("OutputFiles", u"<html><head/><body><p>Each PSA curve represents the signal for a selected channel or ROI for a group of subjects.</p></body></html>", None))
+        self.label_12.setText(QCoreApplication.translate("OutputFiles", u"<html><head/><body><p>EEG spectral power per channel per group of subjects.</p></body></html>", None))
+        self.label_20.setText(QCoreApplication.translate("OutputFiles", u"<html><head/><body><p>Each EEG spectral power curve represents the signal for a selected channel or ROI for a group of subjects.</p></body></html>", None))
         self.label_8.setText(QCoreApplication.translate("OutputFiles", u"<html><head/><body><p><span style=\" font-weight:700;\">Sleep Stage Selection</span></p></body></html>", None))
         self.textEdit.setHtml(QCoreApplication.translate("OutputFiles", u"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset=\"utf-8\" /><style type=\"text/css\">\n"
@@ -643,7 +603,7 @@ class Ui_OutputFiles(object):
 "li.unchecked::marker { content: \"\\2610\"; }\n"
 "li.checked::marker { content: \"\\2612\"; }\n"
 "</style></head><body style=\" font-family:'Roboto'; font-size:12pt; font-weight:400; font-style:normal;\">\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Note: When N2 and N3 stages are selected together, the generated figure displays only the PSA data corresponding to the &quot;N2N3&quot; column of the report. Similarly, when N1, N2, and N3 stages are all selected, the figure presents only the data from the &quot;NREM&quot; column.</p></body></html>", None))
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Note: When N2 and N3 stages are selected together, the generated figure displays only the EEG spectral power data corresponding to the &quot;N2N3&quot; column of the report. Similarly, when N1, N2, and N3 stages are all selected, the figure presents only the data from the &quot;NREM&quot; column.</p></body></html>", None))
         self.checkBox_Wake.setText(QCoreApplication.translate("OutputFiles", u"Wake", None))
         self.checkBox_N1.setText(QCoreApplication.translate("OutputFiles", u"N1", None))
         self.checkBox_N2.setText(QCoreApplication.translate("OutputFiles", u"N2", None))
@@ -660,10 +620,10 @@ class Ui_OutputFiles(object):
         self.label_18.setText(QCoreApplication.translate("OutputFiles", u"Desired Hour", None))
         self.radioButton_clock_hour.setText(QCoreApplication.translate("OutputFiles", u"Clock Hour", None))
         self.label.setText(QCoreApplication.translate("OutputFiles", u"<html><head/><body><p><span style=\" font-weight:600;\">Display Options</span></p></body></html>", None))
-        self.radioButton_all.setText(QCoreApplication.translate("OutputFiles", u"Display all the PSA signal curves on the picture.", None))
-        self.radioButton_mean.setText(QCoreApplication.translate("OutputFiles", u"MEAN : Display only the mean PSA curve", None))
-        self.radioButton_meanstd.setText(QCoreApplication.translate("OutputFiles", u"MEAN + STD : Display the mean PSA curve in bold line\n"
-"and the PSA curve standard deviation in gray shaded area.", None))
+        self.radioButton_all.setText(QCoreApplication.translate("OutputFiles", u"Display all the EEG spectral power curves on the picture.", None))
+        self.radioButton_mean.setText(QCoreApplication.translate("OutputFiles", u"MEAN : Display only the mean of EEG spectral power curve", None))
+        self.radioButton_meanstd.setText(QCoreApplication.translate("OutputFiles", u"MEAN + STD : Display the mean of EEG spectral power curve in bold line\n"
+"and its standard deviation in a shaded area.", None))
         self.checkBox_log.setText(QCoreApplication.translate("OutputFiles", u"Logarithmic Scale", None))
         self.checkBox_legend.setText(QCoreApplication.translate("OutputFiles", u"Show Legend", None))
 #if QT_CONFIG(tooltip)

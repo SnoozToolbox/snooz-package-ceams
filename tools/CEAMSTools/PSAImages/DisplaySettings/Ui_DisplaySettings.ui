@@ -118,7 +118,7 @@ Note that the condition groups and channels are not limited to four; ten colors 
          <item>
           <widget class="QLabel" name="label_8">
            <property name="text">
-            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;One picture per subject&lt;/span&gt; (available when displaying the mean signal curve).&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;One picture per group&lt;/span&gt; (available when displaying the mean signal curve).&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
            </property>
           </widget>
          </item>
@@ -403,8 +403,9 @@ Note that the condition groups and channels are not limited to four; ten colors 
        <item>
         <widget class="QLabel" name="label_15">
          <property name="text">
-          <string>PSA groups are distinguished by the line style when multiple channels are displayed.
-The lower colors (for PSA groups) are used when there is only a single channel to display.</string>
+          <string>EEG spectral power groups are distinguished by the line style when multiple channels are
+displayed. The lower colors (for EEG spectral power groups) are used when there is only
+a single channel to display.</string>
          </property>
         </widget>
        </item>
@@ -475,14 +476,14 @@ The lower colors (for PSA groups) are used when there is only a single channel t
          <item>
           <widget class="QLabel" name="label_2">
            <property name="text">
-            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;One picture per channel&lt;/span&gt; (available when displaying all PSA signal curves).&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;One picture per channel&lt;/span&gt; (available when displaying all signal curves).&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
            </property>
           </widget>
          </item>
          <item>
           <widget class="QLabel" name="label_3">
            <property name="text">
-            <string>Colors are used to differentiate PSA groups.</string>
+            <string>Colors are used to differentiate groups.</string>
            </property>
           </widget>
          </item>
@@ -847,7 +848,7 @@ The lower colors (for PSA groups) are used when there is only a single channel t
          <item>
           <widget class="QLabel" name="label_17">
            <property name="text">
-            <string>Colors are used to differentiate condition group.</string>
+            <string>Colors are used to differentiate cohort group.</string>
            </property>
           </widget>
          </item>
@@ -1125,7 +1126,7 @@ The lower colors (for PSA groups) are used when there is only a single channel t
        <item>
         <widget class="QLabel" name="label_22">
          <property name="text">
-          <string>PSA groups are differentiated with the line style.</string>
+          <string>EEG spectral power groups are differentiated with the line style.</string>
          </property>
         </widget>
        </item>

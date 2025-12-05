@@ -34,6 +34,10 @@ class OutputFiles(BaseStepView, Ui_OutputFiles, QtWidgets.QWidget):
         if hasattr(self, 'checkBox_log'):
             self.checkBox_log.clicked.connect(self.out_options_slot)
         
+        # Connect force axis checkbox to enable/disable spinboxes
+        if hasattr(self, 'checkBox_force_axis'):
+            self.checkBox_force_axis.clicked.connect(self.out_options_slot)
+        
         # Connect radio buttons to trigger spinbox enabling/disabling
         # Note: The button group already connects to out_options_slot, but we also need update_spinbox_states
         if hasattr(self, 'buttonGroup_section'):

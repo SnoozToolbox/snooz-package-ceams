@@ -483,7 +483,7 @@ class Ui_DisplaySettings(object):
 "Note that the condition groups and channels are not limited to four; ten colors are available.", None))
         self.label.setText(QCoreApplication.translate("DisplaySettings", u"<html><head/><body><p><span style=\" font-weight:600;\">Pictures at the subject level.</span></p></body></html>", None))
         self.checkBox_subject_avg_auto.setText(QCoreApplication.translate("DisplaySettings", u"Auto", None))
-        self.label_8.setText(QCoreApplication.translate("DisplaySettings", u"<html><head/><body><p><span style=\" font-weight:600;\">One picture per subject</span> (available when displaying the mean signal curve).</p></body></html>", None))
+        self.label_8.setText(QCoreApplication.translate("DisplaySettings", u"<html><head/><body><p><span style=\" font-weight:600;\">One picture per group</span> (available when displaying the mean signal curve).</p></body></html>", None))
         self.label_9.setText(QCoreApplication.translate("DisplaySettings", u"Colors are used to differentiate channels.", None))
         self.label_10.setText(QCoreApplication.translate("DisplaySettings", u"Channel #1", None))
         self.label_11.setText(QCoreApplication.translate("DisplaySettings", u"Channel #2", None))
@@ -536,11 +536,12 @@ class Ui_DisplaySettings(object):
         self.comboBox_subject_avg_chan4.setItemText(9, QCoreApplication.translate("DisplaySettings", u"cyan", None))
 
         self.comboBox_subject_avg_chan4.setCurrentText(QCoreApplication.translate("DisplaySettings", u"blue", None))
-        self.label_15.setText(QCoreApplication.translate("DisplaySettings", u"PSA groups are distinguished by the line style when multiple channels are displayed.\n"
-"The lower colors (for PSA groups) are used when there is only a single channel to display.", None))
+        self.label_15.setText(QCoreApplication.translate("DisplaySettings", u"EEG spectral power groups are distinguished by the line style when multiple channels are\n"
+"displayed. The lower colors (for EEG spectral power groups) are used when there is only\n"
+"a single channel to display.", None))
         self.checkBox_subject_sel_auto.setText(QCoreApplication.translate("DisplaySettings", u"Auto", None))
-        self.label_2.setText(QCoreApplication.translate("DisplaySettings", u"<html><head/><body><p><span style=\" font-weight:600;\">One picture per channel</span> (available when displaying all PSA signal curves).</p></body></html>", None))
-        self.label_3.setText(QCoreApplication.translate("DisplaySettings", u"Colors are used to differentiate PSA groups.", None))
+        self.label_2.setText(QCoreApplication.translate("DisplaySettings", u"<html><head/><body><p><span style=\" font-weight:600;\">One picture per channel</span> (available when displaying all signal curves).</p></body></html>", None))
+        self.label_3.setText(QCoreApplication.translate("DisplaySettings", u"Colors are used to differentiate groups.", None))
         self.label_4.setText(QCoreApplication.translate("DisplaySettings", u"PSA group #1", None))
         self.label_5.setText(QCoreApplication.translate("DisplaySettings", u"PSA group #2", None))
         self.label_6.setText(QCoreApplication.translate("DisplaySettings", u"PSA group #3", None))
@@ -594,7 +595,7 @@ class Ui_DisplaySettings(object):
         self.comboBox_subject_sel_cat4.setCurrentText(QCoreApplication.translate("DisplaySettings", u"blue", None))
         self.label_14.setText(QCoreApplication.translate("DisplaySettings", u"<html><head/><body><p><span style=\" font-weight:600;\">Pictures at the cohort level.</span></p></body></html>", None))
         self.checkBox_cohort_auto.setText(QCoreApplication.translate("DisplaySettings", u"Auto", None))
-        self.label_17.setText(QCoreApplication.translate("DisplaySettings", u"Colors are used to differentiate condition group.", None))
+        self.label_17.setText(QCoreApplication.translate("DisplaySettings", u"Colors are used to differentiate cohort group.", None))
         self.label_18.setText(QCoreApplication.translate("DisplaySettings", u"Group #1", None))
         self.comboBox_cohort_group1.setItemText(0, QCoreApplication.translate("DisplaySettings", u"blue", None))
         self.comboBox_cohort_group1.setItemText(1, QCoreApplication.translate("DisplaySettings", u"red", None))
@@ -646,6 +647,6 @@ class Ui_DisplaySettings(object):
         self.comboBox_cohort_group3.setItemText(9, QCoreApplication.translate("DisplaySettings", u"cyan", None))
 
         self.comboBox_cohort_group3.setCurrentText(QCoreApplication.translate("DisplaySettings", u"blue", None))
-        self.label_22.setText(QCoreApplication.translate("DisplaySettings", u"PSA groups are differentiated with the line style.", None))
+        self.label_22.setText(QCoreApplication.translate("DisplaySettings", u"EEG spectral power groups are differentiated with the line style.", None))
     # retranslateUi
 

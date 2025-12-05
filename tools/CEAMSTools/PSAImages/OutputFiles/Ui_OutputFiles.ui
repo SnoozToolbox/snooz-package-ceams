@@ -65,7 +65,7 @@
       <property name="geometry">
        <rect>
         <x>0</x>
-        <y>-420</y>
+        <y>-485</y>
         <width>900</width>
         <height>1200</height>
        </rect>
@@ -105,7 +105,7 @@
             </font>
            </property>
            <property name="text">
-            <string>Report level : to generate pictures for each individual report.</string>
+            <string>Group level : to generate pictures for each individual group.</string>
            </property>
            <attribute name="buttonGroup">
             <string notr="true">buttonGroup_level</string>
@@ -146,7 +146,7 @@
                 <string/>
                </property>
                <property name="text">
-                <string>One picture per report</string>
+                <string>One picture per group</string>
                </property>
               </widget>
              </item>
@@ -160,7 +160,7 @@
              <item>
               <widget class="QLabel" name="label_2">
                <property name="text">
-                <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;*The MEAN display option shows the average of all subjects in the report.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;*The MEAN display option shows the average of all subjects in the group.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                </property>
               </widget>
              </item>
@@ -197,21 +197,21 @@
                 <string/>
                </property>
                <property name="text">
-                <string>One picture per channel or ROI per report</string>
+                <string>One picture per channel or ROI per group</string>
                </property>
               </widget>
              </item>
              <item>
               <widget class="QLabel" name="label_3">
                <property name="text">
-                <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;All the subjects in a report are illustrated on the same picture.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;All the subjects in a group are illustrated on the same picture.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                </property>
               </widget>
              </item>
              <item>
               <widget class="QLabel" name="label_10">
                <property name="text">
-                <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;*The MEAN display option shows the average of all subjects per report For each selected channel.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;*The MEAN display option shows the average of all subjects per group For each selected channel.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                </property>
               </widget>
              </item>
@@ -293,14 +293,14 @@
              <item>
               <widget class="QLabel" name="label_11">
                <property name="text">
-                <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;PSA averaged accross channels per group of subjects.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;EEG spectral power averaged accross channels per group of subjects.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                </property>
               </widget>
              </item>
              <item>
               <widget class="QLabel" name="label_19">
                <property name="text">
-                <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Each PSA curve represents the signal averaged accross all the selected channels or ROIs for a group of subjects.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Each spectral power curve represents the signal averaged accross the selected channels or ROIs for a group of subjects.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                </property>
               </widget>
              </item>
@@ -333,14 +333,14 @@
              <item>
               <widget class="QLabel" name="label_12">
                <property name="text">
-                <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;PSA per channel per group of subjects.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;EEG spectral power per channel per group of subjects.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                </property>
               </widget>
              </item>
              <item>
               <widget class="QLabel" name="label_20">
                <property name="text">
-                <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Each PSA curve represents the signal for a selected channel or ROI for a group of subjects.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Each EEG spectral power curve represents the signal for a selected channel or ROI for a group of subjects.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                </property>
               </widget>
              </item>
@@ -424,7 +424,7 @@ hr { height: 1px; border-width: 0; }
 li.unchecked::marker { content: &quot;\2610&quot;; }
 li.checked::marker { content: &quot;\2612&quot;; }
 &lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Roboto'; font-size:12pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Note: When N2 and N3 stages are selected together, the generated figure displays only the PSA data corresponding to the &amp;quot;N2N3&amp;quot; column of the report. Similarly, when N1, N2, and N3 stages are all selected, the figure presents only the data from the &amp;quot;NREM&amp;quot; column.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Note: When N2 and N3 stages are selected together, the generated figure displays only the EEG spectral power data corresponding to the &amp;quot;N2N3&amp;quot; column of the report. Similarly, when N1, N2, and N3 stages are all selected, the figure presents only the data from the &amp;quot;NREM&amp;quot; column.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
              </property>
             </widget>
            </item>
@@ -665,26 +665,13 @@ li.checked::marker { content: &quot;\2612&quot;; }
        <item>
         <layout class="QHBoxLayout" name="horizontalLayout_12">
          <item>
-          <spacer name="horizontalSpacer_8">
-           <property name="orientation">
-            <enum>Qt::Orientation::Horizontal</enum>
-           </property>
-           <property name="sizeHint" stdset="0">
-            <size>
-             <width>40</width>
-             <height>20</height>
-            </size>
-           </property>
-          </spacer>
-         </item>
-         <item>
           <layout class="QGridLayout" name="gridLayout_6">
            <item row="1" column="0">
             <layout class="QVBoxLayout" name="verticalLayout_13">
              <item>
               <widget class="QRadioButton" name="radioButton_all">
                <property name="text">
-                <string>Display all the PSA signal curves on the picture.</string>
+                <string>Display all the EEG spectral power curves on the picture.</string>
                </property>
                <attribute name="buttonGroup">
                 <string notr="true">buttonGroup_display</string>
@@ -694,7 +681,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
              <item>
               <widget class="QRadioButton" name="radioButton_mean">
                <property name="text">
-                <string>MEAN : Display only the mean PSA curve</string>
+                <string>MEAN : Display only the mean of EEG spectral power curve</string>
                </property>
                <attribute name="buttonGroup">
                 <string notr="true">buttonGroup_display</string>
@@ -716,8 +703,8 @@ li.checked::marker { content: &quot;\2612&quot;; }
                 </size>
                </property>
                <property name="text">
-                <string>MEAN + STD : Display the mean PSA curve in bold line
-and the PSA curve standard deviation in gray shaded area.</string>
+                <string>MEAN + STD : Display the mean of EEG spectral power curve in bold line
+and its standard deviation in a shaded area.</string>
                </property>
                <property name="checked">
                 <bool>true</bool>
@@ -884,124 +871,7 @@ and the PSA curve standard deviation in gray shaded area.</string>
           </layout>
          </item>
          <item>
-          <spacer name="horizontalSpacer_17">
-           <property name="orientation">
-            <enum>Qt::Orientation::Horizontal</enum>
-           </property>
-           <property name="sizeHint" stdset="0">
-            <size>
-             <width>40</width>
-             <height>20</height>
-            </size>
-           </property>
-          </spacer>
-         </item>
-         <item>
-          <spacer name="horizontalSpacer_15">
-           <property name="orientation">
-            <enum>Qt::Orientation::Horizontal</enum>
-           </property>
-           <property name="sizeHint" stdset="0">
-            <size>
-             <width>40</width>
-             <height>20</height>
-            </size>
-           </property>
-          </spacer>
-         </item>
-         <item>
-          <spacer name="horizontalSpacer_16">
-           <property name="orientation">
-            <enum>Qt::Orientation::Horizontal</enum>
-           </property>
-           <property name="sizeHint" stdset="0">
-            <size>
-             <width>40</width>
-             <height>20</height>
-            </size>
-           </property>
-          </spacer>
-         </item>
-         <item>
-          <spacer name="horizontalSpacer_14">
-           <property name="orientation">
-            <enum>Qt::Orientation::Horizontal</enum>
-           </property>
-           <property name="sizeHint" stdset="0">
-            <size>
-             <width>40</width>
-             <height>20</height>
-            </size>
-           </property>
-          </spacer>
-         </item>
-         <item>
-          <spacer name="horizontalSpacer_13">
-           <property name="orientation">
-            <enum>Qt::Orientation::Horizontal</enum>
-           </property>
-           <property name="sizeHint" stdset="0">
-            <size>
-             <width>40</width>
-             <height>20</height>
-            </size>
-           </property>
-          </spacer>
-         </item>
-         <item>
-          <spacer name="horizontalSpacer_6">
-           <property name="orientation">
-            <enum>Qt::Orientation::Horizontal</enum>
-           </property>
-           <property name="sizeHint" stdset="0">
-            <size>
-             <width>40</width>
-             <height>20</height>
-            </size>
-           </property>
-          </spacer>
-         </item>
-         <item>
           <spacer name="horizontalSpacer_7">
-           <property name="orientation">
-            <enum>Qt::Orientation::Horizontal</enum>
-           </property>
-           <property name="sizeHint" stdset="0">
-            <size>
-             <width>40</width>
-             <height>20</height>
-            </size>
-           </property>
-          </spacer>
-         </item>
-         <item>
-          <spacer name="horizontalSpacer_5">
-           <property name="orientation">
-            <enum>Qt::Orientation::Horizontal</enum>
-           </property>
-           <property name="sizeHint" stdset="0">
-            <size>
-             <width>40</width>
-             <height>20</height>
-            </size>
-           </property>
-          </spacer>
-         </item>
-         <item>
-          <spacer name="horizontalSpacer_12">
-           <property name="orientation">
-            <enum>Qt::Orientation::Horizontal</enum>
-           </property>
-           <property name="sizeHint" stdset="0">
-            <size>
-             <width>40</width>
-             <height>20</height>
-            </size>
-           </property>
-          </spacer>
-         </item>
-         <item>
-          <spacer name="horizontalSpacer_10">
            <property name="orientation">
             <enum>Qt::Orientation::Horizontal</enum>
            </property>
@@ -1207,7 +1077,7 @@ and the PSA curve standard deviation in gray shaded area.</string>
  </slots>
  <buttongroups>
   <buttongroup name="buttonGroup_display"/>
-  <buttongroup name="buttonGroup_section"/>
   <buttongroup name="buttonGroup_level"/>
+  <buttongroup name="buttonGroup_section"/>
  </buttongroups>
 </ui>
