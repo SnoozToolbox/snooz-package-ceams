@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>PSACohortReviewSettingsView</class>
- <widget class="QWidget" name="PSACohortReviewSettingsView">
+ <class>PSAPicsGeneratorSettingsView</class>
+ <widget class="QWidget" name="PSAPicsGeneratorSettingsView">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -73,7 +73,7 @@
          <item>
           <widget class="QPushButton" name="add_pushButton">
            <property name="text">
-            <string>Add Spectral Power Report</string>
+            <string>Add Spectral Report</string>
            </property>
           </widget>
          </item>
@@ -117,7 +117,7 @@
        <item>
         <widget class="QLabel" name="label_4">
          <property name="text">
-          <string>File Information</string>
+          <string>EEG Spectral Power File Information</string>
          </property>
         </widget>
        </item>
@@ -141,7 +141,7 @@
   <connection>
    <sender>clear_pushButton</sender>
    <signal>clicked()</signal>
-   <receiver>PSACohortReviewSettingsView</receiver>
+   <receiver>PSAPicsGeneratorSettingsView</receiver>
    <slot>clear_subject_slot()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -157,7 +157,7 @@
   <connection>
    <sender>add_pushButton</sender>
    <signal>clicked()</signal>
-   <receiver>PSACohortReviewSettingsView</receiver>
+   <receiver>PSAPicsGeneratorSettingsView</receiver>
    <slot>add_subject_slot()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -173,7 +173,7 @@
   <connection>
    <sender>all_subject_chan_checkBox</sender>
    <signal>clicked()</signal>
-   <receiver>PSACohortReviewSettingsView</receiver>
+   <receiver>PSAPicsGeneratorSettingsView</receiver>
    <slot>select_all_subject_chan_slot()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -189,7 +189,7 @@
   <connection>
    <sender>all_cohort_chan_checkBox</sender>
    <signal>clicked()</signal>
-   <receiver>PSACohortReviewSettingsView</receiver>
+   <receiver>PSAPicsGeneratorSettingsView</receiver>
    <slot>select_all_cohort_chan_slot()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -205,7 +205,7 @@
   <connection>
    <sender>add_ROI_pushButton</sender>
    <signal>clicked()</signal>
-   <receiver>PSACohortReviewSettingsView</receiver>
+   <receiver>PSAPicsGeneratorSettingsView</receiver>
    <slot>add_ROI_slot()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -221,7 +221,7 @@
   <connection>
    <sender>subject_listView</sender>
    <signal>clicked(QModelIndex)</signal>
-   <receiver>PSACohortReviewSettingsView</receiver>
+   <receiver>PSAPicsGeneratorSettingsView</receiver>
    <slot>subject_selection_changed_slot()</slot>
    <hints>
     <hint type="sourcelabel">

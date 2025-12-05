@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file 'Ui_PSACohortReviewSettingsView.ui'
+## Form generated from reading UI file 'Ui_PSAPicsGeneratorSettingsView.ui'
 ##
 ## Created by: Qt User Interface Compiler version 6.8.2
 ##
@@ -21,15 +21,15 @@ from PySide6.QtWidgets import (QAbstractItemView, QApplication, QCheckBox, QGrid
     QTextEdit, QVBoxLayout, QWidget)
 import themes_rc
 
-class Ui_PSACohortReviewSettingsView(object):
-    def setupUi(self, PSACohortReviewSettingsView):
-        if not PSACohortReviewSettingsView.objectName():
-            PSACohortReviewSettingsView.setObjectName(u"PSACohortReviewSettingsView")
-        PSACohortReviewSettingsView.resize(929, 800)
-        PSACohortReviewSettingsView.setStyleSheet(u"font: 12pt \"Roboto\";")
-        self.horizontalLayout_3 = QHBoxLayout(PSACohortReviewSettingsView)
+class Ui_PSAPicsGeneratorSettingsView(object):
+    def setupUi(self, PSAPicsGeneratorSettingsView):
+        if not PSAPicsGeneratorSettingsView.objectName():
+            PSAPicsGeneratorSettingsView.setObjectName(u"PSAPicsGeneratorSettingsView")
+        PSAPicsGeneratorSettingsView.resize(929, 800)
+        PSAPicsGeneratorSettingsView.setStyleSheet(u"font: 12pt \"Roboto\";")
+        self.horizontalLayout_3 = QHBoxLayout(PSAPicsGeneratorSettingsView)
         self.horizontalLayout_3.setObjectName(u"horizontalLayout_3")
-        self.splitter = QSplitter(PSACohortReviewSettingsView)
+        self.splitter = QSplitter(PSAPicsGeneratorSettingsView)
         self.splitter.setObjectName(u"splitter")
         self.splitter.setOrientation(Qt.Orientation.Vertical)
         self.splitter.setHandleWidth(15)
@@ -127,30 +127,30 @@ class Ui_PSACohortReviewSettingsView(object):
         self.horizontalLayout_3.addWidget(self.splitter)
 
 
-        self.retranslateUi(PSACohortReviewSettingsView)
-        self.clear_pushButton.clicked.connect(PSACohortReviewSettingsView.clear_subject_slot)
-        self.add_pushButton.clicked.connect(PSACohortReviewSettingsView.add_subject_slot)
-        self.all_subject_chan_checkBox.clicked.connect(PSACohortReviewSettingsView.select_all_subject_chan_slot)
-        self.all_cohort_chan_checkBox.clicked.connect(PSACohortReviewSettingsView.select_all_cohort_chan_slot)
-        self.add_ROI_pushButton.clicked.connect(PSACohortReviewSettingsView.add_ROI_slot)
-        self.subject_listView.clicked.connect(PSACohortReviewSettingsView.subject_selection_changed_slot)
+        self.retranslateUi(PSAPicsGeneratorSettingsView)
+        self.clear_pushButton.clicked.connect(PSAPicsGeneratorSettingsView.clear_subject_slot)
+        self.add_pushButton.clicked.connect(PSAPicsGeneratorSettingsView.add_subject_slot)
+        self.all_subject_chan_checkBox.clicked.connect(PSAPicsGeneratorSettingsView.select_all_subject_chan_slot)
+        self.all_cohort_chan_checkBox.clicked.connect(PSAPicsGeneratorSettingsView.select_all_cohort_chan_slot)
+        self.add_ROI_pushButton.clicked.connect(PSAPicsGeneratorSettingsView.add_ROI_slot)
+        self.subject_listView.clicked.connect(PSAPicsGeneratorSettingsView.subject_selection_changed_slot)
 
-        QMetaObject.connectSlotsByName(PSACohortReviewSettingsView)
+        QMetaObject.connectSlotsByName(PSAPicsGeneratorSettingsView)
     # setupUi
 
-    def retranslateUi(self, PSACohortReviewSettingsView):
-        PSACohortReviewSettingsView.setWindowTitle(QCoreApplication.translate("PSACohortReviewSettingsView", u"Form", None))
-        self.label.setText(QCoreApplication.translate("PSACohortReviewSettingsView", u"Subject List", None))
-        self.label_2.setText(QCoreApplication.translate("PSACohortReviewSettingsView", u"Subject Channel List", None))
-        self.label_3.setText(QCoreApplication.translate("PSACohortReviewSettingsView", u"Cohort Channel List", None))
-        self.clear_pushButton.setText(QCoreApplication.translate("PSACohortReviewSettingsView", u"Clear", None))
-        self.add_pushButton.setText(QCoreApplication.translate("PSACohortReviewSettingsView", u"Add Spectral Power Report", None))
-        self.all_subject_chan_checkBox.setText(QCoreApplication.translate("PSACohortReviewSettingsView", u"Select All", None))
-        self.all_cohort_chan_checkBox.setText(QCoreApplication.translate("PSACohortReviewSettingsView", u"Select All", None))
+    def retranslateUi(self, PSAPicsGeneratorSettingsView):
+        PSAPicsGeneratorSettingsView.setWindowTitle(QCoreApplication.translate("PSAPicsGeneratorSettingsView", u"Form", None))
+        self.label.setText(QCoreApplication.translate("PSAPicsGeneratorSettingsView", u"Subject List", None))
+        self.label_2.setText(QCoreApplication.translate("PSAPicsGeneratorSettingsView", u"Subject Channel List", None))
+        self.label_3.setText(QCoreApplication.translate("PSAPicsGeneratorSettingsView", u"Cohort Channel List", None))
+        self.clear_pushButton.setText(QCoreApplication.translate("PSAPicsGeneratorSettingsView", u"Clear", None))
+        self.add_pushButton.setText(QCoreApplication.translate("PSAPicsGeneratorSettingsView", u"Add Spectral Report", None))
+        self.all_subject_chan_checkBox.setText(QCoreApplication.translate("PSAPicsGeneratorSettingsView", u"Select All", None))
+        self.all_cohort_chan_checkBox.setText(QCoreApplication.translate("PSAPicsGeneratorSettingsView", u"Select All", None))
 #if QT_CONFIG(tooltip)
-        self.add_ROI_pushButton.setToolTip(QCoreApplication.translate("PSACohortReviewSettingsView", u"Rename your channel labels first. Adding the ROIs must be the final step.", None))
+        self.add_ROI_pushButton.setToolTip(QCoreApplication.translate("PSAPicsGeneratorSettingsView", u"Rename your channel labels first. Adding the ROIs must be the final step.", None))
 #endif // QT_CONFIG(tooltip)
-        self.add_ROI_pushButton.setText(QCoreApplication.translate("PSACohortReviewSettingsView", u"Add ROI", None))
-        self.label_4.setText(QCoreApplication.translate("PSACohortReviewSettingsView", u"File Information", None))
+        self.add_ROI_pushButton.setText(QCoreApplication.translate("PSAPicsGeneratorSettingsView", u"Add ROI", None))
+        self.label_4.setText(QCoreApplication.translate("PSAPicsGeneratorSettingsView", u"EEG Spectral Power File Information", None))
     # retranslateUi
 
