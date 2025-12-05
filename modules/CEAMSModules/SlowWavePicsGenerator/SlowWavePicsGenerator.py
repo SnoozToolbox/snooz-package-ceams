@@ -751,7 +751,7 @@ class SlowWavePicsGenerator(SciNode):
                 # For the 
                 # Display the mean of the signals across events and the std as shaded gray area
                 #if 'mean' in pics_param['display']:
-                if fig_save=='subject_avg':
+                if pics_param['subject_avg']:
                     signal_to_plot_cat = np.empty(0)
                     # For each signal in signals_evt_cur_chan
                     for i_evt, signal_cur in enumerate(signals_evt_cur_chan):
@@ -855,8 +855,7 @@ class SlowWavePicsGenerator(SciNode):
 
                 # Display all signals across events
                 # Always only one channel
-                #else:
-                elif fig_save=='subject_sel':
+                else:
                     # For each signal in signals_evt_cur_chan
                     for i_evt, signal_cur in enumerate(signals_evt_cur_chan):
                         if ('category' not in event_cur_chan_df.columns) or \
@@ -938,8 +937,10 @@ class SlowWavePicsGenerator(SciNode):
             if pics_param['subject_avg'] | pics_param['subject_sel']:
                 fig_name = pics_param['output_folder']+'/'+base_name+'_'+pics_param['sw_aligment']
                 if pics_param['subject_sel']:
-                    fig_name = fig_name + '_' + chan_label[0]
-                fig_name = fig_name + '_'+ pics_param['display']
+                    fig_name = fig_name + '_' + chan_label[0] + '_all'
+                if pics_param['subject_avg']:
+                    fig_name = fig_name + '_avg'
+                #fig_name = fig_name + '_'+ pics_param['display']
                 fig_name = fig_name + '.pdf'
 
                 if pics_param['subject_sel']:
