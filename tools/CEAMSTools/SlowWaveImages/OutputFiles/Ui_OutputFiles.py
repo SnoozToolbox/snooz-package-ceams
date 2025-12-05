@@ -469,19 +469,19 @@ class Ui_OutputFiles(object):
 #endif // QT_CONFIG(tooltip)
         self.radioButton_subject_avg.setText(QCoreApplication.translate("OutputFiles", u"All channels or ROIs are shown on the same figure.\n"
 "Useful for exploring topographic differences.\n"
-"The mean and standard deviation (STD) across slow waves\n"
+"The mean and standard deviation (STD) across SW\n"
 "for each channel or ROI are displayed.", None))
-        self.label_17.setText(QCoreApplication.translate("OutputFiles", u"Example of a figure showing the averaged slow wave for two channels.", None))
+        self.label_17.setText(QCoreApplication.translate("OutputFiles", u"Example of a figure showing the averaged SW for two channels.", None))
         self.label_subject_pic_mean.setText("")
         self.label_10.setText(QCoreApplication.translate("OutputFiles", u"<html><head/><body><p><span style=\" font-weight:600;\">One picture per channel or ROI</span></p></body></html>", None))
 #if QT_CONFIG(tooltip)
         self.radioButton_subject_sel.setToolTip(QCoreApplication.translate("OutputFiles", u"Check the display option 'Display all the SW' in order to check this option.", None))
 #endif // QT_CONFIG(tooltip)
-        self.radioButton_subject_sel.setText(QCoreApplication.translate("OutputFiles", u"Useful for exploring the set of slow-wave events to identify outliers or artifacts.\n"
-"All slow-wave curves are displayed.", None))
-        self.label_18.setText(QCoreApplication.translate("OutputFiles", u"Example of a figure showing all slow waves detected for one channel.", None))
+        self.radioButton_subject_sel.setText(QCoreApplication.translate("OutputFiles", u"Useful for exploring the set of SW events to identify outliers or artifacts.\n"
+"All SW curves are displayed.", None))
+        self.label_18.setText(QCoreApplication.translate("OutputFiles", u"Example of a figure showing all SW detected for one channel.", None))
         self.label_subject_pic_all.setText("")
-        self.label_2.setText(QCoreApplication.translate("OutputFiles", u"<html><head/><body><p>Cohort level : to generate pictures for the cohort.</p></body></html>", None))
+        self.label_2.setText(QCoreApplication.translate("OutputFiles", u"<html><head/><body><p>Cohort level : to generate pictures for the cohort, groups are all displayed on the same picture.</p></body></html>", None))
         self.label_3.setText(QCoreApplication.translate("OutputFiles", u"<html><head/><body><p><span style=\" font-weight:700;\">Display Options</span></p></body></html>", None))
         self.label_cohort_pic_all.setText("")
         self.radioButton_all.setText(QCoreApplication.translate("OutputFiles", u"Display all the SW signal curves on the picture.", None))
@@ -489,16 +489,16 @@ class Ui_OutputFiles(object):
         self.radioButton_meanstd.setText(QCoreApplication.translate("OutputFiles", u"MEAN + STD : Display the mean SW curve in bold line\n"
 "and the SW curve standard deviation in gray shaded area.", None))
         self.label_cohort_pic_shade.setText("")
-        self.label_6.setText(QCoreApplication.translate("OutputFiles", u"Example of a figure showing the averaged slow wave for each group.\n"
-"Average and STD is across all the selected channels.", None))
-        self.label_7.setText(QCoreApplication.translate("OutputFiles", u"Example of a figure showing the averaged slow wave of each recording.\n"
-"The average is across all the selected channels.", None))
+        self.label_6.setText(QCoreApplication.translate("OutputFiles", u"Example of a figure showing the averaged SW for each group.\n"
+"Average and STD displayed are across the subjects of each group.", None))
+        self.label_7.setText(QCoreApplication.translate("OutputFiles", u"Example of a figure showing the averaged SW of each recording.\n"
+"The averaged curve is computed across all channels.", None))
         self.label_11.setText(QCoreApplication.translate("OutputFiles", u"<html><head/><body><p><span style=\" font-weight:600;\">One picture per cohort</span></p></body></html>", None))
-        self.checkBox_cohort_avg.setText(QCoreApplication.translate("OutputFiles", u"SW averaged accross channels per group of subjects. Each SW curve represents the signal averaged accross all the selected channels or ROIs for a group of subjects.", None))
+        self.checkBox_cohort_avg.setText(QCoreApplication.translate("OutputFiles", u"SW averaged across channels per group of subjects. Each curve represents the signal averaged accross all the channels or ROIs.", None))
         self.label_12.setText(QCoreApplication.translate("OutputFiles", u"<html><head/><body><p><span style=\" font-weight:600;\">One picture per channel or ROI</span></p></body></html>", None))
-        self.checkBox_cohort_sel.setText(QCoreApplication.translate("OutputFiles", u"SW per channel per group of subjects. Each SW curve represents the signal for a selected channel or ROI for a group of subjects.", None))
+        self.checkBox_cohort_sel.setText(QCoreApplication.translate("OutputFiles", u"SW per channel per group of subjects. Each curve represents the signal for a selected channel or ROI.", None))
         self.label_8.setText(QCoreApplication.translate("OutputFiles", u"<html><head/><body><p><span style=\" font-weight:600;\">Slow wave category</span></p></body></html>", None))
-        self.checkBox_category.setText(QCoreApplication.translate("OutputFiles", u"Differentiate slow wave categories: use patterned colors to distinguish slow waves with different transition frequencies (when this information is available).", None))
+        self.checkBox_category.setText(QCoreApplication.translate("OutputFiles", u"Differentiate SW categories: use patterned colors to distinguish SW with different transition frequencies (when this information is available).", None))
         self.label.setText(QCoreApplication.translate("OutputFiles", u"<html><head/><body><p><span style=\" font-weight:600;\">Axes Options</span></p></body></html>", None))
         self.checkBox_inverse.setText(QCoreApplication.translate("OutputFiles", u"Inverse the SW signal curves to display negative up.", None))
 #if QT_CONFIG(tooltip)

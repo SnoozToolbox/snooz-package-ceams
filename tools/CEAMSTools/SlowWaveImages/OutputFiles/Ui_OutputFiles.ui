@@ -151,7 +151,7 @@
              <property name="text">
               <string>All channels or ROIs are shown on the same figure.
 Useful for exploring topographic differences.
-The mean and standard deviation (STD) across slow waves
+The mean and standard deviation (STD) across SW
 for each channel or ROI are displayed.</string>
              </property>
              <property name="checked">
@@ -165,7 +165,7 @@ for each channel or ROI are displayed.</string>
            <item>
             <widget class="QLabel" name="label_17">
              <property name="text">
-              <string>Example of a figure showing the averaged slow wave for two channels.</string>
+              <string>Example of a figure showing the averaged SW for two channels.</string>
              </property>
             </widget>
            </item>
@@ -208,8 +208,8 @@ for each channel or ROI are displayed.</string>
               <string>Check the display option 'Display all the SW' in order to check this option.</string>
              </property>
              <property name="text">
-              <string>Useful for exploring the set of slow-wave events to identify outliers or artifacts.
-All slow-wave curves are displayed.</string>
+              <string>Useful for exploring the set of SW events to identify outliers or artifacts.
+All SW curves are displayed.</string>
              </property>
              <attribute name="buttonGroup">
               <string notr="true">buttonGroup_subject_pics</string>
@@ -219,7 +219,7 @@ All slow-wave curves are displayed.</string>
            <item>
             <widget class="QLabel" name="label_18">
              <property name="text">
-              <string>Example of a figure showing all slow waves detected for one channel.</string>
+              <string>Example of a figure showing all SW detected for one channel.</string>
              </property>
             </widget>
            </item>
@@ -266,7 +266,7 @@ All slow-wave curves are displayed.</string>
        <item>
         <widget class="QLabel" name="label_2">
          <property name="text">
-          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Cohort level : to generate pictures for the cohort.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Cohort level : to generate pictures for the cohort, groups are all displayed on the same picture.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
          </property>
         </widget>
        </item>
@@ -416,16 +416,16 @@ and the SW curve standard deviation in gray shaded area.</string>
              <item row="2" column="0">
               <widget class="QLabel" name="label_6">
                <property name="text">
-                <string>Example of a figure showing the averaged slow wave for each group.
-Average and STD is across all the selected channels.</string>
+                <string>Example of a figure showing the averaged SW for each group.
+Average and STD displayed are across the subjects of each group.</string>
                </property>
               </widget>
              </item>
              <item row="2" column="1">
               <widget class="QLabel" name="label_7">
                <property name="text">
-                <string>Example of a figure showing the averaged slow wave of each recording.
-The average is across all the selected channels.</string>
+                <string>Example of a figure showing the averaged SW of each recording.
+The averaged curve is computed across all channels.</string>
                </property>
               </widget>
              </item>
@@ -447,7 +447,7 @@ The average is across all the selected channels.</string>
               </sizepolicy>
              </property>
              <property name="text">
-              <string>SW averaged accross channels per group of subjects. Each SW curve represents the signal averaged accross all the selected channels or ROIs for a group of subjects.</string>
+              <string>SW averaged across channels per group of subjects. Each curve represents the signal averaged accross all the channels or ROIs.</string>
              </property>
              <property name="checked">
               <bool>true</bool>
@@ -470,7 +470,7 @@ The average is across all the selected channels.</string>
               </sizepolicy>
              </property>
              <property name="text">
-              <string>SW per channel per group of subjects. Each SW curve represents the signal for a selected channel or ROI for a group of subjects.</string>
+              <string>SW per channel per group of subjects. Each curve represents the signal for a selected channel or ROI.</string>
              </property>
             </widget>
            </item>
@@ -525,7 +525,7 @@ The average is across all the selected channels.</string>
             </sizepolicy>
            </property>
            <property name="text">
-            <string>Differentiate slow wave categories: use patterned colors to distinguish slow waves with different transition frequencies (when this information is available).</string>
+            <string>Differentiate SW categories: use patterned colors to distinguish SW with different transition frequencies (when this information is available).</string>
            </property>
           </widget>
          </item>
@@ -915,7 +915,7 @@ The average is across all the selected channels.</string>
   <slot>out_options_slot()</slot>
  </slots>
  <buttongroups>
-  <buttongroup name="buttonGroup_mean"/>
   <buttongroup name="buttonGroup_subject_pics"/>
+  <buttongroup name="buttonGroup_mean"/>
  </buttongroups>
 </ui>
