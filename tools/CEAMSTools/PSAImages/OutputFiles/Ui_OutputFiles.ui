@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>956</width>
-    <height>764</height>
+    <width>942</width>
+    <height>733</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -65,7 +65,7 @@
       <property name="geometry">
        <rect>
         <x>0</x>
-        <y>-454</y>
+        <y>-420</y>
         <width>900</width>
         <height>1200</height>
        </rect>
@@ -95,10 +95,21 @@
        <item>
         <layout class="QVBoxLayout" name="verticalLayout_10">
          <item>
-          <widget class="QLabel" name="label_3">
-           <property name="text">
-            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Subject level : to generate pictures for each individual subject.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+          <widget class="QRadioButton" name="radioButton_report_level">
+           <property name="font">
+            <font>
+             <family>Roboto</family>
+             <pointsize>12</pointsize>
+             <italic>false</italic>
+             <bold>false</bold>
+            </font>
            </property>
+           <property name="text">
+            <string>Report level : to generate pictures for each individual report.</string>
+           </property>
+           <attribute name="buttonGroup">
+            <string notr="true">buttonGroup_level</string>
+           </attribute>
           </widget>
          </item>
          <item>
@@ -122,20 +133,34 @@
            <item>
             <layout class="QVBoxLayout" name="verticalLayout">
              <item>
-              <widget class="QLabel" name="label_9">
+              <widget class="QCheckBox" name="checkBox_subject_avg">
+               <property name="font">
+                <font>
+                 <family>Roboto</family>
+                 <pointsize>12</pointsize>
+                 <italic>false</italic>
+                 <bold>false</bold>
+                </font>
+               </property>
+               <property name="toolTip">
+                <string/>
+               </property>
                <property name="text">
-                <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;One picture per report&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                <string>One picture per report</string>
                </property>
               </widget>
              </item>
              <item>
-              <widget class="QCheckBox" name="checkBox_subject_avg">
-               <property name="toolTip">
-                <string>Check the display option 'MEAN' in order to check this option.</string>
-               </property>
+              <widget class="QLabel" name="label_9">
                <property name="text">
-                <string>All the channels or ROIs are illustrated on the same picture.
-*Useful to explore topographic differences.</string>
+                <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;All the selected channels or ROIs are illustrated on the same picture.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLabel" name="label_2">
+               <property name="text">
+                <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;*The MEAN display option shows the average of all subjects in the report.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                </property>
               </widget>
              </item>
@@ -156,22 +181,37 @@
               </spacer>
              </item>
              <item>
-              <widget class="QLabel" name="label_10">
+              <widget class="QCheckBox" name="checkBox_subject_sel">
+               <property name="enabled">
+                <bool>true</bool>
+               </property>
+               <property name="font">
+                <font>
+                 <family>Roboto</family>
+                 <pointsize>12</pointsize>
+                 <italic>false</italic>
+                 <bold>false</bold>
+                </font>
+               </property>
+               <property name="toolTip">
+                <string/>
+               </property>
                <property name="text">
-                <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;One picture per channel or ROI&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                <string>One picture per channel or ROI per report</string>
                </property>
               </widget>
              </item>
              <item>
-              <widget class="QCheckBox" name="checkBox_subject_sel">
-               <property name="enabled">
-                <bool>false</bool>
-               </property>
-               <property name="toolTip">
-                <string>Check the display option 'Display all the SW' in order to check this option.</string>
-               </property>
+              <widget class="QLabel" name="label_3">
                <property name="text">
-                <string>Useful to explore the PSA events set (with the option to display all PSA signals).</string>
+                <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;All the subjects in a report are illustrated on the same picture.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLabel" name="label_10">
+               <property name="text">
+                <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;*The MEAN display option shows the average of all subjects per report For each selected channel.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                </property>
               </widget>
              </item>
@@ -203,10 +243,21 @@
           <enum>QLayout::SizeConstraint::SetNoConstraint</enum>
          </property>
          <item>
-          <widget class="QLabel" name="label_2">
-           <property name="text">
-            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Cohort level : to generate pictures for the cohort.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+          <widget class="QRadioButton" name="radioButton_cohort_level">
+           <property name="font">
+            <font>
+             <family>Roboto</family>
+             <pointsize>12</pointsize>
+             <italic>false</italic>
+             <bold>false</bold>
+            </font>
            </property>
+           <property name="text">
+            <string>Cohort level : to generate pictures for the cohort.</string>
+           </property>
+           <attribute name="buttonGroup">
+            <string notr="true">buttonGroup_level</string>
+           </attribute>
           </widget>
          </item>
          <item>
@@ -230,21 +281,26 @@
            <item>
             <layout class="QVBoxLayout" name="verticalLayout_2">
              <item>
-              <widget class="QLabel" name="label_11">
+              <widget class="QCheckBox" name="checkBox_cohort_avg">
                <property name="text">
-                <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;One picture per cohort&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                <string>One picture per cohort</string>
+               </property>
+               <property name="checked">
+                <bool>false</bool>
                </property>
               </widget>
              </item>
              <item>
-              <widget class="QCheckBox" name="checkBox_cohort_avg">
+              <widget class="QLabel" name="label_11">
                <property name="text">
-                <string>Spectral power averaged accross channels per group of subjects.
-Each spectral curve represents the signal averaged accross all the selected channels
-or ROIs for a group of subjects.</string>
+                <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;PSA averaged accross channels per group of subjects.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                </property>
-               <property name="checked">
-                <bool>true</bool>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLabel" name="label_19">
+               <property name="text">
+                <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Each PSA curve represents the signal averaged accross all the selected channels or ROIs for a group of subjects.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                </property>
               </widget>
              </item>
@@ -265,17 +321,26 @@ or ROIs for a group of subjects.</string>
               </spacer>
              </item>
              <item>
-              <widget class="QLabel" name="label_12">
+              <widget class="QCheckBox" name="checkBox_cohort_sel">
+               <property name="enabled">
+                <bool>true</bool>
+               </property>
                <property name="text">
-                <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;One picture per channel or ROI&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                <string>One picture per channel or ROI</string>
                </property>
               </widget>
              </item>
              <item>
-              <widget class="QCheckBox" name="checkBox_cohort_sel">
+              <widget class="QLabel" name="label_12">
                <property name="text">
-                <string>Spectral power per channel per group of subjects.
-Each spectral curve represents the signal for a selected channel or ROI for a group of subjects.</string>
+                <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;PSA per channel per group of subjects.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLabel" name="label_20">
+               <property name="text">
+                <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Each PSA curve represents the signal for a selected channel or ROI for a group of subjects.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                </property>
               </widget>
              </item>
@@ -304,55 +369,66 @@ Each spectral curve represents the signal for a selected channel or ROI for a gr
        <item>
         <layout class="QVBoxLayout" name="verticalLayout_7">
          <item>
-          <widget class="QLabel" name="label_8">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="text">
-            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Sleep Stage Selection&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QTextEdit" name="textEdit">
-           <property name="minimumSize">
-            <size>
-             <width>0</width>
-             <height>0</height>
-            </size>
-           </property>
-           <property name="maximumSize">
-            <size>
-             <width>16777215</width>
-             <height>100</height>
-            </size>
-           </property>
-           <property name="tabletTracking">
-            <bool>false</bool>
-           </property>
-           <property name="frameShape">
-            <enum>QFrame::Shape::NoFrame</enum>
-           </property>
-           <property name="lineWidth">
-            <number>0</number>
-           </property>
-           <property name="readOnly">
-            <bool>true</bool>
-           </property>
-           <property name="html">
-            <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+          <layout class="QGridLayout" name="gridLayout">
+           <item row="1" column="0">
+            <spacer name="verticalSpacer">
+             <property name="orientation">
+              <enum>Qt::Orientation::Vertical</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>20</width>
+               <height>40</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item row="2" column="0">
+            <widget class="QLabel" name="label_8">
+             <property name="text">
+              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Sleep Stage Selection&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+             </property>
+            </widget>
+           </item>
+           <item row="3" column="0">
+            <widget class="QTextEdit" name="textEdit">
+             <property name="minimumSize">
+              <size>
+               <width>0</width>
+               <height>0</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>16777215</width>
+               <height>100</height>
+              </size>
+             </property>
+             <property name="tabletTracking">
+              <bool>false</bool>
+             </property>
+             <property name="frameShape">
+              <enum>QFrame::Shape::NoFrame</enum>
+             </property>
+             <property name="lineWidth">
+              <number>0</number>
+             </property>
+             <property name="readOnly">
+              <bool>true</bool>
+             </property>
+             <property name="html">
+              <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;meta charset=&quot;utf-8&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
 hr { height: 1px; border-width: 0; }
 li.unchecked::marker { content: &quot;\2610&quot;; }
 li.checked::marker { content: &quot;\2612&quot;; }
 &lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Roboto'; font-size:12pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Note: When N2 and N3 stages are selected together, the generated figure displays only the spectral data corresponding to the &amp;quot;N2N3&amp;quot; column of the report. Similarly, when N1, N2, and N3 stages are all selected, the figure presents only the data from the &amp;quot;NREM&amp;quot; column.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-           </property>
-          </widget>
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Note: When N2 and N3 stages are selected together, the generated figure displays only the PSA data corresponding to the &amp;quot;N2N3&amp;quot; column of the report. Similarly, when N1, N2, and N3 stages are all selected, the figure presents only the data from the &amp;quot;NREM&amp;quot; column.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
          </item>
          <item>
           <layout class="QHBoxLayout" name="horizontalLayout_4">
@@ -405,6 +481,19 @@ li.checked::marker { content: &quot;\2612&quot;; }
              </property>
             </widget>
            </item>
+           <item>
+            <spacer name="horizontalSpacer_11">
+             <property name="orientation">
+              <enum>Qt::Orientation::Horizontal</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>40</width>
+               <height>20</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
           </layout>
          </item>
         </layout>
@@ -443,18 +532,38 @@ li.checked::marker { content: &quot;\2612&quot;; }
              </property>
              <item>
               <layout class="QGridLayout" name="gridLayout_4">
-               <item row="0" column="0">
-                <widget class="QRadioButton" name="radioButton_total">
+               <item row="2" column="1">
+                <widget class="QLabel" name="label_7">
                  <property name="text">
-                  <string>Total</string>
+                  <string>Desired Hour</string>
                  </property>
-                 <property name="checked">
-                  <bool>true</bool>
+                </widget>
+               </item>
+               <item row="1" column="1">
+                <widget class="QLabel" name="label_17">
+                 <property name="text">
+                  <string>Desired Cycle</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="1" column="0">
+                <widget class="QRadioButton" name="radioButton_sleep_cycle">
+                 <property name="text">
+                  <string>Sleep Cycle</string>
                  </property>
                  <attribute name="buttonGroup">
-                  <string notr="true">buttonGroup_align</string>
+                  <string notr="true">buttonGroup_section</string>
                  </attribute>
                 </widget>
+               </item>
+               <item row="1" column="2">
+                <widget class="QSpinBox" name="spinBox_sleep_cycle"/>
+               </item>
+               <item row="2" column="2">
+                <widget class="QSpinBox" name="spinBox_clock_hour"/>
+               </item>
+               <item row="3" column="2">
+                <widget class="QSpinBox" name="spinBox_stage_hour"/>
                </item>
                <item row="1" column="3">
                 <spacer name="horizontalSpacer_4">
@@ -474,46 +583,22 @@ li.checked::marker { content: &quot;\2612&quot;; }
                  <property name="text">
                   <string>Stage Hour</string>
                  </property>
-                </widget>
-               </item>
-               <item row="1" column="0">
-                <widget class="QRadioButton" name="radioButton_sleep_cycle">
-                 <property name="text">
-                  <string>Sleep Cycle</string>
-                 </property>
                  <attribute name="buttonGroup">
-                  <string notr="true">buttonGroup_align</string>
+                  <string notr="true">buttonGroup_section</string>
                  </attribute>
                 </widget>
                </item>
-               <item row="2" column="0">
-                <widget class="QRadioButton" name="radioButton_clock_hour">
+               <item row="0" column="0">
+                <widget class="QRadioButton" name="radioButton_total">
                  <property name="text">
-                  <string>Clock Hour</string>
+                  <string>Total</string>
+                 </property>
+                 <property name="checked">
+                  <bool>true</bool>
                  </property>
                  <attribute name="buttonGroup">
-                  <string notr="true">buttonGroup_align</string>
+                  <string notr="true">buttonGroup_section</string>
                  </attribute>
-                </widget>
-               </item>
-               <item row="2" column="2">
-                <widget class="QSpinBox" name="spinBox_clock_hour"/>
-               </item>
-               <item row="1" column="2">
-                <widget class="QSpinBox" name="spinBox_sleep_cycle"/>
-               </item>
-               <item row="2" column="1">
-                <widget class="QLabel" name="label_7">
-                 <property name="text">
-                  <string>Desired Hour</string>
-                 </property>
-                </widget>
-               </item>
-               <item row="1" column="1">
-                <widget class="QLabel" name="label_17">
-                 <property name="text">
-                  <string>Desired Cycle</string>
-                 </property>
                 </widget>
                </item>
                <item row="3" column="1">
@@ -523,8 +608,28 @@ li.checked::marker { content: &quot;\2612&quot;; }
                  </property>
                 </widget>
                </item>
-               <item row="3" column="2">
-                <widget class="QSpinBox" name="spinBox_stage_hour"/>
+               <item row="2" column="0">
+                <widget class="QRadioButton" name="radioButton_clock_hour">
+                 <property name="text">
+                  <string>Clock Hour</string>
+                 </property>
+                 <attribute name="buttonGroup">
+                  <string notr="true">buttonGroup_section</string>
+                 </attribute>
+                </widget>
+               </item>
+               <item row="4" column="0">
+                <spacer name="verticalSpacer_2">
+                 <property name="orientation">
+                  <enum>Qt::Orientation::Vertical</enum>
+                 </property>
+                 <property name="sizeHint" stdset="0">
+                  <size>
+                   <width>20</width>
+                   <height>40</height>
+                  </size>
+                 </property>
+                </spacer>
                </item>
               </layout>
              </item>
@@ -551,184 +656,362 @@ li.checked::marker { content: &quot;\2612&quot;; }
         </spacer>
        </item>
        <item>
-        <layout class="QVBoxLayout" name="verticalLayout_3">
+        <widget class="QLabel" name="label">
+         <property name="text">
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Display Options&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayout_12">
          <item>
-          <widget class="QLabel" name="label">
-           <property name="text">
-            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Display Options&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+          <spacer name="horizontalSpacer_8">
+           <property name="orientation">
+            <enum>Qt::Orientation::Horizontal</enum>
            </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QRadioButton" name="radioButton_all">
-           <property name="text">
-            <string>Display all the spectral power curves on the picture.</string>
-           </property>
-           <attribute name="buttonGroup">
-            <string notr="true">buttonGroup_mean</string>
-           </attribute>
-          </widget>
-         </item>
-         <item>
-          <widget class="QRadioButton" name="radioButton_mean">
-           <property name="text">
-            <string>MEAN : Display only the mean spectral power curve</string>
-           </property>
-           <attribute name="buttonGroup">
-            <string notr="true">buttonGroup_mean</string>
-           </attribute>
-          </widget>
-         </item>
-         <item>
-          <widget class="QRadioButton" name="radioButton_meanstd">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="minimumSize">
+           <property name="sizeHint" stdset="0">
             <size>
-             <width>0</width>
-             <height>0</height>
+             <width>40</width>
+             <height>20</height>
             </size>
            </property>
-           <property name="text">
-            <string>MEAN + STD : Display the mean spectral power curve in bold line
-and the spectral power curve standard deviation in gray shaded area.</string>
-           </property>
-           <property name="checked">
-            <bool>true</bool>
-           </property>
-           <attribute name="buttonGroup">
-            <string notr="true">buttonGroup_mean</string>
-           </attribute>
-          </widget>
+          </spacer>
          </item>
          <item>
-          <widget class="QCheckBox" name="checkBox_log">
-           <property name="text">
-            <string>Logarithmic Scale</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <layout class="QHBoxLayout" name="horizontalLayout_5">
-           <item>
-            <widget class="QCheckBox" name="checkBox_force_axis">
-             <property name="toolTip">
-              <string>Enable this option for consistent axes across all pictures and define the axes limits. Otherwise, the axes are automatically determined based on the data.</string>
-             </property>
-             <property name="text">
-              <string>Force axis limits</string>
-             </property>
-            </widget>
+          <layout class="QGridLayout" name="gridLayout_6">
+           <item row="1" column="0">
+            <layout class="QVBoxLayout" name="verticalLayout_13">
+             <item>
+              <widget class="QRadioButton" name="radioButton_all">
+               <property name="text">
+                <string>Display all the PSA signal curves on the picture.</string>
+               </property>
+               <attribute name="buttonGroup">
+                <string notr="true">buttonGroup_display</string>
+               </attribute>
+              </widget>
+             </item>
+             <item>
+              <widget class="QRadioButton" name="radioButton_mean">
+               <property name="text">
+                <string>MEAN : Display only the mean PSA curve</string>
+               </property>
+               <attribute name="buttonGroup">
+                <string notr="true">buttonGroup_display</string>
+               </attribute>
+              </widget>
+             </item>
+             <item>
+              <widget class="QRadioButton" name="radioButton_meanstd">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="minimumSize">
+                <size>
+                 <width>0</width>
+                 <height>0</height>
+                </size>
+               </property>
+               <property name="text">
+                <string>MEAN + STD : Display the mean PSA curve in bold line
+and the PSA curve standard deviation in gray shaded area.</string>
+               </property>
+               <property name="checked">
+                <bool>true</bool>
+               </property>
+               <attribute name="buttonGroup">
+                <string notr="true">buttonGroup_display</string>
+               </attribute>
+              </widget>
+             </item>
+            </layout>
            </item>
-           <item>
-            <widget class="QLabel" name="label_13">
-             <property name="text">
-              <string>x-min:</string>
-             </property>
-             <property name="alignment">
-              <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
-             </property>
-            </widget>
+           <item row="2" column="0">
+            <layout class="QHBoxLayout" name="horizontalLayout_13">
+             <item>
+              <widget class="QCheckBox" name="checkBox_log">
+               <property name="text">
+                <string>Logarithmic Scale</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QCheckBox" name="checkBox_legend">
+               <property name="text">
+                <string>Show Legend</string>
+               </property>
+               <property name="checked">
+                <bool>false</bool>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <spacer name="horizontalSpacer_9">
+               <property name="orientation">
+                <enum>Qt::Orientation::Horizontal</enum>
+               </property>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>40</width>
+                 <height>20</height>
+                </size>
+               </property>
+              </spacer>
+             </item>
+            </layout>
            </item>
-           <item>
-            <widget class="QDoubleSpinBox" name="doubleSpinBox_xmin">
-             <property name="enabled">
-              <bool>false</bool>
-             </property>
-             <property name="minimum">
-              <double>-5.000000000000000</double>
-             </property>
-             <property name="maximum">
-              <double>5.000000000000000</double>
-             </property>
-             <property name="singleStep">
-              <double>0.500000000000000</double>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QLabel" name="label_14">
-             <property name="text">
-              <string>x-max:</string>
-             </property>
-             <property name="alignment">
-              <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QDoubleSpinBox" name="doubleSpinBox_xmax">
-             <property name="enabled">
-              <bool>false</bool>
-             </property>
-             <property name="minimum">
-              <double>-5.000000000000000</double>
-             </property>
-             <property name="maximum">
-              <double>5.000000000000000</double>
-             </property>
-             <property name="singleStep">
-              <double>0.500000000000000</double>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QLabel" name="label_15">
-             <property name="text">
-              <string>y-min:</string>
-             </property>
-             <property name="alignment">
-              <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QDoubleSpinBox" name="doubleSpinBox_ymin">
-             <property name="enabled">
-              <bool>false</bool>
-             </property>
-             <property name="minimum">
-              <double>-500.000000000000000</double>
-             </property>
-             <property name="maximum">
-              <double>500.000000000000000</double>
-             </property>
-             <property name="singleStep">
-              <double>50.000000000000000</double>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QLabel" name="label_16">
-             <property name="text">
-              <string>y-max:</string>
-             </property>
-             <property name="alignment">
-              <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QDoubleSpinBox" name="doubleSpinBox_ymax">
-             <property name="enabled">
-              <bool>false</bool>
-             </property>
-             <property name="minimum">
-              <double>-500.000000000000000</double>
-             </property>
-             <property name="maximum">
-              <double>500.000000000000000</double>
-             </property>
-             <property name="singleStep">
-              <double>50.000000000000000</double>
-             </property>
-            </widget>
+           <item row="3" column="0">
+            <layout class="QHBoxLayout" name="horizontalLayout_14">
+             <item>
+              <widget class="QCheckBox" name="checkBox_force_axis">
+               <property name="toolTip">
+                <string>Enable this option for consistent axes across all pictures and define the axes limits. Otherwise, the axes are automatically determined based on the data.</string>
+               </property>
+               <property name="text">
+                <string>Force axis limits</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLabel" name="label_25">
+               <property name="text">
+                <string>x-min:</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QDoubleSpinBox" name="doubleSpinBox_xmin">
+               <property name="enabled">
+                <bool>false</bool>
+               </property>
+               <property name="minimum">
+                <double>-5.000000000000000</double>
+               </property>
+               <property name="maximum">
+                <double>5.000000000000000</double>
+               </property>
+               <property name="singleStep">
+                <double>0.500000000000000</double>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLabel" name="label_26">
+               <property name="text">
+                <string>x-max:</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QDoubleSpinBox" name="doubleSpinBox_xmax">
+               <property name="enabled">
+                <bool>false</bool>
+               </property>
+               <property name="minimum">
+                <double>-5.000000000000000</double>
+               </property>
+               <property name="maximum">
+                <double>5.000000000000000</double>
+               </property>
+               <property name="singleStep">
+                <double>0.500000000000000</double>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLabel" name="label_27">
+               <property name="text">
+                <string>y-min:</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QDoubleSpinBox" name="doubleSpinBox_ymin">
+               <property name="enabled">
+                <bool>false</bool>
+               </property>
+               <property name="minimum">
+                <double>-500.000000000000000</double>
+               </property>
+               <property name="maximum">
+                <double>500.000000000000000</double>
+               </property>
+               <property name="singleStep">
+                <double>50.000000000000000</double>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLabel" name="label_28">
+               <property name="text">
+                <string>y-max:</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QDoubleSpinBox" name="doubleSpinBox_ymax">
+               <property name="enabled">
+                <bool>false</bool>
+               </property>
+               <property name="minimum">
+                <double>-500.000000000000000</double>
+               </property>
+               <property name="maximum">
+                <double>500.000000000000000</double>
+               </property>
+               <property name="singleStep">
+                <double>50.000000000000000</double>
+               </property>
+              </widget>
+             </item>
+            </layout>
            </item>
           </layout>
+         </item>
+         <item>
+          <spacer name="horizontalSpacer_17">
+           <property name="orientation">
+            <enum>Qt::Orientation::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item>
+          <spacer name="horizontalSpacer_15">
+           <property name="orientation">
+            <enum>Qt::Orientation::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item>
+          <spacer name="horizontalSpacer_16">
+           <property name="orientation">
+            <enum>Qt::Orientation::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item>
+          <spacer name="horizontalSpacer_14">
+           <property name="orientation">
+            <enum>Qt::Orientation::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item>
+          <spacer name="horizontalSpacer_13">
+           <property name="orientation">
+            <enum>Qt::Orientation::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item>
+          <spacer name="horizontalSpacer_6">
+           <property name="orientation">
+            <enum>Qt::Orientation::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item>
+          <spacer name="horizontalSpacer_7">
+           <property name="orientation">
+            <enum>Qt::Orientation::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item>
+          <spacer name="horizontalSpacer_5">
+           <property name="orientation">
+            <enum>Qt::Orientation::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item>
+          <spacer name="horizontalSpacer_12">
+           <property name="orientation">
+            <enum>Qt::Orientation::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item>
+          <spacer name="horizontalSpacer_10">
+           <property name="orientation">
+            <enum>Qt::Orientation::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
          </item>
         </layout>
        </item>
@@ -821,24 +1104,11 @@ and the spectral power curve standard deviation in gray shaded area.</string>
          <item>
           <widget class="QLabel" name="label_5">
            <property name="text">
-            <string>Pictures are identified with the basename of the spectral power report and\or channel label.</string>
+            <string>Pictures are identified with the basename of the PSG recording and\or channel label.</string>
            </property>
           </widget>
          </item>
         </layout>
-       </item>
-       <item>
-        <spacer name="verticalSpacer">
-         <property name="orientation">
-          <enum>Qt::Orientation::Vertical</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>20</width>
-           <height>10</height>
-          </size>
-         </property>
-        </spacer>
        </item>
       </layout>
      </widget>
@@ -930,61 +1200,14 @@ and the spectral power curve standard deviation in gray shaded area.</string>
     </hint>
    </hints>
   </connection>
-  <connection>
-   <sender>buttonGroup_align</sender>
-   <signal>buttonClicked(QAbstractButton*)</signal>
-   <receiver>OutputFiles</receiver>
-   <slot>out_options_slot()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>-1</x>
-     <y>-1</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>469</x>
-     <y>496</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>buttonGroup_mean</sender>
-   <signal>buttonClicked(QAbstractButton*)</signal>
-   <receiver>OutputFiles</receiver>
-   <slot>out_options_slot()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>-1</x>
-     <y>-1</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>445</x>
-     <y>496</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>checkBox_force_axis</sender>
-   <signal>clicked()</signal>
-   <receiver>OutputFiles</receiver>
-   <slot>out_options_slot()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>77</x>
-     <y>902</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>447</x>
-     <y>561</y>
-    </hint>
-   </hints>
-  </connection>
  </connections>
  <slots>
   <slot>choose_slot()</slot>
   <slot>out_options_slot()</slot>
  </slots>
  <buttongroups>
-  <buttongroup name="buttonGroup_mean"/>
-  <buttongroup name="buttonGroup_align"/>
+  <buttongroup name="buttonGroup_display"/>
+  <buttongroup name="buttonGroup_section"/>
+  <buttongroup name="buttonGroup_level"/>
  </buttongroups>
 </ui>

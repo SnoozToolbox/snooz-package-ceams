@@ -50,6 +50,7 @@ class PSAPicsGenerator(SciNode):
         - 'output_folder': str, path to save figures
         - 'freq_range': [float, float], frequency range to display
         - 'log_scale': bool, use log scale for y-axis
+        - 'show_legend': bool, show legend on plots (default: True)
         - 'sleep_stage_selection': list of str, sleep stages to include
         - 'activity_var': str, variable for activity ('total', 'clock_h', 'stage_h', 'cyc')
         - 'hour': int, hour for 'clock_h' and 'stage_h' variables
@@ -226,20 +227,21 @@ class PSAPicsGenerator(SciNode):
                         else:
                             fig_save = False
                         
-                        psa_avg_per_chan_cur, freq_avg_per_chan_cur = \
+                        # Only call plotting function if we need to save subject figure
+                        if fig_save:
                             self._save_subject_chan_fig_psa(psa_data_ch_sel, \
                                 pics_param, file_name, chan_label, fig_save, colors_param['subject_sel'])
-                        
-                        if chan_label in psa_data_per_chan.keys():
-                            psa_data_per_chan[chan_label].append(\
-                                [psa_avg_per_chan_cur, file_group_name])
-                        else:
-                            psa_data_per_chan[chan_label] = \
-                                [[psa_avg_per_chan_cur, file_group_name]]
-                        
-                        if fig_save:
                             self._log_manager.log(self.identifier, \
                                 f"Images are generated for the file {file_name} and channel/ROI {ch}.")
+                        
+                        # Accumulate full DataFrame for cohort analysis
+                        if pics_param['cohort_sel']:
+                            if chan_label in psa_data_per_chan.keys():
+                                psa_data_per_chan[chan_label].append(\
+                                    [psa_data_ch_sel, file_group_name])
+                            else:
+                                psa_data_per_chan[chan_label] = \
+                                    [[psa_data_ch_sel, file_group_name]]
 
                     if pics_param['subject_avg'] | pics_param['cohort_avg']:
                         if psa_data_ch_sel is not None and len(psa_data_ch_sel) > 0:
@@ -295,10 +297,8 @@ class PSAPicsGenerator(SciNode):
                         if psa_data_cur_sjt is not None and len(psa_data_cur_sjt)>0:
                             psa_data[group_cur_sjt].append(psa_data_cur_sjt)
             
-                # psa_data : for the current channel -> one PSA per subject,
-                #  they need to be aligned together
-                # psa_data : dict of list of numpy array
-                #   keys are the subject group and values are the PSA data for the current channel or ROI
+                # psa_data : dict of list of DataFrames
+                #   keys are the subject group and values are the full DataFrames for the current channel or ROI
                 self._save_cohort_chan_fig_psa(psa_data, \
                     pics_param, ch, colors_param['cohort']) # n_cats is useless
 
@@ -441,13 +441,16 @@ class PSAPicsGenerator(SciNode):
                 List of colors.
 
         """
-        if fig_save:
-            if 'subject' in fig_save:
-                # Initialize the figure and canvas for plotting
-                fig = Figure()
-                fig.set_size_inches(self.figsize)
-                fig.clear() # reset the hold on
-                ax = fig.add_subplot()
+        # Only create figure if we're actually saving
+        if not fig_save:
+            return None, None
+            
+        if 'subject' in fig_save:
+            # Initialize the figure and canvas for plotting
+            fig = Figure()
+            fig.set_size_inches(self.figsize)
+            fig.clear()
+            ax = fig.add_subplot()
 
         if isinstance(chan_label, str):
             psa_data_all_chan = [psa_data_all_chan]
@@ -470,10 +473,22 @@ class PSAPicsGenerator(SciNode):
         log_scale = pics_param.get('log_scale', False)
         sleep_stage_selection = pics_param.get('sleep_stage_selection', ['All'])
 
+        # Build activity variable string for filename and title
+        if pics_param['activity_var'] == 'total':
+            activity_str = 'Total'
+        elif pics_param['activity_var'] in ['clock_h', 'stage_h']:
+            activity_str = f"{pics_param['activity_var']}{pics_param['hour']}"
+        elif pics_param['activity_var'] == 'cyc':
+            activity_str = f"{pics_param['activity_var']}{pics_param['cycle']}"
+        
+        # Build stage string for title
+        if len(sleep_stage_selection) == 1:
+            stage_str = sleep_stage_selection[0]
+        else:
+            stage_str = '+'.join(sleep_stage_selection)
+
         # For each channel display the PSA data
         for i_chan in range(n_channels):
-            if DEBUG:
-                print(f"Processing channel {i_chan}: {chan_label[i_chan] if i_chan < len(chan_label) else 'Unknown'}")
             # Extract the PSA data for the current channel
             psa_data_cur_chan = psa_data_all_chan[i_chan]
             
@@ -487,83 +502,154 @@ class PSAPicsGenerator(SciNode):
                 
                 # If there are multiple filenames, process each separately
                 if len(unique_filenames) > 1:
-                    # Determine total number of items to plot (filenames * channels)
-                    total_items = len(unique_filenames) * n_channels
-                    # Expand colors if needed
-                    expanded_colors = self._expand_colors(colors, total_items)
-                    for filename_idx, filename_val in enumerate(unique_filenames):
-                        # Filter data for this specific filename
-                        psa_data_for_file = psa_data_cur_chan[psa_data_cur_chan['filename'] == filename_val]
+                    # Check if we should compute mean across subjects
+                    if 'mean' in pics_param['display']:
+                        # Use common frequency grid spanning full range
+                        common_freq = np.linspace(freq_range[0], freq_range[1], 100)
                         
-                        # Get frequency bands and power data from Snooz format
-                        freq_low = psa_data_for_file['freq_low_Hz'].values
-                        freq_high = psa_data_for_file['freq_high_Hz'].values
-                        freq_center = (freq_low + freq_high) / 2  # Use center frequency for plotting
-                        
-                        # Filter frequency range
-                        freq_mask = (freq_center >= freq_range[0]) & (freq_center <= freq_range[1])
-                        freq_filtered = freq_center[freq_mask]
-                        
-                        # Get power columns (stage-specific activity) based on stage selection
-                        power_columns = []
+                        # Collect data from all subjects for mean/std calculation
                         for stage in sleep_stage_selection:
-                            if stage == 'All' and pics_param['activity_var'] == 'total':
-                                stage_col = f"{pics_param['activity_var']}_act"
-                            elif stage == 'All' and (pics_param['activity_var'] == 'clock_h' or pics_param['activity_var'] == 'stage_h'):
-                                stage_col = f"{pics_param['activity_var']}{pics_param['hour']}_act"
-                            elif stage == 'All' and pics_param['activity_var'] == 'cyc':
-                                stage_col = f"{pics_param['activity_var']}{pics_param['cycle']}_act"
-                            elif stage != 'All' and pics_param['activity_var'] == 'total':
-                                stage_col = f"{pics_param['activity_var']}_{stage}_act"
-                            elif stage != 'All' and (pics_param['activity_var'] == 'clock_h' or pics_param['activity_var'] == 'stage_h'):
-                                stage_col = f"{pics_param['activity_var']}{pics_param['hour']}_{stage}_act"
-                            elif stage != 'All' and pics_param['activity_var'] == 'cyc':
-                                stage_col = f"{pics_param['activity_var']}{pics_param['cycle']}_{stage}_act"
-
-                            if stage_col in psa_data_for_file.columns:
-                                power_columns.append(stage_col)
-                        
-                        if power_columns:
-                            # Plot each stage-specific power with different linestyles
-                            for stage_idx, stage_col in enumerate(power_columns):
-                                # Use different colors for different filenames
-                                # Calculate unique index for this filename+channel combination
-                                color_idx = (i_chan * len(unique_filenames) + filename_idx) % len(expanded_colors)
-                                linestyle_idx = stage_idx % len(self.linestyles)
-                                power_data = psa_data_for_file[stage_col].values
-                                power_filtered = power_data[freq_mask]
+                            subject_power_data = []
+                            
+                            for filename_val in unique_filenames:
+                                psa_data_for_file = psa_data_cur_chan[psa_data_cur_chan['filename'] == filename_val]
                                 
-                                # Accumulate data for cohort averaging if enabled
-                                if pics_param.get('cohort_avg', False):
-                                    all_freq_data.append(freq_filtered)
-                                    all_power_data.append(power_filtered)
+                                freq_low = psa_data_for_file['freq_low_Hz'].values
+                                freq_high = psa_data_for_file['freq_high_Hz'].values
+                                freq_center = (freq_low + freq_high) / 2
                                 
-                                if fig_save:
-                                    # Create label with filename
-                                    stage_name = stage_col.replace('_act', '')
-                                    filename_short = os.path.basename(filename_val).split('.')[0] if isinstance(filename_val, str) else f"file_{filename_idx}"
-                                    if n_channels > 1:
-                                        label_name = f'{chan_label[i_chan]}_{filename_short}_{stage_name}'
-                                    else:
-                                        label_name = f'{filename_short}_{stage_name}'
+                                # Build stage column name
+                                if stage == 'All' and pics_param['activity_var'] == 'total':
+                                    stage_col = f"{pics_param['activity_var']}_act"
+                                elif stage == 'All' and (pics_param['activity_var'] == 'clock_h' or pics_param['activity_var'] == 'stage_h'):
+                                    stage_col = f"{pics_param['activity_var']}{pics_param['hour']}_act"
+                                elif stage == 'All' and pics_param['activity_var'] == 'cyc':
+                                    stage_col = f"{pics_param['activity_var']}{pics_param['cycle']}_act"
+                                elif stage != 'All' and pics_param['activity_var'] == 'total':
+                                    stage_col = f"{pics_param['activity_var']}_{stage}_act"
+                                elif stage != 'All' and (pics_param['activity_var'] == 'clock_h' or pics_param['activity_var'] == 'stage_h'):
+                                    stage_col = f"{pics_param['activity_var']}{pics_param['hour']}_{stage}_act"
+                                elif stage != 'All' and pics_param['activity_var'] == 'cyc':
+                                    stage_col = f"{pics_param['activity_var']}{pics_param['cycle']}_{stage}_act"
+                                
+                                if stage_col in psa_data_for_file.columns:
+                                    power_data = psa_data_for_file[stage_col].values
                                     
-                                    if label_name not in legend_labels:
-                                        ax.plot(freq_filtered, power_filtered, color=expanded_colors[color_idx], 
-                                               label=label_name, linewidth=2, linestyle=self.linestyles[linestyle_idx])
-                                        legend_labels[label_name] = True
+                                    # Interpolate to common grid (no masking, interpolate full data)
+                                    if len(power_data) > 0 and len(freq_center) > 0:
+                                        interp_power = np.interp(common_freq, freq_center, power_data, left=np.nan, right=np.nan)
+                                        subject_power_data.append(interp_power)
+                            
+                            # Compute mean and std across subjects
+                            if subject_power_data and len(subject_power_data) > 0:
+                                subject_power_data = np.array(subject_power_data)
+                                mean_power = np.nanmean(subject_power_data, axis=0)
+                                std_power = np.nanstd(subject_power_data, axis=0)
+                                
+                                # Plot mean line
+                                stage_idx = sleep_stage_selection.index(stage)
+                                linestyle_idx = stage_idx % len(self.linestyles)
+                                
+                                # Simplified label - just channel name
+                                label_name = f'{chan_label[i_chan]}'
+                                if label_name not in legend_labels:
+                                    ax.plot(common_freq, mean_power, color=colors[i_chan],
+                                           linestyle=self.linestyles[linestyle_idx],
+                                           label=label_name, linewidth=2)
+                                    legend_labels[label_name] = True
+                                else:
+                                    ax.plot(common_freq, mean_power, color=colors[i_chan],
+                                           linestyle=self.linestyles[linestyle_idx], linewidth=2)
+                                
+                                # Plot std band if requested
+                                if 'std' in pics_param['display']:
+                                    if log_scale:
+                                        log_mean = np.log10(mean_power + 1e-10)
+                                        log_std = std_power / (mean_power + 1e-10) / np.log(10)
+                                        lower_bound = 10 ** (log_mean - log_std)
+                                        upper_bound = 10 ** (log_mean + log_std)
+                                        ax.fill_between(common_freq, lower_bound, upper_bound,
+                                                       color=colors[i_chan], alpha=0.3,
+                                                       edgecolor=colors[i_chan],
+                                                       linestyle=self.linestyles[linestyle_idx],
+                                                       linewidth=1.5)
                                     else:
-                                        ax.plot(freq_filtered, power_filtered, color=expanded_colors[color_idx], 
-                                               linewidth=2, linestyle=self.linestyles[linestyle_idx])
+                                        ax.fill_between(common_freq, mean_power - std_power,
+                                                       mean_power + std_power,
+                                                       color=colors[i_chan], alpha=0.3,
+                                                       edgecolor=colors[i_chan],
+                                                       linestyle=self.linestyles[linestyle_idx],
+                                                       linewidth=1.5)
+                    else:
+                        # Display all individual subjects - use interpolation for consistency
+                        total_items = len(unique_filenames) * n_channels
+                        expanded_colors = self._expand_colors(colors, total_items)
+                        
+                        # Use common frequency grid for all subjects
+                        common_freq = np.linspace(freq_range[0], freq_range[1], 200)
+                        
+                        for filename_idx, filename_val in enumerate(unique_filenames):
+                            psa_data_for_file = psa_data_cur_chan[psa_data_cur_chan['filename'] == filename_val]
+                            
+                            freq_low = psa_data_for_file['freq_low_Hz'].values
+                            freq_high = psa_data_for_file['freq_high_Hz'].values
+                            freq_center = (freq_low + freq_high) / 2
+                            
+                            # Get power columns (stage-specific activity) based on stage selection
+                            power_columns = []
+                            for stage in sleep_stage_selection:
+                                if stage == 'All' and pics_param['activity_var'] == 'total':
+                                    stage_col = f"{pics_param['activity_var']}_act"
+                                elif stage == 'All' and (pics_param['activity_var'] == 'clock_h' or pics_param['activity_var'] == 'stage_h'):
+                                    stage_col = f"{pics_param['activity_var']}{pics_param['hour']}_act"
+                                elif stage == 'All' and pics_param['activity_var'] == 'cyc':
+                                    stage_col = f"{pics_param['activity_var']}{pics_param['cycle']}_act"
+                                elif stage != 'All' and pics_param['activity_var'] == 'total':
+                                    stage_col = f"{pics_param['activity_var']}_{stage}_act"
+                                elif stage != 'All' and (pics_param['activity_var'] == 'clock_h' or pics_param['activity_var'] == 'stage_h'):
+                                    stage_col = f"{pics_param['activity_var']}{pics_param['hour']}_{stage}_act"
+                                elif stage != 'All' and pics_param['activity_var'] == 'cyc':
+                                    stage_col = f"{pics_param['activity_var']}{pics_param['cycle']}_{stage}_act"
+
+                                if stage_col in psa_data_for_file.columns:
+                                    power_columns.append(stage_col)
+                            
+                            if power_columns:
+                                for stage_idx, stage_col in enumerate(power_columns):
+                                    color_idx = (i_chan * len(unique_filenames) + filename_idx) % len(expanded_colors)
+                                    linestyle_idx = stage_idx % len(self.linestyles)
+                                    power_data = psa_data_for_file[stage_col].values
+                                    
+                                    # Interpolate to common grid for consistent axis coverage
+                                    if len(power_data) > 0 and len(freq_center) > 0:
+                                        interp_power = np.interp(common_freq, freq_center, power_data, left=np.nan, right=np.nan)
+                                        
+                                        if fig_save:
+                                            # Extract filename without extension for label
+                                            if isinstance(filename_val, str):
+                                                filename_short = os.path.splitext(os.path.basename(filename_val))[0]
+                                            else:
+                                                filename_short = str(filename_val)
+                                            
+                                            if n_channels > 1:
+                                                label_name = f'{chan_label[i_chan]}_{filename_short}'
+                                            else:
+                                                label_name = f'{filename_short}'
+                                            
+                                            if label_name not in legend_labels:
+                                                ax.plot(common_freq, interp_power, color=expanded_colors[color_idx], 
+                                                       label=label_name, linewidth=2, linestyle=self.linestyles[linestyle_idx])
+                                                legend_labels[label_name] = True
+                                            else:
+                                                ax.plot(common_freq, interp_power, color=expanded_colors[color_idx], 
+                                                       linewidth=2, linestyle=self.linestyles[linestyle_idx])
                 else:
-                    # Single filename or no filename column - process as before
-                    # Get frequency bands and power data from Snooz format
+                    # Single filename - use interpolation for consistency
+                    common_freq = np.linspace(freq_range[0], freq_range[1], 200)
+                    
                     freq_low = psa_data_cur_chan['freq_low_Hz'].values
                     freq_high = psa_data_cur_chan['freq_high_Hz'].values
-                    freq_center = (freq_low + freq_high) / 2  # Use center frequency for plotting
-                    
-                    # Filter frequency range
-                    freq_mask = (freq_center >= freq_range[0]) & (freq_center <= freq_range[1])
-                    freq_filtered = freq_center[freq_mask]
+                    freq_center = (freq_low + freq_high) / 2
                     
                     # Get power columns (stage-specific activity) based on stage selection
                     power_columns = []
@@ -585,70 +671,79 @@ class PSAPicsGenerator(SciNode):
                             power_columns.append(stage_col)
                     
                     if power_columns:
-                        # Plot each stage-specific power with different linestyles when colors are the same
                         for stage_idx, stage_col in enumerate(power_columns):
-                            # Cycle through all available linestyles
                             linestyle_idx = stage_idx % len(self.linestyles)
                             power_data = psa_data_cur_chan[stage_col].values
-                            power_filtered = power_data[freq_mask]
                             
-                            # Accumulate data for cohort averaging if enabled
-                            if pics_param.get('cohort_avg', False):
-                                all_freq_data.append(freq_filtered)
-                                all_power_data.append(power_filtered)
-                            
-                            if fig_save:
-                                # Check if the label has already been added to the legend
-                                stage_name = stage_col.replace('_act', '')
-                                label_name = f'{chan_label[i_chan]}_{stage_name}'
-                                if label_name not in legend_labels:
-                                    # Plot the PSA with a specific color and linestyle
-                                    ax.plot(freq_filtered, power_filtered, color=colors[i_chan], 
-                                           label=label_name, linewidth=2, linestyle=self.linestyles[linestyle_idx])
-                                    # Add the label to the legend
-                                    legend_labels[label_name] = True
-                                else:
-                                    ax.plot(freq_filtered, power_filtered, color=colors[i_chan], 
-                                           linewidth=2, linestyle=self.linestyles[linestyle_idx])
+                            # Interpolate to common grid for consistent axis coverage
+                            if len(power_data) > 0 and len(freq_center) > 0:
+                                interp_power = np.interp(common_freq, freq_center, power_data, left=np.nan, right=np.nan)
+                                
+                                if fig_save:
+                                    label_name = f'{chan_label[i_chan]}'
+                                    if label_name not in legend_labels:
+                                        ax.plot(common_freq, interp_power, color=colors[i_chan], 
+                                               label=label_name, linewidth=2, linestyle=self.linestyles[linestyle_idx])
+                                        legend_labels[label_name] = True
+                                    else:
+                                        ax.plot(common_freq, interp_power, color=colors[i_chan], 
+                                               linewidth=2, linestyle=self.linestyles[linestyle_idx])
                     else:
-                        # Fallback: try to find any numeric columns that might be power
+                        # Fallback
                         numeric_cols = psa_data_cur_chan.select_dtypes(include=[np.number]).columns
                         power_cols = [col for col in numeric_cols if col not in ['freq_low_Hz', 'freq_high_Hz']]
                         
                         if power_cols:
-                            # Use the first power column found
                             power_data = psa_data_cur_chan[power_cols[0]].values
-                            power_filtered = power_data[freq_mask]
                             
-                            # Accumulate data for cohort averaging if enabled
-                            if pics_param.get('cohort_avg', False):
-                                all_freq_data.append(freq_filtered)
-                                all_power_data.append(power_filtered)
-                            
-                            if fig_save:
-                                # Check if the label has already been added to the legend
-                                if f'{chan_label[i_chan]}' not in legend_labels:
-                                    # Plot the PSA with a specific color
-                                    ax.plot(freq_filtered, power_filtered, color=colors[i_chan], 
-                                           label=f'{chan_label[i_chan]}', linewidth=2)
-                                    # Add the label to the legend
-                                    legend_labels[f'{chan_label[i_chan]}'] = True
-                                else:
-                                    ax.plot(freq_filtered, power_filtered, color=colors[i_chan], linewidth=2)
+                            # Interpolate to common grid
+                            if len(power_data) > 0 and len(freq_center) > 0:
+                                interp_power = np.interp(common_freq, freq_center, power_data, left=np.nan, right=np.nan)
+                                
+                                if fig_save:
+                                    if f'{chan_label[i_chan]}' not in legend_labels:
+                                        ax.plot(common_freq, interp_power, color=colors[i_chan], 
+                                               label=f'{chan_label[i_chan]}', linewidth=2)
+                                        legend_labels[f'{chan_label[i_chan]}'] = True
+                                    else:
+                                        ax.plot(common_freq, interp_power, color=colors[i_chan], linewidth=2)
 
         # If the function is used to generate pictures
         if fig_save:
             if pics_param['subject_avg'] | pics_param['subject_sel']:
-                fig_name = pics_param['output_folder']+'/'+os.path.splitext(os.path.basename(base_name))[0]
-                if pics_param['subject_sel']:
-                    fig_name = fig_name + '_' + chan_label[0]
-                fig_name = fig_name + '_psa'
-                fig_name = fig_name + '.pdf'
-
-                if pics_param['subject_sel']:
-                    fig_title = os.path.splitext(os.path.basename(base_name))[0]+ '_' + chan_label[0]
-                if pics_param['subject_avg']:
-                    fig_title = os.path.splitext(os.path.basename(base_name))[0]
+                # Build comprehensive filename
+                base_filename = os.path.splitext(os.path.basename(base_name))[0]
+                
+                # Build filename and title based on plot type
+                if pics_param['subject_sel'] and 'subject_sel' in fig_save:
+                    # subject_sel: always include channel name in filename
+                    fig_name = f"{pics_param['output_folder']}/{base_filename}_{chan_label[0]}_psa_{activity_str}_{stage_str}"
+                    fig_title = f"{base_filename} {chan_label[0]} - {activity_str} - {stage_str}"
+                elif pics_param['subject_avg'] and 'subject_avg' in fig_save:
+                    # subject_avg: include 'avg' suffix to distinguish from subject_sel
+                    if len(chan_label) == 1:
+                        # Single channel case: add 'avg' to differentiate from subject_sel
+                        fig_name = f"{pics_param['output_folder']}/{base_filename}_{chan_label[0]}_avg_psa_{activity_str}_{stage_str}"
+                        fig_title = f"{base_filename} {chan_label[0]} - {activity_str} - {stage_str}"
+                    else:
+                        # Multiple channels case
+                        fig_name = f"{pics_param['output_folder']}/{base_filename}_avg_psa_{activity_str}_{stage_str}"
+                        fig_title = f"{base_filename} - {activity_str} - {stage_str}"
+                else:
+                    # Fallback (shouldn't happen)
+                    fig_name = f"{pics_param['output_folder']}/{base_filename}_psa_{activity_str}_{stage_str}"
+                    fig_title = f"{base_filename} - {activity_str} - {stage_str}"
+                
+                # Add mean/std suffix to both filename and title
+                if 'mean' in pics_param['display']:
+                    fig_name += '_mean'
+                    fig_title += ' (Mean'
+                    if 'std' in pics_param['display']:
+                        fig_name += '_std'
+                        fig_title += '±SD'
+                    fig_title += ')'
+                
+                fig_name += '.pdf'
 
                 if pics_param['force_axis']:
                     ax.set_xlim(pics_param['force_axis'][0], pics_param['force_axis'][1])
@@ -664,9 +759,10 @@ class PSAPicsGenerator(SciNode):
                 ax.grid(which='both', axis='both')
                 ax.set_title(fig_title)
                 
-                # Add legend after all plotting # TODO : add the option to hide the legend
-                if n_channels > 1 or len(legend_labels) > 1:
-                    ax.legend(loc='upper right') 
+                # Add legend based on user preference and if there are multiple items
+                show_legend = pics_param.get('show_legend', True)
+                if show_legend and len(legend_labels) > 1:
+                    ax.legend(loc='upper right')
                 
                 try:
                     fig.savefig(fig_name)
@@ -675,7 +771,8 @@ class PSAPicsGenerator(SciNode):
                 if DEBUG:
                     print(f"{fig_name} is saved")
                 fig.clf()
-        return all_power_data,  all_freq_data
+        
+        return None, None
 
 
     def _save_cohort_chan_fig_psa(self, psa_data, pics_param, chan_label, colors):
@@ -684,8 +781,9 @@ class PSAPicsGenerator(SciNode):
 
         Parameters
         -----------
-            psa_data : dict of list of numpy array
-                keys are the subject group and values are the PSA data for the current channel or ROI
+            psa_data : dict of list
+                For cohort_sel: dict of list of DataFrames (keys are groups, values are subject DataFrames)
+                For cohort_avg: dict of list of lists (keys are groups, values are lists of channel DataFrames per subject)
             pics_param : dict
                 keys are the parameter to generate pictures
             chan_label : string
@@ -731,29 +829,136 @@ class PSAPicsGenerator(SciNode):
 
         # For each group of the cohort
         for i_grp, cohort_group in enumerate(group_list):
-            # For each subject
-            n_subjects = len(psa_data[cohort_group])
-            for i_sjt in range(n_subjects):
-                subject_data = psa_data[cohort_group][i_sjt]
+            first_entry = psa_data[cohort_group][0]
+            
+            if isinstance(first_entry, list):
+                # cohort_avg mode: each entry is a list of channel DataFrames
+                # First, collect all unique filenames across all channel DataFrames
+                all_filenames = set()
+                for channel_list in psa_data[cohort_group]:
+                    for chan_df in channel_list:
+                        if chan_df is not None and 'filename' in chan_df.columns:
+                            all_filenames.update(chan_df['filename'].unique())
                 
-                # Check if this is cohort_avg mode (list of channel DataFrames) or cohort_sel mode (single DataFrame)
-                if isinstance(subject_data, list):
-                    # cohort_avg: subject_data is a list of channel DataFrames
-                    # Process each sleep stage separately
+                all_filenames = sorted(list(all_filenames))
+                
+                # Process each filename (subject) separately
+                for filename_val in all_filenames:
+                    # Process each sleep stage for this subject
                     for stage_idx, stage in enumerate(sleep_stage_selection):
                         stage_freq_data = []
                         stage_power_data = []
                         
-                        # Collect data from all channels for this stage
-                        for chan_df in subject_data:
-                            if chan_df is not None and len(chan_df) > 0:
-                                freq_low = chan_df['freq_low_Hz'].values
-                                freq_high = chan_df['freq_high_Hz'].values
-                                freq_center = (freq_low + freq_high) / 2
+                        # Collect data from all channels for this subject
+                        for channel_list in psa_data[cohort_group]:
+                            for chan_df in channel_list:
+                                if chan_df is not None and len(chan_df) > 0 and 'filename' in chan_df.columns:
+                                    subject_df = chan_df[chan_df['filename'] == filename_val]
+                                    
+                                    if len(subject_df) > 0:
+                                        freq_low = subject_df['freq_low_Hz'].values
+                                        freq_high = subject_df['freq_high_Hz'].values
+                                        freq_center = (freq_low + freq_high) / 2
+                                        
+                                        # Build stage column name
+                                        if stage == 'All' and pics_param['activity_var'] == 'total':
+                                            stage_col = f"{pics_param['activity_var']}_act"
+                                        elif stage == 'All' and (pics_param['activity_var'] == 'clock_h' or pics_param['activity_var'] == 'stage_h'):
+                                            stage_col = f"{pics_param['activity_var']}{pics_param['hour']}_act"
+                                        elif stage == 'All' and pics_param['activity_var'] == 'cyc':
+                                            stage_col = f"{pics_param['activity_var']}{pics_param['cycle']}_act"
+                                        elif stage != 'All' and pics_param['activity_var'] == 'total':
+                                            stage_col = f"{pics_param['activity_var']}_{stage}_act"
+                                        elif stage != 'All' and (pics_param['activity_var'] == 'clock_h' or pics_param['activity_var'] == 'stage_h'):
+                                            stage_col = f"{pics_param['activity_var']}{pics_param['hour']}_{stage}_act"
+                                        elif stage != 'All' and pics_param['activity_var'] == 'cyc':
+                                            stage_col = f"{pics_param['activity_var']}{pics_param['cycle']}_{stage}_act"
+                                        
+                                        if stage_col in subject_df.columns:
+                                            power_data = subject_df[stage_col].values
+                                            
+                                            # Store full data without filtering
+                                            stage_freq_data.append(freq_center)
+                                            stage_power_data.append(power_data)
+                        
+                        # Process this stage's data for this subject
+                        if stage_power_data and len(stage_power_data) > 0:
+                            # Interpolate all channels to common frequency grid spanning full range
+                            common_freq = np.linspace(freq_range[0], freq_range[1], 100)
+                            
+                            interpolated_power = []
+                            for i, power_data in enumerate(stage_power_data):
+                                freq_data = stage_freq_data[i]
+                                if len(power_data) > 0 and len(freq_data) > 0:
+                                    interp_power = np.interp(common_freq, freq_data, power_data, left=np.nan, right=np.nan)
+                                    interpolated_power.append(interp_power)
+                            
+
+                            if interpolated_power:
+                                freq_to_plot = common_freq
+                                subject_avg_power = np.nanmean(interpolated_power, axis=0)
+                            else:
+                                continue
+                            
+
+                            # Store subject average for later cohort statistics
+                            stage_name = stage
+                            if 'mean' in pics_param['display']:
+                                if cohort_group in signal_to_plot_grp.keys():
+                                    if f'stage_{stage_name}' in signal_to_plot_grp[cohort_group].keys():
+                                        signal_to_plot_grp[cohort_group][f'stage_{stage_name}'] = np.concatenate((signal_to_plot_grp[cohort_group][f'stage_{stage_name}'], subject_avg_power.reshape(-1,1)), axis=1)
+                                    else:
+                                        signal_to_plot_grp[cohort_group][f'stage_{stage_name}'] = subject_avg_power.reshape(-1,1)
+                                else:
+                                    signal_to_plot_grp[cohort_group] = {}
+                                    signal_to_plot_grp[cohort_group][f'stage_{stage_name}'] = subject_avg_power.reshape(-1,1)
+                            else:
+                                # Display individual subject's channel-averaged PSA trace
+                                ax.plot(freq_to_plot, subject_avg_power, color=colors[i_grp], 
+                                       linestyle=self.linestyles[stage_idx % len(self.linestyles)], 
+                                       alpha=0.7, linewidth=1.5)
                                 
-                                freq_mask = (freq_center >= freq_range[0]) & (freq_center <= freq_range[1])
-                                freq_filtered = freq_center[freq_mask]
-                                
+                                # Add legend only once per stage-group combination
+                                legend_key = f'stage_{stage_name}-{cohort_group}'
+                                if legend_key not in legend_labels:
+                                    legend_labels[legend_key] = True
+                                    ax.plot([], [], color=colors[i_grp], 
+                                           linestyle=self.linestyles[stage_idx % len(self.linestyles)], 
+                                           label=f'{stage_name}-{cohort_group}', linewidth=1.5)
+            else:
+                # cohort_sel mode: each entry is a single DataFrame
+                n_subjects = len(psa_data[cohort_group])
+                for i_sjt in range(n_subjects):
+                    subject_data = psa_data[cohort_group][i_sjt]
+                    psa_data_subject = subject_data
+                    
+                    if psa_data_subject is not None and len(psa_data_subject) > 0:
+                        # Check if there are multiple filenames in the DataFrame (from ROI averaging)
+                        unique_filenames = []
+                        if 'filename' in psa_data_subject.columns:
+                            unique_filenames = psa_data_subject['filename'].unique()
+                        
+                        # Process each filename separately to keep subjects distinct
+                        filenames_to_process = unique_filenames if len(unique_filenames) > 0 else [None]
+                        
+                        for filename_val in filenames_to_process:
+                            # Filter data for this specific filename if multiple exist
+                            if filename_val is not None:
+                                psa_data_file = psa_data_subject[psa_data_subject['filename'] == filename_val]
+                            else:
+                                psa_data_file = psa_data_subject
+                            
+                            # Get frequency bands and power data from Snooz format
+                            freq_low = psa_data_file['freq_low_Hz'].values
+                            freq_high = psa_data_file['freq_high_Hz'].values
+                            freq_center = (freq_low + freq_high) / 2
+                            
+                            # Filter frequency range
+                            freq_mask = (freq_center >= freq_range[0]) & (freq_center <= freq_range[1])
+                            freq_filtered = freq_center[freq_mask]
+                            
+                            # Get power columns for each sleep stage
+                            for stage_idx, stage in enumerate(sleep_stage_selection):
                                 if stage == 'All' and pics_param['activity_var'] == 'total':
                                     stage_col = f"{pics_param['activity_var']}_act"
                                 elif stage == 'All' and (pics_param['activity_var'] == 'clock_h' or pics_param['activity_var'] == 'stage_h'):
@@ -767,148 +972,35 @@ class PSAPicsGenerator(SciNode):
                                 elif stage != 'All' and pics_param['activity_var'] == 'cyc':
                                     stage_col = f"{pics_param['activity_var']}{pics_param['cycle']}_{stage}_act"
                                 
-                                if stage_col in chan_df.columns:
-                                    power_data = chan_df[stage_col].values
-                                    power_filtered = power_data[freq_mask]
+                                if stage_col in psa_data_file.columns:
+                                    power_data = psa_data_file[stage_col].values
                                     
-                                    stage_freq_data.append(freq_filtered)
-                                    stage_power_data.append(power_filtered)
-                        
-                        # Process this stage's data
-                        if stage_power_data and len(stage_power_data) > 0:
-                            # Average across channels for this stage
-                            if len(stage_power_data) == 1:
-                                freq_to_plot = stage_freq_data[0]
-                                power_to_plot = stage_power_data[0]
-                            else:
-                                # Interpolate to common frequency grid
-                                min_freq = max([freq.min() for freq in stage_freq_data if len(freq) > 0])
-                                max_freq = min([freq.max() for freq in stage_freq_data if len(freq) > 0])
-                                common_freq = np.linspace(min_freq, max_freq, 100)
-                                
-                                interpolated_power = []
-                                for i, power_data in enumerate(stage_power_data):
-                                    freq_data = stage_freq_data[i]
-                                    if len(power_data) > 0 and len(freq_data) > 0:
-                                        interp_power = np.interp(common_freq, freq_data, power_data)
-                                        interpolated_power.append(interp_power)
-                                
-                                if interpolated_power:
-                                    freq_to_plot = common_freq
-                                    # Don't average here - keep individual channel data for proper std calculation
-                                    power_to_plot = interpolated_power  # Keep as list of arrays
-                                else:
-                                    continue
-                            
-                            # Store data for mean calculation or plot
-                            stage_name = stage
-                            if 'mean' in pics_param['display']:
-                                # Store all interpolated power data (not averaged) for proper std calculation
-                                if cohort_group in signal_to_plot_grp.keys():
-                                    if f'stage_{stage_name}' in signal_to_plot_grp[cohort_group].keys():
-                                        # Concatenate all channel data for this subject
-                                        for channel_data in power_to_plot:
-                                            signal_to_plot_grp[cohort_group][f'stage_{stage_name}'] = np.concatenate((signal_to_plot_grp[cohort_group][f'stage_{stage_name}'], channel_data.reshape(-1,1)), axis=1)
-                                    else:
-                                        # Initialize with first channel data
-                                        signal_to_plot_grp[cohort_group][f'stage_{stage_name}'] = power_to_plot[0].reshape(-1,1)
-                                        # Add remaining channel data
-                                        for channel_data in power_to_plot[1:]:
-                                            signal_to_plot_grp[cohort_group][f'stage_{stage_name}'] = np.concatenate((signal_to_plot_grp[cohort_group][f'stage_{stage_name}'], channel_data.reshape(-1,1)), axis=1)
-                                else:
-                                    signal_to_plot_grp[cohort_group] = {}
-                                    # Initialize with first channel data
-                                    signal_to_plot_grp[cohort_group][f'stage_{stage_name}'] = power_to_plot[0].reshape(-1,1)
-                                    # Add remaining channel data
-                                    for channel_data in power_to_plot[1:]:
-                                        signal_to_plot_grp[cohort_group][f'stage_{stage_name}'] = np.concatenate((signal_to_plot_grp[cohort_group][f'stage_{stage_name}'], channel_data.reshape(-1,1)), axis=1)
-                            else:
-                                # For individual traces, average across channels for plotting
-                                power_to_plot_avg = np.mean(power_to_plot, axis=0)
-                                # Display all individual PSA traces
-                                # Check if the label has already been added to the legend
-                                if f'stage_{stage_name}-{cohort_group}' not in legend_labels:
-                                    # Add the label to the legend
-                                    legend_labels[f'stage_{stage_name}-{cohort_group}'] = True
-                                    # Plot the PSA with a specific color and linestyle
-                                    if len(sleep_stage_selection) > 1:
-                                        ax.plot(freq_to_plot, power_to_plot_avg, color=colors[i_grp], 
-                                               linestyle=self.linestyles[stage_idx % len(self.linestyles)], 
-                                               label=f'{stage_name}-{cohort_group}', alpha=0.7, linewidth=1)
-                                    else:
-                                        ax.plot(freq_to_plot, power_to_plot_avg, color=colors[i_grp], 
-                                               label=f'{cohort_group}', alpha=0.7, linewidth=1)
-                                else:
-                                    # Plot the PSA with a specific color and linestyle
-                                    if len(sleep_stage_selection) > 1:
-                                        ax.plot(freq_to_plot, power_to_plot_avg, color=colors[i_grp], 
-                                               linestyle=self.linestyles[stage_idx % len(self.linestyles)], alpha=0.7, linewidth=1)
-                                    else:
-                                        ax.plot(freq_to_plot, power_to_plot_avg, color=colors[i_grp], alpha=0.7, linewidth=1)
-                else:
-                    # cohort_sel: subject_data is a single DataFrame
-                    psa_data_subject = subject_data
-                    if psa_data_subject is not None and len(psa_data_subject) > 0:
-                        # Get frequency bands and power data from Snooz format
-                        freq_low = psa_data_subject['freq_low_Hz'].values
-                        freq_high = psa_data_subject['freq_high_Hz'].values
-                        freq_center = (freq_low + freq_high) / 2  # Use center frequency for plotting
-                        
-                        # Filter frequency range
-                        freq_mask = (freq_center >= freq_range[0]) & (freq_center <= freq_range[1])
-                        freq_filtered = freq_center[freq_mask]
-                        
-                        # Get power columns for each sleep stage
-                        for stage_idx, stage in enumerate(sleep_stage_selection):
-                            if stage == 'All' and pics_param['activity_var'] == 'total':
-                                stage_col = f"{pics_param['activity_var']}_act"
-                            elif stage == 'All' and (pics_param['activity_var'] == 'clock_h' or pics_param['activity_var'] == 'stage_h'):
-                                stage_col = f"{pics_param['activity_var']}{pics_param['hour']}_act"
-                            elif stage == 'All' and pics_param['activity_var'] == 'cyc':
-                                stage_col = f"{pics_param['activity_var']}{pics_param['cycle']}_act"
-                            elif stage != 'All' and pics_param['activity_var'] == 'total':
-                                stage_col = f"{pics_param['activity_var']}_{stage}_act"
-                            elif stage != 'All' and (pics_param['activity_var'] == 'clock_h' or pics_param['activity_var'] == 'stage_h'):
-                                stage_col = f"{pics_param['activity_var']}{pics_param['hour']}_{stage}_act"
-                            elif stage != 'All' and pics_param['activity_var'] == 'cyc':
-                                stage_col = f"{pics_param['activity_var']}{pics_param['cycle']}_{stage}_act"
-                            
-                            if stage_col in psa_data_subject.columns:
-                                power_data = psa_data_subject[stage_col].values
-                                power_filtered = power_data[freq_mask]
-                                
-                                # Store data for mean calculation
-                                if 'mean' in pics_param['display']:
-                                    # concatenate the current signal to all signals
-                                    if cohort_group in signal_to_plot_grp.keys():
-                                        if f'stage_{stage}' in signal_to_plot_grp[cohort_group].keys():
-                                            signal_to_plot_grp[cohort_group][f'stage_{stage}'] = np.concatenate((signal_to_plot_grp[cohort_group][f'stage_{stage}'], power_filtered.reshape(-1,1)), axis=1)
+                                    if 'mean' in pics_param['display']:
+                                        # Interpolate to common grid for accumulation
+                                        common_freq = np.linspace(freq_range[0], freq_range[1], 100)
+                                        interp_power = np.interp(common_freq, freq_center, power_data, left=np.nan, right=np.nan)
+                                        
+                                        if cohort_group in signal_to_plot_grp.keys():
+                                            if f'stage_{stage}' in signal_to_plot_grp[cohort_group].keys():
+                                                signal_to_plot_grp[cohort_group][f'stage_{stage}'] = np.concatenate((signal_to_plot_grp[cohort_group][f'stage_{stage}'], interp_power.reshape(-1,1)), axis=1)
+                                            else:
+                                                signal_to_plot_grp[cohort_group][f'stage_{stage}'] = interp_power.reshape(-1,1)
                                         else:
-                                            signal_to_plot_grp[cohort_group][f'stage_{stage}'] = power_filtered.reshape(-1,1)
+                                            signal_to_plot_grp[cohort_group] = {}
+                                            signal_to_plot_grp[cohort_group][f'stage_{stage}'] = interp_power.reshape(-1,1)
                                     else:
-                                        signal_to_plot_grp[cohort_group] = {}
-                                        signal_to_plot_grp[cohort_group][f'stage_{stage}'] = power_filtered.reshape(-1,1)
-                                else:
-                                    # Display all individual PSA traces
-                                    # Check if the label has already been added to the legend
-                                    if f'stage_{stage}-{cohort_group}' not in legend_labels:
-                                        # Add the label to the legend
-                                        legend_labels[f'stage_{stage}-{cohort_group}'] = True
-                                        # Plot the PSA with a specific color and linestyle
-                                        if len(sleep_stage_selection) > 1:
-                                            ax.plot(freq_filtered, power_filtered, color=colors[i_grp], 
+                                        # Display all - use interpolation for consistent axis coverage
+                                        common_freq = np.linspace(freq_range[0], freq_range[1], 200)
+                                        interp_power = np.interp(common_freq, freq_center, power_data, left=np.nan, right=np.nan)
+                                        
+                                        if f'stage_{stage}-{cohort_group}' not in legend_labels:
+                                            legend_labels[f'stage_{stage}-{cohort_group}'] = True
+                                            ax.plot(common_freq, interp_power, color=colors[i_grp], 
                                                    linestyle=self.linestyles[stage_idx % len(self.linestyles)], 
-                                                   label=f'{stage}-{cohort_group}', alpha=0.7, linewidth=1)
+                                                   label=f'{stage}-{cohort_group}', alpha=0.7, linewidth=1.5)
                                         else:
-                                            ax.plot(freq_filtered, power_filtered, color=colors[i_grp], 
-                                                   label=f'{cohort_group}', alpha=0.7, linewidth=1)
-                                    else:
-                                        # Plot the PSA with a specific color and linestyle
-                                        if len(sleep_stage_selection) > 1:
-                                            ax.plot(freq_filtered, power_filtered, color=colors[i_grp], 
-                                                   linestyle=self.linestyles[stage_idx % len(self.linestyles)], alpha=0.7, linewidth=1)
-                                        else:
-                                            ax.plot(freq_filtered, power_filtered, color=colors[i_grp], alpha=0.7, linewidth=1)
+                                            ax.plot(common_freq, interp_power, color=colors[i_grp], 
+                                                   linestyle=self.linestyles[stage_idx % len(self.linestyles)], alpha=0.7, linewidth=1.5)
 
         # For mean display, compute and plot averages for each stage
         if 'mean' in pics_param['display']:
@@ -952,6 +1044,7 @@ class PSAPicsGenerator(SciNode):
             ax.set_xlim(pics_param['force_axis'][0], pics_param['force_axis'][1])
             ax.set_ylim(pics_param['force_axis'][2], pics_param['force_axis'][3])
         else:
+            # Always set x-axis to freq_range
             ax.set_xlim(freq_range[0], freq_range[1])
 
         if log_scale:
@@ -960,17 +1053,25 @@ class PSAPicsGenerator(SciNode):
         ax.grid(which='both', axis='both')
         ax.set_xlabel('Frequency (Hz)')
         ax.set_ylabel('Power (μV²/Hz)')
-        # set the legend to the upper right
-        ax.legend(loc="upper right") #TODO : add the option to hide the legend
+        
+        # Add legend based on user preference
+        show_legend = pics_param.get('show_legend', True)
+        if show_legend:
+            ax.legend(loc="upper right")
+        
         ax.set_title(fig_title)
-        if pics_param['cohort_avg'] | pics_param['cohort_sel']:
-            try:
-                fig.savefig(fig_name)
-            except:
-                raise NodeRuntimeException(self.identifier, "filenames", f"Error while saving figure {fig_name}, make sure it is not open")
-            if DEBUG:
-                print(f"{fig_name} is saved...")
-            fig.clf()
+        
+        # For cohort_avg, add overall title
+        if pics_param['cohort_avg']:
+            ax.set_title(f"{fig_title}")
+
+        try:
+            fig.savefig(fig_name)
+        except:
+            raise NodeRuntimeException(self.identifier, "filenames", f"Error while saving figure {fig_name}, make sure it is not open")
+        if DEBUG:
+            print(f"{fig_name} is saved...")
+        fig.clf()
 
     def _expand_colors(self, base_colors, n_needed):
         """

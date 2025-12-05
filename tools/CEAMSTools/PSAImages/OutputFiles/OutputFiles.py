@@ -29,10 +29,6 @@ class OutputFiles(BaseStepView, Ui_OutputFiles, QtWidgets.QWidget):
         # init UI
         self.setupUi(self)
         self._load_embedded_image()
-        
-        # Fix: Add stage_hour radio button to the button group (it was missing from UI)
-        if hasattr(self, 'buttonGroup_align') and hasattr(self, 'radioButton_stage_hour'):
-            self.buttonGroup_align.addButton(self.radioButton_stage_hour)
 
         # Connect the log scale checkbox to the options slot
         if hasattr(self, 'checkBox_log'):
@@ -40,8 +36,14 @@ class OutputFiles(BaseStepView, Ui_OutputFiles, QtWidgets.QWidget):
         
         # Connect radio buttons to trigger spinbox enabling/disabling
         # Note: The button group already connects to out_options_slot, but we also need update_spinbox_states
-        if hasattr(self, 'buttonGroup_align'):
-            self.buttonGroup_align.buttonClicked.connect(self.update_spinbox_states)
+        if hasattr(self, 'buttonGroup_section'):
+            self.buttonGroup_section.buttonClicked.connect(self.update_spinbox_states)
+
+        # Connect level selection radio buttons to enable/disable layouts
+        if hasattr(self, 'radioButton_cohort_level'):
+            self.radioButton_cohort_level.clicked.connect(self.update_layout_states)
+        if hasattr(self, 'radioButton_report_level'):
+            self.radioButton_report_level.clicked.connect(self.update_layout_states)
 
         self._psa_images_node = "bc3ee945-0abf-46b7-b110-db5e617ea70a" # identifier for PSA images generator
         # Subscribe to the proper topics to send/get data from the node
@@ -60,6 +62,7 @@ class OutputFiles(BaseStepView, Ui_OutputFiles, QtWidgets.QWidget):
             'hour': 1,
             'cycle': 1,
             'log_scale': True,  # Default to logarithmic scale
+            'show_legend': True,  # Default to showing legend
             'force_axis': False, # False or [xmin, xmax, ymin, ymax]
             'output_folder': ''
         }
@@ -192,21 +195,13 @@ class OutputFiles(BaseStepView, Ui_OutputFiles, QtWidgets.QWidget):
         # Display option
         if self.radioButton_mean.isChecked():
             self.pics_param["display"] = "mean"
-            self.checkBox_subject_sel.setChecked(False)
-            self.checkBox_subject_sel.setEnabled(False)
-            self.checkBox_subject_avg.setEnabled(True)
         elif self.radioButton_all.isChecked():
             self.pics_param["display"] = "all"
-            self.checkBox_subject_sel.setEnabled(True)
-            self.checkBox_subject_avg.setChecked(False)
-            self.checkBox_subject_avg.setEnabled(False)
         elif self.radioButton_meanstd.isChecked():
             self.pics_param["display"] = "mean_std"
-            self.checkBox_subject_sel.setChecked(False)
-            self.checkBox_subject_sel.setEnabled(False)
-            self.checkBox_subject_avg.setEnabled(True)
         
         self.pics_param["log_scale"] = self.checkBox_log.isChecked()
+        self.pics_param["show_legend"] = self.checkBox_legend.isChecked()
 
         if self.checkBox_force_axis.isChecked():
             self.doubleSpinBox_xmin.setEnabled(True)
@@ -328,15 +323,13 @@ class OutputFiles(BaseStepView, Ui_OutputFiles, QtWidgets.QWidget):
 
         if self.pics_param.get("display")=="mean":
             self.radioButton_mean.setChecked(True)
-            self.checkBox_cohort_sel.setEnabled(False)
         elif self.pics_param.get("display") == "all":
             self.radioButton_all.setChecked(True)
-            self.checkBox_cohort_sel.setEnabled(True)
         elif self.pics_param.get("display") == "mean_std":
             self.radioButton_meanstd.setChecked(True)
-            self.checkBox_cohort_sel.setEnabled(False)
 
         self.checkBox_log.setChecked(self.pics_param.get("log_scale", True))  # Default to True
+        self.checkBox_legend.setChecked(self.pics_param.get("show_legend", True))  # Default to True
         
         if not self.pics_param.get("force_axis", False):
             self.checkBox_force_axis.setChecked(False)
@@ -404,6 +397,7 @@ class OutputFiles(BaseStepView, Ui_OutputFiles, QtWidgets.QWidget):
         
         # Set default logarithmic scale
         self.checkBox_log.setChecked(True)
+        self.checkBox_legend.setChecked(True)
         
         # Set default spinbox values
         self.spinBox_stage_hour.setValue(1)
@@ -414,4 +408,34 @@ class OutputFiles(BaseStepView, Ui_OutputFiles, QtWidgets.QWidget):
         self.spinBox_stage_hour.setEnabled(False)
         self.spinBox_clock_hour.setEnabled(False)
         self.spinBox_sleep_cycle.setEnabled(False)
-        
+
+        # Initialize layout states
+        self.update_layout_states()
+
+    def update_layout_states(self):
+        """Enable/disable layouts based on selected level radio button"""
+        if hasattr(self, 'radioButton_cohort_level') and hasattr(self, 'radioButton_report_level'):
+            if self.radioButton_cohort_level.isChecked():
+                # Uncheck subject checkboxes before disabling
+                self.checkBox_subject_avg.setChecked(False)
+                self.checkBox_subject_sel.setChecked(False)
+                # Disable subject layout, enable cohort layout
+                self.set_layout_enabled(self.verticalLayout, False)
+                self.set_layout_enabled(self.verticalLayout_2, True)
+            elif self.radioButton_report_level.isChecked():
+                # Uncheck cohort checkboxes before disabling
+                self.checkBox_cohort_avg.setChecked(False)
+                self.checkBox_cohort_sel.setChecked(False)
+                # Enable subject layout, disable cohort layout
+                self.set_layout_enabled(self.verticalLayout, True)
+                self.set_layout_enabled(self.verticalLayout_2, False)
+
+    def set_layout_enabled(self, layout, enabled):
+        """Enable or disable all widgets in a layout"""
+        for i in range(layout.count()):
+            item = layout.itemAt(i)
+            if item.widget():
+                item.widget().setEnabled(enabled)
+            elif item.layout():
+                # Recursively handle nested layouts
+                self.set_layout_enabled(item.layout(), enabled)
