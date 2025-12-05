@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file ''
+## Form generated from reading UI file 'Ui_AnnotationsSelection.ui'
 ##
 ## Created by: Qt User Interface Compiler version 6.8.2
 ##
@@ -43,6 +43,9 @@ class Ui_AnnotationsSelection(object):
 
         self.file_listview = QListView(AnnotationsSelection)
         self.file_listview.setObjectName(u"file_listview")
+        self.file_listview.setEditTriggers(QAbstractItemView.NoEditTriggers)
+        self.file_listview.setSelectionMode(QAbstractItemView.ExtendedSelection)
+        self.file_listview.setSelectionBehavior(QAbstractItemView.SelectItems)
 
         self.verticalLayout.addWidget(self.file_listview)
 
@@ -60,7 +63,8 @@ class Ui_AnnotationsSelection(object):
         self.event_treeview = QTreeView(AnnotationsSelection)
         self.event_treeview.setObjectName(u"event_treeview")
         self.event_treeview.setEditTriggers(QAbstractItemView.NoEditTriggers)
-        self.event_treeview.setSelectionMode(QAbstractItemView.NoSelection)
+        self.event_treeview.setDragDropMode(QAbstractItemView.NoDragDrop)
+        self.event_treeview.setSelectionMode(QAbstractItemView.SingleSelection)
         self.event_treeview.setSelectionBehavior(QAbstractItemView.SelectItems)
 
         self.verticalLayout_2.addWidget(self.event_treeview)
@@ -77,11 +81,6 @@ class Ui_AnnotationsSelection(object):
         self.search_lineEdit.setMaximumSize(QSize(200, 16777215))
 
         self.horizontalLayout.addWidget(self.search_lineEdit)
-
-        self.apply_all_pushButton = QPushButton(AnnotationsSelection)
-        self.apply_all_pushButton.setObjectName(u"apply_all_pushButton")
-
-        self.horizontalLayout.addWidget(self.apply_all_pushButton)
 
         self.reset_all_files_pushButton = QPushButton(AnnotationsSelection)
         self.reset_all_files_pushButton.setObjectName(u"reset_all_files_pushButton")
@@ -102,8 +101,7 @@ class Ui_AnnotationsSelection(object):
 
         self.retranslateUi(AnnotationsSelection)
         self.file_listview.clicked.connect(AnnotationsSelection.on_file_selected)
-        self.apply_all_pushButton.clicked.connect(AnnotationsSelection.on_apply_to_all_files)
-        self.select_all_checkBox.stateChanged.connect(AnnotationsSelection.on_select_all_groups)
+        self.select_all_checkBox.stateChanged.connect(AnnotationsSelection.on_select_all_events)
         self.reset_all_files_pushButton.clicked.connect(AnnotationsSelection.on_reset_all_files)
         self.search_lineEdit.textEdited.connect(AnnotationsSelection.search_pattern_slot)
 
@@ -117,7 +115,6 @@ class Ui_AnnotationsSelection(object):
         self.label_2.setText(QCoreApplication.translate("AnnotationsSelection", u"Events", None))
         self.select_all_checkBox.setText(QCoreApplication.translate("AnnotationsSelection", u"Select All", None))
         self.search_lineEdit.setPlaceholderText(QCoreApplication.translate("AnnotationsSelection", u"Event group search", None))
-        self.apply_all_pushButton.setText(QCoreApplication.translate("AnnotationsSelection", u"Apply to all files", None))
         self.reset_all_files_pushButton.setText(QCoreApplication.translate("AnnotationsSelection", u"Reset all files", None))
         self.reset_excl_event_checkBox.setText(QCoreApplication.translate("AnnotationsSelection", u"Reset the signal of excluded events ", None))
     # retranslateUi

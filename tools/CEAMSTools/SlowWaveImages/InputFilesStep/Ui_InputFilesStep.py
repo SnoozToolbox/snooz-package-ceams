@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file ''
+## Form generated from reading UI file 'Ui_InputFilesStep.ui'
 ##
 ## Created by: Qt User Interface Compiler version 6.8.2
 ##
@@ -26,7 +26,7 @@ class Ui_InputFilesStep(object):
     def setupUi(self, InputFilesStep):
         if not InputFilesStep.objectName():
             InputFilesStep.setObjectName(u"InputFilesStep")
-        InputFilesStep.resize(947, 595)
+        InputFilesStep.resize(1208, 778)
         InputFilesStep.setStyleSheet(u"font: 12pt \"Roboto\";")
         self.verticalLayout_4 = QVBoxLayout(InputFilesStep)
         self.verticalLayout_4.setObjectName(u"verticalLayout_4")
@@ -37,18 +37,19 @@ class Ui_InputFilesStep(object):
         self.layoutWidget = QWidget(self.splitter)
         self.layoutWidget.setObjectName(u"layoutWidget")
         self.verticalLayout = QVBoxLayout(self.layoutWidget)
+        self.verticalLayout.setSpacing(9)
         self.verticalLayout.setObjectName(u"verticalLayout")
         self.verticalLayout.setContentsMargins(0, 0, 0, 0)
-        self.label = QLabel(self.layoutWidget)
-        self.label.setObjectName(u"label")
+        self.label_PSG = QLabel(self.layoutWidget)
+        self.label_PSG.setObjectName(u"label_PSG")
         font = QFont()
         font.setFamilies([u"Roboto"])
         font.setPointSize(12)
         font.setBold(False)
         font.setItalic(False)
-        self.label.setFont(font)
+        self.label_PSG.setFont(font)
 
-        self.verticalLayout.addWidget(self.label)
+        self.verticalLayout.addWidget(self.label_PSG)
 
         self.files_listview = QListView(self.layoutWidget)
         self.files_listview.setObjectName(u"files_listview")
@@ -100,7 +101,7 @@ class Ui_InputFilesStep(object):
         self.scrollArea.setWidgetResizable(True)
         self.scrollAreaWidgetContents = QWidget()
         self.scrollAreaWidgetContents.setObjectName(u"scrollAreaWidgetContents")
-        self.scrollAreaWidgetContents.setGeometry(QRect(0, 0, 296, 234))
+        self.scrollAreaWidgetContents.setGeometry(QRect(0, 0, 385, 319))
         self.verticalLayout_5 = QVBoxLayout(self.scrollAreaWidgetContents)
         self.verticalLayout_5.setObjectName(u"verticalLayout_5")
         self.events_treeView = QTreeView(self.scrollAreaWidgetContents)
@@ -119,20 +120,19 @@ class Ui_InputFilesStep(object):
         self.frame_montages.setFrameShape(QFrame.StyledPanel)
         self.frame_montages.setFrameShadow(QFrame.Raised)
         self.verticalLayout_7 = QVBoxLayout(self.frame_montages)
-        self.verticalLayout_7.setSpacing(0)
+        self.verticalLayout_7.setSpacing(8)
         self.verticalLayout_7.setObjectName(u"verticalLayout_7")
         self.verticalLayout_7.setContentsMargins(0, 0, 0, 0)
         self.verticalLayout_3 = QVBoxLayout()
         self.verticalLayout_3.setObjectName(u"verticalLayout_3")
-        self.label_3 = QLabel(self.frame_montages)
-        self.label_3.setObjectName(u"label_3")
-        self.label_3.setFont(font)
+        self.label_Montages = QLabel(self.frame_montages)
+        self.label_Montages.setObjectName(u"label_Montages")
+        self.label_Montages.setFont(font)
 
-        self.verticalLayout_3.addWidget(self.label_3)
+        self.verticalLayout_3.addWidget(self.label_Montages)
 
         self.montages_tableview = QTableView(self.frame_montages)
         self.montages_tableview.setObjectName(u"montages_tableview")
-        self.montages_tableview.setEditTriggers(QAbstractItemView.NoEditTriggers)
         self.montages_tableview.setSelectionMode(QAbstractItemView.MultiSelection)
         self.montages_tableview.setSelectionBehavior(QAbstractItemView.SelectRows)
         self.montages_tableview.setHorizontalScrollMode(QAbstractItemView.ScrollPerPixel)
@@ -168,49 +168,58 @@ class Ui_InputFilesStep(object):
         self.frame_channels.setObjectName(u"frame_channels")
         self.frame_channels.setFrameShape(QFrame.StyledPanel)
         self.frame_channels.setFrameShadow(QFrame.Raised)
-        self.verticalLayout_8 = QVBoxLayout(self.frame_channels)
-        self.verticalLayout_8.setSpacing(0)
-        self.verticalLayout_8.setObjectName(u"verticalLayout_8")
-        self.verticalLayout_8.setContentsMargins(0, 0, 0, 0)
-        self.verticalLayout_2 = QVBoxLayout()
-        self.verticalLayout_2.setSpacing(6)
+        self.verticalLayout_2 = QVBoxLayout(self.frame_channels)
+        self.verticalLayout_2.setSpacing(0)
         self.verticalLayout_2.setObjectName(u"verticalLayout_2")
+        self.verticalLayout_2.setContentsMargins(0, 0, 0, 0)
+        self.horizontalLayout_5 = QHBoxLayout()
+        self.horizontalLayout_5.setObjectName(u"horizontalLayout_5")
+        self.label_Channels = QLabel(self.frame_channels)
+        self.label_Channels.setObjectName(u"label_Channels")
+        self.label_Channels.setFont(font)
+
+        self.horizontalLayout_5.addWidget(self.label_Channels)
+
+        self.horizontalSpacer = QSpacerItem(13, 21, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+
+        self.horizontalLayout_5.addItem(self.horizontalSpacer)
+
         self.frame = QFrame(self.frame_channels)
         self.frame.setObjectName(u"frame")
         self.frame.setFrameShape(QFrame.StyledPanel)
         self.frame.setFrameShadow(QFrame.Raised)
-
-        self.verticalLayout_2.addWidget(self.frame)
-
-        self.horizontalLayout_2 = QHBoxLayout()
-        self.horizontalLayout_2.setSpacing(6)
+        self.horizontalLayout_2 = QHBoxLayout(self.frame)
+        self.horizontalLayout_2.setSpacing(0)
         self.horizontalLayout_2.setObjectName(u"horizontalLayout_2")
-        self.label_2 = QLabel(self.frame_channels)
-        self.label_2.setObjectName(u"label_2")
-        self.label_2.setFont(font)
+        self.horizontalLayout_2.setContentsMargins(0, 0, 0, 0)
+        self.label_selection = QLabel(self.frame)
+        self.label_selection.setObjectName(u"label_selection")
 
-        self.horizontalLayout_2.addWidget(self.label_2)
+        self.horizontalLayout_2.addWidget(self.label_selection)
 
-        self.horizontalSpacer = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+        self.horizontalSpacer_3 = QSpacerItem(10, 20, QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Minimum)
 
-        self.horizontalLayout_2.addItem(self.horizontalSpacer)
+        self.horizontalLayout_2.addItem(self.horizontalSpacer_3)
 
-        self.import_pushButton = QPushButton(self.frame_channels)
-        self.import_pushButton.setObjectName(u"import_pushButton")
+        self.import_pushbutton = QPushButton(self.frame)
+        self.import_pushbutton.setObjectName(u"import_pushbutton")
 
-        self.horizontalLayout_2.addWidget(self.import_pushButton)
+        self.horizontalLayout_2.addWidget(self.import_pushbutton)
 
-        self.export_pushbutton = QPushButton(self.frame_channels)
+        self.export_pushbutton = QPushButton(self.frame)
         self.export_pushbutton.setObjectName(u"export_pushbutton")
 
         self.horizontalLayout_2.addWidget(self.export_pushbutton)
 
 
-        self.verticalLayout_2.addLayout(self.horizontalLayout_2)
+        self.horizontalLayout_5.addWidget(self.frame)
+
+
+        self.verticalLayout_2.addLayout(self.horizontalLayout_5)
 
         self.channels_tableview = QTableView(self.frame_channels)
         self.channels_tableview.setObjectName(u"channels_tableview")
-        self.channels_tableview.setEditTriggers(QAbstractItemView.NoEditTriggers)
+        self.channels_tableview.setEditTriggers(QAbstractItemView.SelectedClicked)
         self.channels_tableview.setDragEnabled(False)
         self.channels_tableview.setDragDropOverwriteMode(False)
         self.channels_tableview.setDragDropMode(QAbstractItemView.NoDragDrop)
@@ -242,44 +251,48 @@ class Ui_InputFilesStep(object):
 
         self.verticalLayout_2.addLayout(self.horizontalLayout_4)
 
-
-        self.verticalLayout_8.addLayout(self.verticalLayout_2)
-
         self.splitter.addWidget(self.frame_channels)
 
         self.verticalLayout_4.addWidget(self.splitter)
 
 
         self.retranslateUi(InputFilesStep)
-        self.add_files_pushbutton.clicked.connect(InputFilesStep.on_add_files)
-        self.remove_entries_pushbutton.clicked.connect(InputFilesStep.on_remove_entries)
-        self.add_folders_pushbutton.clicked.connect(InputFilesStep.on_add_folders)
-        self.search_channels_lineedit.textChanged.connect(InputFilesStep.on_channel_search_changed)
-        self.montage_search_lineedit.textChanged.connect(InputFilesStep.on_montage_seach_changed)
-        self.select_all_channels_pushbutton.clicked.connect(InputFilesStep.on_channels_select_all)
-        self.select_all_montage_pushbutton.clicked.connect(InputFilesStep.on_montages_select_all)
-        self.unselect_all_channels_pushbutton.clicked.connect(InputFilesStep.on_channels_unselect_all)
-        self.unselect_all_montage_pushbutton.clicked.connect(InputFilesStep.on_montages_unselect_all)
-        self.files_listview.clicked.connect(InputFilesStep.on_file_selection_changed)
+        self.add_files_pushbutton.clicked.connect(InputFilesStep.add_files_slot)
+        self.remove_entries_pushbutton.clicked.connect(InputFilesStep.remove_entries_slot)
+        self.add_folders_pushbutton.clicked.connect(InputFilesStep.add_folders_slot)
+        self.search_channels_lineedit.textChanged.connect(InputFilesStep.channel_search_changed_slot)
+        self.montage_search_lineedit.textChanged.connect(InputFilesStep.montage_seach_changed_slot)
+        self.select_all_channels_pushbutton.clicked.connect(InputFilesStep.channels_select_all_slot)
+        self.select_all_montage_pushbutton.clicked.connect(InputFilesStep.montages_select_all_slot)
+        self.unselect_all_channels_pushbutton.clicked.connect(InputFilesStep.channels_unselect_all_slot)
+        self.unselect_all_montage_pushbutton.clicked.connect(InputFilesStep.montages_unselect_all_slot)
+        self.files_listview.clicked.connect(InputFilesStep.file_selection_changed_slot)
         self.export_pushbutton.clicked.connect(InputFilesStep.export_slot)
-        self.import_pushButton.clicked.connect(InputFilesStep.import_slot)
+        self.import_pushbutton.clicked.connect(InputFilesStep.import_slot)
 
         QMetaObject.connectSlotsByName(InputFilesStep)
     # setupUi
 
     def retranslateUi(self, InputFilesStep):
         InputFilesStep.setWindowTitle(QCoreApplication.translate("InputFilesStep", u"Form", None))
-        self.label.setText(QCoreApplication.translate("InputFilesStep", u"PSG files", None))
+        self.label_PSG.setText(QCoreApplication.translate("InputFilesStep", u"PSG files", None))
         self.remove_entries_pushbutton.setText(QCoreApplication.translate("InputFilesStep", u"Remove", None))
         self.add_folders_pushbutton.setText(QCoreApplication.translate("InputFilesStep", u"Add from folders", None))
         self.add_files_pushbutton.setText(QCoreApplication.translate("InputFilesStep", u"Add files", None))
         self.label_4.setText(QCoreApplication.translate("InputFilesStep", u"Events details", None))
-        self.label_3.setText(QCoreApplication.translate("InputFilesStep", u"Montages", None))
+        self.label_Montages.setText(QCoreApplication.translate("InputFilesStep", u"Montages", None))
         self.unselect_all_montage_pushbutton.setText(QCoreApplication.translate("InputFilesStep", u"Unselect all", None))
         self.select_all_montage_pushbutton.setText(QCoreApplication.translate("InputFilesStep", u"Select all", None))
         self.montage_search_lineedit.setPlaceholderText(QCoreApplication.translate("InputFilesStep", u"Search Montages", None))
-        self.label_2.setText(QCoreApplication.translate("InputFilesStep", u"Channels", None))
-        self.import_pushButton.setText(QCoreApplication.translate("InputFilesStep", u"Import", None))
+        self.label_Channels.setText(QCoreApplication.translate("InputFilesStep", u"Channels", None))
+        self.label_selection.setText(QCoreApplication.translate("InputFilesStep", u"Selections", None))
+#if QT_CONFIG(tooltip)
+        self.import_pushbutton.setToolTip(QCoreApplication.translate("InputFilesStep", u"Press to import a saved selection of files with their montage and channels.", None))
+#endif // QT_CONFIG(tooltip)
+        self.import_pushbutton.setText(QCoreApplication.translate("InputFilesStep", u"Import", None))
+#if QT_CONFIG(tooltip)
+        self.export_pushbutton.setToolTip(QCoreApplication.translate("InputFilesStep", u"Press to export and save the current selection of files with their montage and channels.", None))
+#endif // QT_CONFIG(tooltip)
         self.export_pushbutton.setText(QCoreApplication.translate("InputFilesStep", u"Export", None))
         self.unselect_all_channels_pushbutton.setText(QCoreApplication.translate("InputFilesStep", u"Unselect all", None))
         self.select_all_channels_pushbutton.setText(QCoreApplication.translate("InputFilesStep", u"Select all", None))

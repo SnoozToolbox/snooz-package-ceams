@@ -36,7 +36,17 @@
       </widget>
      </item>
      <item>
-      <widget class="QListView" name="file_listview"/>
+      <widget class="QListView" name="file_listview">
+       <property name="editTriggers">
+        <set>QAbstractItemView::NoEditTriggers</set>
+       </property>
+       <property name="selectionMode">
+        <enum>QAbstractItemView::ExtendedSelection</enum>
+       </property>
+       <property name="selectionBehavior">
+        <enum>QAbstractItemView::SelectItems</enum>
+       </property>
+      </widget>
      </item>
     </layout>
    </item>
@@ -63,8 +73,11 @@
        <property name="editTriggers">
         <set>QAbstractItemView::NoEditTriggers</set>
        </property>
+       <property name="dragDropMode">
+        <enum>QAbstractItemView::NoDragDrop</enum>
+       </property>
        <property name="selectionMode">
-        <enum>QAbstractItemView::NoSelection</enum>
+        <enum>QAbstractItemView::SingleSelection</enum>
        </property>
        <property name="selectionBehavior">
         <enum>QAbstractItemView::SelectItems</enum>
@@ -90,13 +103,6 @@
          </property>
          <property name="placeholderText">
           <string>Event group search</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QPushButton" name="apply_all_pushButton">
-         <property name="text">
-          <string>Apply to all files</string>
          </property>
         </widget>
        </item>
@@ -141,26 +147,10 @@
    </hints>
   </connection>
   <connection>
-   <sender>apply_all_pushButton</sender>
-   <signal>clicked()</signal>
-   <receiver>AnnotationsSelection</receiver>
-   <slot>on_apply_to_all_files()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>411</x>
-     <y>280</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>240</x>
-     <y>164</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
    <sender>select_all_checkBox</sender>
    <signal>stateChanged(int)</signal>
    <receiver>AnnotationsSelection</receiver>
-   <slot>on_select_all_groups()</slot>
+   <slot>on_select_all_events()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>287</x>
@@ -208,7 +198,7 @@
  <slots>
   <slot>on_file_selected()</slot>
   <slot>on_event_selected()</slot>
-  <slot>on_select_all_groups()</slot>
+  <slot>on_select_all_events()</slot>
   <slot>on_apply_to_all_files()</slot>
   <slot>on_reset_all_files()</slot>
   <slot>search_pattern_slot()</slot>

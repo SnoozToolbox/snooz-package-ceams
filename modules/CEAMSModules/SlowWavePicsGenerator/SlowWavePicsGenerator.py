@@ -51,7 +51,6 @@ class SlowWavePicsGenerator(SciNode):
                 'subject_avg': False,
                 'subject_sel': False,
                 'show_sw_categories': False,
-                'sw_aligment' : 'ZC',
                 'display': "mean_std", # all, mean, mean_std
                 'neg_up': False,
                 'force_axis': False, # False or [xmin, xmax, ymin, ymax]
@@ -62,6 +61,11 @@ class SlowWavePicsGenerator(SciNode):
                 'subjectavg': ['tab:blue', 'tab:red', 'tab:green', 'tab:purple', 'tab:orange', 'tab:brown', 'tab:pink', 'tab:gray', 'tab:olive', 'tab:cyan'],
                 'subjectsel': ['tab:blue', 'tab:red', 'tab:green', 'tab:purple', 'tab:orange', 'tab:brown', 'tab:pink', 'tab:gray', 'tab:olive', 'tab:cyan'],
                 'cohortavg': ['tab:blue', 'tab:red', 'tab:green', 'tab:purple', 'tab:orange', 'tab:brown', 'tab:pink', 'tab:gray', 'tab:olive', 'tab:cyan'],
+        "alignment_param": string
+            How to align the slow wave signals to display them on each other. 
+            The default value is 'ZC'for Zero crossing.
+            Other values are 'PP ' for Positive Peak and 'NP' for Negative Peak.
+
 
     Returns
     -------
@@ -81,6 +85,7 @@ class SlowWavePicsGenerator(SciNode):
         InputPlug('chans_ROIs_sel',self)
         InputPlug('pics_param',self)
         InputPlug('colors_param',self)
+        InputPlug('alignment_param',self)
         # Output plugs
         
         # These properties are needed for the PSGReader plugin 
@@ -114,7 +119,7 @@ class SlowWavePicsGenerator(SciNode):
         #self.palette_labels = ["Blues", "Reds", "Greens", "Greys", "Oranges", "Purples"] # Un groupe pâle et l'autre foncé...
         #self.palette_labels = ["copper", "cool", "summer", "winter"] # max 4 categories
 
-    def compute(self, files, file_group, sw_char_folder, sw_events_def, ROIs_def, chans_ROIs_sel, pics_param, colors_param):
+    def compute(self, files, file_group, sw_char_folder, sw_events_def, ROIs_def, chans_ROIs_sel, pics_param, colors_param, alignment_param):
         """
         Load signals, average SW signal event if needed and generate pictures of slow wave events.
 
@@ -140,7 +145,6 @@ class SlowWavePicsGenerator(SciNode):
                     'subject_avg': False,
                     'subject_sel': False,
                     'show_sw_categories': False,
-                    'sw_aligment' : 'ZC',
                     'display': "mean_std", # all, mean, mean_std
                     'neg_up': False,
                     'force_axis': False, # False or [xmin, xmax, ymin, ymax]
@@ -151,7 +155,11 @@ class SlowWavePicsGenerator(SciNode):
                     'subjectavg': ['tab:blue', 'tab:red', 'tab:green', 'tab:purple', 'tab:orange', 'tab:brown', 'tab:pink', 'tab:gray', 'tab:olive', 'tab:cyan'],
                     'subjectsel': ['tab:blue', 'tab:red', 'tab:green', 'tab:purple', 'tab:orange', 'tab:brown', 'tab:pink', 'tab:gray', 'tab:olive', 'tab:cyan'],
                     'cohortavg': ['tab:blue', 'tab:red', 'tab:green', 'tab:purple', 'tab:orange', 'tab:brown', 'tab:pink', 'tab:gray', 'tab:olive', 'tab:cyan'],
-                    
+            "alignment_param": string
+                How to align the slow wave signals to display them on each other. 
+                The default value is 'ZC'for Zero crossing.
+                Other values are 'PP ' for Positive Peak and 'NP' for Negative Peak.
+
         Returns
         -------
 
@@ -198,6 +206,13 @@ class SlowWavePicsGenerator(SciNode):
         if not isinstance(colors_param, dict):
             raise NodeInputException(self.identifier, "colors_param", \
                 f"SlowWavePicsGenerator : dict is expected for colors_param and it is {type(colors_param)}")
+
+        if not (isinstance(alignment_param, str) and not alignment_param==''):
+            raise NodeInputException(self.identifier, "alignment_param", \
+                f"SlowWavePicsGenerator : string is expected for alignment_param and it is {type(alignment_param)}")
+
+        # Add the SW alignment parameter to pics_param
+        pics_param['sw_aligment'] = alignment_param
 
         # Dict to keep the average signal per channel
         signal_avg_per_chan = {} # the key is the channel label and the value is the average signal
@@ -339,8 +354,8 @@ class SlowWavePicsGenerator(SciNode):
                         # One figure for the current subject : one picture per channel or ROI
                         # **********************************************
                         if pics_param['subject_sel'] | pics_param['cohort_sel']:
-                            # Save figure for a subject and a channel.
-                            # This function display all the signals for the events included in event_cur_chan_df.
+                            # Save figure for each channel of each subject.
+                            # This function displays all the signals for the events included in event_cur_chan_df.
                             #   return the average signal for each category for the current channel and subject
                             if pics_param['subject_sel']:
                                 fig_save = 'subject_sel'
@@ -573,6 +588,7 @@ class SlowWavePicsGenerator(SciNode):
 
 
     def _save_subject_chan_fig_sw(self, signals_evt_all_chan, event_all_chan_df, pics_param, base_name, chan_label, fig_save, colors):
+        
         """""
             Function to save figure for a subject.
             This function display all the signals for the events included in event_all_chan_df.
@@ -583,8 +599,6 @@ class SlowWavePicsGenerator(SciNode):
                     List of signals for the events included in event_all_chan_df
                 event_all_chan_df : pandas dataframe or list of pandas dataframe
                     List of events for the current channel
-                fig_name : str
-                    Path to save the figure
                 pics_param: dict
                     Each key is a parameter to generate pictures.
                     The default values are : 
@@ -593,7 +607,6 @@ class SlowWavePicsGenerator(SciNode):
                         'subject_avg': False,
                         'subject_sel': False,
                         'show_sw_categories': False,
-                        'sw_aligment' : 'ZC',
                         'display': "mean_std", #"mean", "all", "mean_std"
                         'force_axis': False, # False or [xmin, xmax, ymin, ymax]
                         'output_folder': ''    
@@ -603,6 +616,10 @@ class SlowWavePicsGenerator(SciNode):
                     The type (label) of figure to save. If false, the figure is not saved.
                 colors : list of str
                     List of colors.
+                "alignment_param": dict
+                    The key is how to align the slow wave signals to display them on each other. 
+                    The default value is 'sw_aligment' : 'ZC'.
+                    ZC for Zero crossing, PP Positive Peak, NP for Negative Peak.
             Returns 
             -------
                 signal_avg_per_cat : numpy array
@@ -623,7 +640,6 @@ class SlowWavePicsGenerator(SciNode):
                 fig.clear() # reset the hold on
                 ax = fig.add_subplot()
 
-        
         if isinstance(chan_label, str):
             signals_evt_all_chan = [signals_evt_all_chan]
             event_all_chan_df = [event_all_chan_df]
@@ -731,8 +747,11 @@ class SlowWavePicsGenerator(SciNode):
                 elif pics_param['sw_aligment'] == 'PP':
                     idx_pos_peak = idx_pos_peak_all_chan[i_chan]
 
-                # Display the mean of the signals accross events and the std as shaded gray area
-                if 'mean' in pics_param['display']:
+                # For the cohort figure you have 2 options, mean, mean+std and all
+                # For the 
+                # Display the mean of the signals across events and the std as shaded gray area
+                #if 'mean' in pics_param['display']:
+                if pics_param['subject_avg']:
                     signal_to_plot_cat = np.empty(0)
                     # For each signal in signals_evt_cur_chan
                     for i_evt, signal_cur in enumerate(signals_evt_cur_chan):
@@ -782,25 +801,28 @@ class SlowWavePicsGenerator(SciNode):
                             else:
                                 signal_accum_to_avg = np.concatenate((signal_accum_to_avg, signal_to_plot), axis=1)
 
-                    # Display the mean of the signals accross events
+                    # Display the mean of the signals across events
                     signal_avg_chan_cat = np.nanmean(signal_to_plot_cat, axis=1)
 
                     if fig_save:
                         # Check if the label has already been added to the legend
-                        if f'cat{i_cat}-{chan_label[i_chan]}' not in legend_labels:
+                        if (max_cat>1 and f'cat{i_cat}-{chan_label[i_chan]}' not in legend_labels) or (max_cat==1 and f'{chan_label[i_chan]}' not in legend_labels):
                             # Plot the mean with a specific color and linestyle
                             # Multiple channels and multiple categories
                             if (max_cat>1 and n_channels>1):
-                                #ax.plot(time, signal_avg_chan_cat, color=palette_list[i_cat-1][i_chan], linestyle=self.linestyles[i_cat-1], label=f'cat{i_cat}-{chan_label[i_chan]}')
                                 ax.plot(time, signal_avg_chan_cat, color=colors[i_chan], linestyle=self.linestyles[i_cat-1], label=f'cat{i_cat}-{chan_label[i_chan]}')
+                                # Add the label to the legend
+                                legend_labels[f'cat{i_cat}-{chan_label[i_chan]}']=True
                             # Only one channel to plot
                             elif max_cat>1:
                                 ax.plot(time, signal_avg_chan_cat, color=colors[i_cat-1], label=f'cat{i_cat}-{chan_label[i_chan]}')
+                                # Add the label to the legend
+                                legend_labels[f'cat{i_cat}-{chan_label[i_chan]}']=True
                             # Only one category to plot
                             else:
-                                ax.plot(time, signal_avg_chan_cat, color=colors[i_chan], label=f'cat{i_cat}-{chan_label[i_chan]}')
-                            # Add the label to the legend
-                            legend_labels[f'cat{i_cat}-{chan_label[i_chan]}']=True
+                                ax.plot(time, signal_avg_chan_cat, color=colors[i_chan], label=f'{chan_label[i_chan]}')
+                                # Add the label to the legend
+                                legend_labels[f'{chan_label[i_chan]}']=True
                         else:
                             # Plot the mean with a specific color and linestyle
                             # Multiple channels and multiple categories
@@ -814,8 +836,8 @@ class SlowWavePicsGenerator(SciNode):
                             else:
                                 ax.plot(time, signal_avg_chan_cat, color=colors[i_chan])
 
-                        if 'std' in pics_param['display']:
-                            # Display the standard deviation of the signals accross events as shaded area
+                        if 'std' in pics_param['display'] or fig_save=='subject_avg':
+                            # Display the standard deviation of the signals across events as shaded area
                             # Calculate the standard deviation of the signals
                             signal_to_plot_std = np.nanstd(signal_to_plot_cat, axis=1)
                             # Multiple channels and multiple categories
@@ -831,7 +853,7 @@ class SlowWavePicsGenerator(SciNode):
                                 ax.fill_between(time, signal_avg_chan_cat - signal_to_plot_std, \
                                     signal_avg_chan_cat + signal_to_plot_std, color=colors[i_chan], alpha=0.2)                                                    
 
-                # Display all signals accross events
+                # Display all signals across events
                 # Always only one channel
                 else:
                     # For each signal in signals_evt_cur_chan
@@ -877,10 +899,15 @@ class SlowWavePicsGenerator(SciNode):
                             
                             if fig_save:
                                 # Check if the label has already been added to the legend
-                                if f'cat{i_cat}-{chan_label[i_chan]}' not in legend_labels:
-                                    # Add the label to the legend
-                                    legend_labels[f'cat{i_cat}-{chan_label[i_chan]}']=True
-                                    ax.plot(time, signal_pad_end, color=colors[i_cat-1], alpha=0.5, label=f'cat{i_cat}-{chan_label[i_chan]}')
+                                if (max_cat>1 and f'cat{i_cat}-{chan_label[i_chan]}' not in legend_labels) or (max_cat==1 and f'{chan_label[i_chan]}' not in legend_labels):
+                                    if max_cat>1:
+                                        # Add the label to the legend
+                                        legend_labels[f'cat{i_cat}-{chan_label[i_chan]}']=True
+                                        ax.plot(time, signal_pad_end, color=colors[i_cat-1], alpha=0.5, label=f'cat{i_cat}-{chan_label[i_chan]}')
+                                    else:
+                                        # Add the label to the legend
+                                        legend_labels[f'{chan_label[i_chan]}']=True
+                                        ax.plot(time, signal_pad_end, color=colors[i_cat-1], alpha=0.5, label=f'{chan_label[i_chan]}')
                                 else:
                                     ax.plot(time, signal_pad_end, color=colors[i_cat-1],alpha=0.1)
                             # Compute the max index valid for all the sw events
@@ -910,8 +937,10 @@ class SlowWavePicsGenerator(SciNode):
             if pics_param['subject_avg'] | pics_param['subject_sel']:
                 fig_name = pics_param['output_folder']+'/'+base_name+'_'+pics_param['sw_aligment']
                 if pics_param['subject_sel']:
-                    fig_name = fig_name + '_' + chan_label[0]
-                fig_name = fig_name + '_'+ pics_param['display']
+                    fig_name = fig_name + '_' + chan_label[0] + '_all'
+                if pics_param['subject_avg']:
+                    fig_name = fig_name + '_avg'
+                #fig_name = fig_name + '_'+ pics_param['display']
                 fig_name = fig_name + '.pdf'
 
                 if pics_param['subject_sel']:
@@ -1080,24 +1109,23 @@ class SlowWavePicsGenerator(SciNode):
                             signal_to_plot_grp[cohort_group][f'cat{i_cat+1}'] = signal_to_mean
                     else:
                         # Check if the label has already been added to the legend
-                        if f'cat{i_cat+1}-{cohort_group}' not in legend_labels:
-                            # Add the label to the legend
-                            legend_labels[f'cat{i_cat+1}-{cohort_group}']=True
-                            # Plot the channels with a specific linestyle and the categories with a specific color
+                        if ((n_cats>1) and f'cat{i_cat+1}-{cohort_group}' not in legend_labels) or (n_cats==1 and f'{cohort_group}' not in legend_labels):
                             if n_cats>1:
+                                # Add the label to the legend
+                                legend_labels[f'cat{i_cat+1}-{cohort_group}']=True
+                                # Plot the channels with a specific linestyle and the categories with a specific color
                                 ax.plot(time, signal_to_plot, color=colors[i_grp], linestyle=self.linestyles[i_cat], label=f'cat{i_cat+1}-{cohort_group}', alpha=0.5)
                             else:
-                                ax.plot(time, signal_to_plot, color=colors[i_grp], label=f'cat{i_cat+1}-{cohort_group}', alpha=0.5)
-                            #ax.plot(time, signal_to_plot, color=self.colors[i_cat*n_cats+i_grp], linestyle=self.linestyles[i_grp], label=f'cat{i_cat+1}-{cohort_group}', alpha=0.5)
+                                # Add the label to the legend
+                                legend_labels[f'{cohort_group}']=True
+                                # Plot the channels with a specific linestyle and the categories with a specific color
+                                ax.plot(time, signal_to_plot, color=colors[i_grp], label=f'{cohort_group}', alpha=0.5)
                         else:
                             # Plot the channels with a specific linestyle and the categories with a specific color
-                            #ax.plot(time, signal_to_plot, color=self.colors[i_cat], linestyle=self.linestyles[i_grp], alpha=0.5)
                             if n_cats>1:
-                                #ax.plot(time, signal_to_plot, color=palette_list[i_cat][i_grp], alpha=0.5)
                                 ax.plot(time, signal_to_plot, color=colors[i_grp], linestyle=self.linestyles[i_cat], alpha=0.5)
                             else:
                                 ax.plot(time, signal_to_plot, color=colors[i_grp], alpha=0.5)
-                            #ax.plot(time, signal_to_plot, color=self.colors[i_cat*n_cats+i_grp], linestyle=self.linestyles[i_grp], alpha=0.5)
 
         # Average signal to plot mean and gray area
         x_lim_max = 0
@@ -1110,7 +1138,6 @@ class SlowWavePicsGenerator(SciNode):
                     # Compute the standard deviation
                     signal_to_plot_std = np.nanstd(signal_to_plot_grp[cohort_group][f'cat{i_cat+1}'], axis=1)
                     # Plot the channels with a specific linestyle and the categories with a specific color
-                    #ax.plot(time, signal_to_plot_mean, color=self.colors[i_cat], linestyle=self.linestyles[i_grp], label=f'cat{i_cat+1}-{cohort_group}')
                     if n_cats>1:
                         ax.plot(time, signal_to_plot_mean, color=colors[i_grp],\
                          linestyle=self.linestyles[i_cat], label=f'cat{i_cat+1}-{cohort_group}')
