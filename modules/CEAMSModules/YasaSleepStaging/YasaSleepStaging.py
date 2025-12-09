@@ -14,10 +14,23 @@ import mne
 import yasa
 import numpy as np
 import pandas as pd
-import matplotlib.pyplot as plt
-from scipy.signal import resample
-from sklearn.metrics import classification_report, confusion_matrix, cohen_kappa_score
-import matplotlib
+
+# Conditionally import matplotlib based on headless mode
+try:
+    import config
+    if config.HEADLESS_MODE:
+        # Use Agg backend in headless mode (no GUI required, perfect for PDF generation)
+        import matplotlib
+        matplotlib.use('Agg')
+        from matplotlib.figure import Figure
+        import matplotlib.pyplot as plt
+    else:
+        # Use QtAgg backend in GUI mode
+        import matplotlib
+        matplotlib.use('QtAgg')
+        import matplotlib.pyplot as plt
+    # If config is not available, default to QtAgg (for backward compatibility)
+
 
 DEBUG = False
 

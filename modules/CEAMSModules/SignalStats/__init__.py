@@ -4,6 +4,21 @@ See the file LICENCE for full license details.
 """
 from .SignalStats import SignalStats
 from .SignalStatsSettingsView import SignalStatsSettingsView
-from .SignalStatsResultsView import SignalStatsResultsView
-from .Ui_SignalStatsResultsView import Ui_SignalStatsResultsView
-from .Ui_SignalStatsSettingsView import Ui_SignalStatsSettingsView
+
+# Only import ResultsView and UI classes in non-headless mode to avoid matplotlib/Qt dependencies
+try:
+    import config
+    if not config.HEADLESS_MODE:
+        from .SignalStatsResultsView import SignalStatsResultsView
+        from .Ui_SignalStatsResultsView import Ui_SignalStatsResultsView
+        from .Ui_SignalStatsSettingsView import Ui_SignalStatsSettingsView
+    else:
+        # Create stub classes for headless mode
+        SignalStatsResultsView = None
+        Ui_SignalStatsResultsView = None
+        Ui_SignalStatsSettingsView = None
+except (ImportError, AttributeError):
+    # If config is not available, import normally (for backward compatibility)
+    from .SignalStatsResultsView import SignalStatsResultsView
+    from .Ui_SignalStatsResultsView import Ui_SignalStatsResultsView
+    from .Ui_SignalStatsSettingsView import Ui_SignalStatsSettingsView

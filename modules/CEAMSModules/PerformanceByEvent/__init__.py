@@ -4,9 +4,21 @@ See the file LICENCE for full license details.
 """
 from .PerformanceByEvent import PerformanceByEvent
 from .PerformanceByEventSettingsView import PerformanceByEventSettingsView
-from .PerformanceByEventResultsView import PerformanceByEventResultsView
-from .Ui_PerformanceByEventResultsView import Ui_PerformanceByEventResultsView
-from .Ui_PerformanceByEventSettingsView import Ui_PerformanceByEventSettingsView
 
-
-
+# Only import ResultsView and UI classes in non-headless mode to avoid matplotlib/Qt dependencies
+try:
+    import config
+    if not config.HEADLESS_MODE:
+        from .PerformanceByEventResultsView import PerformanceByEventResultsView
+        from .Ui_PerformanceByEventResultsView import Ui_PerformanceByEventResultsView
+        from .Ui_PerformanceByEventSettingsView import Ui_PerformanceByEventSettingsView
+    else:
+        # Create stub classes for headless mode
+        PerformanceByEventResultsView = None
+        Ui_PerformanceByEventResultsView = None
+        Ui_PerformanceByEventSettingsView = None
+except (ImportError, AttributeError):
+    # If config is not available, import normally (for backward compatibility)
+    from .PerformanceByEventResultsView import PerformanceByEventResultsView
+    from .Ui_PerformanceByEventResultsView import Ui_PerformanceByEventResultsView
+    from .Ui_PerformanceByEventSettingsView import Ui_PerformanceByEventSettingsView

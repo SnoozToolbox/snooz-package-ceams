@@ -61,7 +61,23 @@ See the file LICENCE for full license details.
     Log : 
         2022-0X-XX : First release, Cloé Dutil
 """
-import matplotlib.pyplot as plt
+
+# Conditionally import matplotlib based on headless mode
+try:
+    import config
+    if config.HEADLESS_MODE:
+        # Use Agg backend in headless mode (no GUI required, perfect for PDF generation)
+        import matplotlib
+        matplotlib.use('Agg')
+        from matplotlib.figure import Figure
+        import matplotlib.pyplot as plt
+    else:
+        # Use QtAgg backend in GUI mode
+        import matplotlib
+        matplotlib.use('QtAgg')
+        import matplotlib.pyplot as plt
+    # If config is not available, default to QtAgg (for backward compatibility)
+
 import math
 import numpy as np
 import os

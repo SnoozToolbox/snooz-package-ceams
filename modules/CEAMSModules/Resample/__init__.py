@@ -4,9 +4,21 @@ See the file LICENCE for full license details.
 """
 from .Resample import Resample
 from .ResampleSettingsView import ResampleSettingsView
-from .ResampleResultsView import ResampleResultsView
-from .Ui_ResampleResultsView import Ui_ResampleResultsView
-from .Ui_ResampleSettingsView import Ui_ResampleSettingsView
 
-
-
+# Only import ResultsView and UI classes in non-headless mode to avoid matplotlib/Qt dependencies
+try:
+    import config
+    if not config.HEADLESS_MODE:
+        from .ResampleResultsView import ResampleResultsView
+        from .Ui_ResampleResultsView import Ui_ResampleResultsView
+        from .Ui_ResampleSettingsView import Ui_ResampleSettingsView
+    else:
+        # Create stub classes for headless mode
+        ResampleResultsView = None
+        Ui_ResampleResultsView = None
+        Ui_ResampleSettingsView = None
+except (ImportError, AttributeError):
+    # If config is not available, import normally (for backward compatibility)
+    from .ResampleResultsView import ResampleResultsView
+    from .Ui_ResampleResultsView import Ui_ResampleResultsView
+    from .Ui_ResampleSettingsView import Ui_ResampleSettingsView

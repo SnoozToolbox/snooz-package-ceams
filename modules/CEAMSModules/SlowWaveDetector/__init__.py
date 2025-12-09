@@ -4,8 +4,18 @@ See the file LICENCE for full license details.
 """
 from .SlowWaveDetector import SlowWaveDetector
 from .SlowWaveDetectorSettingsView import SlowWaveDetectorSettingsView
-from .SlowWaveDetectorResultsView import SlowWaveDetectorResultsView
-from .Ui_SlowWaveDetectorSettingsView import Ui_SlowWaveDetectorSettingsView
 
-
-
+# Only import ResultsView and UI classes in non-headless mode to avoid matplotlib/Qt dependencies
+try:
+    import config
+    if not config.HEADLESS_MODE:
+        from .SlowWaveDetectorResultsView import SlowWaveDetectorResultsView
+        from .Ui_SlowWaveDetectorSettingsView import Ui_SlowWaveDetectorSettingsView
+    else:
+        # Create stub classes for headless mode
+        SlowWaveDetectorResultsView = None
+        Ui_SlowWaveDetectorSettingsView = None
+except (ImportError, AttributeError):
+    # If config is not available, import normally (for backward compatibility)
+    from .SlowWaveDetectorResultsView import SlowWaveDetectorResultsView
+    from .Ui_SlowWaveDetectorSettingsView import Ui_SlowWaveDetectorSettingsView

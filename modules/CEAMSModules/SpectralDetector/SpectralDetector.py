@@ -71,7 +71,23 @@ See the file LICENCE for full license details.
         2021-04-22 : Output detection_win_activity and med_bsl_win, klacourse
         2021-05-04 : Managed the fixed spectral detector, klacourse
 """
-import matplotlib.pyplot as plt
+
+# Conditionally import matplotlib based on headless mode
+try:
+    import config
+    if config.HEADLESS_MODE:
+        # Use Agg backend in headless mode (no GUI required, perfect for PDF generation)
+        import matplotlib
+        matplotlib.use('Agg')
+        from matplotlib.figure import Figure
+        import matplotlib.pyplot as plt
+    else:
+        # Use QtAgg backend in GUI mode
+        import matplotlib
+        matplotlib.use('QtAgg')
+        import matplotlib.pyplot as plt
+    # If config is not available, default to QtAgg (for backward compatibility)
+
 import numpy as np
 import pandas as pd
 from scipy.stats import norm

@@ -5,18 +5,24 @@ See the file LICENCE for full license details.
     REMsDetectionYasa
     This class detects Rapid Eye Movements (REMs) in sleep recordings using YASA.
 """
-import matplotlib
-import mne
-import numpy as np
-import os
-import pandas as pd
-import yasa
-import sys
-import warnings
-import logging
 
-os.environ["QT_LOGGING_RULES"] = "qt.core.qmetaobject.connectslotsbyname=false"
-matplotlib.use('Agg') # Use non-interactive Agg backend for matplotlib
+# Conditionally import matplotlib based on headless mode
+try:
+    import config
+    if config.HEADLESS_MODE:
+        # Use Agg backend in headless mode (no GUI required, perfect for PDF generation)
+        import matplotlib
+        matplotlib.use('Agg')
+        from matplotlib.figure import Figure
+    else:
+        # Use QtAgg backend in GUI mode
+        import matplotlib
+        matplotlib.use('QtAgg')
+except (ImportError, AttributeError):
+    # If config is not available, default to QtAgg (for backward compatibility)
+    import matplotlib
+    matplotlib.use('QtAgg')
+
 # Suppress warnings from YASA and MNE
 logging.getLogger('yasa').setLevel(logging.ERROR)
 logging.getLogger('mne').setLevel(logging.ERROR)

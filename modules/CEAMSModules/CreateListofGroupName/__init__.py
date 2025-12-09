@@ -4,6 +4,21 @@ See the file LICENCE for full license details.
 """
 from .CreateListofGroupName import CreateListofGroupName
 from .CreateListofGroupNameSettingsView import CreateListofGroupNameSettingsView
-from .CreateListofGroupNameResultsView import CreateListofGroupNameResultsView
-from .Ui_CreateListofGroupNameResultsView import Ui_CreateListofGroupNameResultsView
-from .Ui_CreateListofGroupNameSettingsView import Ui_CreateListofGroupNameSettingsView
+
+# Only import ResultsView and UI classes in non-headless mode to avoid matplotlib/Qt dependencies
+try:
+    import config
+    if not config.HEADLESS_MODE:
+        from .CreateListofGroupNameResultsView import CreateListofGroupNameResultsView
+        from .Ui_CreateListofGroupNameResultsView import Ui_CreateListofGroupNameResultsView
+        from .Ui_CreateListofGroupNameSettingsView import Ui_CreateListofGroupNameSettingsView
+    else:
+        # Create stub classes for headless mode
+        CreateListofGroupNameResultsView = None
+        Ui_CreateListofGroupNameResultsView = None
+        Ui_CreateListofGroupNameSettingsView = None
+except (ImportError, AttributeError):
+    # If config is not available, import normally (for backward compatibility)
+    from .CreateListofGroupNameResultsView import CreateListofGroupNameResultsView
+    from .Ui_CreateListofGroupNameResultsView import Ui_CreateListofGroupNameResultsView
+    from .Ui_CreateListofGroupNameSettingsView import Ui_CreateListofGroupNameSettingsView
