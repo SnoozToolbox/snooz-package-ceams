@@ -5,6 +5,7 @@ See the file LICENCE for full license details.
 DEBUG = False
 from scipy import signal, fft
 import numpy as np
+import os
 
 from PySide6.QtWidgets import QMessageBox
 from qtpy import QtWidgets
@@ -97,6 +98,8 @@ class OximeterView(Ui_OximeterView, QtWidgets.QWidget):
         self._close_file()
         filename = self._ask_user_file()
         if filename is not None:
+            filename_only = os.path.basename(filename)
+            self.label_filename.setText(f"Loading file ... ({filename_only})")
             self._current_filename = filename
             psg_reader_manager = PSGReaderManager()
             psg_reader_manager._init_readers()
@@ -111,6 +114,10 @@ class OximeterView(Ui_OximeterView, QtWidgets.QWidget):
 
             psg_reader_manager.close_file()
             self._channel_selection_dialog()
+
+            # Extract filename from path
+            filename_only = os.path.basename(self._current_filename)
+            self.label_filename.setText(f"File: {filename_only}")
 
             log_msg = QMessageBox()
             log_msg.setWindowTitle("Information")
@@ -182,6 +189,7 @@ class OximeterView(Ui_OximeterView, QtWidgets.QWidget):
 
     def _close_file(self):
         print("close_file")
+        self.label_filename.setText(f"No file loaded.")
         self._selected_montage = None
         self._selected_oximeter = None
         self._current_filename = None

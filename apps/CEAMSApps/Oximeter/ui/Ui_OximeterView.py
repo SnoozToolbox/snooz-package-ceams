@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file ''
+## Form generated from reading UI file 'Ui_OximeterView.ui'
 ##
 ## Created by: Qt User Interface Compiler version 6.8.2
 ##
@@ -49,6 +49,15 @@ class Ui_OximeterView(object):
         self.ymin_comboBox.setObjectName(u"ymin_comboBox")
 
         self.horizontalLayout_2.addWidget(self.ymin_comboBox)
+
+        self.horizontalSpacer_3 = QSpacerItem(20, 20, QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Minimum)
+
+        self.horizontalLayout_2.addItem(self.horizontalSpacer_3)
+
+        self.label_filename = QLabel(OximeterView)
+        self.label_filename.setObjectName(u"label_filename")
+
+        self.horizontalLayout_2.addWidget(self.label_filename)
 
         self.horizontalSpacer_2 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
 
@@ -126,6 +135,7 @@ class Ui_OximeterView(object):
         self.ymin_comboBox.setItemText(8, QCoreApplication.translate("OximeterView", u"80", None))
         self.ymin_comboBox.setItemText(9, QCoreApplication.translate("OximeterView", u"90", None))
 
+        self.label_filename.setText("")
         self.label_2.setText(QCoreApplication.translate("OximeterView", u"(Note: Gray sections represent discontinuities in the signal.)", None))
         self.label_3.setText(QCoreApplication.translate("OximeterView", u"Left-click and drag to select invalid sections.", None))
 #if QT_CONFIG(tooltip)
