@@ -25,7 +25,7 @@ class Ui_OximeterView(object):
     def setupUi(self, OximeterView):
         if not OximeterView.objectName():
             OximeterView.setObjectName(u"OximeterView")
-        OximeterView.resize(815, 496)
+        OximeterView.resize(1059, 496)
         self.verticalLayout = QVBoxLayout(OximeterView)
         self.verticalLayout.setObjectName(u"verticalLayout")
         self.horizontalLayout_2 = QHBoxLayout()
@@ -77,6 +77,7 @@ class Ui_OximeterView(object):
         font.setPointSize(8)
         font.setItalic(True)
         self.label_2.setFont(font)
+        self.label_2.setTextFormat(Qt.TextFormat.RichText)
 
         self.verticalLayout.addWidget(self.label_2)
 
@@ -136,8 +137,9 @@ class Ui_OximeterView(object):
         self.ymin_comboBox.setItemText(9, QCoreApplication.translate("OximeterView", u"90", None))
 
         self.label_filename.setText("")
-        self.label_2.setText(QCoreApplication.translate("OximeterView", u"(Note: Gray sections represent discontinuities in the signal.)", None))
-        self.label_3.setText(QCoreApplication.translate("OximeterView", u"Left-click and drag to select invalid sections.", None))
+        self.label_2.setText(QCoreApplication.translate("OximeterView", u"<html><head/><body><p><i>Note: Gray sections mark signal discontinuities. The black marker shows the minimum saturation value. <br/>Exclude additional sections if this minimum looks invalid.</i></p></body></html>", None))
+        self.label_3.setText(QCoreApplication.translate("OximeterView", u"Left-click and drag to select sections to exclude.\n"
+"Sudden drops in the oximeter signal are typically artifacts and don\u2019t reflect true oxygen saturation.", None))
 #if QT_CONFIG(tooltip)
         self.remove_new_pushButton.setToolTip(QCoreApplication.translate("OximeterView", u"Remove all new selections, keep the ones that we already saved.", None))
 #endif // QT_CONFIG(tooltip)

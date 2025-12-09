@@ -3,6 +3,8 @@ from PySide6.QtWidgets import QWidget
 from PySide6.QtGui import QPainter, QBrush, QColor, QPen, QPainterPath
 from PySide6.QtCore import Qt, QTimer
 
+DEBUG = False
+
 class OximeterDrawArea(QWidget):
     def __init__(self, parent):
         super().__init__(parent)
@@ -40,6 +42,8 @@ class OximeterDrawArea(QWidget):
         self._disc_brush = QBrush(QColor(0,0,0,150))
         self._selection_pen = QPen(QColor(255,0,0,150))
         self._selection_brush = QBrush(QColor(255,0,0,150))
+        self._min_saturation_line_pen = QPen(Qt.black)
+        self._min_saturation_line_pen.setWidth(2)
 
     # PROPERTIES
     @property
@@ -83,6 +87,7 @@ class OximeterDrawArea(QWidget):
         self._paint_signals(painter)
         self._paint_discontinuities(painter)
         self._paint_exclusion_events(painter)
+        self._paint_min_saturation_line(painter)
         if self._is_drawing:
             self._paint_selection(painter)
         self._paint_y_axis_labels(painter, self._saturation_levels)
@@ -238,6 +243,36 @@ class OximeterDrawArea(QWidget):
             w = end_x - start_x
             h = self.height() - self._top_padding - self._bottom_padding
             painter.drawRect(start_x, self._top_padding, w, h)
+
+    def _paint_min_saturation_line(self, painter: QPainter):
+        if len(self._signal_models) == 0:
+            return
+        
+        result = self._calculate_min_saturation_not_excluded()
+        if result is None:
+            return
+        
+        min_sat, x_position = result
+        if DEBUG:
+            print(f"OximeterDrawArea._paint_min_saturation_line: min_sat={min_sat}, x_position={x_position}")
+
+        # Check if min saturation is within the visible range
+        if min_sat < self._min_saturation or min_sat > 100:
+            return
+        
+        painter.setPen(self._min_saturation_line_pen)
+        painter.setBrush(Qt.NoBrush)
+        
+        y = self._sample_to_pixel(min_sat)
+        x1 = self._left_padding
+        x2 = self.width() - self._right_padding
+        painter.drawLine(x1, y, x2, y)
+        
+        # Draw a marker at the minimum position
+        x_marker = self._seconds_to_pixel(x_position)
+        marker_size = 8
+        painter.setBrush(QBrush(Qt.black))
+        painter.drawEllipse(int(x_marker - marker_size/2), int(y - marker_size/2), marker_size, marker_size)
 
     def _paint_y_axis_labels(self, painter, labels):
         if len(labels) == 0:
@@ -441,3 +476,70 @@ class OximeterDrawArea(QWidget):
             result.extend(split_sections)
 
         return result
+
+    def _calculate_min_saturation_not_excluded(self):
+        """Calculate the minimum saturation value from signal samples that are not excluded.
+        
+        Returns:
+            tuple: (min_value, x_position) or None if no valid samples
+        """
+        if len(self._signal_models) == 0:
+            return None
+        
+        # Sort exclusion events by start time
+        sorted_exclusions = sorted(self._exclusion_events, key=lambda x: x[0])
+        
+        # Collect minimum values with their positions from non-excluded regions
+        min_values = []  # List of tuples (min_value, x_position)
+        
+        for signal_model in self._signal_models:
+            # Define valid time ranges (gaps between exclusion events)
+            valid_ranges = []
+            
+            if len(sorted_exclusions) == 0:
+                # No exclusions, entire signal is valid
+                valid_ranges.append((signal_model.start_time, signal_model.end_time))
+            else:
+                # Before first exclusion
+                if signal_model.start_time < sorted_exclusions[0][0]:
+                    valid_ranges.append((signal_model.start_time, min(sorted_exclusions[0][0], signal_model.end_time)))
+                
+                # Between exclusions
+                for i in range(len(sorted_exclusions) - 1):
+                    gap_start = max(sorted_exclusions[i][1], signal_model.start_time)
+                    gap_end = min(sorted_exclusions[i + 1][0], signal_model.end_time)
+                    if gap_start < gap_end:
+                        valid_ranges.append((gap_start, gap_end))
+                
+                # After last exclusion
+                if signal_model.end_time > sorted_exclusions[-1][1]:
+                    valid_ranges.append((max(sorted_exclusions[-1][1], signal_model.start_time), signal_model.end_time))
+            
+            # Find minimum in each valid range
+            for range_start, range_end in valid_ranges:
+                # Convert time to sample indices
+                start_idx = max(0, int((range_start - signal_model.start_time) * signal_model.sample_rate))
+                end_idx = min(len(signal_model.samples), int((range_end - signal_model.start_time) * signal_model.sample_rate) + 1)
+                
+                if start_idx < end_idx:
+                    range_samples = signal_model.samples[start_idx:end_idx]
+                    if len(range_samples) > 0:
+                        min_value = max(0, min(range_samples))  # Clamp minimum to 0
+                        # Find the index of the minimum value within the range
+                        # Use argmin for numpy arrays, or find first occurrence for lists
+                        if hasattr(range_samples, 'argmin'):
+                            min_idx_in_range = range_samples.argmin()
+                        else:
+                            min_idx_in_range = range_samples.index(min(range_samples))  # Use unclamped value for index search
+                        # Calculate the absolute sample index
+                        absolute_sample_idx = start_idx + min_idx_in_range
+                        # Calculate the x-position (time) of this sample
+                        x_position = signal_model.start_time + (absolute_sample_idx / signal_model.sample_rate)
+                        min_values.append((min_value, x_position))
+        
+        # Return minimum value and its position from all non-excluded regions
+        if len(min_values) == 0:
+            return None
+        
+        # Find the overall minimum by comparing the first element of each tuple
+        return min(min_values, key=lambda x: x[0])
