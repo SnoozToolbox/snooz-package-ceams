@@ -94,10 +94,10 @@ class OximeterView(Ui_OximeterView, QtWidgets.QWidget):
         return None
 
     def _open_file(self):
+        self._close_file()
         filename = self._ask_user_file()
         if filename is not None:
             self._current_filename = filename
-
             psg_reader_manager = PSGReaderManager()
             psg_reader_manager._init_readers()
             psg_reader_manager.open_file(filename)
