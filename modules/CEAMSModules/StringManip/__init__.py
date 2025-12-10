@@ -6,19 +6,13 @@ from .StringManip import StringManip
 from .StringManipSettingsView import StringManipSettingsView
 
 # Only import ResultsView and UI classes in non-headless mode to avoid matplotlib/Qt dependencies
-try:
-    import config
-    if not config.HEADLESS_MODE:
-        from .StringManipResultsView import StringManipResultsView
-        from .Ui_StringManipResultsView import Ui_StringManipResultsView
-        from .Ui_StringManipSettingsView import Ui_StringManipSettingsView
-    else:
-        # Create stub classes for headless mode
-        StringManipResultsView = None
-        Ui_StringManipResultsView = None
-        Ui_StringManipSettingsView = None
-except (ImportError, AttributeError):
-    # If config is not available, import normally (for backward compatibility)
+import config
+if not config.HEADLESS_MODE:
     from .StringManipResultsView import StringManipResultsView
     from .Ui_StringManipResultsView import Ui_StringManipResultsView
     from .Ui_StringManipSettingsView import Ui_StringManipSettingsView
+else:
+    # Create stub classes for headless mode
+    StringManipResultsView = None
+    Ui_StringManipResultsView = None
+    Ui_StringManipSettingsView = None

@@ -895,32 +895,53 @@ class SpindlesDetails(SciNode):
             Debug function to open figure in a dialog. This funciton display the original spindle (mean removed) 
             and the filtered spindle in sigma band.
         """""
-
-# Conditionally import matplotlib based on headless mode
-try:
-    import config
-    if config.HEADLESS_MODE:
-        # Use Agg backend in headless mode (no GUI required, perfect for PDF generation)
-        import matplotlib
-        matplotlib.use('Agg')
-        from matplotlib.figure import Figure
-    else:
+        import config
+        if config.HEADLESS_MODE:
+            # Skip dialog in headless mode (no GUI available)
+            return
+        
         # Use QtAgg backend in GUI mode
         import matplotlib
         matplotlib.use('QtAgg')
         from matplotlib.backends.backend_qtagg import FigureCanvasQTAgg as FigureCanvas
+        from matplotlib.figure import Figure
+        from PySide2.QtWidgets import QDialog, QVBoxLayout
+
+        # Extract and define the new extracted channel_cur
+        # Convert onset and duration in samples to avoid rounding error
+        fs_signal = signals_cur_chan[signal_sel].sample_rate
+        ss_start_samples = int(np.round(ss_start*fs_signal))
+        ss_dur_samples = int(np.round(ss_dur*fs_signal))
+        signal_cur = SignalsFromEvents.extract_events_from_signal(SignalsFromEvents, signals_cur_chan[signal_sel], ss_start_samples, ss_dur_samples)
+        sigma_cur = SignalsFromEvents.extract_events_from_signal(SignalsFromEvents, signals_sigma[signal_sel], ss_start_samples, ss_dur_samples)
+
+        dialog = QDialog()
+        fig = Figure(figsize=(5, 4), dpi=100)
+        canvas = FigureCanvas(fig)
+        time = np.arange(ss_start_times[spindle_i],ss_start_times[spindle_i]+ss_dur_times[spindle_i],1/fs_chan)
+        ax = fig.add_subplot(111)
+        ax.plot(time,signal_cur.samples-np.mean(signal_cur.samples),'k')
+        #ax.title.set_text('raw signal')
+        ax.plot(time,sigma_cur.samples, 'r')
+        #ax.title.set_text('signal 11-16 Hz')
+        layout = QVBoxLayout()
+        layout.addWidget(canvas)
+        dialog.setLayout(layout)
+        dialog.exec_()
+
+
+    def _open_dialog_fig_psa_spindle(self, freq_bins, fft_result_win, freq_max_energy):
+        """""
+            Debug function to open figure in a dialog. This funciton display the spectre and the frequency 
+            with the highest energy in the sigma band.
+        """""
+        import config
+        if config.HEADLESS_MODE:
+            # Skip dialog in headless mode (no GUI available)
+            return
+        
         from matplotlib.backends.backend_qtagg import FigureCanvasQTAgg as FigureCanvas
         from matplotlib.figure import Figure
-        from matplotlib.figure import Figure
-except (ImportError, AttributeError):
-    # If config is not available, default to QtAgg (for backward compatibility)
-    import matplotlib
-    matplotlib.use('QtAgg')
-    from matplotlib.backends.backend_qtagg import FigureCanvasQTAgg as FigureCanvas
-    from matplotlib.backends.backend_qtagg import FigureCanvasQTAgg as FigureCanvas
-    from matplotlib.figure import Figure
-    from matplotlib.figure import Figure
-
         from PySide2.QtWidgets import QDialog, QVBoxLayout
         dialog = QDialog()
         fig = Figure(figsize=(5, 4), dpi=100)

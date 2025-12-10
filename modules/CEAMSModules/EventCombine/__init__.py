@@ -6,16 +6,11 @@ from .EventCombine import EventCombine
 from .EventCombineSettingsView import EventCombineSettingsView
 
 # Only import ResultsView and UI classes in non-headless mode to avoid matplotlib/Qt dependencies
-try:
-    import config
-    if not config.HEADLESS_MODE:
-        from .EventCombineResultsView import EventCombineResultsView
-        from .Ui_EventCombineSettingsView import Ui_EventCombineSettingsView
-    else:
-        # Create stub classes for headless mode
-        EventCombineResultsView = None
-        Ui_EventCombineSettingsView = None
-except (ImportError, AttributeError):
-    # If config is not available, import normally (for backward compatibility)
+import config
+if not config.HEADLESS_MODE:
     from .EventCombineResultsView import EventCombineResultsView
     from .Ui_EventCombineSettingsView import Ui_EventCombineSettingsView
+else:
+    # Create stub classes for headless mode
+    EventCombineResultsView = None
+    Ui_EventCombineSettingsView = None

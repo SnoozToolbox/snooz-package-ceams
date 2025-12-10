@@ -6,16 +6,11 @@ from .DropRenameEvents import DropRenameEvents
 from .DropRenameEventsSettingsView import DropRenameEventsSettingsView
 
 # Only import ResultsView and UI classes in non-headless mode to avoid matplotlib/Qt dependencies
-try:
-    import config
-    if not config.HEADLESS_MODE:
-        from .DropRenameEventsResultsView import DropRenameEventsResultsView
-        from .Ui_DropRenameEventsSettingsView import Ui_DropRenameEventsSettingsView
-    else:
-        # Create stub classes for headless mode
-        DropRenameEventsResultsView = None
-        Ui_DropRenameEventsSettingsView = None
-except (ImportError, AttributeError):
-    # If config is not available, import normally (for backward compatibility)
+import config
+if not config.HEADLESS_MODE:
     from .DropRenameEventsResultsView import DropRenameEventsResultsView
     from .Ui_DropRenameEventsSettingsView import Ui_DropRenameEventsSettingsView
+else:
+    # Create stub classes for headless mode
+    DropRenameEventsResultsView = None
+    Ui_DropRenameEventsSettingsView = None

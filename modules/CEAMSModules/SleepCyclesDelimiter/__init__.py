@@ -6,19 +6,13 @@ from .SleepCyclesDelimiter import SleepCyclesDelimiter
 from .SleepCyclesDelimiterSettingsView import SleepCyclesDelimiterSettingsView
 
 # Only import ResultsView and UI classes in non-headless mode to avoid matplotlib/Qt dependencies
-try:
-    import config
-    if not config.HEADLESS_MODE:
-        from .SleepCyclesDelimiterResultsView import SleepCyclesDelimiterResultsView
-        from .Ui_SleepCyclesDelimiterResultsView import Ui_SleepCyclesDelimiterResultsView
-        from .Ui_SleepCyclesDelimiterSettingsView import Ui_SleepCyclesDelimiterSettingsView
-    else:
-        # Create stub classes for headless mode
-        SleepCyclesDelimiterResultsView = None
-        Ui_SleepCyclesDelimiterResultsView = None
-        Ui_SleepCyclesDelimiterSettingsView = None
-except (ImportError, AttributeError):
-    # If config is not available, import normally (for backward compatibility)
+import config
+if not config.HEADLESS_MODE:
     from .SleepCyclesDelimiterResultsView import SleepCyclesDelimiterResultsView
     from .Ui_SleepCyclesDelimiterResultsView import Ui_SleepCyclesDelimiterResultsView
     from .Ui_SleepCyclesDelimiterSettingsView import Ui_SleepCyclesDelimiterSettingsView
+else:
+    # Create stub classes for headless mode
+    SleepCyclesDelimiterResultsView = None
+    Ui_SleepCyclesDelimiterResultsView = None
+    Ui_SleepCyclesDelimiterSettingsView = None

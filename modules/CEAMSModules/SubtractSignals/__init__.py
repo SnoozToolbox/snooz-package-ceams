@@ -6,19 +6,13 @@ from .SubtractSignals import SubtractSignals
 from .SubtractSignalsSettingsView import SubtractSignalsSettingsView
 
 # Only import ResultsView and UI classes in non-headless mode to avoid matplotlib/Qt dependencies
-try:
-    import config
-    if not config.HEADLESS_MODE:
-        from .SubtractSignalsResultsView import SubtractSignalsResultsView
-        from .Ui_SubtractSignalsResultsView import Ui_SubtractSignalsResultsView
-        from .Ui_SubtractSignalsSettingsView import Ui_SubtractSignalsSettingsView
-    else:
-        # Create stub classes for headless mode
-        SubtractSignalsResultsView = None
-        Ui_SubtractSignalsResultsView = None
-        Ui_SubtractSignalsSettingsView = None
-except (ImportError, AttributeError):
-    # If config is not available, import normally (for backward compatibility)
+import config
+if not config.HEADLESS_MODE:
     from .SubtractSignalsResultsView import SubtractSignalsResultsView
     from .Ui_SubtractSignalsResultsView import Ui_SubtractSignalsResultsView
     from .Ui_SubtractSignalsSettingsView import Ui_SubtractSignalsSettingsView
+else:
+    # Create stub classes for headless mode
+    SubtractSignalsResultsView = None
+    Ui_SubtractSignalsResultsView = None
+    Ui_SubtractSignalsSettingsView = None

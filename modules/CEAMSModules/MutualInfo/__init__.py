@@ -6,19 +6,13 @@ from .MutualInfo import MutualInfo
 from .MutualInfoSettingsView import MutualInfoSettingsView
 
 # Only import ResultsView and UI classes in non-headless mode to avoid matplotlib/Qt dependencies
-try:
-    import config
-    if not config.HEADLESS_MODE:
-        from .MutualInfoResultsView import MutualInfoResultsView
-        from .Ui_MutualInfoResultsView import Ui_MutualInfoResultsView
-        from .Ui_MutualInfoSettingsView import Ui_MutualInfoSettingsView
-    else:
-        # Create stub classes for headless mode
-        MutualInfoResultsView = None
-        Ui_MutualInfoResultsView = None
-        Ui_MutualInfoSettingsView = None
-except (ImportError, AttributeError):
-    # If config is not available, import normally (for backward compatibility)
+import config
+if not config.HEADLESS_MODE:
     from .MutualInfoResultsView import MutualInfoResultsView
     from .Ui_MutualInfoResultsView import Ui_MutualInfoResultsView
     from .Ui_MutualInfoSettingsView import Ui_MutualInfoSettingsView
+else:
+    # Create stub classes for headless mode
+    MutualInfoResultsView = None
+    Ui_MutualInfoResultsView = None
+    Ui_MutualInfoSettingsView = None

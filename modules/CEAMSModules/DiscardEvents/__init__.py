@@ -6,19 +6,13 @@ from .DiscardEvents import DiscardEvents
 from .DiscardEventsSettingsView import DiscardEventsSettingsView
 
 # Only import ResultsView and UI classes in non-headless mode to avoid matplotlib/Qt dependencies
-try:
-    import config
-    if not config.HEADLESS_MODE:
-        from .DiscardEventsResultsView import DiscardEventsResultsView
-        from .Ui_DiscardEventsResultsView import Ui_DiscardEventsResultsView
-        from .Ui_DiscardEventsSettingsView import Ui_DiscardEventsSettingsView
-    else:
-        # Create stub classes for headless mode
-        DiscardEventsResultsView = None
-        Ui_DiscardEventsResultsView = None
-        Ui_DiscardEventsSettingsView = None
-except (ImportError, AttributeError):
-    # If config is not available, import normally (for backward compatibility)
+import config
+if not config.HEADLESS_MODE:
     from .DiscardEventsResultsView import DiscardEventsResultsView
     from .Ui_DiscardEventsResultsView import Ui_DiscardEventsResultsView
     from .Ui_DiscardEventsSettingsView import Ui_DiscardEventsSettingsView
+else:
+    # Create stub classes for headless mode
+    DiscardEventsResultsView = None
+    Ui_DiscardEventsResultsView = None
+    Ui_DiscardEventsSettingsView = None

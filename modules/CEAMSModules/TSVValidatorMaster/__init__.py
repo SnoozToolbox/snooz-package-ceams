@@ -6,19 +6,13 @@ from .TSVValidatorMaster import TSVValidatorMaster
 from .TSVValidatorMasterSettingsView import TSVValidatorMasterSettingsView
 
 # Only import ResultsView and UI classes in non-headless mode to avoid matplotlib/Qt dependencies
-try:
-    import config
-    if not config.HEADLESS_MODE:
-        from .TSVValidatorMasterResultsView import TSVValidatorMasterResultsView
-        from .Ui_TSVValidatorMasterResultsView import Ui_TSVValidatorMasterResultsView
-        from .Ui_TSVValidatorMasterSettingsView import Ui_TSVValidatorMasterSettingsView
-    else:
-        # Create stub classes for headless mode
-        TSVValidatorMasterResultsView = None
-        Ui_TSVValidatorMasterResultsView = None
-        Ui_TSVValidatorMasterSettingsView = None
-except (ImportError, AttributeError):
-    # If config is not available, import normally (for backward compatibility)
+import config
+if not config.HEADLESS_MODE:
     from .TSVValidatorMasterResultsView import TSVValidatorMasterResultsView
     from .Ui_TSVValidatorMasterResultsView import Ui_TSVValidatorMasterResultsView
     from .Ui_TSVValidatorMasterSettingsView import Ui_TSVValidatorMasterSettingsView
+else:
+    # Create stub classes for headless mode
+    TSVValidatorMasterResultsView = None
+    Ui_TSVValidatorMasterResultsView = None
+    Ui_TSVValidatorMasterSettingsView = None

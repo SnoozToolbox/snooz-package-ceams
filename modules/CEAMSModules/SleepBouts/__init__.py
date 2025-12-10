@@ -6,19 +6,13 @@ from .SleepBouts import SleepBouts
 from .SleepBoutsSettingsView import SleepBoutsSettingsView
 
 # Only import ResultsView and UI classes in non-headless mode to avoid matplotlib/Qt dependencies
-try:
-    import config
-    if not config.HEADLESS_MODE:
-        from .SleepBoutsResultsView import SleepBoutsResultsView
-        from .Ui_SleepBoutsResultsView import Ui_SleepBoutsResultsView
-        from .Ui_SleepBoutsSettingsView import Ui_SleepBoutsSettingsView
-    else:
-        # Create stub classes for headless mode
-        SleepBoutsResultsView = None
-        Ui_SleepBoutsResultsView = None
-        Ui_SleepBoutsSettingsView = None
-except (ImportError, AttributeError):
-    # If config is not available, import normally (for backward compatibility)
+import config
+if not config.HEADLESS_MODE:
     from .SleepBoutsResultsView import SleepBoutsResultsView
     from .Ui_SleepBoutsResultsView import Ui_SleepBoutsResultsView
     from .Ui_SleepBoutsSettingsView import Ui_SleepBoutsSettingsView
+else:
+    # Create stub classes for headless mode
+    SleepBoutsResultsView = None
+    Ui_SleepBoutsResultsView = None
+    Ui_SleepBoutsSettingsView = None

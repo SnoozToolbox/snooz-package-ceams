@@ -6,19 +6,13 @@ from .ScoringCompleteness import ScoringCompleteness
 from .ScoringCompletenessSettingsView import ScoringCompletenessSettingsView
 
 # Only import ResultsView and UI classes in non-headless mode to avoid matplotlib/Qt dependencies
-try:
-    import config
-    if not config.HEADLESS_MODE:
-        from .ScoringCompletenessResultsView import ScoringCompletenessResultsView
-        from .Ui_ScoringCompletenessResultsView import Ui_ScoringCompletenessResultsView
-        from .Ui_ScoringCompletenessSettingsView import Ui_ScoringCompletenessSettingsView
-    else:
-        # Create stub classes for headless mode
-        ScoringCompletenessResultsView = None
-        Ui_ScoringCompletenessResultsView = None
-        Ui_ScoringCompletenessSettingsView = None
-except (ImportError, AttributeError):
-    # If config is not available, import normally (for backward compatibility)
+import config
+if not config.HEADLESS_MODE:
     from .ScoringCompletenessResultsView import ScoringCompletenessResultsView
     from .Ui_ScoringCompletenessResultsView import Ui_ScoringCompletenessResultsView
     from .Ui_ScoringCompletenessSettingsView import Ui_ScoringCompletenessSettingsView
+else:
+    # Create stub classes for headless mode
+    ScoringCompletenessResultsView = None
+    Ui_ScoringCompletenessResultsView = None
+    Ui_ScoringCompletenessSettingsView = None
