@@ -9,22 +9,11 @@ See the file LICENCE for full license details.
 
 from CEAMSModules.PSGReader.SignalModel import SignalModel
 
-
-# Conditionally import matplotlib based on headless mode
-import config
-if config.HEADLESS_MODE:
-    # Use Agg backend in headless mode (no GUI required, perfect for PDF generation)
-    import matplotlib
-    matplotlib.use('Agg')
-    from matplotlib.figure import Figure
-else:
-    # Use QtAgg backend in GUI mode
-    import matplotlib
-    matplotlib.use('QtAgg')
-    from matplotlib.backends.backend_qtagg import FigureCanvasQTAgg as FigureCanvas
-    from matplotlib.backends.backend_qtagg import NavigationToolbar2QT as NavigationToolbar
-    from matplotlib.figure import Figure
-
+import matplotlib
+matplotlib.use('QtAgg')
+from matplotlib.backends.backend_qtagg import FigureCanvasQTAgg as FigureCanvas
+from matplotlib.backends.backend_qtagg import NavigationToolbar2QT as NavigationToolbar
+from matplotlib.figure import Figure
 from CEAMSModules.SignalsFromEvents.Ui_SignalsFromEventsResultsView import Ui_SignalsFromEventsResultsView
 from qtpy import QtWidgets
 import numpy as np

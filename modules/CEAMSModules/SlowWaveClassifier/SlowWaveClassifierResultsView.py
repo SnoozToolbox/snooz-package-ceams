@@ -6,23 +6,11 @@ See the file LICENCE for full license details.
     Results viewer of the SlowWaveClassifier plugin
 """
 
-
-# Conditionally import matplotlib based on headless mode
-import config
-if config.HEADLESS_MODE:
-    # Use Agg backend in headless mode (no GUI required, perfect for PDF generation)
-    import matplotlib
-    matplotlib.use('Agg')
-    from matplotlib.figure import Figure
-    from matplotlib.lines import Line2D
-else:
-    # Use QtAgg backend in GUI mode
-    import matplotlib
-    matplotlib.use('QtAgg')
-    from matplotlib.backends.backend_qtagg import FigureCanvasQTAgg as FigureCanvas
-    from matplotlib.figure import Figure
-    from matplotlib.lines import Line2D
-
+import matplotlib
+from matplotlib.figure import Figure
+from matplotlib.backends.backend_qtagg import FigureCanvasQTAgg as FigureCanvas
+from matplotlib.lines import Line2D
+matplotlib.use('QtAgg')
 from scipy.stats import norm
 import numpy as np
 from qtpy import QtWidgets, QtCore, QtGui

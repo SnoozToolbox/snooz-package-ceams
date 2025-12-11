@@ -7,24 +7,12 @@ See the file LICENCE for full license details.
     Results viewer of the Resample plugin
 """
 
-
-# Conditionally import matplotlib based on headless mode
-import config
-if config.HEADLESS_MODE:
-    # Use Agg backend in headless mode (no GUI required, perfect for PDF generation)
-    import matplotlib
-    matplotlib.use('Agg')
-    from matplotlib.figure import Figure
-    import matplotlib.pyplot as plt
-else:
-    # Use QtAgg backend in GUI mode
-    import matplotlib
-    matplotlib.use('QtAgg')
-    from matplotlib.backends.backend_qtagg import FigureCanvasQTAgg as FigureCanvas
-    from matplotlib.backends.backend_qtagg import NavigationToolbar2QT as NavigationToolbar
-    from matplotlib.figure import Figure
-    import matplotlib.pyplot as plt
-
+import matplotlib
+matplotlib.use('QtAgg')
+import matplotlib.pyplot as plt
+from matplotlib.backends.backend_qtagg import FigureCanvasQTAgg as FigureCanvas
+from matplotlib.backends.backend_qtagg import NavigationToolbar2QT as NavigationToolbar
+from matplotlib.figure import Figure
 import numpy as np
 
 from qtpy import QtWidgets

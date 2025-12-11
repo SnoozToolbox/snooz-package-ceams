@@ -14,6 +14,8 @@ import mne
 import yasa
 import numpy as np
 import pandas as pd
+from scipy.signal import resample
+from sklearn.metrics import classification_report, confusion_matrix, cohen_kappa_score
 
 # Conditionally import matplotlib based on headless mode
 import config

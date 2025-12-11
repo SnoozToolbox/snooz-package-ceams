@@ -17,6 +17,8 @@ if config.HEADLESS_MODE:
     from matplotlib.figure import Figure
     import matplotlib.pyplot as plt
     import matplotlib.ticker as mticker
+    FigureCanvas = None
+    NavigationToolbar = None
 else:
     # Use QtAgg backend in GUI mode
     import matplotlib
