@@ -800,8 +800,12 @@ class OxygenDesatDetector(SciNode):
                 'duration_sec': Duration of the event in sec (Float)
                 'channels' : Channel where the event occures (String)
         """   
-        for i, signal in enumerate(data_stats):
-            flag_end_min = False         
+
+
+        # Patch to test against ABOSA
+        parameters_oxy["max_slope_drop_sec"] = 180
+
+        for i, signal in enumerate(data_stats):     
             desat_start_sec = data_starts[i]
             desat_start_val = data_stats[i][0]
             cur_min_val = 100
@@ -815,9 +819,9 @@ class OxygenDesatDetector(SciNode):
 
                 # Manage the baseline to measure the saturation before the drop
                 if not desat_drop_reached_flag:
-                    # previous bsl is available
-                    if j > (parameters_oxy["max_slope_drop_sec"]*fs_chan):
-                        bsl_start = int(round(j-(parameters_oxy["max_slope_drop_sec"]*fs_chan)))
+                    if len(desat_tab)>0:
+                        last_desat_end = desat_tab[-1][0]+ desat_tab[-1][1]
+                        bsl_start = int(round((last_desat_end-data_starts[i])*fs_chan))
                     else:
                         bsl_start = 0
                     # Look for the max value to start the desaturation
@@ -876,36 +880,43 @@ class OxygenDesatDetector(SciNode):
                 # The value inscreased of more than 2%
                 if (desat_drop_reached_flag and desat_valid_flag) and (sample > cur_min_val+(self.variability_tolerance/100*cur_min_val/100)*100):
 
+                    # Calculate drop duration and recovery time
+                    drop_duration = cur_min_sec - desat_start_sec
+                    recovery_time = cur_end_sec - cur_min_sec
+
                     # Make sure the desat_start_sec is not already included in a desaturation
                     #    before adding it into the desat_tab
                     if len(desat_tab)>0:
                         last_desat = desat_tab[-1]
                         if not ( (desat_start_sec>=last_desat[0]) and (desat_start_sec<(last_desat[0]+last_desat[1]))):
-                            # Save the valid desaturation
-                            if flag_end_min: # The end is at the last min value
-                                desat_tab.append([desat_start_sec, cur_min_sec-desat_start_sec])
-                            else: # The end is at the resaturation of 2%
-                                desat_tab.append([desat_start_sec, cur_end_sec-desat_start_sec])
+                            desat_tab.append([desat_start_sec, cur_end_sec-desat_start_sec, drop_duration, recovery_time])
                     else:
-                        # Save the valid desaturation
-                        if flag_end_min: # The end is at the last min value
-                            desat_tab.append([desat_start_sec, cur_min_sec-desat_start_sec])
-                        else: # The end is at the resaturation of 2%
-                            desat_tab.append([desat_start_sec, cur_end_sec-desat_start_sec])
-                        
+                        # Save the valid desaturation with recovery time
+                        desat_tab.append([desat_start_sec, cur_min_sec-desat_start_sec, drop_duration, recovery_time])
+
                     desat_drop_reached_flag = False
                     desat_valid_flag = False
                                         
                 cur_end_sec = cur_sec
                 cur_end_val = sample
         
+        # Filter desaturations by recovery time criterion
+        # Keep only desat where recovery time <= min(120 sec, 2 x drop duration)
+        desat_valid_final = []
+        for desat_start, desat_dur, drop_duration, recovery_time in desat_tab:
+            max_recovery_time = min(120, 2 * drop_duration)
+            if (recovery_time <= max_recovery_time) and (desat_dur <= parameters_oxy["max_slope_drop_sec"]):
+                desat_valid_final.append([desat_start, drop_duration])
+
+        # Patch
+        desat_kept = desat_valid_final
         # Keep desat that start in asleep stages only
-        start_time = asleep_stages_df['start_sec'].values
-        end_time = start_time + asleep_stages_df['duration_sec'].values
-        desat_kept = []
-        for desat_start, desat_dur in desat_tab:
-            if any( (start_time<=desat_start) & (end_time>=desat_start) ):
-                desat_kept.append([desat_start, desat_dur])
+        # start_time = asleep_stages_df['start_sec'].values
+        # end_time = start_time + asleep_stages_df['duration_sec'].values
+        # desat_kept = []
+        # for desat_start, desat_dur in desat_valid_final:
+        #     if any( (start_time<=desat_start) & (end_time>=desat_start) ):
+        #         desat_kept.append([desat_start, desat_dur])
         desat_events = [('SpO2', 'desat_SpO2', start_sec, duration_sec, channel) for start_sec, duration_sec in desat_kept]
         return manage_events.create_event_dataframe(data=desat_events)
 
