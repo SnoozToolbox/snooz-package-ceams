@@ -14,8 +14,6 @@ import sys
 import warnings
 import logging
 
-os.environ["QT_LOGGING_RULES"] = "qt.core.qmetaobject.connectslotsbyname=false"
-matplotlib.use('Agg') # Use non-interactive Agg backend for matplotlib
 # Conditionally import matplotlib based on headless mode
 import config
 if config.HEADLESS_MODE:
