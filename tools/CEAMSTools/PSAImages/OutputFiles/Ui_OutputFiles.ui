@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>942</width>
-    <height>733</height>
+    <width>960</width>
+    <height>839</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -65,7 +65,7 @@
       <property name="geometry">
        <rect>
         <x>0</x>
-        <y>-485</y>
+        <y>-379</y>
         <width>900</width>
         <height>1200</height>
        </rect>
@@ -293,14 +293,14 @@
              <item>
               <widget class="QLabel" name="label_11">
                <property name="text">
-                <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;EEG spectral power averaged accross channels per group of subjects.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;EEG spectral power averaged across channels per group of subjects.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                </property>
               </widget>
              </item>
              <item>
               <widget class="QLabel" name="label_19">
                <property name="text">
-                <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Each spectral power curve represents the signal averaged accross the selected channels or ROIs for a group of subjects.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Each spectral power curve represents the signal averaged across the selected channels or ROIs for a group of subjects.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                </property>
               </widget>
              </item>
@@ -666,90 +666,6 @@ li.checked::marker { content: &quot;\2612&quot;; }
         <layout class="QHBoxLayout" name="horizontalLayout_12">
          <item>
           <layout class="QGridLayout" name="gridLayout_6">
-           <item row="1" column="0">
-            <layout class="QVBoxLayout" name="verticalLayout_13">
-             <item>
-              <widget class="QRadioButton" name="radioButton_all">
-               <property name="text">
-                <string>Display all the EEG spectral power curves on the picture.</string>
-               </property>
-               <attribute name="buttonGroup">
-                <string notr="true">buttonGroup_display</string>
-               </attribute>
-              </widget>
-             </item>
-             <item>
-              <widget class="QRadioButton" name="radioButton_mean">
-               <property name="text">
-                <string>MEAN : Display only the mean of EEG spectral power curve</string>
-               </property>
-               <attribute name="buttonGroup">
-                <string notr="true">buttonGroup_display</string>
-               </attribute>
-              </widget>
-             </item>
-             <item>
-              <widget class="QRadioButton" name="radioButton_meanstd">
-               <property name="sizePolicy">
-                <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-                 <horstretch>0</horstretch>
-                 <verstretch>0</verstretch>
-                </sizepolicy>
-               </property>
-               <property name="minimumSize">
-                <size>
-                 <width>0</width>
-                 <height>0</height>
-                </size>
-               </property>
-               <property name="text">
-                <string>MEAN + STD : Display the mean of EEG spectral power curve in bold line
-and its standard deviation in a shaded area.</string>
-               </property>
-               <property name="checked">
-                <bool>true</bool>
-               </property>
-               <attribute name="buttonGroup">
-                <string notr="true">buttonGroup_display</string>
-               </attribute>
-              </widget>
-             </item>
-            </layout>
-           </item>
-           <item row="2" column="0">
-            <layout class="QHBoxLayout" name="horizontalLayout_13">
-             <item>
-              <widget class="QCheckBox" name="checkBox_log">
-               <property name="text">
-                <string>Logarithmic Scale</string>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QCheckBox" name="checkBox_legend">
-               <property name="text">
-                <string>Show Legend</string>
-               </property>
-               <property name="checked">
-                <bool>false</bool>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <spacer name="horizontalSpacer_9">
-               <property name="orientation">
-                <enum>Qt::Orientation::Horizontal</enum>
-               </property>
-               <property name="sizeHint" stdset="0">
-                <size>
-                 <width>40</width>
-                 <height>20</height>
-                </size>
-               </property>
-              </spacer>
-             </item>
-            </layout>
-           </item>
            <item row="3" column="0">
             <layout class="QHBoxLayout" name="horizontalLayout_14">
              <item>
@@ -863,6 +779,165 @@ and its standard deviation in a shaded area.</string>
                </property>
                <property name="singleStep">
                 <double>50.000000000000000</double>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </item>
+           <item row="1" column="0">
+            <layout class="QVBoxLayout" name="verticalLayout_13">
+             <item>
+              <widget class="QRadioButton" name="radioButton_all">
+               <property name="text">
+                <string>Display all the EEG spectral power curves on the picture.</string>
+               </property>
+               <attribute name="buttonGroup">
+                <string notr="true">buttonGroup_display</string>
+               </attribute>
+              </widget>
+             </item>
+             <item>
+              <widget class="QRadioButton" name="radioButton_mean">
+               <property name="text">
+                <string>MEAN : Display only the mean of EEG spectral power curve</string>
+               </property>
+               <attribute name="buttonGroup">
+                <string notr="true">buttonGroup_display</string>
+               </attribute>
+              </widget>
+             </item>
+             <item>
+              <widget class="QRadioButton" name="radioButton_meanstd">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="minimumSize">
+                <size>
+                 <width>0</width>
+                 <height>0</height>
+                </size>
+               </property>
+               <property name="text">
+                <string>MEAN + STD : Display the mean of EEG spectral power curve in bold line
+and its standard deviation in a shaded area.</string>
+               </property>
+               <property name="checked">
+                <bool>true</bool>
+               </property>
+               <attribute name="buttonGroup">
+                <string notr="true">buttonGroup_display</string>
+               </attribute>
+              </widget>
+             </item>
+            </layout>
+           </item>
+           <item row="2" column="0">
+            <layout class="QHBoxLayout" name="horizontalLayout_13">
+             <item>
+              <widget class="QCheckBox" name="checkBox_log">
+               <property name="text">
+                <string>Logarithmic Scale</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QCheckBox" name="checkBox_legend">
+               <property name="text">
+                <string>Show Legend</string>
+               </property>
+               <property name="checked">
+                <bool>false</bool>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <spacer name="horizontalSpacer_9">
+               <property name="orientation">
+                <enum>Qt::Orientation::Horizontal</enum>
+               </property>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>40</width>
+                 <height>20</height>
+                </size>
+               </property>
+              </spacer>
+             </item>
+            </layout>
+           </item>
+           <item row="4" column="0">
+            <layout class="QHBoxLayout" name="horizontalLayout_disp">
+             <item>
+              <widget class="QLabel" name="label_13">
+               <property name="text">
+                <string>Font</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QFontComboBox" name="fontComboBox"/>
+             </item>
+             <item>
+              <spacer name="horizontalSpacer_5">
+               <property name="orientation">
+                <enum>Qt::Orientation::Horizontal</enum>
+               </property>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>40</width>
+                 <height>20</height>
+                </size>
+               </property>
+              </spacer>
+             </item>
+             <item>
+              <widget class="QLabel" name="label_FontSize">
+               <property name="text">
+                <string>Font Size</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QSpinBox" name="spinBox_fontsize">
+               <property name="value">
+                <number>12</number>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <spacer name="horizontalSpacer_6">
+               <property name="orientation">
+                <enum>Qt::Orientation::Horizontal</enum>
+               </property>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>40</width>
+                 <height>20</height>
+                </size>
+               </property>
+              </spacer>
+             </item>
+             <item>
+              <widget class="QLabel" name="label_14">
+               <property name="text">
+                <string>Figure Ratio (Inches)</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QSpinBox" name="spinBox_figwidth">
+               <property name="value">
+                <number>8</number>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QSpinBox" name="spinBox_figheight">
+               <property name="value">
+                <number>6</number>
                </property>
               </widget>
              </item>
@@ -1077,7 +1152,7 @@ and its standard deviation in a shaded area.</string>
  </slots>
  <buttongroups>
   <buttongroup name="buttonGroup_display"/>
-  <buttongroup name="buttonGroup_level"/>
   <buttongroup name="buttonGroup_section"/>
+  <buttongroup name="buttonGroup_level"/>
  </buttongroups>
 </ui>

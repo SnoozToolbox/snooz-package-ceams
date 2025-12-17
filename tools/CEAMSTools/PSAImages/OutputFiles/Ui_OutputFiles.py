@@ -16,17 +16,17 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QImage, QKeySequence, QLinearGradient, QPainter,
     QPalette, QPixmap, QRadialGradient, QTransform)
 from PySide6.QtWidgets import (QApplication, QButtonGroup, QCheckBox, QDoubleSpinBox,
-    QFrame, QGridLayout, QHBoxLayout, QLabel,
-    QLayout, QLineEdit, QPushButton, QRadioButton,
-    QScrollArea, QSizePolicy, QSpacerItem, QSpinBox,
-    QTextEdit, QVBoxLayout, QWidget)
+    QFontComboBox, QFrame, QGridLayout, QHBoxLayout,
+    QLabel, QLayout, QLineEdit, QPushButton,
+    QRadioButton, QScrollArea, QSizePolicy, QSpacerItem,
+    QSpinBox, QTextEdit, QVBoxLayout, QWidget)
 import themes_rc
 
 class Ui_OutputFiles(object):
     def setupUi(self, OutputFiles):
         if not OutputFiles.objectName():
             OutputFiles.setObjectName(u"OutputFiles")
-        OutputFiles.resize(942, 733)
+        OutputFiles.resize(960, 839)
         OutputFiles.setStyleSheet(u"font: 12pt \"Roboto\";")
         self.verticalLayout_5 = QVBoxLayout(OutputFiles)
         self.verticalLayout_5.setObjectName(u"verticalLayout_5")
@@ -49,7 +49,7 @@ class Ui_OutputFiles(object):
         self.scrollArea.setAlignment(Qt.AlignmentFlag.AlignLeading|Qt.AlignmentFlag.AlignLeft|Qt.AlignmentFlag.AlignTop)
         self.scrollAreaWidgetContents = QWidget()
         self.scrollAreaWidgetContents.setObjectName(u"scrollAreaWidgetContents")
-        self.scrollAreaWidgetContents.setGeometry(QRect(0, -485, 900, 1200))
+        self.scrollAreaWidgetContents.setGeometry(QRect(0, -379, 900, 1200))
         sizePolicy1 = QSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Maximum)
         sizePolicy1.setHorizontalStretch(0)
         sizePolicy1.setVerticalStretch(1)
@@ -383,58 +383,6 @@ class Ui_OutputFiles(object):
         self.horizontalLayout_12.setObjectName(u"horizontalLayout_12")
         self.gridLayout_6 = QGridLayout()
         self.gridLayout_6.setObjectName(u"gridLayout_6")
-        self.verticalLayout_13 = QVBoxLayout()
-        self.verticalLayout_13.setObjectName(u"verticalLayout_13")
-        self.radioButton_all = QRadioButton(self.scrollAreaWidgetContents)
-        self.buttonGroup_display = QButtonGroup(OutputFiles)
-        self.buttonGroup_display.setObjectName(u"buttonGroup_display")
-        self.buttonGroup_display.addButton(self.radioButton_all)
-        self.radioButton_all.setObjectName(u"radioButton_all")
-
-        self.verticalLayout_13.addWidget(self.radioButton_all)
-
-        self.radioButton_mean = QRadioButton(self.scrollAreaWidgetContents)
-        self.buttonGroup_display.addButton(self.radioButton_mean)
-        self.radioButton_mean.setObjectName(u"radioButton_mean")
-
-        self.verticalLayout_13.addWidget(self.radioButton_mean)
-
-        self.radioButton_meanstd = QRadioButton(self.scrollAreaWidgetContents)
-        self.buttonGroup_display.addButton(self.radioButton_meanstd)
-        self.radioButton_meanstd.setObjectName(u"radioButton_meanstd")
-        sizePolicy2 = QSizePolicy(QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Fixed)
-        sizePolicy2.setHorizontalStretch(0)
-        sizePolicy2.setVerticalStretch(0)
-        sizePolicy2.setHeightForWidth(self.radioButton_meanstd.sizePolicy().hasHeightForWidth())
-        self.radioButton_meanstd.setSizePolicy(sizePolicy2)
-        self.radioButton_meanstd.setMinimumSize(QSize(0, 0))
-        self.radioButton_meanstd.setChecked(True)
-
-        self.verticalLayout_13.addWidget(self.radioButton_meanstd)
-
-
-        self.gridLayout_6.addLayout(self.verticalLayout_13, 1, 0, 1, 1)
-
-        self.horizontalLayout_13 = QHBoxLayout()
-        self.horizontalLayout_13.setObjectName(u"horizontalLayout_13")
-        self.checkBox_log = QCheckBox(self.scrollAreaWidgetContents)
-        self.checkBox_log.setObjectName(u"checkBox_log")
-
-        self.horizontalLayout_13.addWidget(self.checkBox_log)
-
-        self.checkBox_legend = QCheckBox(self.scrollAreaWidgetContents)
-        self.checkBox_legend.setObjectName(u"checkBox_legend")
-        self.checkBox_legend.setChecked(False)
-
-        self.horizontalLayout_13.addWidget(self.checkBox_legend)
-
-        self.horizontalSpacer_9 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
-
-        self.horizontalLayout_13.addItem(self.horizontalSpacer_9)
-
-
-        self.gridLayout_6.addLayout(self.horizontalLayout_13, 2, 0, 1, 1)
-
         self.horizontalLayout_14 = QHBoxLayout()
         self.horizontalLayout_14.setObjectName(u"horizontalLayout_14")
         self.checkBox_force_axis = QCheckBox(self.scrollAreaWidgetContents)
@@ -504,6 +452,109 @@ class Ui_OutputFiles(object):
 
 
         self.gridLayout_6.addLayout(self.horizontalLayout_14, 3, 0, 1, 1)
+
+        self.verticalLayout_13 = QVBoxLayout()
+        self.verticalLayout_13.setObjectName(u"verticalLayout_13")
+        self.radioButton_all = QRadioButton(self.scrollAreaWidgetContents)
+        self.buttonGroup_display = QButtonGroup(OutputFiles)
+        self.buttonGroup_display.setObjectName(u"buttonGroup_display")
+        self.buttonGroup_display.addButton(self.radioButton_all)
+        self.radioButton_all.setObjectName(u"radioButton_all")
+
+        self.verticalLayout_13.addWidget(self.radioButton_all)
+
+        self.radioButton_mean = QRadioButton(self.scrollAreaWidgetContents)
+        self.buttonGroup_display.addButton(self.radioButton_mean)
+        self.radioButton_mean.setObjectName(u"radioButton_mean")
+
+        self.verticalLayout_13.addWidget(self.radioButton_mean)
+
+        self.radioButton_meanstd = QRadioButton(self.scrollAreaWidgetContents)
+        self.buttonGroup_display.addButton(self.radioButton_meanstd)
+        self.radioButton_meanstd.setObjectName(u"radioButton_meanstd")
+        sizePolicy2 = QSizePolicy(QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Fixed)
+        sizePolicy2.setHorizontalStretch(0)
+        sizePolicy2.setVerticalStretch(0)
+        sizePolicy2.setHeightForWidth(self.radioButton_meanstd.sizePolicy().hasHeightForWidth())
+        self.radioButton_meanstd.setSizePolicy(sizePolicy2)
+        self.radioButton_meanstd.setMinimumSize(QSize(0, 0))
+        self.radioButton_meanstd.setChecked(True)
+
+        self.verticalLayout_13.addWidget(self.radioButton_meanstd)
+
+
+        self.gridLayout_6.addLayout(self.verticalLayout_13, 1, 0, 1, 1)
+
+        self.horizontalLayout_13 = QHBoxLayout()
+        self.horizontalLayout_13.setObjectName(u"horizontalLayout_13")
+        self.checkBox_log = QCheckBox(self.scrollAreaWidgetContents)
+        self.checkBox_log.setObjectName(u"checkBox_log")
+
+        self.horizontalLayout_13.addWidget(self.checkBox_log)
+
+        self.checkBox_legend = QCheckBox(self.scrollAreaWidgetContents)
+        self.checkBox_legend.setObjectName(u"checkBox_legend")
+        self.checkBox_legend.setChecked(False)
+
+        self.horizontalLayout_13.addWidget(self.checkBox_legend)
+
+        self.horizontalSpacer_9 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+
+        self.horizontalLayout_13.addItem(self.horizontalSpacer_9)
+
+
+        self.gridLayout_6.addLayout(self.horizontalLayout_13, 2, 0, 1, 1)
+
+        self.horizontalLayout_disp = QHBoxLayout()
+        self.horizontalLayout_disp.setObjectName(u"horizontalLayout_disp")
+        self.label_13 = QLabel(self.scrollAreaWidgetContents)
+        self.label_13.setObjectName(u"label_13")
+
+        self.horizontalLayout_disp.addWidget(self.label_13)
+
+        self.fontComboBox = QFontComboBox(self.scrollAreaWidgetContents)
+        self.fontComboBox.setObjectName(u"fontComboBox")
+
+        self.horizontalLayout_disp.addWidget(self.fontComboBox)
+
+        self.horizontalSpacer_5 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+
+        self.horizontalLayout_disp.addItem(self.horizontalSpacer_5)
+
+        self.label_FontSize = QLabel(self.scrollAreaWidgetContents)
+        self.label_FontSize.setObjectName(u"label_FontSize")
+
+        self.horizontalLayout_disp.addWidget(self.label_FontSize)
+
+        self.spinBox_fontsize = QSpinBox(self.scrollAreaWidgetContents)
+        self.spinBox_fontsize.setObjectName(u"spinBox_fontsize")
+        self.spinBox_fontsize.setValue(12)
+
+        self.horizontalLayout_disp.addWidget(self.spinBox_fontsize)
+
+        self.horizontalSpacer_6 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+
+        self.horizontalLayout_disp.addItem(self.horizontalSpacer_6)
+
+        self.label_14 = QLabel(self.scrollAreaWidgetContents)
+        self.label_14.setObjectName(u"label_14")
+
+        self.horizontalLayout_disp.addWidget(self.label_14)
+
+        self.spinBox_figwidth = QSpinBox(self.scrollAreaWidgetContents)
+        self.spinBox_figwidth.setObjectName(u"spinBox_figwidth")
+        self.spinBox_figwidth.setValue(8)
+
+        self.horizontalLayout_disp.addWidget(self.spinBox_figwidth)
+
+        self.spinBox_figheight = QSpinBox(self.scrollAreaWidgetContents)
+        self.spinBox_figheight.setObjectName(u"spinBox_figheight")
+        self.spinBox_figheight.setValue(6)
+
+        self.horizontalLayout_disp.addWidget(self.spinBox_figheight)
+
+
+        self.gridLayout_6.addLayout(self.horizontalLayout_disp, 4, 0, 1, 1)
 
 
         self.horizontalLayout_12.addLayout(self.gridLayout_6)
@@ -590,8 +641,8 @@ class Ui_OutputFiles(object):
         self.label_10.setText(QCoreApplication.translate("OutputFiles", u"<html><head/><body><p>*The MEAN display option shows the average of all subjects per group For each selected channel.</p></body></html>", None))
         self.radioButton_cohort_level.setText(QCoreApplication.translate("OutputFiles", u"Cohort level : to generate pictures for the cohort.", None))
         self.checkBox_cohort_avg.setText(QCoreApplication.translate("OutputFiles", u"One picture per cohort", None))
-        self.label_11.setText(QCoreApplication.translate("OutputFiles", u"<html><head/><body><p>EEG spectral power averaged accross channels per group of subjects.</p></body></html>", None))
-        self.label_19.setText(QCoreApplication.translate("OutputFiles", u"<html><head/><body><p>Each spectral power curve represents the signal averaged accross the selected channels or ROIs for a group of subjects.</p></body></html>", None))
+        self.label_11.setText(QCoreApplication.translate("OutputFiles", u"<html><head/><body><p>EEG spectral power averaged across channels per group of subjects.</p></body></html>", None))
+        self.label_19.setText(QCoreApplication.translate("OutputFiles", u"<html><head/><body><p>Each spectral power curve represents the signal averaged across the selected channels or ROIs for a group of subjects.</p></body></html>", None))
         self.checkBox_cohort_sel.setText(QCoreApplication.translate("OutputFiles", u"One picture per channel or ROI", None))
         self.label_12.setText(QCoreApplication.translate("OutputFiles", u"<html><head/><body><p>EEG spectral power per channel per group of subjects.</p></body></html>", None))
         self.label_20.setText(QCoreApplication.translate("OutputFiles", u"<html><head/><body><p>Each EEG spectral power curve represents the signal for a selected channel or ROI for a group of subjects.</p></body></html>", None))
@@ -620,12 +671,6 @@ class Ui_OutputFiles(object):
         self.label_18.setText(QCoreApplication.translate("OutputFiles", u"Desired Hour", None))
         self.radioButton_clock_hour.setText(QCoreApplication.translate("OutputFiles", u"Clock Hour", None))
         self.label.setText(QCoreApplication.translate("OutputFiles", u"<html><head/><body><p><span style=\" font-weight:600;\">Display Options</span></p></body></html>", None))
-        self.radioButton_all.setText(QCoreApplication.translate("OutputFiles", u"Display all the EEG spectral power curves on the picture.", None))
-        self.radioButton_mean.setText(QCoreApplication.translate("OutputFiles", u"MEAN : Display only the mean of EEG spectral power curve", None))
-        self.radioButton_meanstd.setText(QCoreApplication.translate("OutputFiles", u"MEAN + STD : Display the mean of EEG spectral power curve in bold line\n"
-"and its standard deviation in a shaded area.", None))
-        self.checkBox_log.setText(QCoreApplication.translate("OutputFiles", u"Logarithmic Scale", None))
-        self.checkBox_legend.setText(QCoreApplication.translate("OutputFiles", u"Show Legend", None))
 #if QT_CONFIG(tooltip)
         self.checkBox_force_axis.setToolTip(QCoreApplication.translate("OutputFiles", u"Enable this option for consistent axes across all pictures and define the axes limits. Otherwise, the axes are automatically determined based on the data.", None))
 #endif // QT_CONFIG(tooltip)
@@ -634,6 +679,15 @@ class Ui_OutputFiles(object):
         self.label_26.setText(QCoreApplication.translate("OutputFiles", u"x-max:", None))
         self.label_27.setText(QCoreApplication.translate("OutputFiles", u"y-min:", None))
         self.label_28.setText(QCoreApplication.translate("OutputFiles", u"y-max:", None))
+        self.radioButton_all.setText(QCoreApplication.translate("OutputFiles", u"Display all the EEG spectral power curves on the picture.", None))
+        self.radioButton_mean.setText(QCoreApplication.translate("OutputFiles", u"MEAN : Display only the mean of EEG spectral power curve", None))
+        self.radioButton_meanstd.setText(QCoreApplication.translate("OutputFiles", u"MEAN + STD : Display the mean of EEG spectral power curve in bold line\n"
+"and its standard deviation in a shaded area.", None))
+        self.checkBox_log.setText(QCoreApplication.translate("OutputFiles", u"Logarithmic Scale", None))
+        self.checkBox_legend.setText(QCoreApplication.translate("OutputFiles", u"Show Legend", None))
+        self.label_13.setText(QCoreApplication.translate("OutputFiles", u"Font", None))
+        self.label_FontSize.setText(QCoreApplication.translate("OutputFiles", u"Font Size", None))
+        self.label_14.setText(QCoreApplication.translate("OutputFiles", u"Figure Ratio (Inches)", None))
         self.label_4.setText(QCoreApplication.translate("OutputFiles", u"<html><head/><body><p><span style=\" font-weight:600;\">Ouput folder to save pictures</span></p></body></html>", None))
         self.lineEdit_output.setPlaceholderText(QCoreApplication.translate("OutputFiles", u"Select the folder where the pictures will be saved.", None))
         self.pushButton_choose.setText(QCoreApplication.translate("OutputFiles", u"Choose", None))
