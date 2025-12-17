@@ -814,16 +814,13 @@ class OxygenDesatDetector(SciNode):
             desat_drop_reached_flag = False
             desat_valid_flag = False
             desat_tab = []
+            bsl_start = 0  # Initialize baseline search start position
+            max_bsl_i = 0  # Initialize baseline maximum index
             for j, sample in enumerate(signal):
                 cur_sec = data_starts[i] + j/fs_chan
 
                 # Manage the baseline to measure the saturation before the drop
                 if not desat_drop_reached_flag:
-                    if len(desat_tab)>0:
-                        last_desat_end = desat_tab[-1][0]+ desat_tab[-1][1]
-                        bsl_start = int(round((last_desat_end-data_starts[i])*fs_chan))
-                    else:
-                        bsl_start = 0
                     # Look for the max value to start the desaturation
                     if j-bsl_start > 0:
                         max_bsl_val = np.nanmax(signal[bsl_start:j])
@@ -877,25 +874,27 @@ class OxygenDesatDetector(SciNode):
                 # --------------------------------------------------------------
                 # Evaluation of the desaturation value
                 # --------------------------------------------------------------
-                # The value inscreased of more than 2%
-                if (desat_drop_reached_flag and desat_valid_flag) and (sample > cur_min_val+(self.variability_tolerance/100*cur_min_val/100)*100):
+                # Check for recovery of ≥2% from the minimum - this resets the baseline
+                recovery_detected = False
+                if (sample > cur_min_val+(self.variability_tolerance/100*cur_min_val/100)*100):
+                    recovery_detected = True
+                    
+                    # If we have a valid desaturation being tracked, save it
+                    if desat_drop_reached_flag and desat_valid_flag:
 
-                    # Calculate drop duration and recovery time
-                    drop_duration = cur_min_sec - desat_start_sec
-                    recovery_time = cur_end_sec - cur_min_sec
-
-                    # Make sure the desat_start_sec is not already included in a desaturation
-                    #    before adding it into the desat_tab
-                    if len(desat_tab)>0:
-                        last_desat = desat_tab[-1]
-                        if not ( (desat_start_sec>=last_desat[0]) and (desat_start_sec<(last_desat[0]+last_desat[1]))):
-                            desat_tab.append([desat_start_sec, cur_end_sec-desat_start_sec, drop_duration, recovery_time])
-                    else:
+                        # Calculate drop duration and recovery time
+                        drop_duration = cur_min_sec - desat_start_sec
+                        recovery_time = cur_end_sec - cur_min_sec
                         # Save the valid desaturation with recovery time
-                        desat_tab.append([desat_start_sec, cur_min_sec-desat_start_sec, drop_duration, recovery_time])
+                        desat_tab.append([desat_start_sec, cur_end_sec-desat_start_sec, drop_duration, recovery_time])
 
+                    # Reset flags - end any desaturation tracking attempt
                     desat_drop_reached_flag = False
                     desat_valid_flag = False
+                
+                # Reset baseline after any recovery of ≥2%
+                if recovery_detected:
+                    bsl_start = j  # Reset baseline to current position after recovery
                                         
                 cur_end_sec = cur_sec
                 cur_end_val = sample
