@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file ''
+## Form generated from reading UI file 'Ui_OutputFiles.ui'
 ##
 ## Created by: Qt User Interface Compiler version 6.8.2
 ##
@@ -15,9 +15,9 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QFont, QFontDatabase, QGradient, QIcon,
     QImage, QKeySequence, QLinearGradient, QPainter,
     QPalette, QPixmap, QRadialGradient, QTransform)
-from PySide6.QtWidgets import (QApplication, QCheckBox, QHBoxLayout, QLabel,
-    QLineEdit, QSizePolicy, QSpacerItem, QTextEdit,
-    QVBoxLayout, QWidget)
+from PySide6.QtWidgets import (QApplication, QCheckBox, QFrame, QHBoxLayout,
+    QLabel, QLineEdit, QSizePolicy, QSpacerItem,
+    QTextEdit, QVBoxLayout, QWidget)
 import themes_rc
 
 class Ui_OutputFiles(object):
@@ -68,12 +68,14 @@ class Ui_OutputFiles(object):
 
         self.textEdit = QTextEdit(OutputFiles)
         self.textEdit.setObjectName(u"textEdit")
+        self.textEdit.setFrameShape(QFrame.Shape.NoFrame)
         self.textEdit.setReadOnly(True)
 
         self.verticalLayout.addWidget(self.textEdit)
 
         self.checkBox_time = QCheckBox(OutputFiles)
         self.checkBox_time.setObjectName(u"checkBox_time")
+        self.checkBox_time.setChecked(True)
 
         self.verticalLayout.addWidget(self.checkBox_time)
 
@@ -128,13 +130,16 @@ class Ui_OutputFiles(object):
         self.label_6.setText(QCoreApplication.translate("OutputFiles", u"The extracted annotations are written in the same directory as the input file.", None))
         self.label_7.setText(QCoreApplication.translate("OutputFiles", u"<html><head/><body><p><span style=\" font-weight:600;\">Content</span></p></body></html>", None))
         self.textEdit.setHtml(QCoreApplication.translate("OutputFiles", u"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
-"<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
+"<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset=\"utf-8\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
+"hr { height: 1px; border-width: 0; }\n"
+"li.unchecked::marker { content: \"\\2610\"; }\n"
+"li.checked::marker { content: \"\\2612\"; }\n"
 "</style></head><body style=\" font-family:'Roboto'; font-size:12pt; font-weight:400; font-style:normal;\">\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">The columns of the annotations file are as follows:</p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">   1. group : The category of the annotation (annotations with different names can be grouped into the same category), e.g. <span style=\" font-style:italic;\">artifact</span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">   2. name: The text label of the annotation, e.g., <span style=\" font-style:italic"
-                        ";\">art_snooz</span></p>\n"
+"<p style=\" margin-top:0px; margin-botto"
+                        "m:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">   2. name: The text label of the annotation, e.g., <span style=\" font-style:italic;\">art_snooz</span></p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">   3. start_sec: The onset of the annotation in seconds, e.g., <span style=\" font-style:italic;\">300</span></p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">   4. duration_sec : The duration of the annotation in second, e.g., <span style=\" font-style:italic;\">30</span></p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">   5. channels : The list of channels on which the annotation occurs, e.g., <span style=\" font-style:italic;\">['LOC', 'ROC']</span></p></body></html>", None))
