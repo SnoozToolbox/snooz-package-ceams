@@ -276,10 +276,10 @@ class Ui_DetectionSettings(object):
     def retranslateUi(self, DetectionSettings):
         DetectionSettings.setWindowTitle("")
         self.label_10.setText(QCoreApplication.translate("DetectionSettings", u"<html><head/><body><p><span style=\" font-weight:600;\">Oxygen Saturation Pre-processing</span></p></body></html>", None))
-        self.label_11.setText(QCoreApplication.translate("DetectionSettings", u"The oxygen channel is low-pass filtered to 0.4 Hz and downsampled to 1 Hz.\n"
+        self.label_11.setText(QCoreApplication.translate("DetectionSettings", u"The oxygen channel is low-pass filtered to 0.1 Hz and downsampled to 1 Hz.\n"
 "All values are expressed in %, ranging from 0 to 100%.", None))
         self.label_14.setText(QCoreApplication.translate("DetectionSettings", u"Low-pass filter : \n"
-"IIR filter, order 6, applied forward and backward to cancel the phase delay. \n"
+"IIR filter, order 4, applied forward and backward to cancel the phase delay. \n"
 "The order is divided by 2 when applied since is it applied twice.", None))
         self.label.setText(QCoreApplication.translate("DetectionSettings", u"<html><head/><body><p><span style=\" font-weight:600;\">Oxygen Desaturation Crtieria</span></p></body></html>", None))
         self.label_pic.setText("")

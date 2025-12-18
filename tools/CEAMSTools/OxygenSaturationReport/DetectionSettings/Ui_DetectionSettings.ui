@@ -47,7 +47,7 @@
       </size>
      </property>
      <property name="text">
-      <string>The oxygen channel is low-pass filtered to 0.4 Hz and downsampled to 1 Hz.
+      <string>The oxygen channel is low-pass filtered to 0.1 Hz and downsampled to 1 Hz.
 All values are expressed in %, ranging from 0 to 100%.</string>
      </property>
     </widget>
@@ -58,7 +58,7 @@ All values are expressed in %, ranging from 0 to 100%.</string>
       <widget class="QLabel" name="label_14">
        <property name="text">
         <string>Low-pass filter : 
-IIR filter, order 6, applied forward and backward to cancel the phase delay. 
+IIR filter, order 4, applied forward and backward to cancel the phase delay. 
 The order is divided by 2 when applied since is it applied twice.</string>
        </property>
       </widget>
@@ -543,7 +543,7 @@ The order is divided by 2 when applied since is it applied twice.</string>
  <connections/>
  <buttongroups>
   <buttongroup name="buttonGroup_3"/>
-  <buttongroup name="buttonGroup_2"/>
   <buttongroup name="buttonGroup"/>
+  <buttongroup name="buttonGroup_2"/>
  </buttongroups>
 </ui>
