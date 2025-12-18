@@ -202,13 +202,13 @@ class Ui_DetectionSettings(object):
 
         self.gridLayout.addWidget(self.label_17, 1, 1, 1, 1)
 
-        self.radioButton_120s = QRadioButton(DetectionSettings)
-        self.buttonGroup_2.addButton(self.radioButton_120s)
-        self.radioButton_120s.setObjectName(u"radioButton_120s")
-        self.radioButton_120s.setMinimumSize(QSize(115, 0))
-        self.radioButton_120s.setChecked(True)
+        self.radioButton_180s = QRadioButton(DetectionSettings)
+        self.buttonGroup_2.addButton(self.radioButton_180s)
+        self.radioButton_180s.setObjectName(u"radioButton_180s")
+        self.radioButton_180s.setMinimumSize(QSize(115, 0))
+        self.radioButton_180s.setChecked(True)
 
-        self.gridLayout.addWidget(self.radioButton_120s, 1, 2, 1, 1)
+        self.gridLayout.addWidget(self.radioButton_180s, 1, 2, 1, 1)
 
         self.radioButton_hold_10s = QRadioButton(DetectionSettings)
         self.buttonGroup_3.addButton(self.radioButton_hold_10s)
@@ -257,13 +257,6 @@ class Ui_DetectionSettings(object):
 
         self.verticalLayout_2.addWidget(self.label_5)
 
-        self.label_6 = QLabel(DetectionSettings)
-        self.label_6.setObjectName(u"label_6")
-        self.label_6.setFont(font)
-        self.label_6.setWordWrap(True)
-
-        self.verticalLayout_2.addWidget(self.label_6)
-
 
         self.horizontalLayout_3.addLayout(self.verticalLayout_2)
 
@@ -290,25 +283,23 @@ class Ui_DetectionSettings(object):
 "The order is divided by 2 when applied since is it applied twice.", None))
         self.label.setText(QCoreApplication.translate("DetectionSettings", u"<html><head/><body><p><span style=\" font-weight:600;\">Oxygen Desaturation Crtieria</span></p></body></html>", None))
         self.label_pic.setText("")
-        self.label_pic.setText("")
         self.label_7.setText(QCoreApplication.translate("DetectionSettings", u"AASM criteria [1]", None))
         self.label_13.setText(QCoreApplication.translate("DetectionSettings", u"Minimum oxygen desaturation drop : 3% or 4%", None))
         self.label_15.setText(QCoreApplication.translate("DetectionSettings", u"The desaturation ends when there is a resaturation of at least 2%", None))
-        self.label_3.setText(QCoreApplication.translate("DetectionSettings", u"The baseline for respiratory events is 120 sec and the drop signal excursion is >= 10 sec.", None))
+        self.label_3.setText(QCoreApplication.translate("DetectionSettings", u"Maximum recovery duration (the mimimum value between):\n"
+"120 s and 2 x duration of desaturation", None))
         self.label_2.setText(QCoreApplication.translate("DetectionSettings", u"The oxygen level drop", None))
-        self.radioButton_20s.setText(QCoreApplication.translate("DetectionSettings", u"20 sec (CEAMS)", None))
+        self.radioButton_20s.setText(QCoreApplication.translate("DetectionSettings", u"20 sec [CEAMS]", None))
         self.radioButton_3perc.setText(QCoreApplication.translate("DetectionSettings", u"3 %", None))
-        self.radioButton_hold_5s.setText(QCoreApplication.translate("DetectionSettings", u"5 sec (CEAMS)", None))
+        self.radioButton_hold_5s.setText(QCoreApplication.translate("DetectionSettings", u"5 sec [2, CEAMS]", None))
         self.label_4.setText(QCoreApplication.translate("DetectionSettings", u"Minimum hold duration", None))
         self.radioButton_4perc.setText(QCoreApplication.translate("DetectionSettings", u"4 %", None))
-        self.label_17.setText(QCoreApplication.translate("DetectionSettings", u"Maximum time to drop", None))
-        self.radioButton_120s.setText(QCoreApplication.translate("DetectionSettings", u"120 sec [2,3]", None))
-        self.radioButton_hold_10s.setText(QCoreApplication.translate("DetectionSettings", u"10 sec [2,3]", None))
+        self.label_17.setText(QCoreApplication.translate("DetectionSettings", u"Maximum desaturation time", None))
+        self.radioButton_180s.setText(QCoreApplication.translate("DetectionSettings", u"180 sec [2]", None))
+        self.radioButton_hold_10s.setText(QCoreApplication.translate("DetectionSettings", u"10 sec [2]", None))
         self.label_8.setText(QCoreApplication.translate("DetectionSettings", u"<html><head/><body><p><span style=\" font-weight:600;\">References</span></p></body></html>", None))
         self.label_16.setText(QCoreApplication.translate("DetectionSettings", u"[1] Iber, C., American Academy of Sleep Medicine, 2007. The AASM Manual for the Scoring of Sleep and Associated Events: Rules, Terminology and Technical Specifications. American Academy of Sleep Medicine.", None))
-        self.label_5.setText(QCoreApplication.translate("DetectionSettings", u"[2] Chung, Frances FRCPC*,\u2020; Liao, Pu MD*; Elsaid, Hisham MD*; Islam, Sazzadul MSc*; Shapiro, Colin M FRCPC\u2021; Sun, Yuming MD*. Oxygen Desaturation Index from Nocturnal Oximetry: \n"
-"A Sensitive and Specific Tool to Detect Sleep-Disordered Breathing in Surgical Patients. Anesthesia & Analgesia 114(5):p 993-1000, May 2012. | DOI: 10.1213/ANE.0b013e318248f4f5", None))
-        self.label_6.setText(QCoreApplication.translate("DetectionSettings", u"[3] Temirbekov D, G\u00fcne\u015f S, Yaz\u0131c\u0131 ZM, Say\u0131n \u0130. The Ignored Parameter in the Diagnosis of Obstructive Sleep Apnea Syndrome: The Oxygen Desaturation Index. Turk Arch Otorhinolaryngol. 2018 Mar;56(1):1-6.\n"
-" doi: 10.5152/tao.2018.3025. Epub 2018 Mar 1. PMID: 29988275; PMCID: PMC6017211.", None))
+        self.label_5.setText(QCoreApplication.translate("DetectionSettings", u"[2] Karhu, T., Lepp\u00e4nen, T., T\u00f6yr\u00e4s, J., Oksenberg, A., Myllymaa, S., & Nikkonen, S. (2022). ABOSA \u2013 Freely available automatic blood oxygen saturation signal analysis software\u202f: Structure and validation. Computer Methods and Programs in Biomedicine, 226, 107120. https://doi.org/10.1016/j.cmpb.2022.107120\n"
+"", None))
     # retranslateUi
 

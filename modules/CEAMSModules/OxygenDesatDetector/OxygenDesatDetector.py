@@ -801,10 +801,6 @@ class OxygenDesatDetector(SciNode):
                 'channels' : Channel where the event occures (String)
         """   
 
-
-        # Patch to test against ABOSA
-        parameters_oxy["max_slope_drop_sec"] = 180
-
         for i, signal in enumerate(data_stats):     
             desat_start_sec = data_starts[i]
             desat_start_val = data_stats[i][0]
@@ -819,34 +815,26 @@ class OxygenDesatDetector(SciNode):
             for j, sample in enumerate(signal):
                 cur_sec = data_starts[i] + j/fs_chan
 
-                # Manage the baseline to measure the saturation before the drop
-                if not desat_drop_reached_flag:
-                    # Look for the max value to start the desaturation
-                    if j-bsl_start > 0:
-                        max_bsl_val = np.nanmax(signal[bsl_start:j])
-                        i_max_val = [i for i, val in enumerate(signal[bsl_start:j]) if val==max_bsl_val]
-                        if len(i_max_val)>1:
-                            max_bsl_i = np.nanmax(i_max_val)
-                        elif len(i_max_val)==1:
-                            max_bsl_i = i_max_val[0]
-                        else:
-                            max_bsl_i=j # when all nan
-                        max_bsl_sec = data_starts[i] + (bsl_start+max_bsl_i)/fs_chan
+                # Always track the baseline maximum (for desaturation start)
+                if j-bsl_start > 0:
+                    max_bsl_val = np.nanmax(signal[bsl_start:j])
+                    i_max_val = [i for i, val in enumerate(signal[bsl_start:j]) if val==max_bsl_val]
+                    if len(i_max_val)>1:
+                        max_bsl_i = np.nanmax(i_max_val)
+                    elif len(i_max_val)==1:
+                        max_bsl_i = i_max_val[0]
                     else:
-                        max_bsl_val = sample
-                        max_bsl_sec = cur_sec
-                    desat_start_val = max_bsl_val
-                    desat_start_sec = max_bsl_sec
-                
-                # Look for the minimum value to end the desaturation
+                        max_bsl_i=j # when all nan
+                    max_bsl_sec = data_starts[i] + (bsl_start+max_bsl_i)/fs_chan
                 else:
+                    max_bsl_val = sample
+                    max_bsl_sec = cur_sec
 
-                    if j-(bsl_start+max_bsl_i) > 0:
-                        cur_min_val = np.nanmin(signal[bsl_start+max_bsl_i:j])
-                    else:
-                        cur_min_val = sample
+                # Always track the minimum from baseline max onwards (for recovery detection)
+                if j-(bsl_start+max_bsl_i) > 0:
+                    cur_min_val = np.nanmin(signal[bsl_start+max_bsl_i:j+1])
                     # Find the last sec of the minimum value (real end of the desaturation)
-                    i_min_val = [i for i, val in enumerate(signal[bsl_start+max_bsl_i:j]) if val==cur_min_val]
+                    i_min_val = [i for i, val in enumerate(signal[bsl_start+max_bsl_i:j+1]) if val==cur_min_val]
                     if len(i_min_val)>1:
                         min_desat_i = np.nanmax(i_min_val)
                     elif len(i_min_val)==1:
@@ -854,6 +842,14 @@ class OxygenDesatDetector(SciNode):
                     else:
                         min_desat_i=j # when all nan
                     cur_min_sec = data_starts[i] + (bsl_start+max_bsl_i+min_desat_i)/fs_chan
+                else:
+                    cur_min_val = sample
+                    cur_min_sec = cur_sec
+
+                # Update desaturation start only when not actively tracking a drop
+                if not desat_drop_reached_flag:
+                    desat_start_val = max_bsl_val
+                    desat_start_sec = max_bsl_sec
 
                 # --------------------------------------------------------------
                 # Evaluation of the desaturation status

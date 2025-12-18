@@ -82,7 +82,7 @@ class DetectionSettings(BaseStepView, Ui_DetectionSettings, QtWidgets.QWidget):
                 else:
                     self.radioButton_4perc.setChecked(True)
                 if self.parameters_oxy['max_slope_drop_sec']==120:
-                    self.radioButton_120s.setChecked(True)
+                    self.radioButton_180s.setChecked(True)
                 else:
                     self.radioButton_20s.setChecked(True)                
                 if self.parameters_oxy['min_hold_drop_sec']==10:
@@ -96,8 +96,8 @@ class DetectionSettings(BaseStepView, Ui_DetectionSettings, QtWidgets.QWidget):
             self.parameters_oxy['desaturation_drop_percent'] = 3
         elif self.radioButton_4perc.isChecked():
             self.parameters_oxy['desaturation_drop_percent'] = 4
-        if self.radioButton_120s.isChecked():
-            self.parameters_oxy['max_slope_drop_sec'] = 120
+        if self.radioButton_180s.isChecked():
+            self.parameters_oxy['max_slope_drop_sec'] = 180
         elif self.radioButton_20s.isChecked():
             self.parameters_oxy['max_slope_drop_sec'] = 20        
         if self.radioButton_hold_10s.isChecked():
