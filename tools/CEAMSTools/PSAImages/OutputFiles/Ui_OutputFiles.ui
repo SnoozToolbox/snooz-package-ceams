@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>960</width>
-    <height>839</height>
+    <width>921</width>
+    <height>816</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -65,8 +65,8 @@
       <property name="geometry">
        <rect>
         <x>0</x>
-        <y>-379</y>
-        <width>900</width>
+        <y>-402</y>
+        <width>891</width>
         <height>1200</height>
        </rect>
       </property>
@@ -923,7 +923,14 @@ and its standard deviation in a shaded area.</string>
              <item>
               <widget class="QLabel" name="label_14">
                <property name="text">
-                <string>Figure Ratio (Inches)</string>
+                <string>Figure Size (inch):</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLabel" name="label_16">
+               <property name="text">
+                <string>Width</string>
                </property>
               </widget>
              </item>
@@ -931,6 +938,13 @@ and its standard deviation in a shaded area.</string>
               <widget class="QSpinBox" name="spinBox_figwidth">
                <property name="value">
                 <number>8</number>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLabel" name="label_15">
+               <property name="text">
+                <string>Height</string>
                </property>
               </widget>
              </item>
@@ -1151,8 +1165,8 @@ and its standard deviation in a shaded area.</string>
   <slot>out_options_slot()</slot>
  </slots>
  <buttongroups>
-  <buttongroup name="buttonGroup_display"/>
   <buttongroup name="buttonGroup_section"/>
+  <buttongroup name="buttonGroup_display"/>
   <buttongroup name="buttonGroup_level"/>
  </buttongroups>
 </ui>

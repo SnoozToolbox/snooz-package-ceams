@@ -26,7 +26,7 @@ class Ui_OutputFiles(object):
     def setupUi(self, OutputFiles):
         if not OutputFiles.objectName():
             OutputFiles.setObjectName(u"OutputFiles")
-        OutputFiles.resize(960, 839)
+        OutputFiles.resize(921, 816)
         OutputFiles.setStyleSheet(u"font: 12pt \"Roboto\";")
         self.verticalLayout_5 = QVBoxLayout(OutputFiles)
         self.verticalLayout_5.setObjectName(u"verticalLayout_5")
@@ -49,7 +49,7 @@ class Ui_OutputFiles(object):
         self.scrollArea.setAlignment(Qt.AlignmentFlag.AlignLeading|Qt.AlignmentFlag.AlignLeft|Qt.AlignmentFlag.AlignTop)
         self.scrollAreaWidgetContents = QWidget()
         self.scrollAreaWidgetContents.setObjectName(u"scrollAreaWidgetContents")
-        self.scrollAreaWidgetContents.setGeometry(QRect(0, -379, 900, 1200))
+        self.scrollAreaWidgetContents.setGeometry(QRect(0, -402, 891, 1200))
         sizePolicy1 = QSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Maximum)
         sizePolicy1.setHorizontalStretch(0)
         sizePolicy1.setVerticalStretch(1)
@@ -541,11 +541,21 @@ class Ui_OutputFiles(object):
 
         self.horizontalLayout_disp.addWidget(self.label_14)
 
+        self.label_16 = QLabel(self.scrollAreaWidgetContents)
+        self.label_16.setObjectName(u"label_16")
+
+        self.horizontalLayout_disp.addWidget(self.label_16)
+
         self.spinBox_figwidth = QSpinBox(self.scrollAreaWidgetContents)
         self.spinBox_figwidth.setObjectName(u"spinBox_figwidth")
         self.spinBox_figwidth.setValue(8)
 
         self.horizontalLayout_disp.addWidget(self.spinBox_figwidth)
+
+        self.label_15 = QLabel(self.scrollAreaWidgetContents)
+        self.label_15.setObjectName(u"label_15")
+
+        self.horizontalLayout_disp.addWidget(self.label_15)
 
         self.spinBox_figheight = QSpinBox(self.scrollAreaWidgetContents)
         self.spinBox_figheight.setObjectName(u"spinBox_figheight")
@@ -687,7 +697,9 @@ class Ui_OutputFiles(object):
         self.checkBox_legend.setText(QCoreApplication.translate("OutputFiles", u"Show Legend", None))
         self.label_13.setText(QCoreApplication.translate("OutputFiles", u"Font", None))
         self.label_FontSize.setText(QCoreApplication.translate("OutputFiles", u"Font Size", None))
-        self.label_14.setText(QCoreApplication.translate("OutputFiles", u"Figure Ratio (Inches)", None))
+        self.label_14.setText(QCoreApplication.translate("OutputFiles", u"Figure Size (inch):", None))
+        self.label_16.setText(QCoreApplication.translate("OutputFiles", u"Width", None))
+        self.label_15.setText(QCoreApplication.translate("OutputFiles", u"Height", None))
         self.label_4.setText(QCoreApplication.translate("OutputFiles", u"<html><head/><body><p><span style=\" font-weight:600;\">Ouput folder to save pictures</span></p></body></html>", None))
         self.lineEdit_output.setPlaceholderText(QCoreApplication.translate("OutputFiles", u"Select the folder where the pictures will be saved.", None))
         self.pushButton_choose.setText(QCoreApplication.translate("OutputFiles", u"Choose", None))
