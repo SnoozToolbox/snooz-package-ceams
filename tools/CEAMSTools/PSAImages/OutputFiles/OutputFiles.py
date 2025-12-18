@@ -68,6 +68,10 @@ class OutputFiles(BaseStepView, Ui_OutputFiles, QtWidgets.QWidget):
             'log_scale': True,  # Default to logarithmic scale
             'show_legend': True,  # Default to showing legend
             'force_axis': False, # False or [xmin, xmax, ymin, ymax]
+            'font': 'Arial',
+            'fontsize': 12,
+            'figure_width': 8,
+            'figure_height': 6,
             'output_folder': ''
         }
 
@@ -206,6 +210,10 @@ class OutputFiles(BaseStepView, Ui_OutputFiles, QtWidgets.QWidget):
         
         self.pics_param["log_scale"] = self.checkBox_log.isChecked()
         self.pics_param["show_legend"] = self.checkBox_legend.isChecked()
+        self.pics_param["font"] = self.fontComboBox.currentText()
+        self.pics_param["fontsize"] = self.spinBox_fontsize.value()
+        self.pics_param["figure_width"] = self.spinBox_figwidth.value()
+        self.pics_param["figure_height"] = self.spinBox_figheight.value()
 
         if self.checkBox_force_axis.isChecked():
             self.doubleSpinBox_xmin.setEnabled(True)
@@ -334,6 +342,10 @@ class OutputFiles(BaseStepView, Ui_OutputFiles, QtWidgets.QWidget):
 
         self.checkBox_log.setChecked(self.pics_param.get("log_scale", True))  # Default to True
         self.checkBox_legend.setChecked(self.pics_param.get("show_legend", True))  # Default to True
+        self.fontComboBox.setCurrentText(self.pics_param.get("font", "Arial"))
+        self.spinBox_fontsize.setValue(self.pics_param.get("fontsize", 12))
+        self.spinBox_figwidth.setValue(self.pics_param.get("figure_width", 8))
+        self.spinBox_figheight.setValue(self.pics_param.get("figure_height", 6))
         
         if not self.pics_param.get("force_axis", False):
             self.checkBox_force_axis.setChecked(False)
