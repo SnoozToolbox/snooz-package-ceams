@@ -81,7 +81,7 @@ class DetectionSettings(BaseStepView, Ui_DetectionSettings, QtWidgets.QWidget):
                     self.radioButton_3perc.setChecked(True)
                 else:
                     self.radioButton_4perc.setChecked(True)
-                if self.parameters_oxy['max_slope_drop_sec']==120:
+                if self.parameters_oxy['max_slope_drop_sec']==180:
                     self.radioButton_180s.setChecked(True)
                 else:
                     self.radioButton_20s.setChecked(True)                

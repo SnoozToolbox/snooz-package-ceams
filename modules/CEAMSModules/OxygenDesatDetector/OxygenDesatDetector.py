@@ -27,7 +27,7 @@ from CEAMSModules.SleepReport import SleepReport
 from CEAMSModules.OxygenDesatDetector.OxygenDesatDetector_doc import write_doc_file
 from CEAMSModules.OxygenDesatDetector.OxygenDesatDetector_doc import _get_doc
 
-DEBUG = False
+DEBUG = True
 
 class OxygenDesatDetector(SciNode):
     """
@@ -238,7 +238,7 @@ class OxygenDesatDetector(SciNode):
                 f"OxygenDesatDetector has nothing to generate, 'cohort_filename' is empty")    
         if isinstance(signals, str) and signals=='':
             raise NodeInputException(self.identifier, "signals", \
-                f"OxygenDesatDetector this input is empty, no signals no Oxygen Saturation Report.")              
+                f"OxygenDesatDetector this input is empty, no signals no Oxygen Saturation Report.")         
         if isinstance(stages_cycles, str) and stages_cycles=='':
             raise NodeInputException(self.identifier, "stages_cycles", \
                 f"OxygenDesatDetector this input is empty")    
@@ -353,7 +353,7 @@ class OxygenDesatDetector(SciNode):
             # 'max_slope_drop_sec' : 'The maximum duration (s) during which the oxygen level is dropping "120 or 20"',
             # 'min_hold_drop_sec' : 'Minimum duration (s) during which the oxygen level drop is maintained "10 or 5"',
         asleep_stages_df = stage_rec_df[((stage_rec_df['name']>0) & (stage_rec_df['name']<6))]
-        desat_df = self.detect_desaturation(data_starts, data_stats, fs_chan, channel, parameters_oxy, asleep_stages_df)
+        desat_df = self.detect_desaturation_ABOSA(data_starts, data_stats, fs_chan, channel, parameters_oxy, asleep_stages_df)
         desat_stats = self.compute_desat_stats(desat_df, asleep_stages_df)
 
         # Temporal links between desaturation and arousal
@@ -769,11 +769,12 @@ class OxygenDesatDetector(SciNode):
         # return the time as HH:MM:SS
         return f"{HH}:{MM}:{SS}"
 
-
-    def detect_desaturation(self, data_starts, data_stats, fs_chan, channel, parameters_oxy, asleep_stages_df):
+    def detect_desaturation_ABOSA(self, data_starts, data_stats, fs_chan, channel, parameters_oxy, asleep_stages_df):
         """
+        Detect desaturation as described in ABOSA [1].
+
         Parameters :
-            data_stats : numpy array
+            data_stats : list of numpy array
                 oxygen saturation integer values from 1 to 100% 
             data_starts : list
                 start in sec of each continuous section (more than one when there are discontinuities)
@@ -785,9 +786,6 @@ class OxygenDesatDetector(SciNode):
                 'desaturation_drop_percent' : 'Drop level (%) for the oxygen desaturation "3 or 4"',
                 'max_slope_drop_sec' : 'The maximum duration (s) during which the oxygen level is dropping "120 or 20"',
                 'min_hold_drop_sec' : 'Minimum duration (s) during which the oxygen level drop is maintained "10 or 5"',
-                'window_link_sec' : 'The window length (s) to compute the temporal link between desaturations and arousals',
-                'arousal_min_sec' : 'The minimum length (s) of the arousal events kept',
-                'arousal_max_sec' : 'The maximum length (s) of the arousal events kept',
             asleep_stages_df : pandas DataFrame
                 Asleep stages from lights off to lights on.
 
@@ -799,122 +797,411 @@ class OxygenDesatDetector(SciNode):
                 'start_sec': Starting time of the event in sec (Float)
                 'duration_sec': Duration of the event in sec (Float)
                 'channels' : Channel where the event occures (String)
+
+        Reference : 
+            [1] Karhu, T., Leppänen, T., Töyräs, J., Oksenberg, A., Myllymaa, S., & Nikkonen, S. (2022).
+            ABOSA - Freely available automatic blood oxygen saturation signal analysis software: 
+            Structure and validation. Computer Methods and Programs in Biomedicine, 226, 107120. 
+            https://doi.org/10.1016/j.cmpb.2022.107120
         """   
-
-        for i, signal in enumerate(data_stats):     
-            desat_start_sec = data_starts[i]
-            desat_start_val = data_stats[i][0]
-            cur_min_val = 100
-            cur_end_sec = 0
-            cur_end_val = 100
-            desat_drop_reached_flag = False
-            desat_valid_flag = False
-            desat_tab = []
-            bsl_start = 0  # Initialize baseline search start position
-            max_bsl_i = 0  # Initialize baseline maximum index
-            for j, sample in enumerate(signal):
-                cur_sec = data_starts[i] + j/fs_chan
-
-                # Always track the baseline maximum (for desaturation start)
-                if j-bsl_start > 0:
-                    max_bsl_val = np.nanmax(signal[bsl_start:j])
-                    i_max_val = [i for i, val in enumerate(signal[bsl_start:j]) if val==max_bsl_val]
-                    if len(i_max_val)>1:
-                        max_bsl_i = np.nanmax(i_max_val)
-                    elif len(i_max_val)==1:
-                        max_bsl_i = i_max_val[0]
-                    else:
-                        max_bsl_i=j # when all nan
-                    max_bsl_sec = data_starts[i] + (bsl_start+max_bsl_i)/fs_chan
-                else:
-                    max_bsl_val = sample
-                    max_bsl_sec = cur_sec
-
-                # Always track the minimum from baseline max onwards (for recovery detection)
-                if j-(bsl_start+max_bsl_i) > 0:
-                    cur_min_val = np.nanmin(signal[bsl_start+max_bsl_i:j+1])
-                    # Find the last sec of the minimum value (real end of the desaturation)
-                    i_min_val = [i for i, val in enumerate(signal[bsl_start+max_bsl_i:j+1]) if val==cur_min_val]
-                    if len(i_min_val)>1:
-                        min_desat_i = np.nanmax(i_min_val)
-                    elif len(i_min_val)==1:
-                        min_desat_i = i_min_val[0]
-                    else:
-                        min_desat_i=j # when all nan
-                    cur_min_sec = data_starts[i] + (bsl_start+max_bsl_i+min_desat_i)/fs_chan
-                else:
-                    cur_min_val = sample
-                    cur_min_sec = cur_sec
-
-                # Update desaturation start only when not actively tracking a drop
-                if not desat_drop_reached_flag:
-                    desat_start_val = max_bsl_val
-                    desat_start_sec = max_bsl_sec
-
-                # --------------------------------------------------------------
-                # Evaluation of the desaturation status
-                # --------------------------------------------------------------
-                # Drop is enough -> we have a desaturation start!
-                if (not desat_drop_reached_flag) and ((desat_start_val-cur_end_val) >= parameters_oxy["desaturation_drop_percent"]):
-                    desat_drop_reached_flag = True
-                    desat_reached_sec = cur_sec
-                    if DEBUG:
-                        print(f"desaturation drop (start={desat_start_val} and current={cur_end_val}) reached at {self.convert_sec_to_HHMMSS(desat_start_sec)}")
-                
-                # If the drop is maintained its a valid desaturation
-                if desat_drop_reached_flag: 
-                    # Drop is maintained enough
-                    if not desat_valid_flag and ((cur_sec - desat_reached_sec) >= parameters_oxy["min_hold_drop_sec"]):
-                        desat_valid_flag = True
-   
-                # --------------------------------------------------------------
-                # Evaluation of the desaturation value
-                # --------------------------------------------------------------
-                # Check for recovery of ≥2% from the minimum - this resets the baseline
-                recovery_detected = False
-                if (sample > cur_min_val+(self.variability_tolerance/100*cur_min_val/100)*100):
-                    recovery_detected = True
-                    
-                    # If we have a valid desaturation being tracked, save it
-                    if desat_drop_reached_flag and desat_valid_flag:
-
-                        # Calculate drop duration and recovery time
-                        drop_duration = cur_min_sec - desat_start_sec
-                        recovery_time = cur_end_sec - cur_min_sec
-                        # Save the valid desaturation with recovery time
-                        desat_tab.append([desat_start_sec, cur_end_sec-desat_start_sec, drop_duration, recovery_time])
-
-                    # Reset flags - end any desaturation tracking attempt
-                    desat_drop_reached_flag = False
-                    desat_valid_flag = False
-                
-                # Reset baseline after any recovery of ≥2%
-                if recovery_detected:
-                    bsl_start = j  # Reset baseline to current position after recovery
-                                        
-                cur_end_sec = cur_sec
-                cur_end_val = sample
+        all_desat_events = []
         
-        # Filter desaturations by recovery time criterion
-        # Keep only desat where recovery time <= min(120 sec, 2 x drop duration)
-        desat_valid_final = []
-        for desat_start, desat_dur, drop_duration, recovery_time in desat_tab:
-            max_recovery_time = min(120, 2 * drop_duration)
-            if (recovery_time <= max_recovery_time) and (desat_dur <= parameters_oxy["max_slope_drop_sec"]):
-                desat_valid_final.append([desat_start, drop_duration])
+        # ABOSA parameters
+        min_peak_distance_sec = 5
+        min_peak_prominence = 1
+        order = 4
+        low_frequency_cutoff = 0.1
+        min_peak_distance_samples = int(min_peak_distance_sec * fs_chan)
 
-        # Patch
-        desat_kept = desat_valid_final
-        # Keep desat that start in asleep stages only
-        # start_time = asleep_stages_df['start_sec'].values
-        # end_time = start_time + asleep_stages_df['duration_sec'].values
-        # desat_kept = []
-        # for desat_start, desat_dur in desat_valid_final:
-        #     if any( (start_time<=desat_start) & (end_time>=desat_start) ):
-        #         desat_kept.append([desat_start, desat_dur])
-        desat_events = [('SpO2', 'desat_SpO2', start_sec, duration_sec, channel) for start_sec, duration_sec in desat_kept]
+        for i, signal in enumerate(data_stats):
+            valid_mask = ~np.isnan(signal)
+            if not np.any(valid_mask):
+                continue
+        
+            signal_lpf = self.low_pass_filter_nan(signal, order, fs_chan, low_frequency_cutoff)
+            
+            # Step 1: Locate potential endpoints (Lmin)
+            lmin_indices = self.detect_local_min(
+                signal, signal_lpf, fs_chan, 
+                min_peak_distance_samples, min_peak_prominence, 
+                data_starts[i]
+            )
+            
+            # Step 2: Locate potential starting points (Lmax)
+            lmax_indices = self.detect_local_max(
+                signal, signal_lpf, fs_chan, 
+                min_peak_distance_samples, min_peak_prominence, 
+                data_starts[i]
+            )
+
+            # Step 3: Validate and match Lmax-Lmin pairs
+            validated_events = []
+            
+            for lmax_idx in lmax_indices:
+                lmax_time = data_starts[i] + lmax_idx / fs_chan
+                lmax_val = signal[lmax_idx]
+                
+                # Find best Lmin candidate
+                best_lmin = self.find_best_lmin_candidate(
+                    signal, lmin_indices, lmax_indices, lmax_idx, lmax_time, lmax_val,
+                    data_starts[i], fs_chan, 
+                    parameters_oxy['max_slope_drop_sec'], 
+                    parameters_oxy['desaturation_drop_percent']
+                )
+                
+                if best_lmin is None:
+                    continue
+                
+                lmin_idx, lmin_time, lmin_val, drop = best_lmin
+                
+                # Adjust Lmax for fall rate
+                adjusted_lmax_idx, adjusted_lmax_time, adjusted_lmax_val = self.adjust_lmax_for_fall_rate(
+                    signal, lmax_idx, lmin_idx, data_starts[i], fs_chan
+                )
+                
+                # Adjust for plateau
+                adjusted_lmax_idx, adjusted_lmax_time, adjusted_lmax_val, lmin_idx, lmin_time, lmin_val = \
+                    self.adjust_for_plateau(
+                        signal, adjusted_lmax_idx, adjusted_lmax_val, 
+                        lmin_idx, lmin_time, lmin_val,
+                        data_starts[i], fs_chan
+                    )
+                
+                # Final validation
+                final_drop = adjusted_lmax_val - lmin_val
+                if final_drop >= parameters_oxy['desaturation_drop_percent']:
+                    duration = lmin_time - adjusted_lmax_time
+                    validated_events.append((adjusted_lmax_time, duration, final_drop))
+                    
+                    if DEBUG:
+                        print(f"  Valid desaturation: start={adjusted_lmax_time:.2f}s, "
+                              f"duration={duration:.2f}s, drop={final_drop:.1f}%")
+            
+            for start_sec, duration_sec, drop in validated_events:
+                all_desat_events.append((start_sec, duration_sec))
+
+        # Create output dataframe
+        desat_events = [('SpO2', 'desat_SpO2', start_sec, duration_sec, channel) 
+                        for start_sec, duration_sec in all_desat_events]
         return manage_events.create_event_dataframe(data=desat_events)
 
+
+    def low_pass_filter_nan(self, signal, order, fs_chan, cutoff_freq, type='low'):
+        # We expect to have NaN values in chunk (if any)
+        #   so we filter the signal (without nan values) even if it could have border effects
+        #   and we reconstruct the filtered signal with the original NaN values.
+        non_nan_indices = np.where(~np.isnan(signal))[0]
+        if len(non_nan_indices) > 0:
+            # reshape the i_nan_samples (x,1) to (x,)
+            non_nan_indices = np.squeeze(non_nan_indices)
+            samples_without_nan = signal[non_nan_indices]
+            order_filtfilt = int(order)/2
+            sos = scipysignal.butter(int(order_filtfilt), cutoff_freq,\
+                btype=type, output='sos', fs=fs_chan)
+            samples_filtered = scipysignal.sosfiltfilt(\
+                sos, samples_without_nan).copy() # .copy() is a hack to make 
+                                        # recording the EDF with pyedflib much
+                                        # much much faster
+            filtered_signal = np.empty_like(signal) 
+            filtered_signal[non_nan_indices] = samples_filtered
+        else: # The whole signal is NaN - no filter applied
+            filtered_signal = np.empty_like(signal)
+            filtered_signal.fill(np.nan)
+        return filtered_signal
+
+    def detect_local_min(self, signal, signal_lpf, fs_chan, min_peak_distance_samples, min_peak_prominence, data_start):
+        """
+        Detect local minimums from the low-pass filtered signal and correct their location
+        by finding the actual minimum in the original signal within a 10s window.
+        
+        Parameters:
+            signal : numpy array
+                Original SpO2 signal.
+            signal_lpf : numpy array
+                Low-pass filtered SpO2 signal for trend detection.
+            fs_chan : float
+                Sampling frequency (Hz).
+            min_peak_distance_samples : int
+                Minimum distance between peaks in samples.
+            min_peak_prominence : float
+                Minimum prominence for peak detection.
+            data_start : float
+                Start time in seconds of this signal section.
+        
+        Returns:
+            lmin_indices_corrected : numpy array
+                Corrected indices of local minimums in the original signal.
+        """
+        window_s = 10  # seconds window to identify the real minimum
+        half_window_samples = int((window_s / 2) * fs_chan)
+        
+        # Invert the signal to find minimums using find_peaks
+        inverted_signal = -signal_lpf
+        
+        # Find local minimums (peaks in inverted signal)
+        lmin_indices, lmin_properties = scipysignal.find_peaks(
+            inverted_signal,
+            distance=min_peak_distance_samples,
+            prominence=min_peak_prominence
+        )
+        
+        # Correct Lmin locations by finding actual minimum within 10s window
+        lmin_indices_corrected = []
+        for lmin_idx in lmin_indices:
+            # Define window boundaries
+            window_start = max(0, lmin_idx - half_window_samples)
+            window_end = min(len(signal), lmin_idx + half_window_samples)
+            
+            # Find actual minimum within window
+            window_signal = signal[window_start:window_end]
+            if len(window_signal) > 0 and not np.all(np.isnan(window_signal)):
+                local_min_idx = np.nanargmin(window_signal)
+                corrected_idx = window_start + local_min_idx
+                lmin_indices_corrected.append(corrected_idx)
+        
+        lmin_indices_corrected = np.array(lmin_indices_corrected)
+        
+        if DEBUG:
+            lmin_times_sec = data_start + lmin_indices_corrected / fs_chan
+            lmin_values = signal[lmin_indices_corrected] if len(lmin_indices_corrected) > 0 else []
+            print(f"Found {len(lmin_indices_corrected)} local minimums (corrected within {window_s}s window)")
+            for idx, (t, v) in enumerate(zip(lmin_times_sec, lmin_values)):
+                print(f"  Lmin {idx}: time={t:.2f}s, value={v:.1f}%")
+        
+        return lmin_indices_corrected
+
+
+    def detect_local_max(self, signal, signal_lpf, fs_chan, min_peak_distance_samples, min_peak_prominence, data_start):
+        """
+        Detect local maximums from the low-pass filtered signal and correct their location
+        by finding the actual maximum in the original signal within a 10s window.
+        
+        Parameters:
+            signal : numpy array
+                Original SpO2 signal.
+            signal_lpf : numpy array
+                Low-pass filtered SpO2 signal for trend detection.
+            fs_chan : float
+                Sampling frequency (Hz).
+            min_peak_distance_samples : int
+                Minimum distance between peaks in samples.
+            min_peak_prominence : float
+                Minimum prominence for peak detection.
+            data_start : float
+                Start time in seconds of this signal section.
+        
+        Returns:
+            lmax_indices_corrected : numpy array
+                Corrected indices of local maximums in the original signal.
+        """
+        window_s = 10  # seconds window to identify the real maximum
+        half_window_samples = int((window_s / 2) * fs_chan)
+        
+        # Find local maximums using find_peaks on the filtered signal
+        lmax_indices, lmax_properties = scipysignal.find_peaks(
+            signal_lpf,
+            distance=min_peak_distance_samples,
+            prominence=min_peak_prominence
+        )
+
+        # Correct Lmax locations by finding actual maximum within 10s window
+        lmax_indices_corrected = []
+        for lmax_idx in lmax_indices:
+            # Define window boundaries
+            window_start = max(0, lmax_idx - half_window_samples)
+            window_end = min(len(signal), lmax_idx + half_window_samples)
+            
+            # Find actual maximum within window
+            window_signal = signal[window_start:window_end]
+            if len(window_signal) > 0 and not np.all(np.isnan(window_signal)):
+                local_max_idx = np.nanargmax(window_signal)
+                corrected_idx = window_start + local_max_idx
+                lmax_indices_corrected.append(corrected_idx)
+        
+        lmax_indices_corrected = np.array(lmax_indices_corrected)
+        
+        if DEBUG:
+            lmax_times_sec = data_start + lmax_indices_corrected / fs_chan
+            lmax_values = signal[lmax_indices_corrected] if len(lmax_indices_corrected) > 0 else []
+            print(f"Found {len(lmax_indices_corrected)} local maximums (corrected within {window_s}s window)")
+            for idx, (t, v) in enumerate(zip(lmax_times_sec, lmax_values)):
+                print(f"  Lmax {idx}: time={t:.2f}s, value={v:.1f}%")
+        
+        return lmax_indices_corrected
+
+    def find_best_lmin_candidate(self, signal, lmin_indices, lmax_indices, lmax_idx, lmax_time, lmax_val, 
+                                  data_start, fs_chan, max_slope_drop_sec, desaturation_drop_percent):
+        """
+        Find the best Lmin candidate for a given Lmax.
+        
+        Parameters:
+            signal : numpy array
+                Original SpO2 signal.
+            lmin_indices : numpy array
+                Indices of local minimums.
+            lmax_indices : numpy array
+                Indices of local maximums.
+            lmax_idx : int
+                Index of the current Lmax.
+            lmax_time : float
+                Time in seconds of the current Lmax.
+            lmax_val : float
+                Value of the current Lmax.
+            data_start : float
+                Start time in seconds of this signal section.
+            fs_chan : float
+                Sampling frequency (Hz).
+            max_slope_drop_sec : float
+                Maximum duration for the desaturation drop.
+            desaturation_drop_percent : float
+                Minimum drop percentage to be considered a desaturation.
+        
+        Returns:
+            best_lmin : tuple or None
+                (lmin_idx, lmin_time, lmin_val, drop) or None if no valid candidate.
+        """
+        max_end_time = lmax_time + max_slope_drop_sec
+        candidate_lmins = []
+        
+        for lmin_idx in lmin_indices:
+            lmin_time = data_start + lmin_idx / fs_chan
+            
+            # Lmin must be after Lmax and within max duration
+            if lmin_time <= lmax_time or lmin_time > max_end_time:
+                continue
+            
+            # Check if there's another Lmax between current Lmax and this Lmin
+            current_pos = np.where(lmax_indices == lmax_idx)[0][0]
+            if current_pos + 1 < len(lmax_indices):
+                next_lmax_time = data_start + lmax_indices[current_pos + 1] / fs_chan
+                if next_lmax_time < lmin_time:
+                    continue
+            
+            lmin_val = signal[lmin_idx]
+            drop = lmax_val - lmin_val
+            
+            # Reject if drop is less than minimum threshold
+            if drop < desaturation_drop_percent:
+                continue
+            
+            candidate_lmins.append((lmin_idx, lmin_time, lmin_val, drop))
+        
+        if not candidate_lmins:
+            return None
+        
+        # Choose the Lmin with the lowest value (maximum drop)
+        return min(candidate_lmins, key=lambda x: x[2])
+
+
+    def adjust_lmax_for_fall_rate(self, signal, lmax_idx, lmin_idx, data_start, fs_chan, fall_rate_threshold=-0.05):
+        """
+        Shift Lmax forward to where fall rate <= threshold is first reached.
+        
+        Parameters:
+            signal : numpy array
+                Original SpO2 signal.
+            lmax_idx : int
+                Index of the current Lmax.
+            lmin_idx : int
+                Index of the matched Lmin.
+            data_start : float
+                Start time in seconds of this signal section.
+            fs_chan : float
+                Sampling frequency (Hz).
+            fall_rate_threshold : float
+                Fall rate threshold in %/s (default -0.05).
+        
+        Returns:
+            adjusted_lmax_idx : int
+                Adjusted index of Lmax.
+            adjusted_lmax_time : float
+                Adjusted time of Lmax.
+            adjusted_lmax_val : float
+                Adjusted value of Lmax.
+        """
+        adjusted_lmax_idx = lmax_idx
+        for idx in range(lmax_idx, lmin_idx):
+            if idx + 1 < len(signal):
+                fall_rate = (signal[idx + 1] - signal[idx]) * fs_chan
+                if fall_rate <= fall_rate_threshold:
+                    adjusted_lmax_idx = idx
+                    break
+        
+        adjusted_lmax_time = data_start + adjusted_lmax_idx / fs_chan
+        adjusted_lmax_val = signal[adjusted_lmax_idx]
+        return adjusted_lmax_idx, adjusted_lmax_time, adjusted_lmax_val
+
+
+    def adjust_for_plateau(self, signal, adjusted_lmax_idx, adjusted_lmax_val, lmin_idx, lmin_time, lmin_val, 
+                           data_start, fs_chan, plateau_duration_sec=30, plateau_threshold=0.5):
+        """
+        Adjust Lmax or Lmin if a flat plateau exists within the event.
+        
+        Parameters:
+            signal : numpy array
+                Original SpO2 signal.
+            adjusted_lmax_idx : int
+                Current adjusted Lmax index.
+            adjusted_lmax_val : float
+                Current adjusted Lmax value.
+            lmin_idx : int
+                Current Lmin index.
+            lmin_time : float
+                Current Lmin time.
+            lmin_val : float
+                Current Lmin value.
+            data_start : float
+                Start time in seconds of this signal section.
+            fs_chan : float
+                Sampling frequency (Hz).
+            plateau_duration_sec : float
+                Minimum plateau duration in seconds.
+            plateau_threshold : float
+                Maximum change in % to be considered flat.
+        
+        Returns:
+            adjusted_lmax_idx, adjusted_lmax_time, adjusted_lmax_val, lmin_idx, lmin_time, lmin_val : tuple
+                Adjusted values after plateau handling.
+        """
+        plateau_samples = int(plateau_duration_sec * fs_chan)
+        event_signal = signal[adjusted_lmax_idx:lmin_idx + 1]
+        
+        adjusted_lmax_time = data_start + adjusted_lmax_idx / fs_chan
+        
+        if len(event_signal) < plateau_samples:
+            return adjusted_lmax_idx, adjusted_lmax_time, adjusted_lmax_val, lmin_idx, lmin_time, lmin_val
+        
+        # Look for plateau
+        best_plateau_start = None
+        best_plateau_end = None
+        
+        for p_start in range(len(event_signal) - plateau_samples):
+            p_end = p_start + plateau_samples
+            plateau_segment = event_signal[p_start:p_end]
+            
+            if np.nanmax(plateau_segment) - np.nanmin(plateau_segment) <= plateau_threshold:
+                best_plateau_start = p_start
+                best_plateau_end = p_end
+                break
+        
+        # If plateau found, adjust Lmax or Lmin to maximize depth
+        if best_plateau_start is not None:
+            plateau_val = np.nanmean(event_signal[best_plateau_start:best_plateau_end])
+            drop_before_plateau = adjusted_lmax_val - plateau_val
+            drop_after_plateau = plateau_val - lmin_val
+            
+            if drop_before_plateau > drop_after_plateau:
+                # Shift Lmin to start of plateau
+                lmin_idx = adjusted_lmax_idx + best_plateau_start
+                lmin_time = data_start + lmin_idx / fs_chan
+                lmin_val = signal[lmin_idx]
+            else:
+                # Shift Lmax to end of plateau
+                adjusted_lmax_idx = adjusted_lmax_idx + best_plateau_end
+                adjusted_lmax_time = data_start + adjusted_lmax_idx / fs_chan
+                adjusted_lmax_val = signal[adjusted_lmax_idx]
+        
+        return adjusted_lmax_idx, adjusted_lmax_time, adjusted_lmax_val, lmin_idx, lmin_time, lmin_val
 
     def compute_desat_stats(self, desat_df, asleep_stages_df):
         desat_stats = {}
@@ -1037,12 +1324,3 @@ class OxygenDesatDetector(SciNode):
                 duration_sec = desat_df.loc[i_evt2_unique[i_link]]['start_sec']-start_sec
                 link_start.append(['SpO2','SpO2_arousal_end_link', start_sec, duration_sec, channel])
             link_arousal_end_df = manage_events.create_event_dataframe(link_start)
-        else:
-            temporal_stats['arousal_end_before_delay_sec'] = np.nan       
-            link_arousal_end_df = manage_events.create_event_dataframe(None)
-
-        # Concatenate all new events
-        link_event_df = pd.concat([link_desat_start_df, link_desat_end_df])
-        link_event_df = pd.concat([link_event_df, link_arousal_start_df])
-        link_event_df = pd.concat([link_event_df, link_arousal_end_df])
-        return temporal_stats, link_event_df
