@@ -57,6 +57,7 @@ class OxygenDesatDetectorResultsView(Ui_OxygenDesatDetectorResultsView, QtWidget
             # Get the data needed from the cache
             self.signal_raw = cache['signal_raw']
             self.signal_lpf = cache['signal_lpf']
+            self.desat_df = cache['desat_df']
             self.fs = self.signal_raw.sample_rate
 
             # Update the time elapsed based on the loaded data
@@ -70,6 +71,9 @@ class OxygenDesatDetectorResultsView(Ui_OxygenDesatDetectorResultsView, QtWidget
             
             # Get the signals to plot
             self.get_signals()
+
+            # Get the events to plot
+            self.get_events()
 
             # Update event
             self._plot_det_info()
@@ -100,6 +104,8 @@ class OxygenDesatDetectorResultsView(Ui_OxygenDesatDetectorResultsView, QtWidget
         self.get_start_time_to_plot()
         # Get the signals to plot
         self.get_signals()
+        # Get the events to plot
+        self.get_events()
         # Update event
         self._plot_det_info()
 
@@ -206,6 +212,18 @@ class OxygenDesatDetectorResultsView(Ui_OxygenDesatDetectorResultsView, QtWidget
                     # Turn off tick labels
                     ax1.set_yticklabels([])
 
+            # Add rectangles for desaturation events
+            for index, row in self.events.iterrows():
+                event_start = row['start_sec']
+                event_duration = row['duration_sec']
+                # Check if the event is within the plotted window
+                if (event_start >= self.start_to_plot) and (event_start <= (self.start_to_plot + self.duration)):
+                    rect_start = event_start - self.start_to_plot
+                    if n_chan>1:
+                        ax1[chan_sel].axvspan(rect_start, rect_start + event_duration, color='red', alpha=0.3)
+                    else:
+                        ax1.axvspan(rect_start, rect_start + event_duration, color='red', alpha=0.3)
+
             chan_sel += 1
 
         # Hide x labels and tick labels for all but bottom plot.
@@ -245,3 +263,10 @@ class OxygenDesatDetectorResultsView(Ui_OxygenDesatDetectorResultsView, QtWidget
         signal_raw.samples = raw_filled
         signal_lpf.samples = lpf_filled
         self.signals = [signal_raw, signal_lpf]
+
+
+    def get_events(self):
+        # Extract the events from the dataframe that needed to be plotted
+        # the set of events self.desat_df
+        self.events = self.desat_df[self.desat_df['start_sec']>=self.start_to_plot]
+        self.events = self.events[self.events['start_sec']<=(self.start_to_plot + self.duration)]
