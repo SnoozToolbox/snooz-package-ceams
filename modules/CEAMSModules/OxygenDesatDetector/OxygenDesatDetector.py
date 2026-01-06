@@ -227,6 +227,7 @@ class OxygenDesatDetector(SciNode):
         Outputs:
 
         """
+        self.clear_cache()
 
         # Raise NodeInputException if the an input is wrong. This type of
         # exception will stop the process with the error message given in parameter.
@@ -353,8 +354,32 @@ class OxygenDesatDetector(SciNode):
             # 'max_slope_drop_sec' : 'The maximum duration (s) during which the oxygen level is dropping "120 or 20"',
             # 'min_hold_drop_sec' : 'Minimum duration (s) during which the oxygen level drop is maintained "10 or 5"',
         asleep_stages_df = stage_rec_df[((stage_rec_df['name']>0) & (stage_rec_df['name']<6))]
-        desat_df = self.detect_desaturation_ABOSA(data_starts, data_stats, fs_chan, channel, parameters_oxy, asleep_stages_df)
+        desat_df, data_lpf_list = self.detect_desaturation_ABOSA(data_starts, data_stats, fs_chan, channel, parameters_oxy, asleep_stages_df)
+        #desat_df = self.detect_desaturation_ABOSA(data_starts, data_stats, fs_chan, channel, parameters_oxy, asleep_stages_df)
         desat_stats = self.compute_desat_stats(desat_df, asleep_stages_df)
+
+        if DEBUG:
+            cache = {}
+            if len(data_lpf_list)>1:
+                # Find the longuest signal
+                len_data = [len(data) for data in data_lpf_list]
+                index_longuest = np.argmax(len_data)
+                data_lpf_list = [data_lpf_list[index_longuest]]
+            else:
+                index_longuest = 0
+            if len(data_lpf_list)>0:
+                # Create a SignalModel for the raw data and the filtered data
+                signal_raw = signals[index_longuest].clone(clone_samples=False)
+                signal_lpf = signals[index_longuest].clone(clone_samples=False)
+                signal_raw.samples = data_stats[index_longuest]
+                signal_raw.start_time = data_starts[index_longuest]
+                signal_lpf.samples = data_lpf_list[0]
+                signal_lpf.start_time = data_starts[index_longuest]
+                signal_lpf.channel = signal_raw.channel+'_lpf'
+                cache['signal_raw'] = signal_raw
+                cache['signal_lpf'] = signal_lpf
+                cache['desat_df'] = desat_df
+                self._cache_manager.write_mem_cache(self.identifier, cache)
 
         # Temporal links between desaturation and arousal
         # Removed 2024-01-30
@@ -804,12 +829,13 @@ class OxygenDesatDetector(SciNode):
             Structure and validation. Computer Methods and Programs in Biomedicine, 226, 107120. 
             https://doi.org/10.1016/j.cmpb.2022.107120
         """   
+        data_lpf_list = []
         all_desat_events = []
         
         # ABOSA parameters
         min_peak_distance_sec = 5
         min_peak_prominence = 1
-        order = 4
+        order = 2
         low_frequency_cutoff = 0.1
         min_peak_distance_samples = int(min_peak_distance_sec * fs_chan)
 
@@ -818,6 +844,7 @@ class OxygenDesatDetector(SciNode):
             if not np.any(valid_mask):
                 continue
         
+            # Low pass filter the signal to get the trend in order to detect local min and max
             signal_lpf = self.low_pass_filter_nan(signal, order, fs_chan, low_frequency_cutoff)
             
             # Step 1: Locate potential endpoints (Lmin)
@@ -880,10 +907,17 @@ class OxygenDesatDetector(SciNode):
             for start_sec, duration_sec, drop in validated_events:
                 all_desat_events.append((start_sec, duration_sec))
 
+            # Debug output for the result view
+            if DEBUG: 
+                data_lpf_list.append(signal_lpf)
+
         # Create output dataframe
-        desat_events = [('SpO2', 'desat_SpO2', start_sec, duration_sec, channel) 
-                        for start_sec, duration_sec in all_desat_events]
-        return manage_events.create_event_dataframe(data=desat_events)
+        # desat_events = [('SpO2', 'desat_SpO2', start_sec, duration_sec, channel) 
+        #                 for start_sec, duration_sec in all_desat_events]
+        desat_events = [('SpO2', 'desat_SpO2', start_sec, duration_sec, '') 
+                        for start_sec, duration_sec in all_desat_events]    
+        #return manage_events.create_event_dataframe(data=desat_events)    
+        return manage_events.create_event_dataframe(data=desat_events), data_lpf_list
 
 
     def low_pass_filter_nan(self, signal, order, fs_chan, cutoff_freq, type='low'):
@@ -903,6 +937,7 @@ class OxygenDesatDetector(SciNode):
                                         # recording the EDF with pyedflib much
                                         # much much faster
             filtered_signal = np.empty_like(signal) 
+            filtered_signal.fill(np.nan)
             filtered_signal[non_nan_indices] = samples_filtered
         else: # The whole signal is NaN - no filter applied
             filtered_signal = np.empty_like(signal)
@@ -932,7 +967,7 @@ class OxygenDesatDetector(SciNode):
             lmin_indices_corrected : numpy array
                 Corrected indices of local minimums in the original signal.
         """
-        window_s = 10  # seconds window to identify the real minimum
+        window_s = 5  # seconds window to identify the real minimum
         half_window_samples = int((window_s / 2) * fs_chan)
         
         # Invert the signal to find minimums using find_peaks
@@ -994,7 +1029,7 @@ class OxygenDesatDetector(SciNode):
             lmax_indices_corrected : numpy array
                 Corrected indices of local maximums in the original signal.
         """
-        window_s = 10  # seconds window to identify the real maximum
+        window_s = 5  # seconds window to identify the real maximum
         half_window_samples = int((window_s / 2) * fs_chan)
         
         # Find local maximums using find_peaks on the filtered signal
