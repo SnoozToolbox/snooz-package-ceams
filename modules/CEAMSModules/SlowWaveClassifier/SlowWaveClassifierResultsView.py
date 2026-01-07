@@ -15,32 +15,8 @@ from scipy.stats import norm
 import numpy as np
 from qtpy import QtWidgets, QtCore, QtGui
 from CEAMSModules.SlowWaveClassifier.Ui_SlowWaveClassifierResultsView import Ui_SlowWaveClassifierResultsView
+from CEAMSModules.SlowWaveClassifier.SlowWaveClassifier import SlowWaveClassifier
 
-
-def _mix_pdf(x, loc, scale, weights):
-    """
-    Probability density function of gaussian mixture distribution.
-    Used to give different weight to each peak of the gaussian mixture and get
-    a nice graph when shown on histogram.
-    Taken from :
-    https://stats.stackexchange.com/questions/387702/gaussian-mixture-is-this-plot-right 
-    
-    Parameters
-    -----------
-        x   : data to analyse
-        loc : mean of data
-        scale   : covariance of data
-        weights : weight of each gaussian mixture peak
-    
-    Returns
-    -----------
-        d   :   probability density function
-    """
-
-    d = np.zeros_like(x)
-    for mu, sigma, pi in zip(loc, scale, weights):
-        d += pi * norm.pdf(x, loc=mu, scale=sigma)
-    return d
 
 class SlowWaveClassifierResultsView( Ui_SlowWaveClassifierResultsView, QtWidgets.QWidget):
     """
@@ -107,76 +83,12 @@ class SlowWaveClassifierResultsView( Ui_SlowWaveClassifierResultsView, QtWidgets
             self.ax_distr_quarter_4 = self.quarter_fig.add_subplot(self.gs2[1,1])
 
             # Plot figures
-            self.plot_histogram(self.histogram_data, self.gm_data)
-            self.plot_aic_results(self.aic_data)
+            SlowWaveClassifier.plot_histogram(self, self.histogram_data, self.gm_data)
+            SlowWaveClassifier.plot_aic_results(self, self.aic_data)
             self.show_categories_data(self.data_details)
             self.show_sleep_time_distribution()
             self.show_sleep_cycles_distribution()
             self.show_sleep_quarter_distribution()
-
-
-    def plot_histogram(self, data, gm):
-        """
-        Plots an histogram with the gaussian mixture distribution on it
-        Snippet of code below inspired by :
-        https://stats.stackexchange.com/questions/387702/gaussian-mixture-is-this-plot-right
-        
-        Parameters
-        -----------
-            data : Pandas DataFrame
-                DataFrame events (columns=['category','n_t','PaP','Neg', 'tNe', 'tPo', 'Pap_raw', 'Neg_raw', 'mfr', 'tfr'])
-                containing data analysis of parameters for each slow wave category
-                found
-            gm  : list, GaussianMixture value
-        """        
-
-        # Constants
-        N_BINS = 100
-        GAUSSIAN_PRECISION = 0.0001
-        MULT_VISUALISATION = len(data)/25     # Better visualise gaussian mixture on histogram
-
-        self.ax_histo.clear()   # clean old histogram plot
-
-        hist_data = np.array(data)
-        hist_data = hist_data.reshape(-1, 1)   # Gaussian Mixture requires 2D array
-        self.ax_histo.hist(hist_data, bins = N_BINS)
-        "Section of code taken from https://stats.stackexchange.com/questions/387702/gaussian-mixture-is-this-plot-right"
-        pi, mu, sigma = gm.weights_.flatten(), gm.means_.flatten(), np.sqrt(gm.covariances_.flatten())
-        grid = np.arange(np.min(hist_data), np.max(hist_data), GAUSSIAN_PRECISION)
-        self.ax_histo.plot(grid, MULT_VISUALISATION * _mix_pdf(grid, mu, sigma, pi))
-        "End of section of code"
-        self.ax_histo.set_title("Distribution of sleep slow wave's transition frequency")
-        self.ax_histo.set_xlabel('Transition frequency (Hz)')
-        self.ax_histo.set_ylabel('Number of sleep slow waves')
-        custom_legend_lines = [Line2D([0], [0], color='blue', lw=4),
-                                Line2D([0], [0], color='orange', lw=4)] 
-        self.ax_histo.legend(custom_legend_lines, 
-                            ['Histogram of distribution', 'Gaussian mixture of distribution'],
-                            loc='upper right')
-
-
-    def plot_aic_results(self, aic_data):
-        """
-        Plots the Akaike information criterion (AIC) of the gaussian distribution
-        show in the histogram plot
-
-        Parameters
-        -----------
-            aic_data    : aic_results : list, aic value (float) for each distribution
-        """
-
-        self.ax_aic.clear()     # clean old aic plot
-
-        if len(aic_data) > 1:
-            x = [i + 1 for i in range(len(aic_data))]
-            self.ax_aic.plot(x, aic_data)
-            self.ax_aic.set_title("Akaike Information Criterion (AIC)")
-            self.ax_aic.set_xlabel('Number of categories')
-            self.ax_aic.set_ylabel('AIC value')
-            self.ax_aic.set_xticks(x)
-        else:
-            self.ax_aic.set_axis_off()
-
 
     def show_categories_data(self, classification_data):
         """

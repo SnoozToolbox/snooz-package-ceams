@@ -7,20 +7,9 @@ See the file LICENCE for full license details.
     A Class to analyze the oxygen channel, detect oxygen desaturations and export oxygen saturation report.
 """
 
-# Conditionally import matplotlib based on headless mode
-import config
-if config.HEADLESS_MODE:
-    # Use Agg backend in headless mode (no GUI required, perfect for PDF generation)
-    import matplotlib
-    matplotlib.use('Agg')
-    from matplotlib.figure import Figure
-    import matplotlib.pyplot as plt
-else:
-    # Use QtAgg backend in GUI mode
-    import matplotlib
-    matplotlib.use('QtAgg')
-    import matplotlib.pyplot as plt
-
+import matplotlib
+matplotlib.use('Agg')
+import matplotlib.pyplot as plt
 plt.switch_backend('agg')  # turn off gui
 import numpy as np
 import os.path
