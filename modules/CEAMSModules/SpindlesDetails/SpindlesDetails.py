@@ -890,58 +890,71 @@ class SpindlesDetails(SciNode):
         return signals_sigma
 
 
-    def _open_dialog_fig_filtered_spindle(self, signals_cur_chan, signals_sigma, fs_chan, ss_start_times, ss_dur_times, signal_sel, ss_start, ss_dur, spindle_i):
-        """""
-            Debug function to open figure in a dialog. This funciton display the original spindle (mean removed) 
-            and the filtered spindle in sigma band.
-        """""
-        from matplotlib.backends.backend_qtagg import FigureCanvasQTAgg as FigureCanvas
-        from matplotlib.figure import Figure
-        from PySide2.QtWidgets import QDialog, QVBoxLayout
+    # def _open_dialog_fig_filtered_spindle(self, signals_cur_chan, signals_sigma, fs_chan, ss_start_times, ss_dur_times, signal_sel, ss_start, ss_dur, spindle_i):
+    #     """""
+    #         Debug function to open figure in a dialog. This funciton display the original spindle (mean removed) 
+    #         and the filtered spindle in sigma band.
+    #     """""
+    #     import config
+    #     if config.HEADLESS_MODE:
+    #         # Skip dialog in headless mode (no GUI available)
+    #         return
+        
+    #     # Use QtAgg backend in GUI mode
+    #     import matplotlib
+    #     matplotlib.use('QtAgg')
+    #     from matplotlib.backends.backend_qtagg import FigureCanvasQTAgg as FigureCanvas
+    #     from matplotlib.figure import Figure
+    #     from PySide2.QtWidgets import QDialog, QVBoxLayout
 
-        # Extract and define the new extracted channel_cur
-        # Convert onset and duration in samples to avoid rounding error
-        fs_signal = signals_cur_chan[signal_sel].sample_rate
-        ss_start_samples = int(np.round(ss_start*fs_signal))
-        ss_dur_samples = int(np.round(ss_dur*fs_signal))
-        signal_cur = SignalsFromEvents.extract_events_from_signal(SignalsFromEvents, signals_cur_chan[signal_sel], ss_start_samples, ss_dur_samples)
-        sigma_cur = SignalsFromEvents.extract_events_from_signal(SignalsFromEvents, signals_sigma[signal_sel], ss_start_samples, ss_dur_samples)
+    #     # Extract and define the new extracted channel_cur
+    #     # Convert onset and duration in samples to avoid rounding error
+    #     fs_signal = signals_cur_chan[signal_sel].sample_rate
+    #     ss_start_samples = int(np.round(ss_start*fs_signal))
+    #     ss_dur_samples = int(np.round(ss_dur*fs_signal))
+    #     signal_cur = SignalsFromEvents.extract_events_from_signal(SignalsFromEvents, signals_cur_chan[signal_sel], ss_start_samples, ss_dur_samples)
+    #     sigma_cur = SignalsFromEvents.extract_events_from_signal(SignalsFromEvents, signals_sigma[signal_sel], ss_start_samples, ss_dur_samples)
 
-        dialog = QDialog()
-        fig = Figure(figsize=(5, 4), dpi=100)
-        canvas = FigureCanvas(fig)
-        time = np.arange(ss_start_times[spindle_i],ss_start_times[spindle_i]+ss_dur_times[spindle_i],1/fs_chan)
-        ax = fig.add_subplot(111)
-        ax.plot(time,signal_cur.samples-np.mean(signal_cur.samples),'k')
-        #ax.title.set_text('raw signal')
-        ax.plot(time,sigma_cur.samples, 'r')
-        #ax.title.set_text('signal 11-16 Hz')
-        layout = QVBoxLayout()
-        layout.addWidget(canvas)
-        dialog.setLayout(layout)
-        dialog.exec_()
+    #     dialog = QDialog()
+    #     fig = Figure(figsize=(5, 4), dpi=100)
+    #     canvas = FigureCanvas(fig)
+    #     time = np.arange(ss_start_times[spindle_i],ss_start_times[spindle_i]+ss_dur_times[spindle_i],1/fs_chan)
+    #     ax = fig.add_subplot(111)
+    #     ax.plot(time,signal_cur.samples-np.mean(signal_cur.samples),'k')
+    #     #ax.title.set_text('raw signal')
+    #     ax.plot(time,sigma_cur.samples, 'r')
+    #     #ax.title.set_text('signal 11-16 Hz')
+    #     layout = QVBoxLayout()
+    #     layout.addWidget(canvas)
+    #     dialog.setLayout(layout)
+    #     dialog.exec_()
 
 
-    def _open_dialog_fig_psa_spindle(self, freq_bins, fft_result_win, freq_max_energy):
-        """""
-            Debug function to open figure in a dialog. This funciton display the spectre and the frequency 
-            with the highest energy in the sigma band.
-        """""
-        from matplotlib.backends.backend_qtagg import FigureCanvasQTAgg as FigureCanvas
-        from matplotlib.figure import Figure
-        from PySide2.QtWidgets import QDialog, QVBoxLayout
-        dialog = QDialog()
-        fig = Figure(figsize=(5, 4), dpi=100)
-        canvas = FigureCanvas(fig)
-        ax = fig.add_subplot(111)
-        ax.plot(freq_bins,abs(fft_result_win),'k')
-        ax.axvline(x = freq_max_energy, color = 'r')
-        #ax.text(freq_max_energy,max(abs(fft_result_win_sigma)),'X',color='r',horizontalalignment='center')
-        ax.set_xlim(5.0,20.0)
-        layout = QVBoxLayout()
-        layout.addWidget(canvas)
-        dialog.setLayout(layout)
-        dialog.exec_()
+    # def _open_dialog_fig_psa_spindle(self, freq_bins, fft_result_win, freq_max_energy):
+    #     """""
+    #         Debug function to open figure in a dialog. This funciton display the spectre and the frequency 
+    #         with the highest energy in the sigma band.
+    #     """""
+    #     import config
+    #     if config.HEADLESS_MODE:
+    #         # Skip dialog in headless mode (no GUI available)
+    #         return
+        
+    #     from matplotlib.backends.backend_qtagg import FigureCanvasQTAgg as FigureCanvas
+    #     from matplotlib.figure import Figure
+    #     from PySide2.QtWidgets import QDialog, QVBoxLayout
+    #     dialog = QDialog()
+    #     fig = Figure(figsize=(5, 4), dpi=100)
+    #     canvas = FigureCanvas(fig)
+    #     ax = fig.add_subplot(111)
+    #     ax.plot(freq_bins,abs(fft_result_win),'k')
+    #     ax.axvline(x = freq_max_energy, color = 'r')
+    #     #ax.text(freq_max_energy,max(abs(fft_result_win_sigma)),'X',color='r',horizontalalignment='center')
+    #     ax.set_xlim(5.0,20.0)
+    #     layout = QVBoxLayout()
+    #     layout.addWidget(canvas)
+    #     dialog.setLayout(layout)
+    #     dialog.exec_()
 
 
     def compute_char_dom_freq(self, signals_spindle_cur_chan, fs_chan):
@@ -1857,3 +1870,4 @@ class SpindlesDetails(SciNode):
             inv_dur_sec_total = inv_dur_sec_total + inv_dur_sec_cur_epoch
         
         return inv_dur_sec_total
+        

@@ -4,9 +4,15 @@ See the file LICENCE for full license details.
 """
 from .FilterEvents import FilterEvents
 from .FilterEventsSettingsView import FilterEventsSettingsView
-from .FilterEventsResultsView import FilterEventsResultsView
-from .Ui_FilterEventsResultsView import Ui_FilterEventsResultsView
-from .Ui_FilterEventsSettingsView import Ui_FilterEventsSettingsView
 
-
-
+# Only import ResultsView and UI classes in non-headless mode to avoid matplotlib/Qt dependencies
+import config
+if not config.HEADLESS_MODE:
+    from .FilterEventsResultsView import FilterEventsResultsView
+    from .Ui_FilterEventsResultsView import Ui_FilterEventsResultsView
+    from .Ui_FilterEventsSettingsView import Ui_FilterEventsSettingsView
+else:
+    # Create stub classes for headless mode
+    FilterEventsResultsView = None
+    Ui_FilterEventsResultsView = None
+    Ui_FilterEventsSettingsView = None

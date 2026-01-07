@@ -6,7 +6,21 @@ See the file LICENCE for full license details.
 """
     Library helper for plotting data.
 """
-import matplotlib.ticker as mticker
+
+# Conditionally import matplotlib based on headless mode
+import config
+if config.HEADLESS_MODE:
+    # Use Agg backend in headless mode (no GUI required, perfect for PDF generation)
+    import matplotlib
+    matplotlib.use('Agg')
+    from matplotlib.figure import Figure
+    import matplotlib.ticker as mticker
+else:
+    # Use QtAgg backend in GUI mode
+    import matplotlib
+    matplotlib.use('QtAgg')
+    import matplotlib.ticker as mticker
+
 import numpy as np
 
 def draw_spectogram(axis, psd, freq_bins, win_len, win_step, scale='log', \

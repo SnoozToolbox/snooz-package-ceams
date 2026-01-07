@@ -71,7 +71,7 @@ See the file LICENCE for full license details.
         2021-04-22 : Output detection_win_activity and med_bsl_win, klacourse
         2021-05-04 : Managed the fixed spectral detector, klacourse
 """
-import matplotlib.pyplot as plt
+
 import numpy as np
 import pandas as pd
 from scipy.stats import norm
@@ -412,21 +412,21 @@ class SpectralDetector(SciNode):
                         threshold_val = float(threshold_val)
                     # The threshold is negative when data to mark is lower than the mode.
                     threshold_val = mean_main + threshold_val*std_main
-                    if DEBUG:
-                        # save the hypnogram with the normal fit, mode, std and current threshold
-                        figure, histo_ax = plt.subplots()
-                        nbins=50
-                        n, bins, patches = histo_ax.hist(tot_win_act, bins=nbins, density=True)
-                        # add a 'best fit' line on the data normally distributed
-                        x = np.linspace(min(bins), max(bins), nbins)
-                        p = norm.pdf(x, mean_main, std_main)
-                        histo_ax.plot(x, p, 'r--', linewidth=2)
-                        histo_ax.axvline(x=mean_main,color='b')
-                        histo_ax.axvline(x=mean_main+std_main,c='b',ls='--')
-                        histo_ax.axvline(x=mean_main+2*std_main,c='b',ls='--')
-                        histo_ax.axvline(x=threshold_val,color='k')
-                        figure.savefig(f"histogram_{event_name}_{self._event_set_i}.pdf")
-                        self._event_set_i = self._event_set_i + 1
+                    # if DEBUG:
+                    #     # save the hypnogram with the normal fit, mode, std and current threshold
+                    #     figure, histo_ax = plt.subplots()
+                    #     nbins=50
+                    #     n, bins, patches = histo_ax.hist(tot_win_act, bins=nbins, density=True)
+                    #     # add a 'best fit' line on the data normally distributed
+                    #     x = np.linspace(min(bins), max(bins), nbins)
+                    #     p = norm.pdf(x, mean_main, std_main)
+                    #     histo_ax.plot(x, p, 'r--', linewidth=2)
+                    #     histo_ax.axvline(x=mean_main,color='b')
+                    #     histo_ax.axvline(x=mean_main+std_main,c='b',ls='--')
+                    #     histo_ax.axvline(x=mean_main+2*std_main,c='b',ls='--')
+                    #     histo_ax.axvline(x=threshold_val,color='k')
+                    #     figure.savefig(f"histogram_{event_name}_{self._event_set_i}.pdf")
+                    #     self._event_set_i = self._event_set_i + 1
                 else:
                     raise NodeRuntimeException(self.identifier, "psds", \
                         f"SpectralDetector does not have enough statistics to compute standard deviation")

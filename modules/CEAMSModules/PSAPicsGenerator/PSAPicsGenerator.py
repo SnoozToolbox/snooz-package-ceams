@@ -8,11 +8,22 @@ See the file LICENCE for full license details.
 import os
 import pandas as pd
 import numpy as np
-import matplotlib
-matplotlib.use('Qtagg')  # Use non-GUI backend
-from matplotlib.backends.backend_qtagg import FigureCanvasQTAgg as FigureCanvas
-from matplotlib.figure import Figure
-import matplotlib.pyplot as plt
+
+# Conditionally import matplotlib based on headless mode
+import config
+if config.HEADLESS_MODE:
+    # Use Agg backend in headless mode (no GUI required, perfect for PDF generation)
+    import matplotlib
+    matplotlib.use('Agg')
+    from matplotlib.figure import Figure
+    import matplotlib.pyplot as plt
+else:
+    # Use QtAgg backend in GUI mode
+    import matplotlib
+    matplotlib.use('QtAgg')
+    from matplotlib.backends.backend_qtagg import FigureCanvasQTAgg as FigureCanvas
+    from matplotlib.figure import Figure
+    import matplotlib.pyplot as plt
 
 from flowpipe import SciNode, InputPlug, OutputPlug
 from commons.NodeInputException import NodeInputException

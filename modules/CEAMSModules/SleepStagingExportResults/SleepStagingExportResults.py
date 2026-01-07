@@ -13,12 +13,22 @@ from commons.NodeRuntimeException import NodeRuntimeException
 import pandas as pd
 import os
 
-import matplotlib
-matplotlib.use('QtAgg')
+# Conditionally import matplotlib based on headless mode
+import config
+if config.HEADLESS_MODE:
+    # Use Agg backend in headless mode (no GUI required, perfect for PDF generation)
+    import matplotlib
+    matplotlib.use('Agg')
+    from matplotlib.figure import Figure
+else:
+    # Use QtAgg backend in GUI mode
+    import matplotlib
+    matplotlib.use('QtAgg')
+    from matplotlib.backends.backend_qtagg import FigureCanvasQTAgg as FigureCanvas
+    from matplotlib.backends.backend_qtagg import NavigationToolbar2QT as NavigationToolbar
+    from matplotlib.figure import Figure
+
 import matplotlib.pyplot as plt
-from matplotlib.backends.backend_qtagg import FigureCanvasQTAgg as FigureCanvas
-from matplotlib.backends.backend_qtagg import NavigationToolbar2QT as NavigationToolbar
-from matplotlib.figure import Figure
 import matplotlib.gridspec as gridspec
 from sklearn.metrics import confusion_matrix
 import seaborn as sns
@@ -64,7 +74,12 @@ class SleepStagingExportResults(SciNode):
 
         # Initialize the figure and canvas for plotting
         self.figure = Figure()
-        self.canvas = FigureCanvas(self.figure)
+        # Canvas is only needed in GUI mode (for interactive display)
+        # In headless mode, we can still save figures to PDF without canvas
+        if not config.HEADLESS_MODE:
+            self.canvas = FigureCanvas(self.figure)
+        else:
+            self.canvas = None
 
         # A master module allows the process to be reexcuted multiple time.
         self._is_master = False
@@ -248,8 +263,9 @@ class SleepStagingExportResults(SciNode):
             file_name = SavedDestination + name_without_extension + '.pdf'
             self.figure.savefig(file_name, format='pdf')
 
-            # refresh canvas
-            self.canvas.draw()
+            # refresh canvas (only in GUI mode)
+            if self.canvas is not None:
+                self.canvas.draw()
             # Return the path to the updated Excel file
         else:
             export_results_file_path = None

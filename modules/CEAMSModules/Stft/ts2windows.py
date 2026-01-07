@@ -21,7 +21,21 @@ from CEAMSModules.EventCompare import performance as perf
 
 import datetime as dt
 import numpy as np
-import matplotlib.pyplot as plt
+
+# Conditionally import matplotlib based on headless mode
+import config
+if config.HEADLESS_MODE:
+    # Use Agg backend in headless mode (no GUI required, perfect for PDF generation)
+    import matplotlib
+    matplotlib.use('Agg')
+    from matplotlib.figure import Figure
+    import matplotlib.pyplot as plt
+else:
+    # Use QtAgg backend in GUI mode
+    import matplotlib
+    matplotlib.use('QtAgg')
+    import matplotlib.pyplot as plt
+
 import pandas as pd
 import time
 
