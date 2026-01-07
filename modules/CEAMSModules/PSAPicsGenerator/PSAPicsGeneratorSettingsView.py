@@ -148,6 +148,10 @@ class PSAPicsGeneratorSettingsView(BaseSettingsView, Ui_PSAPicsGeneratorSettings
             'log_scale': False,  # Logarithmic scale option
             'show_legend': True,  # Show legend option
             'force_axis': False, # False or [xmin, xmax, ymin, ymax]
+            'font': 'Arial',
+            'fontsize': 12,
+            'figure_width': 8,
+            'figure_height': 6,
             'output_folder': ''
         }
         

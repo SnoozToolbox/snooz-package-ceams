@@ -62,6 +62,10 @@ class PSAPicsGenerator(SciNode):
         - 'freq_range': [float, float], frequency range to display
         - 'log_scale': bool, use log scale for y-axis
         - 'show_legend': bool, show legend on plots (default: True)
+        - 'font': str, font family for all text (default: 'Arial')
+        - 'fontsize': int, font size for titles (default: 12)
+        - 'figure_width': float, figure width in inches (default: 6)
+        - 'figure_height': float, figure height in inches (default: 8)
         - 'sleep_stage_selection': list of str, sleep stages to include
         - 'activity_var': str, variable for activity ('total', 'clock_h', 'stage_h', 'cyc')
         - 'hour': int, hour for 'clock_h' and 'stage_h' variables
@@ -88,8 +92,6 @@ class PSAPicsGenerator(SciNode):
         # Output plugs
         
         # Properties of the module
-        # To display the pictures
-        self.figsize = (8, 6) # in inches
         # Default frequency range for PSA plots (typical for sleep EEG)
         self.default_freq_range = [0.5, 30]
 
@@ -170,7 +172,8 @@ class PSAPicsGenerator(SciNode):
         psa_data_per_chan = {} # the key is the channel label and the value is the PSA data
         # the key is the group label and the value is the PSA data
         psa_data_cohort = {}
-
+        # To display the pictures
+        self.figsize = (pics_param.get("figure_width", 8), pics_param.get("figure_height", 6)) # in inches
         for file_name in filenames.keys():
             file_group_name = file_group[file_name]
             
@@ -761,15 +764,28 @@ class PSAPicsGenerator(SciNode):
                 if log_scale:
                     ax.set_yscale('log')
 
-                ax.set_xlabel('Frequency (Hz)')
-                ax.set_ylabel('Power (μV²/Hz)')
+                # Get font settings from parameters
+                font_family = pics_param.get('font', 'Arial')
+                title_fontsize = pics_param.get('fontsize', 12) + 2
+                label_fontsize = pics_param.get('fontsize', 12)
+
+                ax.set_xlabel('Frequency (Hz)', fontsize=label_fontsize, fontfamily=font_family)
+                ax.set_ylabel('Power (μV²/Hz)', fontsize=label_fontsize, fontfamily=font_family)
                 ax.grid(which='both', axis='both')
-                ax.set_title(fig_title)
+                ax.set_title(fig_title, fontsize=title_fontsize, fontfamily=font_family)
+                
+                # Update tick label font
+                for label in ax.get_xticklabels():
+                    label.set_fontfamily(font_family)
+                    label.set_fontsize(label_fontsize)
+                for label in ax.get_yticklabels():
+                    label.set_fontfamily(font_family)
+                    label.set_fontsize(label_fontsize)
                 
                 # Add legend based on user preference and if there are multiple items
                 show_legend = pics_param.get('show_legend', True)
                 if show_legend and len(legend_labels) > 1:
-                    ax.legend(loc='upper right')
+                    legend = ax.legend(loc='upper right', prop={'family': font_family, 'size': label_fontsize})
                 
                 try:
                     fig.savefig(fig_name)
@@ -827,7 +843,7 @@ class PSAPicsGenerator(SciNode):
         sleep_stage_selection = pics_param.get('sleep_stage_selection', ['All'])
 
         # Create the unique list of keys of psa_data
-        group_list = list(set(psa_data.keys()))
+        group_list = list(psa_data.keys())
 
         # signal_to_plot_grp : dict of list of numpy array
         #         keys are the subject group and values are the average signal for the current channel or ROI
@@ -1057,20 +1073,33 @@ class PSAPicsGenerator(SciNode):
         if log_scale:
             ax.set_yscale('log')
 
+        # Get font settings from parameters
+        font_family = pics_param.get('font', 'Arial')
+        title_fontsize = pics_param.get('fontsize', 12) + 2
+        label_fontsize = pics_param.get('fontsize', 12)
+
         ax.grid(which='both', axis='both')
-        ax.set_xlabel('Frequency (Hz)')
-        ax.set_ylabel('Power (μV²/Hz)')
+        ax.set_xlabel('Frequency (Hz)', fontsize=label_fontsize, fontfamily=font_family)
+        ax.set_ylabel('Power (μV²/Hz)', fontsize=label_fontsize, fontfamily=font_family)
+        
+        # Update tick label font
+        for label in ax.get_xticklabels():
+            label.set_fontfamily(font_family)
+            label.set_fontsize(label_fontsize)
+        for label in ax.get_yticklabels():
+            label.set_fontfamily(font_family)
+            label.set_fontsize(label_fontsize)
         
         # Add legend based on user preference
         show_legend = pics_param.get('show_legend', True)
         if show_legend:
-            ax.legend(loc="upper right")
+            legend = ax.legend(loc="upper right", prop={'family': font_family, 'size': label_fontsize})
         
-        ax.set_title(fig_title)
+        ax.set_title(fig_title, fontsize=title_fontsize, fontfamily=font_family)
         
         # For cohort_avg, add overall title
         if pics_param['cohort_avg']:
-            ax.set_title(f"{fig_title}")
+            ax.set_title(f"{fig_title}", fontsize=title_fontsize, fontfamily=font_family)
 
         try:
             fig.savefig(fig_name)
