@@ -910,29 +910,37 @@ class OxygenDesatDetector(SciNode):
                 #   min_plateau_duration_sec=30s, defined in the paper.
                 min_plateau_duration_sec=30
                 plateau_threshold=1.5
-                adjusted_lmax_idx, adjusted_lmax_time, adjusted_lmax_val, adjusted_lmin_idx, adjusted_lmin_time, adjusted_lmin_val, plateau = \
-                    self.adjust_for_plateau(
-                        signal, adjusted_lmax_idx, adjusted_lmax_val, 
-                        lmin_idx, lmin_time, lmin_val,
-                        data_starts[i], fs_chan, 
-                        min_plateau_duration_sec, plateau_threshold
-                    )
-                if len(plateau) > 0:
-                    plateau_lst.append(plateau)
-                
-                # Store the adjusted min in the list of candidates
-                lmin_list[0] = adjusted_lmin_idx, adjusted_lmin_time, adjusted_lmin_val, adjusted_lmax_val-adjusted_lmin_val
+                adjusted_lmin_list = []
+                for lmin_idx, lmin_time, lmin_val, drop in lmin_list:
+                    adjusted_lmax_idx, adjusted_lmax_time, adjusted_lmax_val, adjusted_lmin_idx, adjusted_lmin_time, adjusted_lmin_val, plateau = \
+                        self.adjust_for_plateau(
+                            signal, adjusted_lmax_idx, adjusted_lmax_val, 
+                            lmin_idx, lmin_time, lmin_val,
+                            data_starts[i], fs_chan, 
+                            min_plateau_duration_sec, plateau_threshold
+                        )
+                    adjusted_lmin_list.append([adjusted_lmin_idx, adjusted_lmin_time, adjusted_lmin_val, adjusted_lmax_val-adjusted_lmin_val])
+                    if len(plateau) > 0:
+                        plateau_lst.append(plateau)
 
                 # Final validation
-                for lmin_idx, lmin_time, lmin_val, drop in lmin_list:
-                    final_drop = adjusted_lmax_val - lmin_val
-                    if final_drop >= parameters_oxy['desaturation_drop_percent']:
-                        duration = lmin_time - adjusted_lmax_time
-                        validated_events.append((adjusted_lmax_time, duration, final_drop))
+                #   Desaturation event need a minimum drop
+                #   The fall rate of the desaturation event is limited between −0.05%/s and −4%/s.
+                for lmin_idx, lmin_time, lmin_val, drop in adjusted_lmin_list:
+                    duration = lmin_time - adjusted_lmax_time
+                    
+                    # Calculate average fall rate (%/s)
+                    avg_fall_rate = -drop / duration if duration > 0 else 0
+                    
+                    # Validate drop threshold and fall rate limits
+                    if (drop >= parameters_oxy['desaturation_drop_percent'] and 
+                        -4.0 <= avg_fall_rate <= -0.05):
+                        validated_events.append((adjusted_lmax_time, duration, drop))
                         
                         if DEBUG:
                             print(f"  Valid desaturation: start={adjusted_lmax_time:.2f}s, "
-                                f"duration={duration:.2f}s, drop={final_drop:.1f}%")
+                                  f"duration={duration:.2f}s, drop={drop:.1f}%, "
+                                  f"fall_rate={avg_fall_rate:.3f}%/s")
             
             for start_sec, duration_sec, drop in validated_events:
                 all_desat_events.append((start_sec, duration_sec))
