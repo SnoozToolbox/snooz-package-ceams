@@ -878,7 +878,7 @@ class OxygenDesatDetector(SciNode):
                 lmax_time = data_starts[i] + lmax_idx / fs_chan
                 lmax_val = signal[lmax_idx]
                 
-                # Find best Lmin candidate
+                # discard lmax without lmin
                 #   The maximum duration of a desaturation event is limited to 180 s.
                 #   The potential Lmax-Lmin pair cannot go through another Lmax.
                 lmin_list = self.discard_lmax_without_lmin(
@@ -887,47 +887,40 @@ class OxygenDesatDetector(SciNode):
                     parameters_oxy['max_slope_drop_sec'], 
                     parameters_oxy['desaturation_drop_percent']
                 )
-                
                 if lmin_list is None:
                     continue
-                # Get the first Lmin candidate for additional validation on Lmax
-                lmin_idx, lmin_time, lmin_val, drop = lmin_list[0]
-                if DEBUG:
-                    if len(lmin_list)>1:
-                        print(f"{len(lmin_list)} Lmins for current Lmax")
+                if DEBUG and len(lmin_list) > 1:
+                    print(f"{len(lmin_list)} Lmins for current Lmax at {lmax_time:.2f}s")
                 
-                # Adjust Lmax for fall rate
-                # The Lmax is shifted forward to a point where the fall rate ≤−0.05%/s is reached for the first time
-                # Every drop is evaluated (between 2 consecutive samples) until the following Lmin is reached.
-                # The first index with a drop < -0.05 is returned.
-                adjusted_lmax_idx, adjusted_lmax_time, adjusted_lmax_val = \
-                    self.adjust_lmax_for_fall_rate(
-                    signal, lmax_idx, lmin_idx, data_starts[i], fs_chan
-                )
-                
-                # Adjust for plateau
-                #   To test : plateau_threshold=0.5% by default.
-                #   min_plateau_duration_sec=30s, defined in the paper.
-                min_plateau_duration_sec=30
-                plateau_threshold=1.5
-                adjusted_lmin_list = []
+                # Process all Lmin candidates through adjustments and validation
+                validated_candidates = []
                 for lmin_idx, lmin_time, lmin_val, drop in lmin_list:
-                    adjusted_lmax_idx, adjusted_lmax_time, adjusted_lmax_val, adjusted_lmin_idx, adjusted_lmin_time, adjusted_lmin_val, plateau = \
+
+                    # Adjust Lmax for fall rate
+                    # The Lmax is shifted forward to a point where the fall rate ≤−0.05%/s is reached for the first time
+                    adjusted_lmax_idx, adjusted_lmax_time, adjusted_lmax_val = \
+                        self.adjust_lmax_for_fall_rate(
+                        signal, lmax_idx, lmin_idx, data_starts[i], fs_chan
+                    )
+                    
+                    # Adjust Lman and all Lmin candidates for plateau
+                    min_plateau_duration_sec = 30
+                    plateau_threshold = 1.5
+                    adjusted_lmax_idx, adjusted_lmax_time, adjusted_lmax_val, \
+                        adjusted_lmin_idx, adjusted_lmin_time, adjusted_lmin_val, plateau = \
                         self.adjust_for_plateau(
                             signal, adjusted_lmax_idx, adjusted_lmax_val, 
                             lmin_idx, lmin_time, lmin_val,
                             data_starts[i], fs_chan, 
                             min_plateau_duration_sec, plateau_threshold
                         )
-                    adjusted_lmin_list.append([adjusted_lmin_idx, adjusted_lmin_time, adjusted_lmin_val, adjusted_lmax_val-adjusted_lmin_val])
+
                     if len(plateau) > 0:
                         plateau_lst.append(plateau)
-
-                # Final validation
-                #   Desaturation event need a minimum drop
-                #   The fall rate of the desaturation event is limited between −0.05%/s and −4%/s.
-                for lmin_idx, lmin_time, lmin_val, drop in adjusted_lmin_list:
-                    duration = lmin_time - adjusted_lmax_time
+                    
+                    # Recalculate drop after adjustments
+                    drop = adjusted_lmax_val - adjusted_lmin_val
+                    duration = adjusted_lmin_time - adjusted_lmax_time
                     
                     # Calculate average fall rate (%/s)
                     avg_fall_rate = -drop / duration if duration > 0 else 0
@@ -935,12 +928,24 @@ class OxygenDesatDetector(SciNode):
                     # Validate drop threshold and fall rate limits
                     if (drop >= parameters_oxy['desaturation_drop_percent'] and 
                         -4.0 <= avg_fall_rate <= -0.05):
-                        validated_events.append((adjusted_lmax_time, duration, drop))
-                        
-                        if DEBUG:
-                            print(f"  Valid desaturation: start={adjusted_lmax_time:.2f}s, "
-                                  f"duration={duration:.2f}s, drop={drop:.1f}%, "
-                                  f"fall_rate={avg_fall_rate:.3f}%/s")
+                        validated_candidates.append((adjusted_lmin_idx, adjusted_lmin_time, adjusted_lmin_val, 
+                                                     adjusted_lmax_time, adjusted_lmax_val, drop, duration, avg_fall_rate))
+                
+                # Select the first validated Lmin candidate
+                if len(validated_candidates) == 0:
+                    if DEBUG:
+                        print(f"No validated Lmin candidates for Lmax at {lmax_time:.2f}s")
+                    continue
+                
+                # Use the first validated candidate
+                selected_full = validated_candidates[0]
+                adjusted_lmin_idx, adjusted_lmin_time, adjusted_lmin_val, adjusted_lmax_time, adjusted_lmax_val, drop, duration, avg_fall_rate = selected_full
+                validated_events.append((adjusted_lmax_time, duration, drop))
+                
+                if DEBUG:
+                    print(f"  Valid desaturation: start={adjusted_lmax_time:.2f}s, "
+                          f"duration={duration:.2f}s, drop={drop:.1f}%, "
+                          f"fall_rate={avg_fall_rate:.3f}%/s")
             
             for start_sec, duration_sec, drop in validated_events:
                 all_desat_events.append((start_sec, duration_sec))
@@ -1041,9 +1046,9 @@ class OxygenDesatDetector(SciNode):
         if DEBUG:
             lmin_times_sec = data_start + lmin_indices_corrected / fs_chan
             lmin_values = signal[lmin_indices_corrected] if len(lmin_indices_corrected) > 0 else []
-            print(f"Found {len(lmin_indices_corrected)} local minimums (corrected within {window_s}s window)")
-            for idx, (t, v) in enumerate(zip(lmin_times_sec, lmin_values)):
-                print(f"  Lmin {idx}: time={t:.2f}s, value={v:.1f}%")
+            print(f"Found {len(lmin_indices_corrected)} local minimums (corrected within {window_s}s window)\n")
+            # for idx, (t, v) in enumerate(zip(lmin_times_sec, lmin_values)):
+            #     print(f"  Lmin {idx}: time={t:.2f}s, value={v:.1f}%")
         
         return lmin_indices_corrected
 
@@ -1118,9 +1123,9 @@ class OxygenDesatDetector(SciNode):
         if DEBUG:
             lmax_times_sec = data_start + filtered_lmax_indices / fs_chan
             lmax_values = signal[filtered_lmax_indices] if len(filtered_lmax_indices) > 0 else []
-            print(f"Found {len(filtered_lmax_indices)} local maximums (corrected within {window_s}s window)")
-            for idx, (t, v) in enumerate(zip(lmax_times_sec, lmax_values)):
-                print(f"  Lmax {idx}: time={t:.2f}s, value={v:.1f}%")
+            print(f"Found {len(filtered_lmax_indices)} local maximums (corrected within {window_s}s window)\n")
+            # for idx, (t, v) in enumerate(zip(lmax_times_sec, lmax_values)):
+            #     print(f"  Lmax {idx}: time={t:.2f}s, value={v:.1f}%")
         
         return filtered_lmax_indices, lmax_indices_org
 
@@ -1188,8 +1193,6 @@ class OxygenDesatDetector(SciNode):
             return None
         
         return candidate_lmins
-        # Choose the Lmin with the lowest value (maximum drop)
-        #return min(candidate_lmins, key=lambda x: x[2])
 
 
     def adjust_lmax_for_fall_rate(self, signal, lmax_idx, lmin_idx, data_start, fs_chan, fall_rate_threshold=-0.05):
