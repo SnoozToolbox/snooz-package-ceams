@@ -13,6 +13,7 @@ from matplotlib.backends.backend_qtagg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.backends.backend_qtagg import NavigationToolbar2QT as NavigationToolbar
 from matplotlib.figure import Figure
 import numpy as np
+import pandas as pd
 from qtpy import QtWidgets
 from qtpy import QtGui
 
@@ -58,6 +59,7 @@ class OxygenDesatDetectorResultsView(Ui_OxygenDesatDetectorResultsView, QtWidget
             self.signal_raw = cache['signal_raw']
             self.signal_lpf = cache['signal_lpf']
             self.desat_df = cache['desat_df']
+            self.plateau_df = cache['plateau_df']
             self.fs = self.signal_raw.sample_rate
 
             # Update the time elapsed based on the loaded data
@@ -97,7 +99,9 @@ class OxygenDesatDetectorResultsView(Ui_OxygenDesatDetectorResultsView, QtWidget
         self.duration = int(self.comboBox_duration.currentText())
         # Get the signals to plot
         self.get_signals()
-        # Update event
+        # Get the events to plot
+        self.get_events()
+        # Update plot
         self._plot_det_info()
 
     def time_elapsed_change_slot(self):
@@ -106,7 +110,7 @@ class OxygenDesatDetectorResultsView(Ui_OxygenDesatDetectorResultsView, QtWidget
         self.get_signals()
         # Get the events to plot
         self.get_events()
-        # Update event
+        # Update plot
         self._plot_det_info()
 
     def get_start_time_to_plot(self):
@@ -128,6 +132,11 @@ class OxygenDesatDetectorResultsView(Ui_OxygenDesatDetectorResultsView, QtWidget
 
     def y_limit_enable_slot(self):
         self.lineEdit_ylim_fixed.setEnabled(not self.checkBox_ylim_norm.isChecked())
+
+    # called when the user check/uncheck "Display y axis"
+    # it forces a redraw of the figure
+    def y_label_slot(self):
+        self._plot_det_info()
         
     def _plot_det_info( self):
         """ 
@@ -219,10 +228,14 @@ class OxygenDesatDetectorResultsView(Ui_OxygenDesatDetectorResultsView, QtWidget
                 # Check if the event is within the plotted window
                 if (event_start >= self.start_to_plot) and (event_start <= (self.start_to_plot + self.duration)):
                     rect_start = event_start - self.start_to_plot
-                    if n_chan>1:
-                        ax1[chan_sel].axvspan(rect_start, rect_start + event_duration, color='red', alpha=0.3)
+                    if row['name']=='desat_SpO2':
+                        color_rec='green'
                     else:
-                        ax1.axvspan(rect_start, rect_start + event_duration, color='red', alpha=0.3)
+                        color_rec='red'
+                    if n_chan>1:
+                        ax1[chan_sel].axvspan(rect_start, rect_start + event_duration, color=color_rec, alpha=0.3)
+                    else:
+                        ax1.axvspan(rect_start, rect_start + event_duration, color=color_rec, alpha=0.3)
 
             chan_sel += 1
 
@@ -267,6 +280,9 @@ class OxygenDesatDetectorResultsView(Ui_OxygenDesatDetectorResultsView, QtWidget
 
     def get_events(self):
         # Extract the events from the dataframe that needed to be plotted
-        # the set of events self.desat_df
+        # the set of events are from self.desat_df and self.plateau_df
+        # Filter events based on the current time window
         self.events = self.desat_df[self.desat_df['start_sec']>=self.start_to_plot]
+        if len(self.plateau_df)>0:
+            self.events = pd.concat([self.events,self.plateau_df[self.plateau_df['start_sec']>=self.start_to_plot]],ignore_index=True)
         self.events = self.events[self.events['start_sec']<=(self.start_to_plot + self.duration)]

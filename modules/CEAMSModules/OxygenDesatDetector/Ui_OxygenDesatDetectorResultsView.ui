@@ -251,6 +251,22 @@ Press enter to display the detection window.</string>
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>checkBox_display_y</sender>
+   <signal>clicked()</signal>
+   <receiver>OxygenDesatDetectorResultsView</receiver>
+   <slot>y_label_slot()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>690</x>
+     <y>94</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>431</x>
+     <y>94</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>on_show_button()</slot>
@@ -259,5 +275,6 @@ Press enter to display the detection window.</string>
   <slot>duration_change_slot()</slot>
   <slot>time_elapsed_change_slot()</slot>
   <slot>y_limit_enable_slot()</slot>
+  <slot>y_label_slot()</slot>
  </slots>
 </ui>

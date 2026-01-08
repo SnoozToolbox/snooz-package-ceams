@@ -127,6 +127,7 @@ class Ui_OxygenDesatDetectorResultsView(object):
         self.comboBox_duration.currentIndexChanged.connect(OxygenDesatDetectorResultsView.duration_change_slot)
         self.checkBox_ylim_norm.clicked.connect(OxygenDesatDetectorResultsView.y_limit_enable_slot)
         self.lineEdit_ylim_fixed.editingFinished.connect(OxygenDesatDetectorResultsView.y_limits_change_slot)
+        self.checkBox_display_y.clicked.connect(OxygenDesatDetectorResultsView.y_label_slot)
 
         QMetaObject.connectSlotsByName(OxygenDesatDetectorResultsView)
     # setupUi
