@@ -933,8 +933,8 @@ class OxygenDesatDetector(SciNode):
                 
                 # Select the first validated Lmin candidate
                 if len(validated_candidates) == 0:
-                    if DEBUG:
-                        print(f"No validated Lmin candidates for Lmax at {lmax_time:.2f}s")
+                    # if DEBUG:
+                    #     print(f"No validated Lmin candidates for Lmax at {lmax_time:.2f}s")
                     continue
                 
                 # Use the first validated candidate
@@ -942,10 +942,10 @@ class OxygenDesatDetector(SciNode):
                 adjusted_lmin_idx, adjusted_lmin_time, adjusted_lmin_val, adjusted_lmax_time, adjusted_lmax_val, drop, duration, avg_fall_rate = selected_full
                 validated_events.append((adjusted_lmax_time, duration, drop))
                 
-                if DEBUG:
-                    print(f"  Valid desaturation: start={adjusted_lmax_time:.2f}s, "
-                          f"duration={duration:.2f}s, drop={drop:.1f}%, "
-                          f"fall_rate={avg_fall_rate:.3f}%/s")
+                # if DEBUG:
+                #     print(f"  Valid desaturation: start={adjusted_lmax_time:.2f}s, "
+                #           f"duration={duration:.2f}s, drop={drop:.1f}%, "
+                #           f"fall_rate={avg_fall_rate:.3f}%/s")
             
             for start_sec, duration_sec, drop in validated_events:
                 all_desat_events.append((start_sec, duration_sec))
@@ -961,6 +961,10 @@ class OxygenDesatDetector(SciNode):
                         for start_sec, duration_sec in all_desat_events]
         plateau_events = [('SpO2', 'plateau_SpO2', start_sec, duration_sec, '') 
                           for start_sec, duration_sec in plateau_lst]
+        if DEBUG:
+            print(f"\n{len(desat_events)} desat events\n")
+            print(f"\n{len(plateau_events)} plateau events\n")
+
         desat_df = manage_events.create_event_dataframe(data=desat_events)
         plateau_df = manage_events.create_event_dataframe(data=plateau_events)
   
@@ -1014,7 +1018,7 @@ class OxygenDesatDetector(SciNode):
             lmin_indices_corrected : numpy array
                 Corrected indices of local minimums in the original signal.
         """
-        window_s = 5  # seconds window to identify the real minimum
+        window_s = 10  # seconds window to identify the real minimum
         half_window_samples = int((window_s / 2) * fs_chan)
         
         # Invert the signal to find minimums using find_peaks
