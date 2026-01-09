@@ -204,7 +204,8 @@ class OxygenDesatDetectorResultsView(Ui_OxygenDesatDetectorResultsView, QtWidget
                 ax1[chan_sel].set_xlabel('time [s]')
                 ax1[chan_sel].set_xlim((time_vect[0], time_vect[-1]))
                 ax1[chan_sel].set_ylim(ylim)
-                ax1[chan_sel].grid(True, which='both', linestyle='--', linewidth=0.5, alpha=0.7)
+                ax1[chan_sel].grid(True, which='major', linestyle='-', linewidth=1.0, alpha=0.8)
+                ax1[chan_sel].grid(True, which='minor', linestyle='--', linewidth=0.5, alpha=0.4)
                 ax1[chan_sel].minorticks_on()
 
                 if not self.checkBox_display_y.isChecked():
@@ -215,7 +216,8 @@ class OxygenDesatDetectorResultsView(Ui_OxygenDesatDetectorResultsView, QtWidget
                 ax1.set_xlabel('time [s]')
                 ax1.set_xlim((time_vect[0], time_vect[-1]))
                 ax1.set_ylim(ylim)
-                ax1.grid(True, which='both', linestyle='--', linewidth=0.5, alpha=0.7)
+                ax1.grid(True, which='major', linestyle='-', linewidth=1.0, alpha=0.8)
+                ax1.grid(True, which='minor', linestyle='--', linewidth=0.5, alpha=0.4)
                 ax1.minorticks_on()
                 if not self.checkBox_display_y.isChecked():
                     # Turn off tick labels
