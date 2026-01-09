@@ -852,8 +852,12 @@ class OxygenDesatDetector(SciNode):
             if not np.any(valid_mask):
                 continue
         
+            # Detect artifact 
+            # signal_clean is the raw signal with short artifacts interpolated and long artifact forced to NaN
+            signal_clean, artifact_list = self.detect_artifact_SpO2(signal, fs_chan)
+
             # Low pass filter the signal to get the trend in order to detect local min and max
-            signal_lpf = self.low_pass_filter_nan(signal, order, fs_chan, low_frequency_cutoff)
+            signal_lpf = self.filter_nan_filtfilt(signal_clean, order, fs_chan, low_frequency_cutoff, 'low')
             
             # Step 1: Locate potential endpoints (Lmin)
             lmin_indices = self.detect_local_min(
@@ -957,8 +961,13 @@ class OxygenDesatDetector(SciNode):
         # Create output dataframe
         # desat_events = [('SpO2', 'desat_SpO2', start_sec, duration_sec, channel) 
         #                 for start_sec, duration_sec in all_desat_events]
-        desat_events = [('SpO2', 'desat_SpO2', start_sec, duration_sec, '') 
+        desat_events = [('SpO2', 'desat_SpO2', start_sec, duration_sec, '') # Add back channel
                         for start_sec, duration_sec in all_desat_events]
+        # Add artifact events as invalid sections in desat_events
+        desat_events += [('SpO2', 'art_SpO2', start_sec, duration_sec, '') # Add back channel
+                         for start_sec, duration_sec in artifact_list]
+        # plateau_events = [('SpO2', 'plateau_SpO2', start_sec, duration_sec, channel) 
+        #                   for start_sec, duration_sec in plateau_lst]
         plateau_events = [('SpO2', 'plateau_SpO2', start_sec, duration_sec, '') 
                           for start_sec, duration_sec in plateau_lst]
         if DEBUG:
@@ -971,7 +980,7 @@ class OxygenDesatDetector(SciNode):
         return desat_df, plateau_df, data_lpf_list
 
 
-    def low_pass_filter_nan(self, signal, order, fs_chan, cutoff_freq, type='low'):
+    def filter_nan_filtfilt(self, signal, order, fs_chan, cutoff_freq, type='low'):
         # We expect to have NaN values in chunk (if any)
         #   so we filter the signal (without nan values) even if it could have border effects
         #   and we reconstruct the filtered signal with the original NaN values.
@@ -994,6 +1003,94 @@ class OxygenDesatDetector(SciNode):
             filtered_signal = np.empty_like(signal)
             filtered_signal.fill(np.nan)
         return filtered_signal
+
+
+    def detect_artifact_SpO2(self, sraw, fs_chan):
+        """
+        Detect major artifacts from oxygen saturation signal.
+        
+        First, major artifacts are detected from the signal (SRaw) by filtering 
+        the SRaw signal with 4th order Butterworth high-pass filter with a 1 Hz cutoff. 
+        Next, the filtered signal is squared. Values >30 in the squared signal, 
+        and values <50% and >100% in the SRaw signal are counted as artifacts. 
+        Adjacent artifact points are grouped into a single artifact, and artifacts 
+        are extended by one second in both directions to add a safety margin. 
+        However, artifacts with a duration of ≤5 s are linearly interpolated.
+        
+        Parameters:
+        - sraw: Raw signal array (may contain NaNs)
+        - fs_chan: Sampling rate in Hz
+        
+        Returns:
+        - cleaned_signal: Signal with short artifacts interpolated
+        - artifact_events: List of (start_sec, duration_sec) tuples for artifacts >5s
+        """
+        # List of constants
+        filter_order = 4
+        cutoff_freq = 1.0
+        threshold_squared = 30
+        lower_bound = 50
+        upper_bound = 100
+        art_buffer_sec = 1.0 # Extend each artifact by 1 second in both directions
+        linear_art_sec = 5.0 # Interpolate artifacts with duration ≤ 5 seconds
+        
+        # 1. Apply 4th order Butterworth high-pass filter (1 Hz cutoff)
+        filtered_signal = self.filter_nan_filtfilt(sraw, filter_order, fs_chan, cutoff_freq, 'high')
+        
+        # 2. Square the filtered signal
+        squared_signal = filtered_signal ** 2
+        
+        # 3. Identify artifact points
+        artifact_mask = np.zeros(len(sraw), dtype=bool)
+        artifact_mask |= (squared_signal > threshold_squared)
+        artifact_mask |= (sraw < lower_bound)
+        artifact_mask |= (sraw > upper_bound)
+        
+        # 4. Group adjacent artifacts and extend by 1 second
+        diff = np.diff(np.concatenate([[0], artifact_mask.astype(int), [0]]))
+        starts = np.where(diff == 1)[0]
+        ends = np.where(diff == -1)[0]
+        
+        # Extend each artifact by 1 second in both directions
+        extension_samples = int(fs_chan * art_buffer_sec)
+        extended_mask = np.zeros(len(sraw), dtype=bool)
+        
+        for start, end in zip(starts, ends):
+            extended_start = max(0, start - extension_samples)
+            extended_end = min(len(sraw), end + extension_samples)
+            extended_mask[extended_start:extended_end] = True
+        
+        # Re-identify artifact regions after extension
+        diff = np.diff(np.concatenate([[0], extended_mask.astype(int), [0]]))
+        starts = np.where(diff == 1)[0]
+        ends = np.where(diff == -1)[0]
+        
+        # 5. Interpolate artifacts with duration ≤ 5 seconds
+        cleaned_signal = sraw.copy()
+        threshold_samples = int(fs_chan * linear_art_sec)
+        artifact_events = []
+        
+        for start, end in zip(starts, ends):
+            duration = end - start
+            
+            if duration <= threshold_samples:
+                # Linear interpolation for short artifacts
+                if start > 0 and end < len(sraw):
+                    x = [start - 1, end]
+                    y = [sraw[start - 1], sraw[end]]
+                    interpolator = interp1d(x, y, kind='linear')
+                    cleaned_signal[start:end] = interpolator(np.arange(start, end))
+                
+                # Mark as non-artifact after interpolation
+                extended_mask[start:end] = False
+            else:
+                # Keep artifacts longer than 5s
+                start_sec = start / fs_chan
+                duration_sec = duration / fs_chan
+                artifact_events.append((start_sec, duration_sec))
+        
+        return cleaned_signal, artifact_events
+
 
     def detect_local_min(self, signal, signal_lpf, fs_chan, min_peak_distance_samples, min_peak_prominence, data_start):
         """
