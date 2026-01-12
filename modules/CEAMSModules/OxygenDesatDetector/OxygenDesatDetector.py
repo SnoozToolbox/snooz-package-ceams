@@ -908,8 +908,8 @@ class OxygenDesatDetector(SciNode):
                     )
                     
                     # Adjust Lman and all Lmin candidates for plateau
-                    min_plateau_duration_sec = 30
-                    plateau_threshold = 1.5
+                    min_plateau_duration_sec = 20
+                    plateau_threshold = 2
                     adjusted_lmax_idx, adjusted_lmax_time, adjusted_lmax_val, \
                         adjusted_lmin_idx, adjusted_lmin_time, adjusted_lmin_val, plateau = \
                         self.adjust_for_plateau(
@@ -921,7 +921,14 @@ class OxygenDesatDetector(SciNode):
 
                     if len(plateau) > 0:
                         plateau_lst.append(plateau)
-                    
+
+                    # Find the closest Lmax after the plateau adjustment
+                    adjusted_lmax_idx = self.correct_peak_indices_in_window(
+                        signal, [adjusted_lmax_idx], window_s=10, fs_chan=fs_chan)
+                    adjusted_lmax_idx = adjusted_lmax_idx[0]
+                    adjusted_lmax_time = data_starts[i] + adjusted_lmax_idx / fs_chan
+                    adjusted_lmax_val = signal[adjusted_lmax_idx]
+
                     # Recalculate drop after adjustments
                     drop = adjusted_lmax_val - adjusted_lmin_val
                     duration = adjusted_lmin_time - adjusted_lmax_time
@@ -1092,6 +1099,47 @@ class OxygenDesatDetector(SciNode):
         return cleaned_signal, artifact_events
 
 
+    def correct_peak_indices_in_window(self, signal, peak_indices, window_s, fs_chan, find_max=True):
+        """
+        Correct peak locations by finding actual extrema in the original signal within a time window.
+        
+        Parameters:
+            signal : numpy array
+                Original SpO2 signal.
+            peak_indices : numpy array or list
+                Indices of peaks to correct.
+            window_s : float
+                Window duration in seconds (centered on each peak).
+            fs_chan : float
+                Sampling frequency (Hz).
+            find_max : bool
+                If True, find maximum within window; if False, find minimum.
+        
+        Returns:
+            corrected_indices : numpy array
+                Corrected indices of peaks in the original signal.
+        """
+        half_window_samples = int((window_s / 2) * fs_chan)
+        corrected_indices = []
+        
+        for peak_idx in peak_indices:
+            # Define window boundaries
+            window_start = max(0, peak_idx - half_window_samples)
+            window_end = min(len(signal), peak_idx + half_window_samples)
+            
+            # Find actual extremum within window
+            window_signal = signal[window_start:window_end]
+            if len(window_signal) > 0 and not np.all(np.isnan(window_signal)):
+                if find_max:
+                    local_extremum_idx = np.nanargmax(window_signal)
+                else:
+                    local_extremum_idx = np.nanargmin(window_signal)
+                corrected_idx = window_start + local_extremum_idx
+                corrected_indices.append(corrected_idx)
+        
+        return np.array(corrected_indices)
+
+
     def detect_local_min(self, signal, signal_lpf, fs_chan, min_peak_distance_samples, min_peak_prominence, data_start):
         """
         Detect local minimums from the low-pass filtered signal and correct their location
@@ -1129,20 +1177,9 @@ class OxygenDesatDetector(SciNode):
         )
         
         # Correct Lmin locations by finding actual minimum within 10s window
-        lmin_indices_corrected = []
-        for lmin_idx in lmin_indices:
-            # Define window boundaries
-            window_start = max(0, lmin_idx - half_window_samples)
-            window_end = min(len(signal), lmin_idx + half_window_samples)
-            
-            # Find actual minimum within window
-            window_signal = signal[window_start:window_end]
-            if len(window_signal) > 0 and not np.all(np.isnan(window_signal)):
-                local_min_idx = np.nanargmin(window_signal)
-                corrected_idx = window_start + local_min_idx
-                lmin_indices_corrected.append(corrected_idx)
-        
-        lmin_indices_corrected = np.array(lmin_indices_corrected)
+        lmin_indices_corrected = self.correct_peak_indices_in_window(
+            signal, lmin_indices, window_s, fs_chan, find_max=False
+        )
         
         if DEBUG:
             lmin_times_sec = data_start + lmin_indices_corrected / fs_chan
@@ -1182,7 +1219,6 @@ class OxygenDesatDetector(SciNode):
                 Indices of local maximums in the original signal.
         """
         window_s = 10  # seconds window to identify the real maximum
-        half_window_samples = int((window_s / 2) * fs_chan)
         min_drop_2_consecutive_max = 3  # minimum drop in SRaw values between two consecutive Lmaxs to consider both Lmaxs
         
         # Find local maximums using find_peaks on the filtered signal
@@ -1193,20 +1229,9 @@ class OxygenDesatDetector(SciNode):
         )
 
         # Correct Lmax locations by finding actual maximum within 10s window
-        lmax_indices_corrected = []
-        for lmax_idx in lmax_indices:
-            # Define window boundaries
-            window_start = max(0, lmax_idx - half_window_samples)
-            window_end = min(len(signal), lmax_idx + half_window_samples)
-            
-            # Find actual maximum within window
-            window_signal = signal[window_start:window_end]
-            if len(window_signal) > 0 and not np.all(np.isnan(window_signal)):
-                local_max_idx = np.nanargmax(window_signal)
-                corrected_idx = window_start + local_max_idx
-                lmax_indices_corrected.append(corrected_idx)
-        
-        lmax_indices_org = np.array(lmax_indices_corrected)
+        lmax_indices_org = self.correct_peak_indices_in_window(
+            signal, lmax_indices, window_s, fs_chan, find_max=True
+        )
 
         # Lmaxvalues that are too low to potentially result in proper desaturation events are removed. 
         # This is done by checking the maximum difference in SRaw values between two adjacent Lmaxs: 
