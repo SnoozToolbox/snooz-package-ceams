@@ -12,6 +12,7 @@ import numpy as np
 import os.path
 import pandas as pd
 import scipy.signal as scipysignal
+from scipy.interpolate import interp1d
 
 from flowpipe import SciNode, InputPlug, OutputPlug
 from commons.NodeInputException import NodeInputException
@@ -353,13 +354,39 @@ class OxygenDesatDetector(SciNode):
             # 'desaturation_drop_percent' : 'Drop level (%) for the oxygen desaturation "3 or 4"',
             # 'max_slope_drop_sec' : 'The maximum duration (s) during which the oxygen level is dropping "120 or 20"',
             # 'min_hold_drop_sec' : 'Minimum duration (s) during which the oxygen level drop is maintained "10 or 5"',
-        asleep_stages_df = stage_rec_df[((stage_rec_df['name']>0) & (stage_rec_df['name']<6))]
         desat_df, plateau_df, data_lpf_list = self.detect_desaturation_ABOSA(\
-            data_starts, data_stats, fs_chan, channel, parameters_oxy, asleep_stages_df)
+            data_starts, data_stats, fs_chan, channel, parameters_oxy)
+        
+        # Keep desaturation events (desat_df) that start in asleep stages only
+        asleep_stages_df = stage_rec_df[((stage_rec_df['name']>0) & (stage_rec_df['name']<6))]
+        
+        # Filter desaturation events to keep only those starting during asleep stages
+        # Only process desat_SpO2 events, exclude art_SpO2 events
+        desat_only_df = desat_df[desat_df['name'] == 'desat_SpO2']
+        artifact_df = desat_df[desat_df['name'] == 'art_SpO2']
+        
+        start_time = asleep_stages_df['start_sec'].values
+        end_time = start_time + asleep_stages_df['duration_sec'].values
+        desat_tab = desat_only_df[['start_sec','duration_sec']].to_numpy()
+        desat_kept = []
+        for desat_start, desat_dur in desat_tab:
+            if any((start_time <= desat_start) & (end_time >= desat_start)):
+                desat_kept.append([desat_start, desat_dur])
+        
+        # Update desat_df to contain only filtered desaturation events plus all artifact events
+        if len(desat_kept) > 0:
+            desat_events = [('SpO2', 'desat_SpO2', start_sec, duration_sec, '') 
+                          for start_sec, duration_sec in desat_kept]
+            filtered_desat_df = manage_events.create_event_dataframe(data=desat_events)
+        else:
+            filtered_desat_df = pd.DataFrame(columns=['group', 'name', 'start_sec', 'duration_sec', 'channels'])
 
         # Compute desaturation stats
         #----------------------------------------------------------------------
-        desat_stats = self.compute_desat_stats(desat_df, asleep_stages_df)
+        desat_stats = self.compute_desat_stats(filtered_desat_df, asleep_stages_df)
+
+        # Combine filtered desaturations with artifacts
+        desat_df = pd.concat([filtered_desat_df, artifact_df], ignore_index=True)
 
         if DEBUG:
             cache = {}
@@ -798,7 +825,7 @@ class OxygenDesatDetector(SciNode):
         # return the time as HH:MM:SS
         return f"{HH}:{MM}:{SS}"
 
-    def detect_desaturation_ABOSA(self, data_starts, data_stats, fs_chan, channel, parameters_oxy, asleep_stages_df):
+    def detect_desaturation_ABOSA(self, data_starts, data_stats, fs_chan, channel, parameters_oxy):
         """
         Detect desaturation as described in ABOSA [1].
 
