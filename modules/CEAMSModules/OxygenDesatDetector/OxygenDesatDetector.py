@@ -28,7 +28,7 @@ from CEAMSModules.SleepReport import SleepReport
 from CEAMSModules.OxygenDesatDetector.OxygenDesatDetector_doc import write_doc_file
 from CEAMSModules.OxygenDesatDetector.OxygenDesatDetector_doc import _get_doc
 
-DEBUG = True
+DEBUG = False
 
 class OxygenDesatDetector(SciNode):
     """
@@ -146,7 +146,6 @@ class OxygenDesatDetector(SciNode):
         self.stage_stats_labels = ['N1', 'N2', 'N3', 'R', 'W']
         self.N_CYCLES = 9
         self.values_below = [96, 94, 92, 90, 85, 80, 75, 70, 60]
-        self.variability_tolerance = 2
     
 
     def compute(self, artifact_group, artifact_name, arousal_group, arousal_name, \
@@ -352,7 +351,7 @@ class OxygenDesatDetector(SciNode):
         #----------------------------------------------------------------------
             # "parameters_oxy": dict
             # 'desaturation_drop_percent' : 'Drop level (%) for the oxygen desaturation "3 or 4"',
-            # 'max_slope_drop_sec' : 'The maximum duration (s) during which the oxygen level is dropping "120 or 20"',
+            # 'max_slope_drop_sec' : 'The maximum duration (s) during which the oxygen level is dropping "180 or 20"',
             # 'min_hold_drop_sec' : 'Minimum duration (s) during which the oxygen level drop is maintained "10 or 5"',
         desat_df, plateau_df, data_lpf_list = self.detect_desaturation_ABOSA(\
             data_starts, data_stats, fs_chan, channel, parameters_oxy)
@@ -935,8 +934,8 @@ class OxygenDesatDetector(SciNode):
                     )
                     
                     # Adjust Lman and all Lmin candidates for plateau
-                    min_plateau_duration_sec = 10
-                    plateau_threshold = 0.5
+                    min_plateau_duration_sec = 30
+                    plateau_threshold = 1 # on the filtered signal
                     adjusted_lmax_idx, adjusted_lmax_time, adjusted_lmax_val, \
                         adjusted_lmin_idx, adjusted_lmin_time, adjusted_lmin_val, plateau = \
                         self.adjust_for_plateau(
@@ -969,9 +968,10 @@ class OxygenDesatDetector(SciNode):
                     # Calculate average fall rate (%/s)
                     avg_fall_rate = -drop / duration if duration > 0 else 0
                     
-                    # Validate drop threshold and fall rate limits
-                    if (drop >= parameters_oxy['desaturation_drop_percent'] and 
-                        -4.0 <= avg_fall_rate <= -0.05):
+                    # Validate drop threshold, duration and fall rate limits
+                    if ((drop >= parameters_oxy['desaturation_drop_percent']) and 
+                        (duration >= parameters_oxy['min_hold_drop_sec']) and
+                        (-4.0 <= avg_fall_rate <= -0.05)):
                         all_desat_events.append((adjusted_lmax_time, duration))
                     else:
                         if DEBUG:
