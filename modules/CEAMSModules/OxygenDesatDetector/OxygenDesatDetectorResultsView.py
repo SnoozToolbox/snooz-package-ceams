@@ -232,8 +232,10 @@ class OxygenDesatDetectorResultsView(Ui_OxygenDesatDetectorResultsView, QtWidget
                     rect_start = event_start - self.start_to_plot
                     if row['name']=='desat_SpO2':
                         color_rec='green'
+                    elif row['name']=='plateau_SpO2':
+                        color_rec='yellow'
                     else:
-                        color_rec='red'
+                        color_rec='red' # artifact
                     if n_chan>1:
                         ax1[chan_sel].axvspan(rect_start, rect_start + event_duration, color=color_rec, alpha=0.3)
                     else:

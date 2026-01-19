@@ -880,7 +880,7 @@ class OxygenDesatDetector(SciNode):
         
             # Detect artifact 
             # signal_clean is the raw signal with short artifacts interpolated and long artifact forced to NaN
-            signal_clean, artifact_list = self.detect_artifact_SpO2(signal, fs_chan)
+            signal_clean, artifact_list = self.detect_artifact_SpO2(signal, data_starts[i], fs_chan)
 
             # Low pass filter the signal to get the trend in order to detect local min and max
             signal_lpf = self.filter_nan_filtfilt(signal_clean, order, fs_chan, low_frequency_cutoff, 'low')
@@ -934,7 +934,7 @@ class OxygenDesatDetector(SciNode):
                     )
                     
                     # Adjust Lman and all Lmin candidates for plateau
-                    min_plateau_duration_sec = 30
+                    min_plateau_duration_sec = 20
                     plateau_threshold = 1 # on the filtered signal
                     adjusted_lmax_idx, adjusted_lmax_time, adjusted_lmax_val, \
                         adjusted_lmin_idx, adjusted_lmin_time, adjusted_lmin_val, plateau = \
@@ -948,15 +948,16 @@ class OxygenDesatDetector(SciNode):
                     if len(plateau) > 0:
                         plateau_lst.extend(plateau)
 
-                    # Correct Lmax locations by finding actual maximum within 10s window on raw signal
+                    # Correct Lmax locations by finding actual maximum within 5s window on raw signal
                     adjusted_lmax_idx = self.correct_peak_indices_in_window(
-                        signal, [adjusted_lmax_idx], window_s=10, fs_chan=fs_chan)
+                        signal, [adjusted_lmax_idx], window_s=5, fs_chan=fs_chan)
                     adjusted_lmax_idx = adjusted_lmax_idx[0]
                     adjusted_lmax_time = data_starts[i] + adjusted_lmax_idx / fs_chan
                     adjusted_lmax_val = signal[adjusted_lmax_idx]
-                    # Correct Lmin locations by finding actual maximum within 10s window on raw signal
+
+                    # Correct Lmin locations by finding actual maximum within 5s window on raw signal
                     adjusted_lmin_idx = self.correct_peak_indices_in_window(
-                        signal, [adjusted_lmin_idx], window_s=10, fs_chan=fs_chan, find_max=False)
+                        signal, [adjusted_lmin_idx], window_s=5, fs_chan=fs_chan, find_max=False)
                     adjusted_lmin_idx = adjusted_lmin_idx[0]
                     adjusted_lmin_time = data_starts[i] + adjusted_lmin_idx / fs_chan
                     adjusted_lmin_val = signal[adjusted_lmin_idx]
@@ -1038,7 +1039,7 @@ class OxygenDesatDetector(SciNode):
         return filtered_signal
 
 
-    def detect_artifact_SpO2(self, sraw, fs_chan):
+    def detect_artifact_SpO2(self, sraw, data_start, fs_chan):
         """
         Detect major artifacts from oxygen saturation signal.
         
@@ -1052,6 +1053,7 @@ class OxygenDesatDetector(SciNode):
         
         Parameters:
         - sraw: Raw signal array (may contain NaNs)
+        - data_start: Start time of the signal in seconds
         - fs_chan: Sampling rate in Hz
         
         Returns:
@@ -1067,28 +1069,34 @@ class OxygenDesatDetector(SciNode):
         art_buffer_sec = 1.0 # Extend each artifact by 1 second in both directions
         linear_art_sec = 5.0 # Interpolate artifacts with duration ≤ 5 seconds
         
-        # 1. Apply 4th order Butterworth high-pass filter (1 Hz cutoff)
-        filtered_signal = self.filter_nan_filtfilt(sraw, filter_order, fs_chan, cutoff_freq, 'high')
-        
-        # 2. Square the filtered signal
-        squared_signal = filtered_signal ** 2
-        
-        # 3. Identify artifact points
+        # 1. Identify artifact points directly from raw signal first
+        # This avoids filter edge effects
         artifact_mask = np.zeros(len(sraw), dtype=bool)
-        artifact_mask |= (squared_signal > threshold_squared)
         artifact_mask |= (sraw < lower_bound)
         artifact_mask |= (sraw > upper_bound)
+        artifact_mask |= np.isnan(sraw)
         
-        # 4. Group adjacent artifacts and extend by 1 second
+        # 2. Apply 4th order Butterworth high-pass filter (1 Hz cutoff) on valid samples only
+        filtered_signal = self.filter_nan_filtfilt(sraw, filter_order, fs_chan, cutoff_freq, 'high')
+        
+        # 3. Square the filtered signal
+        squared_signal = filtered_signal ** 2
+        
+        # 4. Add high-frequency artifacts (rapid changes)
+        artifact_mask |= (squared_signal > threshold_squared)
+        
+        # 5. Group adjacent artifacts and extend by 1 second
         diff = np.diff(np.concatenate([[0], artifact_mask.astype(int), [0]]))
         starts = np.where(diff == 1)[0]
         ends = np.where(diff == -1)[0]
         
         # Extend each artifact by 1 second in both directions
+        # Note: 'start' is the first artifact sample, 'end' is one past the last artifact sample
         extension_samples = int(fs_chan * art_buffer_sec)
         extended_mask = np.zeros(len(sraw), dtype=bool)
         
         for start, end in zip(starts, ends):
+            # Apply symmetric buffer: 1s before start and 1s after the last artifact sample
             extended_start = max(0, start - extension_samples)
             extended_end = min(len(sraw), end + extension_samples)
             extended_mask[extended_start:extended_end] = True
@@ -1098,12 +1106,13 @@ class OxygenDesatDetector(SciNode):
         starts = np.where(diff == 1)[0]
         ends = np.where(diff == -1)[0]
         
-        # 5. Interpolate artifacts with duration ≤ 5 seconds
+        # 6. Interpolate artifacts with duration ≤ 5 seconds
         cleaned_signal = sraw.copy()
         threshold_samples = int(fs_chan * linear_art_sec)
         artifact_events = []
         
         for start, end in zip(starts, ends):
+            # start is first artifact sample, end is first non-artifact sample
             duration = end - start
             
             if duration <= threshold_samples:
@@ -1118,7 +1127,7 @@ class OxygenDesatDetector(SciNode):
                 extended_mask[start:end] = False
             else:
                 # Keep artifacts longer than 5s
-                start_sec = start / fs_chan
+                start_sec = (start / fs_chan) + data_start
                 duration_sec = duration / fs_chan
                 artifact_events.append((start_sec, duration_sec))
         
@@ -1349,12 +1358,13 @@ class OxygenDesatDetector(SciNode):
 
     def adjust_lmax_for_fall_rate(self, signal, lmax_idx, lmin_idx, data_start, fs_chan, fall_rate_threshold=-0.05):
         """
-        Shift Lmax forward to where sustained desaturation begins.
-        Looks for where descent persists over a minimum duration (e.g., 5-10s).
+        Shift Lmax forward to the next variation peak.
+        The signal (already low-pass filtered) is high-pass filtered at 0.2 Hz,
+        squared, and peaks are detected. Lmax is shifted to the next peak.
         
         Parameters:
             signal : numpy array
-                Original SpO2 signal (filtered).
+                Original SpO2 signal (already low-pass filtered).
             lmax_idx : int
                 Index of the current Lmax.
             lmin_idx : int
@@ -1364,7 +1374,7 @@ class OxygenDesatDetector(SciNode):
             fs_chan : float
                 Sampling frequency (Hz).
             fall_rate_threshold : float
-                Fall rate threshold in %/s (default -0.05).
+                Fall rate threshold in %/s (not used in new implementation).
         
         Returns:
             adjusted_lmax_idx : int
@@ -1374,35 +1384,37 @@ class OxygenDesatDetector(SciNode):
             adjusted_lmax_val : float
                 Adjusted value of Lmax.
         """
-        sustained_duration_sec = 5  # Minimum duration for sustained descent (5-10s)
-        samples_included_slope_perc = 0.7  # % of samples to include in slope perc
-        sustained_samples = int(sustained_duration_sec * fs_chan)
-        adjusted_lmax_idx = lmax_idx
+        # Filter parameter
+        order = 2
+        high_cutoff_freq = 0.2
+        # Find maximum parameter
+        min_peak_distance_sec = 1
+        min_peak_prominence = 0.1
+
+        # High-pass filter the signal at 0.2 Hz
+        signal_hpf = self.filter_nan_filtfilt(signal, order, fs_chan, high_cutoff_freq, 'high')
         
-        # Search for where sustained descent begins
-        for idx in range(lmax_idx, lmin_idx - sustained_samples):
-            # Check if descent is sustained over the next N seconds
-            window_end = min(idx + sustained_samples, lmin_idx)
-            window_signal = signal[idx:window_end]
-            
-            # Calculate overall drop in the window
-            if len(window_signal) > 1:
-                overall_drop = window_signal[-1] - window_signal[0]
-                window_duration_sec = len(window_signal) / fs_chan
-                avg_rate = overall_drop / window_duration_sec
-                
-                # Check if average rate over window shows sustained descent
-                if avg_rate <= fall_rate_threshold:
-                    # Additional check: verify most of the window is descending
-                    descending_count = 0
-                    for i in range(len(window_signal) - 1):
-                        if window_signal[i + 1] < window_signal[i]:
-                            descending_count += 1
-                    
-                    # If at least 70% of the window shows descent, this is sustained
-                    if descending_count >= samples_included_slope_perc * (len(window_signal) - 1):
-                        adjusted_lmax_idx = idx
-                        break
+        # Square the high-pass filtered signal
+        signal_squared = signal_hpf ** 2
+        
+        # Detect peaks in the squared signal
+        min_peak_distance_samples = int(min_peak_distance_sec * fs_chan)  
+        peaks, _ = scipysignal.find_peaks(
+            signal_squared,
+            distance=min_peak_distance_samples,
+            prominence=min_peak_prominence
+        )
+        
+        # Find the next peak after lmax_idx
+        adjusted_lmax_idx = lmax_idx
+        next_peaks = peaks[peaks > lmax_idx]
+        
+        if len(next_peaks) > 0:
+            # Use the first peak after lmax_idx that is before lmin_idx
+            for peak_idx in next_peaks:
+                if peak_idx < lmin_idx:
+                    adjusted_lmax_idx = peak_idx
+                    break
         
         adjusted_lmax_time = data_start + adjusted_lmax_idx / fs_chan
         adjusted_lmax_val = signal[adjusted_lmax_idx]
