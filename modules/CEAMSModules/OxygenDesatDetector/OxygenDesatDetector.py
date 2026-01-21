@@ -28,7 +28,7 @@ from CEAMSModules.SleepReport import SleepReport
 from CEAMSModules.OxygenDesatDetector.OxygenDesatDetector_doc import write_doc_file
 from CEAMSModules.OxygenDesatDetector.OxygenDesatDetector_doc import _get_doc
 
-DEBUG = False
+DEBUG = True
 
 class OxygenDesatDetector(SciNode):
     """
@@ -353,8 +353,8 @@ class OxygenDesatDetector(SciNode):
             # 'desaturation_drop_percent' : 'Drop level (%) for the oxygen desaturation "3 or 4"',
             # 'max_slope_drop_sec' : 'The maximum duration (s) during which the oxygen level is dropping "180 or 20"',
             # 'min_hold_drop_sec' : 'Minimum duration (s) during which the oxygen level drop is maintained "10 or 5"',
-        desat_df, plateau_df, data_lpf_list, data_hpf_list = self.detect_desaturation_ABOSA(\
-            data_starts, data_stats, fs_chan, channel, parameters_oxy)
+        desat_df, plateau_df, data_lpf_list, data_hpf_list, lmax_indices_list, lmin_indices_list = \
+            self.detect_desaturation_ABOSA(data_starts, data_stats, fs_chan, channel, parameters_oxy)
         
         # Keep desaturation events (desat_df) that start in asleep stages only
         asleep_stages_df = stage_rec_df[((stage_rec_df['name']>0) & (stage_rec_df['name']<6))]
@@ -406,10 +406,10 @@ class OxygenDesatDetector(SciNode):
                 signal_hpf = signals[index_longuest].clone(clone_samples=False)
                 signal_raw.samples = data_stats[index_longuest]
                 signal_raw.start_time = data_starts[index_longuest]
-                signal_lpf.samples = data_lpf_list[0]
+                signal_lpf.samples = data_lpf_list[index_longuest]
                 signal_lpf.start_time = data_starts[index_longuest]
                 signal_lpf.channel = signal_raw.channel+'_lpf'
-                signal_hpf.samples = data_hpf_list[0]
+                signal_hpf.samples = data_hpf_list[index_longuest]
                 signal_hpf.start_time = data_starts[index_longuest]
                 signal_hpf.channel = signal_raw.channel+'_hpf'
                 cache['signal_raw'] = signal_raw
@@ -417,6 +417,8 @@ class OxygenDesatDetector(SciNode):
                 cache['signal_hpf'] = signal_hpf
                 cache['desat_df'] = desat_df
                 cache['plateau_df'] = plateau_df
+                cache['lmax_sec'] = lmax_indices_list[index_longuest]/fs_chan + data_starts[index_longuest]
+                cache['lmin_sec'] = lmin_indices_list[index_longuest]/fs_chan + data_starts[index_longuest]
                 self._cache_manager.write_mem_cache(self.identifier, cache)
 
         # Temporal links between desaturation and arousal
@@ -874,13 +876,22 @@ class OxygenDesatDetector(SciNode):
         data_hpf_list = []
         all_desat_events = []
         plateau_lst = []
-        
+        lmin_indices_list = []
+        lmax_indices_list = []        
+
         # ABOSA parameters
         min_peak_distance_sec = 5
-        min_peak_prominence = 1
-        order = 2
+        min_peak_prominence = 0.5
+        order = 8
+        # !!!!!!!!!!! try !!!
         low_frequency_cutoff = 0.1
+        high_frequency_cutoff = 0.1
+        # !!!!!!!!!!! try !!!
         min_peak_distance_samples = int(min_peak_distance_sec * fs_chan)
+
+        if DEBUG:
+            print("\n--- Detect desaturation events ---")
+            print(f" detection parameters: min_peak_distance_sec={min_peak_distance_sec}, min_peak_prominence={min_peak_prominence}, order={order}, low_frequency_cutoff={low_frequency_cutoff}, high_frequency_cutoff={high_frequency_cutoff}")
 
         for i, signal in enumerate(data_stats):
             valid_mask = ~np.isnan(signal)
@@ -893,6 +904,9 @@ class OxygenDesatDetector(SciNode):
 
             # Low pass filter the signal to get the trend in order to detect local min and max
             signal_lpf = self.filter_nan_filtfilt(signal_clean, order, fs_chan, low_frequency_cutoff, 'low')
+
+            # High-pass filter the signal at 0.1 Hz (which is already low-pass filtered to 0.1 Hz)
+            signal_hpf = self.filter_nan_filtfilt(signal_lpf, order, fs_chan, high_frequency_cutoff , 'high')
             
             # Step 1: Locate potential endpoints (Lmin)
             lmin_indices = self.detect_local_min(
@@ -900,7 +914,8 @@ class OxygenDesatDetector(SciNode):
                 min_peak_distance_samples, min_peak_prominence, 
                 data_starts[i]
             )
-            
+            lmin_indices_list.append(lmin_indices)
+
             # Step 2: Locate potential starting points (Lmax)
             # lmax_indices (numpy array) : Indices of local maximums filtered for too low maximums.
             # lmax_indices_org (numpy array) : Indices of local maximums in the original signal.
@@ -909,6 +924,7 @@ class OxygenDesatDetector(SciNode):
                 min_peak_distance_samples, min_peak_prominence, 
                 data_starts[i]
             )
+            lmax_indices_list.append(lmax_indices_org)
 
             # Step 3: Validate and match Lmax-Lmin pairs
             validated_events = []
@@ -938,9 +954,8 @@ class OxygenDesatDetector(SciNode):
                     # Adjust Lmax for fall rate
                     # The Lmax is shifted forward to a point where the fall starts using the low pass filtered signal.
                     adjusted_lmax_idx, adjusted_lmax_time, adjusted_lmax_val, signal_squared = \
-                        self.adjust_lmax_for_fall_rate(
-                        signal_lpf, lmax_idx, lmin_idx, data_starts[i], fs_chan
-                    )
+                        self.adjust_lmax_for_fall_rate(signal_lpf, signal_hpf, \
+                                                       lmax_idx, lmin_idx, data_starts[i], fs_chan)
                     
                     # Adjust Lman and all Lmin candidates for plateau
                     min_plateau_duration_sec = 20
@@ -960,7 +975,7 @@ class OxygenDesatDetector(SciNode):
                     if adjusted_lmax_time >= adjusted_lmin_time:
                         if DEBUG:
                             print(f"Lmax at {adjusted_lmax_time:.2f}s is after Lmin at {adjusted_lmin_time:.2f}s after plateau adjustment")
-                        continue
+                        break
                     
                     # # Make sure the lmax is the maximum value of the low-pass filtered signal until the lmin
                     # # The goal is to avoid an artificially long desaturation, when a second max occurs before the lmin
@@ -1031,11 +1046,14 @@ class OxygenDesatDetector(SciNode):
         if DEBUG:
             print(f"\n{len(desat_events)} desat events before filtering out desat not starting in asleep\n")
             print(f"\n{len(plateau_events)} plateau events\n")
+            for i in range(len(data_stats)):
+                print(f"{len(lmax_indices_list[i])} possible max\n")
+                print(f"{len(lmin_indices_list[i])} possible min\n")
 
         desat_df = manage_events.create_event_dataframe(data=desat_events)
         plateau_df = manage_events.create_event_dataframe(data=plateau_events)
   
-        return desat_df, plateau_df, data_lpf_list, data_hpf_list
+        return desat_df, plateau_df, data_lpf_list, data_hpf_list, lmax_indices_list, lmin_indices_list
 
 
     def filter_nan_filtfilt(self, signal, order, fs_chan, cutoff_freq, type='low'):
@@ -1380,7 +1398,7 @@ class OxygenDesatDetector(SciNode):
         return candidate_lmins
 
 
-    def adjust_lmax_for_fall_rate(self, signal, lmax_idx, lmin_idx, data_start, fs_chan, fall_rate_threshold=-0.05):
+    def adjust_lmax_for_fall_rate(self, signal, signal_hpf, lmax_idx, lmin_idx, data_start, fs_chan, fall_rate_threshold=-0.05):
         """
         Shift Lmax forward to the next variation peak.
         The signal (already low-pass filtered) is high-pass filtered at 0.2 Hz,
@@ -1408,16 +1426,10 @@ class OxygenDesatDetector(SciNode):
             adjusted_lmax_val : float
                 Adjusted value of Lmax.
         """
-        # Filter parameter
-        order = 2
-        high_cutoff_freq = 0.1
         # Find maximum parameter
         min_peak_distance_sec = 1
         #min_peak_prominence = 0.01
 
-        # High-pass filter the signal at 0.1 Hz (which is already low-pass filtered to 0.1 Hz)
-        signal_hpf = self.filter_nan_filtfilt(signal, order, fs_chan, high_cutoff_freq, 'high')
-        
         # Invert the variation because we want to identify maximum drops
         signal_squared = signal_hpf ** 2
         

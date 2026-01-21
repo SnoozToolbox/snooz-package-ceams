@@ -17,8 +17,10 @@ import pandas as pd
 from qtpy import QtWidgets
 from qtpy import QtGui
 
+from CEAMSModules.EventReader import manage_events
 from CEAMSModules.OxygenDesatDetector.Ui_OxygenDesatDetectorResultsView import Ui_OxygenDesatDetectorResultsView
 from CEAMSModules.PSGReader.SignalModel import SignalModel
+
 
 class OxygenDesatDetectorResultsView(Ui_OxygenDesatDetectorResultsView, QtWidgets.QWidget):
     """
@@ -61,6 +63,8 @@ class OxygenDesatDetectorResultsView(Ui_OxygenDesatDetectorResultsView, QtWidget
             self.signal_hpf = cache['signal_hpf']
             self.desat_df = cache['desat_df']
             self.plateau_df = cache['plateau_df']
+            self.lmax_sec = cache['lmax_sec']
+            self.lmin_sec = cache['lmin_sec']
             self.fs = self.signal_raw.sample_rate
 
             # Update the time elapsed based on the loaded data
@@ -224,23 +228,38 @@ class OxygenDesatDetectorResultsView(Ui_OxygenDesatDetectorResultsView, QtWidget
                     # Turn off tick labels
                     ax1.set_yticklabels([])
 
-            # Add rectangles for desaturation events
+            # Add rectangles for desaturation events or markers for min max
             for index, row in self.events.iterrows():
                 event_start = row['start_sec']
                 event_duration = row['duration_sec']
+                event_start_to_plot = event_start - self.start_to_plot
+
                 # Check if the event is within the plotted window
                 if (event_start >= self.start_to_plot) and (event_start <= (self.start_to_plot + self.duration)):
-                    rect_start = event_start - self.start_to_plot
-                    if row['name']=='desat_SpO2':
-                        color_rec='green'
-                    elif row['name']=='plateau_SpO2':
-                        color_rec='yellow'
+                    if row['name']=='lmax_SpO2' or row['name']=='lmin_SpO2':
+                        # Add red markers for lmax and blue markers for lmin
+                        if row['name']=='lmax_SpO2':
+                            color_marker='red'
+                        else:
+                            color_marker='blue'
+                        if n_chan>1:
+                            ax1[chan_sel].plot(event_start_to_plot, signal.samples[int(event_start_to_plot*fs)], \
+                                    'o', color=color_marker, alpha=0.3, markersize=8)
+                        else:
+                            ax1.plot(event_start_to_plot, signal.samples[int(event_start_to_plot*fs)], \
+                                     'o', color=color_marker, alpha=0.3, markersize=8)
+
                     else:
-                        color_rec='red' # artifact
-                    if n_chan>1:
-                        ax1[chan_sel].axvspan(rect_start, rect_start + event_duration, color=color_rec, alpha=0.3)
-                    else:
-                        ax1.axvspan(rect_start, rect_start + event_duration, color=color_rec, alpha=0.3)
+                        if row['name']=='desat_SpO2':
+                            color_rec='green'
+                        elif row['name']=='plateau_SpO2':
+                            color_rec='yellow'
+                        elif row['name']=='art_SpO2':
+                            color_rec='red' # artifact
+                        if n_chan>1:
+                            ax1[chan_sel].axvspan(event_start_to_plot, event_start_to_plot + event_duration, color=color_rec, alpha=0.3)
+                        else:
+                            ax1.axvspan(event_start_to_plot, event_start_to_plot + event_duration, color=color_rec, alpha=0.3)
 
             chan_sel += 1
 
@@ -293,7 +312,26 @@ class OxygenDesatDetectorResultsView(Ui_OxygenDesatDetectorResultsView, QtWidget
         # Extract the events from the dataframe that needed to be plotted
         # the set of events are from self.desat_df and self.plateau_df
         # Filter events based on the current time window
+
+        # Create events for the maximum and minimum markers based on self.lmax_sec and self.lmin_sec
+        lmax_events = []
+        for lmax_time in self.lmax_sec:
+            if lmax_time>=self.start_to_plot and lmax_time<=(self.start_to_plot + self.duration):
+                lmax_events.append({'group': "SpO2", 'name':'lmax_SpO2', 'start_sec':lmax_time, 'duration_sec':0, 'channels':""})
+        lmin_events = []
+        for lmin_time in self.lmin_sec:
+            if lmin_time>=self.start_to_plot and lmin_time<=(self.start_to_plot + self.duration):
+                lmin_events.append({'group': "SpO2", 'name':'lmin_SpO2', 'start_sec':lmin_time, 'duration_sec':0, 'channels':""})
+        # Create a dataframe for lmax and lmin events
+        lmax_df = manage_events.create_event_dataframe(data=lmax_events)
+        lmin_df = manage_events.create_event_dataframe(data=lmin_events)
+
+        # Combine all the events into a single dataframe
         self.events = self.desat_df[self.desat_df['start_sec']>=self.start_to_plot]
         if len(self.plateau_df)>0:
             self.events = pd.concat([self.events,self.plateau_df[self.plateau_df['start_sec']>=self.start_to_plot]],ignore_index=True)
         self.events = self.events[self.events['start_sec']<=(self.start_to_plot + self.duration)]
+        if len(lmax_df)>0:
+            self.events = pd.concat([self.events,lmax_df],ignore_index=True)
+        if len(lmin_df)>0:
+            self.events = pd.concat([self.events,lmin_df],ignore_index=True)
