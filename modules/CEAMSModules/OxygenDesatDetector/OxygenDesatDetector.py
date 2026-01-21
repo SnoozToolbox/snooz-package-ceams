@@ -1031,15 +1031,15 @@ class OxygenDesatDetector(SciNode):
                         if DEBUG:
                             print(f"Lmax at {adjusted_lmax_time:.2f}s is after Lmin at {adjusted_lmin_time:.2f}s after plateau adjustment")
                         break
-                    
-                    # # Make sure the lmax is the maximum value of the low-pass filtered signal until the lmin
-                    # # The goal is to avoid an artificially long desaturation, when a second max occurs before the lmin
-                    # possible_desat_signal = signal_lpf[adjusted_lmax_idx:adjusted_lmin_idx+1]
-                    # print(f"adjusted_lmax_idx = {adjusted_lmax_idx}\n")
-                    # if signal_lpf[adjusted_lmax_idx] < np.nanmax(possible_desat_signal):
-                    #     if DEBUG:
-                    #         print(f"  Lmax at {adjusted_lmax_time:.2f}s is not the maximum before Lmin at {adjusted_lmin_time:.2f}s")
-                    #     continue
+
+                    # Verify on the low pass filtered signal that a miminum drop is respected
+                    # It measn that too few samples really drop between adjusted Lmax and Lmin
+                    current_lmax_val = np.nanmax(signal_lpf[adjusted_lmax_idx:adjusted_lmin_idx+1])
+                    current_lmin_val = np.nanmin(signal_lpf[adjusted_lmax_idx:adjusted_lmin_idx+1])
+                    if (current_lmax_val - current_lmin_val) <= 1.5:
+                        if DEBUG:
+                            print(f"  Drop too small ({current_lmax_val - current_lmin_val:.1f}%) between adjusted Lmax at {adjusted_lmax_time:.2f}s and Lmin at {adjusted_lmin_time:.2f}s on low pass filtered signal")
+                        continue
 
                     # Correct Lmax locations by finding actual maximum within 5s window on raw signal
                     adjusted_lmax_idx = self.correct_peak_indices_in_window(
@@ -1072,14 +1072,6 @@ class OxygenDesatDetector(SciNode):
                             print(f"  Invalid desaturation: start={adjusted_lmax_time:.2f}s, "
                                   f"duration={duration:.2f}s, drop={drop:.1f}%, "
                                   f"fall_rate={avg_fall_rate:.3f}%/s")
-                        # continue
-                
-                # # Select the first validated Lmin candidate
-                # if len(validated_candidates) == 0:
-                #     # if DEBUG:
-                #     #     print(f"No validated Lmin candidates for Lmax at {lmax_time:.2f}s")
-                #     continue
-
 
             # Debug output for the result view
             if DEBUG: 
