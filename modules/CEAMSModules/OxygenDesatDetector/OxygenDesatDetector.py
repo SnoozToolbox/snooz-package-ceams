@@ -28,7 +28,7 @@ from CEAMSModules.SleepReport import SleepReport
 from CEAMSModules.OxygenDesatDetector.OxygenDesatDetector_doc import write_doc_file
 from CEAMSModules.OxygenDesatDetector.OxygenDesatDetector_doc import _get_doc
 
-DEBUG = True
+DEBUG = False
 
 class OxygenDesatDetector(SciNode):
     """
@@ -834,6 +834,61 @@ class OxygenDesatDetector(SciNode):
         # return the time as HH:MM:SS
         return f"{HH}:{MM}:{SS}"
 
+    def resolve_overlapping_desaturations(self, desat_events):
+        """
+        Resolve overlapping desaturation events by keeping the one with the steepest fall rate.
+        
+        Parameters:
+            desat_events : list of tuples
+                List of (start_sec, duration_sec, fall_rate) tuples.
+        
+        Returns:
+            resolved_events : list of tuples
+                List of non-overlapping (start_sec, duration_sec, fall_rate) tuples.
+        """
+        if len(desat_events) == 0:
+            return desat_events
+        
+        # Sort events by start time
+        sorted_events = sorted(desat_events, key=lambda x: x[0])
+        
+        resolved_events = []
+        i = 0
+        while i < len(sorted_events):
+            current_start, current_dur, current_rate = sorted_events[i]
+            current_end = current_start + current_dur
+            
+            # Find all overlapping events
+            overlapping = [(i, current_start, current_dur, current_rate)]
+            j = i + 1
+            while j < len(sorted_events):
+                next_start, next_dur, next_rate = sorted_events[j]
+                next_end = next_start + next_dur
+                
+                # Check for overlap: events overlap if next starts before current ends
+                if next_start < current_end:
+                    overlapping.append((j, next_start, next_dur, next_rate))
+                    # Update current_end to include the new event's range
+                    current_end = max(current_end, next_end)
+                    j += 1
+                else:
+                    break
+            
+            # Select the event with the steepest fall rate (most negative, closest to -4)
+            best_event = min(overlapping, key=lambda x: x[3])  # x[3] is fall_rate
+            resolved_events.append((best_event[1], best_event[2], best_event[3]))
+            
+            if DEBUG and len(overlapping) > 1:
+                print(f"Resolved {len(overlapping)} overlapping desaturations:")
+                for idx, start, dur, rate in overlapping:
+                    marker = " <-- KEPT" if (start, dur, rate) == (best_event[1], best_event[2], best_event[3]) else ""
+                    print(f"  start={start:.2f}s, duration={dur:.2f}s, fall_rate={rate:.3f}%/s{marker}")
+            
+            # Move to the next non-overlapping event
+            i = overlapping[-1][0] + 1
+        
+        return resolved_events
+
     def detect_desaturation_ABOSA(self, data_starts, data_stats, fs_chan, channel, parameters_oxy):
         """
         Detect desaturation as described in ABOSA [1].
@@ -1011,7 +1066,7 @@ class OxygenDesatDetector(SciNode):
                     if ((drop >= parameters_oxy['desaturation_drop_percent']) and 
                         (duration >= parameters_oxy['min_hold_drop_sec']) and
                         (-4.0 <= avg_fall_rate <= -0.05)):
-                        all_desat_events.append((adjusted_lmax_time, duration))
+                        all_desat_events.append((adjusted_lmax_time, duration, avg_fall_rate))
                     else:
                         if DEBUG:
                             print(f"  Invalid desaturation: start={adjusted_lmax_time:.2f}s, "
@@ -1031,11 +1086,14 @@ class OxygenDesatDetector(SciNode):
                 data_lpf_list.append(signal_lpf)
                 data_hpf_list.append(signal_squared)
 
+        # Resolve overlapping desaturations by keeping events with steepest fall rate
+        all_desat_events = self.resolve_overlapping_desaturations(all_desat_events)
+
         # Create output dataframe
         # desat_events = [('SpO2', 'desat_SpO2', start_sec, duration_sec, channel) 
         #                 for start_sec, duration_sec in all_desat_events]
         desat_events = [('SpO2', 'desat_SpO2', start_sec, duration_sec, '') # Add back channel
-                        for start_sec, duration_sec in all_desat_events]
+                        for start_sec, duration_sec, _ in all_desat_events]
         # Add artifact events as invalid sections in desat_events
         desat_events += [('SpO2', 'art_SpO2', start_sec, duration_sec, '') # Add back channel
                          for start_sec, duration_sec in artifact_list]
@@ -1318,10 +1376,13 @@ class OxygenDesatDetector(SciNode):
             current_lmax_idx = lmax_indices_org[i]
             next_lmax_idx = lmax_indices_org[i+1]
             signal_vals = signal[current_lmax_idx:next_lmax_idx]
-            current_lmax_val = np.nanmax(signal_vals)
-            current_lmin_val = np.nanmin(signal_vals)
-            if (current_lmax_val - current_lmin_val) >= min_drop_2_consecutive_max:
-                filtered_lmax_indices.append(current_lmax_idx)
+            if len(signal_vals) > 1:
+                current_lmax_val = np.nanmax(signal_vals)
+                current_lmin_val = np.nanmin(signal_vals)
+                if (current_lmax_val - current_lmin_val) >= min_drop_2_consecutive_max:
+                    filtered_lmax_indices.append(current_lmax_idx)
+            else:
+                continue
         
         if DEBUG:
             lmax_times_sec = data_start + filtered_lmax_indices / fs_chan
