@@ -353,7 +353,7 @@ class OxygenDesatDetector(SciNode):
             # 'desaturation_drop_percent' : 'Drop level (%) for the oxygen desaturation "3 or 4"',
             # 'max_slope_drop_sec' : 'The maximum duration (s) during which the oxygen level is dropping "180 or 20"',
             # 'min_hold_drop_sec' : 'Minimum duration (s) during which the oxygen level drop is maintained "10 or 5"',
-        desat_df, plateau_df, data_lpf_list = self.detect_desaturation_ABOSA(\
+        desat_df, plateau_df, data_lpf_list, data_hpf_list = self.detect_desaturation_ABOSA(\
             data_starts, data_stats, fs_chan, channel, parameters_oxy)
         
         # Keep desaturation events (desat_df) that start in asleep stages only
@@ -380,6 +380,9 @@ class OxygenDesatDetector(SciNode):
         else:
             filtered_desat_df = pd.DataFrame(columns=['group', 'name', 'start_sec', 'duration_sec', 'channels'])
 
+        if DEBUG:
+            print(f"\n{len(filtered_desat_df)} desat events after filtering out desat not starting in asleep\n")
+
         # Compute desaturation stats
         #----------------------------------------------------------------------
         desat_stats = self.compute_desat_stats(filtered_desat_df, asleep_stages_df)
@@ -400,13 +403,18 @@ class OxygenDesatDetector(SciNode):
                 # Create a SignalModel for the raw data and the filtered data
                 signal_raw = signals[index_longuest].clone(clone_samples=False)
                 signal_lpf = signals[index_longuest].clone(clone_samples=False)
+                signal_hpf = signals[index_longuest].clone(clone_samples=False)
                 signal_raw.samples = data_stats[index_longuest]
                 signal_raw.start_time = data_starts[index_longuest]
                 signal_lpf.samples = data_lpf_list[0]
                 signal_lpf.start_time = data_starts[index_longuest]
                 signal_lpf.channel = signal_raw.channel+'_lpf'
+                signal_hpf.samples = data_hpf_list[0]
+                signal_hpf.start_time = data_starts[index_longuest]
+                signal_hpf.channel = signal_raw.channel+'_hpf'
                 cache['signal_raw'] = signal_raw
                 cache['signal_lpf'] = signal_lpf
+                cache['signal_hpf'] = signal_hpf
                 cache['desat_df'] = desat_df
                 cache['plateau_df'] = plateau_df
                 self._cache_manager.write_mem_cache(self.identifier, cache)
@@ -863,6 +871,7 @@ class OxygenDesatDetector(SciNode):
             https://doi.org/10.1016/j.cmpb.2022.107120
         """   
         data_lpf_list = []
+        data_hpf_list = []
         all_desat_events = []
         plateau_lst = []
         
@@ -927,15 +936,15 @@ class OxygenDesatDetector(SciNode):
                 for lmin_idx, lmin_time, lmin_val, drop in lmin_list:
 
                     # Adjust Lmax for fall rate
-                    # The Lmax is shifted forward to a point where the fall rate ≤−0.05%/s is reached for the first time
-                    adjusted_lmax_idx, adjusted_lmax_time, adjusted_lmax_val = \
+                    # The Lmax is shifted forward to a point where the fall starts using the low pass filtered signal.
+                    adjusted_lmax_idx, adjusted_lmax_time, adjusted_lmax_val, signal_squared = \
                         self.adjust_lmax_for_fall_rate(
                         signal_lpf, lmax_idx, lmin_idx, data_starts[i], fs_chan
                     )
                     
                     # Adjust Lman and all Lmin candidates for plateau
                     min_plateau_duration_sec = 20
-                    plateau_threshold = 1 # on the filtered signal
+                    plateau_threshold = 0.1 # std threshold on filtered signal (more robust than max-min)
                     adjusted_lmax_idx, adjusted_lmax_time, adjusted_lmax_val, \
                         adjusted_lmin_idx, adjusted_lmin_time, adjusted_lmin_val, plateau = \
                         self.adjust_for_plateau(
@@ -947,6 +956,20 @@ class OxygenDesatDetector(SciNode):
 
                     if len(plateau) > 0:
                         plateau_lst.extend(plateau)
+
+                    if adjusted_lmax_time >= adjusted_lmin_time:
+                        if DEBUG:
+                            print(f"Lmax at {adjusted_lmax_time:.2f}s is after Lmin at {adjusted_lmin_time:.2f}s after plateau adjustment")
+                        continue
+                    
+                    # # Make sure the lmax is the maximum value of the low-pass filtered signal until the lmin
+                    # # The goal is to avoid an artificially long desaturation, when a second max occurs before the lmin
+                    # possible_desat_signal = signal_lpf[adjusted_lmax_idx:adjusted_lmin_idx+1]
+                    # print(f"adjusted_lmax_idx = {adjusted_lmax_idx}\n")
+                    # if signal_lpf[adjusted_lmax_idx] < np.nanmax(possible_desat_signal):
+                    #     if DEBUG:
+                    #         print(f"  Lmax at {adjusted_lmax_time:.2f}s is not the maximum before Lmin at {adjusted_lmin_time:.2f}s")
+                    #     continue
 
                     # Correct Lmax locations by finding actual maximum within 5s window on raw signal
                     adjusted_lmax_idx = self.correct_peak_indices_in_window(
@@ -991,6 +1014,7 @@ class OxygenDesatDetector(SciNode):
             # Debug output for the result view
             if DEBUG: 
                 data_lpf_list.append(signal_lpf)
+                data_hpf_list.append(signal_squared)
 
         # Create output dataframe
         # desat_events = [('SpO2', 'desat_SpO2', start_sec, duration_sec, channel) 
@@ -1005,13 +1029,13 @@ class OxygenDesatDetector(SciNode):
         plateau_events = [('SpO2', 'plateau_SpO2', start_sec, duration_sec, '') 
                           for start_sec, duration_sec in plateau_lst]
         if DEBUG:
-            print(f"\n{len(desat_events)} desat events\n")
+            print(f"\n{len(desat_events)} desat events before filtering out desat not starting in asleep\n")
             print(f"\n{len(plateau_events)} plateau events\n")
 
         desat_df = manage_events.create_event_dataframe(data=desat_events)
         plateau_df = manage_events.create_event_dataframe(data=plateau_events)
   
-        return desat_df, plateau_df, data_lpf_list
+        return desat_df, plateau_df, data_lpf_list, data_hpf_list
 
 
     def filter_nan_filtfilt(self, signal, order, fs_chan, cutoff_freq, type='low'):
@@ -1386,43 +1410,61 @@ class OxygenDesatDetector(SciNode):
         """
         # Filter parameter
         order = 2
-        high_cutoff_freq = 0.2
+        high_cutoff_freq = 0.1
         # Find maximum parameter
         min_peak_distance_sec = 1
-        min_peak_prominence = 0.1
+        #min_peak_prominence = 0.01
 
-        # High-pass filter the signal at 0.2 Hz
+        # High-pass filter the signal at 0.1 Hz (which is already low-pass filtered to 0.1 Hz)
         signal_hpf = self.filter_nan_filtfilt(signal, order, fs_chan, high_cutoff_freq, 'high')
         
-        # Square the high-pass filtered signal
+        # Invert the variation because we want to identify maximum drops
         signal_squared = signal_hpf ** 2
         
-        # Detect peaks in the squared signal
+        # Detect peaks in the inverted signal - we are looking for the biggest drops
         min_peak_distance_samples = int(min_peak_distance_sec * fs_chan)  
         peaks, _ = scipysignal.find_peaks(
             signal_squared,
             distance=min_peak_distance_samples,
-            prominence=min_peak_prominence
+            #prominence=min_peak_prominence
         )
         
         # Find the next peak after lmax_idx
         adjusted_lmax_idx = lmax_idx
         next_peaks = peaks[peaks > lmax_idx]
-        
-        if len(next_peaks) > 0:
-            # Use the first peak after lmax_idx that is before lmin_idx
-            for peak_idx in next_peaks:
-                if peak_idx < lmin_idx:
-                    adjusted_lmax_idx = peak_idx
-                    break
+        possible_peaks = next_peaks[next_peaks < lmin_idx]
+
+        if len(possible_peaks) > 0:
+            # Loop through all peaks before lmin_idx and keep shifting to better maxima
+            for peak_idx in possible_peaks:
+                    
+                # Correct peak locations within 1s window
+                lmax_corrected = self.correct_peak_indices_in_window(signal, [adjusted_lmax_idx], window_s=1, fs_chan=fs_chan)
+                lmax_corrected = lmax_corrected[0]
+                lmax_shifted = self.correct_peak_indices_in_window(signal, [peak_idx], window_s=1, fs_chan=fs_chan)
+                lmax_shifted = lmax_shifted[0]
+                
+                # Check if the shifted peak is higher (better maximum)
+                if signal[lmax_shifted] > signal[lmax_corrected]:
+                    adjusted_lmax_idx = lmax_shifted
+                else:
+                    # Evaluate fall rate to ensure it's a valid shift
+                    duration_sec = (lmax_shifted - lmax_corrected) / fs_chan
+                    drop = signal[lmax_shifted] - signal[lmax_corrected]
+                    fall_rate = drop / duration_sec if duration_sec > 0 else 0
+                    if fall_rate >= fall_rate_threshold:
+                        adjusted_lmax_idx = lmax_shifted
+                    # If fall rate is too steep, keep current position and stop
+                    else:
+                        break
         
         adjusted_lmax_time = data_start + adjusted_lmax_idx / fs_chan
         adjusted_lmax_val = signal[adjusted_lmax_idx]
-        return adjusted_lmax_idx, adjusted_lmax_time, adjusted_lmax_val
+        return adjusted_lmax_idx, adjusted_lmax_time, adjusted_lmax_val, signal_squared
 
 
     def adjust_for_plateau(self, signal, adjusted_lmax_idx, adjusted_lmax_val, lmin_idx, lmin_time, lmin_val, 
-                           data_start, fs_chan, min_plateau_duration_sec=30, plateau_threshold=0.5):
+                           data_start, fs_chan, min_plateau_duration_sec=30, plateau_threshold=0.2):
         """
         Adjust Lmax or Lmin if a flat plateau exists within the event.
         The plateau length is dynamically determined (minimum 30s, can be longer).
@@ -1430,7 +1472,7 @@ class OxygenDesatDetector(SciNode):
         
         Parameters:
             signal : numpy array
-                Original SpO2 signal.
+                Low-pass filtered SpO2 signal.
             adjusted_lmax_idx : int
                 Current adjusted Lmax index.
             adjusted_lmax_val : float
@@ -1448,7 +1490,7 @@ class OxygenDesatDetector(SciNode):
             min_plateau_duration_sec : float
                 Minimum plateau duration in seconds (default 30s).
             plateau_threshold : float
-                Maximum change in % to be considered flat (default 0.5%).
+                Maximum standard deviation to be considered flat (default 0.2%).
         
         Returns:
             adjusted_lmax_idx, adjusted_lmax_time, adjusted_lmax_val, lmin_idx, lmin_time, lmin_val, plateau_list : tuple
@@ -1474,8 +1516,8 @@ class OxygenDesatDetector(SciNode):
                 p_end = p_start + min_plateau_samples
                 plateau_segment = event_signal[p_start:p_end]
                 
-                # Check if this 30s window is flat enough
-                if np.nanmax(plateau_segment) - np.nanmin(plateau_segment) <= plateau_threshold:
+                # Check if this 30s window is flat enough using standard deviation
+                if np.nanstd(plateau_segment) <= plateau_threshold:
                     best_plateau_start = p_start
                     best_plateau_end = p_end
                     
@@ -1483,7 +1525,7 @@ class OxygenDesatDetector(SciNode):
                     while best_plateau_end < len(event_signal):
                         # Check if adding the next sample keeps the plateau flat
                         extended_segment = event_signal[best_plateau_start:best_plateau_end + 1]
-                        if np.nanmax(extended_segment) - np.nanmin(extended_segment) <= plateau_threshold:
+                        if np.nanstd(extended_segment) <= plateau_threshold:
                             best_plateau_end += 1
                         else:
                             break

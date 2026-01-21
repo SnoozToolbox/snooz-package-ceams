@@ -58,6 +58,7 @@ class OxygenDesatDetectorResultsView(Ui_OxygenDesatDetectorResultsView, QtWidget
             # Get the data needed from the cache
             self.signal_raw = cache['signal_raw']
             self.signal_lpf = cache['signal_lpf']
+            self.signal_hpf = cache['signal_hpf']
             self.desat_df = cache['desat_df']
             self.plateau_df = cache['plateau_df']
             self.fs = self.signal_raw.sample_rate
@@ -156,7 +157,7 @@ class OxygenDesatDetectorResultsView(Ui_OxygenDesatDetectorResultsView, QtWidget
 
         #----------------------------------------------------------------------
         # Plot eeg signal
-        n_chan = 2
+        n_chan = len(self.signals)
         gs = self.figure.add_gridspec(n_chan, hspace=0)
         ax1 = gs.subplots(sharex=True, sharey=False)
         chan_sel = 0
@@ -257,6 +258,7 @@ class OxygenDesatDetectorResultsView(Ui_OxygenDesatDetectorResultsView, QtWidget
         # Extract the samples to plot
         signal_raw = self.signal_raw.clone(clone_samples=True)
         signal_lpf = self.signal_lpf.clone(clone_samples=True)
+        signal_hpf = self.signal_hpf.clone(clone_samples=True)
         start_samples = int(self.start_to_plot*self.fs) - int(self.signal_raw.start_time*self.fs)
         end_samples = int((self.start_to_plot - self.signal_raw.start_time + self.duration)*self.fs)
         
@@ -270,16 +272,21 @@ class OxygenDesatDetectorResultsView(Ui_OxygenDesatDetectorResultsView, QtWidget
         n_samples = int(self.duration * self.fs)
         raw_filled = np.full(n_samples, np.nan)
         lpf_filled = np.full(n_samples, np.nan)
+        hpf_filled = np.full(n_samples, np.nan)
         
         # Copy available samples into the NaN-filled arrays
         available_samples = end_samples - start_samples
         if available_samples > 0:
             raw_filled[:available_samples] = signal_raw.samples[start_samples:end_samples]
             lpf_filled[:available_samples] = signal_lpf.samples[start_samples:end_samples]
+            hpf_filled[:available_samples] = signal_hpf.samples[start_samples:end_samples]
         
         signal_raw.samples = raw_filled
         signal_lpf.samples = lpf_filled
-        self.signals = [signal_raw, signal_lpf]
+        signal_hpf.samples = hpf_filled
+        
+         # Store the signals to plot
+        self.signals = [signal_raw, signal_lpf, signal_hpf]
 
 
     def get_events(self):
