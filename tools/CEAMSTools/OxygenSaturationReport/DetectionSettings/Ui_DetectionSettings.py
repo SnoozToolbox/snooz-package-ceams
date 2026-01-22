@@ -24,109 +24,33 @@ class Ui_DetectionSettings(object):
     def setupUi(self, DetectionSettings):
         if not DetectionSettings.objectName():
             DetectionSettings.setObjectName(u"DetectionSettings")
-        DetectionSettings.resize(1544, 759)
+        DetectionSettings.resize(847, 428)
         DetectionSettings.setStyleSheet(u"font: 12pt \"Roboto\";")
         self.verticalLayout = QVBoxLayout(DetectionSettings)
         self.verticalLayout.setObjectName(u"verticalLayout")
-        self.label_10 = QLabel(DetectionSettings)
-        self.label_10.setObjectName(u"label_10")
-        self.label_10.setMaximumSize(QSize(16777215, 30))
+        self.label = QLabel(DetectionSettings)
+        self.label.setObjectName(u"label")
         font = QFont()
         font.setFamilies([u"Roboto"])
         font.setPointSize(12)
         font.setBold(False)
         font.setItalic(False)
-        self.label_10.setFont(font)
-
-        self.verticalLayout.addWidget(self.label_10)
-
-        self.label_11 = QLabel(DetectionSettings)
-        self.label_11.setObjectName(u"label_11")
-        self.label_11.setMinimumSize(QSize(0, 0))
-
-        self.verticalLayout.addWidget(self.label_11)
-
-        self.gridLayout_2 = QGridLayout()
-        self.gridLayout_2.setObjectName(u"gridLayout_2")
-        self.label_14 = QLabel(DetectionSettings)
-        self.label_14.setObjectName(u"label_14")
-
-        self.gridLayout_2.addWidget(self.label_14, 0, 1, 1, 1)
-
-        self.horizontalSpacer_12 = QSpacerItem(30, 20, QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Minimum)
-
-        self.gridLayout_2.addItem(self.horizontalSpacer_12, 0, 0, 1, 1)
-
-        self.verticalSpacer_3 = QSpacerItem(20, 10, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Minimum)
-
-        self.gridLayout_2.addItem(self.verticalSpacer_3, 1, 1, 1, 1)
-
-
-        self.verticalLayout.addLayout(self.gridLayout_2)
-
-        self.label = QLabel(DetectionSettings)
-        self.label.setObjectName(u"label")
         self.label.setFont(font)
 
         self.verticalLayout.addWidget(self.label)
+
+        self.label_3 = QLabel(DetectionSettings)
+        self.label_3.setObjectName(u"label_3")
+
+        self.verticalLayout.addWidget(self.label_3)
 
         self.horizontalLayout_2 = QHBoxLayout()
         self.horizontalLayout_2.setObjectName(u"horizontalLayout_2")
         self.label_pic = QLabel(DetectionSettings)
         self.label_pic.setObjectName(u"label_pic")
-        self.label_pic.setMaximumSize(QSize(16777215, 185))
+        self.label_pic.setMaximumSize(QSize(16777215, 330))
 
         self.horizontalLayout_2.addWidget(self.label_pic)
-
-        self.verticalLayout_4 = QVBoxLayout()
-        self.verticalLayout_4.setObjectName(u"verticalLayout_4")
-        self.verticalSpacer_8 = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
-
-        self.verticalLayout_4.addItem(self.verticalSpacer_8)
-
-        self.label_7 = QLabel(DetectionSettings)
-        self.label_7.setObjectName(u"label_7")
-
-        self.verticalLayout_4.addWidget(self.label_7)
-
-        self.horizontalLayout = QHBoxLayout()
-        self.horizontalLayout.setObjectName(u"horizontalLayout")
-        self.horizontalSpacer = QSpacerItem(20, 20, QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Minimum)
-
-        self.horizontalLayout.addItem(self.horizontalSpacer)
-
-        self.verticalLayout_3 = QVBoxLayout()
-        self.verticalLayout_3.setObjectName(u"verticalLayout_3")
-        self.label_13 = QLabel(DetectionSettings)
-        self.label_13.setObjectName(u"label_13")
-        self.label_13.setWordWrap(False)
-
-        self.verticalLayout_3.addWidget(self.label_13)
-
-        self.label_15 = QLabel(DetectionSettings)
-        self.label_15.setObjectName(u"label_15")
-        self.label_15.setWordWrap(False)
-
-        self.verticalLayout_3.addWidget(self.label_15)
-
-        self.label_3 = QLabel(DetectionSettings)
-        self.label_3.setObjectName(u"label_3")
-        self.label_3.setWordWrap(True)
-
-        self.verticalLayout_3.addWidget(self.label_3)
-
-        self.verticalSpacer_5 = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
-
-        self.verticalLayout_3.addItem(self.verticalSpacer_5)
-
-
-        self.horizontalLayout.addLayout(self.verticalLayout_3)
-
-
-        self.verticalLayout_4.addLayout(self.horizontalLayout)
-
-
-        self.horizontalLayout_2.addLayout(self.verticalLayout_4)
 
         self.horizontalSpacer_4 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
 
@@ -138,6 +62,11 @@ class Ui_DetectionSettings(object):
         self.verticalSpacer_4 = QSpacerItem(20, 13, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Minimum)
 
         self.verticalLayout.addItem(self.verticalSpacer_4)
+
+        self.label_6 = QLabel(DetectionSettings)
+        self.label_6.setObjectName(u"label_6")
+
+        self.verticalLayout.addWidget(self.label_6)
 
         self.gridLayout = QGridLayout()
         self.gridLayout.setObjectName(u"gridLayout")
@@ -224,6 +153,11 @@ class Ui_DetectionSettings(object):
 
         self.verticalLayout.addLayout(self.gridLayout)
 
+        self.label_7 = QLabel(DetectionSettings)
+        self.label_7.setObjectName(u"label_7")
+
+        self.verticalLayout.addWidget(self.label_7)
+
         self.verticalSpacer_6 = QSpacerItem(20, 13, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Minimum)
 
         self.verticalLayout.addItem(self.verticalSpacer_6)
@@ -242,14 +176,6 @@ class Ui_DetectionSettings(object):
 
         self.verticalLayout_2 = QVBoxLayout()
         self.verticalLayout_2.setObjectName(u"verticalLayout_2")
-        self.label_16 = QLabel(DetectionSettings)
-        self.label_16.setObjectName(u"label_16")
-        self.label_16.setMinimumSize(QSize(0, 30))
-        self.label_16.setFont(font)
-        self.label_16.setWordWrap(True)
-
-        self.verticalLayout_2.addWidget(self.label_16)
-
         self.label_5 = QLabel(DetectionSettings)
         self.label_5.setObjectName(u"label_5")
         self.label_5.setFont(font)
@@ -275,31 +201,22 @@ class Ui_DetectionSettings(object):
 
     def retranslateUi(self, DetectionSettings):
         DetectionSettings.setWindowTitle("")
-        self.label_10.setText(QCoreApplication.translate("DetectionSettings", u"<html><head/><body><p><span style=\" font-weight:600;\">Oxygen Saturation Pre-processing</span></p></body></html>", None))
-        self.label_11.setText(QCoreApplication.translate("DetectionSettings", u"The oxygen channel is low-pass filtered to 0.1 Hz and downsampled to 1 Hz.\n"
-"All values are expressed in %, ranging from 0 to 100%.", None))
-        self.label_14.setText(QCoreApplication.translate("DetectionSettings", u"Low-pass filter : \n"
-"IIR filter, order 4, applied forward and backward to cancel the phase delay. \n"
-"The order is divided by 2 when applied since is it applied twice.", None))
         self.label.setText(QCoreApplication.translate("DetectionSettings", u"<html><head/><body><p><span style=\" font-weight:600;\">Oxygen Desaturation Crtieria</span></p></body></html>", None))
+        self.label_3.setText(QCoreApplication.translate("DetectionSettings", u"The oximeter measures the percentage of oxygen in the blood.", None))
         self.label_pic.setText("")
-        self.label_7.setText(QCoreApplication.translate("DetectionSettings", u"AASM criteria [1]", None))
-        self.label_13.setText(QCoreApplication.translate("DetectionSettings", u"Minimum oxygen desaturation drop : 3% or 4%", None))
-        self.label_15.setText(QCoreApplication.translate("DetectionSettings", u"The desaturation ends when there is a resaturation of at least 2%", None))
-        self.label_3.setText(QCoreApplication.translate("DetectionSettings", u"Maximum recovery duration (the mimimum value between):\n"
-"120 s and 2 x duration of desaturation", None))
+        self.label_6.setText(QCoreApplication.translate("DetectionSettings", u"Define the criteria for detecting a desaturation.", None))
         self.label_2.setText(QCoreApplication.translate("DetectionSettings", u"The oxygen level drop", None))
         self.radioButton_20s.setText(QCoreApplication.translate("DetectionSettings", u"20 sec [CEAMS]", None))
         self.radioButton_3perc.setText(QCoreApplication.translate("DetectionSettings", u"3 %", None))
-        self.radioButton_hold_5s.setText(QCoreApplication.translate("DetectionSettings", u"5 sec [2, CEAMS]", None))
-        self.label_4.setText(QCoreApplication.translate("DetectionSettings", u"Minimum hold duration", None))
+        self.radioButton_hold_5s.setText(QCoreApplication.translate("DetectionSettings", u"5 sec [1, CEAMS]", None))
+        self.label_4.setText(QCoreApplication.translate("DetectionSettings", u"Minimum desaturation time", None))
         self.radioButton_4perc.setText(QCoreApplication.translate("DetectionSettings", u"4 %", None))
         self.label_17.setText(QCoreApplication.translate("DetectionSettings", u"Maximum desaturation time", None))
-        self.radioButton_180s.setText(QCoreApplication.translate("DetectionSettings", u"180 sec [2]", None))
-        self.radioButton_hold_10s.setText(QCoreApplication.translate("DetectionSettings", u"10 sec [2]", None))
+        self.radioButton_180s.setText(QCoreApplication.translate("DetectionSettings", u"180 sec [1]", None))
+        self.radioButton_hold_10s.setText(QCoreApplication.translate("DetectionSettings", u"10 sec [1]", None))
+        self.label_7.setText(QCoreApplication.translate("DetectionSettings", u"The oximeter signal is analyzed for desaturations during the sleep period (from sleep onset to final awakening).", None))
         self.label_8.setText(QCoreApplication.translate("DetectionSettings", u"<html><head/><body><p><span style=\" font-weight:600;\">References</span></p></body></html>", None))
-        self.label_16.setText(QCoreApplication.translate("DetectionSettings", u"[1] Iber, C., American Academy of Sleep Medicine, 2007. The AASM Manual for the Scoring of Sleep and Associated Events: Rules, Terminology and Technical Specifications. American Academy of Sleep Medicine.", None))
-        self.label_5.setText(QCoreApplication.translate("DetectionSettings", u"[2] Karhu, T., Lepp\u00e4nen, T., T\u00f6yr\u00e4s, J., Oksenberg, A., Myllymaa, S., & Nikkonen, S. (2022). ABOSA \u2013 Freely available automatic blood oxygen saturation signal analysis software\u202f: Structure and validation. Computer Methods and Programs in Biomedicine, 226, 107120. https://doi.org/10.1016/j.cmpb.2022.107120\n"
+        self.label_5.setText(QCoreApplication.translate("DetectionSettings", u"[1] Karhu, T., Lepp\u00e4nen, T., T\u00f6yr\u00e4s, J., Oksenberg, A., Myllymaa, S., & Nikkonen, S. (2022). ABOSA \u2013 Freely available automatic blood oxygen saturation signal analysis software\u202f: Structure and validation. Computer Methods and Programs in Biomedicine, 226, 107120. https://doi.org/10.1016/j.cmpb.2022.107120\n"
 "", None))
     # retranslateUi
 
