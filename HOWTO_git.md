@@ -145,9 +145,14 @@ To rename a tag
 	$ git push origin new :old 
 	# tag `old` on origin (by pushing an empty tag name to it).
 
-## To add back a file tracked in git
+## To make Git ignore changes to a tracked file, use:
+	$ git update-index --skip-worktree path_to_file
+		ex) git update-index --skip-worktree snooz.code-workspace
+
+## To start tracking a file again, use:
 	$ git update-index --no-skip-worktree path_to_file
 		ex) git update-index --no-skip-worktree .vscode/launch.json
+		ex) git update-index --no-skip-worktree snooz.code-workspace
 
 ## How to ignore new ext file
 Make changes in .gitignore file.
