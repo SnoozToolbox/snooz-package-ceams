@@ -55,16 +55,17 @@ def _get_doc(N_CYCLE, stage_stats_labels, values_below):
 
     total_dict = \
     {            
+            'sleep_period_min' : 'Sleep Period (min): The duration (min) from the first epoch scored as sleep (N1, N2, N3, R) to the final awakening (includes last epoch scored as sleep).',
             'total_invalid_min' : 'Invalid duration for oxygen saturation analysis (min).',
-            'total_valid_min' : 'Valid (no invalid section) duration for oxygen saturation analysis (min) from lights off to lights on.',
-            'total_saturation_avg' : 'The average value of the oxygen saturation (%) during lights off (the recording).',
-            'total_saturation_std' : 'The standard deviation value of the oxygen saturation (%) during lights off (the recording).',
-            'total_saturation_min' : 'The minimum value of the oxygen saturation (%) during lights off (the recording).',
-            'total_saturation_max' : 'The maximum value of the oxygen saturation (%) during lights off (the recording).'
+            'total_valid_min' : 'Valid (no invalid section) duration for oxygen saturation analysis (min) during the sleep period.',
+            'total_saturation_avg' : 'The average value of the oxygen saturation (%) during the sleep period.',
+            'total_saturation_std' : 'The standard deviation value of the oxygen saturation (%) during the sleep period.',
+            'total_saturation_min' : 'The minimum value of the oxygen saturation (%) during the sleep period.',
+            'total_saturation_max' : 'The maximum value of the oxygen saturation (%) during the sleep period.'
     }
     total_threshold_dict = {}
     for val in values_below:
-        total_threshold_dict[f"total_below_{val}_min"] = f"The time spent (min) with an oxygen saturation under {val} % during the recording."
+        total_threshold_dict[f"total_below_{val}_min"] = f"The time spent (min) with an oxygen saturation under {val} % during the sleep period."
         
     third_dict = {}
     third_val = [1, 2, 3]
@@ -75,10 +76,10 @@ def _get_doc(N_CYCLE, stage_stats_labels, values_below):
             label = "second"
         else:
             label = "last"
-        third_dict[f'third{val}_saturation_avg'] = f"The average value of the oxygen saturation (%) for the {label} third of the recording."
-        third_dict[f'third{val}_saturation_std'] = f"The standard deviation value of the oxygen saturation (%) for the {label} third of the recording."
-        third_dict[f'third{val}_saturation_min'] = f"The minimum value of the oxygen saturation (%) for the {label} third of the recording."
-        third_dict[f'third{val}_saturation_max'] = f"The maximum value of the oxygen saturation (%) for the {label} third of the recording."
+        third_dict[f'third{val}_saturation_avg'] = f"The average value of the oxygen saturation (%) for the {label} third of the sleep period."
+        third_dict[f'third{val}_saturation_std'] = f"The standard deviation value of the oxygen saturation (%) for the {label} third of the sleep period."
+        third_dict[f'third{val}_saturation_min'] = f"The minimum value of the oxygen saturation (%) for the {label} third of the sleep period."
+        third_dict[f'third{val}_saturation_max'] = f"The maximum value of the oxygen saturation (%) for the {label} third of the sleep period."
 
     half_dict = {}
     half_val = [1, 2]
@@ -87,17 +88,17 @@ def _get_doc(N_CYCLE, stage_stats_labels, values_below):
             label = "first"
         else :
             label = "last"
-        half_dict[f'half{val}_saturation_avg'] = f"The average value of the oxygen saturation (%) for the {label} half of the recording."
-        half_dict[f'half{val}_saturation_std'] = f"The standard deviation value of the oxygen saturation (%) for the {label} half of the recording."
-        half_dict[f'half{val}_saturation_min'] = f"The minimum value of the oxygen saturation (%) for the {label} half of the recording."
-        half_dict[f'half{val}_saturation_max'] = f"The maximum value of the oxygen saturation (%) for the {label} half of the recording."
+        half_dict[f'half{val}_saturation_avg'] = f"The average value of the oxygen saturation (%) for the {label} half of the sleep period."
+        half_dict[f'half{val}_saturation_std'] = f"The standard deviation value of the oxygen saturation (%) for the {label} half of the sleep period."
+        half_dict[f'half{val}_saturation_min'] = f"The minimum value of the oxygen saturation (%) for the {label} half of the sleep period."
+        half_dict[f'half{val}_saturation_max'] = f"The maximum value of the oxygen saturation (%) for the {label} half of the sleep period."
 
     stage_dict = {}
     for stage in stage_stats_labels:
-        stage_dict[f'{stage}_saturation_avg'] = f"The average value of the oxygen saturation (%) for the {stage} stages during lights off."
-        stage_dict[f'{stage}_saturation_std'] = f"The standard deviation value of the oxygen saturation (%) for the {stage} stages during lights off."
-        stage_dict[f'{stage}_saturation_min'] = f"The minimum value of the oxygen saturation (%) for the {stage} stages during lights off."
-        stage_dict[f'{stage}_saturation_max'] = f"The maximum value of the oxygen saturation (%) for the {stage} stages during lights off."
+        stage_dict[f'{stage}_saturation_avg'] = f"The average value of the oxygen saturation (%) for the {stage} stages during the sleep period."
+        stage_dict[f'{stage}_saturation_std'] = f"The standard deviation value of the oxygen saturation (%) for the {stage} stages during the sleep period."
+        stage_dict[f'{stage}_saturation_min'] = f"The minimum value of the oxygen saturation (%) for the {stage} stages during the sleep period."
+        stage_dict[f'{stage}_saturation_max'] = f"The maximum value of the oxygen saturation (%) for the {stage} stages during the sleep period."
         for val in values_below:
             stage_dict[f"{stage}_below_{val}_min"] = f"The time spent (min) with an oxygen saturation under {val} % in stage {stage}."
 
@@ -115,7 +116,7 @@ def _get_doc(N_CYCLE, stage_stats_labels, values_below):
 
     desat_dict = \
     {            
-            'desat_count' : 'The number of oxygen desaturation from lights off to lights on in asleep stages only.',
+            'desat_count' : 'The number of oxygen desaturation during the sleep period in asleep stages only.',
             'desat_avg_sec' : 'The average duration in sec of the oxygen desaturation events occuring in asleep stages.',
             'desat_std_sec' : 'The standard deviation value of the duration in sec of the oxygen desaturation events occuring in asleep stages.',
             'desat_med_sec' : 'The median value of the duration in sec of the oxygen desaturation events occuring in asleep stages.',

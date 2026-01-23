@@ -297,11 +297,11 @@ class OxygenDesatDetector(SciNode):
         sleep_stage_df = stages_cycles[stages_cycles['group']==commons.sleep_stages_group]
         sleep_stage_df.reset_index(inplace=True, drop=True)
 
-        # Keep stage from the first awake or sleep until the last awake or sleep
+        # Keep stages from the first sleep stage (1-5) to the last sleep stage (1-5) to define the sleep period
         sleep_stage_df.loc[:, 'name'] = sleep_stage_df['name'].apply(int)
-        index_valid = sleep_stage_df[sleep_stage_df['name']<8].index
-        stage_rec_df = sleep_stage_df.loc[index_valid[0]:index_valid[-1]]
-        stage_rec_df.reset_index(inplace=True, drop=True)
+        index_sleep = sleep_stage_df[(sleep_stage_df['name']>=1) & (sleep_stage_df['name']<=5)].index
+        stage_sleep_period_df = sleep_stage_df.loc[index_sleep[0]:index_sleep[-1]]
+        stage_sleep_period_df.reset_index(inplace=True, drop=True)
 
         channels_list = np.unique(SignalModel.get_attribute(signals, 'channel', 'channel'))
         if len(channels_list)>1:
@@ -325,23 +325,26 @@ class OxygenDesatDetector(SciNode):
         # Compute stats for the whole recording from lights off to lights on
         #----------------------------------------------------------------------
         total_stats, data_stats, data_starts = self.compute_total_stats_saturation(\
-            stage_rec_df, signals, subject_info, fs_chan, picture_dir, invalid_events)
+            stage_sleep_period_df, signals, subject_info, fs_chan, picture_dir, invalid_events)
 
         # Compute stats for thirds
         #----------------------------------------------------------------------
         n_divisions = 3
         section_label = 'third'
-        third_stats = self.compute_division_stats_saturation(n_divisions, section_label, stage_rec_df, signals)
+        third_stats = self.compute_division_stats_saturation(\
+            n_divisions, section_label, stage_sleep_period_df, signals)
 
         # Compute stats for halves
         #----------------------------------------------------------------------
         n_divisions = 2
         section_label = 'half'
-        half_stats = self.compute_division_stats_saturation(n_divisions, section_label, stage_rec_df, signals)
+        half_stats = self.compute_division_stats_saturation(\
+            n_divisions, section_label, stage_sleep_period_df, signals)
 
         # Compute stats for stages
         #----------------------------------------------------------------------       
-        stage_stats = self.compute_stages_stats_saturation(stage_rec_df, signals, fs_chan)
+        stage_stats = self.compute_stages_stats_saturation(\
+            stage_sleep_period_df, signals, fs_chan)
 
         # Compute stats for cycles
         #----------------------------------------------------------------------       
@@ -355,40 +358,11 @@ class OxygenDesatDetector(SciNode):
             # 'min_hold_drop_sec' : 'Minimum duration (s) during which the oxygen level drop is maintained "10 or 5"',
         desat_df, plateau_df, data_lpf_list, data_hpf_list, lmax_indices_list, lmin_indices_list = \
             self.detect_desaturation_ABOSA(data_starts, data_stats, fs_chan, channel, parameters_oxy)
-        
-        # Keep desaturation events (desat_df) that start in asleep stages only
-        asleep_stages_df = stage_rec_df[((stage_rec_df['name']>0) & (stage_rec_df['name']<6))]
-        
-        # Filter desaturation events to keep only those starting during asleep stages
-        # Only process desat_SpO2 events, exclude art_SpO2 events
-        desat_only_df = desat_df[desat_df['name'] == 'desat_SpO2']
-        artifact_df = desat_df[desat_df['name'] == 'art_SpO2']
-        
-        start_time = asleep_stages_df['start_sec'].values
-        end_time = start_time + asleep_stages_df['duration_sec'].values
-        desat_tab = desat_only_df[['start_sec','duration_sec']].to_numpy()
-        desat_kept = []
-        for desat_start, desat_dur in desat_tab:
-            if any((start_time <= desat_start) & (end_time >= desat_start)):
-                desat_kept.append([desat_start, desat_dur])
-        
-        # Update desat_df to contain only filtered desaturation events plus all artifact events
-        if len(desat_kept) > 0:
-            desat_events = [('SpO2', 'desat_SpO2', start_sec, duration_sec, '') 
-                          for start_sec, duration_sec in desat_kept]
-            filtered_desat_df = manage_events.create_event_dataframe(data=desat_events)
-        else:
-            filtered_desat_df = pd.DataFrame(columns=['group', 'name', 'start_sec', 'duration_sec', 'channels'])
-
-        if DEBUG:
-            print(f"\n{len(filtered_desat_df)} desat events after filtering out desat not starting in asleep\n")
-
+    
         # Compute desaturation stats
         #----------------------------------------------------------------------
-        desat_stats = self.compute_desat_stats(filtered_desat_df, asleep_stages_df)
+        desat_stats = self.compute_desat_stats(desat_df, stage_sleep_period_df)
 
-        # Combine filtered desaturations with artifacts
-        desat_df = pd.concat([filtered_desat_df, artifact_df], ignore_index=True)
 
         if DEBUG:
             cache = {}
@@ -533,7 +507,7 @@ class OxygenDesatDetector(SciNode):
                 f"Check if the drive is accessible and ensure the file is not already open.")                           
 
     
-    def compute_division_stats_saturation(self, n_divisions, section_label, stage_rec_df, signals):
+    def compute_division_stats_saturation(self, n_divisions, section_label, stage_sleep_period_df, signals):
         """""
             Compute the statistics (mean, std, max and min) of the oxygen saturation for the requested division.
             n_divisions can be 3 or 2.
@@ -544,7 +518,7 @@ class OxygenDesatDetector(SciNode):
                     Number of divisions.
                 section_label               : string
                     Label of the division.
-                stage_rec_df                : pandas DataFrame (columns=['group', 'name','start_sec','duration_sec','channels'])  
+                stage_sleep_period_df                : pandas DataFrame (columns=['group', 'name','start_sec','duration_sec','channels'])  
                     List of sleep stages from lights off to lights on.
                 signals                     : list of SignalModel
                     The list of SignalModel from the whole recording, will be truncated in this fonction.
@@ -562,7 +536,7 @@ class OxygenDesatDetector(SciNode):
             # 14 epochs divided by 3 => [5, 5, 4]
             # 13 epochs divided by 3 => [5, 4, 4]
             # 12 epochs divided by 3 => [4, 4, 4]
-        n_epochs = len(stage_rec_df)
+        n_epochs = len(stage_sleep_period_df)
         n_epoch_div = [n_epochs // n_divisions + (1 if x < n_epochs % n_divisions else 0)  for x in range (n_divisions)]
         # Create a list of indexes to select the epochs in each division
         # Select the portion of the recording, row integer (NOT label), the end point is excluded with the .iloc
@@ -576,8 +550,8 @@ class OxygenDesatDetector(SciNode):
         stats_dict = {}
         section_val = 1
         for index_start, index_stop in index_div:
-            start = stage_rec_df.iloc[index_start]['start_sec']
-            end = stage_rec_df.iloc[index_stop-1]['start_sec']+ stage_rec_df.iloc[index_stop-1]['duration_sec']
+            start = stage_sleep_period_df.iloc[index_start]['start_sec']
+            end = stage_sleep_period_df.iloc[index_stop-1]['start_sec']+ stage_sleep_period_df.iloc[index_stop-1]['duration_sec']
             dur = end - start
             signals_third = []
             for signal in signals:
@@ -632,10 +606,10 @@ class OxygenDesatDetector(SciNode):
         return channel_cur_samples
 
 
-    def compute_total_stats_saturation(self, stage_rec_df, signals, subject_info, fs_chan, picture_dir, invalid_events):
+    def compute_total_stats_saturation(self, stage_sleep_period_df, signals, subject_info, fs_chan, picture_dir, invalid_events):
         """
         Parameters :
-            stage_rec_df : pandas DataFrame
+            stage_sleep_period_df : pandas DataFrame
                 Sleep stages from lights off to lights on.
             signal : SignalModel object
                 signal with channel, samples, sample_rate...
@@ -658,9 +632,9 @@ class OxygenDesatDetector(SciNode):
             data_starts : list
                 start in sec of each continuous section (more than one when there are discontinuities)
         """    
-        # Extract samples from lights off to lights on. 
-        start = stage_rec_df['start_sec'].values[0]
-        end = stage_rec_df['start_sec'].values[-1]+stage_rec_df['duration_sec'].values[-1]
+        # Extract samples for the sleep period
+        start = stage_sleep_period_df['start_sec'].values[0]
+        end = stage_sleep_period_df['start_sec'].values[-1]+stage_sleep_period_df['duration_sec'].values[-1]
         dur = end - start
         data_stats = []
         data_starts = []
@@ -701,6 +675,7 @@ class OxygenDesatDetector(SciNode):
             data_array = np.concatenate((data_array, samples), axis=0)
 
         total_stats = {}
+        total_stats["sleep_period_min"] = dur/60
         total_stats["total_valid_min"] = (len(data_array)-np.isnan(data_array).sum())/fs_chan/60
         total_stats["total_invalid_min"]  = np.isnan(data_array).sum()/fs_chan/60
         total_stats["total_saturation_avg"] = np.nanmean(data_array)
@@ -712,10 +687,10 @@ class OxygenDesatDetector(SciNode):
         return total_stats, data_stats, data_starts
 
 
-    def compute_stages_stats_saturation(self, stage_rec_df, signals, fs_chan):
+    def compute_stages_stats_saturation(self, stage_sleep_period_df, signals, fs_chan):
         """
         Parameters :
-            stage_rec_df : pandas DataFrame
+            stage_sleep_period_df : pandas DataFrame
                 Sleep stages from lights off to lights on.
             signal : SignalModel object
                 signal with channel, samples, sample_rate...
@@ -727,9 +702,9 @@ class OxygenDesatDetector(SciNode):
                 Saturation_avg, std, min and max for each stage.
                 Duration in min for saturation under different thresholds.
         """    
-        stage_start_times = stage_rec_df['start_sec'].to_numpy().astype(float)
-        stage_duration_times = stage_rec_df['duration_sec'].to_numpy().astype(float)
-        stage_name = stage_rec_df['name'].apply(str).to_numpy()
+        stage_start_times = stage_sleep_period_df['start_sec'].to_numpy().astype(float)
+        stage_duration_times = stage_sleep_period_df['duration_sec'].to_numpy().astype(float)
+        stage_name = stage_sleep_period_df['name'].apply(str).to_numpy()
 
         stage_dict = {}
         for stage_label in self.stage_stats_labels:
@@ -938,10 +913,8 @@ class OxygenDesatDetector(SciNode):
         min_peak_distance_sec = 5
         min_peak_prominence = 0.5
         order = 8
-        # !!!!!!!!!!! try !!!
         low_frequency_cutoff = 0.1
         high_frequency_cutoff = 0.1
-        # !!!!!!!!!!! try !!!
         min_peak_distance_samples = int(min_peak_distance_sec * fs_chan)
 
         if DEBUG:
@@ -1624,20 +1597,20 @@ class OxygenDesatDetector(SciNode):
 
         return adjusted_lmax_idx, adjusted_lmax_time, adjusted_lmax_val, lmin_idx, lmin_time, lmin_val, plateau_list
 
-    def compute_desat_stats(self, desat_df, asleep_stages_df):
+    def compute_desat_stats(self, desat_df, stage_sleep_period_df):
         desat_stats = {}
-        # The number of oxygen desaturation from lights off to lights on in asleep stages only.
+        # The number of oxygen desaturation in the sleep period.
         desat_stats['desat_count'] = len(desat_df)
-        # The average duration in sec of the oxygen desaturation events occuring in asleep stages.
+        # The average duration in sec of the oxygen desaturation events in the sleep period.
         desat_stats['desat_avg_sec'] = desat_df['duration_sec'].mean()
-        # The std value of the duration in sec of the oxygen desaturation events occuring in asleep stages.
+        # The std value of the duration in sec of the oxygen desaturation events in the sleep period.
         desat_stats['desat_std_sec'] = desat_df['duration_sec'].std()
-        # The median value of the duration in sec of the oxygen desaturation events occuring in asleep stages.
+        # The median value of the duration in sec of the oxygen desaturation events in the sleep period.
         desat_stats['desat_med_sec'] = desat_df['duration_sec'].median()
-        # The percentage of time spent in desaturation during the asleep stages.
-        desat_stats['desat_sleep_percent'] = desat_df['duration_sec'].sum()/asleep_stages_df['duration_sec'].sum()*100
+        # The percentage of time spent in desaturation during the sleep period.
+        desat_stats['desat_sleep_percent'] = desat_df['duration_sec'].sum()/stage_sleep_period_df['duration_sec'].sum()*100
         # The Oxygen Desaturation Index (ODI) : number of desaturation per sleep hour.
-        desat_stats['desat_ODI'] = len(desat_df)/(asleep_stages_df['duration_sec'].sum()/3600)
+        desat_stats['desat_ODI'] = len(desat_df)/(stage_sleep_period_df['duration_sec'].sum()/3600)
         return desat_stats
 
     
