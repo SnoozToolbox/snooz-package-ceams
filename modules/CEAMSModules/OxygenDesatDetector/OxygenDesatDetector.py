@@ -270,10 +270,10 @@ class OxygenDesatDetector(SciNode):
                     + str(type(report_constants)))   
         self.N_CYCLES = int(float(report_constants['N_CYCLES']))
 
-        #----------------------------------------------------------------------
+        #------------------------------------------------------------------------------
         # Header parameters
         # subject info, sleep cycle parameters, desaturation parameters
-        #----------------------------------------------------------------------
+        #------------------------------------------------------------------------------
         subject_info_params = \
         {
             "filename":subject_info['filename'],
@@ -322,33 +322,49 @@ class OxygenDesatDetector(SciNode):
         # Minimum, maximum and average oxygen saturation per thirds, halves, sleep cycles and sleep stages.
         #----------------------------------------------------------------------
 
-        # Compute stats for the whole recording from lights off to lights on
+        # Extract samples for the sleep period
+        data_stats, data_starts = self.extract_signal_data_for_sleep_period(stage_sleep_period_df, signals)
+
+        # Detect artifact 
+        #   data_clean is the raw signal with short artifacts interpolated and long artifact forced to NaN
+        artifact_events = []
+        data_clean, artifact_det_lst = self.detect_artifact_SpO2(data_stats, data_starts, fs_chan)
+        artifact_events += [('SpO2', 'art_SpO2', start_sec, duration_sec, '') # Add back channel
+                         for start_sec, duration_sec in artifact_det_lst]
+        # Convert artifact_events to dataframe
+        artifact_events_df = manage_events.create_event_dataframe(data=artifact_events)
+        # Add artifact events to invalid events
+        invalid_events = pd.concat([invalid_events, artifact_events_df], ignore_index=True)
+
+        # Compute stats for the sleep period
         #----------------------------------------------------------------------
-        total_stats, data_stats, data_starts = self.compute_total_stats_saturation(\
-            stage_sleep_period_df, signals, subject_info, fs_chan, picture_dir, invalid_events)
+        total_stats = self.compute_total_stats_saturation(\
+            stage_sleep_period_df, data_clean, data_starts, \
+                subject_info, fs_chan, picture_dir, invalid_events)
 
         # Compute stats for thirds
         #----------------------------------------------------------------------
         n_divisions = 3
         section_label = 'third'
         third_stats = self.compute_division_stats_saturation(\
-            n_divisions, section_label, stage_sleep_period_df, signals)
+            n_divisions, section_label, stage_sleep_period_df, data_clean, data_starts, fs_chan)
 
         # Compute stats for halves
         #----------------------------------------------------------------------
         n_divisions = 2
         section_label = 'half'
         half_stats = self.compute_division_stats_saturation(\
-            n_divisions, section_label, stage_sleep_period_df, signals)
+            n_divisions, section_label, stage_sleep_period_df, data_clean, data_starts, fs_chan)
 
         # Compute stats for stages
         #----------------------------------------------------------------------       
         stage_stats = self.compute_stages_stats_saturation(\
-            stage_sleep_period_df, signals, fs_chan)
+            stage_sleep_period_df, data_clean, data_starts, fs_chan)
 
         # Compute stats for cycles
         #----------------------------------------------------------------------       
-        cycle_stats = self.compute_cycles_stats_saturation(sleep_cycles_df, signals)
+        cycle_stats = self.compute_cycles_stats_saturation(\
+            sleep_cycles_df,  data_clean, data_starts, fs_chan)
 
         # Detect desaturation 
         #----------------------------------------------------------------------
@@ -357,8 +373,12 @@ class OxygenDesatDetector(SciNode):
             # 'max_slope_drop_sec' : 'The maximum duration (s) during which the oxygen level is dropping "180 or 20"',
             # 'min_hold_drop_sec' : 'Minimum duration (s) during which the oxygen level drop is maintained "10 or 5"',
         desat_df, plateau_df, data_lpf_list, data_hpf_list, lmax_indices_list, lmin_indices_list = \
-            self.detect_desaturation_ABOSA(data_starts, data_stats, fs_chan, channel, parameters_oxy)
+            self.detect_desaturation_ABOSA(data_starts, data_clean, fs_chan, channel, parameters_oxy)
     
+        #----------------------------------------------------------------------
+        # Add invalid sections to desaturation events
+        desat_df = pd.concat([desat_df, invalid_events], ignore_index=True)
+
         # Compute desaturation stats
         #----------------------------------------------------------------------
         desat_stats = self.compute_desat_stats(desat_df, stage_sleep_period_df)
@@ -506,8 +526,7 @@ class OxygenDesatDetector(SciNode):
                 f"ERROR : Snooz can not save the picture {fig_name}. "+\
                 f"Check if the drive is accessible and ensure the file is not already open.")                           
 
-    
-    def compute_division_stats_saturation(self, n_divisions, section_label, stage_sleep_period_df, signals):
+    def compute_division_stats_saturation(self, n_divisions, section_label, stage_sleep_period_df, data_clean, data_starts, fs):
         """""
             Compute the statistics (mean, std, max and min) of the oxygen saturation for the requested division.
             n_divisions can be 3 or 2.
@@ -554,19 +573,22 @@ class OxygenDesatDetector(SciNode):
             end = stage_sleep_period_df.iloc[index_stop-1]['start_sec']+ stage_sleep_period_df.iloc[index_stop-1]['duration_sec']
             dur = end - start
             signals_third = []
-            for signal in signals:
+            for samples, data_start in zip(data_clean, data_starts):
                 # Because of the discontinuity
                 # we have to verify if the signal includes at least partially the events
                 # Look for the Right windows time
-                if (signal.start_time<(start+dur)) and ((signal.start_time+signal.duration)>start): 
-                    # Extract and define the new extracted channel_cur
-                    channel_cur = self.extract_samples_from_events(signal, start, dur)
-                    signals_third.append(channel_cur)
+                if (data_start<(start+dur)) and ((data_start+len(samples)/fs)>start): 
+                    # Extract samples for the current division
+                    channel_cur_samples = self.extract_samples_from_array(samples, data_start, start, dur, fs)
+                    signals_third.append(channel_cur_samples)
 
             # Flat signals into an array
             data_array = np.empty(0)
             for i_bout, samples in enumerate(signals_third):
-                data_array = np.concatenate((data_array, samples), axis=0)
+                if len(data_array)==0:
+                    data_array = samples
+                else:
+                    data_array = np.concatenate((data_array, samples), axis=0)
 
             # Clean-up invalid values
             #data_array = np.round(data_array,0) # to copy Gaetan
@@ -574,8 +596,10 @@ class OxygenDesatDetector(SciNode):
             data_array[data_array<=0]=np.nan
             stats_dict[f"{section_label}{section_val}_saturation_avg"] = np.nanmean(data_array)
             stats_dict[f"{section_label}{section_val}_saturation_std"] = np.nanstd(data_array)
-            stats_dict[f"{section_label}{section_val}_saturation_min"] = np.round(np.nanmin(data_array),0)
-            stats_dict[f"{section_label}{section_val}_saturation_max"] = np.round(np.nanmax(data_array),0)            
+            # stats_dict[f"{section_label}{section_val}_saturation_min"] = np.round(np.nanmin(data_array),0)
+            # stats_dict[f"{section_label}{section_val}_saturation_max"] = np.round(np.nanmax(data_array),0)     
+            stats_dict[f"{section_label}{section_val}_saturation_min"] = np.nanmin(data_array)
+            stats_dict[f"{section_label}{section_val}_saturation_max"] = np.nanmax(data_array)     
             section_val = section_val + 1
         return stats_dict
 
@@ -604,9 +628,81 @@ class OxygenDesatDetector(SciNode):
         last_sample = int(channel_cur.end_time * channel_cur.sample_rate)
         channel_cur_samples = signal.samples[first_sample-signal_start_samples:last_sample-signal_start_samples]
         return channel_cur_samples
+    
+
+    def extract_signal_data_for_sleep_period(self, stage_sleep_period_df, signals):
+        """
+        Extract signal data and start times for the sleep period, handling discontinuities.
+
+        Parameters :
+            stage_sleep_period_df : pandas DataFrame
+                Sleep stages from lights off to lights on.
+            signals : list of SignalModel
+                List of SignalModel objects from the whole recording.
+
+        Return : 
+            data_stats : list of numpy array
+                Oxygen saturation values (cleaned: >100 or <=0 set to NaN) for each continuous section.
+            data_starts : list of float
+                Start time in sec of each continuous section (more than one when there are discontinuities).
+        """
+        start = stage_sleep_period_df['start_sec'].values[0]
+        end = stage_sleep_period_df['start_sec'].values[-1] + stage_sleep_period_df['duration_sec'].values[-1]
+        dur = end - start
+        data_stats = []
+        data_starts = []
+        for signal in signals:
+            # Because of the discontinuity
+            # we have to verify if the signal includes at least partially the events
+            # Look for the Right windows time
+            if (signal.start_time < (start + dur)) and ((signal.start_time + signal.duration) > start):
+                cur_start = signal.start_time if start <= signal.start_time else start
+                cur_end = end if end <= signal.end_time else signal.end_time
+                # Extract and define the new extracted channel_cur
+                channel_cur = self.extract_samples_from_events(signal, cur_start, cur_end - cur_start)
+                # Clean-up invalid values
+                # channel_cur[channel_cur > 100] = np.nan
+                # channel_cur[channel_cur <= 0] = np.nan
+                data_starts.append(cur_start)
+                data_stats.append(channel_cur)
+        return data_stats, data_starts
 
 
-    def compute_total_stats_saturation(self, stage_sleep_period_df, signals, subject_info, fs_chan, picture_dir, invalid_events):
+    def extract_samples_from_array(self, samples, data_start, start, dur, fs):
+        """
+        Extract samples from a numpy array for a given time window.
+
+        Parameters :
+            samples : numpy array
+                Signal samples.
+            data_start : float
+                Start time in sec of the signal array.
+            start : float
+                Start time in sec of the window to extract.
+            dur : float
+                Duration in sec of the window to extract.
+            fs : float
+                Sampling rate in Hz.
+
+        Return : 
+            extracted_samples : numpy array
+                Samples within the specified time window.
+        """
+        signal_start_samples = int(data_start * fs)
+        end_time = start + dur
+        first_sample = int(start * fs)
+        last_sample = int(end_time * fs)
+        # Add verification to avoid negative indexing
+        if first_sample - signal_start_samples < 0:
+            first_sample = signal_start_samples
+        # Add verification to avoid exceeding array length
+        if last_sample - signal_start_samples > len(samples):
+            last_sample = len(samples) + signal_start_samples
+        extracted_samples = samples[first_sample - signal_start_samples:last_sample - signal_start_samples]
+        return extracted_samples
+
+
+    def compute_total_stats_saturation(self, stage_sleep_period_df, data_clean, data_starts, subject_info, fs_chan, picture_dir, invalid_events):
         """
         Parameters :
             stage_sleep_period_df : pandas DataFrame
@@ -632,47 +728,24 @@ class OxygenDesatDetector(SciNode):
             data_starts : list
                 start in sec of each continuous section (more than one when there are discontinuities)
         """    
-        # Extract samples for the sleep period
+        # Compute duration of sleep period for stats
         start = stage_sleep_period_df['start_sec'].values[0]
-        end = stage_sleep_period_df['start_sec'].values[-1]+stage_sleep_period_df['duration_sec'].values[-1]
+        end = stage_sleep_period_df['start_sec'].values[-1] + stage_sleep_period_df['duration_sec'].values[-1]
         dur = end - start
-        data_stats = []
-        data_starts = []
-        for signal in signals:
-            # Because of the discontinuity
-            # we have to verify if the signal includes at least partially the events
-            # Look for the Right windows time
-            if (signal.start_time<(start+dur)) and ((signal.start_time+signal.duration)>start): 
-                cur_start = signal.start_time if start<=signal.start_time else start
-                cur_end = end if end<=signal.end_time else signal.end_time
-                # if start<=signal.start_time:
-                #     cur_start = signal.start_time
-                # else:
-                #     cur_start = start
-                # if end<=signal.end_time:
-                #     cur_end = end
-                # else:
-                #     cur_end = signal.end_time
-                #cur_dur = cur_end-cur_start
-                # Extract and define the new extracted channel_cur
-                channel_cur = self.extract_samples_from_events(signal, cur_start, cur_end-cur_start)
-                # Clean-up invalid values
-                #channel_cur = np.round(channel_cur,0) # to copy Gaétan
-                channel_cur[channel_cur>100]=np.nan
-                channel_cur[channel_cur<=0]=np.nan
-                data_starts.append(cur_start)      
-                data_stats.append(channel_cur)
 
         # Generate and save the oxygen saturation graph
         if len(picture_dir)>0:
-            for i_bout, samples in enumerate(data_stats):
+            for i_bout, samples in enumerate(data_clean):
                 fig_name = os.path.join(picture_dir, f"{subject_info['filename']}_oxygen_saturation{i_bout}.pdf")
                 self._plot_oxygen_saturation(samples, fs_chan, fig_name, data_starts[i_bout], invalid_events)
 
-        # Flat signals into an array
+        # Flat signals into an array (discontinuity handling)
         data_array = np.empty(0)
-        for i_bout, samples in enumerate(data_stats):
-            data_array = np.concatenate((data_array, samples), axis=0)
+        for i_bout, samples in enumerate(data_clean):
+            if data_array.size == 0:
+                data_array = samples
+            else:
+                data_array = np.concatenate((data_array, samples), axis=0)
 
         total_stats = {}
         total_stats["sleep_period_min"] = dur/60
@@ -680,20 +753,22 @@ class OxygenDesatDetector(SciNode):
         total_stats["total_invalid_min"]  = np.isnan(data_array).sum()/fs_chan/60
         total_stats["total_saturation_avg"] = np.nanmean(data_array)
         total_stats["total_saturation_std"] = np.nanstd(data_array)
-        total_stats["total_saturation_min"] = np.round(np.nanmin(data_array),0)
-        total_stats["total_saturation_max"] = np.round(np.nanmax(data_array),0)
+        total_stats["total_saturation_min"] = np.nanmin(data_array)
+        total_stats["total_saturation_max"] = np.nanmax(data_array)
         for val in self.values_below:
             total_stats[f"total_below_{val}_min"] = (data_array<val).sum()/fs_chan/60
-        return total_stats, data_stats, data_starts
+        return total_stats
 
 
-    def compute_stages_stats_saturation(self, stage_sleep_period_df, signals, fs_chan):
+    def compute_stages_stats_saturation(self, stage_sleep_period_df, data_clean, data_starts, fs_chan):
         """
         Parameters :
             stage_sleep_period_df : pandas DataFrame
                 Sleep stages from lights off to lights on.
-            signal : SignalModel object
+            data_clean : list of numpy arrays   
                 signal with channel, samples, sample_rate...
+            data_starts : list
+                start in sec of each continuous section (more than one when there are discontinuities)
             fs_chan : float
                 sampling rate of the channel
         Return : 
@@ -714,31 +789,29 @@ class OxygenDesatDetector(SciNode):
             if any(stage_mask):
                 signals_from_stages = []
                 for start, dur in zip(start_masked, dur_masked):
-                    end = start + dur
-                    for j, signal in enumerate(signals):
-                        if (signal.start_time<(start+dur)) and ((signal.start_time+signal.duration)>start): 
-                            # Extract and define the new extracted channel_cur
-                            cur_start = signal.start_time if start<=signal.start_time else start
-                            cur_end = end if end<=signal.end_time else signal.end_time
-                            cur_samples = self.extract_samples_from_events(signal, cur_start, cur_end-cur_start)
-                            # When the last epoch is not completed
-                            if (len(cur_samples)/fs_chan) < dur:
-                                n_miss_samples = int(round((dur-len(cur_samples)/fs_chan)*fs_chan,0))
-                                cur_samples = np.pad(cur_samples, (0, n_miss_samples), constant_values=(0,np.nan))
-                            signals_from_stages.append(cur_samples)
+                    for samples, start_signal in zip(data_clean, data_starts):
+                        cur_samples = self.extract_samples_from_array(samples, start_signal, start, dur, fs_chan)
+                        # When the last epoch is not completed
+                        if (len(cur_samples)/fs_chan) < dur:
+                            n_miss_samples = int(round((dur-len(cur_samples)/fs_chan)*fs_chan,0))
+                            cur_samples = np.pad(cur_samples, (0, n_miss_samples), constant_values=(0,np.nan))
+                        signals_from_stages.append(cur_samples)
 
                 # Flat signals into an array
                 signals_cur_stage = np.empty(0)
                 for i_bout, samples in enumerate(signals_from_stages):
-                    signals_cur_stage = np.concatenate((signals_cur_stage, samples), axis=0)
+                    if signals_cur_stage.size == 0:
+                        signals_cur_stage = samples
+                    else:
+                        signals_cur_stage = np.concatenate((signals_cur_stage, samples), axis=0)
 
                 # Clean-up invalid values
-                signals_cur_stage[signals_cur_stage>100]=np.nan
-                signals_cur_stage[signals_cur_stage<=0]=np.nan
+                # signals_cur_stage[signals_cur_stage>100]=np.nan # handled in the artifact detection
+                # signals_cur_stage[signals_cur_stage<=0]=np.nan  # handled in the artifact detection
                 stage_dict[f'{stage_label}_saturation_avg'] = np.nanmean(signals_cur_stage)
                 stage_dict[f'{stage_label}_saturation_std'] = np.nanstd(signals_cur_stage)
-                stage_dict[f'{stage_label}_saturation_min'] = np.round(np.nanmin(signals_cur_stage),0)
-                stage_dict[f'{stage_label}_saturation_max'] = np.round(np.nanmax(signals_cur_stage),0)
+                stage_dict[f'{stage_label}_saturation_min'] = np.nanmin(signals_cur_stage)
+                stage_dict[f'{stage_label}_saturation_max'] = np.nanmax(signals_cur_stage)
                 for val in self.values_below:
                     signals_flat = signals_cur_stage.flatten()
                     stage_dict[f"{stage_label}_below_{val}_min"] = (signals_flat<val).sum()/fs_chan/60
@@ -752,7 +825,7 @@ class OxygenDesatDetector(SciNode):
         return stage_dict
 
 
-    def compute_cycles_stats_saturation(self, sleep_cycles_df, signals):
+    def compute_cycles_stats_saturation(self, sleep_cycles_df, data_clean, data_starts, fs_chan):
         """
         Parameters :
             sleep_cycles_df : pandas DataFrame
@@ -772,28 +845,31 @@ class OxygenDesatDetector(SciNode):
                 end = sleep_cycles_df.iloc[i_cyc]['start_sec']+sleep_cycles_df.iloc[i_cyc]['duration_sec']
                 dur = end - start
                 signals_cyc = []
-                for signal in signals:
+                for samples, data_start in zip(data_clean, data_starts):
                     # Because of the discontinuity
                     # we have to verify if the signal includes at least partially the events
                     # Look for the Right windows time
-                    if (signal.start_time<(start+dur)) and ((signal.start_time+signal.duration)>start): 
+                    if (data_start<(start+dur)) and ((data_start+len(samples)/fs_chan)>start): 
                         # Extract and define the new extracted channel_cur
-                        channel_cur = self.extract_samples_from_events(signal, start, dur)
+                        channel_cur = self.extract_samples_from_array(samples, data_start, start, dur, fs_chan)
                         signals_cyc.append(channel_cur)
                 
                 # Flat signals into an array
                 data_stats = np.empty(0)
                 for i_bout, samples in enumerate(signals_cyc):
-                    data_stats = np.concatenate((data_stats, samples), axis=0)
+                    if data_stats.size == 0:
+                        data_stats = samples
+                    else:
+                        data_stats = np.concatenate((data_stats, samples), axis=0)
 
                 #data_stats = np.round(data_stats,0) # to copy Gaétan   
                 # Clean-up invalid values
-                data_stats[data_stats>100]=np.nan
-                data_stats[data_stats<=0]=np.nan        
+                # data_stats[data_stats>100]=np.nan
+                # data_stats[data_stats<=0]=np.nan        
                 cyc_dict[f'cyc{i_cyc+1}_saturation_avg'] = np.nanmean(data_stats)
                 cyc_dict[f'cyc{i_cyc+1}_saturation_std'] = np.nanstd(data_stats)
-                cyc_dict[f'cyc{i_cyc+1}_saturation_min'] = np.round(np.nanmin(data_stats),0)
-                cyc_dict[f'cyc{i_cyc+1}_saturation_max'] = np.round(np.nanmax(data_stats),0)
+                cyc_dict[f'cyc{i_cyc+1}_saturation_min'] = np.nanmin(data_stats)
+                cyc_dict[f'cyc{i_cyc+1}_saturation_max'] = np.nanmax(data_stats)
             else:
                 cyc_dict[f'cyc{i_cyc+1}_saturation_avg'] = np.nan
                 cyc_dict[f'cyc{i_cyc+1}_saturation_std'] = np.nan
@@ -870,7 +946,7 @@ class OxygenDesatDetector(SciNode):
 
         Parameters :
             data_stats : list of numpy array
-                oxygen saturation integer values from 1 to 100% 
+                oxygen saturation integer values from 1 to 100% (cleaned)
             data_starts : list
                 start in sec of each continuous section (more than one when there are discontinuities)
             fs_chan     : float
@@ -925,13 +1001,9 @@ class OxygenDesatDetector(SciNode):
             valid_mask = ~np.isnan(signal)
             if not np.any(valid_mask):
                 continue
-        
-            # Detect artifact 
-            # signal_clean is the raw signal with short artifacts interpolated and long artifact forced to NaN
-            signal_clean, artifact_list = self.detect_artifact_SpO2(signal, data_starts[i], fs_chan)
 
             # Low pass filter the signal to get the trend in order to detect local min and max
-            signal_lpf = self.filter_nan_filtfilt(signal_clean, order, fs_chan, low_frequency_cutoff, 'low')
+            signal_lpf = self.filter_nan_filtfilt(signal, order, fs_chan, low_frequency_cutoff, 'low')
 
             # High-pass filter the signal at 0.1 Hz (which is already low-pass filtered to 0.1 Hz)
             signal_hpf = self.filter_nan_filtfilt(signal_lpf, order, fs_chan, high_frequency_cutoff , 'high')
@@ -1059,9 +1131,7 @@ class OxygenDesatDetector(SciNode):
         #                 for start_sec, duration_sec in all_desat_events]
         desat_events = [('SpO2', 'desat_SpO2', start_sec, duration_sec, '') # Add back channel
                         for start_sec, duration_sec, _ in all_desat_events]
-        # Add artifact events as invalid sections in desat_events
-        desat_events += [('SpO2', 'art_SpO2', start_sec, duration_sec, '') # Add back channel
-                         for start_sec, duration_sec in artifact_list]
+
         # plateau_events = [('SpO2', 'plateau_SpO2', start_sec, duration_sec, channel) 
         #                   for start_sec, duration_sec in plateau_lst]
         plateau_events = [('SpO2', 'plateau_SpO2', start_sec, duration_sec, '') 
@@ -1104,7 +1174,7 @@ class OxygenDesatDetector(SciNode):
         return filtered_signal
 
 
-    def detect_artifact_SpO2(self, sraw, data_start, fs_chan):
+    def detect_artifact_SpO2(self, sraw, data_starts, fs_chan):
         """
         Detect major artifacts from oxygen saturation signal.
         
@@ -1134,69 +1204,75 @@ class OxygenDesatDetector(SciNode):
         art_buffer_sec = 1.0 # Extend each artifact by 1 second in both directions
         linear_art_sec = 5.0 # Interpolate artifacts with duration ≤ 5 seconds
         
-        # 1. Identify artifact points directly from raw signal first
-        # This avoids filter edge effects
-        artifact_mask = np.zeros(len(sraw), dtype=bool)
-        artifact_mask |= (sraw < lower_bound)
-        artifact_mask |= (sraw > upper_bound)
-        artifact_mask |= np.isnan(sraw)
-        
-        # 2. Apply 4th order Butterworth high-pass filter (1 Hz cutoff) on valid samples only
-        filtered_signal = self.filter_nan_filtfilt(sraw, filter_order, fs_chan, cutoff_freq, 'high')
-        
-        # 3. Square the filtered signal
-        squared_signal = filtered_signal ** 2
-        
-        # 4. Add high-frequency artifacts (rapid changes)
-        artifact_mask |= (squared_signal > threshold_squared)
-        
-        # 5. Group adjacent artifacts and extend by 1 second
-        diff = np.diff(np.concatenate([[0], artifact_mask.astype(int), [0]]))
-        starts = np.where(diff == 1)[0]
-        ends = np.where(diff == -1)[0]
-        
-        # Extend each artifact by 1 second in both directions
-        # Note: 'start' is the first artifact sample, 'end' is one past the last artifact sample
-        extension_samples = int(fs_chan * art_buffer_sec)
-        extended_mask = np.zeros(len(sraw), dtype=bool)
-        
-        for start, end in zip(starts, ends):
-            # Apply symmetric buffer: 1s before start and 1s after the last artifact sample
-            extended_start = max(0, start - extension_samples)
-            extended_end = min(len(sraw), end + extension_samples)
-            extended_mask[extended_start:extended_end] = True
-        
-        # Re-identify artifact regions after extension
-        diff = np.diff(np.concatenate([[0], extended_mask.astype(int), [0]]))
-        starts = np.where(diff == 1)[0]
-        ends = np.where(diff == -1)[0]
-        
-        # 6. Interpolate artifacts with duration ≤ 5 seconds
-        cleaned_signal = sraw.copy()
-        threshold_samples = int(fs_chan * linear_art_sec)
-        artifact_events = []
-        
-        for start, end in zip(starts, ends):
-            # start is first artifact sample, end is first non-artifact sample
-            duration = end - start
+        data_cleaned = []
+        for samples, data_start in zip(sraw, data_starts):
+            # 1. Identify artifact points directly from raw signal first
+            # This avoids filter edge effects
+            artifact_mask = np.zeros(len(samples), dtype=bool)
+            artifact_mask |= (samples < lower_bound)
+            artifact_mask |= (samples > upper_bound)
+            artifact_mask |= np.isnan(samples)
             
-            if duration <= threshold_samples:
-                # Linear interpolation for short artifacts
-                if start > 0 and end < len(sraw):
-                    x = [start - 1, end]
-                    y = [sraw[start - 1], sraw[end]]
-                    interpolator = interp1d(x, y, kind='linear')
-                    cleaned_signal[start:end] = interpolator(np.arange(start, end))
+            # 2. Apply 4th order Butterworth high-pass filter (1 Hz cutoff) on valid samples only
+            filtered_signal = self.filter_nan_filtfilt(samples, filter_order, fs_chan, cutoff_freq, 'high')
+            
+            # 3. Square the filtered signal
+            squared_signal = filtered_signal ** 2
+            
+            # 4. Add high-frequency artifacts (rapid changes)
+            artifact_mask |= (squared_signal > threshold_squared)
+            
+            # 5. Group adjacent artifacts and extend by 1 second
+            diff = np.diff(np.concatenate([[0], artifact_mask.astype(int), [0]]))
+            starts = np.where(diff == 1)[0]
+            ends = np.where(diff == -1)[0]
+            
+            # Extend each artifact by 1 second in both directions
+            # Note: 'start' is the first artifact sample, 'end' is one past the last artifact sample
+            extension_samples = int(fs_chan * art_buffer_sec)
+            extended_mask = np.zeros(len(samples), dtype=bool)
+            
+            for start, end in zip(starts, ends):
+                # Apply symmetric buffer: 1s before start and 1s after the last artifact sample
+                extended_start = max(0, start - extension_samples)
+                extended_end = min(len(samples), end + extension_samples)
+                extended_mask[extended_start:extended_end] = True
+            
+            # Re-identify artifact regions after extension
+            diff = np.diff(np.concatenate([[0], extended_mask.astype(int), [0]]))
+            starts = np.where(diff == 1)[0]
+            ends = np.where(diff == -1)[0]
+            
+            # 6. Interpolate artifacts with duration ≤ 5 seconds
+            cleaned_signal = samples.copy()
+            threshold_samples = int(fs_chan * linear_art_sec)
+            artifact_events = []
+            
+            for start, end in zip(starts, ends):
+                # start is first artifact sample, end is first non-artifact sample
+                duration = end - start
                 
-                # Mark as non-artifact after interpolation
-                extended_mask[start:end] = False
-            else:
-                # Keep artifacts longer than 5s
-                start_sec = (start / fs_chan) + data_start
-                duration_sec = duration / fs_chan
-                artifact_events.append((start_sec, duration_sec))
+                if duration <= threshold_samples:
+                    # Linear interpolation for short artifacts
+                    if start > 0 and end < len(samples):
+                        x = [start - 1, end]
+                        y = [samples[start - 1], samples[end]]
+                        interpolator = interp1d(x, y, kind='linear')
+                        cleaned_signal[start:end] = interpolator(np.arange(start, end))
+                    
+                    # Mark as non-artifact after interpolation
+                    extended_mask[start:end] = False
+                else:
+                    # Keep artifacts longer than 5s
+                    start_sec = (start / fs_chan) + data_start
+                    duration_sec = duration / fs_chan
+                    artifact_events.append((start_sec, duration_sec))
+                    # Mark these samples as NaN in cleaned signal
+                    cleaned_signal[start:end] = np.nan
+
+            data_cleaned.append(cleaned_signal)
         
-        return cleaned_signal, artifact_events
+        return data_cleaned, artifact_events
 
 
     def correct_peak_indices_in_window(self, signal, peak_indices, window_s, fs_chan, find_max=True):
