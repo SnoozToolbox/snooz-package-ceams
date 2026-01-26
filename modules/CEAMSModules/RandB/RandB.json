@@ -1,0 +1,77 @@
+{
+    "item_name": "RandB",
+    "item_type": "module",
+    "item_api_version": "2.0.0",
+    "dependencies": [],
+    "module_params": {
+        "cls": "RandB",
+        "name": "RandB",
+        "metadata": {},
+        "file_location": null,
+        "module": "CEAMSModules.RandB",
+        "module_label": "Rhythm and background",
+        "module_category": "Signal Processing",
+        "module_author": "",
+        "module_url": "",
+        "module_description": "",
+        "module_options": {},
+        "inputs": {
+            "signals": {
+                "name": "signals",
+                "value": "",
+                "connections": {},
+                "sub_plugs": {}
+            },
+            "win_len_sec": {
+                "name": "win_len_sec",
+                "value": "",
+                "connections": {},
+                "sub_plugs": {}
+            },
+            "win_step_sec": {
+                "name": "win_step_sec",
+                "value": "",
+                "connections": {},
+                "sub_plugs": {}
+            },
+            "window_name": {
+                "name": "window_name",
+                "value": "",
+                "connections": {},
+                "sub_plugs": {}
+            },
+            "first_freq": {
+                "name": "first_freq",
+                "value": "",
+                "connections": {},
+                "sub_plugs": {}
+            },
+            "last_freq": {
+                "name": "last_freq",
+                "value": "",
+                "connections": {},
+                "sub_plugs": {}
+            }
+        },
+        "outputs": {
+            "psd": {
+                "name": "psd",
+                "value": "",
+                "connections": {},
+                "sub_plugs": {}
+            },
+            "slope": {
+                "name": "slope",
+                "value": "",
+                "connections": {},
+                "sub_plugs": {}
+            },
+            "intercept": {
+                "name": "intercept",
+                "value": "",
+                "connections": {},
+                "sub_plugs": {}
+            }
+        }
+    }
+}

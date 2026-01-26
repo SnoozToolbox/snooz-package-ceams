@@ -28,8 +28,7 @@ class Outputfiles(BaseStepView, Ui_Outputfiles, QtWidgets.QWidget):
         # Define modules and nodes to talk to
         self._node_id_PSA_std = "4bb8c9ac-64e8-4cec-9c2c-5a00c80b4eae" # provide the output filename to the PSA Compilation
         self._node_id_PSA_Annot = "9dfbe6b9-1887-452a-ac3b-33f1235f9b0a" # provide the output filename to the PSA Compilation
-        # TODO : add the R&A compilation (another instance of PSA Compilation but plugged to the R&A computation)
-        # self._node_id_PSA_ra =         
+        self._node_id_PSA_ra = "d16022c4-3ac0-4982-aa3e-dfff4cada99a"       
 
         self._dist_total_topic = f'{self._node_id_PSA_std}.dist_total'
         self._pub_sub_manager.subscribe(self, self._dist_total_topic)
@@ -41,6 +40,14 @@ class Outputfiles(BaseStepView, Ui_Outputfiles, QtWidgets.QWidget):
         self._pub_sub_manager.subscribe(self, self._filename_topic)
         self._filename_annot_topic = f'{self._node_id_PSA_Annot}.PSA_out_filename'
         self._pub_sub_manager.subscribe(self, self._filename_annot_topic)
+        self._dist_total_ra_topic = f'{self._node_id_PSA_ra}.dist_total'
+        self._pub_sub_manager.subscribe(self, self._dist_total_ra_topic)
+        self._dist_hour_ra_topic = f'{self._node_id_PSA_ra}.dist_hour'
+        self._pub_sub_manager.subscribe(self, self._dist_hour_ra_topic)
+        self._dist_cycle_ra_topic = f'{self._node_id_PSA_ra}.dist_cycle'
+        self._pub_sub_manager.subscribe(self, self._dist_cycle_ra_topic)
+        self._filename_ra_topic = f'{self._node_id_PSA_ra}.filename'
+        self._pub_sub_manager.subscribe(self, self._filename_ra_topic)
 
 
     # To update the Settings Views
@@ -50,7 +57,10 @@ class Outputfiles(BaseStepView, Ui_Outputfiles, QtWidgets.QWidget):
         self._pub_sub_manager.publish(self, self._dist_hour_topic, 'ping')
         self._pub_sub_manager.publish(self, self._dist_cycle_topic, 'ping')
         self._pub_sub_manager.publish(self, self._filename_topic, 'ping')
-        
+        self._pub_sub_manager.publish(self, self._dist_total_ra_topic, 'ping')
+        self._pub_sub_manager.publish(self, self._dist_hour_ra_topic, 'ping')
+        self._pub_sub_manager.publish(self, self._dist_cycle_ra_topic, 'ping')
+        self._pub_sub_manager.publish(self, self._filename_ra_topic, 'ping')
         self._pub_sub_manager.publish(self, self._node_id_PSA_Annot+".get_activation_state", None)
 
 
@@ -79,6 +89,10 @@ class Outputfiles(BaseStepView, Ui_Outputfiles, QtWidgets.QWidget):
         self._pub_sub_manager.publish(self, self._dist_cycle_topic, int(self.cycle_checkBox.isChecked()))
         self._pub_sub_manager.publish(self, self._filename_topic, self.filename_lineEdit.text())
         self._pub_sub_manager.publish(self, self._filename_annot_topic, self.filename_lineEdit.text())
+        self._pub_sub_manager.publish(self, self._dist_total_ra_topic, int(self.total_checkBox.isChecked()))
+        self._pub_sub_manager.publish(self, self._dist_hour_ra_topic, int(self.hour_checkBox.isChecked()))
+        self._pub_sub_manager.publish(self, self._dist_cycle_ra_topic, int(self.cycle_checkBox.isChecked()))
+        self._pub_sub_manager.publish(self, self._filename_ra_topic, self.filename_lineEdit.text())
 
  
     # Called by a node in response to a ping request. 
@@ -92,6 +106,14 @@ class Outputfiles(BaseStepView, Ui_Outputfiles, QtWidgets.QWidget):
         if topic == self._dist_cycle_topic:
             self.cycle_checkBox.setChecked(int(message))        
         if topic == self._filename_topic:
+            self.filename_lineEdit.setText(message)  
+        if topic == self._dist_total_ra_topic:
+            self.total_checkBox.setChecked(int(message))
+        if topic == self._dist_hour_ra_topic:
+            self.hour_checkBox.setChecked(int(message))
+        if topic == self._dist_cycle_ra_topic:
+            self.cycle_checkBox.setChecked(int(message))        
+        if topic == self._filename_ra_topic:
             self.filename_lineEdit.setText(message)  
         if topic == self._node_id_PSA_Annot+".get_activation_state":
             if message == ActivationState.ACTIVATED:
@@ -134,7 +156,10 @@ class Outputfiles(BaseStepView, Ui_Outputfiles, QtWidgets.QWidget):
             self._pub_sub_manager.unsubscribe(self, self._dist_cycle_topic)
             self._pub_sub_manager.unsubscribe(self, self._filename_topic)
             self._pub_sub_manager.unsubscribe(self, self._filename_annot_topic)
-
+            self._pub_sub_manager.unsubscribe(self, self._dist_total_ra_topic)
+            self._pub_sub_manager.unsubscribe(self, self._dist_hour_ra_topic)
+            self._pub_sub_manager.unsubscribe(self, self._dist_cycle_ra_topic)
+            self._pub_sub_manager.unsubscribe(self, self._filename_ra_topic)
 
     # To enable/disable the PSA on annotations widget
     def _enable_annot_widget(self, annot_label):

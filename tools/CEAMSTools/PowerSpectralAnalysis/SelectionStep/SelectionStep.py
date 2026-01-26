@@ -41,7 +41,8 @@ class SelectionStep( BaseStepView,  Ui_SelectionStep, QtWidgets.QWidget):
         self._node_id_ResetSignalArtefact = "1211ee97-72e4-45da-9850-44d4aa249c78"  # to activate when PSA is performed on stages 
         self._node_id_STFT_std = "159bfdad-5000-474b-ae38-8e95ff4142b2"  # to activate when PSA is performed on stages 
         self._node_id_PSA_Compilation_std = "4bb8c9ac-64e8-4cec-9c2c-5a00c80b4eae" # to activate when PSA is performed on stages
-
+        self._node_id_RnB = "32286396-c4c4-4c41-8d7a-1cf26c774426"  # to activate when PSA is performed on stages 
+        self._node_id_PSA_rnb = "d16022c4-3ac0-4982-aa3e-dfff4cada99a" # to activate when PSA is performed on stages
         # Define modules to activate or bypass
         self._node_id_SignalsFromEvents_Annot = "d3620a6b-03f5-444f-b93e-e3ca23983b56" # To activate for PSA on annot
         self._node_id_STFT_Annot = "ea31a87d-038c-4e24-a9c2-66b54aaca483" # To activate for PSA on annot
@@ -97,6 +98,10 @@ class SelectionStep( BaseStepView,  Ui_SelectionStep, QtWidgets.QWidget):
             self._pub_sub_manager.publish(self, self._node_id_STFT_std\
                 +".activation_state_change", ActivationState.ACTIVATED)
             self._pub_sub_manager.publish(self, self._node_id_PSA_Compilation_std\
+                +".activation_state_change", ActivationState.ACTIVATED)
+            self._pub_sub_manager.publish(self, self._node_id_RnB\
+                +".activation_state_change", ActivationState.ACTIVATED)
+            self._pub_sub_manager.publish(self, self._node_id_PSA_rnb\
                 +".activation_state_change", ActivationState.ACTIVATED)    
 
             # Deactivate the modules needed to run on annotations
@@ -133,6 +138,10 @@ class SelectionStep( BaseStepView,  Ui_SelectionStep, QtWidgets.QWidget):
             self._pub_sub_manager.publish(self, self._node_id_STFT_std\
                 +".activation_state_change", ActivationState.DEACTIVATED)
             self._pub_sub_manager.publish(self, self._node_id_PSA_Compilation_std\
+                +".activation_state_change", ActivationState.DEACTIVATED)
+            self._pub_sub_manager.publish(self, self._node_id_RnB\
+                +".activation_state_change", ActivationState.DEACTIVATED)
+            self._pub_sub_manager.publish(self, self._node_id_PSA_rnb\
                 +".activation_state_change", ActivationState.DEACTIVATED)            
 
 

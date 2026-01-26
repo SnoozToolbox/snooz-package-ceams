@@ -25,7 +25,9 @@ class HoursCyclesStep(BaseStepView, Ui_HoursCyclesStep, QtWidgets.QWidget):
         # You need to look into your process.json file to know the ID of the node
         # you are interest in, this is just an example value:
         self._PSACompilation_id = "4bb8c9ac-64e8-4cec-9c2c-5a00c80b4eae"
-        self._constants_report_topic = self._PSACompilation_id + ".report_constants" 
+        self._constants_report_topic = self._PSACompilation_id + ".report_constants"
+        self._PSACompilation_id_rnb = "d16022c4-3ac0-4982-aa3e-dfff4cada99a"
+        self._constants_report_topic_rnb = self._PSACompilation_id_rnb + ".report_constants"
 
         self.report_constants = {}
         self.report_constants['N_HOURS'] = 9
@@ -38,6 +40,7 @@ class HoursCyclesStep(BaseStepView, Ui_HoursCyclesStep, QtWidgets.QWidget):
         # It is a good place to do all ping calls that will request the 
         # underlying process to get the value of a module.
         self._pub_sub_manager.publish(self, self._constants_report_topic, 'ping')
+        self._pub_sub_manager.publish(self, self._constants_report_topic_rnb, 'ping')
 
 
     def on_topic_update(self, topic, message, sender):
@@ -60,12 +63,20 @@ class HoursCyclesStep(BaseStepView, Ui_HoursCyclesStep, QtWidgets.QWidget):
                 self.report_constants = message
             self.spinBox_hours.setValue(self.report_constants['N_HOURS'])
             self.spinBox_cycles.setValue(self.report_constants['N_CYCLES'])
+        elif topic == self._constants_report_topic_rnb:
+            if isinstance(message, str) and not message == "":
+                message = eval(message)
+            if isinstance(message, dict) and not message == {}:
+                self.report_constants = message
+            self.spinBox_hours.setValue(self.report_constants['N_HOURS'])
+            self.spinBox_cycles.setValue(self.report_constants['N_CYCLES'])
 
 
     def on_apply_settings(self):
         self.report_constants['N_HOURS'] = self.spinBox_hours.value()
         self.report_constants['N_CYCLES'] = self.spinBox_cycles.value()
         self._pub_sub_manager.publish(self, self._constants_report_topic, self.report_constants)
+        self._pub_sub_manager.publish(self, self._constants_report_topic_rnb, self.report_constants)
 
 
     def on_validate_settings(self):

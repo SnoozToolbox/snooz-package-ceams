@@ -507,7 +507,7 @@ The last frequency analyzed is limited to FS/2.
        <item>
         <widget class="QRadioButton" name="RA_radioButton">
          <property name="enabled">
-          <bool>false</bool>
+          <bool>true</bool>
          </property>
          <property name="minimumSize">
           <size>

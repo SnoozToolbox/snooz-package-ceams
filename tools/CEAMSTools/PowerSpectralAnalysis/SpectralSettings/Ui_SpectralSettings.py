@@ -229,7 +229,7 @@ class Ui_SpectralSettings(object):
 
         self.RA_radioButton = QRadioButton(SpectralSettings)
         self.RA_radioButton.setObjectName(u"RA_radioButton")
-        self.RA_radioButton.setEnabled(False)
+        self.RA_radioButton.setEnabled(True)
         self.RA_radioButton.setMinimumSize(QSize(225, 0))
 
         self.horizontalLayout_3.addWidget(self.RA_radioButton)
