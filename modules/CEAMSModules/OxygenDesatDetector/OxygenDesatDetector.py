@@ -729,9 +729,9 @@ class OxygenDesatDetector(SciNode):
                 start in sec of each continuous section (more than one when there are discontinuities)
         """    
         # Compute duration of sleep period for stats
-        start = stage_sleep_period_df['start_sec'].values[0]
-        end = stage_sleep_period_df['start_sec'].values[-1] + stage_sleep_period_df['duration_sec'].values[-1]
-        dur = end - start
+        sleep_period_start_sec = stage_sleep_period_df['start_sec'].values[0]
+        sleep_period_end_sec = stage_sleep_period_df['start_sec'].values[-1] + stage_sleep_period_df['duration_sec'].values[-1]
+        sleep_period_dur_sec = sleep_period_end_sec - sleep_period_start_sec
 
         # Generate and save the oxygen saturation graph
         if len(picture_dir)>0:
@@ -748,7 +748,7 @@ class OxygenDesatDetector(SciNode):
                 data_array = np.concatenate((data_array, samples), axis=0)
 
         total_stats = {}
-        total_stats["sleep_period_min"] = dur/60
+        total_stats["sleep_period_min"] = sleep_period_dur_sec/60
         total_stats["total_valid_min"] = (len(data_array)-np.isnan(data_array).sum())/fs_chan/60
         total_stats["total_invalid_min"]  = np.isnan(data_array).sum()/fs_chan/60
         total_stats["total_saturation_avg"] = np.nanmean(data_array)
@@ -756,7 +756,7 @@ class OxygenDesatDetector(SciNode):
         total_stats["total_saturation_min"] = np.nanmin(data_array)
         total_stats["total_saturation_max"] = np.nanmax(data_array)
         for val in self.values_below:
-            total_stats[f"total_below_{val}_min"] = (data_array<val).sum()/fs_chan/60
+            total_stats[f"total_below_{val}_perc"] = ((data_array<val).sum()/fs_chan)/sleep_period_dur_sec*100
         return total_stats
 
 
