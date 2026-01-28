@@ -374,15 +374,18 @@ class OxygenDesatDetector(SciNode):
             # 'min_hold_drop_sec' : 'Minimum duration (s) during which the oxygen level drop is maintained "10 or 5"',
         desat_df, plateau_df, data_lpf_list, data_hpf_list, lmax_indices_list, lmin_indices_list = \
             self.detect_desaturation_ABOSA(data_starts, data_clean, fs_chan, channel, parameters_oxy)
-    
-        #----------------------------------------------------------------------
-        # Add invalid sections to desaturation events
-        desat_df = pd.concat([desat_df, invalid_events], ignore_index=True)
 
         # Compute desaturation stats
         #----------------------------------------------------------------------
         desat_stats = self.compute_desat_stats(desat_df, stage_sleep_period_df)
 
+        # Remove desaturation features not included in the Snooz annotations
+        #----------------------------------------------------------------------
+        # Keep ['group', 'name', 'start_sec', 'duration_sec', 'channels']
+        desat_df = desat_df[['group', 'name', 'start_sec', 'duration_sec', 'channels']]
+
+        # Add invalid sections to desaturation events
+        desat_df = pd.concat([desat_df, invalid_events], ignore_index=True)
 
         if DEBUG:
             cache = {}
@@ -887,6 +890,50 @@ class OxygenDesatDetector(SciNode):
         # return the time as HH:MM:SS
         return f"{HH}:{MM}:{SS}"
 
+    def compute_desaturation_area(self, signal, data_start, start_sec, duration_sec, fs_chan):
+        """
+        Compute the area of a desaturation event.
+        
+        The area is calculated as the integral of the drop below the baseline (starting SpO2 value)
+        over the duration of the event. The result is in %-seconds.
+        
+        Parameters:
+            signal : numpy array
+                SpO2 signal samples.
+            data_start : float
+                Start time in seconds of the signal array.
+            start_sec : float
+                Start time in seconds of the desaturation event.
+            duration_sec : float
+                Duration in seconds of the desaturation event.
+            fs_chan : float
+                Sampling frequency in Hz.
+        
+        Returns:
+            area : float
+                Area of the desaturation event in %-seconds.
+        """
+        # Extract samples for the desaturation event
+        event_samples = self.extract_samples_from_array(signal, data_start, start_sec, duration_sec, fs_chan)
+        
+        if len(event_samples) == 0 or np.all(np.isnan(event_samples)):
+            return np.nan
+        
+        # Baseline is the first valid sample (start of desaturation = max SpO2 before drop)
+        baseline = event_samples[0] if not np.isnan(event_samples[0]) else np.nanmax(event_samples)
+        
+        # Compute the drop below baseline for each sample
+        drop_below_baseline = baseline - event_samples
+        drop_below_baseline = np.clip(drop_below_baseline, 0, None)  # Only count positive drops
+        
+        # Compute the area using trapezoidal integration
+        # Each sample represents 1/fs_chan seconds
+        dt = 1.0 / fs_chan
+        area = np.nansum(drop_below_baseline) * dt
+        
+        return area
+
+
     def resolve_overlapping_desaturations(self, desat_events):
         """
         Resolve overlapping desaturation events by keeping the one with the steepest fall rate.
@@ -908,19 +955,19 @@ class OxygenDesatDetector(SciNode):
         resolved_events = []
         i = 0
         while i < len(sorted_events):
-            current_start, current_dur, current_rate = sorted_events[i]
+            current_start, current_dur, current_rate, current_drop = sorted_events[i]
             current_end = current_start + current_dur
             
             # Find all overlapping events
-            overlapping = [(i, current_start, current_dur, current_rate)]
+            overlapping = [(i, current_start, current_dur, current_rate, current_drop)]
             j = i + 1
             while j < len(sorted_events):
-                next_start, next_dur, next_rate = sorted_events[j]
+                next_start, next_dur, next_rate, next_drop = sorted_events[j]
                 next_end = next_start + next_dur
                 
                 # Check for overlap: events overlap if next starts before current ends
                 if next_start < current_end:
-                    overlapping.append((j, next_start, next_dur, next_rate))
+                    overlapping.append((j, next_start, next_dur, next_rate, next_drop))
                     # Update current_end to include the new event's range
                     current_end = max(current_end, next_end)
                     j += 1
@@ -929,7 +976,7 @@ class OxygenDesatDetector(SciNode):
             
             # Select the event with the steepest fall rate (most negative, closest to -4)
             best_event = min(overlapping, key=lambda x: x[3])  # x[3] is fall_rate
-            resolved_events.append((best_event[1], best_event[2], best_event[3]))
+            resolved_events.append((best_event[1], best_event[2], best_event[3], best_event[4]))
             
             if DEBUG and len(overlapping) > 1:
                 print(f"Resolved {len(overlapping)} overlapping desaturations:")
@@ -1029,8 +1076,6 @@ class OxygenDesatDetector(SciNode):
             lmax_indices_list.append(lmax_indices_org)
 
             # Step 3: Validate and match Lmax-Lmin pairs
-            validated_events = []
-            
             for lmax_idx in lmax_indices:
                 lmax_time = data_starts[i] + lmax_idx / fs_chan
                 lmax_val = signal[lmax_idx]
@@ -1113,7 +1158,8 @@ class OxygenDesatDetector(SciNode):
                     if ((drop >= parameters_oxy['desaturation_drop_percent']) and 
                         (duration >= parameters_oxy['min_hold_drop_sec']) and
                         (-4.0 <= avg_fall_rate <= -0.05)):
-                        all_desat_events.append((adjusted_lmax_time, duration, avg_fall_rate))
+                        # Valid desaturation event with the avg_fall_rate to filter overlapping later
+                        all_desat_events.append((adjusted_lmax_time, duration, avg_fall_rate, drop))
                     else:
                         if DEBUG:
                             print(f"  Invalid desaturation: start={adjusted_lmax_time:.2f}s, "
@@ -1128,11 +1174,24 @@ class OxygenDesatDetector(SciNode):
         # Resolve overlapping desaturations by keeping events with steepest fall rate
         all_desat_events = self.resolve_overlapping_desaturations(all_desat_events)
 
+        # Compute the area under the desaturation events for further analysis
+        desat_areas = []
+        for start_sec, duration_sec, slope, depth in all_desat_events:
+            # Find which signal segment contains this event
+            area = np.nan
+            for samples, data_start in zip(data_stats, data_starts):
+                signal_end = data_start + len(samples) / fs_chan
+                # Check if the event is within this signal segment
+                if start_sec >= data_start and start_sec < signal_end:
+                    area = self.compute_desaturation_area(samples, data_start, start_sec, duration_sec, fs_chan)
+                    break
+            desat_areas.append(area)
+
         # Create output dataframe
         # desat_events = [('SpO2', 'desat_SpO2', start_sec, duration_sec, channel) 
         #                 for start_sec, duration_sec in all_desat_events]
-        desat_events = [('SpO2', 'desat_SpO2', start_sec, duration_sec, '') # Add back channel
-                        for start_sec, duration_sec, _ in all_desat_events]
+        desat_events = [('SpO2', 'desat_SpO2', start_sec, duration_sec, '', slope, depth)
+                        for start_sec, duration_sec, slope, depth in all_desat_events]
 
         # plateau_events = [('SpO2', 'plateau_SpO2', start_sec, duration_sec, channel) 
         #                   for start_sec, duration_sec in plateau_lst]
@@ -1145,7 +1204,9 @@ class OxygenDesatDetector(SciNode):
                 print(f"{len(lmax_indices_list[i])} possible max\n")
                 print(f"{len(lmin_indices_list[i])} possible min\n")
 
-        desat_df = manage_events.create_event_dataframe(data=desat_events)
+        desat_df = pd.DataFrame(data=desat_events, columns=['group', 'name', 'start_sec', 'duration_sec', 'channels', 'slope', 'depth'])
+        # Add the desaturation features to compute stats
+        desat_df['area_percent_sec'] = desat_areas
         plateau_df = manage_events.create_event_dataframe(data=plateau_events)
   
         return desat_df, plateau_df, data_lpf_list, data_hpf_list, lmax_indices_list, lmin_indices_list
@@ -1681,14 +1742,25 @@ class OxygenDesatDetector(SciNode):
         desat_stats['desat_count'] = len(desat_df)
         # The average duration in sec of the oxygen desaturation events in the sleep period.
         desat_stats['desat_avg_sec'] = desat_df['duration_sec'].mean()
-        # The std value of the duration in sec of the oxygen desaturation events in the sleep period.
-        desat_stats['desat_std_sec'] = desat_df['duration_sec'].std()
+        # The variance value of the duration in sec of the oxygen desaturation events in the sleep period.
+        desat_stats['desat_var_sec'] = desat_df['duration_sec'].var()
         # The median value of the duration in sec of the oxygen desaturation events in the sleep period.
         desat_stats['desat_med_sec'] = desat_df['duration_sec'].median()
         # The percentage of time spent in desaturation during the sleep period.
-        desat_stats['desat_sleep_percent'] = desat_df['duration_sec'].sum()/stage_sleep_period_df['duration_sec'].sum()*100
+        desat_stats['desat_SP_percent'] = desat_df['duration_sec'].sum()/stage_sleep_period_df['duration_sec'].sum()*100
         # The Oxygen Desaturation Index (ODI) : number of desaturation per sleep hour.
         desat_stats['desat_ODI'] = len(desat_df)/(stage_sleep_period_df['duration_sec'].sum()/3600)
+        # The average area under the desaturation events in percent*sec.
+        desat_stats['desat_area_avg'] = desat_df['area_percent_sec'].mean()
+        # The average slope of the desaturation events in percent/sec.
+        desat_stats['desat_slope_avg'] = desat_df['slope'].mean()
+        # The average depth of the desaturation events in percent.
+        desat_stats['desat_depth_avg'] = desat_df['depth'].mean()
+        # Desaturation severity : The sum of areas under the desaturation events in percent*sec over the sleep period (sec).
+        desat_stats['desat_severity'] = desat_df['area_percent_sec'].sum()/stage_sleep_period_df['duration_sec'].sum()
+
+
+
         return desat_stats
 
     
