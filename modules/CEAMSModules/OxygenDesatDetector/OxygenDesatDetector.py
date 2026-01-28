@@ -143,8 +143,8 @@ class OxygenDesatDetector(SciNode):
         self._is_master = False 
 
         # Init module variables
-        self.stage_stats_labels = ['N1', 'N2', 'N3', 'R', 'W']
-        self.N_CYCLES = 9
+        self.stage_stats_labels =   ['N1',   'N2',   'N3',   'R',    'W',    'NREM',             'N2N3',         'SLEEP']
+        self.stage_stats_list =     [['N1'], ['N2'], ['N3'], ['R'], ['W'],   ['N1', 'N2', 'N3'], ['N2', 'N3'], ['N1', 'N2', 'N3', 'R', 'W']]
         self.values_below = [96, 94, 92, 90, 85, 80, 75, 70, 60]
     
 
@@ -756,7 +756,7 @@ class OxygenDesatDetector(SciNode):
         total_stats["total_saturation_min"] = np.nanmin(data_array)
         total_stats["total_saturation_max"] = np.nanmax(data_array)
         for val in self.values_below:
-            total_stats[f"total_below_{val}_perc"] = ((data_array<val).sum()/fs_chan)/sleep_period_dur_sec*100
+            total_stats[f"total_below_{val}_percent"] = ((data_array<val).sum()/fs_chan)/sleep_period_dur_sec*100
         return total_stats
 
 
@@ -782,8 +782,10 @@ class OxygenDesatDetector(SciNode):
         stage_name = stage_sleep_period_df['name'].apply(str).to_numpy()
 
         stage_dict = {}
-        for stage_label in self.stage_stats_labels:
-            stage_mask = (stage_name==commons.sleep_stages_name[stage_label])
+        for stage_label, stage_list in zip(self.stage_stats_labels, self.stage_stats_list):
+            stage_mask = np.zeros(stage_name.shape, dtype=bool)
+            for i in range(len(stage_list)):
+                stage_mask = stage_mask | (stage_name == commons.sleep_stages_name[stage_list[i]])
             start_masked = stage_start_times[stage_mask]
             dur_masked = stage_duration_times[stage_mask]
             if any(stage_mask):
@@ -814,14 +816,14 @@ class OxygenDesatDetector(SciNode):
                 stage_dict[f'{stage_label}_saturation_max'] = np.nanmax(signals_cur_stage)
                 for val in self.values_below:
                     signals_flat = signals_cur_stage.flatten()
-                    stage_dict[f"{stage_label}_below_{val}_min"] = (signals_flat<val).sum()/fs_chan/60
+                    stage_dict[f"{stage_label}_below_{val}_percent"] = (signals_flat<val).sum()/len(signals_flat)*100
             else:
                 stage_dict[f'{stage_label}_saturation_avg'] = np.nan
                 stage_dict[f'{stage_label}_saturation_std'] = np.nan
                 stage_dict[f'{stage_label}_saturation_min'] = np.nan
                 stage_dict[f'{stage_label}_saturation_max'] = np.nan
                 for val in self.values_below:
-                    stage_dict[f"{stage_label}_below_{val}_min"] = np.nan                           
+                    stage_dict[f"{stage_label}_below_{val}_percent"] = np.nan                           
         return stage_dict
 
 

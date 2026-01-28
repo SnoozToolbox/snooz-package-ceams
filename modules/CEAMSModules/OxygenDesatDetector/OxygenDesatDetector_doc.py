@@ -65,7 +65,7 @@ def _get_doc(N_CYCLE, stage_stats_labels, values_below):
     }
     total_threshold_dict = {}
     for val in values_below:
-        total_threshold_dict[f"total_below_{val}_perc"] = f"The percentual time spent (%) with an oxygen saturation under {val} % during the sleep period."
+        total_threshold_dict[f"total_below_{val}_percent"] = f"The percentual time spent (%) with an oxygen saturation under {val} % during the sleep period."
         
     third_dict = {}
     third_val = [1, 2, 3]
@@ -100,7 +100,7 @@ def _get_doc(N_CYCLE, stage_stats_labels, values_below):
         stage_dict[f'{stage}_saturation_min'] = f"The minimum value of the oxygen saturation (%) for the {stage} stages during the sleep period."
         stage_dict[f'{stage}_saturation_max'] = f"The maximum value of the oxygen saturation (%) for the {stage} stages during the sleep period."
         for val in values_below:
-            stage_dict[f"{stage}_below_{val}_min"] = f"The time spent (min) with an oxygen saturation under {val} % in stage {stage}."
+            stage_dict[f"{stage}_below_{val}_percent"] = f"The percentual time spent (%) with an oxygen saturation under {val} % in {stage} stages."
 
     cycle_dict = {}
     for i_cycle in range(N_CYCLE):
