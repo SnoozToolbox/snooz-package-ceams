@@ -1,0 +1,66 @@
+{   
+    "item_name": "RnB",
+    "item_type": "module",
+    "item_api_version": "2.0.0",
+    "dependencies": [
+    ],
+    "module_params":{
+        "cls":"RnB",
+        "name":"RnB",
+        "metadata":{},
+        "file_location":null,
+        "module":"CEAMSModules.RnB",
+        "module_label": "Rhythm and background wavelet",
+        "module_category":"Signal Processing",
+        "module_author":"",
+        "module_url":"",
+        "module_description":"",
+        "module_options":{},
+        "inputs": {
+            "signals": {
+                "name": "signals",
+                "value": "",
+                "connections": {},
+                "sub_plugs": {}
+            },"win_len_sec": {
+                "name": "win_len_sec",
+                "value": "",
+                "connections": {},
+                "sub_plugs": {}
+            },"win_step_sec": {
+                "name": "win_step_sec",
+                "value": "",
+                "connections": {},
+                "sub_plugs": {}
+            },"alpha_param": {
+                "name": "alpha_param",
+                "value": "",
+                "connections": {},
+                "sub_plugs": {}
+            },"decomp_level": {
+                "name": "decomp_level",
+                "value": "",
+                "connections": {},
+                "sub_plugs": {}
+            }
+        },
+        "outputs": {
+            "rhythmic_signal": {
+                "name": "rhythmic_signal",
+                "value": "",
+                "connections": {},
+                "sub_plugs": {}
+            },"background_signal": {
+                "name": "background_signal",
+                "value": "",
+                "connections": {},
+                "sub_plugs": {}
+            },"slope": {
+                "name": "slope",
+                "value": "",
+                "connections": {},
+                "sub_plugs": {}
+            }
+        }
+    }
+}

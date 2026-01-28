@@ -1,5 +1,5 @@
 """
-© 2021 CÉAMS. All right reserved.
+@ Valorisation Recherche HSCM, Societe en Commandite – 2025
 See the file LICENCE for full license details.
 """
 """

@@ -1,5 +1,5 @@
 """
-© 2021 CÉAMS. All right reserved.
+@ Valorisation Recherche HSCM, Societe en Commandite – 2025
 See the file LICENCE for full license details.
 """
 """
@@ -13,6 +13,7 @@ import numpy as np
 import math
 from fractions import Fraction
 from scipy.signal import resample_poly, periodogram
+from joblib import Parallel, delayed
 
 from CEAMSModules.PSGReader import SignalModel as test
 
@@ -131,55 +132,37 @@ class RandB(SciNode):
 
         #sign2d = test.SignalModel.get_attribute(signals,'samples' , None)       
         fs = test.SignalModel.get_attribute(signals,'sample_rate' , None)
-        stacked_signal = []
-        stacked_channel = []
-        stacked_start_time = []
-        stacked_end_time = []
-        stacked_dur = []
-
+        psd = []
         # get data and split and stack accordingly
         for i, signal_model in enumerate(signals):
             sign2d_split, new_chan, start_time, end_time, new_dur = self.split_and_stack(signal_model, win_len_sec, fs)
-            stacked_signal.append(sign2d_split)
-            stacked_channel.append(new_chan)
-            stacked_start_time.append(start_time)
-            stacked_end_time.append(end_time)
-            stacked_dur.append(new_dur)
-            
-        stacked_signal = np.concatenate(stacked_signal)
-        stacked_channel = np.concatenate(stacked_channel)
-        stacked_start_time = np.concatenate(stacked_start_time)
-        stacked_end_time = np.concatenate(stacked_end_time)
-        stacked_dur = np.concatenate(stacked_dur)
-   
-        # compute rythmic spectral analysis
-        residu, res_mean, freq_bins,intercept,beta,freq_raw, psd_raw  = self.rythmic_spectral_analysis(stacked_signal, fs,first_freq,last_freq)
+            # compute rythmic spectral analysis
+            residu, res_mean, freq_bins,intercept,beta,freq_raw, psd_raw  = self.rythmic_spectral_analysis(sign2d_split, fs,first_freq,last_freq)
 
-        # Define output
-        psd = []
-        data = {}
-        data['psd'] = residu
-        data['freq_bins'] = freq_bins
-        data['win_len'] = win_len_sec
-        data['win_step'] = win_step_sec
-        data['sample_rate'] = fs[0]
-        data['chan_label'] = stacked_channel[0]
-        data['start_time'] = stacked_start_time[0]
-        data['end_time'] = stacked_end_time[-1]
-        data['duration'] = sum(stacked_dur)
+            # Define output
+            data = {}
+            data['psd'] = residu
+            data['freq_bins'] = freq_bins
+            data['win_len'] = win_len_sec
+            data['win_step'] = win_step_sec
+            data['sample_rate'] = fs[i]
+            data['chan_label'] = new_chan[0]
+            data['start_time'] = start_time[0]
+            data['end_time'] = end_time[-1]
+            data['duration'] = sum(new_dur)
 
-        cache['psd'] = res_mean
-        cache['freq_bins'] = data['freq_bins']
-        cache['channel'] = signals[0].channel
-        cache['sample_rate'] = signals[0].sample_rate
-        cache['win_step_sec'] = win_step_sec
-        cache['win_len'] = win_len_sec
-        cache['psd_raw'] = psd_raw
-        cache['freq_raw'] = freq_raw
-        cache['first_freq'] = first_freq
-        cache['last_freq'] = last_freq
-        self._cache_manager.write_mem_cache(self.identifier, cache)
-        psd.append(data.copy())
+            cache['psd'] = res_mean
+            cache['freq_bins'] = data['freq_bins']
+            cache['channel'] = signals[i].channel
+            cache['sample_rate'] = signals[i].sample_rate
+            cache['win_step_sec'] = win_step_sec
+            cache['win_len'] = win_len_sec
+            cache['psd_raw'] = psd_raw
+            cache['freq_raw'] = freq_raw
+            cache['first_freq'] = first_freq
+            cache['last_freq'] = last_freq
+            self._cache_manager.write_mem_cache(self.identifier, cache)
+            psd.append(data.copy())
 
         # Write to the cache to use the data in the resultTab
            
@@ -201,11 +184,11 @@ class RandB(SciNode):
             if sign.shape[0]/2 > nsample:
                 col_keep = (sign.shape[0]//nsample) * nsample
                 cols_to_cut = sign.shape[0]-col_keep
-                sign = sign[:, :-cols_to_cut]
+                sign = sign[:-cols_to_cut]
             else:
                 col_keep = nsample
                 cols_to_cut = sign.shape[0]-col_keep
-                sign = sign[:, :-cols_to_cut]
+                sign = sign[:-cols_to_cut]
         if remainder ==  0:
             col_keep = sign.shape[0]
         ####################
@@ -323,30 +306,66 @@ class RandB(SciNode):
         return psd_data, freq_bins
 
 
+    def _process_single_epoch(self, data, fs, first_freq, last_freq):
+        """Process a single epoch for parallel computation"""
+        # Check if segment contains NaN values
+        if np.any(np.isnan(data)):
+            return np.nan, np.nan
+        
+        try:
+            pow, freq = self.resampled_spectral_analysis(data, fs)
+            # flatten array
+            pow = np.squeeze(pow)
+            freq = np.squeeze(freq)
+            
+            # exclude lower boundary in case first_freq = 0
+            freqr = np.where((freq > first_freq) & (freq <= last_freq))
+            
+            # Check if we have valid data for polyfit
+            freq_subset = freq[freqr]
+            pow_subset = pow[freqr]
+            
+            if len(freq_subset) == 0 or len(pow_subset) == 0:
+                return np.nan, np.nan
+            
+            # Check for NaN or invalid values in the subset
+            if np.any(np.isnan(freq_subset)) or np.any(np.isnan(pow_subset)) or \
+               np.any(freq_subset <= 0) or np.any(pow_subset <= 0):
+                return np.nan, np.nan
+            
+            beta_val, intercept_val = np.polyfit(np.log(freq_subset), np.log(pow_subset), 1)
+            return beta_val, intercept_val
+            
+        except:
+            return np.nan, np.nan
+
     def rythmic_spectral_analysis(self, signals, fs, first_freq, last_freq):
 
         psd_raw, freq_raw = self.raw_spectral_analysis(signals, fs)
-        psd_raw_mean = np.nanmean(psd_raw,axis = 0)
+        psd_raw_mean = np.nanmean(psd_raw, axis=0)
 
         Nepocs, Npoints = signals.shape
 
-        FW_all = []
-        beta = np.zeros((Nepocs)) 
-        intercept = np.zeros((Nepocs))
-        for i in range(Nepocs):
-            data = signals[i,:]
-            pow , freq = self.resampled_spectral_analysis(data, fs)
-            # flatten array
-            pow = np.squeeze(pow); freq = np.squeeze(freq)
-            # exclude lower boundary in case first_freq  = 0
-            freqr = np.where((freq > first_freq) & (freq <= last_freq))
-            beta[i], intercept[i] = np.polyfit(np.log(freq[freqr]), np.log(pow[freqr]), 1)
+        # Use parallel processing with threading backend (avoids pickling issues)
+        # n_jobs=-1 uses all available CPU cores
+        results = Parallel(n_jobs=-1, backend='threading')(
+            delayed(self._process_single_epoch)(signals[i, :], fs, first_freq, last_freq)
+            for i in range(Nepocs)
+        )
+        
+        # Unpack results
+        beta = np.array([r[0] for r in results])
+        intercept = np.array([r[1] for r in results])
         
         beta = beta.reshape((len(beta), 1))
         intercept = intercept.reshape((len(intercept), 1))
+        
+        # compute freqr for indexing
+        freqr = np.where((freq_raw > first_freq) & (freq_raw <= last_freq))
         freqr = np.squeeze(freqr)
 
-        # compute rythmic spectrum
-        residu = np.exp((-intercept))*(freq_raw[freqr])**((-beta))*(psd_raw[:,freqr])
-        residu_mean = np.mean(residu, axis = 0)
-        return residu, residu_mean,  freq_raw[freqr], beta, intercept, freq_raw, psd_raw_mean
+        # compute rythmic spectrum (handles NaN in beta/intercept automatically)
+        residu = np.exp((-intercept)) * (freq_raw[freqr])**((-beta)) * (psd_raw[:, freqr])
+        residu_mean = np.nanmean(residu, axis=0)
+        
+        return residu, residu_mean, freq_raw[freqr], beta, intercept, freq_raw, psd_raw_mean
