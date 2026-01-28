@@ -377,7 +377,7 @@ class OxygenDesatDetector(SciNode):
 
         # Compute desaturation stats
         #----------------------------------------------------------------------
-        desat_stats = self.compute_desat_stats(desat_df, stage_sleep_period_df)
+        desat_stats = self.compute_desat_stats(desat_df, total_stats, stage_sleep_period_df)
 
         # Remove desaturation features not included in the Snooz annotations
         #----------------------------------------------------------------------
@@ -759,7 +759,7 @@ class OxygenDesatDetector(SciNode):
         total_stats["total_saturation_min"] = np.nanmin(data_array)
         total_stats["total_saturation_max"] = np.nanmax(data_array)
         for val in self.values_below:
-            total_stats[f"total_below_{val}_percent"] = ((data_array<val).sum()/fs_chan)/sleep_period_dur_sec*100
+            total_stats[f"total_below_{val}_percent"] = ((data_array<val).sum()/fs_chan)/(total_stats["total_valid_min"]*60)*100
         return total_stats
 
 
@@ -819,7 +819,8 @@ class OxygenDesatDetector(SciNode):
                 stage_dict[f'{stage_label}_saturation_max'] = np.nanmax(signals_cur_stage)
                 for val in self.values_below:
                     signals_flat = signals_cur_stage.flatten()
-                    stage_dict[f"{stage_label}_below_{val}_percent"] = (signals_flat<val).sum()/len(signals_flat)*100
+                    n_valid = np.sum(~np.isnan(signals_flat)) # To excluded artifact from the total number of samples
+                    stage_dict[f"{stage_label}_below_{val}_percent"] = (signals_flat<val).sum()/n_valid*100 if n_valid > 0 else np.nan
             else:
                 stage_dict[f'{stage_label}_saturation_avg'] = np.nan
                 stage_dict[f'{stage_label}_saturation_std'] = np.nan
@@ -1736,7 +1737,7 @@ class OxygenDesatDetector(SciNode):
 
         return adjusted_lmax_idx, adjusted_lmax_time, adjusted_lmax_val, lmin_idx, lmin_time, lmin_val, plateau_list
 
-    def compute_desat_stats(self, desat_df, stage_sleep_period_df):
+    def compute_desat_stats(self, desat_df, total_stats, stage_sleep_period_df):
         desat_stats = {}
         # The number of oxygen desaturation in the sleep period.
         desat_stats['desat_count'] = len(desat_df)
@@ -1747,9 +1748,9 @@ class OxygenDesatDetector(SciNode):
         # The median value of the duration in sec of the oxygen desaturation events in the sleep period.
         desat_stats['desat_med_sec'] = desat_df['duration_sec'].median()
         # The percentage of time spent in desaturation during the sleep period.
-        desat_stats['desat_SP_percent'] = desat_df['duration_sec'].sum()/stage_sleep_period_df['duration_sec'].sum()*100
+        desat_stats['desat_SP_percent'] = desat_df['duration_sec'].sum()/(total_stats['total_valid_min']*60)*100
         # The Oxygen Desaturation Index (ODI) : number of desaturation per sleep hour.
-        desat_stats['desat_ODI'] = len(desat_df)/(stage_sleep_period_df['duration_sec'].sum()/3600)
+        desat_stats['desat_ODI'] = len(desat_df)/((total_stats['total_valid_min'])/60)
         # The average area under the desaturation events in percent*sec.
         desat_stats['desat_area_avg'] = desat_df['area_percent_sec'].mean()
         # The average slope of the desaturation events in percent/sec.
@@ -1757,7 +1758,7 @@ class OxygenDesatDetector(SciNode):
         # The average depth of the desaturation events in percent.
         desat_stats['desat_depth_avg'] = desat_df['depth'].mean()
         # Desaturation severity : The sum of areas under the desaturation events in percent*sec over the sleep period (sec).
-        desat_stats['desat_severity'] = desat_df['area_percent_sec'].sum()/stage_sleep_period_df['duration_sec'].sum()
+        desat_stats['desat_severity'] = desat_df['area_percent_sec'].sum()/(total_stats['total_valid_min']*60)
 
 
 
