@@ -25,7 +25,7 @@ class Ui_OutputFiles(object):
     def setupUi(self, OutputFiles):
         if not OutputFiles.objectName():
             OutputFiles.setObjectName(u"OutputFiles")
-        OutputFiles.resize(911, 890)
+        OutputFiles.resize(915, 819)
         OutputFiles.setStyleSheet(u"font: 12pt \"Roboto\";")
         self.verticalLayout = QVBoxLayout(OutputFiles)
         self.verticalLayout.setObjectName(u"verticalLayout")
@@ -36,8 +36,8 @@ class Ui_OutputFiles(object):
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.textEdit.sizePolicy().hasHeightForWidth())
         self.textEdit.setSizePolicy(sizePolicy)
-        self.textEdit.setMinimumSize(QSize(0, 260))
-        self.textEdit.setMaximumSize(QSize(16777215, 260))
+        self.textEdit.setMinimumSize(QSize(0, 200))
+        self.textEdit.setMaximumSize(QSize(16777215, 440))
         self.textEdit.setSizeIncrement(QSize(10, 10))
         self.textEdit.setContextMenuPolicy(Qt.ContextMenuPolicy.NoContextMenu)
         self.textEdit.setAutoFillBackground(True)
@@ -49,7 +49,7 @@ class Ui_OutputFiles(object):
 
         self.verticalLayout.addWidget(self.textEdit)
 
-        self.verticalSpacer_2 = QSpacerItem(20, 20, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Minimum)
+        self.verticalSpacer_2 = QSpacerItem(20, 20, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Preferred)
 
         self.verticalLayout.addItem(self.verticalSpacer_2)
 
@@ -90,9 +90,29 @@ class Ui_OutputFiles(object):
 
         self.verticalLayout.addWidget(self.label_4)
 
-        self.verticalSpacer_3 = QSpacerItem(20, 20, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Fixed)
+        self.verticalSpacer_3 = QSpacerItem(20, 20, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Preferred)
 
         self.verticalLayout.addItem(self.verticalSpacer_3)
+
+        self.checkBox_writeEvts = QCheckBox(OutputFiles)
+        self.checkBox_writeEvts.setObjectName(u"checkBox_writeEvts")
+
+        self.verticalLayout.addWidget(self.checkBox_writeEvts)
+
+        self.label_5 = QLabel(OutputFiles)
+        self.label_5.setObjectName(u"label_5")
+        self.label_5.setFont(font)
+
+        self.verticalLayout.addWidget(self.label_5)
+
+        self.label_6 = QLabel(OutputFiles)
+        self.label_6.setObjectName(u"label_6")
+
+        self.verticalLayout.addWidget(self.label_6)
+
+        self.verticalSpacer_4 = QSpacerItem(20, 20, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Preferred)
+
+        self.verticalLayout.addItem(self.verticalSpacer_4)
 
         self.label_2 = QLabel(OutputFiles)
         self.label_2.setObjectName(u"label_2")
@@ -136,36 +156,7 @@ class Ui_OutputFiles(object):
 
         self.verticalLayout.addLayout(self.horizontalLayout_3)
 
-        self.verticalSpacer_4 = QSpacerItem(20, 20, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Fixed)
-
-        self.verticalLayout.addItem(self.verticalSpacer_4)
-
-        self.label_5 = QLabel(OutputFiles)
-        self.label_5.setObjectName(u"label_5")
-        self.label_5.setFont(font)
-
-        self.verticalLayout.addWidget(self.label_5)
-
-        self.checkBox_writeEvts = QCheckBox(OutputFiles)
-        self.checkBox_writeEvts.setObjectName(u"checkBox_writeEvts")
-
-        self.verticalLayout.addWidget(self.checkBox_writeEvts)
-
-        self.horizontalLayout_4 = QHBoxLayout()
-        self.horizontalLayout_4.setObjectName(u"horizontalLayout_4")
-        self.horizontalSpacer_4 = QSpacerItem(10, 20, QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Minimum)
-
-        self.horizontalLayout_4.addItem(self.horizontalSpacer_4)
-
-        self.label_6 = QLabel(OutputFiles)
-        self.label_6.setObjectName(u"label_6")
-
-        self.horizontalLayout_4.addWidget(self.label_6)
-
-
-        self.verticalLayout.addLayout(self.horizontalLayout_4)
-
-        self.verticalSpacer = QSpacerItem(20, 0, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
+        self.verticalSpacer = QSpacerItem(20, 0, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Preferred)
 
         self.verticalLayout.addItem(self.verticalSpacer)
 
@@ -187,33 +178,28 @@ class Ui_OutputFiles(object):
 "li.unchecked::marker { content: \"\\2610\"; }\n"
 "li.checked::marker { content: \"\\2612\"; }\n"
 "</style></head><body style=\" font-family:'Roboto'; font-size:12pt; font-weight:400; font-style:normal;\">\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-weight:600;\">Oxygen saturation report variables</span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">The Oxygen Saturation Report comprises three main categories:</p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; tex"
-                        "t-indent:0px;\"><br /></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" text-decoration: underline;\">1. Oxygen channel variables</span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Minimum, maximum and average oxygen saturation per thirds, halves, sleep cycles and sleep stages.</p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" text-decoration: underline;\">2. Oxygen desaturation drop variables</span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Oxygen desaturation count, average duration (sec), percen"
-                        "tage of sleep time and </p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">index (count per sleep hour) for the total sleep time and each sleep stage.</p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">These variables are stored in the Oxygen Saturation Report, with one line per recording. </p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Each new recording is appended to the report file.</p></body></html>", None))
+"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-weight:700;\">Oxygen Saturation Report Variables</span></p>\n"
+"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Most variables are analyzed during the sleep period, defined as the interval from the first epoch scored as sleep (N1, N2, N3, or R) to the final awakening (including the last epoch scored as slee"
+                        "p).</p>\n"
+"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Automatic artifact detection is applied to the oximeter channel: artifacted segments longer than 5 s are excluded from the analysis, while shorter segments are interpolated.</p>\n"
+"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">The report includes variables describing oxygen saturation (%SpO\u2082) during the valid sleep period.</p>\n"
+"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-weight:700;\">Saturation Variables</span><br />These include minimum, maximum, mean, and variability (standard deviation) values, as well as the percentage of time spent below clinically relevant saturation thresholds (96 % to 60 %). Metrics are computed for the entire sleep period and stratified by sleep thirds, halves, sleep cy"
+                        "cles, and sleep stages (W, N1, N2, N3, REM, NREM, N2\u2013N3, and total sleep).</p>\n"
+"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-weight:700;\">Oxygen Desaturation Variables</span><br />These variables quantify oxygen desaturation events during the valid sleep period. They include the total number of events, average duration, percentage of time spent in desaturation, and the Oxygen Desaturation Index (ODI, events per hour). Additional metrics describe the characteristics of desaturations, including average area, slope, depth, and overall severity (sum of areas under events).</p>\n"
+"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">These variables are stored in the Oxygen Saturation Report, with one line per recording. Each new recording is appended to the report file.</p></body></html>", None))
         self.label.setText(QCoreApplication.translate("OutputFiles", u"Oxygen saturation report file for the cohort", None))
         self.lineEdit_filename.setText("")
         self.lineEdit_filename.setPlaceholderText(QCoreApplication.translate("OutputFiles", u"Select the file to save the oxygen saturation cohort report...", None))
         self.pushButton_browse.setText(QCoreApplication.translate("OutputFiles", u"Browse", None))
         self.label_4.setText(QCoreApplication.translate("OutputFiles", u"* New recordings are added (appended) at the end of the file ", None))
+        self.checkBox_writeEvts.setText(QCoreApplication.translate("OutputFiles", u"Write the desaturation events in the accessory file provided with the PSG recording.", None))
+        self.label_5.setText(QCoreApplication.translate("OutputFiles", u"Oxygen desaturation events", None))
+        self.label_6.setText(QCoreApplication.translate("OutputFiles", u"group = SpO2; name = desat_SpO2", None))
         self.label_2.setText(QCoreApplication.translate("OutputFiles", u"Oxygen saturation graph view", None))
         self.lineEdit_picturename.setText("")
         self.lineEdit_picturename.setPlaceholderText(QCoreApplication.translate("OutputFiles", u"Select a folder to save the oxygen saturation graphic picture...", None))
         self.pushButton_browse_pic.setText(QCoreApplication.translate("OutputFiles", u"Browse", None))
         self.label_3.setText(QCoreApplication.translate("OutputFiles", u"* Pictures are only generated when the directory is defined.\n"
 "The naming convention for picture is the PSG filename as prefix and 'oxygen_saturation' as suffix.", None))
-        self.label_5.setText(QCoreApplication.translate("OutputFiles", u"Oxygen desaturation events", None))
-        self.checkBox_writeEvts.setText(QCoreApplication.translate("OutputFiles", u"Write the desaturation events in the accessory file provided with the PSG recording.", None))
-        self.label_6.setText(QCoreApplication.translate("OutputFiles", u"group = SpO2; name = desat_SpO2", None))
     # retranslateUi
 

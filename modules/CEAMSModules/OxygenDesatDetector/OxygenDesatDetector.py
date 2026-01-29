@@ -1049,27 +1049,29 @@ class OxygenDesatDetector(SciNode):
         #---------------------
         # Avg fall rate limits to consider for desaturation events
         avg_fall_rate_lower_limit = -4.0  # % per second, the deepest
-        avg_fall_rate_upper_limit = -0.08  # % per second, the least steep (-0.05 in the paper) -0.08 for better performance a1370
+        # The least steep (-0.05 in the paper) -0.08 for better performance
+        avg_fall_rate_upper_limit = -0.08  # % per second
 
         # peak detection parameters
-        min_peak_distance_sec = 5
-        min_peak_prominence = 0.5
-        order = 8 # Filter order for lowpass (finding peaks) and highpass (fall rate) filtering
-        low_frequency_cutoff = 0.1
+        min_peak_distance_sec = 5 # ABOSA = 5 sec
+        min_peak_prominence = 0.5 # ABOSA = 1; 0.5 for better performance
+        # Filter order for lowpass (finding peaks) and highpass (fall rate) filtering
+        order = 8 # ABOSA = 2; 8 for better performance
+        low_frequency_cutoff = 0.1 #same as the paper
         # To shift right the maximum to the point where the fall starts
         high_frequency_cutoff = 0.1 # Filter to enhance the variation for fall rate detection
         # Accepted slope to shift Lmax right (more negative is steeper and will reject the shift, the fall starts before)
         fall_rate_threshold = -0.05 # % 
-        # Adjust Lmax and all Lmin candidates for plateau
-        min_plateau_duration_sec = 15 # To move the max or min (15 better performance for a1370)
-        plateau_threshold = 0.15 # std threshold on filtered signal (more robust than max-min)
+        # Adjust Lmax and all Lmin candidates for plateau on the filtered signal
+        min_plateau_duration_sec = 15 # ABOSA=30 sec; 15 sec has better performance
+        plateau_std_threshold = 0.15 # ABOSA not mentionned; works well 0.1% < std < 0.15%
         # Minimum drop on filtered signal between adjusted Lmax and Lmin
-        min_drop_on_filtered_signal = 1 # %
+        min_drop_on_filtered_signal = 1 # % Not in ABOSA; 1 work well until 1.5 %
 
 
         if DEBUG:
             print("\n--- Detect desaturation events ---")
-            print(f"Minimum plateau duration: {min_plateau_duration_sec}s, threshold: {plateau_threshold}%")
+            print(f"Minimum plateau duration: {min_plateau_duration_sec}s, threshold: {plateau_std_threshold}%")
 
         for i, signal in enumerate(data_stats):
             valid_mask = ~np.isnan(signal)
@@ -1137,7 +1139,7 @@ class OxygenDesatDetector(SciNode):
                             signal_lpf, adjusted_lmax_idx, adjusted_lmax_val, 
                             lmin_idx, lmin_time, lmin_val,
                             data_starts[i], fs_chan, 
-                            min_plateau_duration_sec, plateau_threshold
+                            min_plateau_duration_sec, plateau_std_threshold
                         )
 
                     if len(plateau) > 0:
@@ -1664,7 +1666,7 @@ class OxygenDesatDetector(SciNode):
 
 
     def adjust_for_plateau(self, signal, adjusted_lmax_idx, adjusted_lmax_val, lmin_idx, lmin_time, lmin_val, 
-                           data_start, fs_chan, min_plateau_duration_sec=30, plateau_threshold=0.2):
+                           data_start, fs_chan, min_plateau_duration_sec=30, plateau_std_threshold=0.2):
         """
         Adjust Lmax or Lmin if a flat plateau exists within the event.
         The plateau length is dynamically determined (minimum 30s, can be longer).
@@ -1689,7 +1691,7 @@ class OxygenDesatDetector(SciNode):
                 Sampling frequency (Hz).
             min_plateau_duration_sec : float
                 Minimum plateau duration in seconds (default 30s).
-            plateau_threshold : float
+            plateau_std_threshold : float
                 Maximum standard deviation to be considered flat (default 0.2%).
         
         Returns:
@@ -1717,7 +1719,7 @@ class OxygenDesatDetector(SciNode):
                 plateau_segment = event_signal[p_start:p_end]
                 
                 # Check if this 30s window is flat enough using standard deviation
-                if np.nanstd(plateau_segment) <= plateau_threshold:
+                if np.nanstd(plateau_segment) <= plateau_std_threshold:
                     best_plateau_start = p_start
                     best_plateau_end = p_end
                     
@@ -1725,7 +1727,7 @@ class OxygenDesatDetector(SciNode):
                     while best_plateau_end < len(event_signal):
                         # Check if adding the next sample keeps the plateau flat
                         extended_segment = event_signal[best_plateau_start:best_plateau_end + 1]
-                        if np.nanstd(extended_segment) <= plateau_threshold:
+                        if np.nanstd(extended_segment) <= plateau_std_threshold:
                             best_plateau_end += 1
                         else:
                             break
