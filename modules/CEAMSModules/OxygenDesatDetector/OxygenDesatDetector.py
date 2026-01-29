@@ -990,9 +990,9 @@ class OxygenDesatDetector(SciNode):
             
             if DEBUG and len(overlapping) > 1:
                 print(f"Resolved {len(overlapping)} overlapping desaturations:")
-                for idx, start, dur, rate in overlapping:
-                    marker = " <-- KEPT" if (start, dur, rate) == (best_event[1], best_event[2], best_event[3]) else ""
-                    print(f"  start={start:.2f}s, duration={dur:.2f}s, fall_rate={rate:.3f}%/s{marker}")
+                for idx, start, dur, rate, drop in overlapping:
+                    marker = " <-- KEPT" if (start, dur, rate, drop) == (best_event[1], best_event[2], best_event[3], best_event[4]) else ""
+                    print(f"  start={start:.2f}s, duration={dur:.2f}s, fall_rate={rate:.3f}%/s{marker}, drop={drop:.3f}%")
             
             # Move to the next non-overlapping event
             i = overlapping[-1][0] + 1
@@ -1047,26 +1047,29 @@ class OxygenDesatDetector(SciNode):
         #---------------------
         # ABOSA parameters
         #---------------------
+        # Avg fall rate limits to consider for desaturation events
+        avg_fall_rate_lower_limit = -4.0  # % per second, the deepest
+        avg_fall_rate_upper_limit = -0.08  # % per second, the least steep (-0.05 in the paper) -0.08 for better performance a1370
+
         # peak detection parameters
         min_peak_distance_sec = 5
         min_peak_prominence = 0.5
         order = 8 # Filter order for lowpass (finding peaks) and highpass (fall rate) filtering
         low_frequency_cutoff = 0.1
-        high_frequency_cutoff = 0.1
-        fall_rate_threshold=-0.05 # % per second on the low-pass filtered signal
+        # To shift right the maximum to the point where the fall starts
+        high_frequency_cutoff = 0.1 # Filter to enhance the variation for fall rate detection
+        # Accepted slope to shift Lmax right (more negative is steeper and will reject the shift, the fall starts before)
+        fall_rate_threshold = -0.05 # % 
         # Adjust Lmax and all Lmin candidates for plateau
-        min_plateau_duration_sec = 20 # To move the max or min
-        plateau_threshold = 0.1 # std threshold on filtered signal (more robust than max-min)
+        min_plateau_duration_sec = 15 # To move the max or min (15 better performance for a1370)
+        plateau_threshold = 0.15 # std threshold on filtered signal (more robust than max-min)
         # Minimum drop on filtered signal between adjusted Lmax and Lmin
-        min_drop_on_filtered_signal = 0.6*parameters_oxy['desaturation_drop_percent'] # %
-        # Avg fall rate limits to consider for desaturation events
-        avg_fall_rate_lower_limit = -4.0  # % per second, the deepest
-        avg_fall_rate_upper_limit = -0.05  # % per second, the least steep
-        
+        min_drop_on_filtered_signal = 1 # %
+
 
         if DEBUG:
             print("\n--- Detect desaturation events ---")
-            print(f" detection parameters: min_peak_distance_sec={min_peak_distance_sec}, min_peak_prominence={min_peak_prominence}, order={order}, low_frequency_cutoff={low_frequency_cutoff}, high_frequency_cutoff={high_frequency_cutoff}")
+            print(f"Minimum plateau duration: {min_plateau_duration_sec}s, threshold: {plateau_threshold}%")
 
         for i, signal in enumerate(data_stats):
             valid_mask = ~np.isnan(signal)
@@ -1147,6 +1150,7 @@ class OxygenDesatDetector(SciNode):
 
                     # Verify on the low pass filtered signal that a miminum drop is respected
                     # It means that too few samples really drop between adjusted Lmax and Lmin
+                    # or too few samples are in the max peak before Lmin
                     current_lmax_val = np.nanmax(signal_lpf[adjusted_lmax_idx:adjusted_lmin_idx+1])
                     current_lmin_val = np.nanmin(signal_lpf[adjusted_lmax_idx:adjusted_lmin_idx+1])
                     if (current_lmax_val - current_lmin_val) <= min_drop_on_filtered_signal: # 1.5 default
@@ -1219,7 +1223,7 @@ class OxygenDesatDetector(SciNode):
         plateau_events = [('SpO2', 'plateau_SpO2', start_sec, duration_sec, '') 
                           for start_sec, duration_sec in plateau_lst]
         if DEBUG:
-            print(f"\n{len(desat_events)} desat events before filtering out desat not starting in asleep\n")
+            print(f"\n{len(desat_events)} desat events\n")
             print(f"\n{len(plateau_events)} plateau events\n")
             for i in range(len(data_stats)):
                 print(f"{len(lmax_indices_list[i])} possible max\n")
@@ -1586,9 +1590,9 @@ class OxygenDesatDetector(SciNode):
 
     def adjust_lmax_for_fall_rate(self, signal, signal_hpf, lmax_idx, lmin_idx, data_start, fs_chan, fall_rate_threshold=-0.05):
         """
-        Shift Lmax forward to the next variation peak.
-        The signal (already low-pass filtered) is high-pass filtered at 0.2 Hz,
-        squared, and peaks are detected. Lmax is shifted to the next peak.
+        Shift Lmax forward to the next variation peak using the high-pass filtered signal 
+        to identify the onset of the fall, accepting the shift only if the slope between 
+        consecutive peaks is positive or not steeper than the negative fall-rate threshold.
         
         Parameters:
             signal : numpy array
@@ -1602,7 +1606,7 @@ class OxygenDesatDetector(SciNode):
             fs_chan : float
                 Sampling frequency (Hz).
             fall_rate_threshold : float
-                Fall rate threshold in %/s (not used in new implementation).
+                Fall rate threshold in %/s (deepest fall rate to accept a shift).
         
         Returns:
             adjusted_lmax_idx : int
