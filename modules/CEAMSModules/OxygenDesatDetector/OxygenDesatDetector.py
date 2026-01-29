@@ -374,7 +374,16 @@ class OxygenDesatDetector(SciNode):
             # 'min_hold_drop_sec' : 'Minimum duration (s) during which the oxygen level drop is maintained "10 or 5"',
         desat_df, plateau_df, data_lpf_list, data_hpf_list, lmax_indices_list, lmin_indices_list = \
             self.detect_desaturation_ABOSA(data_starts, data_clean, fs_chan, channel, parameters_oxy)
-
+        
+        # Save the list of desaturation events detected and their characteristics
+        #----------------------------------------------------------------------
+        # filename including path to save the dataframe 
+        picture_dir_channel = os.path.join(picture_dir, subject_info['filename'])
+        # Save the oxygen saturation events with characteristics
+        if len(picture_dir)>0:
+            file_events_name = os.path.join(picture_dir, f"{subject_info['filename']}_oxygen_saturation_events.tsv")
+            pd.DataFrame.to_csv(desat_df, path_or_buf=file_events_name, sep='\t', index=False, encoding="utf_8")
+            
         # Compute desaturation stats
         #----------------------------------------------------------------------
         desat_stats = self.compute_desat_stats(desat_df, total_stats, stage_sleep_period_df)
@@ -1035,13 +1044,25 @@ class OxygenDesatDetector(SciNode):
         lmin_indices_list = []
         lmax_indices_list = []        
 
+        #---------------------
         # ABOSA parameters
+        #---------------------
+        # peak detection parameters
         min_peak_distance_sec = 5
         min_peak_prominence = 0.5
-        order = 8
+        order = 8 # Filter order for lowpass (finding peaks) and highpass (fall rate) filtering
         low_frequency_cutoff = 0.1
         high_frequency_cutoff = 0.1
-        min_peak_distance_samples = int(min_peak_distance_sec * fs_chan)
+        fall_rate_threshold=-0.05 # % per second on the low-pass filtered signal
+        # Adjust Lmax and all Lmin candidates for plateau
+        min_plateau_duration_sec = 20 # To move the max or min
+        plateau_threshold = 0.1 # std threshold on filtered signal (more robust than max-min)
+        # Minimum drop on filtered signal between adjusted Lmax and Lmin
+        min_drop_on_filtered_signal = 0.6*parameters_oxy['desaturation_drop_percent'] # %
+        # Avg fall rate limits to consider for desaturation events
+        avg_fall_rate_lower_limit = -4.0  # % per second, the deepest
+        avg_fall_rate_upper_limit = -0.05  # % per second, the least steep
+        
 
         if DEBUG:
             print("\n--- Detect desaturation events ---")
@@ -1059,6 +1080,7 @@ class OxygenDesatDetector(SciNode):
             signal_hpf = self.filter_nan_filtfilt(signal_lpf, order, fs_chan, high_frequency_cutoff , 'high')
             
             # Step 1: Locate potential endpoints (Lmin)
+            min_peak_distance_samples = int(min_peak_distance_sec * fs_chan)
             lmin_indices = self.detect_local_min(
                 signal, signal_lpf, fs_chan, 
                 min_peak_distance_samples, min_peak_prominence, 
@@ -1102,12 +1124,10 @@ class OxygenDesatDetector(SciNode):
                     # Adjust Lmax for fall rate
                     # The Lmax is shifted forward to a point where the fall starts using the low pass filtered signal.
                     adjusted_lmax_idx, adjusted_lmax_time, adjusted_lmax_val, signal_squared = \
-                        self.adjust_lmax_for_fall_rate(signal_lpf, signal_hpf, \
-                                                       lmax_idx, lmin_idx, data_starts[i], fs_chan)
+                        self.adjust_lmax_for_fall_rate(signal_lpf, signal_hpf, lmax_idx, lmin_idx, \
+                                                       data_starts[i], fs_chan, fall_rate_threshold)
                     
                     # Adjust Lman and all Lmin candidates for plateau
-                    min_plateau_duration_sec = 20
-                    plateau_threshold = 0.1 # std threshold on filtered signal (more robust than max-min)
                     adjusted_lmax_idx, adjusted_lmax_time, adjusted_lmax_val, \
                         adjusted_lmin_idx, adjusted_lmin_time, adjusted_lmin_val, plateau = \
                         self.adjust_for_plateau(
@@ -1126,10 +1146,10 @@ class OxygenDesatDetector(SciNode):
                         break
 
                     # Verify on the low pass filtered signal that a miminum drop is respected
-                    # It measn that too few samples really drop between adjusted Lmax and Lmin
+                    # It means that too few samples really drop between adjusted Lmax and Lmin
                     current_lmax_val = np.nanmax(signal_lpf[adjusted_lmax_idx:adjusted_lmin_idx+1])
                     current_lmin_val = np.nanmin(signal_lpf[adjusted_lmax_idx:adjusted_lmin_idx+1])
-                    if (current_lmax_val - current_lmin_val) <= 1.5:
+                    if (current_lmax_val - current_lmin_val) <= min_drop_on_filtered_signal: # 1.5 default
                         if DEBUG:
                             print(f"  Drop too small ({current_lmax_val - current_lmin_val:.1f}%) between adjusted Lmax at {adjusted_lmax_time:.2f}s and Lmin at {adjusted_lmin_time:.2f}s on low pass filtered signal")
                         continue
@@ -1158,7 +1178,7 @@ class OxygenDesatDetector(SciNode):
                     # Validate drop threshold, duration and fall rate limits
                     if ((drop >= parameters_oxy['desaturation_drop_percent']) and 
                         (duration >= parameters_oxy['min_hold_drop_sec']) and
-                        (-4.0 <= avg_fall_rate <= -0.05)):
+                        (avg_fall_rate_lower_limit <= avg_fall_rate <= avg_fall_rate_upper_limit)):
                         # Valid desaturation event with the avg_fall_rate to filter overlapping later
                         all_desat_events.append((adjusted_lmax_time, duration, avg_fall_rate, drop))
                     else:
@@ -1596,10 +1616,10 @@ class OxygenDesatDetector(SciNode):
         min_peak_distance_sec = 1
         #min_peak_prominence = 0.01
 
-        # Invert the variation because we want to identify maximum drops
+        # Square the high-pass filtered signal to enhance peaks (in both directions)
         signal_squared = signal_hpf ** 2
         
-        # Detect peaks in the inverted signal - we are looking for the biggest drops
+        # Detect peaks in the Squared signal - we are looking for the biggest drops
         min_peak_distance_samples = int(min_peak_distance_sec * fs_chan)  
         peaks, _ = scipysignal.find_peaks(
             signal_squared,
@@ -1622,19 +1642,17 @@ class OxygenDesatDetector(SciNode):
                 lmax_shifted = self.correct_peak_indices_in_window(signal, [peak_idx], window_s=1, fs_chan=fs_chan)
                 lmax_shifted = lmax_shifted[0]
                 
-                # Check if the shifted peak is higher (better maximum)
-                if signal[lmax_shifted] > signal[lmax_corrected]:
+                duration_sec = (lmax_shifted - lmax_corrected) / fs_chan
+                drop = signal[lmax_shifted] - signal[lmax_corrected]
+
+                # Evaluate fall rate to ensure it's a valid shift
+                fall_rate = drop / duration_sec if duration_sec > 0 else 0
+                # For any positive fall rate or slow fall rate, we accept the shift
+                if fall_rate >= fall_rate_threshold:
                     adjusted_lmax_idx = lmax_shifted
+                # If fall rate is too steep, keep current position and stop
                 else:
-                    # Evaluate fall rate to ensure it's a valid shift
-                    duration_sec = (lmax_shifted - lmax_corrected) / fs_chan
-                    drop = signal[lmax_shifted] - signal[lmax_corrected]
-                    fall_rate = drop / duration_sec if duration_sec > 0 else 0
-                    if fall_rate >= fall_rate_threshold:
-                        adjusted_lmax_idx = lmax_shifted
-                    # If fall rate is too steep, keep current position and stop
-                    else:
-                        break
+                    break
         
         adjusted_lmax_time = data_start + adjusted_lmax_idx / fs_chan
         adjusted_lmax_val = signal[adjusted_lmax_idx]
