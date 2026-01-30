@@ -25,7 +25,7 @@ class Ui_SpectralSettings(object):
     def setupUi(self, SpectralSettings):
         if not SpectralSettings.objectName():
             SpectralSettings.setObjectName(u"SpectralSettings")
-        SpectralSettings.resize(1139, 775)
+        SpectralSettings.resize(727, 674)
         SpectralSettings.setMinimumSize(QSize(0, 0))
         self.verticalLayout_2 = QVBoxLayout(SpectralSettings)
         self.verticalLayout_2.setObjectName(u"verticalLayout_2")
@@ -45,8 +45,8 @@ class Ui_SpectralSettings(object):
 
         self.plainTextEdit_2 = QPlainTextEdit(SpectralSettings)
         self.plainTextEdit_2.setObjectName(u"plainTextEdit_2")
-        self.plainTextEdit_2.setMinimumSize(QSize(0, 45))
-        self.plainTextEdit_2.setMaximumSize(QSize(16777215, 80))
+        self.plainTextEdit_2.setMinimumSize(QSize(0, 50))
+        self.plainTextEdit_2.setMaximumSize(QSize(16777215, 100))
         self.plainTextEdit_2.setFrameShape(QFrame.Shape.NoFrame)
         self.plainTextEdit_2.setFrameShadow(QFrame.Shadow.Plain)
         self.plainTextEdit_2.setLineWidth(0)
@@ -56,7 +56,7 @@ class Ui_SpectralSettings(object):
 
         self.gridLayout = QGridLayout()
         self.gridLayout.setObjectName(u"gridLayout")
-        self.gridLayout.setSizeConstraint(QLayout.SizeConstraint.SetNoConstraint)
+        self.gridLayout.setSizeConstraint(QLayout.SizeConstraint.SetMinimumSize)
         self.label_2 = QLabel(SpectralSettings)
         self.label_2.setObjectName(u"label_2")
         sizePolicy = QSizePolicy(QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Preferred)
@@ -109,6 +109,7 @@ class Ui_SpectralSettings(object):
 
         self.verticalLayout_5 = QVBoxLayout()
         self.verticalLayout_5.setObjectName(u"verticalLayout_5")
+        self.verticalLayout_5.setSizeConstraint(QLayout.SizeConstraint.SetMinAndMaxSize)
         self.label_7 = QLabel(SpectralSettings)
         self.label_7.setObjectName(u"label_7")
         self.label_7.setMaximumSize(QSize(16777215, 30))
@@ -123,8 +124,8 @@ class Ui_SpectralSettings(object):
         sizePolicy1.setVerticalStretch(0)
         sizePolicy1.setHeightForWidth(self.plainTextEdit.sizePolicy().hasHeightForWidth())
         self.plainTextEdit.setSizePolicy(sizePolicy1)
-        self.plainTextEdit.setMinimumSize(QSize(0, 300))
-        self.plainTextEdit.setMaximumSize(QSize(16777215, 16777215))
+        self.plainTextEdit.setMinimumSize(QSize(0, 200))
+        self.plainTextEdit.setMaximumSize(QSize(16777215, 300))
         self.plainTextEdit.setFrameShape(QFrame.Shape.NoFrame)
         self.plainTextEdit.setFrameShadow(QFrame.Shadow.Plain)
         self.plainTextEdit.setLineWidth(0)
@@ -244,7 +245,11 @@ class Ui_SpectralSettings(object):
 
         self.verticalLayout_2.addLayout(self.verticalLayout_4)
 
-        self.verticalSpacer = QSpacerItem(709, 19, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
+        self.verticalSpacer_2 = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Minimum)
+
+        self.verticalLayout_2.addItem(self.verticalSpacer_2)
+
+        self.verticalSpacer = QSpacerItem(709, 19, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Ignored)
 
         self.verticalLayout_2.addItem(self.verticalSpacer)
 
@@ -260,9 +265,9 @@ class Ui_SpectralSettings(object):
     def retranslateUi(self, SpectralSettings):
         SpectralSettings.setWindowTitle("")
         SpectralSettings.setStyleSheet(QCoreApplication.translate("SpectralSettings", u"font: 12pt \"Roboto\";", None))
-        self.label_3.setText(QCoreApplication.translate("SpectralSettings", u"<html><head/><body><p><span style=\" font-weight:600;\">Short Time Fourier Transform Settings</span></p></body></html>", None))
-        self.plainTextEdit_2.setPlainText(QCoreApplication.translate("SpectralSettings", u"The PSA is performed through many short windows in order to estimate the spectral power.  The procedure is called Short Time Fourier Transform (STFT).\n"
-"Define the window length (s) used to perform each FFT (Fast Fourier Transform) and at which window steps (s) each FFT is performed.", None))
+        self.label_3.setText(QCoreApplication.translate("SpectralSettings", u"<html><head/><body><p><span style=\" font-weight:700;\">Windowed FFT Settings</span></p></body></html>", None))
+        self.plainTextEdit_2.setPlainText(QCoreApplication.translate("SpectralSettings", u"The analysis is performed by dividing the signal into multiple short windows to estimate spectral power. \n"
+"This procedure is based on Welch\u2019s method, which applies a Fast Fourier Transform (FFT) to each window and averages the resulting periodograms.", None))
         self.label_2.setText(QCoreApplication.translate("SpectralSettings", u"Window step (s)", None))
 #if QT_CONFIG(tooltip)
         self.win_step_lineEdit.setToolTip(QCoreApplication.translate("SpectralSettings", u"At which window steps (s) the FFT (Fast Fourier Transform) is performed.", None))
