@@ -203,6 +203,20 @@
             ]
         },
         {
+            "item_name": "AnalyzeEEGConnectivity",
+            "item_type": "tool",
+            "item_version": "2.0.0",
+            "item_hooks": [
+                {
+                    "endpoint_name": "menu_endpoint",
+                    "parameters": {
+                        "menu_category": "2-Processing",
+                        "menu_label": "Analyze EEG Connectivity"
+                    }
+                }
+            ]
+        },
+        {
             "item_name": "PowerSpectralAnalysis",
             "item_type": "tool",
             "item_version": "2.5.0",

@@ -947,7 +947,7 @@
         {
             "item_name": "YasaSleepStaging",
             "item_type": "module",
-            "item_version": "1.0.0",
+            "item_version": "2.0.0",
             "item_hooks": [
                 {
                     "endpoint_name": "module_endpoint",
@@ -961,7 +961,7 @@
         {
             "item_name": "SleepStagingExportResults",
             "item_type": "module",
-            "item_version": "0.0.0",
+            "item_version": "2.0.0",
             "item_hooks": [
                 {
                     "endpoint_name": "module_endpoint",
@@ -975,7 +975,7 @@
         {
             "item_name": "CreateDict",
             "item_type": "module",
-            "item_version": "0.0.0",
+            "item_version": "2.0.0",
             "item_hooks": [
                 {
                     "endpoint_name": "module_endpoint",
@@ -989,7 +989,7 @@
         {
             "item_name": "CreateListofGroupName",
             "item_type": "module",
-            "item_version": "0.0.0",
+            "item_version": "2.0.0",
             "item_hooks": [
                 {
                     "endpoint_name": "module_endpoint",
@@ -1003,7 +1003,7 @@
         {
             "item_name": "TSVValidatorMaster",
             "item_type": "module",
-            "item_version": "0.0.0",
+            "item_version": "2.0.0",
             "item_hooks": [
                 {
                     "endpoint_name": "module_endpoint",
@@ -1045,7 +1045,7 @@
         {
             "item_name": "JsonPathEditorMaster",
             "item_type": "module",
-            "item_version": "0.0.0",
+            "item_version": "2.0.0",
             "item_hooks": [
                 {
                     "endpoint_name": "module_endpoint",
@@ -1059,7 +1059,7 @@
         {
             "item_name": "ExtendEvents",
             "item_type": "module",
-            "item_version": "0.0.0",
+            "item_version": "2.0.0",
             "item_hooks": [
                 {
                     "endpoint_name": "module_endpoint",
@@ -1073,13 +1073,97 @@
         {
             "item_name": "PSAPicsGenerator",
             "item_type": "module",
-            "item_version": "0.0.0",
+            "item_version": "2.0.0",
             "item_hooks": [
                 {
                     "endpoint_name": "module_endpoint",
                     "parameters": {
                         "module_category": "Events Utilities",
                         "module_label": "PSA Pics Generator"
+                    }
+                }
+            ]
+        },
+        {
+            "item_name": "WpliConnectivity",
+            "item_type": "module",
+            "item_version": "2.0.0",
+            "item_hooks": [
+                {
+                    "endpoint_name": "module_endpoint",
+                    "parameters": {
+                        "module_category": "Connectivity Analysis",
+                        "module_label": "Wpli Connectivity"
+                    }
+                }
+            ]
+        },
+        {
+            "item_name": "DpliConnectivity",
+            "item_type": "module",
+            "item_version": "2.0.0",
+            "item_hooks": [
+                {
+                    "endpoint_name": "module_endpoint",
+                    "parameters": {
+                        "module_category": "Connectivity Analysis",
+                        "module_label": "Dpli Connectivity"
+                    }
+                }
+            ]
+        },
+        {
+            "item_name": "EpochSignal",
+            "item_type": "module",
+            "item_version": "2.0.0",
+            "item_hooks": [
+                {
+                    "endpoint_name": "module_endpoint",
+                    "parameters": {
+                        "module_category": "Signal Processing",
+                        "module_label": "Epoch Signal"
+                    }
+                }
+            ]
+        },
+        {
+            "item_name": "RemoveChannelArtefact",
+            "item_type": "module",
+            "item_version": "2.0.0",
+            "item_hooks": [
+                {
+                    "endpoint_name": "module_endpoint",
+                    "parameters": {
+                        "module_category": "Signal Processing",
+                        "module_label": "Remove Channel Artefact"
+                    }
+                }
+            ]
+        },
+        {
+            "item_name": "ConnectivityDetails",
+            "item_type": "module",
+            "item_version": "2.0.0",
+            "item_hooks": [
+                {
+                    "endpoint_name": "module_endpoint",
+                    "parameters": {
+                        "module_category": "Events Utilities",
+                        "module_label": "Connectivity Details"
+                    }
+                }
+            ]
+        },
+        {
+            "item_name": "TrimSignal",
+            "item_type": "module",
+            "item_version": "2.0.0",
+            "item_hooks": [
+                {
+                    "endpoint_name": "module_endpoint",
+                    "parameters": {
+                        "module_category": "Signal Processing",
+                        "module_label": "Trim Signal"
                     }
                 }
             ]
