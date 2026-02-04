@@ -8,11 +8,13 @@ See the file LICENCE for full license details.
 from flowpipe import SciNode, InputPlug, OutputPlug
 from commons.NodeInputException import NodeInputException
 from commons.NodeRuntimeException import NodeRuntimeException
+from CEAMSModules.Stft.Stft import Stft
 
 import numpy as np
 from scipy.stats import median_abs_deviation
 from scipy.special import zeta
 import math
+import scipy
 
 from CEAMSModules.PSGReader import SignalModel as test
 
@@ -102,73 +104,75 @@ class RnB(SciNode):
         
         # Get data
         fs = test.SignalModel.get_attribute(signals, 'sample_rate', None)
-        stacked_signal = []
-        stacked_channel = []
-        stacked_start_time = []
-        stacked_end_time = []
-        stacked_dur = []
-
-        # Split and stack signals
-        for i, signal_model in enumerate(signals):
-            sign2d_split, new_chan, start_time, end_time, new_dur = self.split_and_stack(signal_model, win_len_sec, fs)
-            stacked_signal.append(sign2d_split)
-            stacked_channel.append(new_chan)
-            stacked_start_time.append(start_time)
-            stacked_end_time.append(end_time)
-            stacked_dur.append(new_dur)
-            
-        stacked_signal = np.concatenate(stacked_signal)
-        stacked_channel = np.concatenate(stacked_channel)
-        stacked_start_time = np.concatenate(stacked_start_time)
-        stacked_end_time = np.concatenate(stacked_end_time)
-        stacked_dur = np.concatenate(stacked_dur)
-   
-        # Compute rhythmic and background separation
-        result = self.extract_RnB_signals(stacked_signal, alpha_param, decomp_level)
-        rhythmic_signals = result["rhythmic signal"]
-        betas = result["slope (beta)"]
-        
-        # Compute background signal (original - rhythmic)
-        background_signals = stacked_signal - rhythmic_signals
-
         # Define outputs
         rhythmic_output = []
         background_output = []
-        
-        rhythmic_data = {
-            'psd': rhythmic_signals,
-            'freq_bins' : result["freq_bins"],
-            'sample_rate': fs[0],
-            'chan_label': stacked_channel[0],
-            'start_time': stacked_start_time[0],
-            'end_time': stacked_end_time[-1],
-            'duration': sum(stacked_dur),
-            'win_len': win_len_sec,
-            'win_step': win_step_sec
-        }
-        rhythmic_output.append(rhythmic_data.copy())
-        
-        background_data = {
-            'psd': background_signals,
-            'freq_bins' : result["freq_bins"],
-            'sample_rate': fs[0],
-            'chan_label': stacked_channel[0],
-            'start_time': stacked_start_time[0],
-            'end_time': stacked_end_time[-1],
-            'duration': sum(stacked_dur),
-            'win_len': win_len_sec,
-            'win_step': win_step_sec
-        }
-        background_output.append(background_data.copy())
+        # Split and stack signals
+        for i, signal_model in enumerate(signals):
+            sign2d_split, new_chan, start_time, end_time, new_dur = self.split_and_stack(signal_model, win_len_sec, fs)
 
-        # Write to cache
-        cache['rhythmic_signal'] = rhythmic_signals
-        cache['background_signal'] = background_signals
-        cache['slope'] = betas
-        cache['channel'] = signals[0].channel
-        cache['sample_rate'] = signals[0].sample_rate
-        self._cache_manager.write_mem_cache(self.identifier, cache)
-           
+            # Compute rhythmic and background separation
+            result = self.extract_RnB_signals(sign2d_split, alpha_param, decomp_level)
+            rhythmic_signals = result["rhythmic signal"]
+            betas = result["slope (beta)"]
+        
+            # Compute background signal (original - rhythmic)
+            background_signals = sign2d_split - rhythmic_signals
+
+            # Recreate an array of (n, 1) for the input signals
+            rhythmic_signals = rhythmic_signals.reshape(-1, 1)
+
+            # Removing Nan values from rhythmic and background signals
+            #rhythmic_signals = rhythmic_signals[~np.isnan(rhythmic_signals)]
+            # Extract psd and freq bins of the rhythmic signal with the weltch method
+            #freq_bins, psd_rhythmic = scipy.signal.welch(rhythmic_signals, fs=fs[i], nperseg=128, axis=-1)
+            psd_rhythmic, freq_bins = Stft.fft_norm(self,
+                                rhythmic_signals,
+                                fs[i],
+                                win_len_sec,
+                                win_step_sec,
+                                False,
+                                'hann',
+                                True,
+                                'integrate')   
+            # Extract psd and freq bins of the background signal with the weltch method
+            #freq_bins, psd_background = scipy.signal.welch(background_signals, fs=fs[i], nperseg=128, axis=-1)
+        
+            rhythmic_data = {
+                'psd': psd_rhythmic,
+                'freq_bins' : freq_bins,
+                'sample_rate': fs[i],
+                'chan_label': new_chan[0],
+                'start_time': start_time[0],
+                'end_time': end_time[-1],
+                'duration': sum(new_dur),
+                'win_len': win_len_sec,
+                'win_step': win_step_sec
+            }
+        
+            '''background_data = {
+                'psd': psd_background,
+                'freq_bins' : freq_bins,
+                'sample_rate': fs[i],
+                'chan_label': new_chan[0],
+                'start_time': start_time[0],
+                'end_time': end_time[-1],
+                'duration': sum(new_dur),
+                'win_len': win_len_sec,
+                'win_step': win_step_sec
+            }'''
+
+            '''# Write to cache
+            cache['rhythmic_signal'] = rhythmic_signals
+            cache['background_signal'] = background_signals
+            cache['slope'] = betas
+            cache['channel'] = signals[0].channel
+            cache['sample_rate'] = signals[0].sample_rate
+            self._cache_manager.write_mem_cache(self.identifier, cache)'''
+        
+            rhythmic_output.append(rhythmic_data.copy()) 
+            #background_output.append(background_data.copy())
+            
         return {
             'rhythmic_signal': rhythmic_output,
             'background_signal': background_output,
@@ -505,10 +509,10 @@ class RnB(SciNode):
 
             #double check len
         if len(j12) == 0:
-            j1 = 0
+            j1 = 1
             j2 = J-2
         else:
-            j1 = 0
+            j1 = 1
             j2 = 4
 
         beta = (np.sum(Sj[j1:j2])*sum(jeSj[j1:j2]) - sum(jSj[j1:j2])*sum(eSj[j1:j2]))/(sum(Sj[j1:j2])*sum(j2Sj[j1:j2]) - sum(jSj[j1:j2])*sum(jSj[j1:j2]))
@@ -605,9 +609,9 @@ class RnB(SciNode):
 
             # Filtering
             for i in range(J):
-                aWj = w[a[i] - 1:b[i]]  # Adjusting for MATLAB to Python indexing
+                aWj = w[int(a[i]):int(b[i]+1)]  # Python 0-based indexing with exclusive end
                 aWp = self.K(alpha, alpha0) * 2 ** (-i * alpha) * aWj
-                wr[a[i] - 1:b[i]] = aWp
+                wr[int(a[i]):int(b[i]+1)] = aWp
 
             # Reconstruct signal (may be padded size)
             reconstructed = self.FFTwaveletsynthesis1D(wr, FFTsynthesisfilters, J)
