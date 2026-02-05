@@ -749,16 +749,17 @@ class PSAPicsGenerator(SciNode):
                 else:
                     ax.set_xlim(freq_range[0], freq_range[1])
 
-                if log_scale:
-                    ax.set_yscale('log')
-
                 # Get font settings from parameters
                 font_family = pics_param.get('font', 'Arial')
                 title_fontsize = pics_param.get('fontsize', 12) + 2
                 label_fontsize = pics_param.get('fontsize', 12)
 
                 ax.set_xlabel('Frequency (Hz)', fontsize=label_fontsize, fontfamily=font_family)
-                ax.set_ylabel('Power (μV²/Hz)', fontsize=label_fontsize, fontfamily=font_family)
+                if log_scale:
+                    ax.set_yscale('log')
+                    ax.set_ylabel('Log Power (μV²/Hz)', fontsize=label_fontsize, fontfamily=font_family)
+                else:
+                    ax.set_ylabel('Power (μV²/Hz)', fontsize=label_fontsize, fontfamily=font_family)
                 ax.grid(which='both', axis='both')
                 ax.set_title(fig_title, fontsize=title_fontsize, fontfamily=font_family)
                 
@@ -1058,9 +1059,6 @@ class PSAPicsGenerator(SciNode):
             # Always set x-axis to freq_range
             ax.set_xlim(freq_range[0], freq_range[1])
 
-        if log_scale:
-            ax.set_yscale('log')
-
         # Get font settings from parameters
         font_family = pics_param.get('font', 'Arial')
         title_fontsize = pics_param.get('fontsize', 12) + 2
@@ -1068,7 +1066,11 @@ class PSAPicsGenerator(SciNode):
 
         ax.grid(which='both', axis='both')
         ax.set_xlabel('Frequency (Hz)', fontsize=label_fontsize, fontfamily=font_family)
-        ax.set_ylabel('Power (μV²/Hz)', fontsize=label_fontsize, fontfamily=font_family)
+        if log_scale:
+            ax.set_yscale('log')
+            ax.set_ylabel('Log Power (μV²/Hz)', fontsize=label_fontsize, fontfamily=font_family)
+        else:
+            ax.set_ylabel('Power (μV²/Hz)', fontsize=label_fontsize, fontfamily=font_family)
         
         # Update tick label font
         for label in ax.get_xticklabels():

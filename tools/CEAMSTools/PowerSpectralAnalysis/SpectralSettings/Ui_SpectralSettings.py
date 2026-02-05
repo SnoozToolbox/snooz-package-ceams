@@ -25,7 +25,7 @@ class Ui_SpectralSettings(object):
     def setupUi(self, SpectralSettings):
         if not SpectralSettings.objectName():
             SpectralSettings.setObjectName(u"SpectralSettings")
-        SpectralSettings.resize(727, 674)
+        SpectralSettings.resize(929, 753)
         SpectralSettings.setMinimumSize(QSize(0, 0))
         self.verticalLayout_2 = QVBoxLayout(SpectralSettings)
         self.verticalLayout_2.setObjectName(u"verticalLayout_2")
@@ -296,7 +296,7 @@ class Ui_SpectralSettings(object):
         self.label_9.setText(QCoreApplication.translate("SpectralSettings", u"Last frequency analyzed (Hz)", None))
         self.last_freq_lineEdit.setText(QCoreApplication.translate("SpectralSettings", u"64", None))
         self.label_10.setText(QCoreApplication.translate("SpectralSettings", u"<html><head/><body><p><span style=\" font-size:12pt; font-style:italic;\">* Warning : The last frequency is limited to FS/2 </span></p></body></html>", None))
-        self.label_6.setText(QCoreApplication.translate("SpectralSettings", u"<html><head/><body><p><span style=\" font-weight:600;\">PSA technique</span></p></body></html>", None))
+        self.label_6.setText(QCoreApplication.translate("SpectralSettings", u"<html><head/><body><p><span style=\" font-weight:600;\">Power Spectral Analysis</span></p></body></html>", None))
         self.std_radioButton.setText(QCoreApplication.translate("SpectralSettings", u"Standard ", None))
         self.RA_radioButton.setText(QCoreApplication.translate("SpectralSettings", u"Rythmic/arythmic", None))
     # retranslateUi
