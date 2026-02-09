@@ -281,98 +281,84 @@ class REMsDetails(SciNode):
         rems_events_details = self.add_amplitude_to_rems(rems_events_details, signals)
 
         #-----------------------------------------------------------------------------------
-        # Extract artifact group and name to save the info parameters
-        #-----------------------------------------------------------------------------------
-        artifact_info_param = {}
-        group_name_artifact = artifact_events[['group','name']]
-        group_name_artifact = group_name_artifact.drop_duplicates()
-        group_name_artifact.reset_index(inplace=True, drop=True)
-        artifact_info_param['artefact_group_name'] = ''
-        for index, row in group_name_artifact.iterrows():
-            temp = '('+str(index)+')'+"group:"+row['group']+" name:"+row['name']+' '
-            artifact_info_param['artefact_group_name']=artifact_info_param['artefact_group_name']+temp
-
-        #-----------------------------------------------------------------------------------
         # Compute and organize characteristics
         #----------------------------------------------------------------------------------_
         
         channels_list = np.unique(SignalModel.get_attribute(signals, 'channel', 'channel'))
+        CombinedChannels = ', '.join(channels_list)
         # Define the dataframe to save
         cohort_characteristics_df = []
         rems_characteristics_df = pd.DataFrame()
-        for channel in channels_list:
+        # Define the channel info
+        fs_chan = SignalModel.get_attribute(signals, 'sample_rate', 'channel', channels_list[0])[0][0] 
+        channel_info_param = {}
+        channel_info_param['chan_label']=CombinedChannels
+        channel_info_param['chan_fs']=fs_chan
+        # Organize data for the output (GENERAL)
+        cur_chan_general_dict = subject_info_params | cycle_info_param | rems_det_param_dict | channel_info_param | sleep_cycle_count     
 
-            # Define the channel info
-            fs_chan = SignalModel.get_attribute(signals, 'sample_rate', 'channel', channel)[0][0] 
-            channel_info_param = {}
-            channel_info_param['chan_label']=channel
-            channel_info_param['chan_fs']=fs_chan
-            # Organize data for the output (GENERAL)
-            cur_chan_general_dict = subject_info_params | cycle_info_param | rems_det_param_dict | artifact_info_param | channel_info_param | sleep_cycle_count     
+        # Create empty artifact DataFrame for functions that require it
+        artifact_cur_chan_df = pd.DataFrame(columns=['group','name','start_sec','duration_sec','channels'])    
 
-            # Select artifact for the current channel
-            #   Artifact events have been cleanup to have a single channel as a string
-            artifact_cur_chan_df = artifact_events[artifact_events['channels']==channel]    
+        # Select rems events for the current channel
+        rems_cur_chan_df = rems_events_details[rems_events_details['channels']==CombinedChannels].copy() # dataFrame
+        rems_cur_chan_df.sort_values('start_sec', axis=0, inplace=True, ignore_index='True')  
+        rems_cur_chan_df.reset_index(inplace=True, drop=True)
 
-            # Select rems events for the current channel
-            rems_cur_chan_df = rems_events_details[rems_events_details['channels']==channel].copy() # dataFrame
-            rems_cur_chan_df.sort_values('start_sec', axis=0, inplace=True, ignore_index='True')  
-            rems_cur_chan_df.reset_index(inplace=True, drop=True)
+        # Manage REMs event, reset the index
+        rems_cur_chan_df = rems_cur_chan_df.reset_index(drop=True)
+        # Order columns as expected in the doc
+        if 'amplitude_uV' not in rems_cur_chan_df.columns:
+            rems_cur_chan_df['amplitude_uV'] = np.nan
+        rems_cur_chan_sort = rems_cur_chan_df[self.rems_columns]
 
-            # Manage REMs event, reset the index
-            rems_cur_chan_df = rems_cur_chan_df.reset_index(drop=True)
-            # Order columns as expected in the doc
-            if 'amplitude_uV' not in rems_cur_chan_df.columns:
-                rems_cur_chan_df['amplitude_uV'] = np.nan
-            rems_cur_chan_sort = rems_cur_chan_df[self.rems_columns]
+        # ---------------------------------------------------------------------------------------------------------
+        # Compute the stats for total
+        # ---------------------------------------------------------------------------------------------------------
+        label_stats = 'total'
+        tot_stats = self.compute_tot_stats_per_stage(rems_cur_chan_sort, artifact_cur_chan_df, stage_in_cycle_df, \
+            commons.sleep_stages_name, rems_det_param_dict['stage_sel'], label_stats, self.stage_stats_labels)
 
-            # ---------------------------------------------------------------------------------------------------------
-            # Compute the stats for total
-            # ---------------------------------------------------------------------------------------------------------
-            label_stats = 'total'
-            tot_stats = self.compute_tot_stats_per_stage(rems_cur_chan_sort, artifact_cur_chan_df, stage_in_cycle_df, \
-                commons.sleep_stages_name, rems_det_param_dict['stage_sel'], label_stats, self.stage_stats_labels)
+        # ---------------------------------------------------------------------------------------------------------
+        # Compute the stats for cycle
+        # ---------------------------------------------------------------------------------------------------------
+        label_stats = 'cyc'
+        cyc_stats = self.compute_cyc_stats_per_stage(rems_cur_chan_sort, artifact_cur_chan_df, stage_in_cycle_df, sleep_cycles_df,\
+            commons.sleep_stages_name, rems_det_param_dict['stage_sel'], label_stats, self.stage_stats_labels)
 
-            # ---------------------------------------------------------------------------------------------------------
-            # Compute the stats for cycle
-            # ---------------------------------------------------------------------------------------------------------
-            label_stats = 'cyc'
-            cyc_stats = self.compute_cyc_stats_per_stage(rems_cur_chan_sort, artifact_cur_chan_df, stage_in_cycle_df, sleep_cycles_df,\
-                commons.sleep_stages_name, rems_det_param_dict['stage_sel'], label_stats, self.stage_stats_labels)
+        # ---------------------------------------------------------------------------------------------------------
+        # Compute the stats for clock_h
+        # ---------------------------------------------------------------------------------------------------------
+        label_stats = 'clock_h'
+        clock_h_stats = self.compute_clock_h_stats_per_stage(rems_cur_chan_sort, artifact_cur_chan_df, stage_in_cycle_df,\
+            commons.sleep_stages_name, rems_det_param_dict['stage_sel'], label_stats, self.stage_stats_labels)
 
-            # ---------------------------------------------------------------------------------------------------------
-            # Compute the stats for clock_h
-            # ---------------------------------------------------------------------------------------------------------
-            label_stats = 'clock_h'
-            clock_h_stats = self.compute_clock_h_stats_per_stage(rems_cur_chan_sort, artifact_cur_chan_df, stage_in_cycle_df,\
-                commons.sleep_stages_name, rems_det_param_dict['stage_sel'], label_stats, self.stage_stats_labels)
+        # ---------------------------------------------------------------------------------------------------------
+        # Compute the stats for stage_h
+        # ---------------------------------------------------------------------------------------------------------
+        label_stats = 'stage_h'
+        stage_h_stats = self.compute_stage_h_stats_per_stage(rems_cur_chan_sort, artifact_cur_chan_df, stage_in_cycle_df,\
+            commons.sleep_stages_name, rems_det_param_dict['stage_sel'], label_stats, self.stage_stats_labels)
 
-            # ---------------------------------------------------------------------------------------------------------
-            # Compute the stats for stage_h
-            # ---------------------------------------------------------------------------------------------------------
-            label_stats = 'stage_h'
-            stage_h_stats = self.compute_stage_h_stats_per_stage(rems_cur_chan_sort, artifact_cur_chan_df, stage_in_cycle_df,\
-                commons.sleep_stages_name, rems_det_param_dict['stage_sel'], label_stats, self.stage_stats_labels)
+        # Organize data to write the cohort rems report
+        # Construction of the pandas dataframe that will be used to create the TSV file
+        # There is a new line for each channel and mini band
+        cur_chan_dict = cur_chan_general_dict | tot_stats | cyc_stats | clock_h_stats | stage_h_stats
+        cur_chan_df = pd.DataFrame.from_records([cur_chan_dict])
 
-            # Organize data to write the cohort rems report
-            # Construction of the pandas dataframe that will be used to create the TSV file
-            # There is a new line for each channel and mini band
-            cur_chan_dict = cur_chan_general_dict | tot_stats | cyc_stats | clock_h_stats | stage_h_stats
-            cur_chan_df = pd.DataFrame.from_records([cur_chan_dict])
-
-            # --------------------------------------------------------------------------
-            # Organize data to Write the file
-            # --------------------------------------------------------------------------
-            if len(cohort_characteristics_df):
-                cohort_characteristics_df = pd.concat([cohort_characteristics_df, cur_chan_df])
+        # --------------------------------------------------------------------------
+        # Organize data to Write the file
+        # --------------------------------------------------------------------------
+        if len(cohort_characteristics_df):
+            cohort_characteristics_df = pd.concat([cohort_characteristics_df, cur_chan_df])
+        else:
+            cohort_characteristics_df = cur_chan_df
+        # Organize data to write the rems characteristics
+        if export_rems:
+            if len(rems_characteristics_df)==0:
+                rems_characteristics_df = rems_cur_chan_sort
             else:
-                cohort_characteristics_df = cur_chan_df
-            # Organize data to write the rems characteristics
-            if export_rems:
-                if len(rems_characteristics_df)==0:
-                    rems_characteristics_df = rems_cur_chan_sort
-                else:
-                    rems_characteristics_df = pd.concat([rems_characteristics_df, rems_cur_chan_sort],ignore_index=True)
+                rems_characteristics_df = pd.concat([rems_characteristics_df, rems_cur_chan_sort],ignore_index=True)
 
         #----------------------------------------------------------------------------
         # REMs characteristics TSV file
@@ -486,6 +472,7 @@ class REMsDetails(SciNode):
         stage_in_cycle_df, sleep_stages_name, stage_sel, label_stats, stage_stats_labels):
         # Compute valid duration (min)
         #   Return a dict as valid_dur[f'{label_stats}_valid_min_{stage}']
+        # artifact_cur_chan_df is kept for future use but currently not used
         valid_dur = EventsDetails.compute_valid_dur_min(artifact_cur_chan_df, \
             stage_in_cycle_df, sleep_stages_name, stage_sel, label_stats, stage_stats_labels)
 
@@ -618,6 +605,7 @@ class REMsDetails(SciNode):
 
             # Compute valid duration (min)
             #   For each sleep stage included in stage_sel_df, compute the duration without artifact (valid_min).
+            # artifact_cur_chan_df is kept for future use but currently not used
             valid_dur_cur = EventsDetails.compute_valid_dur_min(artifact_cur_chan_df, stage_sel_df, \
                 commons.sleep_stages_name, stage_sel, cycle_label, self.stage_stats_labels)
             # Accumulate for each cycle
@@ -702,7 +690,7 @@ class REMsDetails(SciNode):
             rems_cur_chan_sort : pandas DataFrame
                 REMs events including the characteristics
             artifact_cur_chan_df : pandas DataFrame
-                List of artifacts events
+                List of artifacts events (kept for future use, currently not used)
             stage_in_cycle_df   : pandas DataFrame
                 List of sleep stages included in the cycles.
             sleep_stages_name : dict
@@ -761,6 +749,7 @@ class REMsDetails(SciNode):
 
             # Compute valid duration (min) for this hour
             # For each sleep stage included in stage_sel_df, compute the duration without artifact (valid_min).
+            # artifact_cur_chan_df is kept for future use but currently not used
             if len(stage_sel_df) > 0:
                 valid_dur_stats_cur = EventsDetails.compute_valid_dur_min(artifact_cur_chan_df, stage_sel_df, \
                     sleep_stages_name, stage_sel, hour_label, stage_stats_labels)
@@ -797,7 +786,7 @@ class REMsDetails(SciNode):
             rems_cur_chan_sort : pandas DataFrame
                 REMs events including the characteristics
             artifact_cur_chan_df : pandas DataFrame
-                List of artifacts events
+                List of artifacts events (kept for future use, currently not used)
             stage_in_cycle_df   : pandas DataFrame
                 List of sleep stages included in the cycles.
             sleep_stages_name : dict
@@ -901,6 +890,7 @@ class REMsDetails(SciNode):
                     rems_sel_df = pd.DataFrame()
                 
                 # Compute valid duration and rems statistics for this stage and hour
+                # artifact_cur_chan_df is kept for future use but currently not used
                 if len(stage_sel_df) > 0:
                     valid_dur_stats_cur = EventsDetails.compute_stage_duration_for_single_stage(stage_sel_df, \
                         artifact_cur_chan_df, stage_label, hour_label, stage_sel)

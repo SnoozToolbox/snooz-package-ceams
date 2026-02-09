@@ -23,6 +23,11 @@
                             "name": "Algorithm's Detatils",
                             "description": "Explain more details of the YASA algorithm.",
                             "custom_step_name": "AlgorithmDetail"
+                        },
+                        {
+                            "name": "Sleep Cycles",
+                            "description": "Explain the sleep cycles method used.",
+                            "module_id": "28a30efa-8c2a-40bc-a6e4-0533e8d2322e"
                         }
                     ]
                 }
@@ -37,7 +42,17 @@
                 "name": "Detector Step",
                 "description": "Get all variables that can vary for the detector",
                 "custom_step_name": "DetectorStep",
-                "show_index": true
+                "show_index": true,
+                "configs": {
+                    "label": "Optional settings:",
+                    "list": [
+                        {
+                            "name": "Hours and Cycles",
+                            "description": "Define the maximum number of hours and cycles to report.",
+                            "custom_step_name": "HoursCyclesStep"
+                        }
+                    ]
+                }
             }
         ]
     },
@@ -70,7 +85,7 @@
                     },
                     "parameters": {
                         "name": "parameters",
-                        "value": "{'defined_option': 'Minimum Criteria', 'Include_SOREMP' : '1', 'Include_last_incompl' : '1', 'Include_all_incompl' : '1', 'dur_ends_REMP' : '15', 'NREM_min_len_first': '0', 'NREM_min_len_mid_last': '0', 'NREM_min_len_val_last': '0', 'REM_min_len_first': '0', 'REM_min_len_mid': '0', 'REM_min_len_last': '0', 'mv_end_REMP': '0', 'sleep_stages': 'N1, N2, N3, R', 'details': '<p>Adjust options based on minimum criteria.<br />These criteria are generally used in the clinic.</p>'}",
+                        "value": "{'defined_option': 'Aeschbach 1993', 'Include_SOREMP': '1', 'Include_last_incompl': '1', 'Include_all_incompl': '1', 'dur_ends_REMP': '15', 'NREM_min_len_first': '15.0', 'NREM_min_len_mid_last': '15.0', 'NREM_min_len_val_last': '5.0', 'REM_min_len_first': '0.5', 'REM_min_len_mid': '5', 'REM_min_len_last': '0.5', 'mv_end_REMP': '1', 'sleep_stages': 'N2, N3, N4, R', 'details': '<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\\n<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset=\"utf-8\" /><style type=\"text/css\">\\np, li { white-space: pre-wrap; }\\nhr { height: 1px; border-width: 0; }\\nli.unchecked::marker { content: \"\\\\2610\"; }\\nli.checked::marker { content: \"\\\\2612\"; }\\n</style></head><body style=\" font-family:\\'Roboto\\'; font-size:12pt; font-weight:400; font-style:normal;\">\\n<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Adjust options based on [1].</p>\\n<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">\\xa0</p>\\n<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">NREM-REMS cycles were defined [...] by the succession of a NREMS episode of at least 15 min duration and a REMS episode of at least 5 min duration. No minimal duration of the REMS episode was required for the completion of the first and last cycle. NREMS episodes were defined as the time interval between the first occurrence of stage 2 and the first occurrence of REMS within a cycle. Consequently REMS episodes were defined as the time intervals between two consecutive NREMS episodes or the time interval between the last NREMS episode and the final awakening. Thus occasional stage 1 epochs between REMS and stage 2 were included in the REMS episode. The reasons for selecting this criterion were the similarity of the EEG in REMS and stage 1, the better delimitation of cycle onset by using stage 2 instead of stage 1, and the fact that the initiation of cycle 1 with stage 2 corresponds to a frequently used criterion of sleep onset.</p>\\n<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">\\xa0</p>\\n<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">[1] Aeschbach D, Borbely AA. All-night dynamics of the human sleep EEG. J Sleep Res. 1993 Jun; 2(2):70-81.<span style=\" color:#00ccff;\"> </span><a href=\"https://doi.org/10.1111/j.1365-2869.1993.tb00065.x\"><span style=\" text-decoration: underline; color:#00ccff;\">https://doi.org/10.1111/j.1365-2869.1993.tb00065.x</span></a></p></body></html>'}",
                         "sub_plugs": {},
                         "connections": {}
                     },
@@ -393,7 +408,7 @@
                         "value": "",
                         "sub_plugs": {},
                         "connections": {
-                            "4824f13b-4ff2-4165-81e1-ace7dee62b5e": "detectiondataframe"
+                            "559de2e5-dc78-4449-8582-cc9f3fdd9697": "events_details"
                         }
                     },
                     "artifact_events": {
@@ -420,13 +435,16 @@
                     },
                     "rems_det_param": {
                         "name": "rems_det_param",
-                        "value": "",
+                        "value": "{'stage_sel': '5', 'rems_event_name': 'YASA_REM'}",
                         "sub_plugs": {},
                         "connections": {}
                     },
                     "report_constants": {
                         "name": "report_constants",
-                        "value": {},
+                        "value": {
+                            "N_HOURS": 9,
+                            "N_CYCLES": 6
+                        },
                         "sub_plugs": {},
                         "connections": {}
                     },
@@ -438,7 +456,7 @@
                     },
                     "export_rems": {
                         "name": "export_rems",
-                        "value": false,
+                        "value": true,
                         "sub_plugs": {},
                         "connections": {}
                     }
@@ -485,7 +503,7 @@
                         "value": "",
                         "sub_plugs": {},
                         "connections": {
-                            "4824f13b-4ff2-4165-81e1-ace7dee62b5e": [
+                            "559de2e5-dc78-4449-8582-cc9f3fdd9697": [
                                 "freq_rem"
                             ]
                         }
@@ -531,7 +549,7 @@
                         "value": "",
                         "sub_plugs": {},
                         "connections": {
-                            "4824f13b-4ff2-4165-81e1-ace7dee62b5e": [
+                            "559de2e5-dc78-4449-8582-cc9f3fdd9697": [
                                 "duration"
                             ]
                         }
@@ -577,7 +595,7 @@
                         "value": "",
                         "sub_plugs": {},
                         "connections": {
-                            "4824f13b-4ff2-4165-81e1-ace7dee62b5e": [
+                            "559de2e5-dc78-4449-8582-cc9f3fdd9697": [
                                 "amplitude"
                             ]
                         }
@@ -590,129 +608,6 @@
                 },
                 "pos_x": 178.0,
                 "pos_y": 248.0
-            },
-            {
-                "cls": "REMsDetectionYasa",
-                "name": "REMsDetectionYasa",
-                "metadata": {},
-                "file_location": null,
-                "module": "CEAMSModules.REMsDetectionYasa",
-                "module_label": "REMs Detection Yasa",
-                "module_category": "Detectors",
-                "module_author": "",
-                "module_url": "",
-                "module_description": "",
-                "module_options": {},
-                "inputs": {
-                    "filename": {
-                        "name": "filename",
-                        "value": "",
-                        "sub_plugs": {},
-                        "connections": {
-                            "c3e6adf4-0698-4655-b2a5-e0cf102bf224": "filename"
-                        }
-                    },
-                    "signals": {
-                        "name": "signals",
-                        "value": "",
-                        "sub_plugs": {},
-                        "connections": {
-                            "cc1d509c-bb2c-421d-946b-96b3f27c00f0": "signals_from_events"
-                        }
-                    },
-                    "events": {
-                        "name": "events",
-                        "value": "",
-                        "sub_plugs": {},
-                        "connections": {
-                            "c3e6adf4-0698-4655-b2a5-e0cf102bf224": "events"
-                        }
-                    },
-                    "sleepstages": {
-                        "name": "sleepstages",
-                        "value": "",
-                        "sub_plugs": {},
-                        "connections": {
-                            "6c110fd6-a8d7-4c8a-abd8-c8a02763049b": "sleep_stage_events"
-                        }
-                    },
-                    "amplitude": {
-                        "name": "amplitude",
-                        "value": "",
-                        "sub_plugs": {},
-                        "connections": {
-                            "e00964ea-3df6-4aaa-8403-e2b75137a539": "Tuple"
-                        }
-                    },
-                    "duration": {
-                        "name": "duration",
-                        "value": "",
-                        "sub_plugs": {},
-                        "connections": {
-                            "a064ba35-38d6-4d11-a54c-9758044fb9bf": "Tuple"
-                        }
-                    },
-                    "freq_rem": {
-                        "name": "freq_rem",
-                        "value": "",
-                        "sub_plugs": {},
-                        "connections": {
-                            "be8b0065-d6f1-4dea-82ee-eda181f655ab": "Tuple"
-                        }
-                    },
-                    "relative_prominence": {
-                        "name": "relative_prominence",
-                        "value": 0.8,
-                        "sub_plugs": {},
-                        "connections": {}
-                    },
-                    "remove_outliers": {
-                        "name": "remove_outliers",
-                        "value": true,
-                        "sub_plugs": {},
-                        "connections": {}
-                    },
-                    "rems_event_name": {
-                        "name": "rems_event_name",
-                        "value": "YASA_REM",
-                        "sub_plugs": {},
-                        "connections": {}
-                    },
-                    "rems_event_group": {
-                        "name": "rems_event_group",
-                        "value": "REM",
-                        "sub_plugs": {},
-                        "connections": {}
-                    },
-                    "include": {
-                        "name": "include",
-                        "value": "5",
-                        "sub_plugs": {},
-                        "connections": {}
-                    }
-                },
-                "outputs": {
-                    "detectiondataframe": {
-                        "name": "detectiondataframe",
-                        "value": "",
-                        "sub_plugs": {},
-                        "connections": {
-                            "c7301dad-f4f2-4851-9845-b16e47dbfbf2": [
-                                "new_events"
-                            ],
-                            "d1489e58-7c3d-490e-9c36-f830c8dc596e": [
-                                "rems_events_details"
-                            ]
-                        }
-                    }
-                },
-                "identifier": "4824f13b-4ff2-4165-81e1-ace7dee62b5e",
-                "activation_state": "activated",
-                "package": {
-                    "package_name": "CEAMSModules"
-                },
-                "pos_x": 387.6250000000002,
-                "pos_y": -85.62500000000003
             },
             {
                 "cls": "SleepStageEvents",
@@ -780,7 +675,7 @@
                         "value": "",
                         "sub_plugs": {},
                         "connections": {
-                            "4824f13b-4ff2-4165-81e1-ace7dee62b5e": [
+                            "559de2e5-dc78-4449-8582-cc9f3fdd9697": [
                                 "sleepstages"
                             ]
                         }
@@ -836,15 +731,15 @@
                         "value": "",
                         "sub_plugs": {},
                         "connections": {
-                            "4824f13b-4ff2-4165-81e1-ace7dee62b5e": [
-                                "filename"
-                            ],
                             "c7301dad-f4f2-4851-9845-b16e47dbfbf2": [
                                 "input_filename",
                                 "output_filename"
                             ],
                             "7679188c-60e1-4d6e-aeed-349fb2ab128e": [
                                 "constant"
+                            ],
+                            "559de2e5-dc78-4449-8582-cc9f3fdd9697": [
+                                "filename"
                             ]
                         }
                     },
@@ -866,7 +761,7 @@
                         "value": "",
                         "sub_plugs": {},
                         "connections": {
-                            "4824f13b-4ff2-4165-81e1-ace7dee62b5e": [
+                            "559de2e5-dc78-4449-8582-cc9f3fdd9697": [
                                 "events"
                             ]
                         }
@@ -1002,10 +897,10 @@
                         "value": "",
                         "sub_plugs": {},
                         "connections": {
-                            "4824f13b-4ff2-4165-81e1-ace7dee62b5e": [
+                            "d1489e58-7c3d-490e-9c36-f830c8dc596e": [
                                 "signals"
                             ],
-                            "d1489e58-7c3d-490e-9c36-f830c8dc596e": [
+                            "559de2e5-dc78-4449-8582-cc9f3fdd9697": [
                                 "signals"
                             ]
                         }
@@ -1145,7 +1040,7 @@
                         "value": "",
                         "sub_plugs": {},
                         "connections": {
-                            "4824f13b-4ff2-4165-81e1-ace7dee62b5e": "detectiondataframe"
+                            "559de2e5-dc78-4449-8582-cc9f3fdd9697": "events"
                         }
                     },
                     "events_to_remove": {
@@ -1174,8 +1069,138 @@
                 "package": {
                     "package_name": "CEAMSModules"
                 },
-                "pos_x": 622.8125000000001,
-                "pos_y": 238.7500000000001
+                "pos_x": 724.8125,
+                "pos_y": 288.7500000000001
+            },
+            {
+                "cls": "REMsDetectionYasa",
+                "name": "REMsDetectionYasa",
+                "metadata": {},
+                "file_location": null,
+                "module": "CEAMSModules.REMsDetectionYasa",
+                "module_label": "REMs Detection Yasa",
+                "module_category": "Detectors",
+                "module_author": "",
+                "module_url": "",
+                "module_description": "",
+                "module_options": {},
+                "inputs": {
+                    "filename": {
+                        "name": "filename",
+                        "value": "",
+                        "sub_plugs": {},
+                        "connections": {
+                            "c3e6adf4-0698-4655-b2a5-e0cf102bf224": "filename"
+                        }
+                    },
+                    "signals": {
+                        "name": "signals",
+                        "value": "",
+                        "sub_plugs": {},
+                        "connections": {
+                            "cc1d509c-bb2c-421d-946b-96b3f27c00f0": "signals_from_events"
+                        }
+                    },
+                    "events": {
+                        "name": "events",
+                        "value": "",
+                        "sub_plugs": {},
+                        "connections": {
+                            "c3e6adf4-0698-4655-b2a5-e0cf102bf224": "events"
+                        }
+                    },
+                    "sleepstages": {
+                        "name": "sleepstages",
+                        "value": "",
+                        "sub_plugs": {},
+                        "connections": {
+                            "6c110fd6-a8d7-4c8a-abd8-c8a02763049b": "sleep_stage_events"
+                        }
+                    },
+                    "amplitude": {
+                        "name": "amplitude",
+                        "value": "",
+                        "sub_plugs": {},
+                        "connections": {
+                            "e00964ea-3df6-4aaa-8403-e2b75137a539": "Tuple"
+                        }
+                    },
+                    "duration": {
+                        "name": "duration",
+                        "value": "",
+                        "sub_plugs": {},
+                        "connections": {
+                            "a064ba35-38d6-4d11-a54c-9758044fb9bf": "Tuple"
+                        }
+                    },
+                    "freq_rem": {
+                        "name": "freq_rem",
+                        "value": "",
+                        "sub_plugs": {},
+                        "connections": {
+                            "be8b0065-d6f1-4dea-82ee-eda181f655ab": "Tuple"
+                        }
+                    },
+                    "relative_prominence": {
+                        "name": "relative_prominence",
+                        "value": 0.8,
+                        "sub_plugs": {},
+                        "connections": {}
+                    },
+                    "remove_outliers": {
+                        "name": "remove_outliers",
+                        "value": true,
+                        "sub_plugs": {},
+                        "connections": {}
+                    },
+                    "rems_event_name": {
+                        "name": "rems_event_name",
+                        "value": "YASA_REM",
+                        "sub_plugs": {},
+                        "connections": {}
+                    },
+                    "rems_event_group": {
+                        "name": "rems_event_group",
+                        "value": "REM",
+                        "sub_plugs": {},
+                        "connections": {}
+                    },
+                    "include": {
+                        "name": "include",
+                        "value": "5",
+                        "sub_plugs": {},
+                        "connections": {}
+                    }
+                },
+                "outputs": {
+                    "events": {
+                        "name": "events",
+                        "value": "",
+                        "sub_plugs": {},
+                        "connections": {
+                            "c7301dad-f4f2-4851-9845-b16e47dbfbf2": [
+                                "new_events"
+                            ]
+                        }
+                    },
+                    "events_details": {
+                        "name": "events_details",
+                        "value": "",
+                        "sub_plugs": {},
+                        "connections": {
+                            "d1489e58-7c3d-490e-9c36-f830c8dc596e": [
+                                "rems_events_details"
+                            ]
+                        }
+                    }
+                },
+                "identifier": "559de2e5-dc78-4449-8582-cc9f3fdd9697",
+                "activation_state": "activated",
+                "package": {
+                    "package_name": "CEAMSModules"
+                },
+                "pos_x": 447.9999999999998,
+                "pos_y": -10.999999999999886
             }
         ]
     }

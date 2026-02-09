@@ -10,6 +10,7 @@ from PySide6.QtCore import *
 
 from commons.BaseStepView import BaseStepView
 from flowpipe.ActivationState import ActivationState
+from widgets.WarningDialog import WarningDialog
 
 
 from CEAMSTools.DetectREMsYASA.DetectorStep.Ui_DetectorStep import Ui_DetectorStep
@@ -62,23 +63,19 @@ class DetectorStep(BaseStepView, Ui_DetectorStep, QtWidgets.QWidget):
         #self._context_manager["context_OutputFiles"] = {"the_data_I_want_to_share":"some_data"}
 
         # description.json file to know the ID of the node
-        node_id_REMsDetectionYASA = "4824f13b-4ff2-4165-81e1-ace7dee62b5e"
+        node_id_REMsDetectionYASA = "559de2e5-dc78-4449-8582-cc9f3fdd9697"
         self._relative_prominence_topic = f'{node_id_REMsDetectionYASA}.relative_prominence'
         self._pub_sub_manager.subscribe(self, self._relative_prominence_topic)
 
-        node_id_REMsDetectionYASA = "4824f13b-4ff2-4165-81e1-ace7dee62b5e"
         self._remove_outliers_topic = f'{node_id_REMsDetectionYASA}.remove_outliers'
         self._pub_sub_manager.subscribe(self, self._remove_outliers_topic)
 
-        node_id_REMsDetectionYASA = "4824f13b-4ff2-4165-81e1-ace7dee62b5e"
         self._rems_event_name_topic = f'{node_id_REMsDetectionYASA}.rems_event_name'
         self._pub_sub_manager.subscribe(self, self._rems_event_name_topic)
 
-        node_id_REMsDetectionYASA = "4824f13b-4ff2-4165-81e1-ace7dee62b5e"
         self._rems_event_group_topic = f'{node_id_REMsDetectionYASA}.rems_event_group'
         self._pub_sub_manager.subscribe(self, self._rems_event_group_topic)
 
-        node_id_REMsDetectionYASA = "4824f13b-4ff2-4165-81e1-ace7dee62b5e"
         self._include_topic = f'{node_id_REMsDetectionYASA}.include'
         self._pub_sub_manager.subscribe(self, self._include_topic)
 
@@ -106,6 +103,11 @@ class DetectorStep(BaseStepView, Ui_DetectorStep, QtWidgets.QWidget):
         self._FreqIdx1 = f'{node_id_FreqTuple}.Idx1'
         self._pub_sub_manager.subscribe(self, self._FreqIdx1)
 
+        self._node_id_REMsDetails = "d1489e58-7c3d-490e-9c36-f830c8dc596e"
+        self._det_param_topic = f'{self._node_id_REMsDetails}.rems_det_param'
+        self._pub_sub_manager.subscribe(self, self._det_param_topic)
+        self._cohort_file_topic = f'{self._node_id_REMsDetails}.cohort_filename'
+        self._pub_sub_manager.subscribe(self, self._cohort_file_topic)
 
     def on_checkBox_2_changed(self):
         """Handle the state change of checkBox_2"""
@@ -167,9 +169,8 @@ class DetectorStep(BaseStepView, Ui_DetectorStep, QtWidgets.QWidget):
             self.doubleSpinBox.setValue(message)
         if topic == self._FreqIdx1:
             self.doubleSpinBox_3.setValue(message)
-        
-                
-    
+        if topic == self._cohort_file_topic:
+            self.lineEdit_CohortFilename.setText(message)
 
     def on_apply_settings(self):
         self._pub_sub_manager.publish(self, self._relative_prominence_topic, self.doubleSpinBox_2.value())
@@ -183,7 +184,20 @@ class DetectorStep(BaseStepView, Ui_DetectorStep, QtWidgets.QWidget):
         self._pub_sub_manager.publish(self, self._DurIdx1_topic, self.doubleSpinBox_5.value())
         self._pub_sub_manager.publish(self, self._FreqIdx0, self.doubleSpinBox.value())
         self._pub_sub_manager.publish(self, self._FreqIdx1, self.doubleSpinBox_3.value())
+        self._pub_sub_manager.publish(self, self._cohort_file_topic, self.lineEdit_CohortFilename.text())
         
+        # Build the dictionary of section selection to run detector and the detector parameters
+        if len(self.lineEdit_3.text()) > 1:
+            stage_sel = self.lineEdit_3.text().strip('[]')
+        elif len(self.lineEdit_3.text()) == 1:
+            stage_sel = str(self.lineEdit_3.text())
+        else:
+            stage_sel = ''
+        det_param = {}
+        det_param["stage_sel"] = stage_sel
+        det_param["rems_event_name"] = str(self.lineEdit_2.text())
+
+        self._pub_sub_manager.publish(self, self._det_param_topic, str(det_param))
     # Slot called when the user wants to write the filename
     def on_choose(self):
         pass
@@ -197,9 +211,23 @@ class DetectorStep(BaseStepView, Ui_DetectorStep, QtWidgets.QWidget):
         # If not, display an error message to the user and return False.
         # This is called just before the apply settings function.
         # Returning False will prevent the process from executing.
-        
+        if len(self.lineEdit_CohortFilename.text())==0:
+            WarningDialog("Define a file to write the detailed events report for the cohort. In step '3-Detector Step'")
+            return False
         return True
 
     # Called when the user delete an instance of the plugin
     def __del__(self):
         pass
+
+    # Called when the user press the browse button to define where to save the cohort report
+    def browse_cohort_slot(self):
+        # define the option to disable the warning dialog when overwriting an existing file
+        filename, _ = QtWidgets.QFileDialog.getSaveFileName(
+            None, 
+            'Save as TSV file', 
+            None, 
+            'TSV (*.tsv)',
+            options = QtWidgets.QFileDialog.DontConfirmOverwrite)
+        if filename != '':
+            self.lineEdit_CohortFilename.setText(filename)

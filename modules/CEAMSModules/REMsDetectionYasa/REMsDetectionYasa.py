@@ -63,7 +63,7 @@ class REMsDetectionYasa(SciNode):
     
     Returns
     -------
-        detectiondataframe: DataFrame
+        events_details: DataFrame
             A DataFrame containing detected REM events.
 
     Raises
@@ -93,7 +93,8 @@ class REMsDetectionYasa(SciNode):
         InputPlug('include', self)
         
         # Output plugs
-        OutputPlug('detectiondataframe', self)
+        OutputPlug('events', self)
+        OutputPlug('events_details', self)
 
         # Define master module behavior
         self._is_master = False 
@@ -105,7 +106,7 @@ class REMsDetectionYasa(SciNode):
 
         Returns
         -------
-            detectiondataframe: DataFrame
+            events_details: DataFrame
                 A DataFrame containing detected REM events.
         
         Raises
@@ -165,13 +166,18 @@ class REMsDetectionYasa(SciNode):
                 'channels': [f"{raw.ch_names[0]}, {raw.ch_names[1]}" for _ in range(len(rems_detection_df))]
             })
             snooz_rem.to_csv(f"{filename}_YASA_REMs_snooz.tsv", sep='\t', index=False)
-        
+            # Add group, name and channels to the rems_detection_df as well.
+            rems_detection_df['group'] = rems_event_group
+            rems_detection_df['name'] = rems_event_name
+            rems_detection_df['start_sec'] = snooz_rem['start_sec']
+            rems_detection_df['duration_sec'] = snooz_rem['duration_sec']
+            rems_detection_df['channels'] = snooz_rem['channels']
         except Exception as e:
             raise NodeRuntimeException(self.identifier, "REMs detection", f"Error during REM detection: {str(e)}")
 
         self._log_manager.log(self.identifier, "This module detects Rapid Eye Movements.")
 
-        return {'detectiondataframe': snooz_rem}
+        return {'events_details': rems_detection_df, 'events': snooz_rem}
     
     def prepare_raw_data(self, raw):
         """Prepare raw data for processing."""

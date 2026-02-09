@@ -53,7 +53,6 @@ def _get_doc(N_CYCLE, N_HOURS=0):
 
     channel_dict = \
     {            
-            'artefact_group_name' : 'List of groups and names of the artifact excluded from the detection',
             'chan_label' : 'The label of the channel.',
             'chan_fs' : 'The sampling rate (Hz) of the channel.'
     }
@@ -65,7 +64,7 @@ def _get_doc(N_CYCLE, N_HOURS=0):
             'sleep_period_min' : 'Total period for detection - Duration (min) of the sleep period.'
     }
 
-    # The valid duration can change across channels because of the artifact detection
+    # The valid duration represents the duration available for detection
     total_dict = \
     {  
             'total_N1_valid_min' : 'Valid (no artifact) period for detection - Valid duration (min) of the sleep period in N1 stage.',
