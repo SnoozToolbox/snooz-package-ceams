@@ -1,8 +1,7 @@
 """
 @ Valorisation Recherche HSCM, Societe en Commandite – 2025
 See the file LICENCE for full license details.
-"""
-"""
+
     Results viewer of the REMsDetails plugin
 """
 
@@ -12,7 +11,7 @@ from CEAMSModules.REMsDetails.Ui_REMsDetailsResultsView import Ui_REMsDetailsRes
 
 class REMsDetailsResultsView(Ui_REMsDetailsResultsView, QtWidgets.QWidget):
     """
-        REMsDetailsResultsView nothing to show.
+        REMsDetailsResultsView.
     """
     def __init__(self, parent_node, cache_manager, pub_sub_manager, *args, **kwargs):
         super(REMsDetailsResultsView, self).__init__(*args, **kwargs)
@@ -28,4 +27,3 @@ class REMsDetailsResultsView(Ui_REMsDetailsResultsView, QtWidgets.QWidget):
         # cache = self._cache_manager.read_mem_cache(self._parent_node.identifier)
         # print(cache)
         pass
-

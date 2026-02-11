@@ -54,7 +54,7 @@ class DetectorStep(BaseStepView, Ui_DetectorStep, QtWidgets.QWidget):
         # Connect checkBox_2 signal to handle frame enabling/disabling
         self.checkBox_2.setChecked(True)
         self.checkBox_2.stateChanged.connect(self.on_checkBox_2_changed)
-
+        self.pushButton_CohortFilename.clicked.connect(self.browse_cohort_slot)
 
         # If necessary, init the context. The context is a memory space shared by 
         # all steps of a tool. It is used to share and notice other steps whenever

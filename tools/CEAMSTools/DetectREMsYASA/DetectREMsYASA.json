@@ -17,7 +17,7 @@
                 "description": "",
                 "custom_step_name": "IntroStepYASA",
                 "configs": {
-                    "label": "More information:",
+                    "label": "More information and sleep cycles setting:",
                     "list": [
                         {
                             "name": "Algorithm's Detatils",
@@ -40,16 +40,21 @@
             },
             {
                 "name": "Detector Step",
-                "description": "Get all variables that can vary for the detector",
+                "description": "fix all variables that can vary for the detector",
                 "custom_step_name": "DetectorStep",
                 "show_index": true,
                 "configs": {
-                    "label": "Optional settings:",
+                    "label": "Optional settings and parameters definition:",
                     "list": [
                         {
                             "name": "Hours and Cycles",
                             "description": "Define the maximum number of hours and cycles to report.",
                             "custom_step_name": "HoursCyclesStep"
+                        },
+                        {
+                            "name": "Parameters Description",
+                            "description": "Definition of the parameters used in the detector.",
+                            "custom_step_name": "ParametersDescription"
                         }
                     ]
                 }

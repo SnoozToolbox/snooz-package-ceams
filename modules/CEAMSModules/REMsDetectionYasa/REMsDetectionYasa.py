@@ -155,7 +155,16 @@ class REMsDetectionYasa(SciNode):
 
             # Save results
             rems_detection_df = rem.summary().round(3)
-            rems_detection_df.to_csv(f"{filename}_YASA_REMs_summary.tsv", sep='\t')
+            if len(filename)>0:
+                subject_id = os.path.basename(filename)
+                # Extract folder of the file
+                folder_cohort = os.path.dirname(filename)
+                # Make directory specific for rems characteristics
+                folder_rems_char = os.path.join(folder_cohort, 'rems_characteristics')
+                if not os.path.isdir(folder_rems_char):
+                    os.makedirs(folder_rems_char)
+                rems_char_filename = os.path.join(folder_rems_char,subject_id)
+                rems_detection_df.to_csv(f"{rems_char_filename}_YASA_REMs_summary.tsv", sep='\t')
 
             # Convert results to Snooz format
             snooz_rem = pd.DataFrame({
@@ -165,7 +174,7 @@ class REMsDetectionYasa(SciNode):
                 'duration_sec': rems_detection_df['Duration'],
                 'channels': [f"{raw.ch_names[0]}, {raw.ch_names[1]}" for _ in range(len(rems_detection_df))]
             })
-            snooz_rem.to_csv(f"{filename}_YASA_REMs_snooz.tsv", sep='\t', index=False)
+            #snooz_rem.to_csv(f"{filename}_YASA_REMs_snooz.tsv", sep='\t', index=False) # We can save this if we needed it later on. Now something similar is exported.
             # Add group, name and channels to the rems_detection_df as well.
             rems_detection_df['group'] = rems_event_group
             rems_detection_df['name'] = rems_event_name
