@@ -622,17 +622,22 @@ class SpindlesDetails(SciNode):
         cycle_name_all = sleep_cycle_df['name'].to_numpy()
 
         ss_start_time = spindle_events['start_sec'].to_numpy()
+        ss_end_time = ss_start_time + spindle_events['duration_sec'].to_numpy()
         ss_stage = []
         ss_cycle = []
-        for start_time in ss_start_time:
+        for start_time, end_time in zip(ss_start_time, ss_end_time):
             # We select the stage where the spindle starts
             stage_sel_arr = (stage_start_all<=start_time) & (stage_end_all>start_time)
-            cycle_sel_arr = (cycle_start_all<=start_time) & (cycle_end_all>start_time)
-            if any(stage_sel_arr):
+            # If it does not start during a stage
+            if not any(stage_sel_arr):
+                # Check if the spindle overlaps with a stage (ex: start before the stage but end during the stage)
+                stage_sel_arr = (stage_start_all<end_time) & (stage_end_all>start_time)
+            if any(stage_sel_arr):  
                 cur_stage = stage_name_all[stage_sel_arr]
                 ss_stage.append(cur_stage[0])
             else:
                 ss_stage.append(np.nan)
+            cycle_sel_arr = (cycle_start_all<=start_time) & (cycle_end_all>start_time)
             if any(cycle_sel_arr):
                 cur_cycle = cycle_name_all[cycle_sel_arr]
                 ss_cycle.append(cur_cycle[0])

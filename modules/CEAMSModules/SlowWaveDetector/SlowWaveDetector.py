@@ -322,7 +322,8 @@ class SlowWaveDetector(SciNode):
                 continue                
 
             # Filter signal in the frequency range 0.16-4.0 Hz   
-            order_filtfilt = int(30)/2
+            #order_filtfilt = int(30)/2
+            order_filtfilt = int(120)/2 # To match Gaétan
             sos = sci.butter(int(order_filtfilt), fmin_max, btype="bandpass", output='sos', fs=fs)
             signal_filtre = sci.sosfiltfilt(sos, signal_model.samples)
 
@@ -346,8 +347,8 @@ class SlowWaveDetector(SciNode):
                     pkpk_amp_uV = (abs(max(segment) - min(segment)))
                     seg_val = [abs(segment[i]) for i in segment_neg]
                     neg_amp_uV = max(seg_val)
-                    neg_sec = (len(segment_neg) - 1) / fs 
-                    pos_sec = (len(segment_pos) - 1) / fs
+                    neg_sec = len(segment_neg) / fs 
+                    pos_sec = (len(segment_pos) + 1) / fs  # +1 for the excluded positive sample at n_zc[i]
 
                     # Compute transition frequency
                     index_u = np.argmin(segment)
