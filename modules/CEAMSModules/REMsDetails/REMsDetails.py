@@ -90,7 +90,8 @@ class REMsDetails(SciNode):
         InputPlug('export_rems',self)
         
         # Init module variables
-        self.stage_stats_labels = ['N1', 'N2', 'N3', 'N2N3', 'NREM', 'R']
+        # REMs only occur in REM sleep stage (R)
+        self.stage_stats_labels = ['R']
 
         # A master module allows the process to be reexcuted multiple time.
         self._is_master = False 
@@ -448,6 +449,7 @@ class REMsDetails(SciNode):
             
             # Find matching signal
             amplitude = np.nan
+            segmentDict = {}
             for signal in signals:
                 if signal.channel in channels:
                     # Extract signal segment for this REM event
@@ -458,11 +460,22 @@ class REMsDetails(SciNode):
                     
                     if start_sample >= 0 and end_sample <= len(signal.samples):
                         segment = signal.samples[start_sample:end_sample]
-                        if len(segment) > 0:
-                            # Calculate peak-to-peak amplitude
-                            amplitude = (np.max(segment) - np.min(segment)) * 1e6  # Convert to uV
-                            break
+                        segmentDict[signal.channel] = segment
             
+            # Calculate amplitude from LOG-ROG difference
+            LOG = None
+            ROG = None
+            for channel, segments in segmentDict.items():
+                if 'L' in channel:
+                    LOG = segments
+                else:
+                    ROG = segments
+            
+            if LOG is not None and ROG is not None and len(LOG) == len(ROG):
+                Subtracted_segment = LOG - ROG
+                if len(Subtracted_segment) > 0:
+                    # Calculate peak-to-peak amplitude
+                    amplitude = np.max(Subtracted_segment) - np.min(Subtracted_segment)
             amplitude_list.append(amplitude)
         
         rems_events_details['amplitude_uV'] = amplitude_list
@@ -476,69 +489,55 @@ class REMsDetails(SciNode):
         valid_dur = EventsDetails.compute_valid_dur_min(artifact_cur_chan_df, \
             stage_in_cycle_df, sleep_stages_name, stage_sel, label_stats, stage_stats_labels)
 
-        # Extract characteristics to average
-        rems_cur_chan_tot = rems_cur_chan_sort[self.rems_characteristics]
-        # Format the rems_cur_chan_stage dataframe values into float
-        rems_cur_chan_tot = rems_cur_chan_tot.applymap(float)        
-        mean_char_series = rems_cur_chan_tot.mean(axis=0, skipna=True, numeric_only=True)
-        mean_char_series = mean_char_series.round(decimals=2)
-        mean_char_tot = mean_char_series.to_dict()
-        # Rename keys
+        # Skip total calculations since REMs only occur in R stage
+        # Total values would be identical to R stage values, so we only keep R stage values
         mean_tot = {}
-        rems_count_tot = {f'{label_stats}_rems_count':len(rems_cur_chan_tot)}
-        for key, value in mean_char_tot.items():
-            if key=='duration_sec':
-                mean_tot[f'{label_stats}_rems_sec'] = value
-            else:
-                mean_tot[f'{label_stats}_{key}'] = value                
-        # Average characteristique per stage
+        rems_count_tot = {}                
+        # Average characteristique per stage (REMs only occur in R stage)
         mean_stage = {}
         rems_count_stage = {}
         rems_density_stage = {}
-        for stage in stage_stats_labels:
-            # Extract rems for the current stage
-            if len(sleep_stages_name[stage]) == 1:
-                rems_cur_chan_stage = rems_cur_chan_sort[rems_cur_chan_sort['stage']==int(sleep_stages_name[stage])]
-            else:
-                rems_cur_chan_stage = pd.DataFrame()
-                for stage_num in sleep_stages_name[stage]:
-                    rems_cur_chan_sub_stage = rems_cur_chan_sort[rems_cur_chan_sort['stage']==int(stage_num)]
-                    rems_cur_chan_stage = pd.concat([rems_cur_chan_stage, rems_cur_chan_sub_stage])
-            rems_cur_chan_stage = rems_cur_chan_stage[self.rems_characteristics]
-            # Format the rems_cur_chan_stage dataframe values into float
-            rems_cur_chan_stage = rems_cur_chan_stage.applymap(float)
-            # Compute the number of detection per stage
-            n_rems = len(rems_cur_chan_stage)
-            rems_count_stage[f'{label_stats}_{stage}_rems_count'] = n_rems
-            # Compute the density
-            if valid_dur[f'{label_stats}_{stage}_valid_min']>0:
-                rems_density_stage[f'{label_stats}_{stage}_rems_density'] = n_rems/valid_dur[f'{label_stats}_{stage}_valid_min']
-            else:
-                rems_density_stage[f'{label_stats}_{stage}_rems_density'] = np.nan
-            # Average the characteristiques for the current recording and stage
+        stage = 'R'  # REMs only occur in REM sleep
+        # Extract rems for the R stage
+        rems_cur_chan_stage = rems_cur_chan_sort[rems_cur_chan_sort['stage']==int(sleep_stages_name[stage])]
+        rems_cur_chan_stage = rems_cur_chan_stage[self.rems_characteristics]
+        # Format the rems_cur_chan_stage dataframe values into float
+        rems_cur_chan_stage = rems_cur_chan_stage.applymap(float)
+        # Compute the number of detection per stage
+        n_rems = len(rems_cur_chan_stage)
+        rems_count_stage[f'{label_stats}_{stage}_rems_count'] = n_rems
+        # Compute the density (per 30-second epoch)
+        # 1 minute = 2 epochs (30 seconds each)
+        if valid_dur[f'{label_stats}_{stage}_valid_min']>0:
+            rems_density_stage[f'{label_stats}_{stage}_rems_density'] = n_rems/(valid_dur[f'{label_stats}_{stage}_valid_min'] * 2)
+        else:
+            rems_density_stage[f'{label_stats}_{stage}_rems_density'] = np.nan
+        # Average the characteristiques for the current recording and stage
+        if n_rems==0:
+            for key in self.rems_characteristics:
+                if key=='duration_sec':
+                    mean_stage[f'{label_stats}_{stage}_rems_sec'] = np.NaN 
+                else:
+                    mean_stage[f'{label_stats}_{stage}_{key}'] = np.NaN      
+        else:
             mean_char_series = rems_cur_chan_stage.mean(axis=0, skipna=True, numeric_only=True)
             mean_char_series = mean_char_series.round(decimals=2)
             mean_char_stage = mean_char_series.to_dict()
-            # Rename keys of the dict with all the stats and all the stages
-            if n_rems==0:
-                for key in self.rems_characteristics:
-                    if key=='duration_sec':
-                        mean_stage[f'{label_stats}_{stage}_rems_sec'] = np.NaN 
-                    else:
-                        mean_stage[f'{label_stats}_{stage}_{key}'] = np.NaN      
-            else:
-                for key, value in mean_char_stage.items():
-                    if key=='duration_sec':
-                        mean_stage[f'{label_stats}_{stage}_rems_sec'] = value
-                    else:
-                        mean_stage[f'{label_stats}_{stage}_{key}'] = value              
-        # Compute total density
+            for key, value in mean_char_stage.items():
+                if key=='duration_sec':
+                    mean_stage[f'{label_stats}_{stage}_rems_sec'] = value
+                else:
+                    mean_stage[f'{label_stats}_{stage}_{key}'] = value              
+        # Skip total density and variance since they're identical to R stage values
         rems_density_tot = {}
-        if valid_dur[f'{label_stats}_valid_min']>0:
-            rems_density_tot[f'{label_stats}_rems_density'] = rems_count_tot[f'{label_stats}_rems_count']/valid_dur[f'{label_stats}_valid_min']
-        else:
-            rems_density_tot[f'{label_stats}_rems_density'] = np.nan
-        tot_stats =  valid_dur | rems_count_stage | mean_stage | rems_count_tot | mean_tot | rems_density_stage | rems_density_tot
+        rems_density_variance = {}
+        
+        # Filter out redundant total valid_min (same as R since REMs only occur in R)
+        # Remove keys like 'total_valid_min' but keep 'total_R_valid_min'
+        valid_dur_filtered = {k: v for k, v in valid_dur.items() 
+                             if not (k == f'{label_stats}_valid_min' and f'{label_stats}_R_valid_min' in valid_dur)}
+        
+        tot_stats =  valid_dur_filtered | rems_count_stage | mean_stage | rems_density_stage
         return tot_stats
 
 
@@ -565,11 +564,8 @@ class REMsDetails(SciNode):
 
         valid_dur= {}
         rec_dur = {}
-        rems_count_cyc = {}
-        mean_cyc = {}
         mean_stage = {}
         rems_count_stage = {}
-        rems_density_cyc = {}
         rems_density_stage = {}
         # For each sleep cycle
         for i_cycle in range(self.N_CYCLES):
@@ -610,74 +606,65 @@ class REMsDetails(SciNode):
                 commons.sleep_stages_name, stage_sel, cycle_label, self.stage_stats_labels)
             # Accumulate for each cycle
             valid_dur = valid_dur | valid_dur_cur
-            # Compute the number of detection per cycle
-            n_rems = len(rems_sel_to_mean)
-            rems_count_cyc[f'{cycle_label}_rems_count'] = n_rems
-            # Compute the density for the current cycle
-            if valid_dur_cur[f'{cycle_label}_valid_min']>0:
-                rems_density_cyc[f'{cycle_label}_rems_density'] = n_rems/valid_dur_cur[f'{cycle_label}_valid_min']
+            # Skip cycle-level totals since REMs only occur in R stage
+            # Cycle totals would be identical to R stage values within that cycle          
+
+            # Average characteristique per stage (REMs only occur in R stage)
+            stage = 'R'  # REMs only occur in REM sleep
+            # Extract rems for the R stage
+            rems_cur_chan_stage = rems_sel_df[rems_sel_df['stage']==int(sleep_stages_name[stage])]
+            rems_cur_to_mean = rems_cur_chan_stage[self.rems_characteristics]
+            # Format the rems_cur_chan_stage dataframe values into float
+            rems_cur_to_mean = rems_cur_to_mean.applymap(float)
+
+            # Compute the number of detection per stage
+            n_rems = len(rems_cur_chan_stage)
+            rems_count_stage[f'{cycle_label}_{stage}_rems_count'] = n_rems
+            # Compute the density (per 30-second epoch)
+            # 1 minute = 2 epochs (30 seconds each)
+            if valid_dur_cur[f'{cycle_label}_{stage}_valid_min']>0:
+                rems_density_stage[f'{cycle_label}_{stage}_rems_density'] = n_rems/(valid_dur_cur[f'{cycle_label}_{stage}_valid_min'] * 2)
             else:
-                rems_density_cyc[f'{cycle_label}_rems_density'] = np.nan
-            # Average characteristique for the current cycle
-            mean_char_series = rems_sel_to_mean.mean(axis=0, skipna=True, numeric_only=True)
-            mean_char_series = mean_char_series.round(decimals=2)
-            mean_char_tot = mean_char_series.to_dict()
+                rems_density_stage[f'{cycle_label}_{stage}_rems_density'] = np.nan
+
+            # Average the characteristiques for the current recording and stage
             if n_rems==0:
                 for key in self.rems_characteristics:
                     if key=='duration_sec':
-                        mean_cyc[f'{cycle_label}_rems_sec'] = np.NaN 
+                        mean_stage[f'{cycle_label}_{stage}_rems_sec'] = np.NaN
                     else:
-                        mean_cyc[f'{cycle_label}_{key}'] = np.NaN          
+                        mean_stage[f'{cycle_label}_{stage}_{key}'] = np.NaN                        
             else:
-                for key, value in mean_char_tot.items():
-                    if key=='duration_sec':
-                        mean_cyc[f'{cycle_label}_rems_sec'] = value
-                    else:
-                        mean_cyc[f'{cycle_label}_{key}'] = value          
-
-            # Average characteristique per stage
-            for stage in stage_stats_labels:
-                # Extract rems for the current stage
-                if len(sleep_stages_name[stage]) == 1:
-                    rems_cur_chan_stage = rems_sel_df[rems_sel_df['stage']==int(sleep_stages_name[stage])]
-                else:
-                    rems_cur_chan_stage = pd.DataFrame()
-                    for stage_num in sleep_stages_name[stage]:
-                        rems_cur_chan_sub_stage = rems_sel_df[rems_sel_df['stage']==int(stage_num)]
-                        rems_cur_chan_stage = pd.concat([rems_cur_chan_stage, rems_cur_chan_sub_stage])
-
-                rems_cur_to_mean = rems_cur_chan_stage[self.rems_characteristics]
-                # Format the rems_cur_chan_stage dataframe values into float
-                rems_cur_to_mean = rems_cur_to_mean.applymap(float)
-
-                # Compute the number of detection per stage
-                n_rems = len(rems_cur_chan_stage)
-                rems_count_stage[f'{cycle_label}_{stage}_rems_count'] = n_rems
-                # Compute the density
-                if valid_dur_cur[f'{cycle_label}_{stage}_valid_min']>0:
-                    rems_density_stage[f'{cycle_label}_{stage}_rems_density'] = n_rems/valid_dur_cur[f'{cycle_label}_{stage}_valid_min']
-                else:
-                    rems_density_stage[f'{cycle_label}_{stage}_rems_density'] = np.nan
-
-                # Average the characteristiques for the current recording and stage
                 mean_char_series = rems_cur_to_mean.mean(axis=0, skipna=True, numeric_only=True)
                 mean_char_series = mean_char_series.round(decimals=2)
                 mean_char_stage = mean_char_series.to_dict()
-                # Rename keys of the dict with all the stats and all the stages
-                if n_rems==0:
-                    for key in self.rems_characteristics:
-                        if key=='duration_sec':
-                            mean_stage[f'{cycle_label}_{stage}_rems_sec'] = np.NaN
-                        else:
-                            mean_stage[f'{cycle_label}_{stage}_{key}'] = np.NaN                        
-                else:
-                    for key, value in mean_char_stage.items():
-                        if key=='duration_sec':
-                            mean_stage[f'{cycle_label}_{stage}_rems_sec'] = value
-                        else:
-                            mean_stage[f'{cycle_label}_{stage}_{key}'] = value
+                for key, value in mean_char_stage.items():
+                    if key=='duration_sec':
+                        mean_stage[f'{cycle_label}_{stage}_rems_sec'] = value
+                    else:
+                        mean_stage[f'{cycle_label}_{stage}_{key}'] = value
 
-            cyc_stats =  valid_dur | rec_dur | rems_count_stage | mean_stage | rems_count_cyc | mean_cyc | rems_density_stage | rems_density_cyc
+            # Calculate variance of densities across cycles using R stage densities
+            density_values = [rems_density_stage.get(f'cyc{i+1}_R_rems_density', np.nan) 
+                            for i in range(self.N_CYCLES)]
+            density_values = [d for d in density_values if not np.isnan(d)]
+            if len(density_values) > 1:
+                rems_density_variance = {'rems_density_var': np.var(density_values, ddof=1)}
+            else:
+                rems_density_variance = {'rems_density_var': np.nan}
+            
+            # Filter out redundant cycle-level valid_min (same as R since REMs only occur in R)
+            # Remove keys like 'cyc1_valid_min' but keep 'cyc1_R_valid_min'
+            valid_dur_filtered = {}
+            for k, v in valid_dur.items():
+                if k.startswith('cyc') and k.endswith('_valid_min') and not k.endswith('_R_valid_min'):
+                    # Check if corresponding R version exists
+                    cycle_num = k.split('_')[0]  # e.g., 'cyc1'
+                    if f'{cycle_num}_R_valid_min' in valid_dur:
+                        continue  # Skip this redundant entry
+                valid_dur_filtered[k] = v
+            
+            cyc_stats =  valid_dur_filtered | rec_dur | rems_count_stage | mean_stage | rems_density_stage | rems_density_variance
         return cyc_stats
 
     def compute_clock_h_stats_per_stage(self, rems_cur_chan_sort, artifact_cur_chan_df, stage_in_cycle_df, \
@@ -759,22 +746,37 @@ class REMsDetails(SciNode):
                 rems_stats_cur = self.compute_rems_stats_per_stage(valid_dur_stats_cur, rems_sel_df, stage_sel, hour_label, stage_stats_labels)
                 hour_rems_stats = hour_rems_stats | rems_stats_cur
             else:
-                # No stages in this hour - set all values to NaN
-                hour_valid_dur_stats[f'{hour_label}_valid_min'] = np.NaN
-                hour_rems_stats[f'{hour_label}_rems_count'] = np.NaN
-                hour_rems_stats[f'{hour_label}_rems_sec'] = np.NaN
-                hour_rems_stats[f'{hour_label}_amplitude_uV'] = np.NaN
-                hour_rems_stats[f'{hour_label}_rems_density'] = np.NaN
-                
-                for stage in stage_stats_labels:
-                    hour_valid_dur_stats[f'{hour_label}_{stage}_valid_min'] = np.NaN
-                    hour_rems_stats[f'{hour_label}_{stage}_rems_count'] = np.NaN
-                    hour_rems_stats[f'{hour_label}_{stage}_rems_sec'] = np.NaN
-                    hour_rems_stats[f'{hour_label}_{stage}_amplitude_uV'] = np.NaN
-                    hour_rems_stats[f'{hour_label}_{stage}_rems_density'] = np.NaN
+                # No stages in this hour - set R stage values to NaN (skip totals since they're redundant)
+                # REMs only occur in R stage
+                stage = 'R'
+                hour_valid_dur_stats[f'{hour_label}_{stage}_valid_min'] = np.NaN
+                hour_rems_stats[f'{hour_label}_{stage}_rems_count'] = np.NaN
+                hour_rems_stats[f'{hour_label}_{stage}_rems_sec'] = np.NaN
+                hour_rems_stats[f'{hour_label}_{stage}_amplitude_uV'] = np.NaN
+                hour_rems_stats[f'{hour_label}_{stage}_rems_density'] = np.NaN
+
+        # Calculate variance of densities across clock hours using R stage densities
+        density_values = [hour_rems_stats.get(f'clock_h{i+1}_R_rems_density', np.nan) 
+                        for i in range(self.N_HOURS)]
+        density_values = [d for d in density_values if not np.isnan(d)]
+        if len(density_values) > 1:
+            hour_rems_stats['clock_h_rems_density_var'] = np.var(density_values, ddof=1)
+        else:
+            hour_rems_stats['clock_h_rems_density_var'] = np.nan
+
+        # Filter out redundant clock hour-level valid_min (same as R since REMs only occur in R)
+        # Remove keys like 'clock_h1_valid_min' but keep 'clock_h1_R_valid_min'
+        hour_valid_dur_stats_filtered = {}
+        for k, v in hour_valid_dur_stats.items():
+            if k.startswith('clock_h') and k.endswith('_valid_min') and not k.endswith('_R_valid_min'):
+                # Check if corresponding R version exists
+                hour_num = k.split('_')[0] + '_' + k.split('_')[1]  # e.g., 'clock_h1'
+                if f'{hour_num}_R_valid_min' in hour_valid_dur_stats:
+                    continue  # Skip this redundant entry
+            hour_valid_dur_stats_filtered[k] = v
 
         # Organize data for the output
-        return hour_rec_dur_stats | hour_valid_dur_stats | hour_rems_stats
+        return hour_rec_dur_stats | hour_valid_dur_stats_filtered | hour_rems_stats
 
     def compute_stage_h_stats_per_stage(self, rems_cur_chan_sort, artifact_cur_chan_df, stage_in_cycle_df, \
         sleep_stages_name, stage_sel, label_stats, stage_stats_labels):
@@ -823,36 +825,24 @@ class REMsDetails(SciNode):
         epoch_duration = round(np.unique(stage_durations)[0])
         expected_windows_per_hour = 3600.0 / epoch_duration  # 120 windows per hour
         
-        # Collect all stages and rems by stage type
-        stage_data = {}
-        rems_data = {}
+        # Collect R stages and rems (REMs only occur in R stage)
+        stage_label = 'R'
+        stage_data = []
+        rems_data = []
         
-        # Group stages by stage type
-        for stage_label in stage_stats_labels:
-            stage_data[stage_label] = []
-            rems_data[stage_label] = []
-            
-            # Handle special case for N2N3 and NREM
-            if stage_label == 'N2N3':
-                stage_numbers = ['2', '3']
-            elif stage_label == 'NREM':
-                stage_numbers = ['1', '2', '3']
-            else:
-                stage_numbers = [sleep_stages_name[stage_label]]
-            
-            # Collect stages of this type
-            for i, stage_num in enumerate(stage_numbers):
-                stage_mask = stage_in_cycle_df['name'] == int(stage_num)
-                if stage_mask.any():
-                    stage_data[stage_label].extend(stage_in_cycle_df[stage_mask].to_dict('records'))
-            # Sort stages by start time
-            stage_data[stage_label].sort(key=lambda x: x['start_sec'])
-            # Collect rems of this type
-            rems_mask = rems_cur_chan_sort['stage'].isin([int(sn) for sn in stage_numbers])
-            if rems_mask.any():
-                rems_data[stage_label].extend(rems_cur_chan_sort[rems_mask].to_dict('records'))
-            # Sort rems by start time
-            rems_data[stage_label].sort(key=lambda x: x['start_sec'])
+        # Collect R stages
+        stage_mask = stage_in_cycle_df['name'] == int(sleep_stages_name[stage_label])
+        if stage_mask.any():
+            stage_data.extend(stage_in_cycle_df[stage_mask].to_dict('records'))
+        # Sort stages by start time
+        stage_data.sort(key=lambda x: x['start_sec'])
+        # Collect rems in R stage
+        rems_mask = rems_cur_chan_sort['stage'] == int(sleep_stages_name[stage_label])
+        if rems_mask.any():
+            rems_data.extend(rems_cur_chan_sort[rems_mask].to_dict('records'))
+        # Sort rems by start time
+        rems_data.sort(key=lambda x: x['start_sec'])
+        
         # Process each hour
         for i_hour in range(self.N_HOURS):
             hour_label = label_stats+str(i_hour+1)
@@ -861,76 +851,84 @@ class REMsDetails(SciNode):
             start_window = int(i_hour * expected_windows_per_hour)
             end_window = int((i_hour + 1) * expected_windows_per_hour)
             
-            # Process each stage type
-            for stage_label in stage_stats_labels:
-                # Get stages and rems for this stage type
-                stages_cur = stage_data[stage_label]
-                rems_cur = rems_data[stage_label]
-                
-                # Apply window-based segmentation
-                stages_cur_hour = []
-                rems_cur_hour = []
-                
-                if len(stages_cur) > start_window:
-                    stages_cur_hour = stages_cur[start_window:min(end_window, len(stages_cur))]           
-                    # Filter rems_cur_hour to only include REMs within the stage time range
-                    stage_start_time = stages_cur_hour[0]['start_sec']
-                    stage_end_time = stages_cur_hour[-1]['start_sec'] + stages_cur_hour[-1]['duration_sec']
-                    rems_cur_hour = [rem for rem in rems_cur if stage_start_time <= rem['start_sec'] <= stage_end_time]
+            # Apply window-based segmentation for R stage
+            stages_cur_hour = []
+            rems_cur_hour = []
+            
+            if len(stage_data) > start_window:
+                stages_cur_hour = stage_data[start_window:min(end_window, len(stage_data))]           
+                # Filter rems_cur_hour to only include REMs within the stage time range
+                stage_start_time = stages_cur_hour[0]['start_sec']
+                stage_end_time = stages_cur_hour[-1]['start_sec'] + stages_cur_hour[-1]['duration_sec']
+                rems_cur_hour = [rem for rem in rems_data if stage_start_time <= rem['start_sec'] <= stage_end_time]
 
-                # Convert back to DataFrames for processing
-                if stages_cur_hour:
-                    stage_sel_df = pd.DataFrame(stages_cur_hour)
-                else:
-                    stage_sel_df = pd.DataFrame()
-                
-                if rems_cur_hour:
-                    rems_sel_df = pd.DataFrame(rems_cur_hour)
-                else:
-                    rems_sel_df = pd.DataFrame()
-                
-                # Compute valid duration and rems statistics for this stage and hour
-                # artifact_cur_chan_df is kept for future use but currently not used
-                if len(stage_sel_df) > 0:
-                    valid_dur_stats_cur = EventsDetails.compute_stage_duration_for_single_stage(stage_sel_df, \
-                        artifact_cur_chan_df, stage_label, hour_label, stage_sel)
-                    stage_hour_valid_dur_stats = stage_hour_valid_dur_stats | valid_dur_stats_cur
+            # Convert back to DataFrames for processing
+            if stages_cur_hour:
+                stage_sel_df = pd.DataFrame(stages_cur_hour)
+            else:
+                stage_sel_df = pd.DataFrame()
+            
+            if rems_cur_hour:
+                rems_sel_df = pd.DataFrame(rems_cur_hour)
+            else:
+                rems_sel_df = pd.DataFrame()
+            
+            # Compute valid duration and rems statistics for R stage and hour
+            # artifact_cur_chan_df is kept for future use but currently not used
+            if len(stage_sel_df) > 0:
+                valid_dur_stats_cur = EventsDetails.compute_stage_duration_for_single_stage(stage_sel_df, \
+                    artifact_cur_chan_df, stage_label, hour_label, stage_sel)
+                stage_hour_valid_dur_stats = stage_hour_valid_dur_stats | valid_dur_stats_cur
 
-                    # Only compute rems statistics if we have rems
-                    if len(rems_sel_df) > 0:
-                        # Compute statistics for this specific stage type only
-                        rems_stats_cur = self.compute_rems_stats_for_single_stage(valid_dur_stats_cur, rems_sel_df, stage_label, hour_label)
-                        stage_hour_rems_stats = stage_hour_rems_stats | rems_stats_cur
-                    else:
-                        # No rems in this hour - set all rems values to NaN
-                        stage_hour_rems_stats[f'{hour_label}_{stage_label}_rems_count'] = np.NaN
-                        stage_hour_rems_stats[f'{hour_label}_{stage_label}_rems_sec'] = np.NaN
-                        stage_hour_rems_stats[f'{hour_label}_{stage_label}_amplitude_uV'] = np.NaN
-                        stage_hour_rems_stats[f'{hour_label}_{stage_label}_rems_density'] = np.NaN
+                # Only compute rems statistics if we have rems
+                if len(rems_sel_df) > 0:
+                    # Compute statistics for R stage only
+                    rems_stats_cur = self.compute_rems_stats_for_single_stage(valid_dur_stats_cur, rems_sel_df, stage_label, hour_label)
+                    stage_hour_rems_stats = stage_hour_rems_stats | rems_stats_cur
                 else:
-                    # No stages in this hour - set all values to NaN
-                    stage_hour_valid_dur_stats[f'{hour_label}_{stage_label}_valid_min'] = np.NaN
+                    # No rems in this hour - set all rems values to NaN
                     stage_hour_rems_stats[f'{hour_label}_{stage_label}_rems_count'] = np.NaN
                     stage_hour_rems_stats[f'{hour_label}_{stage_label}_rems_sec'] = np.NaN
                     stage_hour_rems_stats[f'{hour_label}_{stage_label}_amplitude_uV'] = np.NaN
                     stage_hour_rems_stats[f'{hour_label}_{stage_label}_rems_density'] = np.NaN
+            else:
+                # No stages in this hour - set all values to NaN
+                stage_hour_valid_dur_stats[f'{hour_label}_{stage_label}_valid_min'] = np.NaN
+                stage_hour_rems_stats[f'{hour_label}_{stage_label}_rems_count'] = np.NaN
+                stage_hour_rems_stats[f'{hour_label}_{stage_label}_rems_sec'] = np.NaN
+                stage_hour_rems_stats[f'{hour_label}_{stage_label}_amplitude_uV'] = np.NaN
+                stage_hour_rems_stats[f'{hour_label}_{stage_label}_rems_density'] = np.NaN
             
-            # Compute total statistics for this hour
-            total_stages = sum(len(stage_data[label]) for label in stage_stats_labels if len(sleep_stages_name[label]) == 1)
-            total_rems = sum(len(rems_data[label]) for label in stage_stats_labels if len(sleep_stages_name[label]) == 1)
-            
+            # Compute total statistics for this hour (same as R since REMs only occur in R)
             # Apply window segmentation for totals
-            if total_stages > start_window:
-                total_stages_hour = total_stages - start_window
+            if len(stage_data) > start_window:
+                total_stages_hour = len(stage_data) - start_window
                 stage_hour_rec_dur_stats[f'{hour_label}_min'] = min(total_stages_hour * epoch_duration / 60, 60)  # Max 60 minutes
             else:
                 stage_hour_rec_dur_stats[f'{hour_label}_min'] = 0
             
-            # Compute totals for this hour (aggregate across all stages)
-            self.compute_stage_hour_totals(hour_label, stage_hour_valid_dur_stats, stage_hour_rems_stats)
+        # Calculate variance of densities across stage hours using R stage densities
+        density_values = [stage_hour_rems_stats.get(f'stage_h{i+1}_R_rems_density', np.nan) 
+                        for i in range(self.N_HOURS)]
+        density_values = [d for d in density_values if not np.isnan(d)]
+        if len(density_values) > 1:
+            stage_hour_rems_stats['stage_h_rems_density_var'] = np.var(density_values, ddof=1)
+        else:
+            stage_hour_rems_stats['stage_h_rems_density_var'] = np.nan
+
+        # Filter out redundant stage hour-level valid_min (same as R since REMs only occur in R)
+        # Remove keys like 'stage_h1_valid_min' but keep 'stage_h1_R_valid_min'
+        stage_hour_valid_dur_stats_filtered = {}
+        for k, v in stage_hour_valid_dur_stats.items():
+            if k.startswith('stage_h') and k.endswith('_valid_min') and not k.endswith('_R_valid_min'):
+                # Check if corresponding R version exists
+                hour_num = k.split('_')[0] + '_' + k.split('_')[1]  # e.g., 'stage_h1'
+                if f'{hour_num}_R_valid_min' in stage_hour_valid_dur_stats:
+                    continue  # Skip this redundant entry
+            stage_hour_valid_dur_stats_filtered[k] = v
 
         # Organize data for the output
-        return stage_hour_rec_dur_stats | stage_hour_valid_dur_stats | stage_hour_rems_stats
+        return stage_hour_rec_dur_stats | stage_hour_valid_dur_stats_filtered | stage_hour_rems_stats
 
     def compute_rems_stats_per_stage(self, valid_dur, rems_cur_chan_df, sleep_stage_sel, label_stats, stage_stats_labels):
         """""
@@ -958,79 +956,40 @@ class REMsDetails(SciNode):
         rems_sec = {}
         amplitude_uV = {}
         rems_density = {}
-        rems_count_total = 0
-        rems_sec_all = []
-        amplitude_uV_all = []
         
-        # Create local sleep_stages_name to handle N2N3 and NREM
-        local_sleep_stages_name = commons.sleep_stages_name.copy()
-        local_sleep_stages_name['N2N3'] = ['2', '3']
-        local_sleep_stages_name['NREM'] = ['1', '2', '3']
-        
-        for stage in stage_stats_labels:
-            if type(sleep_stage_sel) is str:
-                sleep_stage_sel = sleep_stage_sel.split(',')
-            # If selected
-            if local_sleep_stages_name[stage] in sleep_stage_sel or (isinstance(local_sleep_stages_name[stage], list) and all(item in sleep_stage_sel for item in local_sleep_stages_name[stage])): 
-                
-                # Count the number of REMs for the current stage
-                rems_cur_stage = rems_cur_chan_df[rems_cur_chan_df['stage'].isin(list(map(int, local_sleep_stages_name[stage])))]
+        # REMs only occur in R stage
+        stage = 'R'
+        # Count the number of REMs for R stage
+        rems_cur_stage = rems_cur_chan_df[rems_cur_chan_df['stage']==int(commons.sleep_stages_name[stage])]
+        rems_count_cur_stage = len(rems_cur_stage)
 
-                rems_count_cur_stage = len(rems_cur_stage)
-
-                if len(local_sleep_stages_name[stage]) == 1:  # condition added to avoid summation for group of stages (ex: for NREM)
-                    rems_count_total = rems_count_total + rems_count_cur_stage
-
-                if valid_dur[f'{label_stats}_{stage}_valid_min']>0:
-                    rems_count[f'{label_stats}_{stage}_rems_count'] = rems_count_cur_stage
-                else:
-                    rems_count[f'{label_stats}_{stage}_rems_count'] = np.nan
-                # Compute the density
-                if valid_dur[f'{label_stats}_{stage}_valid_min']>0:
-                    rems_density[f'{label_stats}_{stage}_rems_density'] = rems_count_cur_stage/valid_dur[f'{label_stats}_{stage}_valid_min']
-                else:
-                    rems_density[f'{label_stats}_{stage}_rems_density'] = np.nan
-
-                if rems_count_cur_stage>0:
-                    rems_sec[f'{label_stats}_{stage}_rems_sec'] = rems_cur_stage['duration_sec'].sum()/rems_count_cur_stage
-                    amplitude_uV[f'{label_stats}_{stage}_amplitude_uV'] = rems_cur_stage['amplitude_uV'].sum()/rems_count_cur_stage
-                else:
-                    rems_sec[f'{label_stats}_{stage}_rems_sec'] = np.NaN
-                    amplitude_uV[f'{label_stats}_{stage}_amplitude_uV'] = np.NaN
-
-                if len(rems_sec_all)==0:
-                    rems_sec_all = rems_cur_stage['duration_sec'].values
-                else:
-                    if len(local_sleep_stages_name[stage]) == 1: # condition added to avoid concatenation for group of stages
-                        rems_sec_all = np.concatenate((rems_sec_all,rems_cur_stage['duration_sec'].values), axis=0)
-
-                if len(amplitude_uV_all)==0:
-                    amplitude_uV_all = rems_cur_stage['amplitude_uV'].values
-                else:
-                    if len(local_sleep_stages_name[stage]) == 1: 
-                        amplitude_uV_all = np.concatenate((amplitude_uV_all,rems_cur_stage['amplitude_uV'].values), axis=0)
-            else:
-                rems_count[f'{label_stats}_{stage}_rems_count'] = np.NaN
-                rems_sec[f'{label_stats}_{stage}_rems_sec'] = np.NaN
-                amplitude_uV[f'{label_stats}_{stage}_amplitude_uV'] = np.NaN
-                rems_density[f'{label_stats}_{stage}_rems_density'] = np.NaN
-
-        # Total stats on the accumulated data
-        rems_count[f'{label_stats}_rems_count'] = rems_count_total
-        rems_sec[f'{label_stats}_rems_sec'] = np.mean(rems_sec_all) if len(rems_sec_all) > 0 else np.nan
-        amplitude_uV[f'{label_stats}_amplitude_uV'] = np.mean(amplitude_uV_all) if len(amplitude_uV_all) > 0 else np.nan
-        # Compute total density
-        if valid_dur[f'{label_stats}_valid_min']>0:
-            rems_density[f'{label_stats}_rems_density'] = rems_count_total/valid_dur[f'{label_stats}_valid_min']
+        if valid_dur[f'{label_stats}_{stage}_valid_min']>0:
+            rems_count[f'{label_stats}_{stage}_rems_count'] = rems_count_cur_stage
         else:
-            rems_density[f'{label_stats}_rems_density'] = np.nan
+            rems_count[f'{label_stats}_{stage}_rems_count'] = np.nan
+        # Compute the density (per 30-second epoch)
+        # 1 minute = 2 epochs (30 seconds each)
+        if valid_dur[f'{label_stats}_{stage}_valid_min']>0:
+            rems_density[f'{label_stats}_{stage}_rems_density'] = rems_count_cur_stage/(valid_dur[f'{label_stats}_{stage}_valid_min'] * 2)
+        else:
+            rems_density[f'{label_stats}_{stage}_rems_density'] = np.nan
+
+        if rems_count_cur_stage>0:
+            rems_sec[f'{label_stats}_{stage}_rems_sec'] = rems_cur_stage['duration_sec'].sum()/rems_count_cur_stage
+            amplitude_uV[f'{label_stats}_{stage}_amplitude_uV'] = rems_cur_stage['amplitude_uV'].sum()/rems_count_cur_stage
+        else:
+            rems_sec[f'{label_stats}_{stage}_rems_sec'] = np.NaN
+            amplitude_uV[f'{label_stats}_{stage}_amplitude_uV'] = np.NaN
+
+        # Skip total stats since they're identical to R stage values (REMs only occur in R)
+        # Only return R stage values to avoid repetition
 
         rems_stats = rems_count | rems_sec | amplitude_uV | rems_density
         return rems_stats
 
     def compute_rems_stats_for_single_stage(self, valid_dur, rems_cur_chan_df, stage_label, label_stats):
         """""
-        Compute statistics for a single stage type (e.g., N1, N2, N3, N2N3, NREM, R).
+        Compute statistics for R stage (REMs only occur in REM sleep).
         This is a simplified version of compute_rems_stats_per_stage for single stage processing.
 
         Parameters
@@ -1040,7 +999,7 @@ class REMsDetails(SciNode):
             rems_cur_chan_df : pandas DataFrame
                 REMs events for the current stage type
             stage_label : str
-                The stage label (N1, N2, N3, N2N3, NREM, R)
+                The stage label (should be 'R' since REMs only occur in REM sleep)
             label_stats : str
                 The label for the statistics (e.g., "stage_h1")
                 
@@ -1067,9 +1026,10 @@ class REMsDetails(SciNode):
             result[f'{label_stats}_{stage_label}_rems_count'] = rems_count
         else:
             result[f'{label_stats}_{stage_label}_rems_count'] = np.nan
-        # Compute the density
+        # Compute the density (per 30-second epoch)
+        # valid_duration is in minutes, 1 minute = 2 epochs (30 seconds each)
         if valid_duration > 0:
-            result[f'{label_stats}_{stage_label}_rems_density'] = rems_count/valid_duration
+            result[f'{label_stats}_{stage_label}_rems_density'] = rems_count/(valid_duration * 2)
         else:
             result[f'{label_stats}_{stage_label}_rems_density'] = np.nan
             
@@ -1083,79 +1043,4 @@ class REMsDetails(SciNode):
             result[f'{label_stats}_{stage_label}_amplitude_uV'] = np.nan
             
         return result
-
-    def compute_stage_hour_totals(self, hour_label, valid_dur_stats, rems_stats):
-        """""
-        Compute total statistics for a stage hour by aggregating across all stages.
-        Uses the same approach as compute_rems_stats_per_stage: concatenate individual values and take mean.
-        
-        Parameters
-        -----------
-            hour_label : str
-                The hour label (e.g., "stage_h1")
-            valid_dur_stats : dict
-                Dictionary containing valid duration statistics (will be modified)
-            rems_stats : dict
-                Dictionary containing REMs statistics (will be modified)
-        """""
-        # Initialize totals
-        total_rems_count = 0
-        
-        # For weighted averages (since we only have per-stage averages, not raw data)
-        weighted_rems_sec_sum = 0
-        weighted_amplitude_uV_sum = 0
-        
-        # Create local sleep_stages_name to check stage length (same as original function)
-        local_sleep_stages_name = commons.sleep_stages_name.copy()
-        local_sleep_stages_name['N2N3'] = ['2', '3']
-        local_sleep_stages_name['NREM'] = ['1', '2', '3']
-        
-        # Aggregate across all stages for this hour
-        for stage_label in self.stage_stats_labels:
-            # Only include individual stages in totals (same logic as original function)
-            if len(local_sleep_stages_name[stage_label]) == 1:
-                
-                # REMs count
-                count_key = f'{hour_label}_{stage_label}_rems_count'
-                if count_key in rems_stats and not np.isnan(rems_stats[count_key]):
-                    total_rems_count += rems_stats[count_key]
-                
-                # Collect values for weighted averaging (only if we have REMs)
-                if count_key in rems_stats and not np.isnan(rems_stats[count_key]) and rems_stats[count_key] > 0:
-                    stage_count = int(rems_stats[count_key])
-                    
-                    # Duration
-                    duration_key = f'{hour_label}_{stage_label}_rems_sec'
-                    if duration_key in rems_stats and not np.isnan(rems_stats[duration_key]):
-                        weighted_rems_sec_sum += rems_stats[duration_key] * stage_count
-                    
-                    # Amplitude
-                    amplitude_key = f'{hour_label}_{stage_label}_amplitude_uV'
-                    if amplitude_key in rems_stats and not np.isnan(rems_stats[amplitude_key]):
-                        weighted_amplitude_uV_sum += rems_stats[amplitude_key] * stage_count
-        
-        # Add total REMs count
-        rems_stats[f'{hour_label}_rems_count'] = total_rems_count
-        
-        # Compute total valid_min for density calculation
-        total_valid_min = 0
-        for stage_label in self.stage_stats_labels:
-            if len(local_sleep_stages_name[stage_label]) == 1:
-                valid_min_key = f'{hour_label}_{stage_label}_valid_min'
-                if valid_min_key in valid_dur_stats and not np.isnan(valid_dur_stats[valid_min_key]):
-                    total_valid_min += valid_dur_stats[valid_min_key]
-        
-        # Compute total density
-        if total_valid_min > 0:
-            rems_stats[f'{hour_label}_rems_density'] = total_rems_count / total_valid_min
-        else:
-            rems_stats[f'{hour_label}_rems_density'] = np.nan
-        
-        # Add total averages using weighted averages (mathematically equivalent to original method)
-        if total_rems_count > 0:
-            rems_stats[f'{hour_label}_rems_sec'] = weighted_rems_sec_sum / total_rems_count
-            rems_stats[f'{hour_label}_amplitude_uV'] = weighted_amplitude_uV_sum / total_rems_count
-        else:
-            rems_stats[f'{hour_label}_rems_sec'] = np.nan
-            rems_stats[f'{hour_label}_amplitude_uV'] = np.nan
 

@@ -132,6 +132,7 @@ class DetectorStep(BaseStepView, Ui_DetectorStep, QtWidgets.QWidget):
         self._pub_sub_manager.publish(self, self._DurIdx1_topic, 'ping')
         self._pub_sub_manager.publish(self, self._FreqIdx0, 'ping')
         self._pub_sub_manager.publish(self, self._FreqIdx1, 'ping')
+        self._pub_sub_manager.publish(self, self._cohort_file_topic, 'ping')
         
 
     def on_topic_update(self, topic, message, sender):

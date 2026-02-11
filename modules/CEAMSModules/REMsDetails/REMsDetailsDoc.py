@@ -65,47 +65,18 @@ def _get_doc(N_CYCLE, N_HOURS=0):
     }
 
     # The valid duration represents the duration available for detection
+    # REMs only occur in REM sleep stage (R)
     total_dict = \
     {  
-            'total_N1_valid_min' : 'Valid (no artifact) period for detection - Valid duration (min) of the sleep period in N1 stage.',
-            'total_N2_valid_min' : 'Valid (no artifact) period for detection - Valid duration (min) of the sleep period in N2 stage.',
-            'total_N3_valid_min' : 'Valid (no artifact) period for detection - Valid duration (min) of the sleep period in N3 stage.',
-            'total_N2N3_valid_min' : 'Valid (no artifact) period for detection - Valid duration (min) of the sleep period in N2 and N3 stage.',
-            'total_NREM_valid_min' : 'Valid (no artifact) period for detection - Valid duration (min) of the sleep period in NREM stage (N1, N2, N3).',
             'total_R_valid_min' : 'Valid (no artifact) period for detection - Valid duration (min) of the sleep period in REM stage.',
-            'total_valid_min' : 'Valid (no artifact) period for detection - Valid duration (min) of the sleep stage selected.',
 
-            'total_N1_rems_count' : 'Total - REMs count in N1 stage.',
-            'total_N2_rems_count' : 'Total - REMs count in N2 stage.',
-            'total_N3_rems_count' : 'Total - REMs count in N3 stage.',
-            'total_N2N3_rems_count' : 'Total - REMs count in N2 and N3 stage.',
-            'total_NREM_rems_count' : 'Total - REMs count in NREM stage (N1, N2, N3).',
             'total_R_rems_count' : 'Total - REMs count in REM stage.',
-            'total_rems_count' : 'Total - REMs count in all stages.',
 
-            'total_N1_rems_sec' : 'Total - Average REMs duration (s) in N1 stage.',
-            'total_N2_rems_sec' : 'Total - Average REMs duration (s) in N2 stage.',
-            'total_N3_rems_sec' : 'Total - Average REMs duration (s) in N3 stage.',
-            'total_N2N3_rems_sec' : 'Total - Average REMs duration (s) in N2 and N3 stage.',
-            'total_NREM_rems_sec' : 'Total - Average REMs duration (s) in NREM stage (N1, N2, N3).',
             'total_R_rems_sec' : 'Total - Average REMs duration (s) in REM stage.',
-            'total_rems_sec' : 'Total - Average REMs duration (s)',
 
-            'total_N1_amplitude_uV' : 'Total - Average REMs amplitude (uV) in N1 stage.',
-            'total_N2_amplitude_uV' : 'Total - Average REMs amplitude (uV) in N2 stage.',
-            'total_N3_amplitude_uV' : 'Total - Average REMs amplitude (uV) in N3 stage.',
-            'total_N2N3_amplitude_uV' : 'Total - Average REMs amplitude (uV) in N2 and N3 stage.',
-            'total_NREM_amplitude_uV' : 'Total - Average REMs amplitude (uV) in NREM stage (N1, N2, N3).',
             'total_R_amplitude_uV' : 'Total - Average REMs amplitude (uV) in REM stage.',
-            'total_amplitude_uV' : 'Total - Average REMs amplitude (uV)',
 
-            'total_N1_rems_density' : 'Total - REMs density (count/min) in N1 stage.',
-            'total_N2_rems_density' : 'Total - REMs density (count/min) in N2 stage.',
-            'total_N3_rems_density' : 'Total - REMs density (count/min) in N3 stage.',
-            'total_N2N3_rems_density' : 'Total - REMs density (count/min) in N2 and N3 stage.',
-            'total_NREM_rems_density' : 'Total - REMs density (count/min) in NREM stage (N1, N2, N3).',
-            'total_R_rems_density' : 'Total - REMs density (count/min) in REM stage.',
-            'total_rems_density' : 'Total - REMs density (count/min)'
+            'total_R_rems_density' : 'Total - REMs density (count/epoch) in REM stage. Epoch duration is 30 seconds.'
 
     }
 
@@ -113,143 +84,63 @@ def _get_doc(N_CYCLE, N_HOURS=0):
     for i_cycle in range(N_CYCLE):
         current_cycle_dict = \
             {
-            f'cyc{i_cycle+1}_valid_min' : f'Cycle {i_cycle+1} - Valid (no artifact) duration (min) available for detection.',
-            f'cyc{i_cycle+1}_N1_valid_min' : f'Cycle {i_cycle+1} - Valid (no artifact) duration (min) in N1 stage available for detection.',
-            f'cyc{i_cycle+1}_N2_valid_min' : f'Cycle {i_cycle+1} - Valid (no artifact) duration (min) in N2 stage available for detection.',
-            f'cyc{i_cycle+1}_N3_valid_min' : f'Cycle {i_cycle+1} - Valid (no artifact) duration (min) in N3 stage available for detection.',
-            f'cyc{i_cycle+1}_N2N3_valid_min' : f'Cycle {i_cycle+1} - Valid (no artifact) duration (min) in N2 and N3 stage available for detection.',
-            f'cyc{i_cycle+1}_NREM_valid_min' : f'Cycle {i_cycle+1} - Valid (no artifact) duration (min) in NREM stage (N1, N2, N3) available for detection.',
             f'cyc{i_cycle+1}_R_valid_min' : f'Cycle {i_cycle+1} - Valid (no artifact) duration (min) in REM stage available for detection.',
             f'cyc{i_cycle+1}_min' : f'Cycle {i_cycle+1} duration (min).',
 
-            f'cyc{i_cycle+1}_N1_rems_count' : f'Cycle {i_cycle+1} - REMs count in N1 stage.',
-            f'cyc{i_cycle+1}_N2_rems_count' : f'Cycle {i_cycle+1} - REMs count in N2 stage.',
-            f'cyc{i_cycle+1}_N3_rems_count' : f'Cycle {i_cycle+1} - REMs count in N3 stage.',
-            f'cyc{i_cycle+1}_N2N3_rems_count' : f'Cycle {i_cycle+1} - REMs count in N2 and N3 stage.',
-            f'cyc{i_cycle+1}_NREM_rems_count' : f'Cycle {i_cycle+1} - REMs count in NREM stage (N1, N2, N3).',
             f'cyc{i_cycle+1}_R_rems_count' : f'Cycle {i_cycle+1} - REMs count in REM stage.',
-            f'cyc{i_cycle+1}_rems_count' : f'Cycle {i_cycle+1} - REMs count in all stages.',
 
-            f'cyc{i_cycle+1}_N1_rems_sec' : f'Cycle {i_cycle+1} - Average REMs duration (s) in N1 stage.',
-            f'cyc{i_cycle+1}_N2_rems_sec' : f'Cycle {i_cycle+1} - Average REMs duration (s) in N2 stage.',
-            f'cyc{i_cycle+1}_N3_rems_sec' : f'Cycle {i_cycle+1} - Average REMs duration (s) in N3 stage.',
-            f'cyc{i_cycle+1}_N2N3_rems_sec' : f'Cycle {i_cycle+1} - Average REMs duration (s) in N2 and N3 stage.',
-            f'cyc{i_cycle+1}_NREM_rems_sec' : f'Cycle {i_cycle+1} - Average REMs duration (s) in NREM stage (N1, N2, N3).',
             f'cyc{i_cycle+1}_R_rems_sec' : f'Cycle {i_cycle+1} - Average REMs duration (s) in REM stage.',
-            f'cyc{i_cycle+1}_rems_sec' : f'Cycle {i_cycle+1} - Average REMs duration (s)',
 
-            f'cyc{i_cycle+1}_N1_amplitude_uV' : f'Cycle {i_cycle+1} - Average REMs amplitude (uV) in N1 stage.',
-            f'cyc{i_cycle+1}_N2_amplitude_uV' : f'Cycle {i_cycle+1} - Average REMs amplitude (uV) in N2 stage.',
-            f'cyc{i_cycle+1}_N3_amplitude_uV' : f'Cycle {i_cycle+1} - Average REMs amplitude (uV) in N3 stage.',
-            f'cyc{i_cycle+1}_N2N3_amplitude_uV' : f'Cycle {i_cycle+1} - Average REMs amplitude (uV) in N2 and N3 stage.',
-            f'cyc{i_cycle+1}_NREM_amplitude_uV' : f'Cycle {i_cycle+1} - Average REMs amplitude (uV) in NREM stage (N1, N2, N3).',
             f'cyc{i_cycle+1}_R_amplitude_uV' : f'Cycle {i_cycle+1} - Average REMs amplitude (uV) in REM stage.',
-            f'cyc{i_cycle+1}_amplitude_uV' : f'Cycle {i_cycle+1} - Average REMs amplitude (uV)',
 
-            f'cyc{i_cycle+1}_N1_rems_density' : f'Cycle {i_cycle+1} - REMs density (count/min) in N1 stage.',
-            f'cyc{i_cycle+1}_N2_rems_density' : f'Cycle {i_cycle+1} - REMs density (count/min) in N2 stage.',
-            f'cyc{i_cycle+1}_N3_rems_density' : f'Cycle {i_cycle+1} - REMs density (count/min) in N3 stage.',
-            f'cyc{i_cycle+1}_N2N3_rems_density' : f'Cycle {i_cycle+1} - REMs density (count/min) in N2 and N3 stage.',
-            f'cyc{i_cycle+1}_NREM_rems_density' : f'Cycle {i_cycle+1} - REMs density (count/min) in NREM stage (N1, N2, N3).',
-            f'cyc{i_cycle+1}_R_rems_density' : f'Cycle {i_cycle+1} - REMs density (count/min) in REM stage.',
-            f'cyc{i_cycle+1}_rems_density' : f'Cycle {i_cycle+1} - REMs density (count/min)'
+            f'cyc{i_cycle+1}_R_rems_density' : f'Cycle {i_cycle+1} - REMs density (count/epoch) in REM stage. Epoch duration is 30 seconds.'
             }
         cycle_dict = cycle_dict | current_cycle_dict
+    
+    # Add variance of densities across cycles
+    cycle_dict['rems_density_var'] = 'Variance of REMs density across all sleep cycles.'
     
     # Add clock hour documentation
     clock_hour_dict = {}
     for i_hour in range(N_HOURS):
         current_hour_dict = \
             {
-            f'clock_h{i_hour+1}_valid_min' : f'Hour {i_hour+1} - Valid (no artifact) duration (min) available for detection.',
-            f'clock_h{i_hour+1}_N1_valid_min' : f'Hour {i_hour+1} - Valid (no artifact) duration (min) in N1 stage available for detection.',
-            f'clock_h{i_hour+1}_N2_valid_min' : f'Hour {i_hour+1} - Valid (no artifact) duration (min) in N2 stage available for detection.',
-            f'clock_h{i_hour+1}_N3_valid_min' : f'Hour {i_hour+1} - Valid (no artifact) duration (min) in N3 stage available for detection.',
-            f'clock_h{i_hour+1}_N2N3_valid_min' : f'Hour {i_hour+1} - Valid (no artifact) duration (min) in N2 and N3 stage available for detection.',
-            f'clock_h{i_hour+1}_NREM_valid_min' : f'Hour {i_hour+1} - Valid (no artifact) duration (min) in NREM stage (N1, N2, N3) available for detection.',
             f'clock_h{i_hour+1}_R_valid_min' : f'Hour {i_hour+1} - Valid (no artifact) duration (min) in REM stage available for detection.',
             f'clock_h{i_hour+1}_min' : f'Hour {i_hour+1} duration (min).',
 
-            f'clock_h{i_hour+1}_N1_rems_count' : f'Hour {i_hour+1} - REMs count in N1 stage.',
-            f'clock_h{i_hour+1}_N2_rems_count' : f'Hour {i_hour+1} - REMs count in N2 stage.',
-            f'clock_h{i_hour+1}_N3_rems_count' : f'Hour {i_hour+1} - REMs count in N3 stage.',
-            f'clock_h{i_hour+1}_N2N3_rems_count' : f'Hour {i_hour+1} - REMs count in N2 and N3 stage.',
-            f'clock_h{i_hour+1}_NREM_rems_count' : f'Hour {i_hour+1} - REMs count in NREM stage (N1, N2, N3).',
             f'clock_h{i_hour+1}_R_rems_count' : f'Hour {i_hour+1} - REMs count in REM stage.',
-            f'clock_h{i_hour+1}_rems_count' : f'Hour {i_hour+1} - REMs count in all stages.',
 
-            f'clock_h{i_hour+1}_N1_rems_sec' : f'Hour {i_hour+1} - Average REMs duration (s) in N1 stage.',
-            f'clock_h{i_hour+1}_N2_rems_sec' : f'Hour {i_hour+1} - Average REMs duration (s) in N2 stage.',
-            f'clock_h{i_hour+1}_N3_rems_sec' : f'Hour {i_hour+1} - Average REMs duration (s) in N3 stage.',
-            f'clock_h{i_hour+1}_N2N3_rems_sec' : f'Hour {i_hour+1} - Average REMs duration (s) in N2 and N3 stage.',
-            f'clock_h{i_hour+1}_NREM_rems_sec' : f'Hour {i_hour+1} - Average REMs duration (s) in NREM stage (N1, N2, N3).',
             f'clock_h{i_hour+1}_R_rems_sec' : f'Hour {i_hour+1} - Average REMs duration (s) in REM stage.',
-            f'clock_h{i_hour+1}_rems_sec' : f'Hour {i_hour+1} - Average REMs duration (s) in all stages.',
 
-            f'clock_h{i_hour+1}_N1_amplitude_uV' : f'Hour {i_hour+1} - Average REMs amplitude (µV) in N1 stage.',
-            f'clock_h{i_hour+1}_N2_amplitude_uV' : f'Hour {i_hour+1} - Average REMs amplitude (µV) in N2 stage.',
-            f'clock_h{i_hour+1}_N3_amplitude_uV' : f'Hour {i_hour+1} - Average REMs amplitude (µV) in N3 stage.',
-            f'clock_h{i_hour+1}_N2N3_amplitude_uV' : f'Hour {i_hour+1} - Average REMs amplitude (µV) in N2 and N3 stage.',
-            f'clock_h{i_hour+1}_NREM_amplitude_uV' : f'Hour {i_hour+1} - Average REMs amplitude (µV) in NREM stage (N1, N2, N3).',
             f'clock_h{i_hour+1}_R_amplitude_uV' : f'Hour {i_hour+1} - Average REMs amplitude (µV) in REM stage.',
-            f'clock_h{i_hour+1}_amplitude_uV' : f'Hour {i_hour+1} - Average REMs amplitude (µV) in all stages.',
 
-            f'clock_h{i_hour+1}_N1_rems_density' : f'Hour {i_hour+1} - REMs density (count/min) in N1 stage.',
-            f'clock_h{i_hour+1}_N2_rems_density' : f'Hour {i_hour+1} - REMs density (count/min) in N2 stage.',
-            f'clock_h{i_hour+1}_N3_rems_density' : f'Hour {i_hour+1} - REMs density (count/min) in N3 stage.',
-            f'clock_h{i_hour+1}_N2N3_rems_density' : f'Hour {i_hour+1} - REMs density (count/min) in N2 and N3 stage.',
-            f'clock_h{i_hour+1}_NREM_rems_density' : f'Hour {i_hour+1} - REMs density (count/min) in NREM stage (N1, N2, N3).',
-            f'clock_h{i_hour+1}_R_rems_density' : f'Hour {i_hour+1} - REMs density (count/min) in REM stage.',
-            f'clock_h{i_hour+1}_rems_density' : f'Hour {i_hour+1} - REMs density (count/min)'
+            f'clock_h{i_hour+1}_R_rems_density' : f'Hour {i_hour+1} - REMs density (count/epoch) in REM stage. Epoch duration is 30 seconds.'
             }
         clock_hour_dict = clock_hour_dict | current_hour_dict
+    
+    # Add variance of densities across clock hours
+    clock_hour_dict['clock_h_rems_density_var'] = 'Variance of REMs density across all clock hours.'
     
     # Add stage hour documentation
     stage_hour_dict = {}
     for i_hour in range(N_HOURS):
         current_stage_hour_dict = \
             {
-            f'stage_h{i_hour+1}_N1_valid_min' : f'Stage Hour {i_hour+1} - Valid (no artifact) duration (min) in N1 stage available for detection.',
-            f'stage_h{i_hour+1}_N2_valid_min' : f'Stage Hour {i_hour+1} - Valid (no artifact) duration (min) in N2 stage available for detection.',
-            f'stage_h{i_hour+1}_N3_valid_min' : f'Stage Hour {i_hour+1} - Valid (no artifact) duration (min) in N3 stage available for detection.',
-            f'stage_h{i_hour+1}_N2N3_valid_min' : f'Stage Hour {i_hour+1} - Valid (no artifact) duration (min) in N2 and N3 stage available for detection.',
-            f'stage_h{i_hour+1}_NREM_valid_min' : f'Stage Hour {i_hour+1} - Valid (no artifact) duration (min) in NREM stage (N1, N2, N3) available for detection.',
             f'stage_h{i_hour+1}_R_valid_min' : f'Stage Hour {i_hour+1} - Valid (no artifact) duration (min) in REM stage available for detection.',
             f'stage_h{i_hour+1}_min' : f'Stage Hour {i_hour+1} duration (min).',
 
-            f'stage_h{i_hour+1}_N1_rems_count' : f'Stage Hour {i_hour+1} - REMs count in N1 stage.',
-            f'stage_h{i_hour+1}_N2_rems_count' : f'Stage Hour {i_hour+1} - REMs count in N2 stage.',
-            f'stage_h{i_hour+1}_N3_rems_count' : f'Stage Hour {i_hour+1} - REMs count in N3 stage.',
-            f'stage_h{i_hour+1}_N2N3_rems_count' : f'Stage Hour {i_hour+1} - REMs count in N2 and N3 stage.',
-            f'stage_h{i_hour+1}_NREM_rems_count' : f'Stage Hour {i_hour+1} - REMs count in NREM stage (N1, N2, N3).',
             f'stage_h{i_hour+1}_R_rems_count' : f'Stage Hour {i_hour+1} - REMs count in REM stage.',
-            f'stage_h{i_hour+1}_rems_count' : f'Stage Hour {i_hour+1} - REMs count in all stages.',
 
-            f'stage_h{i_hour+1}_N1_rems_sec' : f'Stage Hour {i_hour+1} - Average REMs duration (s) in N1 stage.',
-            f'stage_h{i_hour+1}_N2_rems_sec' : f'Stage Hour {i_hour+1} - Average REMs duration (s) in N2 stage.',
-            f'stage_h{i_hour+1}_N3_rems_sec' : f'Stage Hour {i_hour+1} - Average REMs duration (s) in N3 stage.',
-            f'stage_h{i_hour+1}_N2N3_rems_sec' : f'Stage Hour {i_hour+1} - Average REMs duration (s) in N2 and N3 stage.',
-            f'stage_h{i_hour+1}_NREM_rems_sec' : f'Stage Hour {i_hour+1} - Average REMs duration (s) in NREM stage (N1, N2, N3).',
             f'stage_h{i_hour+1}_R_rems_sec' : f'Stage Hour {i_hour+1} - Average REMs duration (s) in REM stage.',
-            f'stage_h{i_hour+1}_rems_sec' : f'Stage Hour {i_hour+1} - Average REMs duration (s) in all stages.',
 
-            f'stage_h{i_hour+1}_N1_amplitude_uV' : f'Stage Hour {i_hour+1} - Average REMs amplitude (µV) in N1 stage.',
-            f'stage_h{i_hour+1}_N2_amplitude_uV' : f'Stage Hour {i_hour+1} - Average REMs amplitude (µV) in N2 stage.',
-            f'stage_h{i_hour+1}_N3_amplitude_uV' : f'Stage Hour {i_hour+1} - Average REMs amplitude (µV) in N3 stage.',
-            f'stage_h{i_hour+1}_N2N3_amplitude_uV' : f'Stage Hour {i_hour+1} - Average REMs amplitude (µV) in N2 and N3 stage.',
-            f'stage_h{i_hour+1}_NREM_amplitude_uV' : f'Stage Hour {i_hour+1} - Average REMs amplitude (µV) in NREM stage (N1, N2, N3).',
             f'stage_h{i_hour+1}_R_amplitude_uV' : f'Stage Hour {i_hour+1} - Average REMs amplitude (µV) in REM stage.',
-            f'stage_h{i_hour+1}_amplitude_uV' : f'Stage Hour {i_hour+1} - Average REMs amplitude (µV) in all stages.',
 
-            f'stage_h{i_hour+1}_N1_rems_density' : f'Stage Hour {i_hour+1} - REMs density (count/min) in N1 stage.',
-            f'stage_h{i_hour+1}_N2_rems_density' : f'Stage Hour {i_hour+1} - REMs density (count/min) in N2 stage.',
-            f'stage_h{i_hour+1}_N3_rems_density' : f'Stage Hour {i_hour+1} - REMs density (count/min) in N3 stage.',
-            f'stage_h{i_hour+1}_N2N3_rems_density' : f'Stage Hour {i_hour+1} - REMs density (count/min) in N2 and N3 stage.',
-            f'stage_h{i_hour+1}_NREM_rems_density' : f'Stage Hour {i_hour+1} - REMs density (count/min) in NREM stage (N1, N2, N3).',
-            f'stage_h{i_hour+1}_R_rems_density' : f'Stage Hour {i_hour+1} - REMs density (count/min) in REM stage.',
-            f'stage_h{i_hour+1}_rems_density' : f'Stage Hour {i_hour+1} - REMs density (count/min) in all stages.'
+            f'stage_h{i_hour+1}_R_rems_density' : f'Stage Hour {i_hour+1} - REMs density (count/epoch) in REM stage. Epoch duration is 30 seconds.'
             }
         stage_hour_dict = stage_hour_dict | current_stage_hour_dict
+    
+    # Add variance of densities across stage hours
+    stage_hour_dict['stage_h_rems_density_var'] = 'Variance of REMs density across all stage hours.'
     
     complete_dict = general_dict | detector_dict | channel_dict | sleep_car_dict | total_dict | cycle_dict | clock_hour_dict | stage_hour_dict
     return complete_dict
