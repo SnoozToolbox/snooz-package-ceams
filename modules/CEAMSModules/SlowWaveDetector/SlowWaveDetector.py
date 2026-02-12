@@ -150,8 +150,6 @@ class SlowWaveDetector(SciNode):
         OutputPlug('events', self)
         OutputPlug('events_details', self)
 
-        #self.order = 30
-
 
     def __del__(self):
         if DEBUG: print('SlowWaveDetector.__del__')
@@ -254,8 +252,9 @@ class SlowWaveDetector(SciNode):
         self.skipped_epochs = 0
         self.signals_used = self.reshaped_signals.copy()
 
+        zero_phase = True
         self.detect_slow_waves(event_group, event_name, float(f_min), float(f_max), float(th_PaP), \
-                                float(th_Neg), int(min_tNe), int(max_tNe), int(min_tPo), int(max_tPo))
+                                float(th_Neg), int(min_tNe), int(max_tNe), int(min_tPo), int(max_tPo), zero_phase)
         
         num_ssw_detected = f"Detected {self.detections} sleep slow waves (SSW) over {len(self.signals_used)} epochs of {self.signals_used[0].duration} seconds"
         self._log_manager.log(self.identifier, num_ssw_detected)
@@ -289,7 +288,7 @@ class SlowWaveDetector(SciNode):
 
 
     def detect_slow_waves(self, event_group, event_name, f_min, f_max, th_PaP, \
-                            th_Neg, min_tNe, max_tNe, min_tPo, max_tPo):
+                            th_Neg, min_tNe, max_tNe, min_tPo, max_tPo, zero_phase):
         """
         Detects and compiles slow waves according to input criterias.
 
@@ -304,7 +303,8 @@ class SlowWaveDetector(SciNode):
             min_tNe : int, minimal duration of negative part of the slow wave
             max_tNe : int, maximal duration of negative part of the slow wave
             min_tPo : int, minimal duration of positive part of the slow wave
-            max_tPo : int, maximal duration of positive part of the slow wave     
+            max_tPo : int, maximal duration of positive part of the slow wave
+            zero_phase : bool, True to use filtfilt, False to use lfilter
         """
         
         fmin_max = [f_min, f_max]
@@ -321,11 +321,22 @@ class SlowWaveDetector(SciNode):
                 self.skipped_epochs += 1
                 continue                
 
-            # Filter signal in the frequency range 0.16-4.0 Hz   
-            #order_filtfilt = int(30)/2
-            order_filtfilt = int(120)/2 # To match Gaétan
-            sos = sci.butter(int(order_filtfilt), fmin_max, btype="bandpass", output='sos', fs=fs)
-            signal_filtre = sci.sosfiltfilt(sos, signal_model.samples)
+            # Filter signal in the frequency range 0.16-4.0 Hz
+            # FIR bandpass filter with Hamming window, -3dB at cutoff frequencies
+            # 2047 taps for fs=256Hz, scaled proportionally for other sampling rates
+            # To goal is to copy the tool "Detection d'oscillations lentes" from CEAMS
+            numtaps = int(fs * 8)
+            # Divide by 2 when using filtfilt (filter applied twice)
+            if zero_phase:
+                numtaps = numtaps // 2
+            # Ensure odd number of taps for Type I FIR bandpass filter
+            if numtaps % 2 == 0:
+                numtaps -= 1
+            fir_coefs = sci.firwin(numtaps, fmin_max, window='hamming', pass_zero=False, fs=fs)
+            if zero_phase:
+                signal_filtre = sci.filtfilt(fir_coefs, [1.0], signal_model.samples)
+            else:
+                signal_filtre = sci.lfilter(fir_coefs, [1.0], signal_model.samples)
 
             # Find zero-crossings
             fa = signal_filtre[1:] # signal delayed by 1 sample
