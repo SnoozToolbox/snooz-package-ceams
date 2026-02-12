@@ -90,8 +90,14 @@
             }
         },
         "outputs": {
-            "detectiondataframe": {
-                "name": "detectiondataframe",
+            "events": {
+                "name": "events",
+                "value": "",
+                "connections": {},
+                "sub_plugs": {}
+            },
+            "events_details": {
+                "name": "events_details",
                 "value": "",
                 "connections": {},
                 "sub_plugs": {}

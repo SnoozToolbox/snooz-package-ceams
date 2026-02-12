@@ -63,7 +63,7 @@ class REMsDetectionYasa(SciNode):
     
     Returns
     -------
-        detectiondataframe: DataFrame
+        events_details: DataFrame
             A DataFrame containing detected REM events.
 
     Raises
@@ -93,7 +93,8 @@ class REMsDetectionYasa(SciNode):
         InputPlug('include', self)
         
         # Output plugs
-        OutputPlug('detectiondataframe', self)
+        OutputPlug('events', self)
+        OutputPlug('events_details', self)
 
         # Define master module behavior
         self._is_master = False 
@@ -105,7 +106,7 @@ class REMsDetectionYasa(SciNode):
 
         Returns
         -------
-            detectiondataframe: DataFrame
+            events_details: DataFrame
                 A DataFrame containing detected REM events.
         
         Raises
@@ -154,7 +155,16 @@ class REMsDetectionYasa(SciNode):
 
             # Save results
             rems_detection_df = rem.summary().round(3)
-            rems_detection_df.to_csv(f"{filename}_YASA_REMs_summary.tsv", sep='\t')
+            if len(filename)>0:
+                subject_id = os.path.basename(filename)
+                # Extract folder of the file
+                folder_cohort = os.path.dirname(filename)
+                # Make directory specific for rems characteristics
+                folder_rems_char = os.path.join(folder_cohort, 'rems_characteristics')
+                if not os.path.isdir(folder_rems_char):
+                    os.makedirs(folder_rems_char)
+                rems_char_filename = os.path.join(folder_rems_char,subject_id)
+                rems_detection_df.to_csv(f"{rems_char_filename}_YASA_REMs_summary.tsv", sep='\t')
 
             # Convert results to Snooz format
             snooz_rem = pd.DataFrame({
@@ -164,14 +174,19 @@ class REMsDetectionYasa(SciNode):
                 'duration_sec': rems_detection_df['Duration'],
                 'channels': [f"{raw.ch_names[0]}, {raw.ch_names[1]}" for _ in range(len(rems_detection_df))]
             })
-            snooz_rem.to_csv(f"{filename}_YASA_REMs_snooz.tsv", sep='\t', index=False)
-        
+            #snooz_rem.to_csv(f"{filename}_YASA_REMs_snooz.tsv", sep='\t', index=False) # We can save this if we needed it later on. Now something similar is exported.
+            # Add group, name and channels to the rems_detection_df as well.
+            rems_detection_df['group'] = rems_event_group
+            rems_detection_df['name'] = rems_event_name
+            rems_detection_df['start_sec'] = snooz_rem['start_sec']
+            rems_detection_df['duration_sec'] = snooz_rem['duration_sec']
+            rems_detection_df['channels'] = snooz_rem['channels']
         except Exception as e:
             raise NodeRuntimeException(self.identifier, "REMs detection", f"Error during REM detection: {str(e)}")
 
         self._log_manager.log(self.identifier, "This module detects Rapid Eye Movements.")
 
-        return {'detectiondataframe': snooz_rem}
+        return {'events_details': rems_detection_df, 'events': snooz_rem}
     
     def prepare_raw_data(self, raw):
         """Prepare raw data for processing."""
