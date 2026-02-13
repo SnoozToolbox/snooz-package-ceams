@@ -14,8 +14,22 @@ import math
 from fractions import Fraction
 from scipy.signal import resample_poly, periodogram
 from joblib import Parallel, delayed
+import matplotlib.pyplot as plt
 
 from CEAMSModules.PSGReader import SignalModel as test
+
+# Import the FOOOF object
+from fooof import FOOOF
+
+# Import some internal functions
+#   These are used here to demonstrate the algorithm
+#   You do not need to import these functions for standard usage of the module
+from fooof.sim.gen import gen_aperiodic
+from fooof.plts.spectra import plot_spectra
+from fooof.plts.annotate import plot_annotated_peak_search
+
+# Import a utility to download and load example data
+from fooof.utils.download import load_fooof_data
 
 DEBUG = False
 
@@ -137,7 +151,8 @@ class RandB(SciNode):
         for i, signal_model in enumerate(signals):
             sign2d_split, new_chan, start_time, end_time, new_dur = self.split_and_stack(signal_model, win_len_sec, fs)
             # compute rythmic spectral analysis
-            residu, res_mean, freq_bins,intercept,beta,freq_raw, psd_raw  = self.rythmic_spectral_analysis(sign2d_split, fs,first_freq,last_freq)
+            #residu, res_mean, freq_bins,intercept,beta,freq_raw, psd_raw  = self.rythmic_spectral_analysis(sign2d_split, fs,first_freq,last_freq)
+            residu, freq_bins = self.rhythmic_FOOOF(sign2d_split, fs)
 
             # Define output
             data = {}
@@ -151,7 +166,7 @@ class RandB(SciNode):
             data['end_time'] = end_time[-1]
             data['duration'] = sum(new_dur)
 
-            cache['psd'] = res_mean
+            '''cache['psd'] = res_mean
             cache['freq_bins'] = data['freq_bins']
             cache['channel'] = signals[i].channel
             cache['sample_rate'] = signals[i].sample_rate
@@ -161,7 +176,7 @@ class RandB(SciNode):
             cache['freq_raw'] = freq_raw
             cache['first_freq'] = first_freq
             cache['last_freq'] = last_freq
-            self._cache_manager.write_mem_cache(self.identifier, cache)
+            self._cache_manager.write_mem_cache(self.identifier, cache)'''
             psd.append(data.copy())
 
         # Write to the cache to use the data in the resultTab
@@ -369,3 +384,25 @@ class RandB(SciNode):
         residu_mean = np.nanmean(residu, axis=0)
         
         return residu, residu_mean, freq_raw[freqr], beta, intercept, freq_raw, psd_raw_mean
+    
+    def rhythmic_FOOOF(self, signals, fs):
+        
+        psd_raw, freq_raw = self.raw_spectral_analysis(signals, fs)
+        psd_raw_mean = np.nanmean(psd_raw, axis=0)
+        #freqs = load_fooof_data('freqs_2.npy', folder='data')
+        #spectrum = load_fooof_data('spectrum_2.npy', folder='data')
+        # Apply fooof method
+        fm = FOOOF(peak_width_limits=[1, 8], max_n_peaks=6, min_peak_height=0.15)
+        fm.add_data(freq_raw, psd_raw_mean, [0, 30])
+        fm.plot(plt_log = True)
+        #plt.savefig('fooof_fit_plot.png')
+        #plt.close()
+        fm.fit(freq_raw, psd_raw_mean, [0, 30])
+        init_ap_fit = gen_aperiodic(fm.freqs, fm._robust_ap_fit(fm.freqs, fm.power_spectrum))
+        init_flat_spec = fm.power_spectrum - init_ap_fit
+        # Plot the flattened the power spectrum
+        #plot_spectra(fm.freqs, init_flat_spec, True,
+        #             label='Flattened Spectrum', color='black')
+        #plt.savefig('flattened_spectrum_plot.png')
+        #plt.close()
+        return init_flat_spec, fm.freqs
