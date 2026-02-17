@@ -369,18 +369,13 @@ class OxygenDesatDetector(SciNode):
 
         # Detect desaturation 
         #----------------------------------------------------------------------
-        # time the processing time for detection desaturation
-        #start_time = time.time()
             # "parameters_oxy": dict
             # 'desaturation_drop_percent' : 'Drop level (%) for the oxygen desaturation "3 or 4"',
             # 'max_slope_drop_sec' : 'The maximum duration (s) during which the oxygen level is dropping "180 or 20"',
             # 'min_hold_drop_sec' : 'Minimum duration (s) during which the oxygen level drop is maintained "10 or 5"',
         desat_df, plateau_df, data_lpf_list, data_hpf_list, data_dev_list, lmax_indices_list, lmin_indices_list = \
             self.detect_desaturation_ABOSA(data_starts, data_clean, fs_chan, channel, parameters_oxy)
-        #end_time = time.time()
-        # Log message for the Logs tab
-        #self._log_manager.log(self.identifier, f"{len(desat_df)} desaturation events in {end_time - start_time:.2f} seconds.")
-        
+
         # Save the list of desaturation events detected and their characteristics
         #----------------------------------------------------------------------
         # filename including path to save the dataframe 
@@ -1075,13 +1070,11 @@ class OxygenDesatDetector(SciNode):
         # Accepted slope to shift Lmax right (more negative is steeper and will reject the shift, the fall starts before)
         fall_rate_threshold = -0.05 # % 
         # Adjust Lmax and all Lmin candidates for plateau on the filtered signal
-        min_plateau_duration_sec = 10 # ABOSA=30 sec paper, but ABOSA email=5 sec; 15 sec has better performance
+        min_plateau_duration_sec = [30, 10, 5] # ABOSA=30 sec paper, but ABOSA email=5 sec; 15 sec has better performance
+        min_slope_plateau = [-0.05, -0.0333]
+        
         derivative_threshold = 0.08 # % per second; slope threshold to define a plateau. ABOSA not mentionned; 
-        derivative_mean_threshold = 0.05 # % per second; mean slope threshold to define a plateau. ABOSA not mentionned; works well 0.1% < mean slope < 0.15%
-        #plateau_std_threshold = 0.05 # ABOSA not mentionned; works well 0.1% < std < 0.15%
-        # Minimum drop on filtered signal between adjusted Lmax and Lmin
-        min_drop_on_filtered_signal = 1 # % Not in ABOSA; 1 work well until 1.5 %
-
+        derivative_mean_threshold = 0.05 # % per second; mean slope threshold to define a plateau. ABOSA not mentionned;
 
         if DEBUG:
             print("\n--- Detect desaturation events ---")
@@ -1157,9 +1150,30 @@ class OxygenDesatDetector(SciNode):
                             adjusted_lmax_idx, adjusted_lmax_val, 
                             lmin_idx, lmin_time, lmin_val,
                             data_starts[i], fs_chan, 
-                            min_plateau_duration_sec, derivative_threshold, derivative_mean_threshold
+                            min_plateau_duration_sec[0], derivative_threshold, derivative_mean_threshold
                         )
+                    if len(plateau) > 0:
+                        plateau_lst.extend(plateau)
 
+                    # Shift right Lmax for derivative plateau
+                    adjusted_lmax_idx, adjusted_lmax_time, adjusted_lmax_val, \
+                        adjusted_lmin_idx, adjusted_lmin_time, adjusted_lmin_val, plateau = \
+                        self.shift_max_right_plateau(
+                            signal_lpf, signal_derivative, adjusted_lmax_idx, adjusted_lmax_val, 
+                            lmin_idx, lmin_time, lmin_val, data_starts[i], fs_chan, 
+                            min_plateau_duration_sec[1], derivative_threshold, derivative_mean_threshold, min_slope_plateau[0]
+                        )
+                    if len(plateau) > 0:
+                        plateau_lst.extend(plateau)
+
+                    # Shift right Lmax for derivative plateau
+                    adjusted_lmax_idx, adjusted_lmax_time, adjusted_lmax_val, \
+                        adjusted_lmin_idx, adjusted_lmin_time, adjusted_lmin_val, plateau = \
+                        self.shift_max_right_plateau(
+                            signal_lpf, signal_derivative, adjusted_lmax_idx, adjusted_lmax_val, 
+                            lmin_idx, lmin_time, lmin_val, data_starts[i], fs_chan, 
+                            min_plateau_duration_sec[2], derivative_threshold, derivative_mean_threshold, min_slope_plateau[1]
+                        )
                     if len(plateau) > 0:
                         plateau_lst.extend(plateau)
 
@@ -1167,16 +1181,6 @@ class OxygenDesatDetector(SciNode):
                         if DEBUG:
                             print(f"Lmax at {adjusted_lmax_time:.2f}s is after Lmin at {adjusted_lmin_time:.2f}s after plateau adjustment")
                         break
-
-                    # # Verify on the low pass filtered signal that a miminum drop is respected
-                    # # It means that too few samples really drop between adjusted Lmax and Lmin
-                    # # or too few samples are in the max peak before Lmin
-                    # current_lmax_val = np.nanmax(signal_lpf[adjusted_lmax_idx:adjusted_lmin_idx+1])
-                    # current_lmin_val = np.nanmin(signal_lpf[adjusted_lmax_idx:adjusted_lmin_idx+1])
-                    # if (current_lmax_val - current_lmin_val) <= min_drop_on_filtered_signal: # 1.5 default
-                    #     if DEBUG:
-                    #         print(f"  Drop too small ({current_lmax_val - current_lmin_val:.1f}%) between adjusted Lmax at {adjusted_lmax_time:.2f}s and Lmin at {adjusted_lmin_time:.2f}s on low pass filtered signal")
-                    #     continue
 
                     # Correct Lmax locations by finding actual maximum within 5s window on raw signal
                     adjusted_lmax_idx = self.correct_peak_indices_in_window(
@@ -1693,153 +1697,10 @@ class OxygenDesatDetector(SciNode):
         adjusted_lmax_time = data_start + adjusted_lmax_idx / fs_chan
         adjusted_lmax_val = signal[adjusted_lmax_idx]
         return adjusted_lmax_idx, adjusted_lmax_time, adjusted_lmax_val, signal_squared
-
-
-    def adjust_for_plateau(self, signal, adjusted_lmax_idx, adjusted_lmax_val, lmin_idx, lmin_time, lmin_val, 
-                           data_start, fs_chan, min_plateau_duration_sec=30, plateau_std_threshold=0.2):
-        """
-        Adjust Lmax or Lmin if a flat plateau exists within the event.
-        The plateau length is dynamically determined (minimum 30s, can be longer).
-        Iteratively detects plateaus until no more are found or the remaining duration is < 30s.
-        
-        Uses rolling standard deviation for O(n) complexity instead of O(n * window_size).
-        
-        Parameters:
-            signal : numpy array
-                Low-pass filtered SpO2 signal.
-            adjusted_lmax_idx : int
-                Current adjusted Lmax index.
-            adjusted_lmax_val : float
-                Current adjusted Lmax value.
-            lmin_idx : int
-                Current Lmin index.
-            lmin_time : float
-                Current Lmin time.
-            lmin_val : float
-                Current Lmin value.
-            data_start : float
-                Start time in seconds of this signal section.
-            fs_chan : float
-                Sampling frequency (Hz).
-            min_plateau_duration_sec : float
-                Minimum plateau duration in seconds (default 30s).
-            plateau_std_threshold : float
-                Maximum standard deviation to be considered flat (default 0.2%).
-        
-        Returns:
-            adjusted_lmax_idx, adjusted_lmax_time, adjusted_lmax_val, lmin_idx, lmin_time, lmin_val, plateau_list : tuple
-                Adjusted values after plateau handling and list of all detected plateaus.
-        """
-        min_plateau_samples = int(min_plateau_duration_sec * fs_chan)
-        plateau_list = []
-        
-        # Iterate to detect multiple plateaus
-        while True:
-            event_signal = signal[adjusted_lmax_idx:lmin_idx + 1]
-            adjusted_lmax_time = data_start + adjusted_lmax_idx / fs_chan
-            
-            # Stop if remaining duration is less than minimum plateau duration
-            if len(event_signal) < min_plateau_samples:
-                break
-            
-            # Use rolling std for O(n) complexity instead of O(n * window_size)
-            # Compute rolling mean and variance using cumulative sums
-            n = len(event_signal)
-            window = min_plateau_samples
-            
-            # Handle NaN values by replacing with interpolated values temporarily
-            event_clean = event_signal.copy()
-            nan_mask = np.isnan(event_clean)
-            if np.any(nan_mask) and not np.all(nan_mask):
-                # Linear interpolation for NaN values
-                valid_indices = np.where(~nan_mask)[0]
-                event_clean[nan_mask] = np.interp(
-                    np.where(nan_mask)[0], valid_indices, event_clean[valid_indices]
-                )
-            elif np.all(nan_mask):
-                break
-            
-            # Compute rolling std using cumulative sums (Welford's online algorithm approach)
-            cumsum = np.cumsum(event_clean)
-            cumsum_sq = np.cumsum(event_clean ** 2)
-            
-            # Rolling sum and sum of squares
-            rolling_sum = cumsum[window-1:] - np.concatenate([[0], cumsum[:-window]])
-            rolling_sum_sq = cumsum_sq[window-1:] - np.concatenate([[0], cumsum_sq[:-window]])
-            
-            # Rolling variance: E[X^2] - E[X]^2
-            rolling_mean = rolling_sum / window
-            rolling_var = rolling_sum_sq / window - rolling_mean ** 2
-            rolling_var = np.maximum(rolling_var, 0)  # Numerical stability
-            rolling_std = np.sqrt(rolling_var)
-            
-            # Find first position where std is below threshold
-            flat_positions = np.where(rolling_std <= plateau_std_threshold)[0]
-            
-            if len(flat_positions) == 0:
-                break
-            
-            best_plateau_start = flat_positions[0]
-            best_plateau_end = best_plateau_start + window
-            
-            # Extend plateau as long as it remains flat
-            # Use incremental std calculation for extension
-            current_sum = rolling_sum[best_plateau_start]
-            current_sum_sq = rolling_sum_sq[best_plateau_start]
-            current_n = window
-            
-            while best_plateau_end < n:
-                # Add new sample
-                new_val = event_clean[best_plateau_end]
-                current_sum += new_val
-                current_sum_sq += new_val ** 2
-                current_n += 1
-                
-                # Calculate new std
-                mean = current_sum / current_n
-                var = current_sum_sq / current_n - mean ** 2
-                std = np.sqrt(max(var, 0))
-                
-                if std <= plateau_std_threshold:
-                    best_plateau_end += 1
-                else:
-                    break
-            
-            # Store plateau information
-            plateau_start_time = data_start + (adjusted_lmax_idx + best_plateau_start) / fs_chan
-            plateau_duration = (best_plateau_end - best_plateau_start) / fs_chan
-            plateau_list.append([plateau_start_time, plateau_duration])
-            
-            # Adjust Lmax or Lmin to maximize depth
-            plateau_val = np.nanmean(event_signal[best_plateau_start:best_plateau_end])
-            drop_before_plateau = adjusted_lmax_val - plateau_val
-            drop_after_plateau = plateau_val - lmin_val
-            
-            if drop_before_plateau > drop_after_plateau:
-                # Shift Lmin to start of plateau
-                lmin_idx = adjusted_lmax_idx + best_plateau_start
-                lmin_time = data_start + lmin_idx / fs_chan
-                lmin_val = signal[lmin_idx]
-            else:
-                # Shift Lmax to end of plateau
-                adjusted_lmax_idx = adjusted_lmax_idx + best_plateau_end
-                adjusted_lmax_time = data_start + adjusted_lmax_idx / fs_chan
-                adjusted_lmax_val = signal[adjusted_lmax_idx]
-            
-                # Make sure the current max on the low pass filtered signal is the maximum value until the Lmin candidate
-                real_lmax_val = np.nanmax(signal[adjusted_lmax_idx:lmin_idx+1])
-                if real_lmax_val > adjusted_lmax_val:
-                    # Update adjusted_lmax_idx, adjusted_lmax_time, adjusted_lmax_val to the real maximum on the low pass filtered signal
-                    adjusted_lmax_idx = np.nanargmax(signal[adjusted_lmax_idx:lmin_idx+1]) + adjusted_lmax_idx
-                    adjusted_lmax_time = data_start + adjusted_lmax_idx / fs_chan
-                    adjusted_lmax_val = signal[adjusted_lmax_idx]
-
-        return adjusted_lmax_idx, adjusted_lmax_time, adjusted_lmax_val, lmin_idx, lmin_time, lmin_val, plateau_list
     
 
     def adjust_for_derivative_plateau(self, signal, signal_derivative, adjusted_lmax_idx, adjusted_lmax_val, lmin_idx, lmin_time, lmin_val, 
-                           data_start, fs_chan, min_plateau_duration_sec=10, derivative_threshold=0.1, 
-                           derivative_mean_threshold=0.01):
+                           data_start, fs_chan, min_plateau_duration_sec, derivative_threshold, derivative_mean_threshold):
         """
         Adjust Lmax or Lmin if a flat plateau exists within the event.
         Plateau detection is based on the derivative of the signal:
@@ -1889,21 +1750,6 @@ class OxygenDesatDetector(SciNode):
             # Stop if remaining duration is less than minimum plateau duration
             if len(event_signal) < min_plateau_samples:
                 break
-            
-            # # Handle NaN values by replacing with interpolated values temporarily
-            # event_clean = event_signal.copy()
-            # nan_mask = np.isnan(event_clean)
-            # if np.any(nan_mask) and not np.all(nan_mask):
-            #     # Linear interpolation for NaN values
-            #     valid_indices = np.where(~nan_mask)[0]
-            #     event_clean[nan_mask] = np.interp(
-            #         np.where(nan_mask)[0], valid_indices, event_clean[valid_indices]
-            #     )
-            # elif np.all(nan_mask):
-            #     break
-            
-            # # Compute derivative (slope) in %/sec using gradient
-            # derivative = np.gradient(event_clean) * fs_chan  # %/sec
             
             # Step 1: Identify samples where individual derivative is below threshold
             # This rejects steep spikes (both positive and negative)
@@ -1965,6 +1811,117 @@ class OxygenDesatDetector(SciNode):
 
         return adjusted_lmax_idx, adjusted_lmax_time, adjusted_lmax_val, lmin_idx, lmin_time, lmin_val, plateau_list
     
+
+    def shift_max_right_plateau(self, signal, signal_derivative, adjusted_lmax_idx, adjusted_lmax_val, lmin_idx, lmin_time, lmin_val, 
+                           data_start, fs_chan, min_plateau_duration_sec, derivative_threshold, derivative_mean_threshold, slope_threshold):
+        """
+        Adjust Lmax or Lmin if a flat plateau exists within the event.
+        Plateau detection is based on the derivative of the signal:
+        - Each sample must have |derivative| < derivative_threshold (rejects steep spikes)
+        - The mean derivative over the plateau must have |mean| < derivative_mean_threshold (rejects constant slopes)
+        
+        This allows detection of plateaus with small oscillations around a mean value,
+        while rejecting both steep transitions and constant drifts.
+        
+        Parameters:
+            signal : numpy array
+                Low-pass filtered SpO2 signal.
+            adjusted_lmax_idx : int
+                Current adjusted Lmax index.
+            adjusted_lmax_val : float
+                Current adjusted Lmax value.
+            lmin_idx : int
+                Current Lmin index.
+            lmin_time : float
+                Current Lmin time.
+            lmin_val : float
+                Current Lmin value.
+            data_start : float
+                Start time in seconds of this signal section.
+            fs_chan : float
+                Sampling frequency (Hz).
+            min_plateau_duration_sec : float
+                Minimum plateau duration in seconds (default 10s).
+            derivative_threshold : float
+                Maximum absolute derivative (%/sec) at each sample to be considered flat (default 0.01).
+            derivative_mean_threshold : float
+                Maximum absolute mean derivative (%/sec) over the plateau to reject constant slopes (default 0.01).
+        
+        Returns:
+            adjusted_lmax_idx, adjusted_lmax_time, adjusted_lmax_val, lmin_idx, lmin_time, lmin_val, plateau_list : tuple
+                Adjusted values after plateau handling and list of all detected plateaus.
+        """
+        min_plateau_samples = int(min_plateau_duration_sec * fs_chan)
+        plateau_list = []
+        
+        # Iterate to detect multiple plateaus
+        while True:
+            event_signal = signal[adjusted_lmax_idx:lmin_idx + 1]
+            adjusted_lmax_time = data_start + adjusted_lmax_idx / fs_chan
+            derivative = signal_derivative[adjusted_lmax_idx:lmin_idx + 1]
+    
+            # Stop if remaining duration is less than minimum plateau duration
+            if len(event_signal) < min_plateau_samples:
+                break
+            
+            # Step 1: Identify samples where individual derivative is below threshold
+            # This rejects steep spikes (both positive and negative)
+            flat_mask = np.abs(derivative) < derivative_threshold
+            
+            # Find contiguous flat regions based on individual derivative threshold
+            diff = np.diff(np.concatenate([[0], flat_mask.astype(int), [0]]))
+            starts = np.where(diff == 1)[0]
+            ends = np.where(diff == -1)[0]
+            
+            # Step 2: For each candidate region, check if mean derivative is also low
+            # This rejects constant slopes (e.g., steady decline)
+            plateau_found = False
+            best_plateau_start = 0
+            best_plateau_end = 0
+            for start, end in zip(starts, ends):
+                if (end - start) >= min_plateau_samples:
+                    # Compute mean derivative over this candidate region
+                    mean_derivative = np.mean(derivative[start:end])
+                    # Accept only if mean derivative is also low (rejects constant slopes)
+                    if np.abs(mean_derivative) < derivative_mean_threshold:
+                        # Evaluate if the slope between the current lmax and the end of the plateau is not too steep 
+                        # (rejects invalid plateaus that would not correspond to a real shift)
+                        duration_sec = (adjusted_lmax_idx + end - adjusted_lmax_idx) / fs_chan
+                        slope = (signal[adjusted_lmax_idx + end] - adjusted_lmax_val) / duration_sec
+                        if slope < slope_threshold:
+                            continue
+                        best_plateau_start = start
+                        best_plateau_end = end
+                        plateau_found = True
+                        break
+            
+            if not plateau_found:
+                break
+            
+            # Store plateau information
+            plateau_start_time = data_start + (adjusted_lmax_idx + best_plateau_start) / fs_chan
+            plateau_duration = (best_plateau_end - best_plateau_start) / fs_chan
+            plateau_list.append([plateau_start_time, plateau_duration])
+            
+            # Adjust Lmax or Lmin to maximize depth
+            plateau_val = np.nanmean(event_signal[best_plateau_start:best_plateau_end])
+
+            # Shift Lmax to end of plateau
+            adjusted_lmax_idx = adjusted_lmax_idx + best_plateau_end
+            adjusted_lmax_time = data_start + adjusted_lmax_idx / fs_chan
+            adjusted_lmax_val = signal[adjusted_lmax_idx]
+        
+            # Make sure the current max on the low pass filtered signal is the maximum value until the Lmin candidate
+            if lmin_idx - adjusted_lmax_idx > 1:
+                real_lmax_val = np.nanmax(signal[adjusted_lmax_idx:lmin_idx+1])
+                if real_lmax_val > adjusted_lmax_val:
+                    # Update adjusted_lmax_idx, adjusted_lmax_time, adjusted_lmax_val to the real maximum on the low pass filtered signal
+                    adjusted_lmax_idx = np.nanargmax(signal[adjusted_lmax_idx:lmin_idx+1]) + adjusted_lmax_idx
+                    adjusted_lmax_time = data_start + adjusted_lmax_idx / fs_chan
+                    adjusted_lmax_val = signal[adjusted_lmax_idx]
+
+        return adjusted_lmax_idx, adjusted_lmax_time, adjusted_lmax_val, lmin_idx, lmin_time, lmin_val, plateau_list
+
 
     def compute_desat_stats(self, desat_df, total_stats, stage_sleep_period_df):
         desat_stats = {}
