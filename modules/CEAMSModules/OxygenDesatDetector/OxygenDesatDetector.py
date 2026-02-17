@@ -1072,7 +1072,8 @@ class OxygenDesatDetector(SciNode):
         # Adjust Lmax and all Lmin candidates for plateau on the filtered signal
         min_plateau_duration_sec = [30, 10, 5] # ABOSA=30 sec paper, but ABOSA email=5 sec; 15 sec has better performance
         min_slope_plateau = [-0.05, -0.0333]
-        
+        downsamplig_fs = min(fs_chan, 256) # Hz info provided by email.
+
         derivative_threshold = 0.08 # % per second; slope threshold to define a plateau. ABOSA not mentionned; 
         derivative_mean_threshold = 0.05 # % per second; mean slope threshold to define a plateau. ABOSA not mentionned;
 
@@ -1087,42 +1088,42 @@ class OxygenDesatDetector(SciNode):
 
             # Low pass filter the signal to get the trend in order to detect local min and max
             signal_lpf = self.filter_nan_filtfilt(signal, order, fs_chan, low_frequency_cutoff, 'low')
+            # Downsample the low pass filtered signal to downsamplig_fs
+            factor = int(round(fs_chan / downsamplig_fs))
+            signal_lpf_ds = signal_lpf[::factor]
 
             # High-pass filter the signal at 0.1 Hz (which is already low-pass filtered to 0.1 Hz)
-            signal_hpf = self.filter_nan_filtfilt(signal_lpf, order, fs_chan, high_frequency_cutoff , 'high')
+            signal_hpf_ds = self.filter_nan_filtfilt(signal_lpf_ds, order, downsamplig_fs, high_frequency_cutoff , 'high')
 
-            # derivative signal for plateau detection
-            signal_derivative = np.gradient(signal_lpf) * fs_chan
+            # derivative signal for plateau detection (uses fs_lpf since it's derived from signal_lpf)
+            signal_derivative = np.gradient(signal_lpf_ds) * downsamplig_fs
 
             # Step 1: Locate potential endpoints (Lmin)
-            min_peak_distance_samples = int(min_peak_distance_sec * fs_chan)
-            lmin_indices = self.detect_local_min(
-                signal, signal_lpf, fs_chan, 
-                min_peak_distance_samples, min_peak_prominence, 
+            lmin_times, lmin_values = self.detect_local_min(
+                signal, signal_lpf_ds, fs_chan, downsamplig_fs,
+                min_peak_distance_sec, min_peak_prominence, 
                 data_starts[i]
             )
-            lmin_indices_list.append(lmin_indices)
+            lmin_indices_list.append(self.time_to_index(lmin_times, data_starts[i], fs_chan))
 
             # Step 2: Locate potential starting points (Lmax)
-            # lmax_indices (numpy array) : Indices of local maximums filtered for too low maximums.
-            # lmax_indices_org (numpy array) : Indices of local maximums in the original signal.
-            lmax_indices, lmax_indices_org = self.detect_local_max(
-                signal, signal_lpf, fs_chan, 
-                min_peak_distance_samples, min_peak_prominence, 
+            # lmax_times (numpy array) : Times of local maximums filtered for too low maximums.
+            # lmax_times_org (numpy array) : Times of all local maximums (for debug).
+            lmax_times, lmax_values, lmax_times_org = self.detect_local_max(
+                signal, signal_lpf_ds, fs_chan, downsamplig_fs,
+                min_peak_distance_sec, min_peak_prominence, 
                 data_starts[i]
             )
-            lmax_indices_list.append(lmax_indices_org)
+            lmax_indices_list.append(self.time_to_index(lmax_times_org, data_starts[i], fs_chan))
 
             # Step 3: Validate and match Lmax-Lmin pairs
-            for lmax_idx in lmax_indices:
-                lmax_time = data_starts[i] + lmax_idx / fs_chan
-                lmax_val = signal[lmax_idx]
+            for lmax_time, lmax_val in zip(lmax_times, lmax_values):
                 
                 # discard lmax without lmin
                 #   The maximum duration of a desaturation event is limited to 180 s.
                 #   The potential Lmax-Lmin pair cannot go through another Lmax.
                 lmin_list = self.discard_lmax_without_lmin(
-                    signal, lmin_indices, lmax_indices, lmax_idx, lmax_time, lmax_val,
+                    signal, lmin_times, lmin_values, lmax_times, lmax_time, lmax_val,
                     data_starts[i], fs_chan, 
                     parameters_oxy['max_slope_drop_sec'], 
                     parameters_oxy['desaturation_drop_percent']
@@ -1133,45 +1134,45 @@ class OxygenDesatDetector(SciNode):
                     print(f"{len(lmin_list)} Lmins for current Lmax at {lmax_time:.2f}s")
                 
                 # Process all Lmin candidates through adjustments and validation
-                for lmin_idx, lmin_time, lmin_val, drop in lmin_list:
+                for lmin_time, lmin_val, drop in lmin_list:
 
                     # Adjust Lmax for fall rate
                     # The Lmax is shifted forward to a point where the fall starts using the low pass filtered signal.
                     # The high pass filtered signal is used to verify abrupt transition
-                    adjusted_lmax_idx, adjusted_lmax_time, adjusted_lmax_val, signal_squared = \
-                        self.adjust_lmax_for_fall_rate(signal_lpf, signal_hpf, lmax_idx, lmin_idx, \
-                                                       data_starts[i], fs_chan, fall_rate_threshold)
+                    adjusted_lmax_time, adjusted_lmax_val, signal_squared = \
+                        self.adjust_lmax_for_fall_rate(signal_lpf_ds, signal_hpf_ds, lmax_time, lmax_val, lmin_time, \
+                                                       data_starts[i], downsamplig_fs, fall_rate_threshold)
                     
                     # Adjust Lmax and all Lmin candidates for derivative plateau
-                    adjusted_lmax_idx, adjusted_lmax_time, adjusted_lmax_val, \
-                        adjusted_lmin_idx, adjusted_lmin_time, adjusted_lmin_val, plateau = \
+                    adjusted_lmax_time, adjusted_lmax_val, \
+                        adjusted_lmin_time, adjusted_lmin_val, plateau = \
                         self.adjust_for_derivative_plateau(
-                            signal_lpf, signal_derivative, \
-                            adjusted_lmax_idx, adjusted_lmax_val, 
-                            lmin_idx, lmin_time, lmin_val,
-                            data_starts[i], fs_chan, 
+                            signal_lpf_ds, signal_derivative, \
+                            adjusted_lmax_time, adjusted_lmax_val, 
+                            lmin_time, lmin_val,
+                            data_starts[i], downsamplig_fs, 
                             min_plateau_duration_sec[0], derivative_threshold, derivative_mean_threshold
                         )
                     if len(plateau) > 0:
                         plateau_lst.extend(plateau)
 
                     # Shift right Lmax for derivative plateau
-                    adjusted_lmax_idx, adjusted_lmax_time, adjusted_lmax_val, \
-                        adjusted_lmin_idx, adjusted_lmin_time, adjusted_lmin_val, plateau = \
+                    adjusted_lmax_time, adjusted_lmax_val, \
+                        adjusted_lmin_time, adjusted_lmin_val, plateau = \
                         self.shift_max_right_plateau(
-                            signal_lpf, signal_derivative, adjusted_lmax_idx, adjusted_lmax_val, 
-                            lmin_idx, lmin_time, lmin_val, data_starts[i], fs_chan, 
+                            signal_lpf_ds, signal_derivative, adjusted_lmax_time, adjusted_lmax_val, 
+                            lmin_time, lmin_val, data_starts[i], downsamplig_fs, 
                             min_plateau_duration_sec[1], derivative_threshold, derivative_mean_threshold, min_slope_plateau[0]
                         )
                     if len(plateau) > 0:
                         plateau_lst.extend(plateau)
 
                     # Shift right Lmax for derivative plateau
-                    adjusted_lmax_idx, adjusted_lmax_time, adjusted_lmax_val, \
-                        adjusted_lmin_idx, adjusted_lmin_time, adjusted_lmin_val, plateau = \
+                    adjusted_lmax_time, adjusted_lmax_val, \
+                        adjusted_lmin_time, adjusted_lmin_val, plateau = \
                         self.shift_max_right_plateau(
-                            signal_lpf, signal_derivative, adjusted_lmax_idx, adjusted_lmax_val, 
-                            lmin_idx, lmin_time, lmin_val, data_starts[i], fs_chan, 
+                            signal_lpf_ds, signal_derivative, adjusted_lmax_time, adjusted_lmax_val, 
+                            lmin_time, lmin_val, data_starts[i], downsamplig_fs, 
                             min_plateau_duration_sec[2], derivative_threshold, derivative_mean_threshold, min_slope_plateau[1]
                         )
                     if len(plateau) > 0:
@@ -1183,18 +1184,20 @@ class OxygenDesatDetector(SciNode):
                         break
 
                     # Correct Lmax locations by finding actual maximum within 5s window on raw signal
-                    adjusted_lmax_idx = self.correct_peak_indices_in_window(
-                        signal, [adjusted_lmax_idx], window_s=5, fs_chan=fs_chan)
-                    adjusted_lmax_idx = adjusted_lmax_idx[0]
-                    adjusted_lmax_time = data_starts[i] + adjusted_lmax_idx / fs_chan
-                    adjusted_lmax_val = signal[adjusted_lmax_idx]
+                    corrected_lmax_times, corrected_lmax_vals = self.correct_peak_times_in_window(
+                        signal, [adjusted_lmax_time], window_s=5, fs_chan=fs_chan, signal_start_time=data_starts[i])
+                    if len(corrected_lmax_times) == 0:
+                        continue
+                    adjusted_lmax_time = corrected_lmax_times[0]
+                    adjusted_lmax_val = corrected_lmax_vals[0]
 
-                    # Correct Lmin locations by finding actual maximum within 5s window on raw signal
-                    adjusted_lmin_idx = self.correct_peak_indices_in_window(
-                        signal, [adjusted_lmin_idx], window_s=5, fs_chan=fs_chan, find_max=False)
-                    adjusted_lmin_idx = adjusted_lmin_idx[0]
-                    adjusted_lmin_time = data_starts[i] + adjusted_lmin_idx / fs_chan
-                    adjusted_lmin_val = signal[adjusted_lmin_idx]
+                    # Correct Lmin locations by finding actual minimum within 5s window on raw signal
+                    corrected_lmin_times, corrected_lmin_vals = self.correct_peak_times_in_window(
+                        signal, [adjusted_lmin_time], window_s=5, fs_chan=fs_chan, signal_start_time=data_starts[i], find_max=False)
+                    if len(corrected_lmin_times) == 0:
+                        continue
+                    adjusted_lmin_time = corrected_lmin_times[0]
+                    adjusted_lmin_val = corrected_lmin_vals[0]
 
                     # Recalculate drop after adjustments
                     drop = adjusted_lmax_val - adjusted_lmin_val
@@ -1388,55 +1391,89 @@ class OxygenDesatDetector(SciNode):
         return data_cleaned, artifact_events
 
 
-    def correct_peak_indices_in_window(self, signal, peak_indices, window_s, fs_chan, find_max=True):
+    def correct_peak_times_in_window(self, signal, peak_times, window_s, fs_chan, signal_start_time=0.0, find_max=True):
         """
-        Correct peak locations by finding actual extrema in the original signal within a time window.
-        Vectorized implementation for better performance.
+        Correct peak locations by finding actual extrema in a signal within a time window.
+        Works with times in seconds for compatibility with downsampled signals.
         
         Parameters:
             signal : numpy array
-                Original SpO2 signal.
-            peak_indices : numpy array or list
-                Indices of peaks to correct.
+                SpO2 signal (can be original or downsampled).
+            peak_times : numpy array or list
+                Times in seconds of peaks to correct (absolute times).
             window_s : float
                 Window duration in seconds (centered on each peak).
             fs_chan : float
-                Sampling frequency (Hz).
+                Sampling frequency (Hz) of the signal.
+            signal_start_time : float
+                Start time of the signal in seconds (default 0.0).
             find_max : bool
                 If True, find maximum within window; if False, find minimum.
         
         Returns:
-            corrected_indices : numpy array
-                Corrected indices of peaks in the original signal.
+            corrected_times : numpy array
+                Corrected times in seconds of peaks.
+            corrected_values : numpy array
+                Values at the corrected peak times.
         """
-        peak_indices = np.asarray(peak_indices)
-        if len(peak_indices) == 0:
-            return np.array([], dtype=int)
+        peak_times = np.asarray(peak_times, dtype=float)
+        if len(peak_times) == 0:
+            return np.array([], dtype=float), np.array([], dtype=float)
         
-        half_window_samples = int((window_s / 2) * fs_chan)
+        half_window_sec = window_s / 2
         signal_len = len(signal)
+        signal_end_time = signal_start_time + signal_len / fs_chan
         
-        # Vectorized window bounds calculation
-        window_starts = np.maximum(0, peak_indices - half_window_samples)
-        window_ends = np.minimum(signal_len, peak_indices + half_window_samples)
+        corrected_times = np.empty(len(peak_times), dtype=float)
+        corrected_values = np.empty(len(peak_times), dtype=float)
+        valid_mask = np.ones(len(peak_times), dtype=bool)
         
-        corrected_indices = np.empty(len(peak_indices), dtype=int)
-        valid_mask = np.ones(len(peak_indices), dtype=bool)
-        
-        for i, (ws, we) in enumerate(zip(window_starts, window_ends)):
-            window_signal = signal[ws:we]
+        for i, peak_time in enumerate(peak_times):
+            # Calculate window bounds in time
+            window_start_time = max(signal_start_time, peak_time - half_window_sec)
+            window_end_time = min(signal_end_time, peak_time + half_window_sec)
+            
+            # Convert times to indices
+            window_start_idx = int((window_start_time - signal_start_time) * fs_chan)
+            window_end_idx = int((window_end_time - signal_start_time) * fs_chan)
+            
+            window_signal = signal[window_start_idx:window_end_idx]
             if len(window_signal) > 0 and not np.all(np.isnan(window_signal)):
                 if find_max:
-                    corrected_indices[i] = ws + np.nanargmax(window_signal)
+                    extrema_idx_in_window = np.nanargmax(window_signal)
                 else:
-                    corrected_indices[i] = ws + np.nanargmin(window_signal)
+                    extrema_idx_in_window = np.nanargmin(window_signal)
+                
+                # Convert back to time
+                corrected_times[i] = signal_start_time + (window_start_idx + extrema_idx_in_window) / fs_chan
+                corrected_values[i] = window_signal[extrema_idx_in_window]
             else:
                 valid_mask[i] = False
         
-        return corrected_indices[valid_mask]
+        return corrected_times[valid_mask], corrected_values[valid_mask]
 
 
-    def detect_local_min(self, signal, signal_lpf, fs_chan, min_peak_distance_samples, min_peak_prominence, data_start):
+    def time_to_index(self, time_sec, signal_start_time, fs_chan):
+        """
+        Convert time in seconds to signal index.
+        
+        Parameters:
+            time_sec : float or numpy array
+                Time(s) in seconds to convert.
+            signal_start_time : float
+                Start time of the signal in seconds.
+            fs_chan : float
+                Sampling frequency (Hz) of the signal.
+        
+        Returns:
+            index : int or numpy array
+                Index/indices in the signal.
+        """
+        # Use floor (int truncation) to be consistent with standard signal indexing
+        return ((np.asarray(time_sec) - signal_start_time) * fs_chan).astype(int)
+
+
+    def detect_local_min(self, signal, signal_lpf, fs_chan, fs_lpf, min_peak_distance_sec, min_peak_prominence, data_start):
         """
         Detect local minimums from the low-pass filtered signal and correct their location
         by finding the actual minimum in the original signal within a 10s window.
@@ -1445,22 +1482,26 @@ class OxygenDesatDetector(SciNode):
             signal : numpy array
                 Original SpO2 signal.
             signal_lpf : numpy array
-                Low-pass filtered SpO2 signal for trend detection.
+                Low-pass filtered SpO2 signal for trend detection (can be downsampled).
             fs_chan : float
-                Sampling frequency (Hz).
-            min_peak_distance_samples : int
-                Minimum distance between peaks in samples.
+                Sampling frequency (Hz) of the original signal.
+            fs_lpf : float
+                Sampling frequency (Hz) of the low-pass filtered signal.
+            min_peak_distance_sec : float
+                Minimum distance between peaks in seconds.
             min_peak_prominence : float
                 Minimum prominence for peak detection.
             data_start : float
                 Start time in seconds of this signal section.
         
         Returns:
-            lmin_indices_corrected : numpy array
-                Corrected indices of local minimums in the original signal.
+            lmin_times : numpy array
+                Corrected times in seconds of local minimums.
+            lmin_values : numpy array
+                Values at the corrected local minimums.
         """
         window_s = 10  # seconds window to identify the real minimum
-        half_window_samples = int((window_s / 2) * fs_chan)
+        min_peak_distance_samples = int(min_peak_distance_sec * fs_lpf)
         
         # Invert the signal to find minimums using find_peaks
         inverted_signal = -signal_lpf
@@ -1472,25 +1513,24 @@ class OxygenDesatDetector(SciNode):
             prominence=min_peak_prominence
         )
         
-        # Correct Lmin locations by finding actual minimum within 10s window
-        lmin_indices_corrected = self.correct_peak_indices_in_window(
-            signal, lmin_indices, window_s, fs_chan, find_max=False
+        # Convert indices to times using fs_lpf (the filtered signal's sampling rate)
+        lmin_times_lpf = data_start + lmin_indices / fs_lpf
+        
+        # Correct Lmin locations by finding actual minimum within 10s window on original signal
+        lmin_times, lmin_values = self.correct_peak_times_in_window(
+            signal, lmin_times_lpf, window_s, fs_chan, signal_start_time=data_start, find_max=False
         )
         
         if DEBUG:
-            lmin_times_sec = data_start + lmin_indices_corrected / fs_chan
-            lmin_values = signal[lmin_indices_corrected] if len(lmin_indices_corrected) > 0 else []
-            print(f"Found {len(lmin_indices_corrected)} local minimums (corrected within {window_s}s window)\n")
-            # for idx, (t, v) in enumerate(zip(lmin_times_sec, lmin_values)):
-            #     print(f"  Lmin {idx}: time={t:.2f}s, value={v:.1f}%")
+            print(f"Found {len(lmin_times)} local minimums (corrected within {window_s}s window)\n")
         
-        return lmin_indices_corrected
+        return lmin_times, lmin_values
 
 
-    def detect_local_max(self, signal, signal_lpf, fs_chan, min_peak_distance_samples, min_peak_prominence, data_start):
+    def detect_local_max(self, signal, signal_lpf, fs_chan, fs_lpf, min_peak_distance_sec, min_peak_prominence, data_start):
         """
         Detect local maximums from the low-pass filtered signal and correct their location
-        by finding the actual maximum in the original signal within a 5s window (to validate).
+        by finding the actual maximum in the original signal within a 10s window.
 
         If the difference is <3 percentage points between 2 consecutive Lmax, the first Lmax is removed.
         
@@ -1498,24 +1538,29 @@ class OxygenDesatDetector(SciNode):
             signal : numpy array
                 Original SpO2 signal.
             signal_lpf : numpy array
-                Low-pass filtered SpO2 signal for trend detection.
+                Low-pass filtered SpO2 signal for trend detection (can be downsampled).
             fs_chan : float
-                Sampling frequency (Hz).
-            min_peak_distance_samples : int
-                Minimum distance between peaks in samples.
+                Sampling frequency (Hz) of the original signal.
+            fs_lpf : float
+                Sampling frequency (Hz) of the low-pass filtered signal.
+            min_peak_distance_sec : float
+                Minimum distance between peaks in seconds.
             min_peak_prominence : float
                 Minimum prominence for peak detection.
             data_start : float
                 Start time in seconds of this signal section.
         
         Returns:
-            filtered_lmax_indices : numpy array
-                Indices of local maximums filtered for too low maximums.
-            lmax_indices_org : numpy array
-                Indices of local maximums in the original signal.
+            filtered_lmax_times : numpy array
+                Times in seconds of local maximums filtered for too low maximums.
+            filtered_lmax_values : numpy array
+                Values at filtered local maximums.
+            lmax_times_org : numpy array
+                Times in seconds of all local maximums (for debug display).
         """
         window_s = 10  # seconds window to identify the real maximum
         min_drop_2_consecutive_max = 3  # minimum drop in SRaw values between two consecutive Lmaxs to consider both Lmaxs
+        min_peak_distance_samples = int(min_peak_distance_sec * fs_lpf)
         
         # Find local maximums using find_peaks on the filtered signal
         lmax_indices, lmax_properties = scipysignal.find_peaks(
@@ -1524,56 +1569,61 @@ class OxygenDesatDetector(SciNode):
             prominence=min_peak_prominence
         )
 
-        # Correct Lmax locations by finding actual maximum within 10s window
-        lmax_indices_org = self.correct_peak_indices_in_window(
-            signal, lmax_indices, window_s, fs_chan, find_max=True
+        # Convert indices to times using fs_lpf (the filtered signal's sampling rate)
+        lmax_times_lpf = data_start + lmax_indices / fs_lpf
+
+        # Correct Lmax locations by finding actual maximum within 10s window on original signal
+        lmax_times_org, lmax_values_org = self.correct_peak_times_in_window(
+            signal, lmax_times_lpf, window_s, fs_chan, signal_start_time=data_start, find_max=True
         )
 
         # Lmaxvalues that are too low to potentially result in proper desaturation events are removed. 
         # This is done by checking the maximum difference in SRaw values between two adjacent Lmaxs: 
         # if the difference is <3 percentage points, the first Lmax is removed
-        filtered_lmax_indices = []
-        for i in range(len(lmax_indices_org)-1):
-            current_lmax_idx = lmax_indices_org[i]
-            next_lmax_idx = lmax_indices_org[i+1]
+        filtered_lmax_times = []
+        filtered_lmax_values = []
+        for i in range(len(lmax_times_org)-1):
+            current_lmax_time = lmax_times_org[i]
+            next_lmax_time = lmax_times_org[i+1]
+            # Convert times to indices for signal access
+            current_lmax_idx = self.time_to_index(current_lmax_time, data_start, fs_chan)
+            next_lmax_idx = self.time_to_index(next_lmax_time, data_start, fs_chan)
             signal_vals = signal[current_lmax_idx:next_lmax_idx]
             if len(signal_vals) > 1:
                 current_lmax_val = np.nanmax(signal_vals)
                 current_lmin_val = np.nanmin(signal_vals)
                 if (current_lmax_val - current_lmin_val) >= min_drop_2_consecutive_max:
-                    filtered_lmax_indices.append(current_lmax_idx)
+                    filtered_lmax_times.append(current_lmax_time)
+                    filtered_lmax_values.append(lmax_values_org[i])
             else:
                 continue
         
-        # Convert to numpy array for efficient operations (searchsorted, indexing)
-        filtered_lmax_indices = np.array(filtered_lmax_indices, dtype=int)
+        # Convert to numpy arrays
+        filtered_lmax_times = np.array(filtered_lmax_times, dtype=float)
+        filtered_lmax_values = np.array(filtered_lmax_values, dtype=float)
         
         if DEBUG:
-            lmax_times_sec = data_start + filtered_lmax_indices / fs_chan
-            lmax_values = signal[filtered_lmax_indices] if len(filtered_lmax_indices) > 0 else []
-            print(f"Found {len(filtered_lmax_indices)} local maximums (corrected within {window_s}s window)\n")
-            # for idx, (t, v) in enumerate(zip(lmax_times_sec, lmax_values)):
-            #     print(f"  Lmax {idx}: time={t:.2f}s, value={v:.1f}%")
+            print(f"Found {len(filtered_lmax_times)} local maximums (corrected within {window_s}s window)\n")
         
-        return filtered_lmax_indices, lmax_indices_org
+        return filtered_lmax_times, filtered_lmax_values, lmax_times_org
 
-    def discard_lmax_without_lmin(self, signal, lmin_indices, lmax_indices, lmax_idx, lmax_time, lmax_val, 
+    def discard_lmax_without_lmin(self, signal, lmin_times, lmin_values, lmax_times, lmax_time, lmax_val, 
                                   data_start, fs_chan, max_slope_drop_sec, desaturation_drop_percent):
         """
-        Find the best Lmin candidate for a given Lmax (lmax_idx).
+        Find Lmin candidates for a given Lmax.
 
-        The maximum duration of a desaturation event is limited to 180 s.
+        The maximum duration of a desaturation event is limited to max_slope_drop_sec.
         The potential Lmax-Lmin pair cannot go through another Lmax.
         
         Parameters:
             signal : numpy array
                 Original SpO2 signal.
-            lmin_indices : numpy array
-                Indices of local minimums.
-            lmax_indices : numpy array
-                Indices of local maximums.
-            lmax_idx : int
-                Index of the current Lmax.
+            lmin_times : numpy array
+                Times in seconds of local minimums.
+            lmin_values : numpy array
+                Values at local minimums.
+            lmax_times : numpy array
+                Times in seconds of local maximums.
             lmax_time : float
                 Time in seconds of the current Lmax.
             lmax_val : float
@@ -1588,35 +1638,32 @@ class OxygenDesatDetector(SciNode):
                 Minimum drop percentage to be considered a desaturation.
         
         Returns:
-            best_lmin : tuple or None
-                (lmin_idx, lmin_time, lmin_val, drop) or None if no valid candidate.
+            candidate_lmins : list or None
+                List of (lmin_time, lmin_val, drop) tuples or None if no valid candidate.
         """
         max_end_time = lmax_time + max_slope_drop_sec
         candidate_lmins = []
         
-        for lmin_idx in lmin_indices:
-            lmin_time = data_start + lmin_idx / fs_chan
-            
+        for lmin_time, lmin_val in zip(lmin_times, lmin_values):
             # Lmin must be after Lmax and within max duration
             if lmin_time <= lmax_time or lmin_time > max_end_time:
                 continue
             
             # Check if there's another Lmax between current Lmax and this Lmin
-            # Use searchsorted for O(log n) lookup instead of np.where O(n)
-            current_pos = np.searchsorted(lmax_indices, lmax_idx)
-            if current_pos + 1 < len(lmax_indices):
-                next_lmax_time = data_start + lmax_indices[current_pos + 1] / fs_chan
+            # Use searchsorted for O(log n) lookup
+            current_pos = np.searchsorted(lmax_times, lmax_time)
+            if current_pos + 1 < len(lmax_times):
+                next_lmax_time = lmax_times[current_pos + 1]
                 if next_lmax_time < lmin_time:
                     continue
             
-            lmin_val = signal[lmin_idx]
             drop = lmax_val - lmin_val
             
             # Reject if drop is less than minimum threshold
             if drop < desaturation_drop_percent:
                 continue
             
-            candidate_lmins.append((lmin_idx, lmin_time, lmin_val, drop))
+            candidate_lmins.append((lmin_time, lmin_val, drop))
         
         if not candidate_lmins:
             return None
@@ -1624,7 +1671,7 @@ class OxygenDesatDetector(SciNode):
         return candidate_lmins
 
 
-    def adjust_lmax_for_fall_rate(self, signal, signal_hpf, lmax_idx, lmin_idx, data_start, fs_chan, fall_rate_threshold=-0.05):
+    def adjust_lmax_for_fall_rate(self, signal, signal_hpf, lmax_time, lmax_val, lmin_time, data_start, fs_chan, fall_rate_threshold=-0.05):
         """
         Shift Lmax forward to the next variation peak using the high-pass filtered signal 
         to identify the onset of the fall, accepting the shift only if the slope between 
@@ -1632,11 +1679,15 @@ class OxygenDesatDetector(SciNode):
         
         Parameters:
             signal : numpy array
-                Original SpO2 signal (already low-pass filtered).
-            lmax_idx : int
-                Index of the current Lmax.
-            lmin_idx : int
-                Index of the matched Lmin.
+                Low-passed SpO2 signal.
+            signal_hpf : numpy array
+                High-pass filtered signal for detecting variations.
+            lmax_time : float
+                Time in seconds of the current Lmax.
+            lmax_val : float
+                Value of the current Lmax.
+            lmin_time : float
+                Time in seconds of the matched Lmin.
             data_start : float
                 Start time in seconds of this signal section.
             fs_chan : float
@@ -1645,16 +1696,15 @@ class OxygenDesatDetector(SciNode):
                 Fall rate threshold in %/s (deepest fall rate to accept a shift).
         
         Returns:
-            adjusted_lmax_idx : int
-                Adjusted index of Lmax.
             adjusted_lmax_time : float
                 Adjusted time of Lmax.
             adjusted_lmax_val : float
                 Adjusted value of Lmax.
+            signal_squared : numpy array
+                Squared HPF signal (for debug).
         """
         # Find maximum parameter
         min_peak_distance_sec = 1
-        #min_peak_prominence = 0.01
 
         # Square the high-pass filtered signal to enhance peaks (in both directions)
         signal_squared = signal_hpf ** 2
@@ -1664,42 +1714,52 @@ class OxygenDesatDetector(SciNode):
         peaks, _ = scipysignal.find_peaks(
             signal_squared,
             distance=min_peak_distance_samples,
-            #prominence=min_peak_prominence
         )
         
-        # Find the next peak after lmax_idx
-        adjusted_lmax_idx = lmax_idx
-        next_peaks = peaks[peaks > lmax_idx]
-        possible_peaks = next_peaks[next_peaks < lmin_idx]
+        # Convert indices to times for comparison
+        peak_times = data_start + peaks / fs_chan
+        
+        # Find the next peak after lmax_time and before lmin_time
+        adjusted_lmax_time = lmax_time
+        adjusted_lmax_val = lmax_val
+        next_peaks = peak_times[peak_times > lmax_time]
+        possible_peaks = next_peaks[next_peaks < lmin_time]
 
         if len(possible_peaks) > 0:
-            # Loop through all peaks before lmin_idx and keep shifting to better maxima
-            for peak_idx in possible_peaks:
-                    
+            # Loop through all peaks before lmin_time and keep shifting to better maxima
+            for peak_time in possible_peaks:
                 # Correct peak locations within 1s window
-                lmax_corrected = self.correct_peak_indices_in_window(signal, [adjusted_lmax_idx], window_s=1, fs_chan=fs_chan)
-                lmax_corrected = lmax_corrected[0]
-                lmax_shifted = self.correct_peak_indices_in_window(signal, [peak_idx], window_s=1, fs_chan=fs_chan)
-                lmax_shifted = lmax_shifted[0]
+                corrected_lmax_times, corrected_lmax_vals = self.correct_peak_times_in_window(
+                    signal, [adjusted_lmax_time], window_s=1, fs_chan=fs_chan, signal_start_time=data_start)
+                if len(corrected_lmax_times) == 0:
+                    break
+                lmax_corrected_time = corrected_lmax_times[0]
+                lmax_corrected_val = corrected_lmax_vals[0]
                 
-                duration_sec = (lmax_shifted - lmax_corrected) / fs_chan
-                drop = signal[lmax_shifted] - signal[lmax_corrected]
+                corrected_shift_times, corrected_shift_vals = self.correct_peak_times_in_window(
+                    signal, [peak_time], window_s=1, fs_chan=fs_chan, signal_start_time=data_start)
+                if len(corrected_shift_times) == 0:
+                    break
+                lmax_shifted_time = corrected_shift_times[0]
+                lmax_shifted_val = corrected_shift_vals[0]
+                
+                duration_sec = lmax_shifted_time - lmax_corrected_time
+                drop = lmax_shifted_val - lmax_corrected_val
 
                 # Evaluate fall rate to ensure it's a valid shift
                 fall_rate = drop / duration_sec if duration_sec > 0 else 0
                 # For any positive fall rate or slow fall rate, we accept the shift
                 if fall_rate >= fall_rate_threshold:
-                    adjusted_lmax_idx = lmax_shifted
+                    adjusted_lmax_time = lmax_shifted_time
+                    adjusted_lmax_val = lmax_shifted_val
                 # If fall rate is too steep, keep current position and stop
                 else:
                     break
         
-        adjusted_lmax_time = data_start + adjusted_lmax_idx / fs_chan
-        adjusted_lmax_val = signal[adjusted_lmax_idx]
-        return adjusted_lmax_idx, adjusted_lmax_time, adjusted_lmax_val, signal_squared
+        return adjusted_lmax_time, adjusted_lmax_val, signal_squared
     
 
-    def adjust_for_derivative_plateau(self, signal, signal_derivative, adjusted_lmax_idx, adjusted_lmax_val, lmin_idx, lmin_time, lmin_val, 
+    def adjust_for_derivative_plateau(self, signal, signal_derivative, adjusted_lmax_time, adjusted_lmax_val, lmin_time, lmin_val, 
                            data_start, fs_chan, min_plateau_duration_sec, derivative_threshold, derivative_mean_threshold):
         """
         Adjust Lmax or Lmin if a flat plateau exists within the event.
@@ -1713,14 +1773,12 @@ class OxygenDesatDetector(SciNode):
         Parameters:
             signal : numpy array
                 Low-pass filtered SpO2 signal.
-            adjusted_lmax_idx : int
-                Current adjusted Lmax index.
+            adjusted_lmax_time : float
+                Current adjusted Lmax time in seconds.
             adjusted_lmax_val : float
                 Current adjusted Lmax value.
-            lmin_idx : int
-                Current Lmin index.
             lmin_time : float
-                Current Lmin time.
+                Current Lmin time in seconds.
             lmin_val : float
                 Current Lmin value.
             data_start : float
@@ -1735,16 +1793,19 @@ class OxygenDesatDetector(SciNode):
                 Maximum absolute mean derivative (%/sec) over the plateau to reject constant slopes (default 0.01).
         
         Returns:
-            adjusted_lmax_idx, adjusted_lmax_time, adjusted_lmax_val, lmin_idx, lmin_time, lmin_val, plateau_list : tuple
+            adjusted_lmax_time, adjusted_lmax_val, lmin_time, lmin_val, plateau_list : tuple
                 Adjusted values after plateau handling and list of all detected plateaus.
         """
         min_plateau_samples = int(min_plateau_duration_sec * fs_chan)
         plateau_list = []
         
+        # Convert times to indices for signal access
+        adjusted_lmax_idx = self.time_to_index(adjusted_lmax_time, data_start, fs_chan)
+        lmin_idx = self.time_to_index(lmin_time, data_start, fs_chan)
+        
         # Iterate to detect multiple plateaus
         while True:
             event_signal = signal[adjusted_lmax_idx:lmin_idx + 1]
-            adjusted_lmax_time = data_start + adjusted_lmax_idx / fs_chan
             derivative = signal_derivative[adjusted_lmax_idx:lmin_idx + 1]
     
             # Stop if remaining duration is less than minimum plateau duration
@@ -1809,13 +1870,13 @@ class OxygenDesatDetector(SciNode):
                         adjusted_lmax_time = data_start + adjusted_lmax_idx / fs_chan
                         adjusted_lmax_val = signal[adjusted_lmax_idx]
 
-        return adjusted_lmax_idx, adjusted_lmax_time, adjusted_lmax_val, lmin_idx, lmin_time, lmin_val, plateau_list
+        return adjusted_lmax_time, adjusted_lmax_val, lmin_time, lmin_val, plateau_list
     
 
-    def shift_max_right_plateau(self, signal, signal_derivative, adjusted_lmax_idx, adjusted_lmax_val, lmin_idx, lmin_time, lmin_val, 
+    def shift_max_right_plateau(self, signal, signal_derivative, adjusted_lmax_time, adjusted_lmax_val, lmin_time, lmin_val, 
                            data_start, fs_chan, min_plateau_duration_sec, derivative_threshold, derivative_mean_threshold, slope_threshold):
         """
-        Adjust Lmax or Lmin if a flat plateau exists within the event.
+        Shift Lmax right if a flat plateau exists within the event.
         Plateau detection is based on the derivative of the signal:
         - Each sample must have |derivative| < derivative_threshold (rejects steep spikes)
         - The mean derivative over the plateau must have |mean| < derivative_mean_threshold (rejects constant slopes)
@@ -1826,14 +1887,12 @@ class OxygenDesatDetector(SciNode):
         Parameters:
             signal : numpy array
                 Low-pass filtered SpO2 signal.
-            adjusted_lmax_idx : int
-                Current adjusted Lmax index.
+            adjusted_lmax_time : float
+                Current adjusted Lmax time in seconds.
             adjusted_lmax_val : float
                 Current adjusted Lmax value.
-            lmin_idx : int
-                Current Lmin index.
             lmin_time : float
-                Current Lmin time.
+                Current Lmin time in seconds.
             lmin_val : float
                 Current Lmin value.
             data_start : float
@@ -1846,18 +1905,23 @@ class OxygenDesatDetector(SciNode):
                 Maximum absolute derivative (%/sec) at each sample to be considered flat (default 0.01).
             derivative_mean_threshold : float
                 Maximum absolute mean derivative (%/sec) over the plateau to reject constant slopes (default 0.01).
+            slope_threshold : float
+                Minimum slope to accept a plateau shift.
         
         Returns:
-            adjusted_lmax_idx, adjusted_lmax_time, adjusted_lmax_val, lmin_idx, lmin_time, lmin_val, plateau_list : tuple
+            adjusted_lmax_time, adjusted_lmax_val, lmin_time, lmin_val, plateau_list : tuple
                 Adjusted values after plateau handling and list of all detected plateaus.
         """
         min_plateau_samples = int(min_plateau_duration_sec * fs_chan)
         plateau_list = []
         
+        # Convert times to indices for signal access
+        adjusted_lmax_idx = self.time_to_index(adjusted_lmax_time, data_start, fs_chan)
+        lmin_idx = self.time_to_index(lmin_time, data_start, fs_chan)
+        
         # Iterate to detect multiple plateaus
         while True:
             event_signal = signal[adjusted_lmax_idx:lmin_idx + 1]
-            adjusted_lmax_time = data_start + adjusted_lmax_idx / fs_chan
             derivative = signal_derivative[adjusted_lmax_idx:lmin_idx + 1]
     
             # Stop if remaining duration is less than minimum plateau duration
@@ -1886,8 +1950,8 @@ class OxygenDesatDetector(SciNode):
                     if np.abs(mean_derivative) < derivative_mean_threshold:
                         # Evaluate if the slope between the current lmax and the end of the plateau is not too steep 
                         # (rejects invalid plateaus that would not correspond to a real shift)
-                        duration_sec = (adjusted_lmax_idx + end - adjusted_lmax_idx) / fs_chan
-                        slope = (signal[adjusted_lmax_idx + end] - adjusted_lmax_val) / duration_sec
+                        duration_sec = end / fs_chan
+                        slope = (signal[adjusted_lmax_idx + end] - adjusted_lmax_val) / duration_sec if duration_sec > 0 else 0
                         if slope < slope_threshold:
                             continue
                         best_plateau_start = start
@@ -1920,7 +1984,7 @@ class OxygenDesatDetector(SciNode):
                     adjusted_lmax_time = data_start + adjusted_lmax_idx / fs_chan
                     adjusted_lmax_val = signal[adjusted_lmax_idx]
 
-        return adjusted_lmax_idx, adjusted_lmax_time, adjusted_lmax_val, lmin_idx, lmin_time, lmin_val, plateau_list
+        return adjusted_lmax_time, adjusted_lmax_val, lmin_time, lmin_val, plateau_list
 
 
     def compute_desat_stats(self, desat_df, total_stats, stage_sleep_period_df):
