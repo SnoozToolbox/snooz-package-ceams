@@ -462,17 +462,17 @@ class REMsDetails(SciNode):
                         segment = signal.samples[start_sample:end_sample]
                         segmentDict[signal.channel] = segment
             
-            # Calculate amplitude from LOG-ROG difference
-            LOG = None
-            ROG = None
+            # Calculate amplitude from LOC-ROC difference
+            LOC = None
+            ROC = None
             for channel, segments in segmentDict.items():
                 if 'L' in channel:
-                    LOG = segments
+                    LOC = segments
                 else:
-                    ROG = segments
+                    ROC = segments
             
-            if LOG is not None and ROG is not None and len(LOG) == len(ROG):
-                Subtracted_segment = LOG - ROG
+            if LOC is not None and ROC is not None and len(LOC) == len(ROC):
+                Subtracted_segment = LOC - ROC
                 if len(Subtracted_segment) > 0:
                     # Calculate peak-to-peak amplitude
                     amplitude = np.max(Subtracted_segment) - np.min(Subtracted_segment)

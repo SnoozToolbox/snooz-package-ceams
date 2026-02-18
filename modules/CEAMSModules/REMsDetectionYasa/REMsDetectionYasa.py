@@ -132,7 +132,7 @@ class REMsDetectionYasa(SciNode):
             raw = self.prepare_raw_data(signals)
             hypno_up = yasa.hypno_upsample_to_data(hypno, sf_hypno=1/30, 
                                                     data=raw._data[0, :], 
-                                                    sf_data=raw.info['sfreq'])
+                                                    sf_data=np.round(raw.info['sfreq']))
             # Extract EOG signals
             loc = raw._data[0, :] * 1e6  # Convert from V to µV
             roc = raw._data[1, :] * 1e6
@@ -193,7 +193,21 @@ class REMsDetectionYasa(SciNode):
         ch_names = [raw[0].channel, raw[1].channel]
         ch_type = ['eog', 'eog']
         sfreq = raw[0].sample_rate
-        data = np.array([r.samples * 1e-6 for r in raw])
+        if len(raw) > 2:
+            LOC_list = []
+            ROC_list = []
+            for ch in ch_names:
+                for i in range(len(raw)):
+                    if raw[i].channel == ch and 'L' in ch:
+                        LOC_list.append(raw[i].samples)
+                    elif raw[i].channel == ch and 'L' not in ch:
+                        ROC_list.append(raw[i].samples)
+            LOC_array = np.concatenate(LOC_list) if LOC_list else np.array([])
+            ROC_array = np.concatenate(ROC_list) if ROC_list else np.array([])
+            raw_samples_conatenated = np.vstack((LOC_array, ROC_array))
+            data = np.array([r * 1e-6 for r in raw_samples_conatenated])
+        else:
+            data = np.array([r.samples * 1e-6 for r in raw])  # Convert from V to µV
         info = mne.create_info(ch_names=ch_names, sfreq=sfreq, ch_types=ch_type)
         return mne.io.RawArray(data, info)
     
