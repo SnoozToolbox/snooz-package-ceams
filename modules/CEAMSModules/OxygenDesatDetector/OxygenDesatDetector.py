@@ -329,7 +329,7 @@ class OxygenDesatDetector(SciNode):
         # Detect artifact 
         #   data_clean is the raw signal with short artifacts interpolated and long artifact forced to NaN
         artifact_events = []
-        data_clean, artifact_det_lst = self.detect_artifact_SpO2(data_stats, data_starts, fs_chan)
+        data_clean, artifact_det_lst, data_squared = self.detect_artifact_SpO2(data_stats, data_starts, fs_chan)
         artifact_events += [('SpO2', 'art_SpO2', start_sec, duration_sec, '') # Add back channel
                          for start_sec, duration_sec in artifact_det_lst]
         # Convert artifact_events to dataframe
@@ -410,22 +410,27 @@ class OxygenDesatDetector(SciNode):
                 # Create a SignalModel for the raw data and the filtered data
                 signal_raw = signals[index_longuest].clone(clone_samples=False)
                 signal_lpf = signals[index_longuest].clone(clone_samples=False)
-                signal_hpf = signals[index_longuest].clone(clone_samples=False)
-                signal_dev = signals[index_longuest].clone(clone_samples=False)
+                # signal_hpf = signals[index_longuest].clone(clone_samples=False)
+                # signal_dev = signals[index_longuest].clone(clone_samples=False)
+                signal_squared = signals[index_longuest].clone(clone_samples=False)
                 signal_raw.samples = data_stats[index_longuest]
                 signal_raw.start_time = data_starts[index_longuest]
                 signal_lpf.samples = data_lpf_list[index_longuest]
                 signal_lpf.start_time = data_starts[index_longuest]
                 signal_lpf.channel = signal_raw.channel+'_lpf'
-                signal_dev.samples = data_dev_list[index_longuest]
-                signal_dev.start_time = data_starts[index_longuest]
-                signal_dev.channel = signal_raw.channel+'_dev'
-                signal_hpf.samples = data_hpf_list[index_longuest]
-                signal_hpf.start_time = data_starts[index_longuest]
-                signal_hpf.channel = signal_raw.channel+'_hpf'
+                signal_squared.samples = data_squared[index_longuest]
+                signal_squared.start_time = data_starts[index_longuest]
+                signal_squared.channel = signal_raw.channel+'_squared'
+                # signal_dev.samples = data_dev_list[index_longuest]
+                # signal_dev.start_time = data_starts[index_longuest]
+                # signal_dev.channel = signal_raw.channel+'_dev'
+                # signal_hpf.samples = data_hpf_list[index_longuest]
+                # signal_hpf.start_time = data_starts[index_longuest]
+                # signal_hpf.channel = signal_raw.channel+'_hpf'
                 cache['signal_raw'] = signal_raw
                 cache['signal_lpf'] = signal_lpf
-                cache['signal_hpf'] = signal_dev
+                cache['signal_hpf'] = signal_squared
+                #cache['signal_hpf'] = signal_dev
                 #cache['signal_dev'] = signal_dev
                 cache['desat_df'] = desat_df
                 cache['plateau_df'] = plateau_df
@@ -1058,23 +1063,23 @@ class OxygenDesatDetector(SciNode):
         avg_fall_rate_lower_limit = -4.0  # % per second, the deepest
         # The least steep (-0.05 in the paper) -0.08 for better performance
         avg_fall_rate_upper_limit = -0.05  # % per second
-
         # peak detection parameters
         min_peak_distance_sec = 5 # ABOSA = 5 sec
         min_peak_prominence = 1 # ABOSA = 1; 0.5 for better performance
         # Filter order for lowpass (finding peaks) and highpass (fall rate) filtering
-        order = 4 # ABOSA paper= 2; ABOSA email=4; 8 for better performance
+        order = 4 # ABOSA paper= 2; ABOSA email=4;
         low_frequency_cutoff = 0.1 #same as the paper
         # To shift right the maximum to the point where the fall starts
         high_frequency_cutoff = 0.1 # Filter to enhance the variation for fall rate detection
         # Accepted slope to shift Lmax right (more negative is steeper and will reject the shift, the fall starts before)
         fall_rate_threshold = -0.05 # % 
         # Adjust Lmax and all Lmin candidates for plateau on the filtered signal
-        min_plateau_duration_sec = [30, 10, 5] # ABOSA=30 sec paper, but ABOSA email=5 sec; 15 sec has better performance
-        min_slope_plateau = [-0.05, -0.0333]
+        min_plateau_duration_sec = [30, 10, 5] # ABOSA (info from email)
+        min_slope_plateau = [-0.05, -0.0333] # Here it is applied on the low-pass signal (ABOSA on raw signal)
         
-        derivative_threshold = 0.08 # % per second; slope threshold to define a plateau. ABOSA not mentionned; 
-        derivative_mean_threshold = 0.05 # % per second; mean slope threshold to define a plateau. ABOSA not mentionned;
+        # Made up parameters to define plateaus
+        derivative_threshold = 0.1 # slope (% per second); ABOSA not mentionned; valid values [0.08, 0.1(best), 0.15]
+        derivative_mean_threshold = 0.05 # slope (% per second); ABOSA not mentionned; valid values [0.025 0.05(best), 0.08(same)] 
 
         if DEBUG:
             print("\n--- Detect desaturation events ---")
@@ -1181,6 +1186,12 @@ class OxygenDesatDetector(SciNode):
                         if DEBUG:
                             print(f"Lmax at {adjusted_lmax_time:.2f}s is after Lmin at {adjusted_lmin_time:.2f}s after plateau adjustment")
                         break
+
+                    # Skip desaturation events that include artifacts
+                    if any(np.isnan(signal[adjusted_lmax_idx:lmin_idx + 1])):
+                        if DEBUG:
+                            print(f"Skipping desaturation event from {adjusted_lmax_time:.2f}s to {lmin_time:.2f}s due to artifact (NaN values in signal)")
+                        continue
 
                     # Correct Lmax locations by finding actual maximum within 5s window on raw signal
                     adjusted_lmax_idx = self.correct_peak_indices_in_window(
@@ -1309,15 +1320,17 @@ class OxygenDesatDetector(SciNode):
         - artifact_events: List of (start_sec, duration_sec) tuples for artifacts >5s
         """
         # List of constants
-        filter_order = 4
+        filter_order = 8 # The author uses order 4 with filtfilt but did not divide the order by 2
         cutoff_freq = 1.0
-        threshold_squared = 30
+        threshold_squared = 20 # ABOSA 30
         lower_bound = 50
         upper_bound = 100
         art_buffer_sec = 1.0 # Extend each artifact by 1 second in both directions
         linear_art_sec = 5.0 # Interpolate artifacts with duration ≤ 5 seconds
-        
+        slope_threshold = 6 # If the slope of the interpolation is too steep, we can skip the interpolation and keep it as artifact (NaN)
+
         data_cleaned = []
+        data_squared = []
         for samples, data_start in zip(sraw, data_starts):
             # 1. Identify artifact points directly from raw signal first
             # This avoids filter edge effects
@@ -1370,6 +1383,16 @@ class OxygenDesatDetector(SciNode):
                     if start > 0 and end < len(samples):
                         x = [start - 1, end]
                         y = [samples[start - 1], samples[end]]
+                        
+                        # If the slope of the interpolation is too steep, we can skip the interpolation and keep it as artifact (NaN)
+                        slope = abs((y[1] - y[0]) / ((x[1] - x[0])/fs_chan))  # Slope in % per second
+                        if slope > slope_threshold:  # Adjust this threshold as needed
+                            start_sec = (start / fs_chan) + data_start
+                            duration_sec = duration / fs_chan
+                            artifact_events.append((start_sec, duration_sec))
+                            cleaned_signal[start:end] = np.nan
+                            continue
+                        
                         interpolator = interp1d(x, y, kind='linear')
                         cleaned_signal[start:end] = interpolator(np.arange(start, end))
                     
@@ -1384,8 +1407,9 @@ class OxygenDesatDetector(SciNode):
                     cleaned_signal[start:end] = np.nan
 
             data_cleaned.append(cleaned_signal)
+            data_squared.append(squared_signal)
         
-        return data_cleaned, artifact_events
+        return data_cleaned, artifact_events, data_squared
 
 
     def correct_peak_indices_in_window(self, signal, peak_indices, window_s, fs_chan, find_max=True):
