@@ -329,7 +329,7 @@ class OxygenDesatDetector(SciNode):
         # Detect artifact 
         #   data_clean is the raw signal with short artifacts interpolated and long artifact forced to NaN
         artifact_events = []
-        data_clean, artifact_det_lst, data_squared = self.detect_artifact_SpO2(data_stats, data_starts, fs_chan)
+        data_clean, artifact_det_lst, data_gradient = self.detect_artifact_SpO2(data_stats, data_starts, fs_chan)
         artifact_events += [('SpO2', 'art_SpO2', start_sec, duration_sec, '') # Add back channel
                          for start_sec, duration_sec in artifact_det_lst]
         # Convert artifact_events to dataframe
@@ -411,27 +411,22 @@ class OxygenDesatDetector(SciNode):
                 signal_raw = signals[index_longuest].clone(clone_samples=False)
                 signal_lpf = signals[index_longuest].clone(clone_samples=False)
                 # signal_hpf = signals[index_longuest].clone(clone_samples=False)
-                # signal_dev = signals[index_longuest].clone(clone_samples=False)
                 signal_squared = signals[index_longuest].clone(clone_samples=False)
                 signal_raw.samples = data_stats[index_longuest]
                 signal_raw.start_time = data_starts[index_longuest]
                 signal_lpf.samples = data_lpf_list[index_longuest]
                 signal_lpf.start_time = data_starts[index_longuest]
                 signal_lpf.channel = signal_raw.channel+'_lpf'
-                signal_squared.samples = data_squared[index_longuest]
+                signal_squared.samples = data_gradient[index_longuest]
                 signal_squared.start_time = data_starts[index_longuest]
                 signal_squared.channel = signal_raw.channel+'_squared'
-                # signal_dev.samples = data_dev_list[index_longuest]
-                # signal_dev.start_time = data_starts[index_longuest]
-                # signal_dev.channel = signal_raw.channel+'_dev'
                 # signal_hpf.samples = data_hpf_list[index_longuest]
                 # signal_hpf.start_time = data_starts[index_longuest]
                 # signal_hpf.channel = signal_raw.channel+'_hpf'
                 cache['signal_raw'] = signal_raw
                 cache['signal_lpf'] = signal_lpf
                 cache['signal_hpf'] = signal_squared
-                #cache['signal_hpf'] = signal_dev
-                #cache['signal_dev'] = signal_dev
+
                 cache['desat_df'] = desat_df
                 cache['plateau_df'] = plateau_df
                 cache['lmax_sec'] = lmax_indices_list[index_longuest]/fs_chan + data_starts[index_longuest]
@@ -1322,15 +1317,14 @@ class OxygenDesatDetector(SciNode):
         # List of constants
         filter_order = 4 # The author uses order 4 with filtfilt but did not divide the order by 2
         cutoff_freq = 1.0
-        threshold_squared = 20 # ABOSA 30 # 20 for 1 subject
+        threshold_squared = 30 # ABOSA 30 # 20 for 1 subject
         lower_bound = 50
         upper_bound = 100
         art_buffer_sec = 1.0 # Extend each artifact by 1 second in both directions
         linear_art_sec = 5.0 # Interpolate artifacts with duration ≤ 5 seconds
-        slope_threshold = 5 # If the slope of the interpolation is too steep, we can skip the interpolation and keep it as artifact (NaN)
 
         data_cleaned = []
-        data_squared = []
+        data_gradient = []
         for samples, data_start in zip(sraw, data_starts):
             # 1. Identify artifact points directly from raw signal first
             # This avoids filter edge effects
@@ -1386,7 +1380,7 @@ class OxygenDesatDetector(SciNode):
                         
                         # If the slope of the interpolation is too steep, we can skip the interpolation and keep it as artifact (NaN)
                         slope = abs((y[1] - y[0]) / ((x[1] - x[0])/fs_chan))  # Slope in % per second
-                        if slope > slope_threshold:  # Adjust this threshold as needed
+                        if slope > np.sqrt(threshold_squared):  # Adjust this threshold as needed
                             start_sec = (start / fs_chan) + data_start
                             duration_sec = duration / fs_chan
                             artifact_events.append((start_sec, duration_sec))
@@ -1407,9 +1401,9 @@ class OxygenDesatDetector(SciNode):
                     cleaned_signal[start:end] = np.nan
 
             data_cleaned.append(cleaned_signal)
-            data_squared.append(squared_signal)
+            data_gradient.append(squared_signal)
         
-        return data_cleaned, artifact_events, data_squared
+        return data_cleaned, artifact_events, data_gradient
 
 
     def correct_peak_indices_in_window(self, signal, peak_indices, window_s, fs_chan, find_max=True):
