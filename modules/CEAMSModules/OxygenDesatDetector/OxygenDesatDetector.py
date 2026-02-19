@@ -1320,14 +1320,14 @@ class OxygenDesatDetector(SciNode):
         - artifact_events: List of (start_sec, duration_sec) tuples for artifacts >5s
         """
         # List of constants
-        filter_order = 8 # The author uses order 4 with filtfilt but did not divide the order by 2
+        filter_order = 4 # The author uses order 4 with filtfilt but did not divide the order by 2
         cutoff_freq = 1.0
-        threshold_squared = 20 # ABOSA 30
+        threshold_squared = 20 # ABOSA 30 # 20 for 1 subject
         lower_bound = 50
         upper_bound = 100
         art_buffer_sec = 1.0 # Extend each artifact by 1 second in both directions
         linear_art_sec = 5.0 # Interpolate artifacts with duration ≤ 5 seconds
-        slope_threshold = 6 # If the slope of the interpolation is too steep, we can skip the interpolation and keep it as artifact (NaN)
+        slope_threshold = 5 # If the slope of the interpolation is too steep, we can skip the interpolation and keep it as artifact (NaN)
 
         data_cleaned = []
         data_squared = []
