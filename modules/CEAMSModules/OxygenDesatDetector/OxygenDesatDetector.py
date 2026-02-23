@@ -414,9 +414,11 @@ class OxygenDesatDetector(SciNode):
                 #signal_squared = signals[index_longuest].clone(clone_samples=False)
                 signal_raw.samples = data_stats[index_longuest]
                 signal_raw.start_time = data_starts[index_longuest]
-                signal_lpf.samples = data_lpf_list[index_longuest]
+                #signal_lpf.samples = data_lpf_list[index_longuest]
+                signal_lpf.samples = data_gradient[index_longuest]
                 signal_lpf.start_time = data_starts[index_longuest]
-                signal_lpf.channel = signal_raw.channel+'_lpf'
+                #signal_lpf.channel = signal_raw.channel+'_lpf'
+                signal_lpf.channel = signal_raw.channel+'_art'
                 signal_hpf.samples = data_dev_list[index_longuest]
                 signal_hpf.start_time = data_starts[index_longuest]
                 signal_hpf.channel = signal_raw.channel+'_grad'
@@ -1067,11 +1069,10 @@ class OxygenDesatDetector(SciNode):
         fall_rate_threshold = -0.05 # % 
         # Adjust Lmax and all Lmin candidates for plateau on the filtered signal
         min_plateau_duration_sec = 30  # For adjust_for_rounded_plateau method (ABOSA info from email)
-        # Plateau duration ranges (min_sec, max_sec) and corresponding slope thresholds for shift_max_right_rounded_plateau
-        # Shorter plateaus (5-10s) use stricter slope (-0.0333 %/s)
-        # Longer plateaus (10-30s) use more permissive slope (-0.05 %/s)
-        plateau_duration_ranges = [(5, 10), (10, 30)]  # (min_sec, max_sec) for each range
-        plateau_slope_thresholds = [-0.0333, -0.05]  # %/sec for each duration range
+        # Parameters for shift_max_right_rounded_plateau
+        # Uses same threshold as avg_fall_rate_upper_limit (physiologically grounded)
+        min_block_duration_sec = 5  # Minimum block duration to consider for shifting
+        block_slope_threshold = -0.05  # %/sec - same as ABOSA fall rate upper limit
         
         # Made up parameters to define plateaus
         #derivative_threshold = 0.1 # slope (% per second); ABOSA not mentionned; valid values [0.08, 0.1(best), 0.15]
@@ -1157,9 +1158,9 @@ class OxygenDesatDetector(SciNode):
                     adjusted_lmax_idx, adjusted_lmax_time, adjusted_lmax_val, \
                         adjusted_lmin_idx, adjusted_lmin_time, adjusted_lmin_val, plateau = \
                         self.shift_max_right_rounded_plateau(
-                            signal_rounded, signal_derivative, adjusted_lmax_idx, adjusted_lmax_val, 
+                            signal_rounded, signal_derivative, signal, adjusted_lmax_idx, adjusted_lmax_val, 
                             adjusted_lmin_idx, adjusted_lmin_time, adjusted_lmin_val, data_starts[i], fs_chan, 
-                            plateau_duration_ranges, plateau_slope_thresholds
+                            min_block_duration_sec, block_slope_threshold
                         )
                     if len(plateau) > 0:
                         plateau_lst.extend(plateau)
@@ -2060,19 +2061,23 @@ class OxygenDesatDetector(SciNode):
         return adjusted_lmax_idx, adjusted_lmax_time, adjusted_lmax_val, lmin_idx, lmin_time, lmin_val, plateau_list
     
 
-    def shift_max_right_rounded_plateau(self, signal, signal_derivative, adjusted_lmax_idx, adjusted_lmax_val, lmin_idx, lmin_time, lmin_val, 
-                           data_start, fs_chan, plateau_duration_ranges, slope_thresholds):
+    def shift_max_right_rounded_plateau(self, signal_rounded, signal_derivative, signal_raw, adjusted_lmax_idx, adjusted_lmax_val, lmin_idx, lmin_time, lmin_val, 
+                           data_start, fs_chan, min_block_duration_sec, block_slope_threshold):
         """
-        Shift Lmax to the right through consecutive plateaus as long as the slope from 
-        the original Lmax to the end of each plateau is not steep enough (> slope_threshold).
+        Shift Lmax to the right through consecutive blocks as long as the slope 
+        within each block (computed on the raw signal) is too shallow (> block_slope_threshold).
         
-        The slope threshold depends on the plateau duration:
-        - Short plateaus (5-10s) use a stricter slope threshold (-0.0333 %/s)
-        - Longer plateaus (10-30s) use a more permissive slope threshold (-0.05 %/s)
+        Block boundaries are detected from the rounded signal (edges where derivative != 0).
+        The slope is computed on the raw signal: max at block start, min at block end.
+        This gives a more realistic slope estimate since LP filtering attenuates variations.
         
         Parameters:
-            signal : numpy array
-                Low-pass filtered SpO2 signal.
+            signal_rounded : numpy array
+                Low-pass filtered and rounded SpO2 signal (for edge detection).
+            signal_derivative : numpy array
+                Derivative of the rounded signal (edges where derivative != 0).
+            signal_raw : numpy array
+                Raw/cleaned SpO2 signal (for slope calculation).
             adjusted_lmax_idx : int
                 Current adjusted Lmax index.
             adjusted_lmax_val : float
@@ -2087,124 +2092,98 @@ class OxygenDesatDetector(SciNode):
                 Start time in seconds of this signal section.
             fs_chan : float
                 Sampling frequency (Hz).
-            plateau_duration_ranges : list of tuples
-                List of (min_sec, max_sec) tuples defining plateau duration ranges.
-                e.g., [(5, 10), (10, 30)] means 5-10s and 10-30s ranges.
-            slope_thresholds : list of float
-                Slope thresholds (%/sec) corresponding to each duration range.
-                e.g., [-0.0333, -0.05] means -0.0333 for 5-10s, -0.05 for 10-30s.
+            min_block_duration_sec : float
+                Minimum block duration in seconds to consider for shifting.
+            block_slope_threshold : float
+                Slope threshold in %/sec. Block slope > this value means too shallow 
+                and the block will be skipped. Should match avg_fall_rate_upper_limit (-0.05).
         
         Returns:
             adjusted_lmax_idx, adjusted_lmax_time, adjusted_lmax_val, lmin_idx, lmin_time, lmin_val, plateau_list : tuple
                 Adjusted values after plateau handling and list of all detected plateaus.
         """
-        # Use the smallest minimum duration from all ranges
-        min_plateau_duration_sec = min(r[0] for r in plateau_duration_ranges)
-        min_plateau_samples = int(min_plateau_duration_sec * fs_chan)
+        min_block_samples = int(min_block_duration_sec * fs_chan)
         plateau_list = []
         
-        def get_slope_threshold_for_duration(duration_sec):
-            """Get the appropriate slope threshold based on plateau duration."""
-            for i, (min_dur, max_dur) in enumerate(plateau_duration_ranges):
-                if min_dur <= duration_sec < max_dur:
-                    return slope_thresholds[i]
-            # If duration exceeds all ranges, use the last (most permissive) threshold
-            if duration_sec >= plateau_duration_ranges[-1][1]:
-                return slope_thresholds[-1]
-            return None  # Duration too short for any range
-        
-        def is_plateau_valid(plateau_duration_samples, potential_end_idx, original_lmax_idx, original_lmax_val):
-            """Check if a plateau meets duration and slope criteria."""
-            plateau_duration_sec = plateau_duration_samples / fs_chan
-            slope_threshold = get_slope_threshold_for_duration(plateau_duration_sec)
-            if slope_threshold is None:
-                return False, None
-            
-            duration_from_lmax_sec = (potential_end_idx - original_lmax_idx) / fs_chan
-            if duration_from_lmax_sec <= 0:
-                return False, None
-            
-            slope = (signal[potential_end_idx] - original_lmax_val) / duration_from_lmax_sec
-            return slope > slope_threshold, slope_threshold
-        
-        # Store the original Lmax position to compute slope from original position
-        original_lmax_idx = adjusted_lmax_idx
-        original_lmax_val = adjusted_lmax_val
-        
-        event_signal = signal[adjusted_lmax_idx:lmin_idx + 1] # lp and rounded
+        event_signal_rounded = signal_rounded[adjusted_lmax_idx:lmin_idx + 1]
         adjusted_lmax_time = data_start + adjusted_lmax_idx / fs_chan
         derivative = signal_derivative[adjusted_lmax_idx:lmin_idx + 1]
 
-        # Stop if remaining duration is less than minimum plateau duration
-        if len(event_signal) >= min_plateau_samples:
+        # Stop if remaining duration is less than minimum block duration
+        if len(event_signal_rounded) < min_block_samples:
+            return adjusted_lmax_idx, adjusted_lmax_time, adjusted_lmax_val, lmin_idx, lmin_time, lmin_val, plateau_list
+        
+        # Find edges (transitions where derivative != 0) on the rounded signal
+        edge_mask = derivative != 0
+        edge_indices = np.where(edge_mask)[0]
+        
+        # Build list of blocks: (start_idx, end_idx) relative to event_signal
+        blocks = []
+        if len(edge_indices) == 0:
+            # No edges - entire region is one block
+            blocks = [(0, len(event_signal_rounded) - 1)]
+        else:
+            # Block from start to first edge
+            if edge_indices[0] > 0:
+                blocks.append((0, edge_indices[0]))
+            # Blocks between consecutive edges
+            for i in range(len(edge_indices) - 1):
+                block_start = edge_indices[i] + 1
+                block_end = edge_indices[i + 1]
+                if block_end > block_start:
+                    blocks.append((block_start, block_end))
+            # Block from last edge to end
+            if edge_indices[-1] < len(event_signal_rounded) - 1:
+                blocks.append((edge_indices[-1] + 1, len(event_signal_rounded) - 1))
+        
+        # Iterate through blocks and shift Lmax as long as block slope is too shallow
+        cumulative_shift_end = 0
+        for block_start, block_end in blocks:
+            block_duration_samples = block_end - block_start
             
-            # Step 1: Find edges (transitions where derivative != 0)
-            # Edges are where the rounded signal changes value
-            edge_mask = derivative != 0
-            edge_indices = np.where(edge_mask)[0]
+            # Skip blocks that are too short
+            if block_duration_samples < min_block_samples:
+                continue
             
-            # Step 2: Find all valid plateaus and extend as long as slope is acceptable
-            plateau_found = False
-            best_plateau_start = 0
-            best_plateau_end = 0
+            # Compute block slope on RAW signal: max at block start, min at block end
+            block_start_abs_idx = adjusted_lmax_idx + block_start
+            block_end_abs_idx = adjusted_lmax_idx + block_end
+            raw_block = signal_raw[block_start_abs_idx:block_end_abs_idx + 1]
             
-            if len(edge_indices) > 0: 
-                # Check plateau from start to first edge (closest to Lmax)
-                plateau_duration_samples = edge_indices[0]
-                if plateau_duration_samples >= min_plateau_samples:
-                    potential_end_idx = adjusted_lmax_idx + edge_indices[0]
-                    is_valid, _ = is_plateau_valid(plateau_duration_samples, potential_end_idx, original_lmax_idx, original_lmax_val)
-                    if is_valid:
-                        best_plateau_start = 0
-                        best_plateau_end = edge_indices[0]
-                        plateau_found = True
-                
-                # Check plateaus between consecutive edges and extend if slope is acceptable
-                for i in range(len(edge_indices) - 1):
-                    plateau_duration_samples = edge_indices[i + 1] - edge_indices[i] - 1
-                    if plateau_duration_samples >= min_plateau_samples:
-                        potential_end_idx = adjusted_lmax_idx + edge_indices[i + 1]
-                        is_valid, _ = is_plateau_valid(plateau_duration_samples, potential_end_idx, original_lmax_idx, original_lmax_val)
-                        if is_valid:
-                            best_plateau_start = edge_indices[i] + 1 if not plateau_found else best_plateau_start
-                            best_plateau_end = edge_indices[i + 1]
-                            plateau_found = True
-                        else:
-                            # Slope too steep, stop extending
-                            break
-                
-                # Check plateau from last edge to end
-                plateau_duration_samples = len(event_signal) - edge_indices[-1] - 1
-                if plateau_duration_samples >= min_plateau_samples:
-                    potential_end_idx = adjusted_lmax_idx + len(event_signal) - 1
-                    is_valid, _ = is_plateau_valid(plateau_duration_samples, potential_end_idx, original_lmax_idx, original_lmax_val)
-                    if is_valid:
-                        best_plateau_start = edge_indices[-1] + 1 if not plateau_found else best_plateau_start
-                        best_plateau_end = len(event_signal)
-                        plateau_found = True
+            # Skip if block contains NaN values
+            if np.any(np.isnan(raw_block)):
+                continue
             
-            if plateau_found:
-                # Compute absolute index of plateau end
-                plateau_end_idx = adjusted_lmax_idx + best_plateau_end
-                
+            # Find max value in first half, min value in second half of block
+            # This captures the actual drop within the block
+            block_max_val = np.nanmax(raw_block)
+            block_min_val = np.nanmin(raw_block)
+            block_duration_sec = block_duration_samples / fs_chan
+            block_slope = (block_min_val - block_max_val) / block_duration_sec
+            
+            # If block slope is too shallow (> threshold), shift through this block
+            if block_slope > block_slope_threshold:
+                cumulative_shift_end = block_end
                 # Store plateau information
-                plateau_start_time = data_start + (adjusted_lmax_idx + best_plateau_start) / fs_chan
-                plateau_duration = (best_plateau_end - best_plateau_start) / fs_chan
-                plateau_list.append([plateau_start_time, plateau_duration])
-
-                # Shift Lmax to end of plateau (slope is not steep enough)
-                adjusted_lmax_idx = plateau_end_idx
-                adjusted_lmax_time = data_start + adjusted_lmax_idx / fs_chan
-                adjusted_lmax_val = signal[adjusted_lmax_idx]
+                plateau_start_time = data_start + block_start_abs_idx / fs_chan
+                plateau_list.append([plateau_start_time, block_duration_sec])
+            else:
+                # Block slope is steep enough - this is where the real fall starts
+                break
+        
+        # Apply the cumulative shift if any blocks were skipped
+        if cumulative_shift_end > 0:
+            adjusted_lmax_idx = adjusted_lmax_idx + cumulative_shift_end
+            adjusted_lmax_time = data_start + adjusted_lmax_idx / fs_chan
+            adjusted_lmax_val = signal_rounded[adjusted_lmax_idx]
             
-                # Make sure the current max on the low pass filtered signal is the maximum value until the Lmin candidate
-                if lmin_idx - adjusted_lmax_idx > 1:
-                    real_lmax_val = np.nanmax(signal[adjusted_lmax_idx:lmin_idx+1])
-                    if real_lmax_val > adjusted_lmax_val:
-                        # Update adjusted_lmax_idx, adjusted_lmax_time, adjusted_lmax_val to the real maximum on the low pass filtered signal
-                        adjusted_lmax_idx = np.nanargmax(signal[adjusted_lmax_idx:lmin_idx+1]) + adjusted_lmax_idx
-                        adjusted_lmax_time = data_start + adjusted_lmax_idx / fs_chan
-                        adjusted_lmax_val = signal[adjusted_lmax_idx]
+            # Make sure the current max is the maximum value until the Lmin candidate
+            if lmin_idx - adjusted_lmax_idx > 1:
+                real_lmax_val = np.nanmax(signal_rounded[adjusted_lmax_idx:lmin_idx+1])
+                if real_lmax_val > adjusted_lmax_val:
+                    adjusted_lmax_idx = np.nanargmax(signal_rounded[adjusted_lmax_idx:lmin_idx+1]) + adjusted_lmax_idx
+                    adjusted_lmax_time = data_start + adjusted_lmax_idx / fs_chan
+                    adjusted_lmax_val = signal_rounded[adjusted_lmax_idx]
 
         return adjusted_lmax_idx, adjusted_lmax_time, adjusted_lmax_val, lmin_idx, lmin_time, lmin_val, plateau_list
 
