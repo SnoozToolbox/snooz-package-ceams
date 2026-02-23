@@ -64,7 +64,7 @@
     "dependencies": [
         {
             "package_name": "CEAMSModules",
-            "package_version": "7.2.8"
+            "package_version": "7.3.0"
         }
     ],
     "process_params": {
