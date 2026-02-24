@@ -126,35 +126,78 @@ class REMsDetectionYasa(SciNode):
             raise NodeInputException(self.identifier, "Invalid 'sleepstages' input. Must be a DataFrame.")
         
         use_progress_bar = sys.stdout is not None and sys.stdout.isatty() ### added to check
+        sections_start_times = np.unique([signal.start_time for signal in signals])  # Get unique start times of signals
         try:
-            # Extract sleep stage information
-            hypno = np.squeeze(sleepstages["name"].values).tolist()
-            raw = self.prepare_raw_data(signals)
-            hypno_up = yasa.hypno_upsample_to_data(hypno, sf_hypno=1/30, 
-                                                    data=raw._data[0, :], 
-                                                    sf_data=np.round(raw.info['sfreq']))
-            # Extract EOG signals
-            loc = raw._data[0, :] * 1e6  # Convert from V to µV
-            roc = raw._data[1, :] * 1e6
+            rems_events = []  # Initialize a list to hold detected REM events across all sections
+            for section in range(len(sections_start_times)):
+                section_signal = []  # Initialize a list to hold signals for the current section
+                for signal in signals:
+                    if signal.start_time == sections_start_times[section]:  # Check if the signal corresponds to the current section
+                        section_signal.append(signal)  # Append the signal to the section-specific list
+                raw = self.prepare_raw_data(section_signal)
+                end_time = section_signal[-1].end_time
+                # Extract sleep stage information
+                if len(sections_start_times) > 1:
+                    sleepstages_sig = sleepstages[(sleepstages['start_sec'] < end_time) & (sleepstages['start_sec'] >= sections_start_times[section])]
+                else:
+                    sleepstages_sig = sleepstages
+                hypno = np.squeeze(sleepstages_sig["name"].values).tolist() if not sleepstages_sig.empty else []
+                hypno_up = yasa.hypno_upsample_to_data(hypno, sf_hypno=1/30, 
+                                                        data=raw._data[0, :], 
+                                                        sf_data=np.round(raw.info['sfreq']))
+                # Extract EOG signals
+                loc = raw._data[0, :] * 1e6  # Convert from V to µV
+                roc = raw._data[1, :] * 1e6
 
-            # Process inclusion list
-            include = self.extract_ints(include)
-            include = include[0] if len(include) == 1 else include
+                # Process inclusion list
+                if include is not None:
+                    if isinstance(include, str) and include.strip() != "":
+                        include = self.extract_ints(include)
+                    elif isinstance(include, int):
+                        include = [include]
+                    else:
+                        include = include if isinstance(include, list) else []
+                else:
+                    include = []
             
-            # Check if the user provided the sleep stages or not
-            if set(list(sleepstages['name'].unique())) == {'9'}:
-                hypno_up = None
-                include = None
-                
-            # Detect REMs
-            rem = yasa.rem_detect(loc, roc, raw.info['sfreq'], 
-                                  hypno=hypno_up, include=include, 
-                                  amplitude=amplitude, duration=duration, 
-                                  freq_rem=freq_rem, relative_prominence=relative_prominence, 
-                                  remove_outliers=remove_outliers, verbose= False)
-
+                # Check if the user provided the sleep stages or not
+                if set(list(sleepstages['name'].unique())) == {'9'}:
+                    hypno_up = None
+                    include = None
+                if all(str(val) in set(str(h) for h in np.unique(hypno)) for val in include):
+                    # Detect REMs
+                    rem = yasa.rem_detect(loc, roc, raw.info['sfreq'], 
+                                        hypno=hypno_up, include=include, 
+                                        amplitude=amplitude, duration=duration, 
+                                        freq_rem=freq_rem, relative_prominence=relative_prominence, 
+                                        remove_outliers=remove_outliers, verbose= False)
+                    
+                    rem_dataframe = rem.summary().round(3)  # Get summary of detected REM events for the current section
+                    rem_dataframe['Start'] = rem_dataframe['Start'] + sections_start_times[section]  # Adjust start times to be relative to the recording start
+                    rem_dataframe['End'] = rem_dataframe['End'] + sections_start_times[section]  # Adjust end times to be relative to the recording start
+                    rem_dataframe['Peak'] = rem_dataframe['Peak'] + sections_start_times[section]  # Adjust peak times to be relative to the recording start                    
+                    # Filter REMs: keep only events where start + 1/3 duration falls in sleep stage 5
+                    valid_indices = []
+                    for idx, row in rem_dataframe.iterrows():
+                        check_time1 = row['Start'] + (row['Duration'] / 3)
+                        check_time2 = row['End'] - (row['Duration'] / 3)
+                        previous_stage_at_time = sleepstages_sig[(sleepstages_sig['start_sec'] <= check_time1) & 
+                                                        (sleepstages_sig['start_sec'] + 30 > check_time1)]
+                        next_stage_at_time = sleepstages_sig[(sleepstages_sig['start_sec'] <= check_time2) & 
+                                                        (sleepstages_sig['start_sec'] + 30 > check_time2)]
+                        if not previous_stage_at_time.empty and not next_stage_at_time.empty and (str(previous_stage_at_time.iloc[0]['name']) == '5' or str(next_stage_at_time.iloc[0]['name']) == '5'):
+                                valid_indices.append(idx)
+                                if row['Stage'] != 5:
+                                    rem_dataframe.loc[idx, 'Stage'] = 5
+                    
+                    rem_dataframe = rem_dataframe.loc[valid_indices].reset_index(drop=True)
+                    rems_events.append(rem_dataframe)  # Append detected REM events for the current section to the list
             # Save results
-            rems_detection_df = rem.summary().round(3)
+            if len(rems_events) > 1:
+                rems_detection_df = pd.concat(rems_events, ignore_index=True)
+            else:
+                rems_detection_df = rems_events[0] if len(rems_events) == 1 else pd.DataFrame()
+
             if len(filename)>0:
                 subject_id = os.path.basename(filename)
                 # Extract folder of the file
@@ -193,21 +236,7 @@ class REMsDetectionYasa(SciNode):
         ch_names = [raw[0].channel, raw[1].channel]
         ch_type = ['eog', 'eog']
         sfreq = raw[0].sample_rate
-        if len(raw) > 2:
-            LOC_list = []
-            ROC_list = []
-            for ch in ch_names:
-                for i in range(len(raw)):
-                    if raw[i].channel == ch and 'L' in ch:
-                        LOC_list.append(raw[i].samples)
-                    elif raw[i].channel == ch and 'L' not in ch:
-                        ROC_list.append(raw[i].samples)
-            LOC_array = np.concatenate(LOC_list) if LOC_list else np.array([])
-            ROC_array = np.concatenate(ROC_list) if ROC_list else np.array([])
-            raw_samples_conatenated = np.vstack((LOC_array, ROC_array))
-            data = np.array([r * 1e-6 for r in raw_samples_conatenated])
-        else:
-            data = np.array([r.samples * 1e-6 for r in raw])  # Convert from V to µV
+        data = np.array([r.samples * 1e-6 for r in raw])  # Convert from V to µV
         info = mne.create_info(ch_names=ch_names, sfreq=sfreq, ch_types=ch_type)
         return mne.io.RawArray(data, info)
     

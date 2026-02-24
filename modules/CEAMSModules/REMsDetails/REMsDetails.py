@@ -96,7 +96,7 @@ class REMsDetails(SciNode):
         # A master module allows the process to be reexcuted multiple time.
         self._is_master = False 
 
-        self.rems_columns = ['group','name','cycle','stage','start_sec','duration_sec','amplitude_uV','channels']
+        self.rems_columns = ['group','name','cycle','Stage','start_sec','duration_sec','amplitude_uV','channels']
         self.rems_characteristics = ['duration_sec','amplitude_uV']
     
 
@@ -499,7 +499,7 @@ class REMsDetails(SciNode):
         rems_density_stage = {}
         stage = 'R'  # REMs only occur in REM sleep
         # Extract rems for the R stage
-        rems_cur_chan_stage = rems_cur_chan_sort[rems_cur_chan_sort['stage']==int(sleep_stages_name[stage])]
+        rems_cur_chan_stage = rems_cur_chan_sort[rems_cur_chan_sort['Stage']==int(sleep_stages_name[stage])]
         rems_cur_chan_stage = rems_cur_chan_stage[self.rems_characteristics]
         # Format the rems_cur_chan_stage dataframe values into float
         rems_cur_chan_stage = rems_cur_chan_stage.applymap(float)
@@ -612,7 +612,7 @@ class REMsDetails(SciNode):
             # Average characteristique per stage (REMs only occur in R stage)
             stage = 'R'  # REMs only occur in REM sleep
             # Extract rems for the R stage
-            rems_cur_chan_stage = rems_sel_df[rems_sel_df['stage']==int(sleep_stages_name[stage])]
+            rems_cur_chan_stage = rems_sel_df[rems_sel_df['Stage']==int(sleep_stages_name[stage])]
             rems_cur_to_mean = rems_cur_chan_stage[self.rems_characteristics]
             # Format the rems_cur_chan_stage dataframe values into float
             rems_cur_to_mean = rems_cur_to_mean.applymap(float)
@@ -837,7 +837,7 @@ class REMsDetails(SciNode):
         # Sort stages by start time
         stage_data.sort(key=lambda x: x['start_sec'])
         # Collect rems in R stage
-        rems_mask = rems_cur_chan_sort['stage'] == int(sleep_stages_name[stage_label])
+        rems_mask = rems_cur_chan_sort['Stage'] == int(sleep_stages_name[stage_label])
         if rems_mask.any():
             rems_data.extend(rems_cur_chan_sort[rems_mask].to_dict('records'))
         # Sort rems by start time
@@ -960,7 +960,7 @@ class REMsDetails(SciNode):
         # REMs only occur in R stage
         stage = 'R'
         # Count the number of REMs for R stage
-        rems_cur_stage = rems_cur_chan_df[rems_cur_chan_df['stage']==int(commons.sleep_stages_name[stage])]
+        rems_cur_stage = rems_cur_chan_df[rems_cur_chan_df['Stage']==int(commons.sleep_stages_name[stage])]
         rems_count_cur_stage = len(rems_cur_stage)
 
         if valid_dur[f'{label_stats}_{stage}_valid_min']>0:

@@ -704,7 +704,7 @@
                 "module_category": "Files I/O",
                 "module_options": {
                     "alias": {
-                        "value": "EOG",
+                        "value": "",
                         "tooltip": "List of aliases separated by a semicolon(;) character"
                     },
                     "file_selection_only": {
@@ -721,11 +721,7 @@
                     },
                     "alias": {
                         "name": "alias",
-                        "value": {
-                            "EOG": [
-                                ""
-                            ]
-                        },
+                        "value": {},
                         "sub_plugs": {},
                         "connections": {}
                     }
@@ -753,10 +749,10 @@
                         "value": "",
                         "sub_plugs": {},
                         "connections": {
-                            "fe4d36b6-65ff-4ae6-adab-9fff0e29b5ff": [
+                            "c7301dad-f4f2-4851-9845-b16e47dbfbf2": [
                                 "signals"
                             ],
-                            "c7301dad-f4f2-4851-9845-b16e47dbfbf2": [
+                            "cc1d509c-bb2c-421d-946b-96b3f27c00f0": [
                                 "signals"
                             ]
                         }
@@ -808,57 +804,6 @@
                 "pos_y": -134.99999999999997
             },
             {
-                "cls": "AliasSignals",
-                "name": "AliasSignals",
-                "metadata": {},
-                "file_location": "",
-                "module_label": "Alias Signals",
-                "module_category": "Parameters",
-                "module_options": {},
-                "inputs": {
-                    "signals": {
-                        "name": "signals",
-                        "value": "",
-                        "sub_plugs": {},
-                        "connections": {
-                            "c3e6adf4-0698-4655-b2a5-e0cf102bf224": "signals"
-                        }
-                    },
-                    "alias": {
-                        "name": "alias",
-                        "value": "EOG",
-                        "sub_plugs": {},
-                        "connections": {}
-                    }
-                },
-                "outputs": {
-                    "signals": {
-                        "name": "signals",
-                        "value": "",
-                        "sub_plugs": {},
-                        "connections": {
-                            "cc1d509c-bb2c-421d-946b-96b3f27c00f0": [
-                                "signals"
-                            ]
-                        }
-                    },
-                    "channels_name": {
-                        "name": "channels_name",
-                        "value": "",
-                        "sub_plugs": {},
-                        "connections": {}
-                    }
-                },
-                "module": "CEAMSModules.AliasSignals",
-                "identifier": "fe4d36b6-65ff-4ae6-adab-9fff0e29b5ff",
-                "activation_state": "activated",
-                "package": {
-                    "package_name": "CEAMSModules"
-                },
-                "pos_x": -255.0,
-                "pos_y": -235.0
-            },
-            {
                 "cls": "SignalsFromEvents",
                 "name": "SignalsFromEvents",
                 "metadata": {},
@@ -872,7 +817,7 @@
                         "value": "",
                         "sub_plugs": {},
                         "connections": {
-                            "fe4d36b6-65ff-4ae6-adab-9fff0e29b5ff": "signals"
+                            "c3e6adf4-0698-4655-b2a5-e0cf102bf224": "signals"
                         }
                     },
                     "events": {
