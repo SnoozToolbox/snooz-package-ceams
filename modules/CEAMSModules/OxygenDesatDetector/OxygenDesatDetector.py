@@ -1204,7 +1204,7 @@ class OxygenDesatDetector(SciNode):
                     if ((drop >= parameters_oxy['desaturation_drop_percent']) and 
                         (duration >= parameters_oxy['min_hold_drop_sec']) and
                         (avg_fall_rate_lower_limit <= avg_fall_rate <= avg_fall_rate_upper_limit) and
-                        (fall_rate_first_1s < avg_fall_rate_upper_limit)):  # Check for steep drop in the first second:
+                        (fall_rate_first_1s > avg_fall_rate_lower_limit)):  # Check for steep drop in the first second:
                         # Valid desaturation event with the avg_fall_rate to filter overlapping later
                         all_desat_events.append((adjusted_lmax_time, duration, avg_fall_rate, drop))
                     else:
@@ -2140,12 +2140,19 @@ class OxygenDesatDetector(SciNode):
             if edge_indices[-1] < len(event_signal_rounded) - 1:
                 blocks.append((edge_indices[-1] + 1, len(event_signal_rounded) - 1))
         
-        # Iterate through blocks and shift Lmax as long as block slope is too shallow
+        # ABOSA-inspired thresholds for medium blocks (5-10s)
+        # -0.0333 %/s is shallower than -0.05, used for medium blocks and as
+        # an alternative path for long blocks combined with a shape criterion
+        medium_block_slope_threshold = -0.0333  # %/sec (ABOSA crit5)
+        # Minimum percentage of samples near start value to confirm plateau shape (ABOSA crit6)
+        pct_near_start_threshold = 33  # percent
+
+        # Iterate through blocks and shift Lmax as long as the block looks like a plateau
         cumulative_shift_end = 0
         for block_start, block_end in blocks:
             block_duration_samples = block_end - block_start
             
-            # Compute block slope on RAW signal: max at block start, min at block end
+            # Compute block slope on RAW signal using endpoints (like ABOSA)
             block_start_abs_idx = adjusted_lmax_idx + block_start
             block_end_abs_idx = adjusted_lmax_idx + block_end
             raw_block = signal_raw[block_start_abs_idx:block_end_abs_idx + 1]
@@ -2154,31 +2161,43 @@ class OxygenDesatDetector(SciNode):
             if np.any(np.isnan(raw_block)):
                 continue
             
-            # Find max value in first third, min value in last third of block
-            # This captures the actual drop within the block and scales with block duration
-            third_samples = max(1, len(raw_block) // 3)
-            first_third = raw_block[:third_samples]
-            last_third = raw_block[-third_samples:]
-            block_max_val = np.nanmax(first_third)
-            block_min_val = np.nanmin(last_third)
             block_duration_sec = block_duration_samples / fs_chan
-            block_slope = (block_min_val - block_max_val) / block_duration_sec
+            # Use endpoint-based slope (ABOSA style) instead of extrema-of-thirds
+            # This avoids overestimating the fall rate on oscillating plateaus
+            block_slope = (raw_block[-1] - raw_block[0]) / block_duration_sec if block_duration_sec > 0 else 0
             
-            # For short blocks: only check if slope is steep (real fall) to stop shifting
-            # We don't shift through short blocks, but a steep short block indicates fall onset
-            if block_duration_samples < min_block_samples:
+            # Determine whether to shift through this block
+            should_shift = False
+
+            if block_duration_sec >= 10:
+                # Long blocks (>=10s): shift if slope is shallow (ABOSA crit2 && crit3)
+                if block_slope > block_slope_threshold:
+                    should_shift = True
+                # Alternative path for long blocks with borderline slope (ABOSA crit2 && crit5 && crit6):
+                # If slope > -0.0333 and >= 33% of samples are near the block start value,
+                # the block is a plateau with slight drift, not a real fall
+                elif block_slope > medium_block_slope_threshold:
+                    pct_near_start = 100 * np.sum(raw_block + 0.5 > raw_block[0]) / len(raw_block)
+                    if pct_near_start >= pct_near_start_threshold:
+                        should_shift = True
+            elif block_duration_sec >= 5:
+                # Medium blocks (5-10s): use stricter slope threshold (ABOSA crit4 && crit5)
+                if block_slope > medium_block_slope_threshold:
+                    should_shift = True
+            else:
+                # Short blocks (<5s): a steep short block signals fall onset
                 if block_slope <= block_slope_threshold:
-                    # Short block with steep slope - this is where the real fall starts
                     break
-                # Short block with shallow slope - skip but continue looking
-                continue
+                # Shallow short block: include in cumulative shift so that
+                # a plateau composed of many small flat blocks is properly shifted
+                should_shift = True
             
-            # For long blocks: shift through if slope is shallow, stop if steep
-            if block_slope > block_slope_threshold:
+            if should_shift:
                 cumulative_shift_end = block_end
-                # Store plateau information
-                plateau_start_time = data_start + block_start_abs_idx / fs_chan
-                plateau_list.append([plateau_start_time, block_duration_sec])
+                # Store plateau info only for blocks long enough to be meaningful
+                if block_duration_sec >= min_block_duration_sec:
+                    plateau_start_time = data_start + block_start_abs_idx / fs_chan
+                    plateau_list.append([plateau_start_time, block_duration_sec])
             else:
                 # Block slope is steep enough - this is where the real fall starts
                 break
