@@ -1196,11 +1196,15 @@ class OxygenDesatDetector(SciNode):
                     
                     # Calculate average fall rate (%/s)
                     avg_fall_rate = -drop / duration if duration > 0 else 0
+
+                    # Keep only events without huge spike with slope steeper than -4%/s during the first 1sec of desat
+                    fall_rate_first_1s = adjusted_lmax_val - signal[adjusted_lmax_idx + int(fs_chan)] if (adjusted_lmax_idx + int(fs_chan)) < len(signal) else 0
                     
                     # Validate drop threshold, duration and fall rate limits
                     if ((drop >= parameters_oxy['desaturation_drop_percent']) and 
                         (duration >= parameters_oxy['min_hold_drop_sec']) and
-                        (avg_fall_rate_lower_limit <= avg_fall_rate <= avg_fall_rate_upper_limit)):
+                        (avg_fall_rate_lower_limit <= avg_fall_rate <= avg_fall_rate_upper_limit) and
+                        (fall_rate_first_1s < avg_fall_rate_upper_limit)):  # Check for steep drop in the first second:
                         # Valid desaturation event with the avg_fall_rate to filter overlapping later
                         all_desat_events.append((adjusted_lmax_time, duration, avg_fall_rate, drop))
                     else:
@@ -1303,7 +1307,7 @@ class OxygenDesatDetector(SciNode):
         - artifact_events: List of (start_sec, duration_sec) tuples for artifacts >5s
         """
         # List of constants
-        filter_order = 4 # The author uses order 4 with filtfilt but did not divide the order by 2
+        filter_order = 8 # The author uses order 4 with filtfilt but did not divide the order by 2
         cutoff_freq = 1.0
         threshold_squared = 30 # ABOSA 30 # 20 for 1 subject
         lower_bound = 50
@@ -2141,10 +2145,6 @@ class OxygenDesatDetector(SciNode):
         for block_start, block_end in blocks:
             block_duration_samples = block_end - block_start
             
-            # Skip blocks that are too short
-            if block_duration_samples < min_block_samples:
-                continue
-            
             # Compute block slope on RAW signal: max at block start, min at block end
             block_start_abs_idx = adjusted_lmax_idx + block_start
             block_end_abs_idx = adjusted_lmax_idx + block_end
@@ -2154,14 +2154,26 @@ class OxygenDesatDetector(SciNode):
             if np.any(np.isnan(raw_block)):
                 continue
             
-            # Find max value in first half, min value in second half of block
-            # This captures the actual drop within the block
-            block_max_val = np.nanmax(raw_block)
-            block_min_val = np.nanmin(raw_block)
+            # Find max value in first third, min value in last third of block
+            # This captures the actual drop within the block and scales with block duration
+            third_samples = max(1, len(raw_block) // 3)
+            first_third = raw_block[:third_samples]
+            last_third = raw_block[-third_samples:]
+            block_max_val = np.nanmax(first_third)
+            block_min_val = np.nanmin(last_third)
             block_duration_sec = block_duration_samples / fs_chan
             block_slope = (block_min_val - block_max_val) / block_duration_sec
             
-            # If block slope is too shallow (> threshold), shift through this block
+            # For short blocks: only check if slope is steep (real fall) to stop shifting
+            # We don't shift through short blocks, but a steep short block indicates fall onset
+            if block_duration_samples < min_block_samples:
+                if block_slope <= block_slope_threshold:
+                    # Short block with steep slope - this is where the real fall starts
+                    break
+                # Short block with shallow slope - skip but continue looking
+                continue
+            
+            # For long blocks: shift through if slope is shallow, stop if steep
             if block_slope > block_slope_threshold:
                 cumulative_shift_end = block_end
                 # Store plateau information
