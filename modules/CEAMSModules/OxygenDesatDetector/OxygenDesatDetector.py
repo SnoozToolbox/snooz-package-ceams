@@ -1054,29 +1054,19 @@ class OxygenDesatDetector(SciNode):
         # ABOSA parameters
         #---------------------♣
         # Avg fall rate limits to consider for desaturation events
-        avg_fall_rate_lower_limit = -4.0  # % per second, the deepest
+        desat_event_slope_steep_limit = -4.0  # % per second, the deepest
         # The least steep (-0.05 in the paper) -0.08 for better performance
-        avg_fall_rate_upper_limit = -0.05  # % per second
+        desat_event_slope_shallow_limit = -0.05  # % per second
         # peak detection parameters
         min_peak_distance_sec = 5 # ABOSA = 5 sec
-        min_peak_prominence = 1 # ABOSA = 1; 0.5 for better performance
+        min_peak_prominence = 1 # ABOSA = 1; 
         # Filter order for lowpass (finding peaks) and highpass (fall rate) filtering
         order = 4 # ABOSA paper= 2; ABOSA email=4;
-        low_frequency_cutoff = 0.1 #same as the paper
-        # To shift right the maximum to the point where the fall starts
-        high_frequency_cutoff = 0.1 # Filter to enhance the variation for fall rate detection
-        # Accepted slope to shift Lmax right (more negative is steeper and will reject the shift, the fall starts before)
-        fall_rate_threshold = -0.05 # % 
+        frequency_cutoff = 0.1 #same as the paper
         # Adjust Lmax and all Lmin candidates for plateau on the filtered signal
-        min_plateau_duration_sec = 20  # For adjust_for_rounded_plateau method (ABOSA info from email)
-        # Parameters for shift_max_right_rounded_plateau
-        # Uses same threshold as avg_fall_rate_upper_limit (physiologically grounded)
-        min_block_duration_sec = 5  # Minimum block duration to consider for shifting
-        block_slope_threshold = -0.05  # %/sec - same as ABOSA fall rate upper limit
-        
-        # Made up parameters to define plateaus
-        #derivative_threshold = 0.1 # slope (% per second); ABOSA not mentionned; valid values [0.08, 0.1(best), 0.15]
-        #derivative_mean_threshold = 0.05 # slope (% per second); ABOSA not mentionned; valid values [0.025 0.05(best), 0.08(same)] 
+        min_plateau_duration_sec = 20  # Strategy different than ABOSA
+        # Steepest accepted slope during 1 sec 
+        desat_event_slope_steepest_1sec = -6.0  # % per second
 
         for i, signal in enumerate(data_stats):
             valid_mask = ~np.isnan(signal)
@@ -1084,14 +1074,14 @@ class OxygenDesatDetector(SciNode):
                 continue
 
             # Low pass filter the signal to get the trend in order to detect local min and max
-            signal_lpf = self.filter_nan_filtfilt(signal, order, fs_chan, low_frequency_cutoff, 'low')
+            signal_lpf = self.filter_nan_filtfilt(signal, order, fs_chan, frequency_cutoff, 'low')
+
+            # Plateau detection
             signal_rounded = np.round(signal_lpf, 0)
+            signal_derivative = np.gradient(signal_rounded) * fs_chan
 
             # High-pass filter the signal at 0.1 Hz (which is already low-pass filtered to 0.1 Hz)
-            signal_hpf = self.filter_nan_filtfilt(signal_lpf, order, fs_chan, high_frequency_cutoff , 'high')
-
-            # derivative signal for plateau detection
-            signal_derivative = np.gradient(signal_rounded) * fs_chan
+            signal_hpf = self.filter_nan_filtfilt(signal_lpf, order, fs_chan, frequency_cutoff , 'high')
 
             # Step 1: Locate potential endpoints (Lmin)
             min_peak_distance_samples = int(min_peak_distance_sec * fs_chan)
@@ -1139,7 +1129,7 @@ class OxygenDesatDetector(SciNode):
                     # The high pass filtered signal is used to verify abrupt transition
                     adjusted_lmax_idx, adjusted_lmax_time, adjusted_lmax_val, signal_squared = \
                         self.adjust_lmax_for_fall_rate(signal_lpf, signal_hpf, lmax_idx, lmin_idx, \
-                                                       data_starts[i], fs_chan, fall_rate_threshold)
+                                                       data_starts[i], fs_chan, desat_event_slope_shallow_limit)
                     
                     # Adjust Lmax and all Lmin candidates for derivative plateau
                     adjusted_lmax_idx, adjusted_lmax_time, adjusted_lmax_val, \
@@ -1154,28 +1144,24 @@ class OxygenDesatDetector(SciNode):
                     if len(plateau) > 0:
                         plateau_lst.extend(plateau)
 
-                    # # Shift right Lmax for derivative plateau
-                    # adjusted_lmax_idx, adjusted_lmax_time, adjusted_lmax_val, \
-                    #     adjusted_lmin_idx, adjusted_lmin_time, adjusted_lmin_val, plateau = \
-                    #     self.shift_max_right_rounded_plateau(
-                    #         signal_rounded, signal_derivative, signal, adjusted_lmax_idx, adjusted_lmax_val, 
-                    #         adjusted_lmin_idx, adjusted_lmin_time, adjusted_lmin_val, data_starts[i], fs_chan, 
-                    #         min_block_duration_sec, block_slope_threshold
-                    #     )
-                    # if len(plateau) > 0:
-                    #     plateau_lst.extend(plateau)
-
                     if adjusted_lmax_time >= adjusted_lmin_time:
                         if DEBUG:
                             print(f"Lmax at {adjusted_lmax_time:.2f}s is after Lmin at {adjusted_lmin_time:.2f}s after plateau adjustment")
                         break
 
                     # Skip desaturation events that include artifacts
-                    if any(np.isnan(signal[adjusted_lmax_idx:lmin_idx + 1])):
+                    if any(np.isnan(signal[adjusted_lmax_idx:adjusted_lmin_idx + 1])):
                         if DEBUG:
-                            print(f"Skipping desaturation event from {adjusted_lmax_time:.2f}s to {lmin_time:.2f}s due to artifact (NaN values in signal)")
+                            print(f"Skipping desaturation event from {adjusted_lmax_time:.2f}s to {adjusted_lmin_time:.2f}s due to artifact (NaN values in signal)")
                         continue
 
+                    # Adjust Lmax for fall rate
+                    # The Lmax is shifted forward to a point where the fall starts using the low pass filtered signal.
+                    # The high pass filtered signal is used to verify abrupt transition
+                    adjusted_lmax_idx, adjusted_lmax_time, adjusted_lmax_val, signal_squared = \
+                        self.adjust_lmax_for_fall_rate(signal_lpf, signal_hpf, adjusted_lmax_idx, adjusted_lmin_idx, \
+                                                       data_starts[i], fs_chan, desat_event_slope_shallow_limit)
+                                        
                     # Correct Lmax locations by finding actual maximum within 5s window on raw signal
                     adjusted_lmax_idx = self.correct_peak_indices_in_window(
                         signal, [adjusted_lmax_idx], window_s=5, fs_chan=fs_chan)
@@ -1197,14 +1183,26 @@ class OxygenDesatDetector(SciNode):
                     # Calculate average fall rate (%/s)
                     avg_fall_rate = -drop / duration if duration > 0 else 0
 
-                    # Keep only events without huge spike with slope steeper than -4%/s during the first 1sec of desat
-                    fall_rate_first_1s = adjusted_lmax_val - signal[adjusted_lmax_idx + int(fs_chan)] if (adjusted_lmax_idx + int(fs_chan)) < len(signal) else 0
+                    # Keep only events without disconnections during the desaturation event
+                    # A disconnection is a drop with a slope steeper than desat_event_slope_steepest_1sec %/s for 1 second
+                    # Use a sliding window of 1 sec (step of 0.5 sec) to detect steep slopes across the entire event
+                    window_samples = int(fs_chan)        # 1 sec window
+                    step_samples = max(1, int(0.5 * fs_chan))    # 0.5 sec step
+                    end_idx = min(adjusted_lmin_idx, len(signal) - 1)
+                    segment = signal[adjusted_lmax_idx:end_idx + 1]
+                    if len(segment) > window_samples:
+                        # Compute fall rate for all windows at once using vectorized indexing
+                        win_starts = np.arange(0, len(segment) - window_samples, step_samples)
+                        fall_rates = segment[win_starts] - segment[win_starts + window_samples]
+                        has_steep_spike = bool(np.any(fall_rates <= desat_event_slope_steepest_1sec))
+                    else:
+                        has_steep_spike = False
                     
                     # Validate drop threshold, duration and fall rate limits
                     if ((drop >= parameters_oxy['desaturation_drop_percent']) and 
                         (duration >= parameters_oxy['min_hold_drop_sec']) and
-                        (avg_fall_rate_lower_limit <= avg_fall_rate <= avg_fall_rate_upper_limit) and
-                        (fall_rate_first_1s > avg_fall_rate_lower_limit)):  # Check for steep drop in the first second:
+                        (desat_event_slope_steep_limit <= avg_fall_rate <= desat_event_slope_shallow_limit) and
+                        (not has_steep_spike)):  # No steep drop detected within any 1s window:
                         # Valid desaturation event with the avg_fall_rate to filter overlapping later
                         all_desat_events.append((adjusted_lmax_time, duration, avg_fall_rate, drop))
                     else:
@@ -1634,7 +1632,7 @@ class OxygenDesatDetector(SciNode):
         return candidate_lmins
 
 
-    def adjust_lmax_for_fall_rate(self, signal, signal_hpf, lmax_idx, lmin_idx, data_start, fs_chan, fall_rate_threshold=-0.05):
+    def adjust_lmax_for_fall_rate(self, signal, signal_hpf, lmax_idx, lmin_idx, data_start, fs_chan, desat_event_slope_shallow_limit=-0.05):
         """
         Shift Lmax forward to the next variation peak using the high-pass filtered signal 
         to identify the onset of the fall, accepting the shift only if the slope between 
@@ -1651,7 +1649,7 @@ class OxygenDesatDetector(SciNode):
                 Start time in seconds of this signal section.
             fs_chan : float
                 Sampling frequency (Hz).
-            fall_rate_threshold : float
+            desat_event_slope_shallow_limit : float
                 Fall rate threshold in %/s (deepest fall rate to accept a shift).
         
         Returns:
@@ -1698,7 +1696,7 @@ class OxygenDesatDetector(SciNode):
                 # Evaluate fall rate to ensure it's a valid shift
                 fall_rate = drop / duration_sec if duration_sec > 0 else 0
                 # For any positive fall rate or slow fall rate, we accept the shift
-                if fall_rate >= fall_rate_threshold:
+                if fall_rate >= desat_event_slope_shallow_limit:
                     adjusted_lmax_idx = lmax_shifted
                 # If fall rate is too steep, keep current position and stop
                 else:
@@ -2100,7 +2098,7 @@ class OxygenDesatDetector(SciNode):
                 Minimum block duration in seconds to consider for shifting.
             block_slope_threshold : float
                 Slope threshold in %/sec. Block slope > this value means too shallow 
-                and the block will be skipped. Should match avg_fall_rate_upper_limit (-0.05).
+                and the block will be skipped. Should match desat_event_slope_shallow_limit (-0.05).
         
         Returns:
             adjusted_lmax_idx, adjusted_lmax_time, adjusted_lmax_val, lmin_idx, lmin_time, lmin_val, plateau_list : tuple
@@ -2223,26 +2221,30 @@ class OxygenDesatDetector(SciNode):
         desat_stats = {}
         # The number of oxygen desaturation in the sleep period.
         desat_stats['desat_count'] = len(desat_df)
+        # The Oxygen Desaturation Index (ODI) : number of desaturation per sleep hour.
+        desat_stats['desat_ODI'] = len(desat_df)/((total_stats['total_valid_min'])/60)
+        # Desaturation severity : The sum of areas under the desaturation events in percent*sec over the sleep period (sec).
+        desat_stats['desat_severity'] = desat_df['area_percent_sec'].sum()/(total_stats['total_valid_min']*60)
+        # The percentage of time spent in desaturation during the sleep period.
+        desat_stats['desat_SP_percent'] = desat_df['duration_sec'].sum()/(total_stats['total_valid_min']*60)*100
         # The average duration in sec of the oxygen desaturation events in the sleep period.
         desat_stats['desat_avg_sec'] = desat_df['duration_sec'].mean()
         # The variance value of the duration in sec of the oxygen desaturation events in the sleep period.
         desat_stats['desat_var_sec'] = desat_df['duration_sec'].var()
         # The median value of the duration in sec of the oxygen desaturation events in the sleep period.
         desat_stats['desat_med_sec'] = desat_df['duration_sec'].median()
-        # The percentage of time spent in desaturation during the sleep period.
-        desat_stats['desat_SP_percent'] = desat_df['duration_sec'].sum()/(total_stats['total_valid_min']*60)*100
-        # The Oxygen Desaturation Index (ODI) : number of desaturation per sleep hour.
-        desat_stats['desat_ODI'] = len(desat_df)/((total_stats['total_valid_min'])/60)
         # The average area under the desaturation events in percent*sec.
         desat_stats['desat_area_avg'] = desat_df['area_percent_sec'].mean()
+        # The median area under the desaturation events in percent*sec.
+        desat_stats['desat_area_med'] = desat_df['area_percent_sec'].median()
         # The average slope of the desaturation events in percent/sec.
         desat_stats['desat_slope_avg'] = desat_df['slope'].mean()
+        # The median slope of the desaturation events in percent/sec.
+        desat_stats['desat_slope_med'] = desat_df['slope'].median()
         # The average depth of the desaturation events in percent.
         desat_stats['desat_depth_avg'] = desat_df['depth'].mean()
-        # Desaturation severity : The sum of areas under the desaturation events in percent*sec over the sleep period (sec).
-        desat_stats['desat_severity'] = desat_df['area_percent_sec'].sum()/(total_stats['total_valid_min']*60)
-
-
+        # The median depth of the desaturation events in percent.
+        desat_stats['desat_depth_med'] = desat_df['depth'].median()
 
         return desat_stats
 
