@@ -260,18 +260,34 @@ class PSGReaderManager:
             for signal in signals:
 
                 signal_model = SignalModel()
-                if isinstance(signal.samples, np.ndarray):
-                    signal_model.samples = signal.samples
-                else:
-                    signal_model.samples = np.array(signal.samples)
                 signal_model.start_time = signal.start_time
                 signal_model.end_time = signal.end_time
                 signal_model.duration = signal.duration
                 signal_model.sample_rate = signal.sample_rate
                 signal_model.channel = signal.channel
                 signal_model.montage_index = montage_index
+                if isinstance(signal.samples, np.ndarray):
+                    signal_model.samples = signal.samples[0:int(signal_model.duration*signal.sample_rate)]
+                else:
+                    signal_model.samples = np.array(signal.samples[0:int(signal_model.duration*signal.sample_rate)])
 
-                signal_models.append(signal_model)
+                # Check if the exact same signal is not already in signal_models
+                if len(signal_models) == 0:
+                    signal_models.append(signal_model)
+                    continue #Continue to the next signal
+
+                # First filter on cheap fields (start_time, channel), then check expensive fields only on matches
+                new_signal = True
+                for signal_model_cur in signal_models:
+                    if (signal_model_cur.start_time == signal_model.start_time and
+                        signal_model_cur.channel == signal_model.channel and
+                        signal_model_cur.duration == signal_model.duration and
+                        signal_model_cur.sample_rate == signal_model.sample_rate and
+                        np.array_equal(signal_model_cur.samples, signal_model.samples)):
+                        new_signal = False
+                        break
+                if new_signal:
+                    signal_models.append(signal_model)
 
         return signal_models
 
