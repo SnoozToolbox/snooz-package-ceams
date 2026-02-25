@@ -414,11 +414,11 @@ class OxygenDesatDetector(SciNode):
                 #signal_squared = signals[index_longuest].clone(clone_samples=False)
                 signal_raw.samples = data_stats[index_longuest]
                 signal_raw.start_time = data_starts[index_longuest]
-                #signal_lpf.samples = data_lpf_list[index_longuest]
-                signal_lpf.samples = data_gradient[index_longuest]
+                signal_lpf.samples = data_lpf_list[index_longuest]
+                #signal_lpf.samples = data_gradient[index_longuest]
                 signal_lpf.start_time = data_starts[index_longuest]
-                #signal_lpf.channel = signal_raw.channel+'_lpf'
-                signal_lpf.channel = signal_raw.channel+'_art'
+                signal_lpf.channel = signal_raw.channel+'_lpf'
+                #signal_lpf.channel = signal_raw.channel+'_art'
                 signal_hpf.samples = data_dev_list[index_longuest]
                 signal_hpf.start_time = data_starts[index_longuest]
                 signal_hpf.channel = signal_raw.channel+'_grad'
@@ -1068,7 +1068,7 @@ class OxygenDesatDetector(SciNode):
         # Accepted slope to shift Lmax right (more negative is steeper and will reject the shift, the fall starts before)
         fall_rate_threshold = -0.05 # % 
         # Adjust Lmax and all Lmin candidates for plateau on the filtered signal
-        min_plateau_duration_sec = 30  # For adjust_for_rounded_plateau method (ABOSA info from email)
+        min_plateau_duration_sec = 20  # For adjust_for_rounded_plateau method (ABOSA info from email)
         # Parameters for shift_max_right_rounded_plateau
         # Uses same threshold as avg_fall_rate_upper_limit (physiologically grounded)
         min_block_duration_sec = 5  # Minimum block duration to consider for shifting
@@ -1154,16 +1154,16 @@ class OxygenDesatDetector(SciNode):
                     if len(plateau) > 0:
                         plateau_lst.extend(plateau)
 
-                    # Shift right Lmax for derivative plateau
-                    adjusted_lmax_idx, adjusted_lmax_time, adjusted_lmax_val, \
-                        adjusted_lmin_idx, adjusted_lmin_time, adjusted_lmin_val, plateau = \
-                        self.shift_max_right_rounded_plateau(
-                            signal_rounded, signal_derivative, signal, adjusted_lmax_idx, adjusted_lmax_val, 
-                            adjusted_lmin_idx, adjusted_lmin_time, adjusted_lmin_val, data_starts[i], fs_chan, 
-                            min_block_duration_sec, block_slope_threshold
-                        )
-                    if len(plateau) > 0:
-                        plateau_lst.extend(plateau)
+                    # # Shift right Lmax for derivative plateau
+                    # adjusted_lmax_idx, adjusted_lmax_time, adjusted_lmax_val, \
+                    #     adjusted_lmin_idx, adjusted_lmin_time, adjusted_lmin_val, plateau = \
+                    #     self.shift_max_right_rounded_plateau(
+                    #         signal_rounded, signal_derivative, signal, adjusted_lmax_idx, adjusted_lmax_val, 
+                    #         adjusted_lmin_idx, adjusted_lmin_time, adjusted_lmin_val, data_starts[i], fs_chan, 
+                    #         min_block_duration_sec, block_slope_threshold
+                    #     )
+                    # if len(plateau) > 0:
+                    #     plateau_lst.extend(plateau)
 
                     if adjusted_lmax_time >= adjusted_lmin_time:
                         if DEBUG:
