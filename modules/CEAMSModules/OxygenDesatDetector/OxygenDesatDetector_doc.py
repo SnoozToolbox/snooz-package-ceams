@@ -117,18 +117,17 @@ def _get_doc(N_CYCLE, stage_stats_labels, values_below):
     desat_dict = \
     {            
             'desat_count' : 'The number of oxygen desaturation during the valid sleep period.',
-            'desat_avg_sec' : 'The average duration in sec of the oxygen desaturation events occuring during the valid sleep period.',
-            'desat_var_sec' : 'The variance value of the duration in sec of the oxygen desaturation events occuring during the valid sleep period.',
-            'desat_med_sec' : 'The median value of the duration in sec of the oxygen desaturation events occuring during the valid sleep period.',
-            'desat_SP_percent' : 'The percentage of time spent in desaturation during the valid sleep period (SP).',
             'desat_ODI' : 'The Oxygen Desaturation Index (ODI) : number of desaturations per hour during the valid sleep period.',
+            'desat_severity' : 'Desaturation severity : The sum of areas under the desaturation events in percent*sec over the valid sleep period (sec).',
+            'desat_SP_percent' : 'The percentage of time spent in desaturation during the valid sleep period (SP).',
+            'desat_avg_sec' : 'The average duration in sec of the oxygen desaturation events occuring during the valid sleep period.',
+            'desat_med_sec' : 'The median value of the duration in sec of the oxygen desaturation events occuring during the valid sleep period.',
             'desat_area_avg' : 'The average area under the desaturation events in percent*sec.',
             'desat_area_med' : 'The median area under the desaturation events in percent*sec.',
             'desat_slope_avg' : 'The average slope of the desaturation events in percent/sec.',
             'desat_slope_med' : 'The median slope of the desaturation events in percent/sec.',
             'desat_depth_avg' : 'The average depth of the desaturation events in percent.',
-            'desat_depth_med' : 'The median depth of the desaturation events in percent.',
-            'desat_severity' : 'Desaturation severity : The sum of areas under the desaturation events in percent*sec over the valid sleep period (sec).'
+            'desat_depth_med' : 'The median depth of the desaturation events in percent.'
     }
 
     # temporal_link_dict = \

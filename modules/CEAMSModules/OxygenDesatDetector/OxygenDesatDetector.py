@@ -1965,8 +1965,6 @@ class OxygenDesatDetector(SciNode):
         desat_stats['desat_SP_percent'] = desat_df['duration_sec'].sum()/(total_stats['total_valid_min']*60)*100
         # The average duration in sec of the oxygen desaturation events in the sleep period.
         desat_stats['desat_avg_sec'] = desat_df['duration_sec'].mean()
-        # The variance value of the duration in sec of the oxygen desaturation events in the sleep period.
-        desat_stats['desat_var_sec'] = desat_df['duration_sec'].var()
         # The median value of the duration in sec of the oxygen desaturation events in the sleep period.
         desat_stats['desat_med_sec'] = desat_df['duration_sec'].median()
         # The average area under the desaturation events in percent*sec.
