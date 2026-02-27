@@ -129,6 +129,7 @@ class REMsDetectionYasa(SciNode):
         sections_start_times = np.unique([signal.start_time for signal in signals])  # Get unique start times of signals
         try:
             rems_events = []  # Initialize a list to hold detected REM events across all sections
+            NoneSections = 0 # Counter for sections where no REMs were detected
             for section in range(len(sections_start_times)):
                 section_signal = []  # Initialize a list to hold signals for the current section
                 for signal in signals:
@@ -138,10 +139,10 @@ class REMsDetectionYasa(SciNode):
                 end_time = section_signal[-1].end_time
                 # Extract sleep stage information
                 if len(sections_start_times) > 1:
-                    sleepstages_sig = sleepstages[(sleepstages['start_sec'] < end_time) & (sleepstages['start_sec'] >= sections_start_times[section])]
+                    sleepstages_sig = sleepstages[(sleepstages['start_sec'].astype(int) < int(end_time)) & (sleepstages['start_sec'].astype(int) >= int(sections_start_times[section]))]
                 else:
                     sleepstages_sig = sleepstages
-                hypno = np.squeeze(sleepstages_sig["name"].values).tolist() if not sleepstages_sig.empty else []
+                hypno = np.squeeze(sleepstages_sig["name"].values) if not sleepstages_sig.empty else np.array([])
                 hypno_up = yasa.hypno_upsample_to_data(hypno, sf_hypno=1/30, 
                                                         data=raw._data[0, :], 
                                                         sf_data=np.round(raw.info['sfreq']))
@@ -171,27 +172,37 @@ class REMsDetectionYasa(SciNode):
                                         amplitude=amplitude, duration=duration, 
                                         freq_rem=freq_rem, relative_prominence=relative_prominence, 
                                         remove_outliers=remove_outliers, verbose= False)
-                    
-                    rem_dataframe = rem.summary().round(3)  # Get summary of detected REM events for the current section
-                    rem_dataframe['Start'] = rem_dataframe['Start'] + sections_start_times[section]  # Adjust start times to be relative to the recording start
-                    rem_dataframe['End'] = rem_dataframe['End'] + sections_start_times[section]  # Adjust end times to be relative to the recording start
-                    rem_dataframe['Peak'] = rem_dataframe['Peak'] + sections_start_times[section]  # Adjust peak times to be relative to the recording start                    
-                    # Filter REMs: keep only events where start + 1/3 duration falls in sleep stage 5
-                    valid_indices = []
-                    for idx, row in rem_dataframe.iterrows():
-                        check_time1 = row['Start'] + (row['Duration'] / 3)
-                        check_time2 = row['End'] - (row['Duration'] / 3)
-                        previous_stage_at_time = sleepstages_sig[(sleepstages_sig['start_sec'] <= check_time1) & 
-                                                        (sleepstages_sig['start_sec'] + 30 > check_time1)]
-                        next_stage_at_time = sleepstages_sig[(sleepstages_sig['start_sec'] <= check_time2) & 
-                                                        (sleepstages_sig['start_sec'] + 30 > check_time2)]
-                        if not previous_stage_at_time.empty and not next_stage_at_time.empty and (str(previous_stage_at_time.iloc[0]['name']) == '5' or str(next_stage_at_time.iloc[0]['name']) == '5'):
-                                valid_indices.append(idx)
-                                if row['Stage'] != 5:
-                                    rem_dataframe.loc[idx, 'Stage'] = 5
-                    
-                    rem_dataframe = rem_dataframe.loc[valid_indices].reset_index(drop=True)
-                    rems_events.append(rem_dataframe)  # Append detected REM events for the current section to the list
+                    if rem is not None and rem._events is not None and len(rem._events) > 0:
+                        rem_dataframe = rem.summary().round(3)  # Get summary of detected REM events for the current section
+                        # Adjust REM event times to be relative to the recording start
+                        rem_dataframe['Start'] = rem_dataframe['Start'] + sections_start_times[section]  # Adjust start times to be relative to the recording start
+                        rem_dataframe['End'] = rem_dataframe['End'] + sections_start_times[section]  # Adjust end times to be relative to the recording start
+                        rem_dataframe['Peak'] = rem_dataframe['Peak'] + sections_start_times[section]  # Adjust peak times to be relative to the recording start                    
+                        # Filter REMs: keep only events where start + 1/3 duration falls in sleep stage 5
+                        valid_indices = []
+                        for idx, row in rem_dataframe.iterrows():
+                            check_time1 = row['Start'] + (row['Duration'] / 3)
+                            check_time2 = row['End'] - (row['Duration'] / 3)
+                            previous_stage_at_time = sleepstages_sig[(sleepstages_sig['start_sec'] <= check_time1) & 
+                                                            (sleepstages_sig['start_sec'] + 30 > check_time1)]
+                            next_stage_at_time = sleepstages_sig[(sleepstages_sig['start_sec'] <= check_time2) & 
+                                                            (sleepstages_sig['start_sec'] + 30 > check_time2)]
+                            if not previous_stage_at_time.empty and not next_stage_at_time.empty and (str(previous_stage_at_time.iloc[0]['name']) == '5' or str(next_stage_at_time.iloc[0]['name']) == '5'):
+                                    valid_indices.append(idx)
+                                    if row['Stage'] != 5:
+                                        rem_dataframe.loc[idx, 'Stage'] = 5
+                        
+                        if len(valid_indices) > 0:
+                            rem_dataframe = rem_dataframe.loc[valid_indices].reset_index(drop=True)
+                            rems_events.append(rem_dataframe)  # Append detected REM events for the current section to the list
+                        else:
+                            NoneSections += 1
+                    else:
+                        NoneSections += 1
+                        continue  # Skip to the next section if no REMs were detected
+            
+            if NoneSections == len(sections_start_times):
+                raise NodeRuntimeException(self.identifier, "REMs detection", f"No REMs were found in data. Returning None.")
             # Save results
             if len(rems_events) > 1:
                 rems_detection_df = pd.concat(rems_events, ignore_index=True)
