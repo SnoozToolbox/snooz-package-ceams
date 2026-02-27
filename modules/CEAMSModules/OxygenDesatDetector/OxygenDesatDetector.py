@@ -15,6 +15,7 @@ import numpy as np
 import os.path
 import pandas as pd
 import scipy.signal as scipysignal
+from scipy.interpolate import interp1d
 
 from flowpipe import SciNode, InputPlug, OutputPlug
 from commons.NodeInputException import NodeInputException
@@ -145,10 +146,9 @@ class OxygenDesatDetector(SciNode):
         self._is_master = False 
 
         # Init module variables
-        self.stage_stats_labels = ['N1', 'N2', 'N3', 'R', 'W']
-        self.N_CYCLES = 9
+        self.stage_stats_labels =   ['N1',   'N2',   'N3',   'R',    'W',    'NREM',             'N2N3',         'SLEEP']
+        self.stage_stats_list =     [['N1'], ['N2'], ['N3'], ['R'], ['W'],   ['N1', 'N2', 'N3'], ['N2', 'N3'], ['N1', 'N2', 'N3', 'R', 'W']]
         self.values_below = [96, 94, 92, 90, 85, 80, 75, 70, 60]
-        self.variability_tolerance = 2
     
 
     def compute(self, artifact_group, artifact_name, arousal_group, arousal_name, \
@@ -230,6 +230,7 @@ class OxygenDesatDetector(SciNode):
         Outputs:
 
         """
+        self.clear_cache()
 
         # Raise NodeInputException if the an input is wrong. This type of
         # exception will stop the process with the error message given in parameter.
@@ -241,7 +242,7 @@ class OxygenDesatDetector(SciNode):
                 f"OxygenDesatDetector has nothing to generate, 'cohort_filename' is empty")    
         if isinstance(signals, str) and signals=='':
             raise NodeInputException(self.identifier, "signals", \
-                f"OxygenDesatDetector this input is empty, no signals no Oxygen Saturation Report.")              
+                f"OxygenDesatDetector this input is empty, no signals no Oxygen Saturation Report.")         
         if isinstance(stages_cycles, str) and stages_cycles=='':
             raise NodeInputException(self.identifier, "stages_cycles", \
                 f"OxygenDesatDetector this input is empty")    
@@ -272,10 +273,10 @@ class OxygenDesatDetector(SciNode):
                     + str(type(report_constants)))   
         self.N_CYCLES = int(float(report_constants['N_CYCLES']))
 
-        #----------------------------------------------------------------------
+        #------------------------------------------------------------------------------
         # Header parameters
         # subject info, sleep cycle parameters, desaturation parameters
-        #----------------------------------------------------------------------
+        #------------------------------------------------------------------------------
         subject_info_params = \
         {
             "filename":subject_info['filename'],
@@ -299,11 +300,11 @@ class OxygenDesatDetector(SciNode):
         sleep_stage_df = stages_cycles[stages_cycles['group']==commons.sleep_stages_group]
         sleep_stage_df.reset_index(inplace=True, drop=True)
 
-        # Keep stage from the first awake or sleep until the last awake or sleep
+        # Keep stages from the first sleep stage (1-5) to the last sleep stage (1-5) to define the sleep period
         sleep_stage_df.loc[:, 'name'] = sleep_stage_df['name'].apply(int)
-        index_valid = sleep_stage_df[sleep_stage_df['name']<8].index
-        stage_rec_df = sleep_stage_df.loc[index_valid[0]:index_valid[-1]]
-        stage_rec_df.reset_index(inplace=True, drop=True)
+        index_sleep = sleep_stage_df[(sleep_stage_df['name']>=1) & (sleep_stage_df['name']<=5)].index
+        stage_sleep_period_df = sleep_stage_df.loc[index_sleep[0]:index_sleep[-1]]
+        stage_sleep_period_df.reset_index(inplace=True, drop=True)
 
         channels_list = np.unique(SignalModel.get_attribute(signals, 'channel', 'channel'))
         if len(channels_list)>1:
@@ -324,40 +325,114 @@ class OxygenDesatDetector(SciNode):
         # Minimum, maximum and average oxygen saturation per thirds, halves, sleep cycles and sleep stages.
         #----------------------------------------------------------------------
 
-        # Compute stats for the whole recording from lights off to lights on
+        # Extract samples for the sleep period
+        data_stats, data_starts = self.extract_signal_data_for_sleep_period(stage_sleep_period_df, signals)
+
+        # Detect artifact 
+        #   data_clean is the raw signal with short artifacts interpolated and long artifact forced to NaN
+        artifact_events = []
+        data_clean, artifact_det_lst, data_gradient = self.detect_artifact_SpO2(data_stats, data_starts, fs_chan)
+        artifact_events += [('SpO2', 'art_SpO2', start_sec, duration_sec, '') # Add back channel
+                         for start_sec, duration_sec in artifact_det_lst]
+        # Convert artifact_events to dataframe
+        artifact_events_df = manage_events.create_event_dataframe(data=artifact_events)
+        # Add artifact events to invalid events
+        invalid_events = pd.concat([invalid_events, artifact_events_df], ignore_index=True)
+
+        # Compute stats for the sleep period
         #----------------------------------------------------------------------
-        total_stats, data_stats, data_starts = self.compute_total_stats_saturation(\
-            stage_rec_df, signals, subject_info, fs_chan, picture_dir, invalid_events)
+        total_stats = self.compute_total_stats_saturation(\
+            stage_sleep_period_df, data_clean, data_starts, \
+                subject_info, fs_chan, picture_dir, invalid_events)
 
         # Compute stats for thirds
         #----------------------------------------------------------------------
         n_divisions = 3
         section_label = 'third'
-        third_stats = self.compute_division_stats_saturation(n_divisions, section_label, stage_rec_df, signals)
+        third_stats = self.compute_division_stats_saturation(\
+            n_divisions, section_label, stage_sleep_period_df, data_clean, data_starts, fs_chan)
 
         # Compute stats for halves
         #----------------------------------------------------------------------
         n_divisions = 2
         section_label = 'half'
-        half_stats = self.compute_division_stats_saturation(n_divisions, section_label, stage_rec_df, signals)
+        half_stats = self.compute_division_stats_saturation(\
+            n_divisions, section_label, stage_sleep_period_df, data_clean, data_starts, fs_chan)
 
         # Compute stats for stages
         #----------------------------------------------------------------------       
-        stage_stats = self.compute_stages_stats_saturation(stage_rec_df, signals, fs_chan)
+        stage_stats = self.compute_stages_stats_saturation(\
+            stage_sleep_period_df, data_clean, data_starts, fs_chan)
 
         # Compute stats for cycles
         #----------------------------------------------------------------------       
-        cycle_stats = self.compute_cycles_stats_saturation(sleep_cycles_df, signals)
+        cycle_stats = self.compute_cycles_stats_saturation(\
+            sleep_cycles_df,  data_clean, data_starts, fs_chan)
 
         # Detect desaturation 
         #----------------------------------------------------------------------
             # "parameters_oxy": dict
             # 'desaturation_drop_percent' : 'Drop level (%) for the oxygen desaturation "3 or 4"',
-            # 'max_slope_drop_sec' : 'The maximum duration (s) during which the oxygen level is dropping "120 or 20"',
+            # 'max_slope_drop_sec' : 'The maximum duration (s) during which the oxygen level is dropping "180 or 20"',
             # 'min_hold_drop_sec' : 'Minimum duration (s) during which the oxygen level drop is maintained "10 or 5"',
-        asleep_stages_df = stage_rec_df[((stage_rec_df['name']>0) & (stage_rec_df['name']<6))]
-        desat_df = self.detect_desaturation(data_starts, data_stats, fs_chan, channel, parameters_oxy, asleep_stages_df)
-        desat_stats = self.compute_desat_stats(desat_df, asleep_stages_df)
+        desat_df, plateau_df, data_lpf_list, data_hpf_list, data_dev_list, lmax_indices_list, lmin_indices_list = \
+            self.detect_desaturation_ABOSA(data_starts, data_clean, fs_chan, channel, parameters_oxy)
+
+        # Save the list of desaturation events detected and their characteristics
+        #----------------------------------------------------------------------
+        # filename including path to save the dataframe 
+        picture_dir_channel = os.path.join(picture_dir, subject_info['filename'])
+        # Save the oxygen saturation events with characteristics
+        if len(picture_dir)>0:
+            file_events_name = os.path.join(picture_dir, f"{subject_info['filename']}_oxygen_saturation_events.tsv")
+            pd.DataFrame.to_csv(desat_df, path_or_buf=file_events_name, sep='\t', index=False, encoding="utf_8")
+            
+        # Compute desaturation stats
+        #----------------------------------------------------------------------
+        desat_stats = self.compute_desat_stats(desat_df, total_stats, stage_sleep_period_df)
+
+        # Remove desaturation features not included in the Snooz annotations
+        #----------------------------------------------------------------------
+        # Keep ['group', 'name', 'start_sec', 'duration_sec', 'channels']
+        desat_df = desat_df[['group', 'name', 'start_sec', 'duration_sec', 'channels']]
+
+        # Add invalid sections to desaturation events
+        desat_df = pd.concat([desat_df, invalid_events], ignore_index=True)
+
+        if DEBUG:
+            cache = {}
+            if len(data_lpf_list)>1:
+                # Find the longuest signal
+                len_data = [len(data) for data in data_lpf_list]
+                index_longuest = np.argmax(len_data)
+                data_lpf_list = [data_lpf_list[index_longuest]]
+            else:
+                index_longuest = 0
+            if len(data_lpf_list)>0:
+                # Create a SignalModel for the raw data and the filtered data
+                signal_raw = signals[index_longuest].clone(clone_samples=False)
+                signal_lpf = signals[index_longuest].clone(clone_samples=False)
+                signal_hpf = signals[index_longuest].clone(clone_samples=False)
+                #signal_squared = signals[index_longuest].clone(clone_samples=False)
+                signal_raw.samples = data_stats[index_longuest]
+                signal_raw.start_time = data_starts[index_longuest]
+                signal_lpf.samples = data_lpf_list[index_longuest]
+                #signal_lpf.samples = data_gradient[index_longuest]
+                signal_lpf.start_time = data_starts[index_longuest]
+                signal_lpf.channel = signal_raw.channel+'_lpf'
+                #signal_lpf.channel = signal_raw.channel+'_art'
+                signal_hpf.samples = data_dev_list[index_longuest]
+                signal_hpf.start_time = data_starts[index_longuest]
+                signal_hpf.channel = signal_raw.channel+'_grad'
+                cache['signal_raw'] = signal_raw
+                cache['signal_lpf'] = signal_lpf
+                cache['signal_hpf'] = signal_hpf
+
+                cache['desat_df'] = desat_df
+                cache['plateau_df'] = plateau_df
+                cache['lmax_sec'] = lmax_indices_list[index_longuest]/fs_chan + data_starts[index_longuest]
+                cache['lmin_sec'] = lmin_indices_list[index_longuest]/fs_chan + data_starts[index_longuest]
+                self._cache_manager.write_mem_cache(self.identifier, cache)
 
         # Temporal links between desaturation and arousal
         # Removed 2024-01-30
@@ -470,8 +545,7 @@ class OxygenDesatDetector(SciNode):
                 f"ERROR : Snooz can not save the picture {fig_name}. "+\
                 f"Check if the drive is accessible and ensure the file is not already open.")                           
 
-    
-    def compute_division_stats_saturation(self, n_divisions, section_label, stage_rec_df, signals):
+    def compute_division_stats_saturation(self, n_divisions, section_label, stage_sleep_period_df, data_clean, data_starts, fs):
         """""
             Compute the statistics (mean, std, max and min) of the oxygen saturation for the requested division.
             n_divisions can be 3 or 2.
@@ -482,7 +556,7 @@ class OxygenDesatDetector(SciNode):
                     Number of divisions.
                 section_label               : string
                     Label of the division.
-                stage_rec_df                : pandas DataFrame (columns=['group', 'name','start_sec','duration_sec','channels'])  
+                stage_sleep_period_df                : pandas DataFrame (columns=['group', 'name','start_sec','duration_sec','channels'])  
                     List of sleep stages from lights off to lights on.
                 signals                     : list of SignalModel
                     The list of SignalModel from the whole recording, will be truncated in this fonction.
@@ -500,7 +574,7 @@ class OxygenDesatDetector(SciNode):
             # 14 epochs divided by 3 => [5, 5, 4]
             # 13 epochs divided by 3 => [5, 4, 4]
             # 12 epochs divided by 3 => [4, 4, 4]
-        n_epochs = len(stage_rec_df)
+        n_epochs = len(stage_sleep_period_df)
         n_epoch_div = [n_epochs // n_divisions + (1 if x < n_epochs % n_divisions else 0)  for x in range (n_divisions)]
         # Create a list of indexes to select the epochs in each division
         # Select the portion of the recording, row integer (NOT label), the end point is excluded with the .iloc
@@ -514,23 +588,26 @@ class OxygenDesatDetector(SciNode):
         stats_dict = {}
         section_val = 1
         for index_start, index_stop in index_div:
-            start = stage_rec_df.iloc[index_start]['start_sec']
-            end = stage_rec_df.iloc[index_stop-1]['start_sec']+ stage_rec_df.iloc[index_stop-1]['duration_sec']
+            start = stage_sleep_period_df.iloc[index_start]['start_sec']
+            end = stage_sleep_period_df.iloc[index_stop-1]['start_sec']+ stage_sleep_period_df.iloc[index_stop-1]['duration_sec']
             dur = end - start
             signals_third = []
-            for signal in signals:
+            for samples, data_start in zip(data_clean, data_starts):
                 # Because of the discontinuity
                 # we have to verify if the signal includes at least partially the events
                 # Look for the Right windows time
-                if (signal.start_time<(start+dur)) and ((signal.start_time+signal.duration)>start): 
-                    # Extract and define the new extracted channel_cur
-                    channel_cur = self.extract_samples_from_events(signal, start, dur)
-                    signals_third.append(channel_cur)
+                if (data_start<(start+dur)) and ((data_start+len(samples)/fs)>start): 
+                    # Extract samples for the current division
+                    channel_cur_samples = self.extract_samples_from_array(samples, data_start, start, dur, fs)
+                    signals_third.append(channel_cur_samples)
 
             # Flat signals into an array
             data_array = np.empty(0)
             for i_bout, samples in enumerate(signals_third):
-                data_array = np.concatenate((data_array, samples), axis=0)
+                if len(data_array)==0:
+                    data_array = samples
+                else:
+                    data_array = np.concatenate((data_array, samples), axis=0)
 
             # Clean-up invalid values
             #data_array = np.round(data_array,0) # to copy Gaetan
@@ -538,8 +615,10 @@ class OxygenDesatDetector(SciNode):
             data_array[data_array<=0]=np.nan
             stats_dict[f"{section_label}{section_val}_saturation_avg"] = np.nanmean(data_array)
             stats_dict[f"{section_label}{section_val}_saturation_std"] = np.nanstd(data_array)
-            stats_dict[f"{section_label}{section_val}_saturation_min"] = np.round(np.nanmin(data_array),0)
-            stats_dict[f"{section_label}{section_val}_saturation_max"] = np.round(np.nanmax(data_array),0)            
+            # stats_dict[f"{section_label}{section_val}_saturation_min"] = np.round(np.nanmin(data_array),0)
+            # stats_dict[f"{section_label}{section_val}_saturation_max"] = np.round(np.nanmax(data_array),0)     
+            stats_dict[f"{section_label}{section_val}_saturation_min"] = np.nanmin(data_array)
+            stats_dict[f"{section_label}{section_val}_saturation_max"] = np.nanmax(data_array)     
             section_val = section_val + 1
         return stats_dict
 
@@ -568,12 +647,84 @@ class OxygenDesatDetector(SciNode):
         last_sample = int(channel_cur.end_time * channel_cur.sample_rate)
         channel_cur_samples = signal.samples[first_sample-signal_start_samples:last_sample-signal_start_samples]
         return channel_cur_samples
+    
+
+    def extract_signal_data_for_sleep_period(self, stage_sleep_period_df, signals):
+        """
+        Extract signal data and start times for the sleep period, handling discontinuities.
+
+        Parameters :
+            stage_sleep_period_df : pandas DataFrame
+                Sleep stages from lights off to lights on.
+            signals : list of SignalModel
+                List of SignalModel objects from the whole recording.
+
+        Return : 
+            data_stats : list of numpy array
+                Oxygen saturation values (cleaned: >100 or <=0 set to NaN) for each continuous section.
+            data_starts : list of float
+                Start time in sec of each continuous section (more than one when there are discontinuities).
+        """
+        start = stage_sleep_period_df['start_sec'].values[0]
+        end = stage_sleep_period_df['start_sec'].values[-1] + stage_sleep_period_df['duration_sec'].values[-1]
+        dur = end - start
+        data_stats = []
+        data_starts = []
+        for signal in signals:
+            # Because of the discontinuity
+            # we have to verify if the signal includes at least partially the events
+            # Look for the Right windows time
+            if (signal.start_time < (start + dur)) and ((signal.start_time + signal.duration) > start):
+                cur_start = signal.start_time if start <= signal.start_time else start
+                cur_end = end if end <= signal.end_time else signal.end_time
+                # Extract and define the new extracted channel_cur
+                channel_cur = self.extract_samples_from_events(signal, cur_start, cur_end - cur_start)
+                # Clean-up invalid values
+                # channel_cur[channel_cur > 100] = np.nan
+                # channel_cur[channel_cur <= 0] = np.nan
+                data_starts.append(cur_start)
+                data_stats.append(channel_cur)
+        return data_stats, data_starts
 
 
-    def compute_total_stats_saturation(self, stage_rec_df, signals, subject_info, fs_chan, picture_dir, invalid_events):
+    def extract_samples_from_array(self, samples, data_start, start, dur, fs):
+        """
+        Extract samples from a numpy array for a given time window.
+
+        Parameters :
+            samples : numpy array
+                Signal samples.
+            data_start : float
+                Start time in sec of the signal array.
+            start : float
+                Start time in sec of the window to extract.
+            dur : float
+                Duration in sec of the window to extract.
+            fs : float
+                Sampling rate in Hz.
+
+        Return : 
+            extracted_samples : numpy array
+                Samples within the specified time window.
+        """
+        signal_start_samples = int(data_start * fs)
+        end_time = start + dur
+        first_sample = int(start * fs)
+        last_sample = int(end_time * fs)
+        # Add verification to avoid negative indexing
+        if first_sample - signal_start_samples < 0:
+            first_sample = signal_start_samples
+        # Add verification to avoid exceeding array length
+        if last_sample - signal_start_samples > len(samples):
+            last_sample = len(samples) + signal_start_samples
+        extracted_samples = samples[first_sample - signal_start_samples:last_sample - signal_start_samples]
+        return extracted_samples
+
+
+    def compute_total_stats_saturation(self, stage_sleep_period_df, data_clean, data_starts, subject_info, fs_chan, picture_dir, invalid_events):
         """
         Parameters :
-            stage_rec_df : pandas DataFrame
+            stage_sleep_period_df : pandas DataFrame
                 Sleep stages from lights off to lights on.
             signal : SignalModel object
                 signal with channel, samples, sample_rate...
@@ -596,67 +747,47 @@ class OxygenDesatDetector(SciNode):
             data_starts : list
                 start in sec of each continuous section (more than one when there are discontinuities)
         """    
-        # Extract samples from lights off to lights on. 
-        start = stage_rec_df['start_sec'].values[0]
-        end = stage_rec_df['start_sec'].values[-1]+stage_rec_df['duration_sec'].values[-1]
-        dur = end - start
-        data_stats = []
-        data_starts = []
-        for signal in signals:
-            # Because of the discontinuity
-            # we have to verify if the signal includes at least partially the events
-            # Look for the Right windows time
-            if (signal.start_time<(start+dur)) and ((signal.start_time+signal.duration)>start): 
-                cur_start = signal.start_time if start<=signal.start_time else start
-                cur_end = end if end<=signal.end_time else signal.end_time
-                # if start<=signal.start_time:
-                #     cur_start = signal.start_time
-                # else:
-                #     cur_start = start
-                # if end<=signal.end_time:
-                #     cur_end = end
-                # else:
-                #     cur_end = signal.end_time
-                #cur_dur = cur_end-cur_start
-                # Extract and define the new extracted channel_cur
-                channel_cur = self.extract_samples_from_events(signal, cur_start, cur_end-cur_start)
-                # Clean-up invalid values
-                #channel_cur = np.round(channel_cur,0) # to copy Gaétan
-                channel_cur[channel_cur>100]=np.nan
-                channel_cur[channel_cur<=0]=np.nan
-                data_starts.append(cur_start)      
-                data_stats.append(channel_cur)
+        # Compute duration of sleep period for stats
+        sleep_period_start_sec = stage_sleep_period_df['start_sec'].values[0]
+        sleep_period_end_sec = stage_sleep_period_df['start_sec'].values[-1] + stage_sleep_period_df['duration_sec'].values[-1]
+        sleep_period_dur_sec = sleep_period_end_sec - sleep_period_start_sec
 
         # Generate and save the oxygen saturation graph
         if len(picture_dir)>0:
-            for i_bout, samples in enumerate(data_stats):
-                fig_name = os.path.join(picture_dir, f"{subject_info['filename']}_oxygen_saturation{i_bout}.pdf")
+            for i_bout, samples in enumerate(data_clean):
+                fig_name = os.path.join(picture_dir, f"{subject_info['filename']}_oxygen_saturation_graph{i_bout}.pdf")
                 self._plot_oxygen_saturation(samples, fs_chan, fig_name, data_starts[i_bout], invalid_events)
 
-        # Flat signals into an array
+        # Flat signals into an array (discontinuity handling)
         data_array = np.empty(0)
-        for i_bout, samples in enumerate(data_stats):
-            data_array = np.concatenate((data_array, samples), axis=0)
+        for i_bout, samples in enumerate(data_clean):
+            if data_array.size == 0:
+                data_array = samples
+            else:
+                data_array = np.concatenate((data_array, samples), axis=0)
 
         total_stats = {}
+        total_stats["sleep_period_min"] = sleep_period_dur_sec/60
         total_stats["total_valid_min"] = (len(data_array)-np.isnan(data_array).sum())/fs_chan/60
         total_stats["total_invalid_min"]  = np.isnan(data_array).sum()/fs_chan/60
         total_stats["total_saturation_avg"] = np.nanmean(data_array)
         total_stats["total_saturation_std"] = np.nanstd(data_array)
-        total_stats["total_saturation_min"] = np.round(np.nanmin(data_array),0)
-        total_stats["total_saturation_max"] = np.round(np.nanmax(data_array),0)
+        total_stats["total_saturation_min"] = np.nanmin(data_array)
+        total_stats["total_saturation_max"] = np.nanmax(data_array)
         for val in self.values_below:
-            total_stats[f"total_below_{val}_min"] = (data_array<val).sum()/fs_chan/60
-        return total_stats, data_stats, data_starts
+            total_stats[f"total_below_{val}_percent"] = ((data_array<val).sum()/fs_chan)/(total_stats["total_valid_min"]*60)*100
+        return total_stats
 
 
-    def compute_stages_stats_saturation(self, stage_rec_df, signals, fs_chan):
+    def compute_stages_stats_saturation(self, stage_sleep_period_df, data_clean, data_starts, fs_chan):
         """
         Parameters :
-            stage_rec_df : pandas DataFrame
+            stage_sleep_period_df : pandas DataFrame
                 Sleep stages from lights off to lights on.
-            signal : SignalModel object
+            data_clean : list of numpy arrays   
                 signal with channel, samples, sample_rate...
+            data_starts : list
+                start in sec of each continuous section (more than one when there are discontinuities)
             fs_chan : float
                 sampling rate of the channel
         Return : 
@@ -665,57 +796,58 @@ class OxygenDesatDetector(SciNode):
                 Saturation_avg, std, min and max for each stage.
                 Duration in min for saturation under different thresholds.
         """    
-        stage_start_times = stage_rec_df['start_sec'].to_numpy().astype(float)
-        stage_duration_times = stage_rec_df['duration_sec'].to_numpy().astype(float)
-        stage_name = stage_rec_df['name'].apply(str).to_numpy()
+        stage_start_times = stage_sleep_period_df['start_sec'].to_numpy().astype(float)
+        stage_duration_times = stage_sleep_period_df['duration_sec'].to_numpy().astype(float)
+        stage_name = stage_sleep_period_df['name'].apply(str).to_numpy()
 
         stage_dict = {}
-        for stage_label in self.stage_stats_labels:
-            stage_mask = (stage_name==commons.sleep_stages_name[stage_label])
+        for stage_label, stage_list in zip(self.stage_stats_labels, self.stage_stats_list):
+            stage_mask = np.zeros(stage_name.shape, dtype=bool)
+            for i in range(len(stage_list)):
+                stage_mask = stage_mask | (stage_name == commons.sleep_stages_name[stage_list[i]])
             start_masked = stage_start_times[stage_mask]
             dur_masked = stage_duration_times[stage_mask]
             if any(stage_mask):
                 signals_from_stages = []
                 for start, dur in zip(start_masked, dur_masked):
-                    end = start + dur
-                    for j, signal in enumerate(signals):
-                        if (signal.start_time<(start+dur)) and ((signal.start_time+signal.duration)>start): 
-                            # Extract and define the new extracted channel_cur
-                            cur_start = signal.start_time if start<=signal.start_time else start
-                            cur_end = end if end<=signal.end_time else signal.end_time
-                            cur_samples = self.extract_samples_from_events(signal, cur_start, cur_end-cur_start)
-                            # When the last epoch is not completed
-                            if (len(cur_samples)/fs_chan) < dur:
-                                n_miss_samples = int(round((dur-len(cur_samples)/fs_chan)*fs_chan,0))
-                                cur_samples = np.pad(cur_samples, (0, n_miss_samples), constant_values=(0,np.nan))
-                            signals_from_stages.append(cur_samples)
+                    for samples, start_signal in zip(data_clean, data_starts):
+                        cur_samples = self.extract_samples_from_array(samples, start_signal, start, dur, fs_chan)
+                        # When the last epoch is not completed
+                        if (len(cur_samples)/fs_chan) < dur:
+                            n_miss_samples = int(round((dur-len(cur_samples)/fs_chan)*fs_chan,0))
+                            cur_samples = np.pad(cur_samples, (0, n_miss_samples), constant_values=(0,np.nan))
+                        signals_from_stages.append(cur_samples)
 
                 # Flat signals into an array
                 signals_cur_stage = np.empty(0)
                 for i_bout, samples in enumerate(signals_from_stages):
-                    signals_cur_stage = np.concatenate((signals_cur_stage, samples), axis=0)
+                    if signals_cur_stage.size == 0:
+                        signals_cur_stage = samples
+                    else:
+                        signals_cur_stage = np.concatenate((signals_cur_stage, samples), axis=0)
 
                 # Clean-up invalid values
-                signals_cur_stage[signals_cur_stage>100]=np.nan
-                signals_cur_stage[signals_cur_stage<=0]=np.nan
+                # signals_cur_stage[signals_cur_stage>100]=np.nan # handled in the artifact detection
+                # signals_cur_stage[signals_cur_stage<=0]=np.nan  # handled in the artifact detection
                 stage_dict[f'{stage_label}_saturation_avg'] = np.nanmean(signals_cur_stage)
                 stage_dict[f'{stage_label}_saturation_std'] = np.nanstd(signals_cur_stage)
-                stage_dict[f'{stage_label}_saturation_min'] = np.round(np.nanmin(signals_cur_stage),0)
-                stage_dict[f'{stage_label}_saturation_max'] = np.round(np.nanmax(signals_cur_stage),0)
+                stage_dict[f'{stage_label}_saturation_min'] = np.nanmin(signals_cur_stage)
+                stage_dict[f'{stage_label}_saturation_max'] = np.nanmax(signals_cur_stage)
                 for val in self.values_below:
                     signals_flat = signals_cur_stage.flatten()
-                    stage_dict[f"{stage_label}_below_{val}_min"] = (signals_flat<val).sum()/fs_chan/60
+                    n_valid = np.sum(~np.isnan(signals_flat)) # To excluded artifact from the total number of samples
+                    stage_dict[f"{stage_label}_below_{val}_percent"] = (signals_flat<val).sum()/n_valid*100 if n_valid > 0 else np.nan
             else:
                 stage_dict[f'{stage_label}_saturation_avg'] = np.nan
                 stage_dict[f'{stage_label}_saturation_std'] = np.nan
                 stage_dict[f'{stage_label}_saturation_min'] = np.nan
                 stage_dict[f'{stage_label}_saturation_max'] = np.nan
                 for val in self.values_below:
-                    stage_dict[f"{stage_label}_below_{val}_min"] = np.nan                           
+                    stage_dict[f"{stage_label}_below_{val}_percent"] = np.nan                           
         return stage_dict
 
 
-    def compute_cycles_stats_saturation(self, sleep_cycles_df, signals):
+    def compute_cycles_stats_saturation(self, sleep_cycles_df, data_clean, data_starts, fs_chan):
         """
         Parameters :
             sleep_cycles_df : pandas DataFrame
@@ -735,28 +867,31 @@ class OxygenDesatDetector(SciNode):
                 end = sleep_cycles_df.iloc[i_cyc]['start_sec']+sleep_cycles_df.iloc[i_cyc]['duration_sec']
                 dur = end - start
                 signals_cyc = []
-                for signal in signals:
+                for samples, data_start in zip(data_clean, data_starts):
                     # Because of the discontinuity
                     # we have to verify if the signal includes at least partially the events
                     # Look for the Right windows time
-                    if (signal.start_time<(start+dur)) and ((signal.start_time+signal.duration)>start): 
+                    if (data_start<(start+dur)) and ((data_start+len(samples)/fs_chan)>start): 
                         # Extract and define the new extracted channel_cur
-                        channel_cur = self.extract_samples_from_events(signal, start, dur)
+                        channel_cur = self.extract_samples_from_array(samples, data_start, start, dur, fs_chan)
                         signals_cyc.append(channel_cur)
                 
                 # Flat signals into an array
                 data_stats = np.empty(0)
                 for i_bout, samples in enumerate(signals_cyc):
-                    data_stats = np.concatenate((data_stats, samples), axis=0)
+                    if data_stats.size == 0:
+                        data_stats = samples
+                    else:
+                        data_stats = np.concatenate((data_stats, samples), axis=0)
 
                 #data_stats = np.round(data_stats,0) # to copy Gaétan   
                 # Clean-up invalid values
-                data_stats[data_stats>100]=np.nan
-                data_stats[data_stats<=0]=np.nan        
+                # data_stats[data_stats>100]=np.nan
+                # data_stats[data_stats<=0]=np.nan        
                 cyc_dict[f'cyc{i_cyc+1}_saturation_avg'] = np.nanmean(data_stats)
                 cyc_dict[f'cyc{i_cyc+1}_saturation_std'] = np.nanstd(data_stats)
-                cyc_dict[f'cyc{i_cyc+1}_saturation_min'] = np.round(np.nanmin(data_stats),0)
-                cyc_dict[f'cyc{i_cyc+1}_saturation_max'] = np.round(np.nanmax(data_stats),0)
+                cyc_dict[f'cyc{i_cyc+1}_saturation_min'] = np.nanmin(data_stats)
+                cyc_dict[f'cyc{i_cyc+1}_saturation_max'] = np.nanmax(data_stats)
             else:
                 cyc_dict[f'cyc{i_cyc+1}_saturation_avg'] = np.nan
                 cyc_dict[f'cyc{i_cyc+1}_saturation_std'] = np.nan
@@ -772,12 +907,112 @@ class OxygenDesatDetector(SciNode):
         # return the time as HH:MM:SS
         return f"{HH}:{MM}:{SS}"
 
-
-    def detect_desaturation(self, data_starts, data_stats, fs_chan, channel, parameters_oxy, asleep_stages_df):
+    def compute_desaturation_area(self, signal, data_start, start_sec, duration_sec, fs_chan):
         """
+        Compute the area of a desaturation event.
+        
+        The area is calculated as the integral of the drop below the baseline (starting SpO2 value)
+        over the duration of the event. The result is in %-seconds.
+        
+        Parameters:
+            signal : numpy array
+                SpO2 signal samples.
+            data_start : float
+                Start time in seconds of the signal array.
+            start_sec : float
+                Start time in seconds of the desaturation event.
+            duration_sec : float
+                Duration in seconds of the desaturation event.
+            fs_chan : float
+                Sampling frequency in Hz.
+        
+        Returns:
+            area : float
+                Area of the desaturation event in %-seconds.
+        """
+        # Extract samples for the desaturation event
+        event_samples = self.extract_samples_from_array(signal, data_start, start_sec, duration_sec, fs_chan)
+        
+        if len(event_samples) == 0 or np.all(np.isnan(event_samples)):
+            return np.nan
+        
+        # Baseline is the first valid sample (start of desaturation = max SpO2 before drop)
+        baseline = event_samples[0] if not np.isnan(event_samples[0]) else np.nanmax(event_samples)
+        
+        # Compute the drop below baseline for each sample
+        drop_below_baseline = baseline - event_samples
+        drop_below_baseline = np.clip(drop_below_baseline, 0, None)  # Only count positive drops
+        
+        # Compute the area using trapezoidal integration
+        # Each sample represents 1/fs_chan seconds
+        dt = 1.0 / fs_chan
+        area = np.nansum(drop_below_baseline) * dt
+        
+        return area
+
+
+    def resolve_overlapping_desaturations(self, desat_events):
+        """
+        Resolve overlapping desaturation events by keeping the one with the steepest fall rate.
+        
+        Parameters:
+            desat_events : list of tuples
+                List of (start_sec, duration_sec, fall_rate) tuples.
+        
+        Returns:
+            resolved_events : list of tuples
+                List of non-overlapping (start_sec, duration_sec, fall_rate) tuples.
+        """
+        if len(desat_events) == 0:
+            return desat_events
+        
+        # Sort events by start time
+        sorted_events = sorted(desat_events, key=lambda x: x[0])
+        
+        resolved_events = []
+        i = 0
+        while i < len(sorted_events):
+            current_start, current_dur, current_rate, current_drop = sorted_events[i]
+            current_end = current_start + current_dur
+            
+            # Find all overlapping events
+            overlapping = [(i, current_start, current_dur, current_rate, current_drop)]
+            j = i + 1
+            while j < len(sorted_events):
+                next_start, next_dur, next_rate, next_drop = sorted_events[j]
+                next_end = next_start + next_dur
+                
+                # Check for overlap: events overlap if next starts before current ends
+                if next_start < current_end:
+                    overlapping.append((j, next_start, next_dur, next_rate, next_drop))
+                    # Update current_end to include the new event's range
+                    current_end = max(current_end, next_end)
+                    j += 1
+                else:
+                    break
+            
+            # Select the event with the steepest fall rate (most negative, closest to -4)
+            best_event = min(overlapping, key=lambda x: x[3])  # x[3] is fall_rate
+            resolved_events.append((best_event[1], best_event[2], best_event[3], best_event[4]))
+            
+            if DEBUG and len(overlapping) > 1:
+                print(f"Resolved {len(overlapping)} overlapping desaturations:")
+                for idx, start, dur, rate, drop in overlapping:
+                    marker = " <-- KEPT" if (start, dur, rate, drop) == (best_event[1], best_event[2], best_event[3], best_event[4]) else ""
+                    print(f"  start={start:.2f}s, duration={dur:.2f}s, fall_rate={rate:.3f}%/s{marker}, drop={drop:.3f}%")
+            
+            # Move to the next non-overlapping event
+            i = overlapping[-1][0] + 1
+        
+        return resolved_events
+
+    def detect_desaturation_ABOSA(self, data_starts, data_stats, fs_chan, channel, parameters_oxy):
+        """
+        Detect desaturation as described in ABOSA [1].
+
         Parameters :
-            data_stats : numpy array
-                oxygen saturation integer values from 1 to 100% 
+            data_stats : list of numpy array
+                oxygen saturation integer values from 1 to 100% (cleaned)
             data_starts : list
                 start in sec of each continuous section (more than one when there are discontinuities)
             fs_chan     : float
@@ -788,9 +1023,6 @@ class OxygenDesatDetector(SciNode):
                 'desaturation_drop_percent' : 'Drop level (%) for the oxygen desaturation "3 or 4"',
                 'max_slope_drop_sec' : 'The maximum duration (s) during which the oxygen level is dropping "120 or 20"',
                 'min_hold_drop_sec' : 'Minimum duration (s) during which the oxygen level drop is maintained "10 or 5"',
-                'window_link_sec' : 'The window length (s) to compute the temporal link between desaturations and arousals',
-                'arousal_min_sec' : 'The minimum length (s) of the arousal events kept',
-                'arousal_max_sec' : 'The maximum length (s) of the arousal events kept',
             asleep_stages_df : pandas DataFrame
                 Asleep stages from lights off to lights on.
 
@@ -802,131 +1034,954 @@ class OxygenDesatDetector(SciNode):
                 'start_sec': Starting time of the event in sec (Float)
                 'duration_sec': Duration of the event in sec (Float)
                 'channels' : Channel where the event occures (String)
+            signal_lpf_list : list of numpy array
+                low pass filtered oxygen saturation signals (the trend) for debug purpose.
+            
+
+        Reference : 
+            [1] Karhu, T., Leppänen, T., Töyräs, J., Oksenberg, A., Myllymaa, S., & Nikkonen, S. (2022).
+            ABOSA - Freely available automatic blood oxygen saturation signal analysis software: 
+            Structure and validation. Computer Methods and Programs in Biomedicine, 226, 107120. 
+            https://doi.org/10.1016/j.cmpb.2022.107120
         """   
+        data_lpf_list = []
+        data_hpf_list = []
+        data_dev_list = []
+        all_desat_events = []
+        plateau_lst = []
+        lmin_indices_list = []
+        lmax_indices_list = []        
+
+        #---------------------
+        # ABOSA parameters
+        #---------------------♣
+        # Avg fall rate limits to consider for the whole desaturation event
+        # The deeptest slope
+        desat_event_slope_steep_limit = -4.0  # % per second
+        # The least steep
+        desat_event_slope_shallow_limit = -0.05  # % per second
+        # peak detection parameters
+        min_peak_distance_sec = 5 
+        min_peak_prominence = 1
+        # Filter order for lowpass (finding peaks) and highpass (fall rate) filtering
+        order = 4 # ABOSA
+        frequency_cutoff = 0.1 #same as the paper
+        # Adjust Lmax and all Lmin candidates for plateau on the filtered signal
+        min_plateau_duration_sec = 20  # Strategy different than ABOSA
+        # Steepest accepted slope during 1 sec 
+        desat_event_slope_steepest_1sec = -6.0  # % per second
+
         for i, signal in enumerate(data_stats):
-            flag_end_min = False         
-            desat_start_sec = data_starts[i]
-            desat_start_val = data_stats[i][0]
-            cur_min_val = 100
-            cur_end_sec = 0
-            cur_end_val = 100
-            desat_drop_reached_flag = False
-            desat_valid_flag = False
-            desat_tab = []
-            for j, sample in enumerate(signal):
-                cur_sec = data_starts[i] + j/fs_chan
+            valid_mask = ~np.isnan(signal)
+            if not np.any(valid_mask):
+                continue
 
-                # Manage the baseline to measure the saturation before the drop
-                if not desat_drop_reached_flag:
-                    # previous bsl is available
-                    if j > (parameters_oxy["max_slope_drop_sec"]*fs_chan):
-                        bsl_start = int(round(j-(parameters_oxy["max_slope_drop_sec"]*fs_chan)))
-                    else:
-                        bsl_start = 0
-                    # Look for the max value to start the desaturation
-                    if j-bsl_start > 0:
-                        max_bsl_val = np.nanmax(signal[bsl_start:j])
-                        i_max_val = [i for i, val in enumerate(signal[bsl_start:j]) if val==max_bsl_val]
-                        if len(i_max_val)>1:
-                            max_bsl_i = np.nanmax(i_max_val)
-                        elif len(i_max_val)==1:
-                            max_bsl_i = i_max_val[0]
-                        else:
-                            max_bsl_i=j # when all nan
-                        max_bsl_sec = data_starts[i] + (bsl_start+max_bsl_i)/fs_chan
-                    else:
-                        max_bsl_val = sample
-                        max_bsl_sec = cur_sec
-                    desat_start_val = max_bsl_val
-                    desat_start_sec = max_bsl_sec
+            # Low pass filter the signal to get the trend in order to detect local min and max
+            signal_lpf = self.filter_nan_filtfilt(signal, order, fs_chan, frequency_cutoff, 'low')
+
+            # Plateau detection
+            signal_rounded = np.round(signal_lpf, 0)
+            signal_derivative = np.gradient(signal_rounded) * fs_chan
+
+            # High-pass filter the signal at 0.1 Hz (which is already low-pass filtered to 0.1 Hz)
+            signal_hpf = self.filter_nan_filtfilt(signal_lpf, order, fs_chan, frequency_cutoff , 'high')
+
+            # Step 1: Locate potential endpoints (Lmin)
+            min_peak_distance_samples = int(min_peak_distance_sec * fs_chan)
+            lmin_indices = self.detect_local_min(
+                signal, signal_lpf, fs_chan, 
+                min_peak_distance_samples, min_peak_prominence, 
+                data_starts[i]
+            )
+            lmin_indices_list.append(lmin_indices)
+
+            # Step 2: Locate potential starting points (Lmax)
+            # lmax_indices (numpy array) : Indices of local maximums filtered for too low maximums.
+            # lmax_indices_org (numpy array) : Indices of local maximums in the original signal.
+            lmax_indices, lmax_indices_org = self.detect_local_max(
+                signal, signal_lpf, fs_chan, 
+                min_peak_distance_samples, min_peak_prominence, 
+                data_starts[i]
+            )
+            lmax_indices_list.append(lmax_indices_org)
+
+            # Step 3: Validate and match Lmax-Lmin pairs
+            for lmax_idx in lmax_indices:
+                lmax_time = data_starts[i] + lmax_idx / fs_chan
+                lmax_val = signal[lmax_idx]
                 
-                # Look for the minimum value to end the desaturation
-                else:
-
-                    if j-(bsl_start+max_bsl_i) > 0:
-                        cur_min_val = np.nanmin(signal[bsl_start+max_bsl_i:j])
-                    else:
-                        cur_min_val = sample
-                    # Find the last sec of the minimum value (real end of the desaturation)
-                    i_min_val = [i for i, val in enumerate(signal[bsl_start+max_bsl_i:j]) if val==cur_min_val]
-                    if len(i_min_val)>1:
-                        min_desat_i = np.nanmax(i_min_val)
-                    elif len(i_min_val)==1:
-                        min_desat_i = i_min_val[0]
-                    else:
-                        min_desat_i=j # when all nan
-                    cur_min_sec = data_starts[i] + (bsl_start+max_bsl_i+min_desat_i)/fs_chan
-
-                # --------------------------------------------------------------
-                # Evaluation of the desaturation status
-                # --------------------------------------------------------------
-                # Drop is enough -> we have a desaturation start!
-                if (not desat_drop_reached_flag) and ((desat_start_val-cur_end_val) >= parameters_oxy["desaturation_drop_percent"]):
-                    desat_drop_reached_flag = True
-                    desat_reached_sec = cur_sec
-                    if DEBUG:
-                        print(f"desaturation drop (start={desat_start_val} and current={cur_end_val}) reached at {self.convert_sec_to_HHMMSS(desat_start_sec)}")
+                # discard lmax without lmin
+                #   The maximum duration of a desaturation event is limited to 180 s.
+                #   The potential Lmax-Lmin pair cannot go through another Lmax.
+                lmin_list = self.discard_lmax_without_lmin(
+                    signal, lmin_indices, lmax_indices, lmax_idx, lmax_time, lmax_val,
+                    data_starts[i], fs_chan, 
+                    parameters_oxy['max_slope_drop_sec'], 
+                    parameters_oxy['desaturation_drop_percent']
+                )
+                if lmin_list is None:
+                    continue
+                if DEBUG and len(lmin_list) > 1:
+                    print(f"{len(lmin_list)} Lmins for current Lmax at {lmax_time:.2f}s")
                 
-                # If the drop is maintained its a valid desaturation
-                if desat_drop_reached_flag: 
-                    # Drop is maintained enough
-                    if not desat_valid_flag and ((cur_sec - desat_reached_sec) >= parameters_oxy["min_hold_drop_sec"]):
-                        desat_valid_flag = True
-   
-                # --------------------------------------------------------------
-                # Evaluation of the desaturation value
-                # --------------------------------------------------------------
-                # The value inscreased of more than 2%
-                if (desat_drop_reached_flag and desat_valid_flag) and (sample > cur_min_val+(self.variability_tolerance/100*cur_min_val/100)*100):
+                # Process all Lmin candidates through adjustments and validation
+                for lmin_idx, lmin_time, lmin_val, drop in lmin_list:
 
-                    # Make sure the desat_start_sec is not already included in a desaturation
-                    #    before adding it into the desat_tab
-                    if len(desat_tab)>0:
-                        last_desat = desat_tab[-1]
-                        if not ( (desat_start_sec>=last_desat[0]) and (desat_start_sec<(last_desat[0]+last_desat[1]))):
-                            # Save the valid desaturation
-                            if flag_end_min: # The end is at the last min value
-                                desat_tab.append([desat_start_sec, cur_min_sec-desat_start_sec])
-                            else: # The end is at the resaturation of 2%
-                                desat_tab.append([desat_start_sec, cur_end_sec-desat_start_sec])
-                    else:
-                        # Save the valid desaturation
-                        if flag_end_min: # The end is at the last min value
-                            desat_tab.append([desat_start_sec, cur_min_sec-desat_start_sec])
-                        else: # The end is at the resaturation of 2%
-                            desat_tab.append([desat_start_sec, cur_end_sec-desat_start_sec])
-                        
-                    desat_drop_reached_flag = False
-                    desat_valid_flag = False
+                    # Adjust Lmax for fall rate
+                    # The Lmax is shifted forward to a point where the fall starts using the low pass filtered signal.
+                    # The high pass filtered signal is used to verify abrupt transition
+                    adjusted_lmax_idx, adjusted_lmax_time, adjusted_lmax_val, signal_squared = \
+                        self.adjust_lmax_for_fall_rate(signal_lpf, signal_hpf, lmax_idx, lmin_idx, \
+                                                       data_starts[i], fs_chan, desat_event_slope_shallow_limit)
+                    
+                    # Adjust Lmax and all Lmin candidates at least 20 s plateau
+                    adjusted_lmax_idx, adjusted_lmax_time, adjusted_lmax_val, \
+                        adjusted_lmin_idx, adjusted_lmin_time, adjusted_lmin_val, plateau = \
+                        self.adjust_for_rounded_plateau(
+                            signal_rounded, signal_derivative, \
+                            adjusted_lmax_idx, adjusted_lmax_val, 
+                            lmin_idx, lmin_time, lmin_val,
+                            data_starts[i], fs_chan, 
+                            min_plateau_duration_sec
+                        )
+                    if len(plateau) > 0:
+                        plateau_lst.extend(plateau)
+
+                    if adjusted_lmax_time >= adjusted_lmin_time:
+                        if DEBUG:
+                            print(f"Lmax at {adjusted_lmax_time:.2f}s is after Lmin at {adjusted_lmin_time:.2f}s after plateau adjustment")
+                        break
+
+                    # Skip desaturation events that include artifacts
+                    if any(np.isnan(signal[adjusted_lmax_idx:adjusted_lmin_idx + 1])):
+                        if DEBUG:
+                            print(f"Skipping desaturation event from {adjusted_lmax_time:.2f}s to {adjusted_lmin_time:.2f}s due to artifact (NaN values in signal)")
+                        continue
+
+                    # Adjust Lmax for fall rate
+                    # The Lmax is shifted forward to a point where the fall starts using the low pass filtered signal.
+                    # The high pass filtered signal is used to verify abrupt transition
+                    adjusted_lmax_idx, adjusted_lmax_time, adjusted_lmax_val, signal_squared = \
+                        self.adjust_lmax_for_fall_rate(signal_lpf, signal_hpf, adjusted_lmax_idx, adjusted_lmin_idx, \
+                                                       data_starts[i], fs_chan, desat_event_slope_shallow_limit)
                                         
-                cur_end_sec = cur_sec
-                cur_end_val = sample
+                    # Correct Lmax locations by finding actual maximum within 5s window on raw signal
+                    adjusted_lmax_idx = self.correct_peak_indices_in_window(
+                        signal, [adjusted_lmax_idx], window_s=5, fs_chan=fs_chan)
+                    adjusted_lmax_idx = adjusted_lmax_idx[0]
+                    adjusted_lmax_time = data_starts[i] + adjusted_lmax_idx / fs_chan
+                    adjusted_lmax_val = signal[adjusted_lmax_idx]
+
+                    # Correct Lmin locations by finding actual maximum within 5s window on raw signal
+                    adjusted_lmin_idx = self.correct_peak_indices_in_window(
+                        signal, [adjusted_lmin_idx], window_s=5, fs_chan=fs_chan, find_max=False)
+                    adjusted_lmin_idx = adjusted_lmin_idx[0]
+                    adjusted_lmin_time = data_starts[i] + adjusted_lmin_idx / fs_chan
+                    adjusted_lmin_val = signal[adjusted_lmin_idx]
+
+                    # Recalculate drop after adjustments
+                    drop = adjusted_lmax_val - adjusted_lmin_val
+                    duration = adjusted_lmin_time - adjusted_lmax_time
+                    
+                    # Calculate average fall rate (%/s)
+                    avg_fall_rate = -drop / duration if duration > 0 else 0
+
+                    # Keep only events without disconnections during the desaturation event
+                    # A disconnection is a drop with a slope steeper than desat_event_slope_steepest_1sec %/s for 1 second
+                    # Use a sliding window of 1 sec (step of 0.5 sec) to detect steep slopes across the entire event
+                    window_samples = int(fs_chan)        # 1 sec window
+                    step_samples = max(1, int(0.5 * fs_chan))    # 0.5 sec step
+                    end_idx = min(adjusted_lmin_idx, len(signal) - 1)
+                    segment = signal[adjusted_lmax_idx:end_idx + 1]
+                    if len(segment) > window_samples:
+                        # Compute fall rate for all windows at once using vectorized indexing
+                        win_starts = np.arange(0, len(segment) - window_samples, step_samples)
+                        fall_rates = segment[win_starts] - segment[win_starts + window_samples]
+                        has_steep_spike = bool(np.any(fall_rates <= desat_event_slope_steepest_1sec))
+                    else:
+                        has_steep_spike = False
+                    
+                    # Validate drop threshold, duration and fall rate limits
+                    if ((drop >= parameters_oxy['desaturation_drop_percent']) and 
+                        (duration >= parameters_oxy['min_hold_drop_sec']) and
+                        (desat_event_slope_steep_limit <= avg_fall_rate <= desat_event_slope_shallow_limit) and
+                        (not has_steep_spike)):  # No steep drop detected within any 1s window:
+                        # Valid desaturation event with the avg_fall_rate to filter overlapping later
+                        all_desat_events.append((adjusted_lmax_time, duration, avg_fall_rate, drop))
+                    else:
+                        if DEBUG:
+                            print(f"  Invalid desaturation: start={adjusted_lmax_time:.2f}s, "
+                                  f"duration={duration:.2f}s, drop={drop:.1f}%, "
+                                  f"fall_rate={avg_fall_rate:.3f}%/s")
+
+            # Debug output for the result view
+            if DEBUG: 
+                data_lpf_list.append(signal_lpf)
+                data_hpf_list.append(signal_squared)
+                data_dev_list.append(signal_derivative)
+
+        # Resolve overlapping desaturations by keeping events with steepest fall rate
+        all_desat_events = self.resolve_overlapping_desaturations(all_desat_events)
+
+        # Compute the area under the desaturation events for further analysis
+        desat_areas = []
+        for start_sec, duration_sec, slope, depth in all_desat_events:
+            # Find which signal segment contains this event
+            area = np.nan
+            for samples, data_start in zip(data_stats, data_starts):
+                signal_end = data_start + len(samples) / fs_chan
+                # Check if the event is within this signal segment
+                if start_sec >= data_start and start_sec < signal_end:
+                    area = self.compute_desaturation_area(samples, data_start, start_sec, duration_sec, fs_chan)
+                    break
+            desat_areas.append(area)
+
+        # Create output dataframe
+        # desat_events = [('SpO2', 'desat_SpO2', start_sec, duration_sec, channel) 
+        #                 for start_sec, duration_sec in all_desat_events]
+        desat_events = [('SpO2', 'desat_SpO2', start_sec, duration_sec, '', slope, depth)
+                        for start_sec, duration_sec, slope, depth in all_desat_events]
+
+        # plateau_events = [('SpO2', 'plateau_SpO2', start_sec, duration_sec, channel) 
+        #                   for start_sec, duration_sec in plateau_lst]
+        plateau_events = [('SpO2', 'plateau_SpO2', start_sec, duration_sec, '') 
+                          for start_sec, duration_sec in plateau_lst]
+        if DEBUG:
+            print(f"\n{len(desat_events)} desat events\n")
+            print(f"\n{len(plateau_events)} plateau events\n")
+            for i in range(len(data_stats)):
+                print(f"{len(lmax_indices_list[i])} possible max\n")
+                print(f"{len(lmin_indices_list[i])} possible min\n")
+
+        desat_df = pd.DataFrame(data=desat_events, columns=['group', 'name', 'start_sec', 'duration_sec', 'channels', 'slope', 'depth'])
+        # Add the desaturation features to compute stats
+        desat_df['area_percent_sec'] = desat_areas
+        plateau_df = manage_events.create_event_dataframe(data=plateau_events)
+  
+        return desat_df, plateau_df, data_lpf_list, data_hpf_list, data_dev_list, lmax_indices_list, lmin_indices_list
+
+
+    def filter_nan_filtfilt(self, signal, order, fs_chan, cutoff_freq, type='low'):
+        # We expect to have NaN values in chunk (if any)
+        #   so we filter the signal (without nan values) even if it could have border effects
+        #   and we reconstruct the filtered signal with the original NaN values.
+        non_nan_indices = np.where(~np.isnan(signal))[0]
+        if len(non_nan_indices) > 0:
+            # reshape the i_nan_samples (x,1) to (x,)
+            non_nan_indices = np.squeeze(non_nan_indices)
+            samples_without_nan = signal[non_nan_indices]
+            order_filtfilt = int(order)/2
+            sos = scipysignal.butter(int(order_filtfilt), cutoff_freq,\
+                btype=type, output='sos', fs=fs_chan)
+            samples_filtered = scipysignal.sosfiltfilt(\
+                sos, samples_without_nan).copy() # .copy() is a hack to make 
+                                        # recording the EDF with pyedflib much
+                                        # much much faster
+            filtered_signal = np.empty_like(signal) 
+            filtered_signal.fill(np.nan)
+            filtered_signal[non_nan_indices] = samples_filtered
+        else: # The whole signal is NaN - no filter applied
+            filtered_signal = np.empty_like(signal)
+            filtered_signal.fill(np.nan)
+        return filtered_signal
+
+
+    def detect_artifact_SpO2(self, sraw, data_starts, fs_chan):
+        """
+        Detect major artifacts from oxygen saturation signal.
         
-        # Keep desat that start in asleep stages only
-        start_time = asleep_stages_df['start_sec'].values
-        end_time = start_time + asleep_stages_df['duration_sec'].values
-        desat_kept = []
-        for desat_start, desat_dur in desat_tab:
-            if any( (start_time<=desat_start) & (end_time>=desat_start) ):
-                desat_kept.append([desat_start, desat_dur])
-        desat_events = [('SpO2', 'desat_SpO2', start_sec, duration_sec, channel) for start_sec, duration_sec in desat_kept]
-        return manage_events.create_event_dataframe(data=desat_events)
+        First, major artifacts are detected from the signal (SRaw) by filtering 
+        the SRaw signal with 4th order Butterworth high-pass filter with a 1 Hz cutoff. 
+        Next, the filtered signal is squared. Values >30 in the squared signal, 
+        and values <50% and >100% in the SRaw signal are counted as artifacts. 
+        Adjacent artifact points are grouped into a single artifact, and artifacts 
+        are extended by one second in both directions to add a safety margin. 
+        However, artifacts with a duration of ≤5 s are linearly interpolated.
+        
+        Parameters:
+        - sraw: Raw signal array (may contain NaNs)
+        - data_start: Start time of the signal in seconds
+        - fs_chan: Sampling rate in Hz
+        
+        Returns:
+        - cleaned_signal: Signal with short artifacts interpolated
+        - artifact_events: List of (start_sec, duration_sec) tuples for artifacts >5s
+        """
+        # List of constants
+        filter_order = 8 # The author uses order 4 with filtfilt but did not divide the order by 2
+        cutoff_freq = 1.0
+        threshold_squared = 30 # ABOSA 30 # 20 for 1 subject
+        lower_bound = 50
+        upper_bound = 100
+        art_buffer_sec = 1.0 # Extend each artifact by 1 second in both directions
+        linear_art_sec = 5.0 # Interpolate artifacts with duration ≤ 5 seconds
+
+        data_cleaned = []
+        data_gradient = []
+        for samples, data_start in zip(sraw, data_starts):
+            # 1. Identify artifact points directly from raw signal first
+            # This avoids filter edge effects
+            artifact_mask = np.zeros(len(samples), dtype=bool)
+            artifact_mask |= (samples < lower_bound)
+            artifact_mask |= (samples > upper_bound)
+            artifact_mask |= np.isnan(samples)
+            
+            # 2. Apply 4th order Butterworth high-pass filter (1 Hz cutoff) on valid samples only
+            filtered_signal = self.filter_nan_filtfilt(samples, filter_order, fs_chan, cutoff_freq, 'high')
+            
+            # 3. Square the filtered signal
+            squared_signal = filtered_signal ** 2
+            
+            # 4. Add high-frequency artifacts (rapid changes)
+            artifact_mask |= (squared_signal > threshold_squared)
+            
+            # 5. Group adjacent artifacts and extend by 1 second
+            diff = np.diff(np.concatenate([[0], artifact_mask.astype(int), [0]]))
+            starts = np.where(diff == 1)[0]
+            ends = np.where(diff == -1)[0]
+            
+            # Extend each artifact by 1 second in both directions
+            # Note: 'start' is the first artifact sample, 'end' is one past the last artifact sample
+            extension_samples = int(fs_chan * art_buffer_sec)
+            extended_mask = np.zeros(len(samples), dtype=bool)
+            
+            for start, end in zip(starts, ends):
+                # Apply symmetric buffer: 1s before start and 1s after the last artifact sample
+                extended_start = max(0, start - extension_samples)
+                extended_end = min(len(samples), end + extension_samples)
+                extended_mask[extended_start:extended_end] = True
+            
+            # Re-identify artifact regions after extension
+            diff = np.diff(np.concatenate([[0], extended_mask.astype(int), [0]]))
+            starts = np.where(diff == 1)[0]
+            ends = np.where(diff == -1)[0]
+            
+            # 6. Interpolate artifacts with duration ≤ 5 seconds
+            cleaned_signal = samples.copy()
+            threshold_samples = int(fs_chan * linear_art_sec)
+            artifact_events = []
+            
+            for start, end in zip(starts, ends):
+                # start is first artifact sample, end is first non-artifact sample
+                duration = end - start
+                
+                if duration <= threshold_samples:
+                    # Linear interpolation for short artifacts
+                    if start > 0 and end < len(samples):
+                        x = [start - 1, end]
+                        y = [samples[start - 1], samples[end]]
+                        
+                        # If the slope of the interpolation is too steep, we can skip the interpolation and keep it as artifact (NaN)
+                        slope = abs((y[1] - y[0]) / ((x[1] - x[0])/fs_chan))  # Slope in % per second
+                        if slope > np.sqrt(threshold_squared):
+                            start_sec = (start / fs_chan) + data_start
+                            duration_sec = duration / fs_chan
+                            artifact_events.append((start_sec, duration_sec))
+                            cleaned_signal[start:end] = np.nan
+                            continue
+                        
+                        interpolator = interp1d(x, y, kind='linear')
+                        cleaned_signal[start:end] = interpolator(np.arange(start, end))
+                    
+                    # Mark as non-artifact after interpolation
+                    extended_mask[start:end] = False
+                else:
+                    # Keep artifacts longer than 5s
+                    start_sec = (start / fs_chan) + data_start
+                    duration_sec = duration / fs_chan
+                    artifact_events.append((start_sec, duration_sec))
+                    # Mark these samples as NaN in cleaned signal
+                    cleaned_signal[start:end] = np.nan
+
+            data_cleaned.append(cleaned_signal)
+            data_gradient.append(squared_signal)
+        
+        return data_cleaned, artifact_events, data_gradient
 
 
-    def compute_desat_stats(self, desat_df, asleep_stages_df):
+    def correct_peak_indices_in_window(self, signal, peak_indices, window_s, fs_chan, find_max=True):
+        """
+        Correct peak locations by finding actual extrema in the original signal within a time window.
+        Vectorized implementation for better performance.
+        
+        Parameters:
+            signal : numpy array
+                Original SpO2 signal.
+            peak_indices : numpy array or list
+                Indices of peaks to correct.
+            window_s : float
+                Window duration in seconds (centered on each peak).
+            fs_chan : float
+                Sampling frequency (Hz).
+            find_max : bool
+                If True, find maximum within window; if False, find minimum.
+        
+        Returns:
+            corrected_indices : numpy array
+                Corrected indices of peaks in the original signal.
+        """
+        peak_indices = np.asarray(peak_indices)
+        if len(peak_indices) == 0:
+            return np.array([], dtype=int)
+        
+        half_window_samples = int((window_s / 2) * fs_chan)
+        signal_len = len(signal)
+        
+        # Vectorized window bounds calculation
+        window_starts = np.maximum(0, peak_indices - half_window_samples)
+        window_ends = np.minimum(signal_len, peak_indices + half_window_samples)
+        
+        corrected_indices = np.empty(len(peak_indices), dtype=int)
+        valid_mask = np.ones(len(peak_indices), dtype=bool)
+        
+        for i, (ws, we) in enumerate(zip(window_starts, window_ends)):
+            window_signal = signal[ws:we]
+            if len(window_signal) > 0 and not np.all(np.isnan(window_signal)):
+                if find_max:
+                    corrected_indices[i] = ws + np.nanargmax(window_signal)
+                else:
+                    corrected_indices[i] = ws + np.nanargmin(window_signal)
+            else:
+                valid_mask[i] = False
+        
+        return corrected_indices[valid_mask]
+
+
+    def detect_local_min(self, signal, signal_lpf, fs_chan, min_peak_distance_samples, min_peak_prominence, data_start):
+        """
+        Detect local minimums from the low-pass filtered signal and correct their location
+        by finding the actual minimum in the original signal within a 10s window.
+        
+        Parameters:
+            signal : numpy array
+                Original SpO2 signal.
+            signal_lpf : numpy array
+                Low-pass filtered SpO2 signal for trend detection.
+            fs_chan : float
+                Sampling frequency (Hz).
+            min_peak_distance_samples : int
+                Minimum distance between peaks in samples.
+            min_peak_prominence : float
+                Minimum prominence for peak detection.
+            data_start : float
+                Start time in seconds of this signal section.
+        
+        Returns:
+            lmin_indices_corrected : numpy array
+                Corrected indices of local minimums in the original signal.
+        """
+        window_s = 10  # seconds window to identify the real minimum
+        half_window_samples = int((window_s / 2) * fs_chan)
+        
+        # Invert the signal to find minimums using find_peaks
+        inverted_signal = -signal_lpf
+        
+        # Find local minimums (peaks in inverted signal)
+        lmin_indices, lmin_properties = scipysignal.find_peaks(
+            inverted_signal,
+            distance=min_peak_distance_samples,
+            prominence=min_peak_prominence
+        )
+        
+        # Correct Lmin locations by finding actual minimum within 10s window
+        lmin_indices_corrected = self.correct_peak_indices_in_window(
+            signal, lmin_indices, window_s, fs_chan, find_max=False
+        )
+        
+        if DEBUG:
+            lmin_times_sec = data_start + lmin_indices_corrected / fs_chan
+            lmin_values = signal[lmin_indices_corrected] if len(lmin_indices_corrected) > 0 else []
+            print(f"Found {len(lmin_indices_corrected)} local minimums (corrected within {window_s}s window)\n")
+            # for idx, (t, v) in enumerate(zip(lmin_times_sec, lmin_values)):
+            #     print(f"  Lmin {idx}: time={t:.2f}s, value={v:.1f}%")
+        
+        return lmin_indices_corrected
+
+
+    def detect_local_max(self, signal, signal_lpf, fs_chan, min_peak_distance_samples, min_peak_prominence, data_start):
+        """
+        Detect local maximums from the low-pass filtered signal and correct their location
+        by finding the actual maximum in the original signal within a 5s window (to validate).
+
+        If the difference is <3 percentage points between 2 consecutive Lmax, the first Lmax is removed.
+        
+        Parameters:
+            signal : numpy array
+                Original SpO2 signal.
+            signal_lpf : numpy array
+                Low-pass filtered SpO2 signal for trend detection.
+            fs_chan : float
+                Sampling frequency (Hz).
+            min_peak_distance_samples : int
+                Minimum distance between peaks in samples.
+            min_peak_prominence : float
+                Minimum prominence for peak detection.
+            data_start : float
+                Start time in seconds of this signal section.
+        
+        Returns:
+            filtered_lmax_indices : numpy array
+                Indices of local maximums filtered for too low maximums.
+            lmax_indices_org : numpy array
+                Indices of local maximums in the original signal.
+        """
+        window_s = 10  # seconds window to identify the real maximum
+        min_drop_2_consecutive_max = 3  # minimum drop in SRaw values between two consecutive Lmaxs to consider both Lmaxs
+        
+        # Find local maximums using find_peaks on the filtered signal
+        lmax_indices, lmax_properties = scipysignal.find_peaks(
+            signal_lpf,
+            distance=min_peak_distance_samples,
+            prominence=min_peak_prominence
+        )
+
+        # Correct Lmax locations by finding actual maximum within 10s window
+        lmax_indices_org = self.correct_peak_indices_in_window(
+            signal, lmax_indices, window_s, fs_chan, find_max=True
+        )
+
+        # Lmaxvalues that are too low to potentially result in proper desaturation events are removed. 
+        # This is done by checking the maximum difference in SRaw values between two adjacent Lmaxs: 
+        # if the difference is <3 percentage points, the first Lmax is removed
+        filtered_lmax_indices = []
+        for i in range(len(lmax_indices_org)-1):
+            current_lmax_idx = lmax_indices_org[i]
+            next_lmax_idx = lmax_indices_org[i+1]
+            signal_vals = signal[current_lmax_idx:next_lmax_idx]
+            if len(signal_vals) > 1:
+                current_lmax_val = np.nanmax(signal_vals)
+                current_lmin_val = np.nanmin(signal_vals)
+                if (current_lmax_val - current_lmin_val) >= min_drop_2_consecutive_max:
+                    filtered_lmax_indices.append(current_lmax_idx)
+            else:
+                continue
+        
+        # Convert to numpy array for efficient operations (searchsorted, indexing)
+        filtered_lmax_indices = np.array(filtered_lmax_indices, dtype=int)
+        
+        if DEBUG:
+            lmax_times_sec = data_start + filtered_lmax_indices / fs_chan
+            lmax_values = signal[filtered_lmax_indices] if len(filtered_lmax_indices) > 0 else []
+            print(f"Found {len(filtered_lmax_indices)} local maximums (corrected within {window_s}s window)\n")
+            # for idx, (t, v) in enumerate(zip(lmax_times_sec, lmax_values)):
+            #     print(f"  Lmax {idx}: time={t:.2f}s, value={v:.1f}%")
+        
+        return filtered_lmax_indices, lmax_indices_org
+
+    def discard_lmax_without_lmin(self, signal, lmin_indices, lmax_indices, lmax_idx, lmax_time, lmax_val, 
+                                  data_start, fs_chan, max_slope_drop_sec, desaturation_drop_percent):
+        """
+        Find the best Lmin candidate for a given Lmax (lmax_idx).
+
+        The maximum duration of a desaturation event is limited to 180 s.
+        The potential Lmax-Lmin pair cannot go through another Lmax.
+        
+        Parameters:
+            signal : numpy array
+                Original SpO2 signal.
+            lmin_indices : numpy array
+                Indices of local minimums.
+            lmax_indices : numpy array
+                Indices of local maximums.
+            lmax_idx : int
+                Index of the current Lmax.
+            lmax_time : float
+                Time in seconds of the current Lmax.
+            lmax_val : float
+                Value of the current Lmax.
+            data_start : float
+                Start time in seconds of this signal section.
+            fs_chan : float
+                Sampling frequency (Hz).
+            max_slope_drop_sec : float
+                Maximum duration for the desaturation drop.
+            desaturation_drop_percent : float
+                Minimum drop percentage to be considered a desaturation.
+        
+        Returns:
+            best_lmin : tuple or None
+                (lmin_idx, lmin_time, lmin_val, drop) or None if no valid candidate.
+        """
+        max_end_time = lmax_time + max_slope_drop_sec
+        candidate_lmins = []
+        
+        for lmin_idx in lmin_indices:
+            lmin_time = data_start + lmin_idx / fs_chan
+            
+            # Lmin must be after Lmax and within max duration
+            if lmin_time <= lmax_time or lmin_time > max_end_time:
+                continue
+            
+            # Check if there's another Lmax between current Lmax and this Lmin
+            # Use searchsorted for O(log n) lookup instead of np.where O(n)
+            current_pos = np.searchsorted(lmax_indices, lmax_idx)
+            if current_pos + 1 < len(lmax_indices):
+                next_lmax_time = data_start + lmax_indices[current_pos + 1] / fs_chan
+                if next_lmax_time < lmin_time:
+                    continue
+            
+            lmin_val = signal[lmin_idx]
+            drop = lmax_val - lmin_val
+            
+            # Reject if drop is less than minimum threshold
+            if drop < desaturation_drop_percent:
+                continue
+            
+            candidate_lmins.append((lmin_idx, lmin_time, lmin_val, drop))
+        
+        if not candidate_lmins:
+            return None
+        
+        return candidate_lmins
+
+
+    def adjust_lmax_for_fall_rate(self, signal, signal_hpf, lmax_idx, lmin_idx, data_start, fs_chan, desat_event_slope_shallow_limit=-0.05):
+        """
+        Shift Lmax forward to the next variation peak using the high-pass filtered signal 
+        to identify the onset of the fall, accepting the shift only if the slope between 
+        consecutive peaks is positive or not steeper than the negative fall-rate threshold.
+        
+        Parameters:
+            signal : numpy array
+                Original SpO2 signal (already low-pass filtered).
+            lmax_idx : int
+                Index of the current Lmax.
+            lmin_idx : int
+                Index of the matched Lmin.
+            data_start : float
+                Start time in seconds of this signal section.
+            fs_chan : float
+                Sampling frequency (Hz).
+            desat_event_slope_shallow_limit : float
+                Fall rate threshold in %/s (deepest fall rate to accept a shift).
+        
+        Returns:
+            adjusted_lmax_idx : int
+                Adjusted index of Lmax.
+            adjusted_lmax_time : float
+                Adjusted time of Lmax.
+            adjusted_lmax_val : float
+                Adjusted value of Lmax.
+        """
+        # Find maximum parameter
+        min_peak_distance_sec = 1
+        #min_peak_prominence = 0.01
+
+        # Square the high-pass filtered signal to enhance peaks (in both directions)
+        signal_squared = signal_hpf ** 2
+        
+        # Detect peaks in the Squared signal - we are looking for the biggest drops
+        min_peak_distance_samples = int(min_peak_distance_sec * fs_chan)  
+        peaks, _ = scipysignal.find_peaks(
+            signal_squared,
+            distance=min_peak_distance_samples,
+            #prominence=min_peak_prominence
+        )
+        
+        # Find the next peak after lmax_idx
+        adjusted_lmax_idx = lmax_idx
+        next_peaks = peaks[peaks > lmax_idx]
+        possible_peaks = next_peaks[next_peaks < lmin_idx]
+
+        if len(possible_peaks) > 0:
+            # Loop through all peaks before lmin_idx and keep shifting to better maxima
+            for peak_idx in possible_peaks:
+                    
+                # Correct peak locations within 1s window
+                lmax_corrected = self.correct_peak_indices_in_window(signal, [adjusted_lmax_idx], window_s=1, fs_chan=fs_chan)
+                lmax_corrected = lmax_corrected[0]
+                lmax_shifted = self.correct_peak_indices_in_window(signal, [peak_idx], window_s=1, fs_chan=fs_chan)
+                lmax_shifted = lmax_shifted[0]
+                
+                duration_sec = (lmax_shifted - lmax_corrected) / fs_chan
+                drop = signal[lmax_shifted] - signal[lmax_corrected]
+
+                # Evaluate fall rate to ensure it's a valid shift
+                fall_rate = drop / duration_sec if duration_sec > 0 else 0
+                # For any positive fall rate or slow fall rate, we accept the shift
+                if fall_rate >= desat_event_slope_shallow_limit:
+                    adjusted_lmax_idx = lmax_shifted
+                # If fall rate is too steep, keep current position and stop
+                else:
+                    break
+        
+        adjusted_lmax_time = data_start + adjusted_lmax_idx / fs_chan
+        adjusted_lmax_val = signal[adjusted_lmax_idx]
+        return adjusted_lmax_idx, adjusted_lmax_time, adjusted_lmax_val, signal_squared
+    
+
+    # Obsolete
+    def adjust_for_derivative_plateau(self, signal, signal_derivative, adjusted_lmax_idx, adjusted_lmax_val, lmin_idx, lmin_time, lmin_val, 
+                           data_start, fs_chan, min_plateau_duration_sec, derivative_threshold, derivative_mean_threshold):
+        """
+        Adjust Lmax or Lmin if a flat plateau exists within the event.
+        Plateau detection is based on the derivative of the signal:
+        - Each sample must have |derivative| < derivative_threshold (rejects steep spikes)
+        - The mean derivative over the plateau must have |mean| < derivative_mean_threshold (rejects constant slopes)
+        
+        This allows detection of plateaus with small oscillations around a mean value,
+        while rejecting both steep transitions and constant drifts.
+        
+        Parameters:
+            signal : numpy array
+                Low-pass filtered SpO2 signal.
+            adjusted_lmax_idx : int
+                Current adjusted Lmax index.
+            adjusted_lmax_val : float
+                Current adjusted Lmax value.
+            lmin_idx : int
+                Current Lmin index.
+            lmin_time : float
+                Current Lmin time.
+            lmin_val : float
+                Current Lmin value.
+            data_start : float
+                Start time in seconds of this signal section.
+            fs_chan : float
+                Sampling frequency (Hz).
+            min_plateau_duration_sec : float
+                Minimum plateau duration in seconds (default 10s).
+            derivative_threshold : float
+                Maximum absolute derivative (%/sec) at each sample to be considered flat (default 0.01).
+            derivative_mean_threshold : float
+                Maximum absolute mean derivative (%/sec) over the plateau to reject constant slopes (default 0.01).
+        
+        Returns:
+            adjusted_lmax_idx, adjusted_lmax_time, adjusted_lmax_val, lmin_idx, lmin_time, lmin_val, plateau_list : tuple
+                Adjusted values after plateau handling and list of all detected plateaus.
+        """
+        min_plateau_samples = int(min_plateau_duration_sec * fs_chan)
+        plateau_list = []
+        
+        # Iterate to detect multiple plateaus
+        while True:
+            event_signal = signal[adjusted_lmax_idx:lmin_idx + 1]
+            adjusted_lmax_time = data_start + adjusted_lmax_idx / fs_chan
+            derivative = signal_derivative[adjusted_lmax_idx:lmin_idx + 1]
+    
+            # Stop if remaining duration is less than minimum plateau duration
+            if len(event_signal) < min_plateau_samples:
+                break
+            
+            # Step 1: Identify samples where individual derivative is below threshold
+            # This rejects steep spikes (both positive and negative)
+            flat_mask = np.abs(derivative) < derivative_threshold
+            
+            # Find contiguous flat regions based on individual derivative threshold
+            diff = np.diff(np.concatenate([[0], flat_mask.astype(int), [0]]))
+            starts = np.where(diff == 1)[0]
+            ends = np.where(diff == -1)[0]
+            
+            # Step 2: For each candidate region, check if mean derivative is also low
+            # This rejects constant slopes (e.g., steady decline)
+            plateau_found = False
+            best_plateau_start = 0
+            best_plateau_end = 0
+            for start, end in zip(starts, ends):
+                if (end - start) >= min_plateau_samples:
+                    # Compute mean derivative over this candidate region
+                    mean_derivative = np.mean(derivative[start:end])
+                    # Accept only if mean derivative is also low (rejects constant slopes)
+                    if np.abs(mean_derivative) < derivative_mean_threshold:
+                        best_plateau_start = start
+                        best_plateau_end = end
+                        plateau_found = True
+                        break
+            
+            if not plateau_found:
+                break
+            
+            # Store plateau information
+            plateau_start_time = data_start + (adjusted_lmax_idx + best_plateau_start) / fs_chan
+            plateau_duration = (best_plateau_end - best_plateau_start) / fs_chan
+            plateau_list.append([plateau_start_time, plateau_duration])
+            
+            # Adjust Lmax or Lmin to maximize depth
+            plateau_val = np.nanmean(event_signal[best_plateau_start:best_plateau_end])
+            drop_before_plateau = adjusted_lmax_val - plateau_val
+            drop_after_plateau = plateau_val - lmin_val
+            
+            if drop_before_plateau > drop_after_plateau:
+                # Shift Lmin to start of plateau
+                lmin_idx = adjusted_lmax_idx + best_plateau_start
+                lmin_time = data_start + lmin_idx / fs_chan
+                lmin_val = signal[lmin_idx]
+            else:
+                # Shift Lmax to end of plateau
+                adjusted_lmax_idx = adjusted_lmax_idx + best_plateau_end
+                adjusted_lmax_time = data_start + adjusted_lmax_idx / fs_chan
+                adjusted_lmax_val = signal[adjusted_lmax_idx]
+            
+                # Make sure the current max on the low pass filtered signal is the maximum value until the Lmin candidate
+                if lmin_idx - adjusted_lmax_idx > 1:
+                    real_lmax_val = np.nanmax(signal[adjusted_lmax_idx:lmin_idx+1])
+                    if real_lmax_val > adjusted_lmax_val:
+                        # Update adjusted_lmax_idx, adjusted_lmax_time, adjusted_lmax_val to the real maximum on the low pass filtered signal
+                        adjusted_lmax_idx = np.nanargmax(signal[adjusted_lmax_idx:lmin_idx+1]) + adjusted_lmax_idx
+                        adjusted_lmax_time = data_start + adjusted_lmax_idx / fs_chan
+                        adjusted_lmax_val = signal[adjusted_lmax_idx]
+
+        return adjusted_lmax_idx, adjusted_lmax_time, adjusted_lmax_val, lmin_idx, lmin_time, lmin_val, plateau_list
+    
+
+    def adjust_for_rounded_plateau(self, signal, signal_derivative, \
+                        adjusted_lmax_idx, adjusted_lmax_val, lmin_idx, lmin_time, lmin_val, 
+                        data_start, fs_chan, min_plateau_duration_sec):
+        """
+        Adjust Lmax or Lmin if a flat plateau exists within the event.
+        Plateau detection is based on the derivative of the signal:
+        - Each sample must have |derivative| < derivative_threshold (rejects steep spikes)
+        - The mean derivative over the plateau must have |mean| < derivative_mean_threshold (rejects constant slopes)
+        
+        This allows detection of plateaus with small oscillations around a mean value,
+        while rejecting both steep transitions and constant drifts.
+        
+        Parameters:
+            signal : numpy array
+                Low-pass filtered SpO2 signal.
+            adjusted_lmax_idx : int
+                Current adjusted Lmax index.
+            adjusted_lmax_val : float
+                Current adjusted Lmax value.
+            lmin_idx : int
+                Current Lmin index.
+            lmin_time : float
+                Current Lmin time.
+            lmin_val : float
+                Current Lmin value.
+            data_start : float
+                Start time in seconds of this signal section.
+            fs_chan : float
+                Sampling frequency (Hz).
+            min_plateau_duration_sec : float
+                Minimum plateau duration in seconds (default 10s).
+            derivative_threshold : float
+                Maximum absolute derivative (%/sec) at each sample to be considered flat (default 0.01).
+            derivative_mean_threshold : float
+                Maximum absolute mean derivative (%/sec) over the plateau to reject constant slopes (default 0.01).
+        
+        Returns:
+            adjusted_lmax_idx, adjusted_lmax_time, adjusted_lmax_val, lmin_idx, lmin_time, lmin_val, plateau_list : tuple
+                Adjusted values after plateau handling and list of all detected plateaus.
+        """
+        min_plateau_samples = int(min_plateau_duration_sec * fs_chan)
+        plateau_list = []
+        
+        # Iterate to detect multiple plateaus
+        while True:
+            event_signal = signal[adjusted_lmax_idx:lmin_idx + 1]
+            adjusted_lmax_time = data_start + adjusted_lmax_idx / fs_chan
+            derivative = signal_derivative[adjusted_lmax_idx:lmin_idx + 1]
+
+            # Stop if remaining duration is less than minimum plateau duration
+            if len(event_signal) < min_plateau_samples:
+                break
+            
+            # Step 1: Find edges (transitions where derivative != 0)
+            # Edges are where the rounded signal changes value
+            edge_mask = derivative != 0
+            edge_indices = np.where(edge_mask)[0]
+            
+            # Step 2: Calculate plateau durations between consecutive edges
+            # A plateau is the flat region between two edges
+            plateau_found = False
+            best_plateau_start = 0
+            best_plateau_end = 0
+            
+            if len(edge_indices) == 0:
+                # No edges found - the entire region is a plateau
+                if len(event_signal) >= min_plateau_samples:
+                    best_plateau_start = 0
+                    best_plateau_end = len(event_signal)
+                    plateau_found = True
+            else:
+                # Check plateau from start to first edge
+                if edge_indices[0] >= min_plateau_samples:
+                    best_plateau_start = 0
+                    best_plateau_end = edge_indices[0]
+                    plateau_found = True
+                
+                # Check plateaus between consecutive edges
+                if not plateau_found:
+                    for i in range(len(edge_indices) - 1):
+                        plateau_duration_samples = edge_indices[i + 1] - edge_indices[i] - 1
+                        if plateau_duration_samples >= min_plateau_samples:
+                            best_plateau_start = edge_indices[i] + 1
+                            best_plateau_end = edge_indices[i + 1]
+                            plateau_found = True
+                            break
+                
+                # Check plateau from last edge to end
+                if not plateau_found:
+                    plateau_duration_samples = len(event_signal) - edge_indices[-1] - 1
+                    if plateau_duration_samples >= min_plateau_samples:
+                        best_plateau_start = edge_indices[-1] + 1
+                        best_plateau_end = len(event_signal)
+                        plateau_found = True
+            
+            if not plateau_found:
+                break
+            
+            # Store plateau information
+            plateau_start_time = data_start + (adjusted_lmax_idx + best_plateau_start) / fs_chan
+            plateau_duration = (best_plateau_end - best_plateau_start) / fs_chan
+            plateau_list.append([plateau_start_time, plateau_duration])
+            
+            # Adjust Lmax or Lmin to maximize depth
+            plateau_val = np.nanmean(event_signal[best_plateau_start:best_plateau_end])
+            drop_before_plateau = adjusted_lmax_val - plateau_val
+            drop_after_plateau = plateau_val - lmin_val
+            
+            if drop_before_plateau > drop_after_plateau:
+                # Shift Lmin to start of plateau
+                lmin_idx = adjusted_lmax_idx + best_plateau_start
+                lmin_time = data_start + lmin_idx / fs_chan
+                lmin_val = signal[lmin_idx]
+            else:
+                # Shift Lmax to end of plateau
+                adjusted_lmax_idx = adjusted_lmax_idx + best_plateau_end
+                adjusted_lmax_time = data_start + adjusted_lmax_idx / fs_chan
+                adjusted_lmax_val = signal[adjusted_lmax_idx]
+            
+                # Make sure the current max on the low pass filtered signal is the maximum value until the Lmin candidate
+                if lmin_idx - adjusted_lmax_idx > 1:
+                    real_lmax_val = np.nanmax(signal[adjusted_lmax_idx:lmin_idx+1])
+                    if real_lmax_val > adjusted_lmax_val:
+                        # Update adjusted_lmax_idx, adjusted_lmax_time, adjusted_lmax_val to the real maximum on the low pass filtered signal
+                        adjusted_lmax_idx = np.nanargmax(signal[adjusted_lmax_idx:lmin_idx+1]) + adjusted_lmax_idx
+                        adjusted_lmax_time = data_start + adjusted_lmax_idx / fs_chan
+                        adjusted_lmax_val = signal[adjusted_lmax_idx]
+
+        return adjusted_lmax_idx, adjusted_lmax_time, adjusted_lmax_val, lmin_idx, lmin_time, lmin_val, plateau_list
+
+
+    def compute_desat_stats(self, desat_df, total_stats, stage_sleep_period_df):
         desat_stats = {}
-        # The number of oxygen desaturation from lights off to lights on in asleep stages only.
+        # The number of oxygen desaturation in the sleep period.
         desat_stats['desat_count'] = len(desat_df)
-        # The average duration in sec of the oxygen desaturation events occuring in asleep stages.
-        desat_stats['desat_avg_sec'] = desat_df['duration_sec'].mean()
-        # The std value of the duration in sec of the oxygen desaturation events occuring in asleep stages.
-        desat_stats['desat_std_sec'] = desat_df['duration_sec'].std()
-        # The median value of the duration in sec of the oxygen desaturation events occuring in asleep stages.
-        desat_stats['desat_med_sec'] = desat_df['duration_sec'].median()
-        # The percentage of time spent in desaturation during the asleep stages.
-        desat_stats['desat_sleep_percent'] = desat_df['duration_sec'].sum()/asleep_stages_df['duration_sec'].sum()*100
         # The Oxygen Desaturation Index (ODI) : number of desaturation per sleep hour.
-        desat_stats['desat_ODI'] = len(desat_df)/(asleep_stages_df['duration_sec'].sum()/3600)
+        desat_stats['desat_ODI'] = len(desat_df)/((total_stats['total_valid_min'])/60)
+        # Desaturation severity : The sum of areas under the desaturation events in percent*sec over the sleep period (sec).
+        desat_stats['desat_severity'] = desat_df['area_percent_sec'].sum()/(total_stats['total_valid_min']*60)
+        # The percentage of time spent in desaturation during the sleep period.
+        desat_stats['desat_SP_percent'] = desat_df['duration_sec'].sum()/(total_stats['total_valid_min']*60)*100
+        # The average duration in sec of the oxygen desaturation events in the sleep period.
+        desat_stats['desat_avg_sec'] = desat_df['duration_sec'].mean()
+        # The median value of the duration in sec of the oxygen desaturation events in the sleep period.
+        desat_stats['desat_med_sec'] = desat_df['duration_sec'].median()
+        # The average area under the desaturation events in percent*sec.
+        desat_stats['desat_area_avg'] = desat_df['area_percent_sec'].mean()
+        # The median area under the desaturation events in percent*sec.
+        desat_stats['desat_area_med'] = desat_df['area_percent_sec'].median()
+        # The average slope of the desaturation events in percent/sec.
+        desat_stats['desat_slope_avg'] = desat_df['slope'].mean()
+        # The median slope of the desaturation events in percent/sec.
+        desat_stats['desat_slope_med'] = desat_df['slope'].median()
+        # The average depth of the desaturation events in percent.
+        desat_stats['desat_depth_avg'] = desat_df['depth'].mean()
+        # The median depth of the desaturation events in percent.
+        desat_stats['desat_depth_med'] = desat_df['depth'].median()
+
         return desat_stats
 
     
@@ -1034,12 +2089,3 @@ class OxygenDesatDetector(SciNode):
                 duration_sec = desat_df.loc[i_evt2_unique[i_link]]['start_sec']-start_sec
                 link_start.append(['SpO2','SpO2_arousal_end_link', start_sec, duration_sec, channel])
             link_arousal_end_df = manage_events.create_event_dataframe(link_start)
-        else:
-            temporal_stats['arousal_end_before_delay_sec'] = np.nan       
-            link_arousal_end_df = manage_events.create_event_dataframe(None)
-
-        # Concatenate all new events
-        link_event_df = pd.concat([link_desat_start_df, link_desat_end_df])
-        link_event_df = pd.concat([link_event_df, link_arousal_start_df])
-        link_event_df = pd.concat([link_event_df, link_arousal_end_df])
-        return temporal_stats, link_event_df

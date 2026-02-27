@@ -2,7 +2,7 @@ import base64
 import os
 
 # List of artifact example images to convert
-image_files = ['oxy_desaturation_small.png']
+image_files = ['Oxy_tool_small.png']
 
 # Variable names for each image
 variable_names = ['OXY_DESATURATION_SMALL_IMAGE_BASE64']
