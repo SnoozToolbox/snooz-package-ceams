@@ -388,21 +388,27 @@ class RandB(SciNode):
     def rhythmic_FOOOF(self, signals, fs):
         
         psd_raw, freq_raw = self.raw_spectral_analysis(signals, fs)
-        psd_raw_mean = np.nanmean(psd_raw, axis=0)
+        #psd_raw_mean = np.nanmean(psd_raw, axis=0)
         #freqs = load_fooof_data('freqs_2.npy', folder='data')
         #spectrum = load_fooof_data('spectrum_2.npy', folder='data')
         # Apply fooof method
         fm = FOOOF(peak_width_limits=[1, 8], max_n_peaks=6, min_peak_height=0.15)
-        fm.add_data(freq_raw, psd_raw_mean, [0, 30])
-        fm.plot(plt_log = True)
-        #plt.savefig('fooof_fit_plot.png')
-        #plt.close()
-        fm.fit(freq_raw, psd_raw_mean, [0, 30])
-        init_ap_fit = gen_aperiodic(fm.freqs, fm._robust_ap_fit(fm.freqs, fm.power_spectrum))
-        init_flat_spec = fm.power_spectrum - init_ap_fit
+        spectrum_array = np.zeros((psd_raw.shape[0], len(freq_raw)-1))
+        for i in range(len(freq_raw)):
+            if np.isnan(psd_raw[i, :]).any():
+                spectrum_array[i, :] = np.full((len(freq_raw)-1,), np.nan)
+            else:
+                fm.add_data(freq_raw, psd_raw[i, :])
+                #fm.plot(plt_log = True)
+                #plt.savefig('fooof_fit_plot.png')
+                #plt.close()
+                fm.fit(freq_raw, psd_raw[i, :])
+                init_ap_fit = gen_aperiodic(fm.freqs, fm._robust_ap_fit(fm.freqs, fm.power_spectrum))
+                init_flat_spec = fm.power_spectrum - init_ap_fit
+                spectrum_array[i, :] = init_flat_spec
         # Plot the flattened the power spectrum
         #plot_spectra(fm.freqs, init_flat_spec, True,
         #             label='Flattened Spectrum', color='black')
         #plt.savefig('flattened_spectrum_plot.png')
         #plt.close()
-        return init_flat_spec, fm.freqs
+        return spectrum_array, fm.freqs
