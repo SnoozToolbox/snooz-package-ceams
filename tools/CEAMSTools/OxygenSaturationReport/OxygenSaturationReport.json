@@ -35,7 +35,7 @@
             },
             {
                 "name": "Non valid sections",
-                "description": "Selection of the non valid sections for the oxygen channel.\n\nCheck the invalid sections annotation for each file or apply the first selection to all files.\n\nInvalid sections must be annotated in the accessory file before running this tool.",
+                "description": "Selection of the non valid sections for the oxygen channel.\n\nStart by selecting one PSG or multiple files (with the ctrl key pressed), then select an event group or name.\n\nEnjoy the Event Group Search box.\n\nBe aware that the files must still be highlighted in the GUI to apply the 'Select All' option.",
                 "custom_step_name": "NonValidAnnot",
                 "show_index": true
             },

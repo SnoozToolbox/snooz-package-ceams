@@ -753,7 +753,7 @@ class OxygenDesatDetector(SciNode):
         # Generate and save the oxygen saturation graph
         if len(picture_dir)>0:
             for i_bout, samples in enumerate(data_clean):
-                fig_name = os.path.join(picture_dir, f"{subject_info['filename']}_oxygen_saturation{i_bout}.pdf")
+                fig_name = os.path.join(picture_dir, f"{subject_info['filename']}_oxygen_saturation_graph{i_bout}.pdf")
                 self._plot_oxygen_saturation(samples, fs_chan, fig_name, data_starts[i_bout], invalid_events)
 
         # Flat signals into an array (discontinuity handling)
