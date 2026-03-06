@@ -256,7 +256,7 @@ class RandB(SciNode):
         # compute spectral analysis using scipy periodogram
         # scaling='density' gives power spectral density in V^2/Hz
         # we'll use 'spectrum' to get power spectrum directly
-        freq_bins, psd_data = periodogram(signals, fs=fs, window='boxcar', 
+        freq_bins, psd_data = periodogram(signals, fs=fs, window='hann', 
                                           nfft=n, scaling='spectrum', 
                                           detrend=False, axis=1)
 
@@ -388,27 +388,107 @@ class RandB(SciNode):
     def rhythmic_FOOOF(self, signals, fs):
         
         psd_raw, freq_raw = self.raw_spectral_analysis(signals, fs)
-        #psd_raw_mean = np.nanmean(psd_raw, axis=0)
-        #freqs = load_fooof_data('freqs_2.npy', folder='data')
-        #spectrum = load_fooof_data('spectrum_2.npy', folder='data')
-        # Apply fooof method
-        fm = FOOOF(peak_width_limits=[1, 8], max_n_peaks=6, min_peak_height=0.15)
-        spectrum_array = np.zeros((psd_raw.shape[0], len(freq_raw)-1))
-        for i in range(len(freq_raw)):
+        
+        # FOOOF excludes 0 Hz, so we need to skip it in our arrays too
+        # Initialize array for rhythmic spectra (excluding 0 Hz)
+        Sf = (len(freq_raw) - 1) / freq_raw[-1]  # Sampling frequency for FOOOF (based on max frequency)
+        max_freq = 40  # Maximum frequency to analyze (Hz)
+        num_freq_sample = (int(Sf * max_freq))
+        spectrum_array = np.zeros((psd_raw.shape[0], num_freq_sample))
+        
+        # DEBUG: Print dimensions
+        print(f"DEBUG: psd_raw shape: {psd_raw.shape}")
+        print(f"DEBUG: freq_raw shape: {freq_raw.shape}")
+        print(f"DEBUG: freq_raw[0]: {freq_raw[0]}, freq_raw[-1]: {freq_raw[-1]}")
+        
+        # Fit each epoch separately to extract rhythmic component
+        for i in range(psd_raw.shape[0]):
             if np.isnan(psd_raw[i, :]).any():
-                spectrum_array[i, :] = np.full((len(freq_raw)-1,), np.nan)
+                spectrum_array[i, :] = np.full(num_freq_sample, np.nan)
             else:
-                fm.add_data(freq_raw, psd_raw[i, :])
-                #fm.plot(plt_log = True)
-                #plt.savefig('fooof_fit_plot.png')
-                #plt.close()
-                fm.fit(freq_raw, psd_raw[i, :])
-                init_ap_fit = gen_aperiodic(fm.freqs, fm._robust_ap_fit(fm.freqs, fm.power_spectrum))
-                init_flat_spec = fm.power_spectrum - init_ap_fit
-                spectrum_array[i, :] = init_flat_spec
-        # Plot the flattened the power spectrum
-        #plot_spectra(fm.freqs, init_flat_spec, True,
-        #             label='Flattened Spectrum', color='black')
-        #plt.savefig('flattened_spectrum_plot.png')
-        #plt.close()
+                # Initialize FOOOF with appropriate settings
+                fm = FOOOF(peak_width_limits=[1, 8], max_n_peaks=6, min_peak_height=0.15)
+                
+                # Fit the model - FOOOF works in log-log space internally
+                # FOOOF will skip 0 Hz internally
+                fm.fit(freq_raw, psd_raw[i, :], [0, max_freq])
+                
+                # DEBUG: For first epoch, print and plot details
+                '''if i < 10:
+                    print(f"\nDEBUG Epoch {i}:")
+                    print(f"  fm.freqs shape: {fm.freqs.shape}")
+                    print(f"  fm.freqs[0]: {fm.freqs[0]}, fm.freqs[-1]: {fm.freqs[-1]}")
+                    print(f"  fm.aperiodic_params_: {fm.aperiodic_params_}")
+                    print(f"  Number of peaks found: {len(fm.peak_params_)}")
+                    
+                    # Generate aperiodic fit
+                    ap_fit = gen_aperiodic(fm.freqs, fm._robust_ap_fit(fm.freqs, np.log(psd_raw[i, :num_freq_sample])))
+                    print(f"  ap_fit shape: {ap_fit.shape}")
+                    print(f"  psd_raw[i, 1:] shape: {psd_raw[i, 1:].shape}")
+                    
+                    # Plot for visual inspection
+                    fig, axes = plt.subplots(3, 1, figsize=(12, 10))
+                    
+                    # Plot 1: Original PSD
+                    axes[0].plot(fm.freqs, np.log(psd_raw[i, :num_freq_sample]), 'b-', label='Original PSD', linewidth=2)
+                    axes[0].set_xlabel('Frequency (Hz)')
+                    axes[0].set_ylabel('Power (μV²)')
+                    axes[0].set_title('Original Power Spectrum')
+                    axes[0].set_xlim([0, 40])
+                    # Calculate y-limits only for data in the visible frequency range
+                    freq_mask = (freq_raw >= 0) & (freq_raw <= 40)
+                    visible_data = psd_raw[i, freq_mask]
+                    axes[0].set_ylim([visible_data.min() * 0.5, visible_data.max() * 2])
+                    axes[0].legend()
+                    axes[0].grid(True)
+                    
+                    # Plot 2: PSD with FOOOF fit (linear scale to see negative values)
+                    axes[1].plot(fm.freqs, np.log(psd_raw[i, :num_freq_sample]), 'b-', label='Original PSD', linewidth=2)
+                    axes[1].plot(fm.freqs, ap_fit, 'r--', label='Aperiodic Fit', linewidth=2)
+                    axes[1].set_xlabel('Frequency (Hz)')
+                    axes[1].set_ylabel('Power (μV²)')
+                    axes[1].set_title('FOOOF Fit (linear scale)')
+                    axes[1].set_xlim([0, 40])
+                    # Calculate y-limits for visible frequency range
+                    freq_mask2 = (fm.freqs >= 0) & (fm.freqs <= 40)
+                    visible_psd = psd_raw[i, :num_freq_sample][freq_mask2]
+                    visible_ap = ap_fit[freq_mask2]
+                    y_min = min(visible_psd.min(), visible_ap.min())
+                    y_max = max(visible_psd.max(), visible_ap.max())
+                    y_margin = (y_max - y_min) * 0.1
+                    axes[1].set_ylim([y_min - y_margin, y_max + y_margin])
+                    axes[1].legend()
+                    axes[1].grid(True)
+                    
+                    # Plot 3: Rhythmic component
+                    rhythmic_temp = np.log(psd_raw[i, :num_freq_sample]) - ap_fit
+                    axes[2].plot(fm.freqs, rhythmic_temp, 'g-', label='Rhythmic Component', linewidth=2)
+                    axes[2].axhline(y=1.0, color='k', linestyle='--', alpha=0.5, label='Baseline')
+                    axes[2].set_xlabel('Frequency (Hz)')
+                    axes[2].set_ylabel('Normalized Power')
+                    axes[2].set_title('Rhythmic Component (PSD - Aperiodic Fit)')
+                    axes[2].set_xlim([0, 40])
+                    visible_rhythmic = rhythmic_temp[freq_mask2]
+                    y_margin = (visible_rhythmic.max() - visible_rhythmic.min()) * 0.1
+                    axes[2].set_ylim([visible_rhythmic.min() - y_margin, visible_rhythmic.max() + y_margin])
+                    axes[2].legend()
+                    axes[2].grid(True)
+                    
+                    plt.tight_layout()
+                    plt.savefig('fooof_debug_epoch0.png', dpi=150)
+                    plt.close()
+                    print(f"  Saved debug plot to: fooof_debug_epoch0.png")'''
+                
+                # Generate aperiodic fit in LINEAR space using fitted parameters
+                # fm.freqs excludes 0 Hz, so ap_fit has length len(freq_raw) - 1
+                ap_fit = gen_aperiodic(fm.freqs, fm._robust_ap_fit(fm.freqs, np.log(psd_raw[i, :num_freq_sample])))
+                
+                # Rhythmic component: DIVIDE original spectrum by aperiodic fit (not subtract)
+                # This gives you oscillatory power normalized by the 1/f background
+                # Values > 1 indicate oscillatory peaks, values < 1 indicate below-background activity
+                rhythmic_spectrum = np.log(psd_raw[i, :num_freq_sample]) - ap_fit
+                
+                spectrum_array[i, :] = rhythmic_spectrum
+
+        # Return frequencies excluding 0 Hz to match spectrum_array dimensions
         return spectrum_array, fm.freqs
