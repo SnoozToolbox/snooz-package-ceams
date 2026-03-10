@@ -293,6 +293,8 @@ class EEGInspectorView(Ui_EEGInspectorView, QWidget):
 
             # Show loading message and force UI update
             self.desc_label22.setText('Loading...')
+            self.BackButton2.setEnabled(False)
+            self.NextButton2.setEnabled(False)
             QCoreApplication.processEvents()  # Force UI refresh
 
             # Use EpochProcessor to setup epochs
@@ -312,6 +314,8 @@ class EEGInspectorView(Ui_EEGInspectorView, QWidget):
         try:
             # Show loading message and force UI update
             self.desc_label_33.setText('Loading...')
+            self.BackButton3.setEnabled(False)
+            self.NextButton3.setEnabled(False)
             QCoreApplication.processEvents()  # Force UI refresh
 
             """Setup PSD visualization using PSDVisualizer"""
@@ -381,19 +385,34 @@ class EEGInspectorView(Ui_EEGInspectorView, QWidget):
         """Navigate back to channel selection"""
         self.StackedWidget.setCurrentIndex(0)
         self.desc_label13.setText(u"Click on \"Next\" once your selection is finished or click on \"skip\" if you want to skip this step.")
-        self.NextButton1.setEnabled(True)
+        # Find best montage for channel detection
+        best_montage = self._find_best_montage(self.intial_channel_names)
+        # Setup channel selection UI using ChannelSelector
+        placeholder1 = self.findChild(QWidget, "figure_placeholder1")
+        confirm_button = self.channel_selector.setup_channel_selection_ui(
+            placeholder1, self.intial_channel_names, best_montage
+        )
+        confirm_button.clicked.connect(self._on_channels_confirmed)
+        self.NextButton1.setEnabled(False)
+        self.NextButton1.setVisible(True)
         self.SkipButton1.setEnabled(True)
+        self.channel_selector.confirm_button.setEnabled(True)
+
 
     def on_back_page3(self):
         """Navigate back to EEG visualization"""
         self.desc_label22.setText('Click on "Next" once your selection is finished.')
         self.StackedWidget.setCurrentIndex(1)
+        self.NextButton2.setEnabled(True)
+        self.BackButton2.setEnabled(True)
 
     def on_back_page4(self):
         """Navigate back to epoch processing"""
         self.StackedWidget.setCurrentIndex(2)
         # Use already processed data
         self.epoch_processor.apply_new_epoch_duration(self.eeg_bad_chs_removed, self._duration)
+        self.NextButton3.setEnabled(True)
+        self.BackButton3.setEnabled(True)
 
     def on_apply_epochs(self):
         """Apply new epoch duration using EpochProcessor"""
