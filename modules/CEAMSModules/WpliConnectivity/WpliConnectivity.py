@@ -19,6 +19,7 @@ from joblib import Parallel, delayed
 from flowpipe import SciNode, InputPlug, OutputPlug
 from commons.NodeInputException import NodeInputException
 from commons.NodeRuntimeException import NodeRuntimeException
+from commons.parallel_utils import normalize_n_jobs, select_joblib_backend
 
 
 DEBUG = False
@@ -325,7 +326,10 @@ def wpli_corrected_numba(signal, num_surrogates, p_value):
             if np.allclose(diffs, 0):
                 p = 1.0
             else:
-                _, p = wilcoxon(diffs, mode='approx')
+                try:
+                    _, p = wilcoxon(diffs, mode='auto')
+                except ValueError:
+                    p = 1.0
             if p < p_value and (real_val > median_sur):
                 corrected_wpli[i, j] = real_val - median_sur
 
@@ -343,10 +347,19 @@ def wpli_parallel_numba(windowed_signal, info, num_surrogates, p_value, n_jobs=-
     def process_window(w):
         data_2d = windowed_signal[w]  # shape (num_channels, num_samples)
         return wpli_corrected_numba(data_2d, num_surrogates, p_value)
-    
-    results = Parallel(n_jobs=n_jobs)(
-        delayed(process_window)(w) for w in range(num_windows)
-    )
+
+    effective_n_jobs = normalize_n_jobs(n_jobs, num_windows)
+
+    if effective_n_jobs == 1:
+        results = [process_window(w) for w in range(num_windows)]
+    else:
+        backend = select_joblib_backend()
+        parallel_kwargs = {"n_jobs": effective_n_jobs, "backend": backend}
+        if backend == "threading":
+            parallel_kwargs["prefer"] = "threads"
+        results = Parallel(**parallel_kwargs)(
+            delayed(process_window)(w) for w in range(num_windows)
+        )
     
     for w in range(num_windows):
         final_wpli[w] = results[w]

@@ -18,6 +18,7 @@ from joblib import Parallel, delayed
 from flowpipe import SciNode, InputPlug, OutputPlug
 from commons.NodeInputException import NodeInputException
 from commons.NodeRuntimeException import NodeRuntimeException
+from commons.parallel_utils import normalize_n_jobs, select_joblib_backend
 
 DEBUG = True
 
@@ -371,7 +372,10 @@ def dpli_corrected_numba(signal, num_surrogates, p_value):
             if np.allclose(diffs, 0):
                 p = 1.0      # Guard: if all diffs ~ 0, Wilcoxon is undefined; treat as non-significant
             else:
-                _, p = wilcoxon(diffs, mode='approx')
+                try:
+                    _, p = wilcoxon(diffs, mode='auto')
+                except ValueError:
+                    p = 1.0
 
             if p < p_value:
                 # Case 1 & 2
@@ -429,10 +433,20 @@ def dpli_parallel_numba(windowed_signal, info, num_surrogates, p_value, n_jobs=-
     def process_window(w):
         return dpli_corrected_numba(windowed_signal[w, :, :], num_surrogates, p_value)
 
-    # Parallel over windows
-    results = Parallel(n_jobs=n_jobs)(
-        delayed(process_window)(w) for w in range(num_windows)
-    )
+    effective_n_jobs = normalize_n_jobs(n_jobs, num_windows)
+
+    if effective_n_jobs == 1:
+        results = [process_window(w) for w in range(num_windows)]
+    else:
+        backend = select_joblib_backend()
+        parallel_kwargs = {"n_jobs": effective_n_jobs, "backend": backend}
+        if backend == "threading":
+            parallel_kwargs["prefer"] = "threads"
+
+        # Parallel over windows
+        results = Parallel(**parallel_kwargs)(
+            delayed(process_window)(w) for w in range(num_windows)
+        )
 
     for w in range(num_windows):
         final_dpli[w] = results[w]
