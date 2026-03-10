@@ -19,7 +19,7 @@
             },
             {
                 "name": "Input Files",
-                "description":"Add your files, select .edf, .sts or .eeg files.\n\nFor accepted PSG formats, click 'Read more!' below.\n\nSelect the montage and channels for artifact detection.\n\nAliases are required to distinguish EEG from EMG channels.\n\nEMG is only used to improve muscle-artifact detection (one EMG channel is enough).\n\nIf no EMG channel is available, simply enter 'EMG' in the EMG Alias.",
+                "description":"Add your files, select .edf, .sts or .eeg files.\n\nFor accepted PSG formats, click 'Read more!' below.\n\nSelect the montage and channels for artifact detection.\n\nAliases are required to distinguish EEG from EMG channels.\n\nEMG is only used to improve muscle-artifact detection (one EMG channel is enough).\n\nIf no EMG channel is available, simply enter 'NA' in the EMG Alias.",
                 "custom_step_name": "InputFilesArtStep"
             },
             {

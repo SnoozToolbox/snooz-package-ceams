@@ -31,7 +31,7 @@ from CEAMSModules.SleepReport import SleepReport
 from CEAMSModules.OxygenDesatDetector.OxygenDesatDetector_doc import write_doc_file
 from CEAMSModules.OxygenDesatDetector.OxygenDesatDetector_doc import _get_doc
 
-DEBUG = False
+DEBUG = True
 
 class OxygenDesatDetector(SciNode):
     """
@@ -1054,7 +1054,7 @@ class OxygenDesatDetector(SciNode):
 
         #---------------------
         # ABOSA parameters
-        #---------------------♣
+        #---------------------
         # Avg fall rate limits to consider for the whole desaturation event
         # The deeptest slope
         desat_event_slope_steep_limit = -4.0  # % per second
