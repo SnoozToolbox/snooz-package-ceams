@@ -31,7 +31,7 @@ from CEAMSModules.SleepReport import SleepReport
 from CEAMSModules.OxygenDesatDetector.OxygenDesatDetector_doc import write_doc_file
 from CEAMSModules.OxygenDesatDetector.OxygenDesatDetector_doc import _get_doc
 
-DEBUG = True
+DEBUG = False
 
 class OxygenDesatDetector(SciNode):
     """
