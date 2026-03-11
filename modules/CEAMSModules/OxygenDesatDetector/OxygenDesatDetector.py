@@ -1309,12 +1309,14 @@ class OxygenDesatDetector(SciNode):
         """
         # List of constants
         filter_order = 8 # The author uses order 4 with filtfilt but did not divide the order by 2
-        cutoff_freq = 1.0
-        threshold_squared = 30 # ABOSA 30 # 20 for 1 subject
+        threshold_squared = 30 # ABOSA 30
         lower_bound = 50
         upper_bound = 100
         art_buffer_sec = 1.0 # Extend each artifact by 1 second in both directions
         linear_art_sec = 5.0 # Interpolate artifacts with duration ≤ 5 seconds
+
+        # We cannot use the ABOSA strategy when the sampling frequency is low (e.g. 1 Hz) - we use fs/3 as cutoff in this case
+        cutoff_freq = min(1.0, fs_chan / 3.0) 
 
         data_cleaned = []
         data_gradient = []
@@ -1643,7 +1645,9 @@ class OxygenDesatDetector(SciNode):
         
         Parameters:
             signal : numpy array
-                Original SpO2 signal (already low-pass filtered).
+                SpO2 signal (already low-pass filtered).
+            signal_hpf : numpy array
+                High-pass filtered SpO2 signal to identify peaks corresponding to rapid changes.
             lmax_idx : int
                 Index of the current Lmax.
             lmin_idx : int
@@ -1665,8 +1669,11 @@ class OxygenDesatDetector(SciNode):
         """
         # Find maximum parameter
         min_peak_distance_sec = 1
-        #min_peak_prominence = 0.01
-
+        # seconds window to identify the real maximum for each peak
+        if fs_chan <= 2:
+            window_s = 2
+        else:
+            window_s = 1 
         # Square the high-pass filtered signal to enhance peaks (in both directions)
         signal_squared = signal_hpf ** 2
         
@@ -1688,9 +1695,9 @@ class OxygenDesatDetector(SciNode):
             for peak_idx in possible_peaks:
                     
                 # Correct peak locations within 1s window
-                lmax_corrected = self.correct_peak_indices_in_window(signal, [adjusted_lmax_idx], window_s=1, fs_chan=fs_chan)
+                lmax_corrected = self.correct_peak_indices_in_window(signal, [adjusted_lmax_idx], window_s=window_s, fs_chan=fs_chan)
                 lmax_corrected = lmax_corrected[0]
-                lmax_shifted = self.correct_peak_indices_in_window(signal, [peak_idx], window_s=1, fs_chan=fs_chan)
+                lmax_shifted = self.correct_peak_indices_in_window(signal, [peak_idx], window_s=window_s, fs_chan=fs_chan)
                 lmax_shifted = lmax_shifted[0]
                 
                 duration_sec = (lmax_shifted - lmax_corrected) / fs_chan
