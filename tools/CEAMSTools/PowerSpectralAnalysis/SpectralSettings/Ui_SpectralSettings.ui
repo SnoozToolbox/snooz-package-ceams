@@ -83,51 +83,9 @@ Define the window length (s) used to perform each FFT (Fast Fourier Transform) a
        <property name="sizeConstraint">
         <enum>QLayout::SizeConstraint::SetNoConstraint</enum>
        </property>
-       <item row="1" column="0">
-        <widget class="QLabel" name="label_2">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="minimumSize">
-          <size>
-           <width>200</width>
-           <height>0</height>
-          </size>
-         </property>
-         <property name="text">
-          <string>Window step (s)</string>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="1">
-        <widget class="QLineEdit" name="win_step_lineEdit">
-         <property name="maximumSize">
-          <size>
-           <width>80</width>
-           <height>16777215</height>
-          </size>
-         </property>
-         <property name="toolTip">
-          <string>At which window steps (s) the FFT (Fast Fourier Transform) is performed.</string>
-         </property>
-        </widget>
-       </item>
-       <item row="0" column="1">
-        <widget class="QLineEdit" name="win_len_lineEdit">
-         <property name="maximumSize">
-          <size>
-           <width>80</width>
-           <height>16777215</height>
-          </size>
-         </property>
-         <property name="toolTip">
-          <string>Window length (s) used to perform the FFT (Fast Fourier Transform).</string>
-         </property>
-        </widget>
-       </item>
+       <property name="bottomMargin">
+        <number>1</number>
+       </property>
        <item row="0" column="0">
         <widget class="QLabel" name="label">
          <property name="sizePolicy">
@@ -153,8 +111,40 @@ Define the window length (s) used to perform each FFT (Fast Fourier Transform) a
          </property>
         </widget>
        </item>
-       <item row="0" column="2">
-        <spacer name="horizontalSpacer_2">
+       <item row="1" column="0">
+        <widget class="QLabel" name="label_2">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>200</width>
+           <height>0</height>
+          </size>
+         </property>
+         <property name="text">
+          <string>Window step (s)</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="1">
+        <widget class="QLineEdit" name="win_len_lineEdit">
+         <property name="maximumSize">
+          <size>
+           <width>80</width>
+           <height>16777215</height>
+          </size>
+         </property>
+         <property name="toolTip">
+          <string>Window length (s) used to perform the FFT (Fast Fourier Transform).</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="3">
+        <spacer name="horizontalSpacer_3">
          <property name="orientation">
           <enum>Qt::Orientation::Horizontal</enum>
          </property>
@@ -166,8 +156,21 @@ Define the window length (s) used to perform each FFT (Fast Fourier Transform) a
          </property>
         </spacer>
        </item>
-       <item row="1" column="2">
-        <spacer name="horizontalSpacer_3">
+       <item row="1" column="1">
+        <widget class="QLineEdit" name="win_step_lineEdit">
+         <property name="maximumSize">
+          <size>
+           <width>80</width>
+           <height>16777215</height>
+          </size>
+         </property>
+         <property name="toolTip">
+          <string>At which window steps (s) the FFT (Fast Fourier Transform) is performed.</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="3">
+        <spacer name="horizontalSpacer_2">
          <property name="orientation">
           <enum>Qt::Orientation::Horizontal</enum>
          </property>
@@ -516,7 +519,14 @@ The last frequency analyzed is limited to FS/2.
           </size>
          </property>
          <property name="text">
-          <string>Rhythmic/Arhythmic</string>
+          <string>Rhythmic (RnB)</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QRadioButton" name="FoooF_radioButton">
+         <property name="text">
+          <string>Rhythmic (FOOOF)</string>
          </property>
         </widget>
        </item>

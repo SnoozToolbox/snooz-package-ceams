@@ -51,6 +51,12 @@
                 "value": "",
                 "connections": {},
                 "sub_plugs": {}
+            },
+            "flag": {
+                "name": "flag",
+                "value": "",
+                "connections": {},
+                "sub_plugs": {}
             }
         },
         "outputs": {

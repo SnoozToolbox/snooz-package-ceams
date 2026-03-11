@@ -3,7 +3,7 @@
 ################################################################################
 ## Form generated from reading UI file 'Ui_RandBResultsView.ui'
 ##
-## Created by: Qt User Interface Compiler version 6.10.0
+## Created by: Qt User Interface Compiler version 6.8.2
 ##
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
@@ -16,7 +16,6 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QImage, QKeySequence, QLinearGradient, QPainter,
     QPalette, QPixmap, QRadialGradient, QTransform)
 from PySide6.QtWidgets import (QApplication, QSizePolicy, QVBoxLayout, QWidget)
-import themes_rc
 
 class Ui_RandBResultsView(object):
     def setupUi(self, RandBResultsView):

@@ -49,20 +49,172 @@
     <layout class="QHBoxLayout" name="window_name_horizontalLayout">
      <item>
       <widget class="QLabel" name="window_name_label">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
        <property name="text">
         <string>window_name</string>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QLineEdit" name="window_name_lineedit"/>
+      <widget class="QComboBox" name="window_name_comboBox">
+       <property name="currentText">
+        <string>boxcar</string>
+       </property>
+       <item>
+        <property name="text">
+         <string>boxcar</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>trlang</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>blackman</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>hamming</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>hann</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>bartlett</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>flattop</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>parzen</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>bohman</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>blackmanharris</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>nuttall</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>barthann</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>kaiser</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>gaussian</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>general_gaussian</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>dpss</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>chebwin</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>exponential</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>tukey</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>taylor</string>
+        </property>
+       </item>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <layout class="QHBoxLayout" name="horizontalLayout">
+     <item>
+      <widget class="QLabel" name="first_freq_label">
+       <property name="text">
+        <string>first_freq</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLineEdit" name="first_freq_lineedit"/>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <layout class="QHBoxLayout" name="horizontalLayout_2">
+     <item>
+      <widget class="QLabel" name="last_freq_label">
+       <property name="text">
+        <string>last_freq</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLineEdit" name="last_freq_lineedit"/>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <layout class="QHBoxLayout" name="horizontalLayout_3">
+     <item>
+      <widget class="QLabel" name="flag_label">
+       <property name="text">
+        <string>flag</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLineEdit" name="flag_lineedit"/>
      </item>
     </layout>
    </item>
    <item>
     <spacer name="verticalSpacer">
      <property name="orientation">
-      <enum>Qt::Vertical</enum>
+      <enum>Qt::Orientation::Vertical</enum>
      </property>
      <property name="sizeHint" stdset="0">
       <size>

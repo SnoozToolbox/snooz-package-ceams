@@ -34,6 +34,8 @@ class RandBSettingsView(BaseSettingsView, Ui_RandBSettingsView, QtWidgets.QWidge
         self._pub_sub_manager.subscribe(self, self._first_freq_topic)
         self._last_freq_topic = f'{self._parent_node.identifier}.last_freq'
         self._pub_sub_manager.subscribe(self, self._last_freq_topic)        
+        self._flag_topic = f'{self._parent_node.identifier}.flag'
+        self._pub_sub_manager.subscribe(self, self._flag_topic)
 
 
     def load_settings(self):
@@ -45,7 +47,7 @@ class RandBSettingsView(BaseSettingsView, Ui_RandBSettingsView, QtWidgets.QWidge
         self._pub_sub_manager.publish(self, self._window_name_topic, 'ping')
         self._pub_sub_manager.publish(self, self._first_freq_topic, 'ping')
         self._pub_sub_manager.publish(self, self._last_freq_topic, 'ping')
-        
+        self._pub_sub_manager.publish(self, self._flag_topic, 'ping')
 
     def on_apply_settings(self):
         """ Called when the user clicks on "Apply" 
@@ -53,10 +55,10 @@ class RandBSettingsView(BaseSettingsView, Ui_RandBSettingsView, QtWidgets.QWidge
         # Send the settings to the publisher for inputs to RandB
         self._pub_sub_manager.publish(self, self._win_len_sec_topic, str(self.win_len_sec_lineedit.text()))
         self._pub_sub_manager.publish(self, self._win_step_sec_topic, str(self.win_step_sec_lineedit.text()))
-        self._pub_sub_manager.publish(self, self._window_name_topic, str(self.window_name_lineedit.text()))
+        self._pub_sub_manager.publish(self, self._window_name_topic, str(self.window_name_comboBox.currentText()))
         self._pub_sub_manager.publish(self, self._last_freq_topic, str(self.last_freq_lineedit.text()))
         self._pub_sub_manager.publish(self, self._first_freq_topic, str(self.first_freq_lineedit.text()))
-        
+        self._pub_sub_manager.publish(self, self._flag_topic, str(self.flag_lineedit.text()))
 
     def on_topic_update(self, topic, message, sender):
         pass
@@ -70,11 +72,13 @@ class RandBSettingsView(BaseSettingsView, Ui_RandBSettingsView, QtWidgets.QWidge
         if topic == self._win_step_sec_topic:
             self.win_step_sec_lineedit.setText(message)
         if topic == self._window_name_topic:
-            self.window_name_lineedit.setText(message)
+            self.window_name_comboBox.setCurrentText(message)
         if topic == self._first_freq_topic:
             self.first_freq_lineedit.setText(message)
         if topic == self._last_freq_topic:
-            self.last_freq_lineedit.setText(message)    
+            self.last_freq_lineedit.setText(message)
+        if topic == self._flag_topic:
+            self.flag_lineedit.setText(message)
         
 
    # Called when the user delete an instance of the plugin
@@ -85,5 +89,6 @@ class RandBSettingsView(BaseSettingsView, Ui_RandBSettingsView, QtWidgets.QWidge
             self._pub_sub_manager.unsubscribe(self, self._window_name_topic)
             self._pub_sub_manager.unsubscribe(self, self._last_freq_topic)
             self._pub_sub_manager.unsubscribe(self, self._first_freq_topic)
+            self._pub_sub_manager.unsubscribe(self, self._flag_topic)
            
             

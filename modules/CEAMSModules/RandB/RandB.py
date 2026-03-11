@@ -72,16 +72,13 @@ class RandB(SciNode):
         InputPlug('window_name',self)
         InputPlug('first_freq',self)
         InputPlug('last_freq',self)
+        InputPlug('flag',self) # flag to choose between rythmic spectral analysis (True) and FOOOF (False)
 
         # Output plugs
         OutputPlug('psd',self)
         OutputPlug('slope',self)
         OutputPlug('intercept',self)
         
-
-        # Init module variables
-        self.this_is_an_example_you_can_delete_it = 0
-
         # A master module allows the process to be reexcuted multiple time.
         # For exemple, this is useful when the process must be repeated over multiple
         # files. When the master module is done, ie when all the files were process, 
@@ -90,7 +87,7 @@ class RandB(SciNode):
         self._is_master = False 
     
 
-    def compute(self, signals, win_len_sec, win_step_sec, window_name,first_freq,last_freq):
+    def compute(self, signals, win_len_sec, win_step_sec, window_name,first_freq,last_freq, flag=True):
         """
         Compute the rhytmic spectrum for each epoch of a 2D array (NepocsXNsamples)
 
@@ -151,8 +148,10 @@ class RandB(SciNode):
         for i, signal_model in enumerate(signals):
             sign2d_split, new_chan, start_time, end_time, new_dur = self.split_and_stack(signal_model, win_len_sec, fs)
             # compute rythmic spectral analysis
-            #residu, res_mean, freq_bins,intercept,beta,freq_raw, psd_raw  = self.rythmic_spectral_analysis(sign2d_split, fs,first_freq,last_freq)
-            residu, freq_bins = self.rhythmic_FOOOF(sign2d_split, fs)
+            if flag:
+                residu, freq_bins = self.rhythmic_FOOOF(sign2d_split, fs, first_freq, last_freq, window_name)
+            else:
+                residu, res_mean, freq_bins,intercept,beta,freq_raw, psd_raw  = self.rythmic_spectral_analysis(sign2d_split, fs,first_freq,last_freq, window_name)
 
             # Define output
             data = {}
@@ -227,7 +226,7 @@ class RandB(SciNode):
         return new_arr, new_chan, start_time, end_time, new_dur
     
     
-    def raw_spectral_analysis(self, signals, fs):
+    def raw_spectral_analysis(self, signals, fs, window_name):
         """ Compute the spectral analysis of the signals using scipy.signal.periodogram
 
         Parameters
@@ -256,14 +255,14 @@ class RandB(SciNode):
         # compute spectral analysis using scipy periodogram
         # scaling='density' gives power spectral density in V^2/Hz
         # we'll use 'spectrum' to get power spectrum directly
-        freq_bins, psd_data = periodogram(signals, fs=fs, window='hann', 
+        freq_bins, psd_data = periodogram(signals, fs=fs, window=window_name, 
                                           nfft=n, scaling='spectrum', 
                                           detrend=False, axis=1)
 
         return psd_data, freq_bins
 
 
-    def resampled_spectral_analysis(self, signals, fs):
+    def resampled_spectral_analysis(self, signals, fs, last_freq, window_name):
         """Compute resampled spectral analysis using scipy periodogram"""
         fs = fs[0]
         Npoints = len(signals)
@@ -275,11 +274,17 @@ class RandB(SciNode):
         # Use the full signal
         sign = signals
         
-        # Get maximum frequency bins needed
+        # Use fixed nfft for all scales to ensure consistent frequency grids
         max_nfft = int(Npoints * scale[-1])
-        Nfrac = max_nfft // 2 + 1
+        fixed_nfft = max_nfft  # Use same nfft for all scales
+        full_Nfrac = fixed_nfft // 2 + 1
         
-        # initialize array for power resampling
+        # Calculate which indices correspond to frequencies <= last_freq
+        freq_full = np.linspace(0, fs/2, full_Nfrac)
+        idx_keep = np.where(freq_full <= last_freq)[0]
+        Nfrac = len(idx_keep)
+        
+        # initialize array for power resampling (only up to last_freq)
         pow1 = np.full((nscale, Nfrac), np.nan)
         pow2 = np.full((nscale, Nfrac), np.nan)
 
@@ -291,44 +296,42 @@ class RandB(SciNode):
             
             # compute power scaling UP
             sign_rescaled = resample_poly(sign, num, dem)
-            Nsign_rescaled = len(sign_rescaled)
-            freq_up, psd_up = periodogram(sign_rescaled, fs=fs, window='boxcar',
-                                         nfft=Nsign_rescaled, scaling='spectrum',
+            freq_up, psd_up = periodogram(sign_rescaled, fs=fs, window=window_name,
+                                         nfft=fixed_nfft, scaling='spectrum',
                                          detrend=False)
-            nfill = min([Nfrac, len(psd_up)])
-            pow1[i, 0:int(nfill)] = psd_up[0:int(nfill)]
+            # Keep only frequencies up to last_freq using consistent indexing
+            pow1[i, :] = psd_up[idx_keep]
             
             # compute power scaling DOWN
             sign_rescaled = resample_poly(sign, dem, num)
-            Nsign_rescaled = len(sign_rescaled)
-            freq_down, psd_down = periodogram(sign_rescaled, fs=fs, window='boxcar',
-                                             nfft=Nsign_rescaled, scaling='spectrum',
+            freq_down, psd_down = periodogram(sign_rescaled, fs=fs, window=window_name,
+                                             nfft=fixed_nfft, scaling='spectrum',
                                              detrend=False)
-            nfill = min([Nfrac, len(psd_down)])
-            pow2[i, 0:int(nfill)] = psd_down[0:int(nfill)]
+            # Keep only frequencies up to last_freq using consistent indexing
+            pow2[i, :] = psd_down[idx_keep]
 
-        # Compute geometric mean of resampled spectra
+        # Compute geometric mean of resampled spectra (only on frequencies up to last_freq)
         P1P2 = np.exp(np.nanmean(0.5 * np.log(np.multiply(pow1, pow2)), axis=0))
         
         # Remove NaN values and get corresponding frequencies
         YesNaN = np.argwhere(~np.isnan(P1P2))
         psd_data = P1P2[YesNaN]
         
-        # Create frequency array matching the PSD length
-        freq = fs / 2 * np.linspace(0, 1, Nfrac)
+        # Create frequency array for the filtered range (0 to last_freq)
+        freq = freq_full[idx_keep]
         freq_bins = freq[YesNaN]
 
         return psd_data, freq_bins
 
 
-    def _process_single_epoch(self, data, fs, first_freq, last_freq):
+    def _process_single_epoch(self, data, fs, first_freq, last_freq, window_name):
         """Process a single epoch for parallel computation"""
         # Check if segment contains NaN values
         if np.any(np.isnan(data)):
             return np.nan, np.nan
         
         try:
-            pow, freq = self.resampled_spectral_analysis(data, fs)
+            pow, freq = self.resampled_spectral_analysis(data, fs, last_freq, window_name)
             # flatten array
             pow = np.squeeze(pow)
             freq = np.squeeze(freq)
@@ -354,9 +357,9 @@ class RandB(SciNode):
         except:
             return np.nan, np.nan
 
-    def rythmic_spectral_analysis(self, signals, fs, first_freq, last_freq):
+    def rythmic_spectral_analysis(self, signals, fs, first_freq, last_freq, window_name):
 
-        psd_raw, freq_raw = self.raw_spectral_analysis(signals, fs)
+        psd_raw, freq_raw = self.raw_spectral_analysis(signals, fs, window_name)
         psd_raw_mean = np.nanmean(psd_raw, axis=0)
 
         Nepocs, Npoints = signals.shape
@@ -364,7 +367,7 @@ class RandB(SciNode):
         # Use parallel processing with threading backend (avoids pickling issues)
         # n_jobs=-1 uses all available CPU cores
         results = Parallel(n_jobs=-1, backend='threading')(
-            delayed(self._process_single_epoch)(signals[i, :], fs, first_freq, last_freq)
+            delayed(self._process_single_epoch)(signals[i, :], fs, first_freq, last_freq, window_name)
             for i in range(Nepocs)
         )
         
@@ -385,21 +388,14 @@ class RandB(SciNode):
         
         return residu, residu_mean, freq_raw[freqr], beta, intercept, freq_raw, psd_raw_mean
     
-    def rhythmic_FOOOF(self, signals, fs):
+    def rhythmic_FOOOF(self, signals, fs, first_freq, last_freq, window_name):
         
-        psd_raw, freq_raw = self.raw_spectral_analysis(signals, fs)
-        
+        psd_raw, freq_raw = self.raw_spectral_analysis(signals, fs, window_name)
         # FOOOF excludes 0 Hz, so we need to skip it in our arrays too
         # Initialize array for rhythmic spectra (excluding 0 Hz)
         Sf = (len(freq_raw) - 1) / freq_raw[-1]  # Sampling frequency for FOOOF (based on max frequency)
-        max_freq = 40  # Maximum frequency to analyze (Hz)
-        num_freq_sample = (int(Sf * max_freq))
+        num_freq_sample = (int(Sf * last_freq))
         spectrum_array = np.zeros((psd_raw.shape[0], num_freq_sample))
-        
-        # DEBUG: Print dimensions
-        print(f"DEBUG: psd_raw shape: {psd_raw.shape}")
-        print(f"DEBUG: freq_raw shape: {freq_raw.shape}")
-        print(f"DEBUG: freq_raw[0]: {freq_raw[0]}, freq_raw[-1]: {freq_raw[-1]}")
         
         # Fit each epoch separately to extract rhythmic component
         for i in range(psd_raw.shape[0]):
@@ -408,87 +404,14 @@ class RandB(SciNode):
             else:
                 # Initialize FOOOF with appropriate settings
                 fm = FOOOF(peak_width_limits=[1, 8], max_n_peaks=6, min_peak_height=0.15)
-                
                 # Fit the model - FOOOF works in log-log space internally
                 # FOOOF will skip 0 Hz internally
-                fm.fit(freq_raw, psd_raw[i, :], [0, max_freq])
-                
-                # DEBUG: For first epoch, print and plot details
-                '''if i < 10:
-                    print(f"\nDEBUG Epoch {i}:")
-                    print(f"  fm.freqs shape: {fm.freqs.shape}")
-                    print(f"  fm.freqs[0]: {fm.freqs[0]}, fm.freqs[-1]: {fm.freqs[-1]}")
-                    print(f"  fm.aperiodic_params_: {fm.aperiodic_params_}")
-                    print(f"  Number of peaks found: {len(fm.peak_params_)}")
-                    
-                    # Generate aperiodic fit
-                    ap_fit = gen_aperiodic(fm.freqs, fm._robust_ap_fit(fm.freqs, np.log(psd_raw[i, :num_freq_sample])))
-                    print(f"  ap_fit shape: {ap_fit.shape}")
-                    print(f"  psd_raw[i, 1:] shape: {psd_raw[i, 1:].shape}")
-                    
-                    # Plot for visual inspection
-                    fig, axes = plt.subplots(3, 1, figsize=(12, 10))
-                    
-                    # Plot 1: Original PSD
-                    axes[0].plot(fm.freqs, np.log(psd_raw[i, :num_freq_sample]), 'b-', label='Original PSD', linewidth=2)
-                    axes[0].set_xlabel('Frequency (Hz)')
-                    axes[0].set_ylabel('Power (μV²)')
-                    axes[0].set_title('Original Power Spectrum')
-                    axes[0].set_xlim([0, 40])
-                    # Calculate y-limits only for data in the visible frequency range
-                    freq_mask = (freq_raw >= 0) & (freq_raw <= 40)
-                    visible_data = psd_raw[i, freq_mask]
-                    axes[0].set_ylim([visible_data.min() * 0.5, visible_data.max() * 2])
-                    axes[0].legend()
-                    axes[0].grid(True)
-                    
-                    # Plot 2: PSD with FOOOF fit (linear scale to see negative values)
-                    axes[1].plot(fm.freqs, np.log(psd_raw[i, :num_freq_sample]), 'b-', label='Original PSD', linewidth=2)
-                    axes[1].plot(fm.freqs, ap_fit, 'r--', label='Aperiodic Fit', linewidth=2)
-                    axes[1].set_xlabel('Frequency (Hz)')
-                    axes[1].set_ylabel('Power (μV²)')
-                    axes[1].set_title('FOOOF Fit (linear scale)')
-                    axes[1].set_xlim([0, 40])
-                    # Calculate y-limits for visible frequency range
-                    freq_mask2 = (fm.freqs >= 0) & (fm.freqs <= 40)
-                    visible_psd = psd_raw[i, :num_freq_sample][freq_mask2]
-                    visible_ap = ap_fit[freq_mask2]
-                    y_min = min(visible_psd.min(), visible_ap.min())
-                    y_max = max(visible_psd.max(), visible_ap.max())
-                    y_margin = (y_max - y_min) * 0.1
-                    axes[1].set_ylim([y_min - y_margin, y_max + y_margin])
-                    axes[1].legend()
-                    axes[1].grid(True)
-                    
-                    # Plot 3: Rhythmic component
-                    rhythmic_temp = np.log(psd_raw[i, :num_freq_sample]) - ap_fit
-                    axes[2].plot(fm.freqs, rhythmic_temp, 'g-', label='Rhythmic Component', linewidth=2)
-                    axes[2].axhline(y=1.0, color='k', linestyle='--', alpha=0.5, label='Baseline')
-                    axes[2].set_xlabel('Frequency (Hz)')
-                    axes[2].set_ylabel('Normalized Power')
-                    axes[2].set_title('Rhythmic Component (PSD - Aperiodic Fit)')
-                    axes[2].set_xlim([0, 40])
-                    visible_rhythmic = rhythmic_temp[freq_mask2]
-                    y_margin = (visible_rhythmic.max() - visible_rhythmic.min()) * 0.1
-                    axes[2].set_ylim([visible_rhythmic.min() - y_margin, visible_rhythmic.max() + y_margin])
-                    axes[2].legend()
-                    axes[2].grid(True)
-                    
-                    plt.tight_layout()
-                    plt.savefig('fooof_debug_epoch0.png', dpi=150)
-                    plt.close()
-                    print(f"  Saved debug plot to: fooof_debug_epoch0.png")'''
-                
+                fm.fit(freq_raw, psd_raw[i, :], [first_freq, last_freq])
                 # Generate aperiodic fit in LINEAR space using fitted parameters
                 # fm.freqs excludes 0 Hz, so ap_fit has length len(freq_raw) - 1
                 ap_fit = gen_aperiodic(fm.freqs, fm._robust_ap_fit(fm.freqs, np.log(psd_raw[i, :num_freq_sample])))
-                
-                # Rhythmic component: DIVIDE original spectrum by aperiodic fit (not subtract)
-                # This gives you oscillatory power normalized by the 1/f background
-                # Values > 1 indicate oscillatory peaks, values < 1 indicate below-background activity
+                # Rhythmic component: Subtract aperiodic fit from original spectrum
                 rhythmic_spectrum = np.log(psd_raw[i, :num_freq_sample]) - ap_fit
-                
                 spectrum_array[i, :] = rhythmic_spectrum
-
         # Return frequencies excluding 0 Hz to match spectrum_array dimensions
         return spectrum_array, fm.freqs

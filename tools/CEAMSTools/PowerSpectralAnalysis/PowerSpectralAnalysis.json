@@ -117,7 +117,7 @@
                         "value": "",
                         "sub_plugs": {},
                         "connections": {
-                            "32286396-c4c4-4c41-8d7a-1cf26c774426": "psd"
+                            "441dc01b-9020-4a7c-81bc-5dd835846ab2": "psd"
                         }
                     },
                     "events": {
@@ -138,7 +138,7 @@
                     },
                     "mini_bandwidth": {
                         "name": "mini_bandwidth",
-                        "value": "0.5",
+                        "value": "1",
                         "sub_plugs": {},
                         "connections": {}
                     },
@@ -150,25 +150,25 @@
                     },
                     "last_freq": {
                         "name": "last_freq",
-                        "value": "64",
+                        "value": "30",
                         "sub_plugs": {},
                         "connections": {}
                     },
                     "dist_total": {
                         "name": "dist_total",
-                        "value": "1",
+                        "value": 1,
                         "sub_plugs": {},
                         "connections": {}
                     },
                     "dist_hour": {
                         "name": "dist_hour",
-                        "value": "1",
+                        "value": 1,
                         "sub_plugs": {},
                         "connections": {}
                     },
                     "dist_cycle": {
                         "name": "dist_cycle",
-                        "value": "1",
+                        "value": 1,
                         "sub_plugs": {},
                         "connections": {}
                     },
@@ -206,7 +206,10 @@
                     },
                     "report_constants": {
                         "name": "report_constants",
-                        "value": {},
+                        "value": {
+                            "N_HOURS": 9,
+                            "N_CYCLES": 6
+                        },
                         "sub_plugs": {},
                         "connections": {}
                     },
@@ -220,96 +223,12 @@
                 "outputs": {},
                 "module": "CEAMSModules.PSACompilation",
                 "identifier": "d16022c4-3ac0-4982-aa3e-dfff4cada99a",
-                "activation_state": "activated",
+                "activation_state": "deactivated",
                 "package": {
                     "package_name": "CEAMSModules"
                 },
                 "pos_x": 1527.4999999999998,
                 "pos_y": 806.2499999999997
-            },
-            {
-                "cls": "RandB",
-                "name": "RandB",
-                "metadata": {},
-                "file_location": null,
-                "module": "CEAMSModules.RandB",
-                "module_label": "Rhythm and background",
-                "module_category": "Signal Processing",
-                "module_author": "",
-                "module_url": "",
-                "module_description": "",
-                "module_options": {},
-                "inputs": {
-                    "signals": {
-                        "name": "signals",
-                        "value": "",
-                        "sub_plugs": {},
-                        "connections": {
-                            "1211ee97-72e4-45da-9850-44d4aa249c78": "signals"
-                        }
-                    },
-                    "win_len_sec": {
-                        "name": "win_len_sec",
-                        "value": "",
-                        "sub_plugs": {},
-                        "connections": {}
-                    },
-                    "win_step_sec": {
-                        "name": "win_step_sec",
-                        "value": "",
-                        "sub_plugs": {},
-                        "connections": {}
-                    },
-                    "window_name": {
-                        "name": "window_name",
-                        "value": "",
-                        "sub_plugs": {},
-                        "connections": {}
-                    },
-                    "first_freq": {
-                        "name": "first_freq",
-                        "value": "",
-                        "sub_plugs": {},
-                        "connections": {}
-                    },
-                    "last_freq": {
-                        "name": "last_freq",
-                        "value": "",
-                        "sub_plugs": {},
-                        "connections": {}
-                    }
-                },
-                "outputs": {
-                    "psd": {
-                        "name": "psd",
-                        "value": "",
-                        "sub_plugs": {},
-                        "connections": {
-                            "d16022c4-3ac0-4982-aa3e-dfff4cada99a": [
-                                "PSD"
-                            ]
-                        }
-                    },
-                    "slope": {
-                        "name": "slope",
-                        "value": "",
-                        "sub_plugs": {},
-                        "connections": {}
-                    },
-                    "intercept": {
-                        "name": "intercept",
-                        "value": "",
-                        "sub_plugs": {},
-                        "connections": {}
-                    }
-                },
-                "identifier": "32286396-c4c4-4c41-8d7a-1cf26c774426",
-                "activation_state": "activated",
-                "package": {
-                    "package_name": "CEAMSModules"
-                },
-                "pos_x": 895.3124999999998,
-                "pos_y": 792.8124999999999
             },
             {
                 "cls": "PSGReader",
@@ -785,7 +704,7 @@
                             "159bfdad-5000-474b-ae38-8e95ff4142b2": [
                                 "signals"
                             ],
-                            "32286396-c4c4-4c41-8d7a-1cf26c774426": [
+                            "441dc01b-9020-4a7c-81bc-5dd835846ab2": [
                                 "signals"
                             ]
                         }
@@ -2305,6 +2224,96 @@
                 "package": {
                     "package_name": "CEAMSModules"
                 }
+            },
+            {
+                "cls": "RandB",
+                "name": "RandB",
+                "metadata": {},
+                "file_location": null,
+                "module": "CEAMSModules.RandB",
+                "module_label": "Rhythm and background",
+                "module_category": "Signal Processing",
+                "module_author": "",
+                "module_url": "",
+                "module_description": "",
+                "module_options": {},
+                "inputs": {
+                    "signals": {
+                        "name": "signals",
+                        "value": "",
+                        "sub_plugs": {},
+                        "connections": {
+                            "1211ee97-72e4-45da-9850-44d4aa249c78": "signals"
+                        }
+                    },
+                    "win_len_sec": {
+                        "name": "win_len_sec",
+                        "value": "5",
+                        "sub_plugs": {},
+                        "connections": {}
+                    },
+                    "win_step_sec": {
+                        "name": "win_step_sec",
+                        "value": "5",
+                        "sub_plugs": {},
+                        "connections": {}
+                    },
+                    "window_name": {
+                        "name": "window_name",
+                        "value": "hann",
+                        "sub_plugs": {},
+                        "connections": {}
+                    },
+                    "first_freq": {
+                        "name": "first_freq",
+                        "value": "0",
+                        "sub_plugs": {},
+                        "connections": {}
+                    },
+                    "last_freq": {
+                        "name": "last_freq",
+                        "value": "30",
+                        "sub_plugs": {},
+                        "connections": {}
+                    },
+                    "flag": {
+                        "name": "flag",
+                        "value": "False",
+                        "sub_plugs": {},
+                        "connections": {}
+                    }
+                },
+                "outputs": {
+                    "psd": {
+                        "name": "psd",
+                        "value": "",
+                        "sub_plugs": {},
+                        "connections": {
+                            "d16022c4-3ac0-4982-aa3e-dfff4cada99a": [
+                                "PSD"
+                            ]
+                        }
+                    },
+                    "slope": {
+                        "name": "slope",
+                        "value": "",
+                        "sub_plugs": {},
+                        "connections": {}
+                    },
+                    "intercept": {
+                        "name": "intercept",
+                        "value": "",
+                        "sub_plugs": {},
+                        "connections": {}
+                    }
+                },
+                "identifier": "441dc01b-9020-4a7c-81bc-5dd835846ab2",
+                "activation_state": "deactivated",
+                "package": {
+                    "package_name": "CEAMSModules"
+                },
+                "pos_x": 918.0,
+                "pos_y": 753.0
             }
         ]
     }
