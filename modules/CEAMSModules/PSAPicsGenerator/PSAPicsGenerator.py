@@ -513,8 +513,6 @@ class PSAPicsGenerator(SciNode):
                                 psa_data_for_file = psa_data_cur_chan[psa_data_cur_chan['filename'] == filename_val]
                                 
                                 freq_low = psa_data_for_file['freq_low_Hz'].values
-                                freq_high = psa_data_for_file['freq_high_Hz'].values
-                                freq_center = (freq_low + freq_high) / 2
                                 
                                 # Build stage column name
                                 if stage == 'All' and pics_param['activity_var'] == 'total':
@@ -534,8 +532,8 @@ class PSAPicsGenerator(SciNode):
                                     power_data = psa_data_for_file[stage_col].values
                                     
                                     # Interpolate to common grid (no masking, interpolate full data)
-                                    if len(power_data) > 0 and len(freq_center) > 0:
-                                        interp_power = np.interp(common_freq, freq_center, power_data, left=np.nan, right=np.nan)
+                                    if len(power_data) > 0 and len(freq_low) > 0:
+                                        interp_power = np.interp(common_freq, freq_low, power_data, left=np.nan, right=np.nan)
                                         subject_power_data.append(interp_power)
                             
                             # Compute mean and std across subjects
@@ -590,8 +588,6 @@ class PSAPicsGenerator(SciNode):
                             psa_data_for_file = psa_data_cur_chan[psa_data_cur_chan['filename'] == filename_val]
                             
                             freq_low = psa_data_for_file['freq_low_Hz'].values
-                            freq_high = psa_data_for_file['freq_high_Hz'].values
-                            freq_center = (freq_low + freq_high) / 2
                             
                             # Get power columns (stage-specific activity) based on stage selection
                             power_columns = []
@@ -619,8 +615,8 @@ class PSAPicsGenerator(SciNode):
                                     power_data = psa_data_for_file[stage_col].values
                                     
                                     # Interpolate to common grid for consistent axis coverage
-                                    if len(power_data) > 0 and len(freq_center) > 0:
-                                        interp_power = np.interp(common_freq, freq_center, power_data, left=np.nan, right=np.nan)
+                                    if len(power_data) > 0 and len(freq_low) > 0:
+                                        interp_power = np.interp(common_freq, freq_low, power_data, left=np.nan, right=np.nan)
                                         
                                         if fig_save:
                                             # Extract filename without extension for label
@@ -646,8 +642,6 @@ class PSAPicsGenerator(SciNode):
                     common_freq = np.linspace(freq_range[0], freq_range[1], 200)
                     
                     freq_low = psa_data_cur_chan['freq_low_Hz'].values
-                    freq_high = psa_data_cur_chan['freq_high_Hz'].values
-                    freq_center = (freq_low + freq_high) / 2
                     
                     # Get power columns (stage-specific activity) based on stage selection
                     power_columns = []
@@ -674,8 +668,8 @@ class PSAPicsGenerator(SciNode):
                             power_data = psa_data_cur_chan[stage_col].values
                             
                             # Interpolate to common grid for consistent axis coverage
-                            if len(power_data) > 0 and len(freq_center) > 0:
-                                interp_power = np.interp(common_freq, freq_center, power_data, left=np.nan, right=np.nan)
+                            if len(power_data) > 0 and len(freq_low) > 0:
+                                interp_power = np.interp(common_freq, freq_low, power_data, left=np.nan, right=np.nan)
                                 
                                 if fig_save:
                                     label_name = f'{chan_label[i_chan]}'
@@ -695,8 +689,8 @@ class PSAPicsGenerator(SciNode):
                             power_data = psa_data_cur_chan[power_cols[0]].values
                             
                             # Interpolate to common grid
-                            if len(power_data) > 0 and len(freq_center) > 0:
-                                interp_power = np.interp(common_freq, freq_center, power_data, left=np.nan, right=np.nan)
+                            if len(power_data) > 0 and len(freq_low) > 0:
+                                interp_power = np.interp(common_freq, freq_low, power_data, left=np.nan, right=np.nan)
                                 
                                 if fig_save:
                                     if f'{chan_label[i_chan]}' not in legend_labels:
@@ -869,8 +863,6 @@ class PSAPicsGenerator(SciNode):
                                     
                                     if len(subject_df) > 0:
                                         freq_low = subject_df['freq_low_Hz'].values
-                                        freq_high = subject_df['freq_high_Hz'].values
-                                        freq_center = (freq_low + freq_high) / 2
                                         
                                         # Build stage column name
                                         if stage == 'All' and pics_param['activity_var'] == 'total':
@@ -890,7 +882,7 @@ class PSAPicsGenerator(SciNode):
                                             power_data = subject_df[stage_col].values
                                             
                                             # Store full data without filtering
-                                            stage_freq_data.append(freq_center)
+                                            stage_freq_data.append(freq_low)
                                             stage_power_data.append(power_data)
                         
                         # Process this stage's data for this subject
@@ -962,12 +954,10 @@ class PSAPicsGenerator(SciNode):
                             
                             # Get frequency bands and power data from Snooz format
                             freq_low = psa_data_file['freq_low_Hz'].values
-                            freq_high = psa_data_file['freq_high_Hz'].values
-                            freq_center = (freq_low + freq_high) / 2
                             
                             # Filter frequency range
-                            freq_mask = (freq_center >= freq_range[0]) & (freq_center <= freq_range[1])
-                            freq_filtered = freq_center[freq_mask]
+                            freq_mask = (freq_low >= freq_range[0]) & (freq_low <= freq_range[1])
+                            freq_filtered = freq_low[freq_mask]
                             
                             # Get power columns for each sleep stage
                             for stage_idx, stage in enumerate(sleep_stage_selection):
@@ -990,7 +980,7 @@ class PSAPicsGenerator(SciNode):
                                     if 'mean' in pics_param['display']:
                                         # Interpolate to common grid for accumulation
                                         common_freq = np.linspace(freq_range[0], freq_range[1], 100)
-                                        interp_power = np.interp(common_freq, freq_center, power_data, left=np.nan, right=np.nan)
+                                        interp_power = np.interp(common_freq, freq_low, power_data, left=np.nan, right=np.nan)
                                         
                                         if cohort_group in signal_to_plot_grp.keys():
                                             if f'stage_{stage}' in signal_to_plot_grp[cohort_group].keys():
@@ -1003,7 +993,7 @@ class PSAPicsGenerator(SciNode):
                                     else:
                                         # Display all - use interpolation for consistent axis coverage
                                         common_freq = np.linspace(freq_range[0], freq_range[1], 200)
-                                        interp_power = np.interp(common_freq, freq_center, power_data, left=np.nan, right=np.nan)
+                                        interp_power = np.interp(common_freq, freq_low, power_data, left=np.nan, right=np.nan)
                                         
                                         if f'stage_{stage}-{cohort_group}' not in legend_labels:
                                             legend_labels[f'stage_{stage}-{cohort_group}'] = True
