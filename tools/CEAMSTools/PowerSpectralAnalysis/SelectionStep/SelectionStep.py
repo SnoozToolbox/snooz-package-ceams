@@ -216,7 +216,6 @@ class SelectionStep( BaseStepView,  Ui_SelectionStep, QtWidgets.QWidget):
         self.excl_nremp_checkBox.setEnabled(bool_flag)
         self.excl_remp_checkBox.setEnabled(bool_flag)
         self.in_cycle_checkBox.setEnabled(bool_flag)
-        self.label_2.setEnabled(bool_flag)
         self.label_3.setEnabled(bool_flag)
         self.label_4.setEnabled(bool_flag)
         self.label_5.setEnabled(bool_flag)

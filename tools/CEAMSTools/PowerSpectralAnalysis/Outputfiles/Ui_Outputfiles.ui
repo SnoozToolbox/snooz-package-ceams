@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>861</width>
+    <width>864</width>
     <height>876</height>
    </rect>
   </property>
@@ -476,7 +476,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
         <bool>true</bool>
        </property>
        <property name="plainText">
-        <string>The output file is a .tsv (tab separated values) file. Each line is specific to a subject, a channel and a frequency band. Warning : the PSA data is added (appended) to the output file, the output file will be modified each time the PSA tool is run.</string>
+        <string>The output file is a .tsv (tab separated values) file. Each line corresponds to a subject, a channel, and a frequency band. Warning : Spectral data are appended to the output file, so the file will be modified each time the tool is run.</string>
        </property>
       </widget>
      </item>
@@ -501,7 +501,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
           <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
          </property>
          <property name="placeholderText">
-          <string>Select the file to save the PSA</string>
+          <string>Select the file to save the cohort EEG spectral report.</string>
          </property>
         </widget>
        </item>

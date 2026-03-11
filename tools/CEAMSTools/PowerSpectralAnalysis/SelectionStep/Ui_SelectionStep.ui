@@ -31,21 +31,21 @@
       </font>
      </property>
      <property name="text">
-      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Section selection to perform the PSA on. &lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Section selection to perform the EEG spectal power. &lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
      </property>
     </widget>
    </item>
    <item>
     <widget class="QRadioButton" name="radioButton_annotations">
      <property name="text">
-      <string>Perform PSA on specific annotations (on the next step)</string>
+      <string>Analyse spectral power for specific annotations (in the next step)</string>
      </property>
     </widget>
    </item>
    <item>
     <widget class="QRadioButton" name="radioButton_sleep">
      <property name="text">
-      <string>Perform PSA on sleep stages and/or cycles (below)</string>
+      <string>Analyse spectral power for sleep stages and/or cycles (below)</string>
      </property>
      <property name="checked">
       <bool>true</bool>
@@ -108,14 +108,7 @@
          <item>
           <widget class="QLabel" name="label_3">
            <property name="text">
-            <string>The PSA is performed per sleep stage.</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QLabel" name="label_2">
-           <property name="text">
-            <string>Select the stages to include in the PSA.</string>
+            <string>The spectral power is analysed per sleep stage.  Select the stages to include in the analysis.</string>
            </property>
           </widget>
          </item>
@@ -293,7 +286,7 @@
        <item>
         <widget class="QLabel" name="label_7">
          <property name="text">
-          <string>To perform the PSA on specific section of the recording.</string>
+          <string>To perform the analysis on specific section of the recording.</string>
          </property>
         </widget>
        </item>
@@ -348,9 +341,9 @@
             <bool>true</bool>
            </property>
            <property name="plainText">
-            <string>To perform the PSA only on the signal included in the sleep cycles.
+            <string>To analyse only the signal included in the sleep cycles.
 I.e. from sleep onset to the last asleep stage.
-Useful to run the PSA on complete sleep cycles only (make sure incomplete cycles are not included in the Common Settings for Sleep Cycles in the introduction step of the tool).</string>
+Useful to analyse complete sleep cycles only (ensure incomplete cycles are excluded in the Common Settings for Sleep Cycles in the tool’s introduction step).</string>
            </property>
           </widget>
          </item>
@@ -382,8 +375,8 @@ Useful to run the PSA on complete sleep cycles only (make sure incomplete cycles
            </property>
            <property name="plainText">
             <string>To exclude sleep periods from the spectral analysis.
-Useful for running PSA on NREM stages included in NREM periods only (not in REM periods). In this case, please check “Exclude REM periods”.
-The same idea can be applied for NREM periods.</string>
+Useful to analyse NREM stages included in NREM periods only (not in REM periods). In this case, please check “Exclude REM periods”.
+The same approach can be applied to NREM periods.</string>
            </property>
           </widget>
          </item>

@@ -4,15 +4,15 @@
     "item_api_version": "2.0.0",
     "item_url": "https://snooz-toolbox-documentation.readthedocs.io/latest/user_guide/tools/Postprocessing/PSA_Cohort_Review.html#power-spectral-analysis-psa-cohort-review",
     "item_author": "Karine Lacourse",
-    "item_description": "To clean and transpose the PSA output.",
+    "item_description": "To clean and transpose the EEG Spectral report.",
     "tool_params": {
-        "tool_label": "Review EEG Spectral Power for the cohort",
+        "tool_label": "Review Power for the cohort",
         "tool_category": "3-Postprocessing",
         "asset_directory": "",
         "package_name": "CEAMSTools",
         "steps": [
             {
-                "name": "PSA Cohort Review",
+                "name": "Review Power",
                 "description": "Click <strong>Read more!</strong> below for details.",
                 "custom_step_name": "IntroStep",
                 "show_index": false

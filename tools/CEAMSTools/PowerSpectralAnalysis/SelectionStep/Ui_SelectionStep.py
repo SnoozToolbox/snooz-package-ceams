@@ -74,11 +74,6 @@ class Ui_SelectionStep(object):
 
         self.verticalLayout.addWidget(self.label_3)
 
-        self.label_2 = QLabel(SelectionStep)
-        self.label_2.setObjectName(u"label_2")
-
-        self.verticalLayout.addWidget(self.label_2)
-
         self.gridLayout = QGridLayout()
         self.gridLayout.setObjectName(u"gridLayout")
         self.unscored_checkBox = QCheckBox(SelectionStep)
@@ -248,12 +243,11 @@ class Ui_SelectionStep(object):
         SelectionStep.setToolTip("")
 #endif // QT_CONFIG(tooltip)
         SelectionStep.setStyleSheet(QCoreApplication.translate("SelectionStep", u"font: 12pt \"Roboto\";", None))
-        self.label.setText(QCoreApplication.translate("SelectionStep", u"<html><head/><body><p><span style=\" font-weight:600;\">Section selection to perform the PSA on. </span></p></body></html>", None))
-        self.radioButton_annotations.setText(QCoreApplication.translate("SelectionStep", u"Perform PSA on specific annotations (on the next step)", None))
-        self.radioButton_sleep.setText(QCoreApplication.translate("SelectionStep", u"Perform PSA on sleep stages and/or cycles (below)", None))
+        self.label.setText(QCoreApplication.translate("SelectionStep", u"<html><head/><body><p><span style=\" font-weight:600;\">Section selection to perform the EEG spectal power. </span></p></body></html>", None))
+        self.radioButton_annotations.setText(QCoreApplication.translate("SelectionStep", u"Analyse spectral power for specific annotations (in the next step)", None))
+        self.radioButton_sleep.setText(QCoreApplication.translate("SelectionStep", u"Analyse spectral power for sleep stages and/or cycles (below)", None))
         self.label_5.setText(QCoreApplication.translate("SelectionStep", u"<html><head/><body><p><span style=\" font-weight:600;\">Sleep Stage Selection</span></p></body></html>", None))
-        self.label_3.setText(QCoreApplication.translate("SelectionStep", u"The PSA is performed per sleep stage.", None))
-        self.label_2.setText(QCoreApplication.translate("SelectionStep", u"Select the stages to include in the PSA.", None))
+        self.label_3.setText(QCoreApplication.translate("SelectionStep", u"The spectral power is analysed per sleep stage.  Select the stages to include in the analysis.", None))
 #if QT_CONFIG(tooltip)
         self.unscored_checkBox.setToolTip(QCoreApplication.translate("SelectionStep", u"Check to perform the PSA on signal unscored.  PSG recording without sleep staging will be marked \"unscored\".", None))
 #endif // QT_CONFIG(tooltip)
@@ -284,13 +278,13 @@ class Ui_SelectionStep(object):
         self.s4_checkBox.setText(QCoreApplication.translate("SelectionStep", u"Stage 4", None))
         self.nrem_checkBox.setText(QCoreApplication.translate("SelectionStep", u"NREM", None))
         self.label_4.setText(QCoreApplication.translate("SelectionStep", u"<html><head/><body><p><span style=\" font-weight:600;\">Sleep Period Selection</span></p></body></html>", None))
-        self.label_7.setText(QCoreApplication.translate("SelectionStep", u"To perform the PSA on specific section of the recording.", None))
-        self.plainTextEdit.setPlainText(QCoreApplication.translate("SelectionStep", u"To perform the PSA only on the signal included in the sleep cycles.\n"
+        self.label_7.setText(QCoreApplication.translate("SelectionStep", u"To perform the analysis on specific section of the recording.", None))
+        self.plainTextEdit.setPlainText(QCoreApplication.translate("SelectionStep", u"To analyse only the signal included in the sleep cycles.\n"
 "I.e. from sleep onset to the last asleep stage.\n"
-"Useful to run the PSA on complete sleep cycles only (make sure incomplete cycles are not included in the Common Settings for Sleep Cycles in the introduction step of the tool).", None))
+"Useful to analyse complete sleep cycles only (ensure incomplete cycles are excluded in the Common Settings for Sleep Cycles in the tool\u2019s introduction step).", None))
         self.plainTextEdit_2.setPlainText(QCoreApplication.translate("SelectionStep", u"To exclude sleep periods from the spectral analysis.\n"
-"Useful for running PSA on NREM stages included in NREM periods only (not in REM periods). In this case, please check \u201cExclude REM periods\u201d.\n"
-"The same idea can be applied for NREM periods.", None))
+"Useful to analyse NREM stages included in NREM periods only (not in REM periods). In this case, please check \u201cExclude REM periods\u201d.\n"
+"The same approach can be applied to NREM periods.", None))
 #if QT_CONFIG(tooltip)
         self.in_cycle_checkBox.setToolTip(QCoreApplication.translate("SelectionStep", u"Check to perform the PSA only on the signal included in the sleep cycles i.e. from sleep onset to the last asleep stage.", None))
 #endif // QT_CONFIG(tooltip)

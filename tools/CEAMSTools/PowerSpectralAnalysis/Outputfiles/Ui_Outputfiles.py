@@ -25,7 +25,7 @@ class Ui_Outputfiles(object):
     def setupUi(self, Outputfiles):
         if not Outputfiles.objectName():
             Outputfiles.setObjectName(u"Outputfiles")
-        Outputfiles.resize(861, 876)
+        Outputfiles.resize(864, 876)
         self.verticalLayout_3 = QVBoxLayout(Outputfiles)
         self.verticalLayout_3.setObjectName(u"verticalLayout_3")
         self.label = QLabel(Outputfiles)
@@ -304,11 +304,11 @@ class Ui_Outputfiles(object):
 #endif // QT_CONFIG(tooltip)
         self.radioButton_annot.setText(QCoreApplication.translate("Outputfiles", u"The spectral power is computed on selected events.", None))
         self.label_4.setText(QCoreApplication.translate("Outputfiles", u"<html><head/><body><p><span style=\" font-weight:600;\">Output</span></p></body></html>", None))
-        self.plainTextEdit_4.setPlainText(QCoreApplication.translate("Outputfiles", u"The output file is a .tsv (tab separated values) file. Each line is specific to a subject, a channel and a frequency band. Warning : the PSA data is added (appended) to the output file, the output file will be modified each time the PSA tool is run.", None))
+        self.plainTextEdit_4.setPlainText(QCoreApplication.translate("Outputfiles", u"The output file is a .tsv (tab separated values) file. Each line corresponds to a subject, a channel, and a frequency band. Warning : Spectral data are appended to the output file, so the file will be modified each time the tool is run.", None))
         self.label_3.setText(QCoreApplication.translate("Outputfiles", u"Filename", None))
         self.filename_lineEdit.setInputMask("")
         self.filename_lineEdit.setText("")
-        self.filename_lineEdit.setPlaceholderText(QCoreApplication.translate("Outputfiles", u"Select the file to save the PSA", None))
+        self.filename_lineEdit.setPlaceholderText(QCoreApplication.translate("Outputfiles", u"Select the file to save the cohort EEG spectral report.", None))
         self.choose_pushButton.setText(QCoreApplication.translate("Outputfiles", u"Choose", None))
     # retranslateUi
 

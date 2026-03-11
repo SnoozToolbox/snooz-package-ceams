@@ -25,7 +25,7 @@ class Ui_OutputFileStep(object):
     def setupUi(self, OutputFileStep):
         if not OutputFileStep.objectName():
             OutputFileStep.setObjectName(u"OutputFileStep")
-        OutputFileStep.resize(837, 732)
+        OutputFileStep.resize(842, 732)
         self.verticalLayout = QVBoxLayout(OutputFileStep)
         self.verticalLayout.setObjectName(u"verticalLayout")
         self.horizontalLayout = QHBoxLayout()
@@ -37,18 +37,14 @@ class Ui_OutputFileStep(object):
 
         self.horizontalLayout.addWidget(self.label_3)
 
+
+        self.verticalLayout.addLayout(self.horizontalLayout)
+
         self.export_raw_checkBox = QCheckBox(OutputFileStep)
         self.export_raw_checkBox.setObjectName(u"export_raw_checkBox")
         self.export_raw_checkBox.setMaximumSize(QSize(16777215, 16777215))
 
-        self.horizontalLayout.addWidget(self.export_raw_checkBox)
-
-
-        self.verticalLayout.addLayout(self.horizontalLayout)
-
-        self.verticalSpacer = QSpacerItem(40, 50, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Fixed)
-
-        self.verticalLayout.addItem(self.verticalSpacer)
+        self.verticalLayout.addWidget(self.export_raw_checkBox)
 
         self.horizontalLayout_2 = QHBoxLayout()
         self.horizontalLayout_2.setObjectName(u"horizontalLayout_2")
@@ -59,15 +55,15 @@ class Ui_OutputFileStep(object):
 
         self.horizontalLayout_2.addWidget(self.label_8)
 
+
+        self.verticalLayout.addLayout(self.horizontalLayout_2)
+
         self.export_transpose_checkBox = QCheckBox(OutputFileStep)
         self.export_transpose_checkBox.setObjectName(u"export_transpose_checkBox")
         self.export_transpose_checkBox.setMaximumSize(QSize(16777215, 16777215))
         self.export_transpose_checkBox.setChecked(True)
 
-        self.horizontalLayout_2.addWidget(self.export_transpose_checkBox)
-
-
-        self.verticalLayout.addLayout(self.horizontalLayout_2)
+        self.verticalLayout.addWidget(self.export_transpose_checkBox)
 
         self.verticalSpacer_4 = QSpacerItem(20, 20, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Fixed)
 
@@ -155,17 +151,17 @@ class Ui_OutputFileStep(object):
     def retranslateUi(self, OutputFileStep):
         OutputFileStep.setWindowTitle("")
         OutputFileStep.setStyleSheet(QCoreApplication.translate("OutputFileStep", u"font: 12pt \"Roboto\";", None))
-        self.label_3.setText(QCoreApplication.translate("OutputFileStep", u"The PSA Cohort Review tool can be used to clean the PSA file.", None))
+        self.label_3.setText(QCoreApplication.translate("OutputFileStep", u"This tool can be used to clean the EEG Spectral report.", None))
 #if QT_CONFIG(tooltip)
         self.export_raw_checkBox.setToolTip(QCoreApplication.translate("OutputFileStep", u"Check to export PSA activity of selected channels only (same format as the input PSA file).", None))
 #endif // QT_CONFIG(tooltip)
-        self.export_raw_checkBox.setText(QCoreApplication.translate("OutputFileStep", u"Export PSA file clean", None))
-        self.label_8.setText(QCoreApplication.translate("OutputFileStep", u"The PSA Cohort Review tool can be used to transpose the PSA file.", None))
+        self.export_raw_checkBox.setText(QCoreApplication.translate("OutputFileStep", u"Export the clean EEG Spectral report", None))
+        self.label_8.setText(QCoreApplication.translate("OutputFileStep", u"This tool can be used to transpose the EEG Spectral report.", None))
 #if QT_CONFIG(tooltip)
         self.export_transpose_checkBox.setToolTip(QCoreApplication.translate("OutputFileStep", u"Check to export the transposed PSA file. The format is one sujet per row and the selected channels (including ROIs) and frequency bands are packed as additional columns. ", None))
 #endif // QT_CONFIG(tooltip)
-        self.export_transpose_checkBox.setText(QCoreApplication.translate("OutputFileStep", u"Export transposed PSA file", None))
-        self.label_4.setText(QCoreApplication.translate("OutputFileStep", u"When the PSA activity is computed per frequency band and sleep stage :", None))
+        self.export_transpose_checkBox.setText(QCoreApplication.translate("OutputFileStep", u"Export transposed EEG Spectral report", None))
+        self.label_4.setText(QCoreApplication.translate("OutputFileStep", u"When the EEG spectral power is computed per frequency band and sleep stage :", None))
         self.textEdit.setHtml(QCoreApplication.translate("OutputFileStep", u"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset=\"utf-8\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
@@ -183,7 +179,7 @@ class Ui_OutputFileStep(object):
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Select <span style=\" font-weight:700;\">Distributio"
                         "n per annotation</span> to output the average per annotation. </p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">No cycle or hour information here.</p></body></html>", None))
-        self.label.setText(QCoreApplication.translate("OutputFileStep", u"Activity variables exported in the transposed PSA file", None))
+        self.label.setText(QCoreApplication.translate("OutputFileStep", u"Activity variables exported in the transposed report", None))
         self.label_2.setText(QCoreApplication.translate("OutputFileStep", u"Define the filename to save the exported files (the sufix _clean.tsv or _transposed.tsv will be added to the filename)", None))
         self.filename_lineEdit.setInputMask("")
         self.filename_lineEdit.setText("")

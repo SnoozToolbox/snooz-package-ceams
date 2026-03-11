@@ -35,7 +35,7 @@
             },
             {
                 "name": "Events to exclude",
-                "description": "Select events to exclude from the PSA (i.e. artifacts).\n\nStart by selecting one PSG or multiple files (with the ctrl key pressed), then select an event group or name.\n\nBe aware that the files must still be highlighted in the GUI to apply the 'Select All' option.",
+                "description": "Select events to exclude from the analysis (i.e. artifacts).\n\nStart by selecting one PSG or multiple files (with the ctrl key pressed), then select an event group or name.\n\nBe aware that the files must still be highlighted in the GUI to apply the 'Select All' option.",
                 "custom_step_name": "NonValidEventStep",
                 "show_index": true
             },
@@ -47,25 +47,25 @@
             },
             {
                 "name": "Section Selection",
-                "description": "Select the sections i.e. events, sleep stage and/or period to perform the PSA on.",
+                "description": "Select the sections i.e. events, sleep stage and/or period to perform the analysis on.",
                 "custom_step_name": "SelectionStep",
                 "show_index": true
             },
             {
                 "name": "Annotations Selection",
-                "description": "Select the annotations to perform the PSA on.\n\nStart by selecting one PSG or multiple files (with the ctrl key pressed), then select an event group or name.\n\nBe aware that the files must still be highlighted in the GUI to apply the 'Select All' option.",
+                "description": "Select the annotations to perform the analysis on.\n\nStart by selecting one PSG or multiple files (with the ctrl key pressed), then select an event group or name.\n\nBe aware that the files must still be highlighted in the GUI to apply the 'Select All' option.",
                 "custom_step_name": "AnnotationsSelStep",
                 "show_index": true
             },
             {
                 "name": "Spectral Settings",
-                "description": "Define the spectral settings of the PSA for your study",
+                "description": "Define the spectral settings of the analysis for your study",
                 "custom_step_name": "SpectralSettings",
                 "show_index": true
             },
             {
                 "name": "Output Files",
-                "description": "Define the PSA output files for your study.",
+                "description": "Define the analysis output files for your study.",
                 "custom_step_name": "Outputfiles",
                 "show_index": true,
                 "configs": {
