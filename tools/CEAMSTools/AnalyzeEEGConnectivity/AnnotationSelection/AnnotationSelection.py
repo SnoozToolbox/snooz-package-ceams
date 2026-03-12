@@ -50,7 +50,7 @@ class AnnotationSelection(NonValidEventStep):
             group_dict = {}
             name_dict = {}
             for file in files_list:
-                group_dict[file] = ','.join(['stages']*len(self.selected_sleep_stages_name.split(',')))
+                group_dict[file] = ','.join(['stage']*len(self.selected_sleep_stages_name.split(',')))
                 name_dict[file] = self.selected_sleep_stages_name
             self._pub_sub_manager.publish(self, self._artefact_group_topic, str(group_dict))
             self._pub_sub_manager.publish(self, self._artefact_name_topic, str(name_dict))   
