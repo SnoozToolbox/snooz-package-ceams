@@ -121,7 +121,7 @@ class Hypnogram(SciNode):
                 if '.' in PSG_filename:
                     PSG_filename = PSG_filename.split('.')[0]
                 self.subject_id = PSG_filename
-                self.plot_hypnogram(self, sleep_stages, sleep_cycles, epoch_len=epoch_len_sec)
+                self.plot_hypnogram(sleep_stages, sleep_cycles, epoch_len=epoch_len_sec)
                 if not '.' in fig_name:
                     fig_name = fig_name + '.pdf'
                 self.figure.savefig(fig_name)
@@ -219,7 +219,7 @@ class Hypnogram(SciNode):
             self.hypno_ax.set_title(f'Hypnogram with Sleep Cycles - {self.subject_id}')
 
         if sleep_cycles is not None:
-            self.draw_sleep_cycles(self, sleep_cycles, scoring_start, 
+            self.draw_sleep_cycles(sleep_cycles, scoring_start, 
                 fill_color_complete_NREM, fill_color_complete_REM, fill_color_incomplete, alpha)
             
             # Add legend for sleep cycle patches
