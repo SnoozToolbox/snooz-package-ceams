@@ -62,7 +62,7 @@ from CEAMSModules.PSGReader import commons
 import numpy as np
 import pandas as pd
 
-DEBUG = True
+DEBUG = False
 
 class SignalsFromEvents(SciNode):
     """
@@ -234,7 +234,7 @@ class SignalsFromEvents(SciNode):
                 f"SignalsFromEvents input mismatch. The number of event groups must match the number of event names. Each annotation is assigned to a group and labeled with a name.")
 
         # Select events
-        if (event_name_lst == ''):
+        if (events_groups == ''):
             events_to_write = events.copy()
         else:
             events_to_write = create_event_dataframe(None)
