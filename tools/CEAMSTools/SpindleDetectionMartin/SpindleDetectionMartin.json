@@ -1139,9 +1139,15 @@
                             "6323a842-eb2b-47cd-b444-d299d0d6f2df": "sleep_stage_events"
                         }
                     },
+                    "events_groups": {
+                        "name": "events_groups",
+                        "value": "",
+                        "sub_plugs": {},
+                        "connections": {}
+                    },
                     "events_names": {
                         "name": "events_names",
-                        "value": "spindle_bout",
+                        "value": "",
                         "sub_plugs": {},
                         "connections": {}
                     },

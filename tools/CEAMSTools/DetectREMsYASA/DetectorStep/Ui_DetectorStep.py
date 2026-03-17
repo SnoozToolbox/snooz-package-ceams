@@ -19,12 +19,14 @@ from PySide6.QtWidgets import (QApplication, QCheckBox, QDoubleSpinBox, QFrame,
     QGridLayout, QHBoxLayout, QLabel, QLineEdit,
     QPushButton, QSizePolicy, QSpacerItem, QSpinBox,
     QWidget)
+import themes_rc
 
 class Ui_DetectorStep(object):
     def setupUi(self, DetectorStep):
         if not DetectorStep.objectName():
             DetectorStep.setObjectName(u"DetectorStep")
         DetectorStep.resize(934, 750)
+        DetectorStep.setStyleSheet(u"font: 12pt \"Roboto\";")
         self.gridLayout_2 = QGridLayout(DetectorStep)
         self.gridLayout_2.setObjectName(u"gridLayout_2")
         self.gridLayout = QGridLayout()
@@ -429,7 +431,6 @@ class Ui_DetectorStep(object):
 
     def retranslateUi(self, DetectorStep):
         DetectorStep.setWindowTitle("")
-        DetectorStep.setStyleSheet(QCoreApplication.translate("DetectorStep", u"font: 10pt \"Roboto-Regular\";", None))
         self.checkBox_2.setText(QCoreApplication.translate("DetectorStep", u"Yes", None))
         self.label_2.setText(QCoreApplication.translate("DetectorStep", u"<html><head/><body><p><span style=\" font-size:12pt;\">Duration (s)</span></p></body></html>", None))
         self.label_11.setText(QCoreApplication.translate("DetectorStep", u"<html><head/><body><p><span style=\" font-size:12pt;\">Min:</span></p></body></html>", None))

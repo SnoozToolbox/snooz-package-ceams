@@ -27,6 +27,12 @@
                 "connections": {},
                 "sub_plugs": {}
             },
+            "events_groups": {
+                "name": "events_groups",
+                "value": "",
+                "connections": {},
+                "sub_plugs": {}
+            },
             "events_names": {
                 "name": "events_names",
                 "value": "",

@@ -14,7 +14,7 @@
    <string/>
   </property>
   <property name="styleSheet">
-   <string>font: 10pt &quot;Roboto-Regular&quot;;</string>
+   <string notr="true">font: 12pt &quot;Roboto&quot;;</string>
   </property>
   <layout class="QGridLayout" name="gridLayout_2">
    <item row="0" column="0">
@@ -731,7 +731,9 @@
    </item>
   </layout>
  </widget>
- <resources/>
+ <resources>
+  <include location="../../../../../snooz-toolbox/src/main/python/ui/themes/themes.qrc"/>
+ </resources>
  <connections/>
  <slots>
   <slot>on_choose()</slot>

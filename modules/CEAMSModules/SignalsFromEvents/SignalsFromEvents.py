@@ -30,6 +30,9 @@ See the file LICENCE for full license details.
             'duration_sec': Duration of the event in sec (Float)
             'channels' : Channel where the event occures (String)
             (For now events are expected to be on all channels)
+        events_groups : String
+            String of the desired event groups to take in account. Separated by a 
+            comma. ex)'group_1' or ex)'group_1,group2,group3'
         events_names : String
             String of the desired events to take in account. Separated by a 
             comma. ex)'stage_2' or ex)'stage_1,stage2,stage3'
@@ -57,6 +60,7 @@ from CEAMSModules.EventReader.manage_events import create_event_dataframe
 from CEAMSModules.PSGReader import commons
 
 import numpy as np
+import pandas as pd
 
 DEBUG = False
 
@@ -88,6 +92,9 @@ class SignalsFromEvents(SciNode):
                 'duration_sec': Duration of the event in sec (Float)
                 'channels' : Channel where the event occures (String)
                 (For now events are expected to be on all channels)
+            events_groups : String
+                String of the desired event groups to take in account. Separated by a 
+                comma. ex)'group_1' or ex)'group_1,group2,group3'
             events_names : String
                 String of the desired events to take in account. Separated by a 
                 comma. ex)'stage_2' or ex)'stage_1,stage2,stage3'
@@ -114,6 +121,7 @@ class SignalsFromEvents(SciNode):
         self._filename = None
         InputPlug('signals', self)
         InputPlug('events', self)
+        InputPlug('events_groups', self)
         InputPlug('events_names', self)     
         InputPlug('create', self)
         OutputPlug('signals_from_events', self)
@@ -125,7 +133,7 @@ class SignalsFromEvents(SciNode):
         pass
 
 
-    def compute(self, signals, events, events_names, create):
+    def compute(self, signals, events, events_names, events_groups, create):
         """
         Manage a list of SignalModel from specific events during a recording.  
 
@@ -159,6 +167,9 @@ class SignalsFromEvents(SciNode):
             events_names : String
                 String of the desired events to take in account. Separated by a 
                 comma. ex)'stage_2' or ex)'stage_1,stage2,stage3'
+            events_groups : String
+                String of the desired event groups to take in account. Separated by a 
+                comma. ex)'group_1' or ex)'group_1,group2,group3'
             create : bool
                 True to create a new list of SignalModel based on the events.
                 False to select items from the list of SignalModel based on the events.
@@ -205,7 +216,7 @@ class SignalsFromEvents(SciNode):
                 'signals_from_events': signals,
                 'epochs_to_process' : create_event_dataframe(None)
             }
-        
+
         # It is possible to bypass the module by passing the input signals directly
         # to the output signals without any modification
         if self.activation_state == ActivationState.BYPASS:
@@ -214,28 +225,31 @@ class SignalsFromEvents(SciNode):
                 'epochs_to_process' : create_event_dataframe(None)
             }    
  
-
         # split list to check on the events desired
-        event_name = list(events_names.split(","))
+        event_name_lst = list(events_names.split(","))
+        event_group_lst = list(events_groups.split(","))
+
+        if len(event_name_lst) != len(event_group_lst):
+            raise NodeInputException(self.identifier, "events_names, events_groups", \
+                f"SignalsFromEvents input mismatch. The number of event groups must match the number of event names. Each annotation is assigned to a group and labeled with a name.")
+
         # Select events
-        if (events_names == ''):
+        if (events_groups == ''):
             events_to_write = events.copy()
         else:
-            events_to_write = events.loc[events['name'].isin(event_name)].reset_index(drop=True).copy()   
+            events_to_write = create_event_dataframe(None)
+            for i, group_cur in enumerate(event_group_lst):
+                cur_selection = events[(events['group']==group_cur) & (events['name']==event_name_lst[i])]
+                events_to_write = pd.concat([events_to_write,cur_selection]) 
+
+        events_to_write = events_to_write.reset_index(drop=True).copy()   
 
         # Transform dataframe events start and duration into array
-        if (events_names == ''):
-            start_times = events['start_sec'].to_numpy().astype(float)
-            duration_times = events['duration_sec'].to_numpy().astype(float)
-            channel_times = events['channels'].to_numpy()
-            event_groups = events['group'].to_numpy()
-            event_names = events['name'].to_numpy()
-        else:
-            start_times = events.loc[events['name'].isin(event_name), 'start_sec'].to_numpy().astype(float)
-            duration_times = events.loc[events['name'].isin(event_name), 'duration_sec'].to_numpy().astype(float)
-            channel_times = events.loc[events['name'].isin(event_name), 'channels'].to_numpy()
-            event_groups = events.loc[events['name'].isin(event_name),'group'].to_numpy()
-            event_names = events.loc[events['name'].isin(event_name),'name'].to_numpy()
+        start_times = events_to_write['start_sec'].to_numpy().astype(float)
+        duration_times = events_to_write['duration_sec'].to_numpy().astype(float)
+        channel_times = events_to_write['channels'].to_numpy()
+        event_groups = events_to_write['group'].to_numpy()
+        event_names = events_to_write['name'].to_numpy()
 
         if isinstance(create,str):
             try:

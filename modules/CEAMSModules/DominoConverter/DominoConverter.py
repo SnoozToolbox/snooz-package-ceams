@@ -241,7 +241,7 @@ class DominoConverter(SciNode):
                         event_group = "stage"
                         # Convert sleep stage into number
                         somno_df['name'] = somno_df['name'].str.strip()
-                        somno_df['name'].replace(to_replace=self._somno_stage_label, inplace=True)
+                        somno_df['name'] = somno_df['name'].replace(to_replace=self._somno_stage_label)
                     # Start time conversion
                     edf_time = time.strptime(start_time,'%H:%M:%S') # EDF start '17/11/2010' '23:57:00'
                     for index, row in somno_df.iterrows():

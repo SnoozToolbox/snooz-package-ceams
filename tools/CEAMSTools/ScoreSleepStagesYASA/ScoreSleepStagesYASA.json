@@ -13,7 +13,7 @@
         "package_name": "CEAMSTools",
         "steps": [
             {
-                "name": "Score Sleep Stages YASA",
+                "name": "Score Sleep Stages",
                 "description": "Click <strong>Read more!</strong> below for details.",
                 "custom_step_name": "AlgoIntroStep",
                 "show_index": false
@@ -128,6 +128,12 @@
                             "6bce15ba-1723-42cb-b093-b42f78cbbe2e": "sleep_stage_events"
                         }
                     },
+                    "events_groups": {
+                        "name": "events_groups",
+                        "value": "",
+                        "sub_plugs": {},
+                        "connections": {}
+                    },
                     "events_names": {
                         "name": "events_names",
                         "value": "",
@@ -192,6 +198,12 @@
                         "connections": {
                             "6bce15ba-1723-42cb-b093-b42f78cbbe2e": "sleep_stage_events"
                         }
+                    },
+                    "events_groups": {
+                        "name": "events_groups",
+                        "value": "",
+                        "sub_plugs": {},
+                        "connections": {}
                     },
                     "events_names": {
                         "name": "events_names",
@@ -491,6 +503,12 @@
                         "connections": {
                             "6bce15ba-1723-42cb-b093-b42f78cbbe2e": "sleep_stage_events"
                         }
+                    },
+                    "events_groups": {
+                        "name": "events_groups",
+                        "value": "",
+                        "sub_plugs": {},
+                        "connections": {}
                     },
                     "events_names": {
                         "name": "events_names",

@@ -108,7 +108,7 @@
          </property>
          <property name="maximumSize">
           <size>
-           <width>600</width>
+           <width>800</width>
            <height>16777215</height>
           </size>
          </property>
@@ -225,8 +225,8 @@ li.checked::marker { content: &quot;\2612&quot;; }
          </property>
          <property name="maximumSize">
           <size>
-           <width>16777215</width>
-           <height>130</height>
+           <width>800</width>
+           <height>16777215</height>
           </size>
          </property>
          <property name="frameShape">
@@ -340,22 +340,6 @@ li.checked::marker { content: &quot;\2612&quot;; }
           <string>* The slow wave details are appended at the end of the cohort report if it exists.</string>
          </property>
         </widget>
-       </item>
-       <item>
-        <spacer name="verticalSpacer">
-         <property name="orientation">
-          <enum>Qt::Orientation::Vertical</enum>
-         </property>
-         <property name="sizeType">
-          <enum>QSizePolicy::Policy::Minimum</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>20</width>
-           <height>40</height>
-          </size>
-         </property>
-        </spacer>
        </item>
       </layout>
      </item>

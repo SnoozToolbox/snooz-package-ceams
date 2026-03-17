@@ -24,7 +24,7 @@ class Ui_ExportResultsStep(object):
     def setupUi(self, ExportResultsStep):
         if not ExportResultsStep.objectName():
             ExportResultsStep.setObjectName(u"ExportResultsStep")
-        ExportResultsStep.resize(1270, 755)
+        ExportResultsStep.resize(643, 773)
         ExportResultsStep.setStyleSheet(u"font: 12pt \"Roboto\";")
         self.verticalLayout_2 = QVBoxLayout(ExportResultsStep)
         self.verticalLayout_2.setObjectName(u"verticalLayout_2")
@@ -40,6 +40,7 @@ class Ui_ExportResultsStep(object):
         self.label.setObjectName(u"label")
         self.label.setStyleSheet(u"")
         self.label.setLineWidth(0)
+        self.label.setWordWrap(True)
 
         self.verticalLayout_4.addWidget(self.label)
 
@@ -57,6 +58,7 @@ class Ui_ExportResultsStep(object):
         self.verticalLayout_6.setObjectName(u"verticalLayout_6")
         self.textEdit = QTextEdit(self.frame_7)
         self.textEdit.setObjectName(u"textEdit")
+        self.textEdit.setMaximumSize(QSize(16777215, 100))
         self.textEdit.setFrameShape(QFrame.Shape.NoFrame)
         self.textEdit.setFrameShadow(QFrame.Shadow.Plain)
         self.textEdit.setLineWidth(0)
@@ -64,7 +66,7 @@ class Ui_ExportResultsStep(object):
 
         self.verticalLayout_6.addWidget(self.textEdit)
 
-        self.verticalSpacer_4 = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
+        self.verticalSpacer_4 = QSpacerItem(20, 20, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Fixed)
 
         self.verticalLayout_6.addItem(self.verticalSpacer_4)
 
@@ -79,23 +81,26 @@ class Ui_ExportResultsStep(object):
         self.horizontalLayout_3.setObjectName(u"horizontalLayout_3")
         self.label_2 = QLabel(self.frame_4)
         self.label_2.setObjectName(u"label_2")
+        self.label_2.setMinimumSize(QSize(500, 0))
         self.label_2.setLineWidth(0)
+        self.label_2.setWordWrap(True)
 
         self.horizontalLayout_3.addWidget(self.label_2)
 
-        self.horizontalSpacer = QSpacerItem(40, 20, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
-
-        self.horizontalLayout_3.addItem(self.horizontalSpacer)
-
         self.lineEdit_2 = QLineEdit(self.frame_4)
         self.lineEdit_2.setObjectName(u"lineEdit_2")
+        self.lineEdit_2.setMaximumSize(QSize(500, 16777215))
 
         self.horizontalLayout_3.addWidget(self.lineEdit_2)
+
+        self.horizontalSpacer_2 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+
+        self.horizontalLayout_3.addItem(self.horizontalSpacer_2)
 
 
         self.verticalLayout_4.addWidget(self.frame_4)
 
-        self.verticalSpacer_2 = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
+        self.verticalSpacer_2 = QSpacerItem(20, 20, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Fixed)
 
         self.verticalLayout_4.addItem(self.verticalSpacer_2)
 
@@ -123,6 +128,7 @@ class Ui_ExportResultsStep(object):
         self.label_3.setObjectName(u"label_3")
         self.label_3.setStyleSheet(u"")
         self.label_3.setLineWidth(0)
+        self.label_3.setWordWrap(True)
 
         self.horizontalLayout_2.addWidget(self.label_3)
 
@@ -132,7 +138,7 @@ class Ui_ExportResultsStep(object):
 
         self.verticalLayout.addWidget(self.frame)
 
-        self.verticalSpacer_3 = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Fixed)
+        self.verticalSpacer_3 = QSpacerItem(20, 20, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Fixed)
 
         self.verticalLayout.addItem(self.verticalSpacer_3)
 
@@ -156,12 +162,14 @@ class Ui_ExportResultsStep(object):
         self.verticalLayout_5.setObjectName(u"verticalLayout_5")
         self.label_4 = QLabel(self.frame_9)
         self.label_4.setObjectName(u"label_4")
+        self.label_4.setWordWrap(True)
 
         self.verticalLayout_5.addWidget(self.label_4)
 
         self.label_5 = QLabel(self.frame_9)
         self.label_5.setObjectName(u"label_5")
         self.label_5.setLineWidth(0)
+        self.label_5.setWordWrap(True)
 
         self.verticalLayout_5.addWidget(self.label_5)
 
@@ -176,13 +184,19 @@ class Ui_ExportResultsStep(object):
         self.horizontalLayout_4.setObjectName(u"horizontalLayout_4")
         self.lineEdit = QLineEdit(self.frame_6)
         self.lineEdit.setObjectName(u"lineEdit")
+        self.lineEdit.setMinimumSize(QSize(500, 0))
 
         self.horizontalLayout_4.addWidget(self.lineEdit)
 
         self.pushButton = QPushButton(self.frame_6)
         self.pushButton.setObjectName(u"pushButton")
+        self.pushButton.setMaximumSize(QSize(500, 16777215))
 
         self.horizontalLayout_4.addWidget(self.pushButton)
+
+        self.horizontalSpacer_3 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+
+        self.horizontalLayout_4.addItem(self.horizontalSpacer_3)
 
 
         self.verticalLayout_3.addWidget(self.frame_6)
@@ -196,6 +210,7 @@ class Ui_ExportResultsStep(object):
         self.label_6 = QLabel(self.frame_8)
         self.label_6.setObjectName(u"label_6")
         self.label_6.setLineWidth(0)
+        self.label_6.setWordWrap(True)
 
         self.horizontalLayout_6.addWidget(self.label_6)
 
@@ -228,11 +243,10 @@ class Ui_ExportResultsStep(object):
 "li.unchecked::marker { content: \"\\2610\"; }\n"
 "li.checked::marker { content: \"\\2612\"; }\n"
 "</style></head><body style=\" font-family:'Roboto'; font-size:12pt; font-weight:400; font-style:normal;\">\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">In this step, you can either apply an automatic scoring or compare the results of the automatic scoring with expert scoring if you have expert-annotated sleep stage files.</p>\n"
-"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">The sleep stage scoring from the YASA algorithm will then be exported.</p>\n"
-"<p style=\"-qt-paragrap"
-                        "h-type:empty; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
-"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">*NOTE: Snooz cannot write sleep staging data to NATUS or Stellate formats. However, the tool can still be used to compare YASA scoring with existing sleep staging in these formats.</p></body></html>", None))
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">In this step, you can run automatic sleep staging or compare YASA results with expert-annotated sleep stage files. The YASA sleep staging will then be exported.</p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-righ"
+                        "t:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-style:italic;\">Note:</span> Snooz cannot write sleep staging data to NATUS or Stellate formats, but the tool can still compare YASA scoring with existing staging in these formats.</p></body></html>", None))
         self.label_2.setText(QCoreApplication.translate("ExportResultsStep", u"<html><head/><body><p>Define a label for the predicted sleep stages group label in the accessory file.</p></body></html>", None))
         self.lineEdit_2.setText(QCoreApplication.translate("ExportResultsStep", u"stage", None))
         self.checkBox.setText(QCoreApplication.translate("ExportResultsStep", u"Automatic Scoring", None))
@@ -242,6 +256,6 @@ class Ui_ExportResultsStep(object):
         self.label_5.setText(QCoreApplication.translate("ExportResultsStep", u"<html><head/><body><p>Sleep stage annotations for gold standard are defined with <span style=\" font-weight:700;\">group = &quot;stage&quot;</span>, and the <span style=\" font-weight:700;\">name</span> values correspond to: 0 (W), 1 (N1), 2 (N2), 3 (N3), 5 (R), and 9 (Unscored).</p></body></html>", None))
         self.lineEdit.setText(QCoreApplication.translate("ExportResultsStep", u"Select the folder where the exported files are supposed to be saved", None))
         self.pushButton.setText(QCoreApplication.translate("ExportResultsStep", u"Choose", None))
-        self.label_6.setText(QCoreApplication.translate("ExportResultsStep", u"<html><head/><body><p>The exported file includes, the expert annotated hypnogram, the predicted hypnogram, confusion matrix, accuracy, and<br/>the average confidence.</p></body></html>", None))
+        self.label_6.setText(QCoreApplication.translate("ExportResultsStep", u"<html><head/><body><p>The exported file includes, the expert annotated hypnogram, the predicted hypnogram, confusion matrix, accuracy, and the average confidence.</p></body></html>", None))
     # retranslateUi
 

@@ -28,6 +28,7 @@ class NonValidEventConStep(NonValidEventStep):
         super().__init__(**kwargs)
         self.reset_excl_event_checkBox.setChecked(True)
         self.reset_excl_event_checkBox.setEnabled(False)
-        self.select_all_checkBox.setEnabled(False)
+        # Usefull to select many annotations at the same time on the UI
+        #self.select_all_checkBox.setEnabled(False)
         
 # For the other functions see CEAMSTools.PowerSpectralAnalysis.NonValidEventStep.NonValidEventStep
