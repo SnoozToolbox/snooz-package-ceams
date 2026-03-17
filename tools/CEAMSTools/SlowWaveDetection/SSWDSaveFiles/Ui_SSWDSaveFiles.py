@@ -75,7 +75,7 @@ class Ui_SSWDSaveFiles(object):
         sizePolicy1.setVerticalStretch(0)
         sizePolicy1.setHeightForWidth(self.textEdit.sizePolicy().hasHeightForWidth())
         self.textEdit.setSizePolicy(sizePolicy1)
-        self.textEdit.setMaximumSize(QSize(600, 16777215))
+        self.textEdit.setMaximumSize(QSize(800, 16777215))
         self.textEdit.setFrameShape(QFrame.Shape.NoFrame)
         self.textEdit.setFrameShadow(QFrame.Shadow.Plain)
         self.textEdit.setLineWidth(0)
@@ -121,7 +121,7 @@ class Ui_SSWDSaveFiles(object):
         self.textEdit_2.setObjectName(u"textEdit_2")
         sizePolicy1.setHeightForWidth(self.textEdit_2.sizePolicy().hasHeightForWidth())
         self.textEdit_2.setSizePolicy(sizePolicy1)
-        self.textEdit_2.setMaximumSize(QSize(16777215, 130))
+        self.textEdit_2.setMaximumSize(QSize(800, 16777215))
         self.textEdit_2.setFrameShape(QFrame.Shape.NoFrame)
         self.textEdit_2.setFrameShadow(QFrame.Shadow.Plain)
         self.textEdit_2.setLineWidth(0)
@@ -177,10 +177,6 @@ class Ui_SSWDSaveFiles(object):
         self.label_2.setSizePolicy(sizePolicy)
 
         self.verticalLayout_2.addWidget(self.label_2)
-
-        self.verticalSpacer = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Minimum)
-
-        self.verticalLayout_2.addItem(self.verticalSpacer)
 
 
         self.horizontalLayout_4.addLayout(self.verticalLayout_2)
