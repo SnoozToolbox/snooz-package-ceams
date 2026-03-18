@@ -105,33 +105,11 @@ li.checked::marker { content: &quot;\2612&quot;; }
           </property>
           <layout class="QVBoxLayout" name="verticalLayout_4">
            <item>
-            <widget class="QScrollArea" name="scrollArea">
-             <property name="widgetResizable">
-              <bool>true</bool>
+            <widget class="QLabel" name="label_2">
+             <property name="text">
+              <string/>
              </property>
-             <widget class="QWidget" name="scrollAreaWidgetContents">
-              <property name="geometry">
-               <rect>
-                <x>0</x>
-                <y>0</y>
-                <width>1338</width>
-                <height>476</height>
-               </rect>
-              </property>
-              <layout class="QVBoxLayout" name="verticalLayout_5">
-               <property name="sizeConstraint">
-                <enum>QLayout::SizeConstraint::SetNoConstraint</enum>
-               </property>
-               <item>
-                <widget class="QLabel" name="label_2">
-                 <property name="text">
-                  <string/>
-                 </property>
-                 <property name="text"><string/></property>
-                </widget>
-               </item>
-              </layout>
-             </widget>
+             <property name="text"><string/></property>
             </widget>
            </item>
           </layout>

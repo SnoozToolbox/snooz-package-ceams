@@ -16,23 +16,19 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QImage, QKeySequence, QLinearGradient, QPainter,
     QPalette, QPixmap, QRadialGradient, QTransform)
 from PySide6.QtWidgets import (QAbstractScrollArea, QApplication, QFrame, QHBoxLayout,
-    QLabel, QLayout, QScrollArea, QSizePolicy,
-    QSpacerItem, QSplitter, QTextEdit, QVBoxLayout,
-    QWidget)
+    QLabel, QLayout, QSizePolicy, QSpacerItem,
+    QTextEdit, QVBoxLayout, QWidget)
 import themes_rc
 
 class Ui_ArtIntroStepPL(object):
     def setupUi(self, ArtIntroStepPL):
         if not ArtIntroStepPL.objectName():
             ArtIntroStepPL.setObjectName(u"ArtIntroStepPL")
-        ArtIntroStepPL.resize(1004, 789)
+        ArtIntroStepPL.resize(900, 854)
         ArtIntroStepPL.setStyleSheet(u"font: 12pt \"Roboto\";")
         self.horizontalLayout = QHBoxLayout(ArtIntroStepPL)
         self.horizontalLayout.setObjectName(u"horizontalLayout")
-        self.splitter = QSplitter(ArtIntroStepPL)
-        self.splitter.setObjectName(u"splitter")
-        self.splitter.setOrientation(Qt.Orientation.Horizontal)
-        self.widget = QWidget(self.splitter)
+        self.widget = QWidget(ArtIntroStepPL)
         self.widget.setObjectName(u"widget")
         sizePolicy = QSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
         sizePolicy.setHorizontalStretch(0)
@@ -44,7 +40,7 @@ class Ui_ArtIntroStepPL(object):
         self.verticalLayout_2.setSizeConstraint(QLayout.SizeConstraint.SetDefaultConstraint)
         self.label_2 = QLabel(self.widget)
         self.label_2.setObjectName(u"label_2")
-        sizePolicy1 = QSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Fixed)
+        sizePolicy1 = QSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Fixed)
         sizePolicy1.setHorizontalStretch(0)
         sizePolicy1.setVerticalStretch(0)
         sizePolicy1.setHeightForWidth(self.label_2.sizePolicy().hasHeightForWidth())
@@ -79,9 +75,13 @@ class Ui_ArtIntroStepPL(object):
         sizePolicy2.setVerticalStretch(4)
         sizePolicy2.setHeightForWidth(self.textEdit_3.sizePolicy().hasHeightForWidth())
         self.textEdit_3.setSizePolicy(sizePolicy2)
+        self.textEdit_3.setMinimumSize(QSize(850, 0))
         self.textEdit_3.setMaximumSize(QSize(16777215, 16777215))
         self.textEdit_3.setFrameShape(QFrame.Shape.NoFrame)
-        self.textEdit_3.setSizeAdjustPolicy(QAbstractScrollArea.SizeAdjustPolicy.AdjustToContents)
+        self.textEdit_3.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
+        self.textEdit_3.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
+        self.textEdit_3.setSizeAdjustPolicy(QAbstractScrollArea.SizeAdjustPolicy.AdjustIgnored)
+        self.textEdit_3.setReadOnly(True)
 
         self.verticalLayout_2.addWidget(self.textEdit_3)
 
@@ -106,32 +106,33 @@ class Ui_ArtIntroStepPL(object):
         sizePolicy3.setHeightForWidth(self.textEdit_2.sizePolicy().hasHeightForWidth())
         self.textEdit_2.setSizePolicy(sizePolicy3)
         self.textEdit_2.setFrameShape(QFrame.Shape.NoFrame)
-        self.textEdit_2.setSizeAdjustPolicy(QAbstractScrollArea.SizeAdjustPolicy.AdjustToContents)
+        self.textEdit_2.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
+        self.textEdit_2.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
+        self.textEdit_2.setSizeAdjustPolicy(QAbstractScrollArea.SizeAdjustPolicy.AdjustIgnored)
+        self.textEdit_2.setReadOnly(True)
 
         self.verticalLayout_2.addWidget(self.textEdit_2)
 
-        self.splitter.addWidget(self.widget)
-        self.scrollArea = QScrollArea(self.splitter)
-        self.scrollArea.setObjectName(u"scrollArea")
-        self.scrollArea.setWidgetResizable(True)
-        self.scrollAreaWidgetContents = QWidget()
-        self.scrollAreaWidgetContents.setObjectName(u"scrollAreaWidgetContents")
-        self.scrollAreaWidgetContents.setGeometry(QRect(0, 0, 75, 769))
-        self.verticalLayout = QVBoxLayout(self.scrollAreaWidgetContents)
+
+        self.horizontalLayout.addWidget(self.widget)
+
+        self.widget_2 = QWidget(ArtIntroStepPL)
+        self.widget_2.setObjectName(u"widget_2")
+        self.verticalLayout = QVBoxLayout(self.widget_2)
         self.verticalLayout.setObjectName(u"verticalLayout")
-        self.label_6 = QLabel(self.scrollAreaWidgetContents)
+        self.label_6 = QLabel(self.widget_2)
         self.label_6.setObjectName(u"label_6")
         self.label_6.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
         self.verticalLayout.addWidget(self.label_6)
 
-        self.label_8 = QLabel(self.scrollAreaWidgetContents)
+        self.label_8 = QLabel(self.widget_2)
         self.label_8.setObjectName(u"label_8")
         self.label_8.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
         self.verticalLayout.addWidget(self.label_8)
 
-        self.label_5 = QLabel(self.scrollAreaWidgetContents)
+        self.label_5 = QLabel(self.widget_2)
         self.label_5.setObjectName(u"label_5")
         sizePolicy4 = QSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Preferred)
         sizePolicy4.setHorizontalStretch(0)
@@ -142,28 +143,26 @@ class Ui_ArtIntroStepPL(object):
 
         self.verticalLayout.addWidget(self.label_5)
 
-        self.label_9 = QLabel(self.scrollAreaWidgetContents)
+        self.label_9 = QLabel(self.widget_2)
         self.label_9.setObjectName(u"label_9")
         self.label_9.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
         self.verticalLayout.addWidget(self.label_9)
 
-        self.label_10 = QLabel(self.scrollAreaWidgetContents)
+        self.label_10 = QLabel(self.widget_2)
         self.label_10.setObjectName(u"label_10")
         self.label_10.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
         self.verticalLayout.addWidget(self.label_10)
 
-        self.label_11 = QLabel(self.scrollAreaWidgetContents)
+        self.label_11 = QLabel(self.widget_2)
         self.label_11.setObjectName(u"label_11")
         self.label_11.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
         self.verticalLayout.addWidget(self.label_11)
 
-        self.scrollArea.setWidget(self.scrollAreaWidgetContents)
-        self.splitter.addWidget(self.scrollArea)
 
-        self.horizontalLayout.addWidget(self.splitter)
+        self.horizontalLayout.addWidget(self.widget_2)
 
 
         self.retranslateUi(ArtIntroStepPL)
@@ -191,10 +190,10 @@ class Ui_ArtIntroStepPL(object):
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">     Muscle artifact : Segments with burst of activity in the frequency band 20.25-32 Hz.</p>\n"
 "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Artifa"
-                        "ct detection performs better when similar sleep stages are selected, as the power distribution can be modeled more accurately.<br />Some detectors use a 3-component Gaussian Mixture Model (GMM) to estimate the standard deviation of non-corrupted data, which is then used to define the threshold value.</p>\n"
+                        "ct detection performs better when similar sleep stages are selected, as the power distribution can be modeled more accurately. Some detectors use a 3-component Gaussian Mixture Model (GMM) to estimate the standard deviation of non-corrupted data, which is then used to define the threshold value.</p>\n"
 "<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">We recommend running artifact detection separately for <span style=\" font-weight:700;\">NREM</span>, <span style=\" font-weight:700;\">REM</span>, and <span style=\" font-weight:700;\">Awake</span> stages.<br />Threshold values for the different algorithms can be edited; however, two sets of default values are also available.</p>\n"
-"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Make sure to use different annotation groups or names to avoid confusion when running artifact detection twice.<br />The default lab"
-                        "els reflect the selected sleep stages and the chosen set of default values.</p>\n"
+"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Make sure to use different annotation groups or names to avoid confusion when running artifact detection twice. The default labels reflec"
+                        "t the selected sleep stages and the chosen set of default values.</p>\n"
 "<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">While sleep stages are mandatory for sleep recordings, artifact detection can also be run on any EEG recording if <span style=\" font-weight:700;\">&quot;Unscored&quot;</span> is selected for the sleep stages.</p></body></html>", None))
         self.label_4.setText(QCoreApplication.translate("ArtIntroStepPL", u"<html><head/><body><p><span style=\" font-weight:600;\">Output</span></p></body></html>", None))
         self.textEdit_2.setHtml(QCoreApplication.translate("ArtIntroStepPL", u"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
@@ -204,16 +203,16 @@ class Ui_ArtIntroStepPL(object):
 "li.unchecked::marker { content: \"\\2610\"; }\n"
 "li.checked::marker { content: \"\\2612\"; }\n"
 "</style></head><body style=\" font-family:'Roboto'; font-size:12pt; font-weight:400; font-style:normal;\">\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">The detected artifacts are added in the input file as new events (i.e. .tsv for edf, .sts for Stellate and .ent for NATUS).</p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">The detected artifacts are added in the input file as new events <br />(i.e. .tsv for edf, .sts for Stellate and .ent for NATUS).</p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">If the input file already contains the group and name of the new events to be added, they will first be deleted. </p>\n"
-"<p style=\" margin-top:0px; ma"
-                        "rgin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">If you detect artifact on an EDF file without accessory file, the accessory (.tsv) file will be automatically generated.</p>\n"
+"<p style=\" margin-top:0"
+                        "px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">If you detect artifact on an EDF file without accessory file, the accessory (.tsv) file will be automatically generated.</p>\n"
 "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">The output is a TSV (Tab Separated Values) file. A new row is added for every artifact detection.</p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">The channel label is concatened to the artifact name with a @@ (EDFbrowser compatible).</p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">The columns of the file are as follows:</p>\n"
-"<p style=\" margin-top:0px; mar"
-                        "gin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">     1. group : The group of the event is artifact.</p>\n"
+"<p style=\" margin-top:0p"
+                        "x; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">     1. group : The group of the event is artifact.</p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">     2. name : The name of the event. Ex. flatline.</p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">     3. start_sec : The onset of the event in second. </p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">     4. duration_sec : The duration of the event in second.</p>\n"

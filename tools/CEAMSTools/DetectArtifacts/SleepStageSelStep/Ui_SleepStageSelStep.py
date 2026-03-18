@@ -25,7 +25,7 @@ class Ui_SleepStageSelStep(object):
     def setupUi(self, SleepStageSelStep):
         if not SleepStageSelStep.objectName():
             SleepStageSelStep.setObjectName(u"SleepStageSelStep")
-        SleepStageSelStep.resize(1075, 851)
+        SleepStageSelStep.resize(812, 840)
         SleepStageSelStep.setStyleSheet(u"font: 12pt \"Roboto\";")
         self.verticalLayout = QVBoxLayout(SleepStageSelStep)
         self.verticalLayout.setObjectName(u"verticalLayout")
@@ -41,18 +41,18 @@ class Ui_SleepStageSelStep(object):
 
         self.plainTextEdit = QPlainTextEdit(SleepStageSelStep)
         self.plainTextEdit.setObjectName(u"plainTextEdit")
-        sizePolicy1 = QSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Preferred)
+        sizePolicy1 = QSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
         sizePolicy1.setHorizontalStretch(0)
         sizePolicy1.setVerticalStretch(0)
         sizePolicy1.setHeightForWidth(self.plainTextEdit.sizePolicy().hasHeightForWidth())
         self.plainTextEdit.setSizePolicy(sizePolicy1)
-        self.plainTextEdit.setMinimumSize(QSize(0, 200))
-        self.plainTextEdit.setMaximumSize(QSize(16777215, 200))
+        self.plainTextEdit.setMinimumSize(QSize(0, 0))
+        self.plainTextEdit.setMaximumSize(QSize(16777215, 16777215))
         self.plainTextEdit.setFrameShape(QFrame.Shape.Panel)
         self.plainTextEdit.setLineWidth(0)
         self.plainTextEdit.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAsNeeded)
         self.plainTextEdit.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAsNeeded)
-        self.plainTextEdit.setSizeAdjustPolicy(QAbstractScrollArea.SizeAdjustPolicy.AdjustToContents)
+        self.plainTextEdit.setSizeAdjustPolicy(QAbstractScrollArea.SizeAdjustPolicy.AdjustIgnored)
         self.plainTextEdit.setReadOnly(True)
 
         self.verticalLayout.addWidget(self.plainTextEdit)
@@ -152,8 +152,12 @@ class Ui_SleepStageSelStep(object):
 
         self.textEdit = QTextEdit(SleepStageSelStep)
         self.textEdit.setObjectName(u"textEdit")
+        sizePolicy1.setHeightForWidth(self.textEdit.sizePolicy().hasHeightForWidth())
+        self.textEdit.setSizePolicy(sizePolicy1)
+        self.textEdit.setMaximumSize(QSize(16777215, 160))
         self.textEdit.setFrameShape(QFrame.Shape.NoFrame)
         self.textEdit.setLineWidth(0)
+        self.textEdit.setSizeAdjustPolicy(QAbstractScrollArea.SizeAdjustPolicy.AdjustIgnored)
         self.textEdit.setReadOnly(True)
 
         self.verticalLayout.addWidget(self.textEdit)
@@ -166,7 +170,11 @@ class Ui_SleepStageSelStep(object):
 
         self.textEdit_2 = QTextEdit(SleepStageSelStep)
         self.textEdit_2.setObjectName(u"textEdit_2")
+        sizePolicy1.setHeightForWidth(self.textEdit_2.sizePolicy().hasHeightForWidth())
+        self.textEdit_2.setSizePolicy(sizePolicy1)
+        self.textEdit_2.setMaximumSize(QSize(16777215, 160))
         self.textEdit_2.setFrameShape(QFrame.Shape.NoFrame)
+        self.textEdit_2.setSizeAdjustPolicy(QAbstractScrollArea.SizeAdjustPolicy.AdjustIgnored)
         self.textEdit_2.setReadOnly(True)
 
         self.verticalLayout.addWidget(self.textEdit_2)
@@ -175,10 +183,6 @@ class Ui_SleepStageSelStep(object):
         self.label_2.setObjectName(u"label_2")
 
         self.verticalLayout.addWidget(self.label_2)
-
-        self.verticalSpacer_2 = QSpacerItem(20, 10, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
-
-        self.verticalLayout.addItem(self.verticalSpacer_2)
 
 
         self.retranslateUi(SleepStageSelStep)

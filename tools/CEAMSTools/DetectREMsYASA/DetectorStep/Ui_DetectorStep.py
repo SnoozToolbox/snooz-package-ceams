@@ -17,7 +17,7 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QPalette, QPixmap, QRadialGradient, QTransform)
 from PySide6.QtWidgets import (QApplication, QCheckBox, QDoubleSpinBox, QFrame,
     QGridLayout, QHBoxLayout, QLabel, QLineEdit,
-    QPushButton, QSizePolicy, QSpacerItem, QSpinBox,
+    QPushButton, QScrollArea, QSizePolicy, QSpacerItem, QSpinBox,
     QWidget)
 import themes_rc
 
@@ -25,10 +25,19 @@ class Ui_DetectorStep(object):
     def setupUi(self, DetectorStep):
         if not DetectorStep.objectName():
             DetectorStep.setObjectName(u"DetectorStep")
-        DetectorStep.resize(934, 750)
+        DetectorStep.resize(934, 640)
         DetectorStep.setStyleSheet(u"font: 12pt \"Roboto\";")
         self.gridLayout_2 = QGridLayout(DetectorStep)
         self.gridLayout_2.setObjectName(u"gridLayout_2")
+        self.scrollArea = QScrollArea(DetectorStep)
+        self.scrollArea.setObjectName(u"scrollArea")
+        self.scrollArea.setFrameShape(QFrame.Shape.NoFrame)
+        self.scrollArea.setWidgetResizable(True)
+        self.scrollAreaWidgetContents = QWidget()
+        self.scrollAreaWidgetContents.setObjectName(u"scrollAreaWidgetContents")
+        self.scrollAreaLayout = QGridLayout(self.scrollAreaWidgetContents)
+        self.scrollAreaLayout.setObjectName(u"scrollAreaLayout")
+        self.scrollArea.setWidget(self.scrollAreaWidgetContents)
         self.gridLayout = QGridLayout()
         self.gridLayout.setSpacing(4)
         self.gridLayout.setObjectName(u"gridLayout")
@@ -421,7 +430,10 @@ class Ui_DetectorStep(object):
         self.gridLayout.addLayout(self.gridLayout_7, 20, 0, 1, 4)
 
 
-        self.gridLayout_2.addLayout(self.gridLayout, 0, 0, 1, 1)
+        self.scrollAreaLayout.addLayout(self.gridLayout, 0, 0, 1, 1)
+
+
+        self.gridLayout_2.addWidget(self.scrollArea, 0, 0, 1, 1)
 
 
         self.retranslateUi(DetectorStep)

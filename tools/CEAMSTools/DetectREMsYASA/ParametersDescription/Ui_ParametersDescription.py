@@ -23,7 +23,7 @@ class Ui_ParametersDescription(object):
     def setupUi(self, ParametersDescription):
         if not ParametersDescription.objectName():
             ParametersDescription.setObjectName(u"ParametersDescription")
-        ParametersDescription.resize(995, 799)
+        ParametersDescription.resize(995, 640)
         ParametersDescription.setStyleSheet(u"font: 10pt \"Roboto-Regular\"; QLabel {background-color: rgb(255, 255, 255);}")
         self.verticalLayout_4 = QVBoxLayout(ParametersDescription)
         self.verticalLayout_4.setObjectName(u"verticalLayout_4")

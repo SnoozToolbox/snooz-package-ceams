@@ -16,7 +16,7 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QImage, QKeySequence, QLinearGradient, QPainter,
     QPalette, QPixmap, QRadialGradient, QTransform)
 from PySide6.QtWidgets import (QApplication, QFrame, QGridLayout, QLabel,
-    QLayout, QScrollArea, QSizePolicy, QTextEdit,
+    QSizePolicy, QTextEdit,
     QVBoxLayout, QWidget)
 
 class Ui_AlgorithmDetail(object):
@@ -72,23 +72,10 @@ class Ui_AlgorithmDetail(object):
         self.frame_3.setFrameShadow(QFrame.Shadow.Raised)
         self.verticalLayout_4 = QVBoxLayout(self.frame_3)
         self.verticalLayout_4.setObjectName(u"verticalLayout_4")
-        self.scrollArea = QScrollArea(self.frame_3)
-        self.scrollArea.setObjectName(u"scrollArea")
-        self.scrollArea.setWidgetResizable(True)
-        self.scrollAreaWidgetContents = QWidget()
-        self.scrollAreaWidgetContents.setObjectName(u"scrollAreaWidgetContents")
-        self.scrollAreaWidgetContents.setGeometry(QRect(0, 0, 1338, 476))
-        self.verticalLayout_5 = QVBoxLayout(self.scrollAreaWidgetContents)
-        self.verticalLayout_5.setObjectName(u"verticalLayout_5")
-        self.verticalLayout_5.setSizeConstraint(QLayout.SizeConstraint.SetNoConstraint)
-        self.label_2 = QLabel(self.scrollAreaWidgetContents)
+        self.label_2 = QLabel(self.frame_3)
         self.label_2.setObjectName(u"label_2")
 
-        self.verticalLayout_5.addWidget(self.label_2)
-
-        self.scrollArea.setWidget(self.scrollAreaWidgetContents)
-
-        self.verticalLayout_4.addWidget(self.scrollArea)
+        self.verticalLayout_4.addWidget(self.label_2)
 
 
         self.verticalLayout_2.addWidget(self.frame_3)

@@ -9,14 +9,14 @@
 ################################################################################
 
 from PySide6.QtCore import (QCoreApplication, QDate, QDateTime, QLocale,
-    QMetaObject, QObject, QPoint, QRect,
+    QMetaObject, QObject, QPoint,
     QSize, QTime, QUrl, Qt)
 from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QFont, QFontDatabase, QGradient, QIcon,
     QImage, QKeySequence, QLinearGradient, QPainter,
     QPalette, QPixmap, QRadialGradient, QTransform)
 from PySide6.QtWidgets import (QApplication, QFrame, QGridLayout, QHBoxLayout,
-    QLabel, QLayout, QLineEdit, QScrollArea,
+    QLabel, QLayout, QLineEdit,
     QSizePolicy, QSpacerItem, QTextEdit, QVBoxLayout,
     QWidget)
 import themes_rc
@@ -29,23 +29,17 @@ class Ui_PowerLineStep(object):
         PowerLineStep.setStyleSheet(u"font: 12pt \"Roboto\";")
         self.verticalLayout_4 = QVBoxLayout(PowerLineStep)
         self.verticalLayout_4.setObjectName(u"verticalLayout_4")
-        self.scrollArea = QScrollArea(PowerLineStep)
-        self.scrollArea.setObjectName(u"scrollArea")
+        self.imageWidget = QWidget(PowerLineStep)
+        self.imageWidget.setObjectName(u"imageWidget")
         sizePolicy = QSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.scrollArea.sizePolicy().hasHeightForWidth())
-        self.scrollArea.setSizePolicy(sizePolicy)
-        self.scrollArea.setWidgetResizable(True)
-        self.scrollAreaWidgetContents = QWidget()
-        self.scrollAreaWidgetContents.setObjectName(u"scrollAreaWidgetContents")
-        self.scrollAreaWidgetContents.setGeometry(QRect(0, 0, 1591, 100))
-        sizePolicy.setHeightForWidth(self.scrollAreaWidgetContents.sizePolicy().hasHeightForWidth())
-        self.scrollAreaWidgetContents.setSizePolicy(sizePolicy)
-        self.scrollAreaWidgetContents.setMinimumSize(QSize(0, 100))
-        self.horizontalLayout = QHBoxLayout(self.scrollAreaWidgetContents)
+        sizePolicy.setHeightForWidth(self.imageWidget.sizePolicy().hasHeightForWidth())
+        self.imageWidget.setSizePolicy(sizePolicy)
+        self.imageWidget.setMinimumSize(QSize(0, 100))
+        self.horizontalLayout = QHBoxLayout(self.imageWidget)
         self.horizontalLayout.setObjectName(u"horizontalLayout")
-        self.label_10 = QLabel(self.scrollAreaWidgetContents)
+        self.label_10 = QLabel(self.imageWidget)
         self.label_10.setObjectName(u"label_10")
         sizePolicy1 = QSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Preferred)
         sizePolicy1.setHorizontalStretch(0)
@@ -59,9 +53,7 @@ class Ui_PowerLineStep(object):
 
         self.horizontalLayout.addWidget(self.label_10)
 
-        self.scrollArea.setWidget(self.scrollAreaWidgetContents)
-
-        self.verticalLayout_4.addWidget(self.scrollArea)
+        self.verticalLayout_4.addWidget(self.imageWidget)
 
         self.verticalLayout_3 = QVBoxLayout()
         self.verticalLayout_3.setObjectName(u"verticalLayout_3")

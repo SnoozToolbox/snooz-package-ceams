@@ -18,35 +18,16 @@
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_5">
    <item>
-    <widget class="QScrollArea" name="scrollArea">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
-     <property name="widgetResizable">
-      <bool>true</bool>
-     </property>
-     <widget class="QWidget" name="scrollAreaWidgetContents">
-      <property name="geometry">
-       <rect>
-        <x>0</x>
-        <y>0</y>
-        <width>1548</width>
-        <height>190</height>
-       </rect>
-      </property>
-      <layout class="QHBoxLayout" name="horizontalLayout">
-       <item>
-        <widget class="QLabel" name="label_2">
-         <property name="text">
-          <string/>
-         </property>
-        </widget>
-       </item>
-      </layout>
-     </widget>
+        <widget class="QWidget" name="widget" native="true">
+         <layout class="QHBoxLayout" name="horizontalLayout">
+          <item>
+           <widget class="QLabel" name="label_2">
+                <property name="text">
+                 <string/>
+                </property>
+           </widget>
+          </item>
+         </layout>
     </widget>
    </item>
    <item>

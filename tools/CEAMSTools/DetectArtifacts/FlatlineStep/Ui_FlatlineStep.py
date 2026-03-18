@@ -9,14 +9,14 @@
 ################################################################################
 
 from PySide6.QtCore import (QCoreApplication, QDate, QDateTime, QLocale,
-    QMetaObject, QObject, QPoint, QRect,
+        QMetaObject, QObject, QPoint,
     QSize, QTime, QUrl, Qt)
 from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QFont, QFontDatabase, QGradient, QIcon,
     QImage, QKeySequence, QLinearGradient, QPainter,
     QPalette, QPixmap, QRadialGradient, QTransform)
 from PySide6.QtWidgets import (QApplication, QFormLayout, QFrame, QHBoxLayout,
-    QLabel, QLineEdit, QScrollArea, QSizePolicy,
+        QLabel, QLineEdit, QSizePolicy,
     QTextEdit, QVBoxLayout, QWidget)
 import themes_rc
 
@@ -27,27 +27,21 @@ class Ui_FlatlineStep(object):
         FlatlineStep.resize(765, 620)
         self.verticalLayout_5 = QVBoxLayout(FlatlineStep)
         self.verticalLayout_5.setObjectName(u"verticalLayout_5")
-        self.scrollArea = QScrollArea(FlatlineStep)
-        self.scrollArea.setObjectName(u"scrollArea")
+        self.widget = QWidget(FlatlineStep)
+        self.widget.setObjectName(u"widget")
         sizePolicy = QSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Preferred)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.scrollArea.sizePolicy().hasHeightForWidth())
-        self.scrollArea.setSizePolicy(sizePolicy)
-        self.scrollArea.setWidgetResizable(True)
-        self.scrollAreaWidgetContents = QWidget()
-        self.scrollAreaWidgetContents.setObjectName(u"scrollAreaWidgetContents")
-        self.scrollAreaWidgetContents.setGeometry(QRect(0, 0, 1548, 190))
-        self.horizontalLayout = QHBoxLayout(self.scrollAreaWidgetContents)
+        sizePolicy.setHeightForWidth(self.widget.sizePolicy().hasHeightForWidth())
+        self.widget.setSizePolicy(sizePolicy)
+        self.horizontalLayout = QHBoxLayout(self.widget)
         self.horizontalLayout.setObjectName(u"horizontalLayout")
-        self.label_2 = QLabel(self.scrollAreaWidgetContents)
+        self.label_2 = QLabel(self.widget)
         self.label_2.setObjectName(u"label_2")
 
         self.horizontalLayout.addWidget(self.label_2)
 
-        self.scrollArea.setWidget(self.scrollAreaWidgetContents)
-
-        self.verticalLayout_5.addWidget(self.scrollArea)
+        self.verticalLayout_5.addWidget(self.widget)
 
         self.verticalLayout_3 = QVBoxLayout()
         self.verticalLayout_3.setObjectName(u"verticalLayout_3")

@@ -48,6 +48,8 @@ class PSGReaderSettingsView( BaseSettingsView,  Ui_PSGReaderSettingsView, QtWidg
         self.setupUi(self)
         self.montages_tableview.horizontalHeader().setSectionResizeMode(QtWidgets.QHeaderView.Interactive)
         self.channels_tableview.horizontalHeader().setSectionResizeMode(QtWidgets.QHeaderView.Interactive)
+        self.montages_tableview.horizontalHeader().setMinimumSectionSize(24)
+        self.channels_tableview.horizontalHeader().setMinimumSectionSize(24)
 
         # init 
         self.files_details = {}
@@ -201,9 +203,9 @@ class PSGReaderSettingsView( BaseSettingsView,  Ui_PSGReaderSettingsView, QtWidg
         if self._options['file_selection_only']['value'] == "0":
             # Invalide the models so it refreshes the UI
             self.montages_proxy_model.invalidate()
-            self.montages_tableview.resizeColumnsToContents() # Especially important for the check mark column or it will not appear properly
+            #self.montages_tableview.resizeColumnsToContents() # Especially important for the check mark column or it will not appear properly
             self.channels_proxy_model.invalidate()
-            self.channels_tableview.resizeColumnsToContents() # Especially important for the check mark column or it will not appear properly
+            self._apply_responsive_table_columns()
             self.on_montages_selection_changed()
 
         # Update the number of files in the title
@@ -214,6 +216,34 @@ class PSGReaderSettingsView( BaseSettingsView,  Ui_PSGReaderSettingsView, QtWidg
             # Generate signals to inform that Montage and Channel tables have been updated and the check state has changed
             self.montages_table_model.dataChangedWithCheckState.emit(self.montages_table_model.checkedItemCount())
             self.channels_table_model.dataChangedWithCheckState.emit(self.channels_table_model.checkedItemCount())      
+
+
+    def _apply_responsive_table_columns(self):
+        """Resize table columns while capping widths for small-screen layouts."""
+        self._resize_table_columns_with_cap(self.montages_tableview)
+        self._resize_table_columns_with_cap(self.channels_tableview)
+
+
+    def _resize_table_columns_with_cap(self, table_view):
+        """Auto-resize columns and cap oversized sections to preserve responsiveness."""
+        model = table_view.model()
+        if model is None:
+            return
+
+        col_count = model.columnCount()
+        if col_count <= 0:
+            return
+
+        # Keep content-aware sizing, then cap wide columns so window can still shrink.
+        table_view.resizeColumnsToContents()
+        header = table_view.horizontalHeader()
+
+        # First column is usually the check-state flag.
+        first_col_width = max(28, min(header.sectionSize(0), 48))
+        header.resizeSection(0, first_col_width)
+
+        for col in range(1, col_count):
+            header.resizeSection(col, min(header.sectionSize(col), 260))
 
 
     # Create an empty model based with the column Group-Name and Count

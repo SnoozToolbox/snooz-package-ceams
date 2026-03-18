@@ -43,7 +43,7 @@ class Ui_OutputFiles(object):
         self.textEdit.setFrameShape(QFrame.Shape.NoFrame)
         self.textEdit.setFrameShadow(QFrame.Shadow.Plain)
         self.textEdit.setLineWidth(-1)
-        self.textEdit.setSizeAdjustPolicy(QAbstractScrollArea.SizeAdjustPolicy.AdjustToContents)
+        self.textEdit.setSizeAdjustPolicy(QAbstractScrollArea.SizeAdjustPolicy.AdjustIgnored)
         self.textEdit.setReadOnly(True)
 
         self.verticalLayout.addWidget(self.textEdit)

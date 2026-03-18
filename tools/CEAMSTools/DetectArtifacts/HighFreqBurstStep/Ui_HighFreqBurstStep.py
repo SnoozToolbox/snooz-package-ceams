@@ -9,7 +9,7 @@
 ################################################################################
 
 from PySide6.QtCore import (QCoreApplication, QDate, QDateTime, QLocale,
-    QMetaObject, QObject, QPoint, QRect,
+        QMetaObject, QObject, QPoint,
     QSize, QTime, QUrl, Qt)
 from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QFont, QFontDatabase, QGradient, QIcon,
@@ -17,7 +17,7 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QPalette, QPixmap, QRadialGradient, QTransform)
 from PySide6.QtWidgets import (QApplication, QFormLayout, QFrame, QGridLayout,
     QHBoxLayout, QLabel, QLayout, QLineEdit,
-    QScrollArea, QSizePolicy, QSpacerItem, QTextEdit,
+        QSizePolicy, QSpacerItem, QTextEdit,
     QVBoxLayout, QWidget)
 import themes_rc
 
@@ -29,28 +29,22 @@ class Ui_HighFreqBurstStep(object):
         HighFreqBurstStep.setStyleSheet(u"font: 12pt \"Roboto\";")
         self.verticalLayout_2 = QVBoxLayout(HighFreqBurstStep)
         self.verticalLayout_2.setObjectName(u"verticalLayout_2")
-        self.scrollArea = QScrollArea(HighFreqBurstStep)
-        self.scrollArea.setObjectName(u"scrollArea")
+        self.widget = QWidget(HighFreqBurstStep)
+        self.widget.setObjectName(u"widget")
         sizePolicy = QSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Preferred)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.scrollArea.sizePolicy().hasHeightForWidth())
-        self.scrollArea.setSizePolicy(sizePolicy)
-        self.scrollArea.setWidgetResizable(True)
-        self.scrollAreaWidgetContents = QWidget()
-        self.scrollAreaWidgetContents.setObjectName(u"scrollAreaWidgetContents")
-        self.scrollAreaWidgetContents.setGeometry(QRect(0, 0, 1543, 182))
-        self.horizontalLayout = QHBoxLayout(self.scrollAreaWidgetContents)
+        sizePolicy.setHeightForWidth(self.widget.sizePolicy().hasHeightForWidth())
+        self.widget.setSizePolicy(sizePolicy)
+        self.horizontalLayout = QHBoxLayout(self.widget)
         self.horizontalLayout.setObjectName(u"horizontalLayout")
-        self.label_10 = QLabel(self.scrollAreaWidgetContents)
+        self.label_10 = QLabel(self.widget)
         self.label_10.setObjectName(u"label_10")
         self.label_10.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
         self.horizontalLayout.addWidget(self.label_10)
 
-        self.scrollArea.setWidget(self.scrollAreaWidgetContents)
-
-        self.verticalLayout_2.addWidget(self.scrollArea)
+        self.verticalLayout_2.addWidget(self.widget)
 
         self.label_9 = QLabel(HighFreqBurstStep)
         self.label_9.setObjectName(u"label_9")

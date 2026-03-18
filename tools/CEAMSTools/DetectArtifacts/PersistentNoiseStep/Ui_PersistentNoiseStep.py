@@ -9,14 +9,14 @@
 ################################################################################
 
 from PySide6.QtCore import (QCoreApplication, QDate, QDateTime, QLocale,
-    QMetaObject, QObject, QPoint, QRect,
+        QMetaObject, QObject, QPoint,
     QSize, QTime, QUrl, Qt)
 from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QFont, QFontDatabase, QGradient, QIcon,
     QImage, QKeySequence, QLinearGradient, QPainter,
     QPalette, QPixmap, QRadialGradient, QTransform)
 from PySide6.QtWidgets import (QApplication, QFrame, QGridLayout, QHBoxLayout,
-    QLabel, QLineEdit, QScrollArea, QSizePolicy,
+        QLabel, QLineEdit, QSizePolicy,
     QSpacerItem, QTextEdit, QVBoxLayout, QWidget)
 import themes_rc
 
@@ -28,32 +28,22 @@ class Ui_PersistentNoiseStep(object):
         PersistentNoiseStep.setStyleSheet(u"font: 12pt \"Roboto\";")
         self.verticalLayout_2 = QVBoxLayout(PersistentNoiseStep)
         self.verticalLayout_2.setObjectName(u"verticalLayout_2")
-        self.scrollArea = QScrollArea(PersistentNoiseStep)
-        self.scrollArea.setObjectName(u"scrollArea")
+        self.imageWidget = QWidget(PersistentNoiseStep)
+        self.imageWidget.setObjectName(u"imageWidget")
         sizePolicy = QSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Preferred)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.scrollArea.sizePolicy().hasHeightForWidth())
-        self.scrollArea.setSizePolicy(sizePolicy)
-        self.scrollArea.setAutoFillBackground(True)
-        self.scrollArea.setFrameShape(QFrame.Shape.NoFrame)
-        self.scrollArea.setFrameShadow(QFrame.Shadow.Plain)
-        self.scrollArea.setLineWidth(0)
-        self.scrollArea.setWidgetResizable(True)
-        self.scrollAreaWidgetContents = QWidget()
-        self.scrollAreaWidgetContents.setObjectName(u"scrollAreaWidgetContents")
-        self.scrollAreaWidgetContents.setGeometry(QRect(0, 0, 1543, 181))
-        self.horizontalLayout = QHBoxLayout(self.scrollAreaWidgetContents)
+        sizePolicy.setHeightForWidth(self.imageWidget.sizePolicy().hasHeightForWidth())
+        self.imageWidget.setSizePolicy(sizePolicy)
+        self.horizontalLayout = QHBoxLayout(self.imageWidget)
         self.horizontalLayout.setObjectName(u"horizontalLayout")
-        self.label_10 = QLabel(self.scrollAreaWidgetContents)
+        self.label_10 = QLabel(self.imageWidget)
         self.label_10.setObjectName(u"label_10")
         self.label_10.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
         self.horizontalLayout.addWidget(self.label_10)
 
-        self.scrollArea.setWidget(self.scrollAreaWidgetContents)
-
-        self.verticalLayout_2.addWidget(self.scrollArea)
+        self.verticalLayout_2.addWidget(self.imageWidget)
 
         self.verticalLayout_3 = QVBoxLayout()
         self.verticalLayout_3.setObjectName(u"verticalLayout_3")
