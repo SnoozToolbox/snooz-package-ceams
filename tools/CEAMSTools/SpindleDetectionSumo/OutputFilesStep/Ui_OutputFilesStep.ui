@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>909</width>
-    <height>734</height>
+        <width>691</width>
+        <height>449</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -63,7 +63,7 @@
        <property name="sizeHint" stdset="0">
         <size>
          <width>20</width>
-         <height>30</height>
+         <height>20</height>
         </size>
        </property>
       </spacer>
@@ -101,13 +101,13 @@
        <property name="minimumSize">
         <size>
          <width>0</width>
-         <height>315</height>
+                                 <height>0</height>
         </size>
        </property>
        <property name="maximumSize">
         <size>
          <width>16777215</width>
-         <height>330</height>
+                                 <height>16777215</height>
         </size>
        </property>
        <property name="frameShape">
@@ -245,22 +245,6 @@ li.checked::marker { content: &quot;\2612&quot;; }
      </item>
      <item>
       <layout class="QHBoxLayout" name="horizontalLayout_2"/>
-     </item>
-     <item>
-      <spacer name="verticalSpacer">
-       <property name="orientation">
-        <enum>Qt::Orientation::Vertical</enum>
-       </property>
-       <property name="sizeType">
-        <enum>QSizePolicy::Policy::Expanding</enum>
-       </property>
-       <property name="sizeHint" stdset="0">
-        <size>
-         <width>20</width>
-         <height>40</height>
-        </size>
-       </property>
-      </spacer>
      </item>
     </layout>
    </item>

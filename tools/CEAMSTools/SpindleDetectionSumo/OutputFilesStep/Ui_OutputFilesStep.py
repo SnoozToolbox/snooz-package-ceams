@@ -24,7 +24,7 @@ class Ui_OutputFilesStep(object):
     def setupUi(self, OutputFilesStep):
         if not OutputFilesStep.objectName():
             OutputFilesStep.setObjectName(u"OutputFilesStep")
-        OutputFilesStep.resize(909, 734)
+        OutputFilesStep.resize(691, 449)
         OutputFilesStep.setStyleSheet(u"font: 12pt \"Roboto\";")
         self.horizontalLayout_3 = QHBoxLayout(OutputFilesStep)
         self.horizontalLayout_3.setObjectName(u"horizontalLayout_3")
@@ -56,7 +56,7 @@ class Ui_OutputFilesStep(object):
 
         self.verticalLayout_2.addLayout(self.verticalLayout)
 
-        self.verticalSpacer_2 = QSpacerItem(20, 30, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Fixed)
+        self.verticalSpacer_2 = QSpacerItem(20, 20, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Fixed)
 
         self.verticalLayout_2.addItem(self.verticalSpacer_2)
 
@@ -78,8 +78,8 @@ class Ui_OutputFilesStep(object):
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.textEdit.sizePolicy().hasHeightForWidth())
         self.textEdit.setSizePolicy(sizePolicy)
-        self.textEdit.setMinimumSize(QSize(0, 315))
-        self.textEdit.setMaximumSize(QSize(16777215, 330))
+        self.textEdit.setMinimumSize(QSize(0, 0))
+        self.textEdit.setMaximumSize(QSize(16777215, 16777215))
         self.textEdit.setFrameShape(QFrame.Shape.NoFrame)
         self.textEdit.setFrameShadow(QFrame.Shadow.Plain)
         self.textEdit.setLineWidth(0)
@@ -142,10 +142,6 @@ class Ui_OutputFilesStep(object):
         self.horizontalLayout_2.setObjectName(u"horizontalLayout_2")
 
         self.verticalLayout_2.addLayout(self.horizontalLayout_2)
-
-        self.verticalSpacer = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
-
-        self.verticalLayout_2.addItem(self.verticalSpacer)
 
 
         self.horizontalLayout_3.addLayout(self.verticalLayout_2)
