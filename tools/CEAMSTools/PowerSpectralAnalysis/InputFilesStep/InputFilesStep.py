@@ -41,13 +41,7 @@ class InputFilesStep( BaseStepView,  Ui_InputFilesStep, QtWidgets.QWidget):
         else:
             # To extract the SettingsView and add it to our Layout in the preset
             self.my_PsgReaderSettingsView = module.create_settings_view()
-            # Keep Step 1 shrinkable on small screens by scrolling the PSG reader view.
-            self.my_PsgReaderSettingsView.setMinimumSize(0, 0)
-            self._psg_scroll_area = QtWidgets.QScrollArea(self)
-            self._psg_scroll_area.setWidgetResizable(True)
-            self._psg_scroll_area.setFrameShape(QtWidgets.QFrame.NoFrame)
-            self._psg_scroll_area.setWidget(self.my_PsgReaderSettingsView)
-            self.verticalLayout.addWidget(self._psg_scroll_area)
+            self.verticalLayout.addWidget(self.my_PsgReaderSettingsView)
             # _context_manager is inherited from the BaseStepView
             # it allows to share information between steps in the step-by-step interface
             # ContextManager is a dictionary that publish an update through the 
@@ -71,17 +65,6 @@ class InputFilesStep( BaseStepView,  Ui_InputFilesStep, QtWidgets.QWidget):
     @QtCore.Slot()
     def _emit_timeout_reached(self):
         self._context_manager[self.context_files_view] = self.my_PsgReaderSettingsView
-        # Recompute geometry after model updates so main window minimum size can shrink.
-        self.setMinimumSize(0, 0)
-        if hasattr(self, "_psg_scroll_area"):
-            self._psg_scroll_area.setMinimumSize(0, 0)
-            self._psg_scroll_area.updateGeometry()
-        self.my_PsgReaderSettingsView.setMinimumSize(0, 0)
-        self.my_PsgReaderSettingsView.updateGeometry()
-        self.updateGeometry()
-        window = self.window()
-        if window is not None:
-            window.updateGeometry()
 
 
     # To ping specific nodes to call on_topic_response

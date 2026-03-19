@@ -46,6 +46,8 @@ class PSGReaderSettingsView( BaseSettingsView,  Ui_PSGReaderSettingsView, QtWidg
 
         # init UI
         self.setupUi(self)
+        # Allow this widget to shrink in step containers.
+        self.setMinimumSize(0, 0)
         self.montages_tableview.horizontalHeader().setSectionResizeMode(QtWidgets.QHeaderView.Interactive)
         self.channels_tableview.horizontalHeader().setSectionResizeMode(QtWidgets.QHeaderView.Interactive)
         self.montages_tableview.horizontalHeader().setMinimumSectionSize(24)
@@ -91,6 +93,12 @@ class PSGReaderSettingsView( BaseSettingsView,  Ui_PSGReaderSettingsView, QtWidg
             else:
                 self.frame_montages.setVisible(False)
                 self.frame_channels.setVisible(False)
+
+        # Debounce geometry refresh so parent step containers can shrink after model updates.
+        self._geometry_refresh_timer = QtCore.QTimer(self)
+        self._geometry_refresh_timer.setSingleShot(True)
+        self._geometry_refresh_timer.timeout.connect(self._refresh_geometry)
+        self.model_updated_signal.connect(lambda: self._geometry_refresh_timer.start(5))
         
 
     def __del__(self):
@@ -217,6 +225,14 @@ class PSGReaderSettingsView( BaseSettingsView,  Ui_PSGReaderSettingsView, QtWidg
             self.montages_table_model.dataChangedWithCheckState.emit(self.montages_table_model.checkedItemCount())
             self.channels_table_model.dataChangedWithCheckState.emit(self.channels_table_model.checkedItemCount())      
 
+
+    def _refresh_geometry(self):
+        """Propagate geometry updates to the parent window after model changes."""
+        self.setMinimumSize(0, 0)
+        self.updateGeometry()
+        window = self.window()
+        if window is not None:
+            window.updateGeometry()
 
     def _apply_responsive_table_columns(self):
         """Resize table columns while capping widths for small-screen layouts."""
