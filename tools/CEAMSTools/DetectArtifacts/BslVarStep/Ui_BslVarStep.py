@@ -9,16 +9,15 @@
 ################################################################################
 
 from PySide6.QtCore import (QCoreApplication, QDate, QDateTime, QLocale,
-        QMetaObject, QObject, QPoint,
+    QMetaObject, QObject, QPoint, QRect,
     QSize, QTime, QUrl, Qt)
 from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QFont, QFontDatabase, QGradient, QIcon,
     QImage, QKeySequence, QLinearGradient, QPainter,
     QPalette, QPixmap, QRadialGradient, QTransform)
 from PySide6.QtWidgets import (QApplication, QFrame, QHBoxLayout, QLabel,
-        QLineEdit, QPlainTextEdit, QSizePolicy,
-    QSpacerItem, QSplitter, QTextEdit, QVBoxLayout,
-    QWidget)
+    QLineEdit, QSizePolicy, QSpacerItem, QSplitter,
+    QTextEdit, QVBoxLayout, QWidget)
 import themes_rc
 
 class Ui_BslVarStep(object):
@@ -43,6 +42,7 @@ class Ui_BslVarStep(object):
         self.label_7.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
         self.horizontalLayout.addWidget(self.label_7)
+
 
         self.verticalLayout_2.addWidget(self.imageWidget)
 
@@ -200,18 +200,20 @@ class Ui_BslVarStep(object):
 
         self.verticalLayout_2.addLayout(self.horizontalLayout_2)
 
-        self.plainTextEdit = QPlainTextEdit(BslVarStep)
-        self.plainTextEdit.setObjectName(u"plainTextEdit")
-        sizePolicy2.setHeightForWidth(self.plainTextEdit.sizePolicy().hasHeightForWidth())
-        self.plainTextEdit.setSizePolicy(sizePolicy2)
-        self.plainTextEdit.setMinimumSize(QSize(0, 0))
-        self.plainTextEdit.setMaximumSize(QSize(16777215, 130))
-        self.plainTextEdit.setFrameShape(QFrame.Shape.NoFrame)
-        self.plainTextEdit.setFrameShadow(QFrame.Shadow.Sunken)
-        self.plainTextEdit.setLineWidth(1)
-        self.plainTextEdit.setReadOnly(True)
+        self.textEdit1 = QTextEdit(BslVarStep)
+        self.textEdit1.setObjectName(u"textEdit1")
+        sizePolicy2.setHeightForWidth(self.textEdit1.sizePolicy().hasHeightForWidth())
+        self.textEdit1.setSizePolicy(sizePolicy2)
+        self.textEdit1.setMinimumSize(QSize(0, 0))
+        self.textEdit1.setMaximumSize(QSize(16777215, 130))
+        self.textEdit1.setFrameShape(QFrame.Shape.NoFrame)
+        self.textEdit1.setFrameShadow(QFrame.Shadow.Sunken)
+        self.textEdit1.setLineWidth(1)
+        self.textEdit1.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
+        self.textEdit1.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
+        self.textEdit1.setReadOnly(True)
 
-        self.verticalLayout_2.addWidget(self.plainTextEdit)
+        self.verticalLayout_2.addWidget(self.textEdit1)
 
         self.verticalSpacer = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Preferred)
 
@@ -277,10 +279,18 @@ class Ui_BslVarStep(object):
 #endif // QT_CONFIG(tooltip)
         self.threshold_lineEdit.setText(QCoreApplication.translate("BslVarStep", u"4", None))
         self.label_2.setText(QCoreApplication.translate("BslVarStep", u"optimal value from 3.5 to 5", None))
-        self.plainTextEdit.setPlainText(QCoreApplication.translate("BslVarStep", u"The threshold value may depends of the high-pass filter applied on the PSG signals.\n"
-"\n"
-"When the recording has large low frequency delta waves, please increase the detection threshold to reduce the number of false positives. \n"
-"Setting the threshold value to 5 helps reduce false positives.\n"
-"It is also possible to deactivate this detector.", None))
+        self.textEdit1.setHtml(QCoreApplication.translate("BslVarStep", u"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
+"<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset=\"utf-8\" /><style type=\"text/css\">\n"
+"p, li { white-space: pre-wrap; }\n"
+"hr { height: 1px; border-width: 0; }\n"
+"li.unchecked::marker { content: \"\\2610\"; }\n"
+"li.checked::marker { content: \"\\2612\"; }\n"
+"</style></head><body style=\" font-family:'Roboto'; font-size:12pt; font-weight:400; font-style:normal;\">\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">The threshold value may depends of the high-pass filter applied on the PSG signals.</p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">When the recording has large lo"
+                        "w frequency delta waves, please increase the detection threshold to reduce the number of false positives. </p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Setting the threshold value to 5 helps reduce false positives.</p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">It is also possible to deactivate this detector.</p></body></html>", None))
     # retranslateUi
 

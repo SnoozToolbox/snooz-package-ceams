@@ -16,9 +16,9 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QImage, QKeySequence, QLinearGradient, QPainter,
     QPalette, QPixmap, QRadialGradient, QTransform)
 from PySide6.QtWidgets import (QApplication, QCheckBox, QFrame, QHBoxLayout,
-    QLabel, QLineEdit, QPlainTextEdit, QPushButton,
-    QRadioButton, QSizePolicy, QSpacerItem, QTextEdit,
-    QVBoxLayout, QWidget)
+    QLabel, QLineEdit, QPushButton, QRadioButton,
+    QSizePolicy, QSpacerItem, QTextEdit, QVBoxLayout,
+    QWidget)
 import themes_rc
 
 class Ui_Outputfiles(object):
@@ -199,15 +199,17 @@ class Ui_Outputfiles(object):
 
         self.verticalLayout_2.addWidget(self.label_4)
 
-        self.plainTextEdit_4 = QPlainTextEdit(Outputfiles)
-        self.plainTextEdit_4.setObjectName(u"plainTextEdit_4")
-        self.plainTextEdit_4.setMaximumSize(QSize(16777215, 60))
-        self.plainTextEdit_4.setFrameShape(QFrame.Shape.NoFrame)
-        self.plainTextEdit_4.setFrameShadow(QFrame.Shadow.Plain)
-        self.plainTextEdit_4.setLineWidth(0)
-        self.plainTextEdit_4.setReadOnly(True)
+        self.textEdit_4 = QTextEdit(Outputfiles)
+        self.textEdit_4.setObjectName(u"textEdit_4")
+        self.textEdit_4.setMaximumSize(QSize(16777215, 60))
+        self.textEdit_4.setFrameShape(QFrame.Shape.NoFrame)
+        self.textEdit_4.setFrameShadow(QFrame.Shadow.Plain)
+        self.textEdit_4.setLineWidth(0)
+        self.textEdit_4.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
+        self.textEdit_4.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
+        self.textEdit_4.setReadOnly(True)
 
-        self.verticalLayout_2.addWidget(self.plainTextEdit_4)
+        self.verticalLayout_2.addWidget(self.textEdit_4)
 
         self.horizontalLayout_2 = QHBoxLayout()
         self.horizontalLayout_2.setObjectName(u"horizontalLayout_2")
@@ -304,7 +306,14 @@ class Ui_Outputfiles(object):
 #endif // QT_CONFIG(tooltip)
         self.radioButton_annot.setText(QCoreApplication.translate("Outputfiles", u"The spectral power is computed on selected events.", None))
         self.label_4.setText(QCoreApplication.translate("Outputfiles", u"<html><head/><body><p><span style=\" font-weight:600;\">Output</span></p></body></html>", None))
-        self.plainTextEdit_4.setPlainText(QCoreApplication.translate("Outputfiles", u"The output file is a .tsv (tab separated values) file. Each line corresponds to a subject, a channel, and a frequency band. Warning : Spectral data are appended to the output file, so the file will be modified each time the tool is run.", None))
+        self.textEdit_4.setHtml(QCoreApplication.translate("Outputfiles", u"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
+"<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset=\"utf-8\" /><style type=\"text/css\">\n"
+"p, li { white-space: pre-wrap; }\n"
+"hr { height: 1px; border-width: 0; }\n"
+"li.unchecked::marker { content: \"\\2610\"; }\n"
+"li.checked::marker { content: \"\\2612\"; }\n"
+"</style></head><body style=\" font-family:'Roboto'; font-size:12pt; font-weight:400; font-style:normal;\">\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">The output file is a .tsv (tab separated values) file. Each line corresponds to a subject, a channel, and a frequency band. Warning : Spectral data are appended to the output file, so the file will be modified each time the tool is run.</p></body></html>", None))
         self.label_3.setText(QCoreApplication.translate("Outputfiles", u"Filename", None))
         self.filename_lineEdit.setInputMask("")
         self.filename_lineEdit.setText("")
