@@ -73,9 +73,9 @@ class OutputFiles(BaseStepView, Ui_OutputFiles, QtWidgets.QWidget):
         pixmap.loadFromData(image_bytes)
         self.label_cohort_pic_all.setPixmap(pixmap)
 
-        # Force scroll area to recalculate its content size
-        self.scrollAreaWidgetContents.adjustSize()
-        self.scrollArea.updateGeometry()
+        # # Force scroll area to recalculate its content size
+        # self.scrollAreaWidgetContents.adjustSize()
+        # self.scrollArea.updateGeometry()
 
 
     def load_settings(self):
