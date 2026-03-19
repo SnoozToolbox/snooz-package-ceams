@@ -15,8 +15,8 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QFont, QFontDatabase, QGradient, QIcon,
     QImage, QKeySequence, QLinearGradient, QPainter,
     QPalette, QPixmap, QRadialGradient, QTransform)
-from PySide6.QtWidgets import (QApplication, QFrame, QLabel, QScrollArea,
-    QSizePolicy, QVBoxLayout, QWidget)
+from PySide6.QtWidgets import (QAbstractScrollArea, QApplication, QFrame, QLabel,
+    QSizePolicy, QTextEdit, QVBoxLayout, QWidget)
 import themes_rc
 
 class Ui_SleepCycleDoc(object):
@@ -27,21 +27,11 @@ class Ui_SleepCycleDoc(object):
         SleepCycleDoc.setMaximumSize(QSize(16777215, 16777215))
         self.verticalLayout_3 = QVBoxLayout(SleepCycleDoc)
         self.verticalLayout_3.setObjectName(u"verticalLayout_3")
-        self.scrollArea = QScrollArea(SleepCycleDoc)
-        self.scrollArea.setObjectName(u"scrollArea")
-        self.scrollArea.setFrameShape(QFrame.Shape.NoFrame)
-        self.scrollArea.setFrameShadow(QFrame.Shadow.Plain)
-        self.scrollArea.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAsNeeded)
-        self.scrollArea.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAsNeeded)
-        self.scrollArea.setWidgetResizable(True)
-        self.scrollAreaWidgetContents = QWidget()
-        self.scrollAreaWidgetContents.setObjectName(u"scrollAreaWidgetContents")
-        self.scrollAreaWidgetContents.setGeometry(QRect(0, 0, 899, 1018))
-        self.verticalLayout_2 = QVBoxLayout(self.scrollAreaWidgetContents)
+        self.verticalLayout_2 = QVBoxLayout()
         self.verticalLayout_2.setObjectName(u"verticalLayout_2")
         self.verticalLayout = QVBoxLayout()
         self.verticalLayout.setObjectName(u"verticalLayout")
-        self.hypnogram_pic = QLabel(self.scrollAreaWidgetContents)
+        self.hypnogram_pic = QLabel(SleepCycleDoc)
         self.hypnogram_pic.setObjectName(u"hypnogram_pic")
         sizePolicy = QSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Fixed)
         sizePolicy.setHorizontalStretch(0)
@@ -53,7 +43,7 @@ class Ui_SleepCycleDoc(object):
 
         self.verticalLayout.addWidget(self.hypnogram_pic)
 
-        self.textLabel = QLabel(self.scrollAreaWidgetContents)
+        self.textLabel = QTextEdit(SleepCycleDoc)
         self.textLabel.setObjectName(u"textLabel")
         sizePolicy1 = QSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Preferred)
         sizePolicy1.setHorizontalStretch(0)
@@ -63,18 +53,18 @@ class Ui_SleepCycleDoc(object):
         self.textLabel.setFrameShape(QFrame.Shape.NoFrame)
         self.textLabel.setFrameShadow(QFrame.Shadow.Plain)
         self.textLabel.setLineWidth(0)
-        self.textLabel.setTextFormat(Qt.TextFormat.RichText)
-        self.textLabel.setAlignment(Qt.AlignmentFlag.AlignLeading|Qt.AlignmentFlag.AlignLeft|Qt.AlignmentFlag.AlignTop)
-        self.textLabel.setWordWrap(True)
+        self.textLabel.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
+        self.textLabel.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
+        self.textLabel.setSizeAdjustPolicy(QAbstractScrollArea.SizeAdjustPolicy.AdjustIgnored)
+        self.textLabel.setReadOnly(True)
 
         self.verticalLayout.addWidget(self.textLabel)
 
 
         self.verticalLayout_2.addLayout(self.verticalLayout)
 
-        self.scrollArea.setWidget(self.scrollAreaWidgetContents)
 
-        self.verticalLayout_3.addWidget(self.scrollArea)
+        self.verticalLayout_3.addLayout(self.verticalLayout_2)
 
 
         self.retranslateUi(SleepCycleDoc)
@@ -86,7 +76,7 @@ class Ui_SleepCycleDoc(object):
         SleepCycleDoc.setWindowTitle("")
         SleepCycleDoc.setStyleSheet(QCoreApplication.translate("SleepCycleDoc", u"font: 12pt \"Roboto\";", None))
         self.hypnogram_pic.setText(QCoreApplication.translate("SleepCycleDoc", u"TextLabel", None))
-        self.textLabel.setText(QCoreApplication.translate("SleepCycleDoc", u"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
+        self.textLabel.setHtml(QCoreApplication.translate("SleepCycleDoc", u"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset=\"utf-8\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
 "hr { height: 1px; border-width: 0; }\n"
