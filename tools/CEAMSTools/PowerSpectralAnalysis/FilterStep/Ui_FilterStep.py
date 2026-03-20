@@ -24,7 +24,7 @@ class Ui_FilterStep(object):
     def setupUi(self, FilterStep):
         if not FilterStep.objectName():
             FilterStep.setObjectName(u"FilterStep")
-        FilterStep.resize(1172, 881)
+        FilterStep.resize(813, 565)
         self.verticalLayout = QVBoxLayout(FilterStep)
         self.verticalLayout.setObjectName(u"verticalLayout")
         self.label_2 = QLabel(FilterStep)
@@ -46,6 +46,8 @@ class Ui_FilterStep(object):
         self.textBrowser.setFrameShape(QFrame.Shape.NoFrame)
         self.textBrowser.setFrameShadow(QFrame.Shadow.Plain)
         self.textBrowser.setLineWidth(0)
+        self.textBrowser.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
+        self.textBrowser.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
 
         self.verticalLayout.addWidget(self.textBrowser)
 

@@ -9,7 +9,7 @@
 ################################################################################
 
 from PySide6.QtCore import (QCoreApplication, QDate, QDateTime, QLocale,
-    QMetaObject, QObject, QPoint, QRect,
+        QMetaObject, QObject, QPoint,
     QSize, QTime, QUrl, Qt)
 from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QFont, QFontDatabase, QGradient, QIcon,
@@ -17,7 +17,7 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QPalette, QPixmap, QRadialGradient, QTransform)
 from PySide6.QtWidgets import (QApplication, QFormLayout, QFrame, QGridLayout,
     QHBoxLayout, QLabel, QLayout, QLineEdit,
-    QScrollArea, QSizePolicy, QSpacerItem, QTextEdit,
+        QSizePolicy, QSpacerItem, QTextEdit,
     QVBoxLayout, QWidget)
 import themes_rc
 
@@ -29,24 +29,17 @@ class Ui_MuscularStep(object):
         MuscularStep.setStyleSheet(u"font: 12pt \"Roboto\";")
         self.verticalLayout_2 = QVBoxLayout(MuscularStep)
         self.verticalLayout_2.setObjectName(u"verticalLayout_2")
-        self.scrollArea = QScrollArea(MuscularStep)
-        self.scrollArea.setObjectName(u"scrollArea")
+        self.imageWidget = QWidget(MuscularStep)
+        self.imageWidget.setObjectName(u"imageWidget")
         sizePolicy = QSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.scrollArea.sizePolicy().hasHeightForWidth())
-        self.scrollArea.setSizePolicy(sizePolicy)
-        self.scrollArea.setMaximumSize(QSize(16777215, 160))
-        self.scrollArea.setWidgetResizable(True)
-        self.scrollAreaWidgetContents = QWidget()
-        self.scrollAreaWidgetContents.setObjectName(u"scrollAreaWidgetContents")
-        self.scrollAreaWidgetContents.setGeometry(QRect(0, 0, 1549, 151))
-        sizePolicy.setHeightForWidth(self.scrollAreaWidgetContents.sizePolicy().hasHeightForWidth())
-        self.scrollAreaWidgetContents.setSizePolicy(sizePolicy)
-        self.scrollAreaWidgetContents.setMaximumSize(QSize(16777215, 160))
-        self.horizontalLayout = QHBoxLayout(self.scrollAreaWidgetContents)
+        sizePolicy.setHeightForWidth(self.imageWidget.sizePolicy().hasHeightForWidth())
+        self.imageWidget.setSizePolicy(sizePolicy)
+        self.imageWidget.setMaximumSize(QSize(16777215, 160))
+        self.horizontalLayout = QHBoxLayout(self.imageWidget)
         self.horizontalLayout.setObjectName(u"horizontalLayout")
-        self.picture_label = QLabel(self.scrollAreaWidgetContents)
+        self.picture_label = QLabel(self.imageWidget)
         self.picture_label.setObjectName(u"picture_label")
         sizePolicy1 = QSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Preferred)
         sizePolicy1.setHorizontalStretch(0)
@@ -58,9 +51,7 @@ class Ui_MuscularStep(object):
 
         self.horizontalLayout.addWidget(self.picture_label)
 
-        self.scrollArea.setWidget(self.scrollAreaWidgetContents)
-
-        self.verticalLayout_2.addWidget(self.scrollArea)
+        self.verticalLayout_2.addWidget(self.imageWidget)
 
         self.verticalLayout_3 = QVBoxLayout()
         self.verticalLayout_3.setObjectName(u"verticalLayout_3")

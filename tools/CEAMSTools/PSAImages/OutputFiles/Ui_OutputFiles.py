@@ -18,51 +18,23 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
 from PySide6.QtWidgets import (QApplication, QButtonGroup, QCheckBox, QDoubleSpinBox,
     QFontComboBox, QFrame, QGridLayout, QHBoxLayout,
     QLabel, QLayout, QLineEdit, QPushButton,
-    QRadioButton, QScrollArea, QSizePolicy, QSpacerItem,
-    QSpinBox, QTextEdit, QVBoxLayout, QWidget)
+    QRadioButton, QSizePolicy, QSpacerItem, QSpinBox,
+    QTextEdit, QVBoxLayout, QWidget)
 import themes_rc
 
 class Ui_OutputFiles(object):
     def setupUi(self, OutputFiles):
         if not OutputFiles.objectName():
             OutputFiles.setObjectName(u"OutputFiles")
-        OutputFiles.resize(921, 816)
+        OutputFiles.resize(895, 1161)
         OutputFiles.setStyleSheet(u"font: 12pt \"Roboto\";")
         self.verticalLayout_5 = QVBoxLayout(OutputFiles)
         self.verticalLayout_5.setObjectName(u"verticalLayout_5")
-        self.scrollArea = QScrollArea(OutputFiles)
-        self.scrollArea.setObjectName(u"scrollArea")
-        sizePolicy = QSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.scrollArea.sizePolicy().hasHeightForWidth())
-        self.scrollArea.setSizePolicy(sizePolicy)
-        self.scrollArea.setMinimumSize(QSize(0, 0))
-        self.scrollArea.setMaximumSize(QSize(16777215, 16777215))
-        self.scrollArea.setStyleSheet(u"")
-        self.scrollArea.setFrameShape(QFrame.Shape.NoFrame)
-        self.scrollArea.setFrameShadow(QFrame.Shadow.Plain)
-        self.scrollArea.setLineWidth(0)
-        self.scrollArea.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOn)
-        self.scrollArea.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
-        self.scrollArea.setWidgetResizable(True)
-        self.scrollArea.setAlignment(Qt.AlignmentFlag.AlignLeading|Qt.AlignmentFlag.AlignLeft|Qt.AlignmentFlag.AlignTop)
-        self.scrollAreaWidgetContents = QWidget()
-        self.scrollAreaWidgetContents.setObjectName(u"scrollAreaWidgetContents")
-        self.scrollAreaWidgetContents.setGeometry(QRect(0, -402, 891, 1200))
-        sizePolicy1 = QSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Maximum)
-        sizePolicy1.setHorizontalStretch(0)
-        sizePolicy1.setVerticalStretch(1)
-        sizePolicy1.setHeightForWidth(self.scrollAreaWidgetContents.sizePolicy().hasHeightForWidth())
-        self.scrollAreaWidgetContents.setSizePolicy(sizePolicy1)
-        self.scrollAreaWidgetContents.setMinimumSize(QSize(862, 1200))
-        self.scrollAreaWidgetContents.setMaximumSize(QSize(900, 1200))
-        self.scrollAreaWidgetContents.setLayoutDirection(Qt.LayoutDirection.LeftToRight)
-        self.verticalLayout_8 = QVBoxLayout(self.scrollAreaWidgetContents)
+        self.verticalLayout_8 = QVBoxLayout()
         self.verticalLayout_8.setObjectName(u"verticalLayout_8")
         self.verticalLayout_10 = QVBoxLayout()
         self.verticalLayout_10.setObjectName(u"verticalLayout_10")
-        self.radioButton_report_level = QRadioButton(self.scrollAreaWidgetContents)
+        self.radioButton_report_level = QRadioButton(OutputFiles)
         self.buttonGroup_level = QButtonGroup(OutputFiles)
         self.buttonGroup_level.setObjectName(u"buttonGroup_level")
         self.buttonGroup_level.addButton(self.radioButton_report_level)
@@ -84,18 +56,18 @@ class Ui_OutputFiles(object):
 
         self.verticalLayout = QVBoxLayout()
         self.verticalLayout.setObjectName(u"verticalLayout")
-        self.checkBox_subject_avg = QCheckBox(self.scrollAreaWidgetContents)
+        self.checkBox_subject_avg = QCheckBox(OutputFiles)
         self.checkBox_subject_avg.setObjectName(u"checkBox_subject_avg")
         self.checkBox_subject_avg.setFont(font)
 
         self.verticalLayout.addWidget(self.checkBox_subject_avg)
 
-        self.label_9 = QLabel(self.scrollAreaWidgetContents)
+        self.label_9 = QLabel(OutputFiles)
         self.label_9.setObjectName(u"label_9")
 
         self.verticalLayout.addWidget(self.label_9)
 
-        self.label_2 = QLabel(self.scrollAreaWidgetContents)
+        self.label_2 = QLabel(OutputFiles)
         self.label_2.setObjectName(u"label_2")
 
         self.verticalLayout.addWidget(self.label_2)
@@ -104,19 +76,19 @@ class Ui_OutputFiles(object):
 
         self.verticalLayout.addItem(self.verticalSpacer_6)
 
-        self.checkBox_subject_sel = QCheckBox(self.scrollAreaWidgetContents)
+        self.checkBox_subject_sel = QCheckBox(OutputFiles)
         self.checkBox_subject_sel.setObjectName(u"checkBox_subject_sel")
         self.checkBox_subject_sel.setEnabled(True)
         self.checkBox_subject_sel.setFont(font)
 
         self.verticalLayout.addWidget(self.checkBox_subject_sel)
 
-        self.label_3 = QLabel(self.scrollAreaWidgetContents)
+        self.label_3 = QLabel(OutputFiles)
         self.label_3.setObjectName(u"label_3")
 
         self.verticalLayout.addWidget(self.label_3)
 
-        self.label_10 = QLabel(self.scrollAreaWidgetContents)
+        self.label_10 = QLabel(OutputFiles)
         self.label_10.setObjectName(u"label_10")
 
         self.verticalLayout.addWidget(self.label_10)
@@ -130,14 +102,14 @@ class Ui_OutputFiles(object):
 
         self.verticalLayout_8.addLayout(self.verticalLayout_10)
 
-        self.verticalSpacer_3 = QSpacerItem(20, 20, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Fixed)
+        self.verticalSpacer_3 = QSpacerItem(20, 10, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Fixed)
 
         self.verticalLayout_8.addItem(self.verticalSpacer_3)
 
         self.verticalLayout_11 = QVBoxLayout()
         self.verticalLayout_11.setObjectName(u"verticalLayout_11")
         self.verticalLayout_11.setSizeConstraint(QLayout.SizeConstraint.SetNoConstraint)
-        self.radioButton_cohort_level = QRadioButton(self.scrollAreaWidgetContents)
+        self.radioButton_cohort_level = QRadioButton(OutputFiles)
         self.buttonGroup_level.addButton(self.radioButton_cohort_level)
         self.radioButton_cohort_level.setObjectName(u"radioButton_cohort_level")
         self.radioButton_cohort_level.setFont(font)
@@ -152,19 +124,21 @@ class Ui_OutputFiles(object):
 
         self.verticalLayout_2 = QVBoxLayout()
         self.verticalLayout_2.setObjectName(u"verticalLayout_2")
-        self.checkBox_cohort_avg = QCheckBox(self.scrollAreaWidgetContents)
+        self.checkBox_cohort_avg = QCheckBox(OutputFiles)
         self.checkBox_cohort_avg.setObjectName(u"checkBox_cohort_avg")
         self.checkBox_cohort_avg.setChecked(False)
 
         self.verticalLayout_2.addWidget(self.checkBox_cohort_avg)
 
-        self.label_11 = QLabel(self.scrollAreaWidgetContents)
+        self.label_11 = QLabel(OutputFiles)
         self.label_11.setObjectName(u"label_11")
+        self.label_11.setWordWrap(False)
 
         self.verticalLayout_2.addWidget(self.label_11)
 
-        self.label_19 = QLabel(self.scrollAreaWidgetContents)
+        self.label_19 = QLabel(OutputFiles)
         self.label_19.setObjectName(u"label_19")
+        self.label_19.setWordWrap(False)
 
         self.verticalLayout_2.addWidget(self.label_19)
 
@@ -172,19 +146,21 @@ class Ui_OutputFiles(object):
 
         self.verticalLayout_2.addItem(self.verticalSpacer_7)
 
-        self.checkBox_cohort_sel = QCheckBox(self.scrollAreaWidgetContents)
+        self.checkBox_cohort_sel = QCheckBox(OutputFiles)
         self.checkBox_cohort_sel.setObjectName(u"checkBox_cohort_sel")
         self.checkBox_cohort_sel.setEnabled(True)
 
         self.verticalLayout_2.addWidget(self.checkBox_cohort_sel)
 
-        self.label_12 = QLabel(self.scrollAreaWidgetContents)
+        self.label_12 = QLabel(OutputFiles)
         self.label_12.setObjectName(u"label_12")
+        self.label_12.setWordWrap(False)
 
         self.verticalLayout_2.addWidget(self.label_12)
 
-        self.label_20 = QLabel(self.scrollAreaWidgetContents)
+        self.label_20 = QLabel(OutputFiles)
         self.label_20.setObjectName(u"label_20")
+        self.label_20.setWordWrap(False)
 
         self.verticalLayout_2.addWidget(self.label_20)
 
@@ -197,7 +173,7 @@ class Ui_OutputFiles(object):
 
         self.verticalLayout_8.addLayout(self.verticalLayout_11)
 
-        self.verticalSpacer_4 = QSpacerItem(20, 20, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Fixed)
+        self.verticalSpacer_4 = QSpacerItem(20, 10, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Fixed)
 
         self.verticalLayout_8.addItem(self.verticalSpacer_4)
 
@@ -205,62 +181,60 @@ class Ui_OutputFiles(object):
         self.verticalLayout_7.setObjectName(u"verticalLayout_7")
         self.gridLayout = QGridLayout()
         self.gridLayout.setObjectName(u"gridLayout")
-        self.verticalSpacer = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
-
-        self.gridLayout.addItem(self.verticalSpacer, 1, 0, 1, 1)
-
-        self.label_8 = QLabel(self.scrollAreaWidgetContents)
+        self.label_8 = QLabel(OutputFiles)
         self.label_8.setObjectName(u"label_8")
 
-        self.gridLayout.addWidget(self.label_8, 2, 0, 1, 1)
+        self.gridLayout.addWidget(self.label_8, 1, 0, 1, 1)
 
-        self.textEdit = QTextEdit(self.scrollAreaWidgetContents)
+        self.textEdit = QTextEdit(OutputFiles)
         self.textEdit.setObjectName(u"textEdit")
         self.textEdit.setMinimumSize(QSize(0, 0))
         self.textEdit.setMaximumSize(QSize(16777215, 100))
         self.textEdit.setTabletTracking(False)
         self.textEdit.setFrameShape(QFrame.Shape.NoFrame)
         self.textEdit.setLineWidth(0)
+        self.textEdit.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
+        self.textEdit.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
         self.textEdit.setReadOnly(True)
 
-        self.gridLayout.addWidget(self.textEdit, 3, 0, 1, 1)
+        self.gridLayout.addWidget(self.textEdit, 2, 0, 1, 1)
 
 
         self.verticalLayout_7.addLayout(self.gridLayout)
 
         self.horizontalLayout_4 = QHBoxLayout()
         self.horizontalLayout_4.setObjectName(u"horizontalLayout_4")
-        self.checkBox_Wake = QCheckBox(self.scrollAreaWidgetContents)
+        self.checkBox_Wake = QCheckBox(OutputFiles)
         self.checkBox_Wake.setObjectName(u"checkBox_Wake")
 
         self.horizontalLayout_4.addWidget(self.checkBox_Wake)
 
-        self.checkBox_N1 = QCheckBox(self.scrollAreaWidgetContents)
+        self.checkBox_N1 = QCheckBox(OutputFiles)
         self.checkBox_N1.setObjectName(u"checkBox_N1")
 
         self.horizontalLayout_4.addWidget(self.checkBox_N1)
 
-        self.checkBox_N2 = QCheckBox(self.scrollAreaWidgetContents)
+        self.checkBox_N2 = QCheckBox(OutputFiles)
         self.checkBox_N2.setObjectName(u"checkBox_N2")
 
         self.horizontalLayout_4.addWidget(self.checkBox_N2)
 
-        self.checkBox_N3 = QCheckBox(self.scrollAreaWidgetContents)
+        self.checkBox_N3 = QCheckBox(OutputFiles)
         self.checkBox_N3.setObjectName(u"checkBox_N3")
 
         self.horizontalLayout_4.addWidget(self.checkBox_N3)
 
-        self.checkBox_REM = QCheckBox(self.scrollAreaWidgetContents)
+        self.checkBox_REM = QCheckBox(OutputFiles)
         self.checkBox_REM.setObjectName(u"checkBox_REM")
 
         self.horizontalLayout_4.addWidget(self.checkBox_REM)
 
-        self.checkBox_Unscored = QCheckBox(self.scrollAreaWidgetContents)
+        self.checkBox_Unscored = QCheckBox(OutputFiles)
         self.checkBox_Unscored.setObjectName(u"checkBox_Unscored")
 
         self.horizontalLayout_4.addWidget(self.checkBox_Unscored)
 
-        self.checkBox_All = QCheckBox(self.scrollAreaWidgetContents)
+        self.checkBox_All = QCheckBox(OutputFiles)
         self.checkBox_All.setObjectName(u"checkBox_All")
 
         self.horizontalLayout_4.addWidget(self.checkBox_All)
@@ -275,7 +249,7 @@ class Ui_OutputFiles(object):
 
         self.verticalLayout_8.addLayout(self.verticalLayout_7)
 
-        self.verticalSpacer_8 = QSpacerItem(20, 20, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Fixed)
+        self.verticalSpacer_8 = QSpacerItem(20, 10, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Fixed)
 
         self.verticalLayout_8.addItem(self.verticalSpacer_8)
 
@@ -283,7 +257,7 @@ class Ui_OutputFiles(object):
         self.horizontalLayout_6.setObjectName(u"horizontalLayout_6")
         self.verticalLayout_6 = QVBoxLayout()
         self.verticalLayout_6.setObjectName(u"verticalLayout_6")
-        self.label_6 = QLabel(self.scrollAreaWidgetContents)
+        self.label_6 = QLabel(OutputFiles)
         self.label_6.setObjectName(u"label_6")
 
         self.verticalLayout_6.addWidget(self.label_6)
@@ -293,17 +267,17 @@ class Ui_OutputFiles(object):
         self.verticalLayout_4.setSizeConstraint(QLayout.SizeConstraint.SetMinimumSize)
         self.gridLayout_4 = QGridLayout()
         self.gridLayout_4.setObjectName(u"gridLayout_4")
-        self.label_7 = QLabel(self.scrollAreaWidgetContents)
+        self.label_7 = QLabel(OutputFiles)
         self.label_7.setObjectName(u"label_7")
 
         self.gridLayout_4.addWidget(self.label_7, 2, 1, 1, 1)
 
-        self.label_17 = QLabel(self.scrollAreaWidgetContents)
+        self.label_17 = QLabel(OutputFiles)
         self.label_17.setObjectName(u"label_17")
 
         self.gridLayout_4.addWidget(self.label_17, 1, 1, 1, 1)
 
-        self.radioButton_sleep_cycle = QRadioButton(self.scrollAreaWidgetContents)
+        self.radioButton_sleep_cycle = QRadioButton(OutputFiles)
         self.buttonGroup_section = QButtonGroup(OutputFiles)
         self.buttonGroup_section.setObjectName(u"buttonGroup_section")
         self.buttonGroup_section.addButton(self.radioButton_sleep_cycle)
@@ -311,17 +285,17 @@ class Ui_OutputFiles(object):
 
         self.gridLayout_4.addWidget(self.radioButton_sleep_cycle, 1, 0, 1, 1)
 
-        self.spinBox_sleep_cycle = QSpinBox(self.scrollAreaWidgetContents)
+        self.spinBox_sleep_cycle = QSpinBox(OutputFiles)
         self.spinBox_sleep_cycle.setObjectName(u"spinBox_sleep_cycle")
 
         self.gridLayout_4.addWidget(self.spinBox_sleep_cycle, 1, 2, 1, 1)
 
-        self.spinBox_clock_hour = QSpinBox(self.scrollAreaWidgetContents)
+        self.spinBox_clock_hour = QSpinBox(OutputFiles)
         self.spinBox_clock_hour.setObjectName(u"spinBox_clock_hour")
 
         self.gridLayout_4.addWidget(self.spinBox_clock_hour, 2, 2, 1, 1)
 
-        self.spinBox_stage_hour = QSpinBox(self.scrollAreaWidgetContents)
+        self.spinBox_stage_hour = QSpinBox(OutputFiles)
         self.spinBox_stage_hour.setObjectName(u"spinBox_stage_hour")
 
         self.gridLayout_4.addWidget(self.spinBox_stage_hour, 3, 2, 1, 1)
@@ -330,25 +304,25 @@ class Ui_OutputFiles(object):
 
         self.gridLayout_4.addItem(self.horizontalSpacer_4, 1, 3, 1, 1)
 
-        self.radioButton_stage_hour = QRadioButton(self.scrollAreaWidgetContents)
+        self.radioButton_stage_hour = QRadioButton(OutputFiles)
         self.buttonGroup_section.addButton(self.radioButton_stage_hour)
         self.radioButton_stage_hour.setObjectName(u"radioButton_stage_hour")
 
         self.gridLayout_4.addWidget(self.radioButton_stage_hour, 3, 0, 1, 1)
 
-        self.radioButton_total = QRadioButton(self.scrollAreaWidgetContents)
+        self.radioButton_total = QRadioButton(OutputFiles)
         self.buttonGroup_section.addButton(self.radioButton_total)
         self.radioButton_total.setObjectName(u"radioButton_total")
         self.radioButton_total.setChecked(True)
 
         self.gridLayout_4.addWidget(self.radioButton_total, 0, 0, 1, 1)
 
-        self.label_18 = QLabel(self.scrollAreaWidgetContents)
+        self.label_18 = QLabel(OutputFiles)
         self.label_18.setObjectName(u"label_18")
 
         self.gridLayout_4.addWidget(self.label_18, 3, 1, 1, 1)
 
-        self.radioButton_clock_hour = QRadioButton(self.scrollAreaWidgetContents)
+        self.radioButton_clock_hour = QRadioButton(OutputFiles)
         self.buttonGroup_section.addButton(self.radioButton_clock_hour)
         self.radioButton_clock_hour.setObjectName(u"radioButton_clock_hour")
 
@@ -370,11 +344,11 @@ class Ui_OutputFiles(object):
 
         self.verticalLayout_8.addLayout(self.horizontalLayout_6)
 
-        self.verticalSpacer_9 = QSpacerItem(20, 20, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Fixed)
+        self.verticalSpacer_9 = QSpacerItem(20, 10, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Fixed)
 
         self.verticalLayout_8.addItem(self.verticalSpacer_9)
 
-        self.label = QLabel(self.scrollAreaWidgetContents)
+        self.label = QLabel(OutputFiles)
         self.label.setObjectName(u"label")
 
         self.verticalLayout_8.addWidget(self.label)
@@ -385,18 +359,18 @@ class Ui_OutputFiles(object):
         self.gridLayout_6.setObjectName(u"gridLayout_6")
         self.horizontalLayout_14 = QHBoxLayout()
         self.horizontalLayout_14.setObjectName(u"horizontalLayout_14")
-        self.checkBox_force_axis = QCheckBox(self.scrollAreaWidgetContents)
+        self.checkBox_force_axis = QCheckBox(OutputFiles)
         self.checkBox_force_axis.setObjectName(u"checkBox_force_axis")
 
         self.horizontalLayout_14.addWidget(self.checkBox_force_axis)
 
-        self.label_25 = QLabel(self.scrollAreaWidgetContents)
+        self.label_25 = QLabel(OutputFiles)
         self.label_25.setObjectName(u"label_25")
         self.label_25.setAlignment(Qt.AlignmentFlag.AlignRight|Qt.AlignmentFlag.AlignTrailing|Qt.AlignmentFlag.AlignVCenter)
 
         self.horizontalLayout_14.addWidget(self.label_25)
 
-        self.doubleSpinBox_xmin = QDoubleSpinBox(self.scrollAreaWidgetContents)
+        self.doubleSpinBox_xmin = QDoubleSpinBox(OutputFiles)
         self.doubleSpinBox_xmin.setObjectName(u"doubleSpinBox_xmin")
         self.doubleSpinBox_xmin.setEnabled(False)
         self.doubleSpinBox_xmin.setMinimum(-5.000000000000000)
@@ -405,13 +379,13 @@ class Ui_OutputFiles(object):
 
         self.horizontalLayout_14.addWidget(self.doubleSpinBox_xmin)
 
-        self.label_26 = QLabel(self.scrollAreaWidgetContents)
+        self.label_26 = QLabel(OutputFiles)
         self.label_26.setObjectName(u"label_26")
         self.label_26.setAlignment(Qt.AlignmentFlag.AlignRight|Qt.AlignmentFlag.AlignTrailing|Qt.AlignmentFlag.AlignVCenter)
 
         self.horizontalLayout_14.addWidget(self.label_26)
 
-        self.doubleSpinBox_xmax = QDoubleSpinBox(self.scrollAreaWidgetContents)
+        self.doubleSpinBox_xmax = QDoubleSpinBox(OutputFiles)
         self.doubleSpinBox_xmax.setObjectName(u"doubleSpinBox_xmax")
         self.doubleSpinBox_xmax.setEnabled(False)
         self.doubleSpinBox_xmax.setMinimum(-5.000000000000000)
@@ -420,13 +394,13 @@ class Ui_OutputFiles(object):
 
         self.horizontalLayout_14.addWidget(self.doubleSpinBox_xmax)
 
-        self.label_27 = QLabel(self.scrollAreaWidgetContents)
+        self.label_27 = QLabel(OutputFiles)
         self.label_27.setObjectName(u"label_27")
         self.label_27.setAlignment(Qt.AlignmentFlag.AlignRight|Qt.AlignmentFlag.AlignTrailing|Qt.AlignmentFlag.AlignVCenter)
 
         self.horizontalLayout_14.addWidget(self.label_27)
 
-        self.doubleSpinBox_ymin = QDoubleSpinBox(self.scrollAreaWidgetContents)
+        self.doubleSpinBox_ymin = QDoubleSpinBox(OutputFiles)
         self.doubleSpinBox_ymin.setObjectName(u"doubleSpinBox_ymin")
         self.doubleSpinBox_ymin.setEnabled(False)
         self.doubleSpinBox_ymin.setMinimum(-500.000000000000000)
@@ -435,13 +409,13 @@ class Ui_OutputFiles(object):
 
         self.horizontalLayout_14.addWidget(self.doubleSpinBox_ymin)
 
-        self.label_28 = QLabel(self.scrollAreaWidgetContents)
+        self.label_28 = QLabel(OutputFiles)
         self.label_28.setObjectName(u"label_28")
         self.label_28.setAlignment(Qt.AlignmentFlag.AlignRight|Qt.AlignmentFlag.AlignTrailing|Qt.AlignmentFlag.AlignVCenter)
 
         self.horizontalLayout_14.addWidget(self.label_28)
 
-        self.doubleSpinBox_ymax = QDoubleSpinBox(self.scrollAreaWidgetContents)
+        self.doubleSpinBox_ymax = QDoubleSpinBox(OutputFiles)
         self.doubleSpinBox_ymax.setObjectName(u"doubleSpinBox_ymax")
         self.doubleSpinBox_ymax.setEnabled(False)
         self.doubleSpinBox_ymax.setMinimum(-500.000000000000000)
@@ -455,7 +429,7 @@ class Ui_OutputFiles(object):
 
         self.verticalLayout_13 = QVBoxLayout()
         self.verticalLayout_13.setObjectName(u"verticalLayout_13")
-        self.radioButton_all = QRadioButton(self.scrollAreaWidgetContents)
+        self.radioButton_all = QRadioButton(OutputFiles)
         self.buttonGroup_display = QButtonGroup(OutputFiles)
         self.buttonGroup_display.setObjectName(u"buttonGroup_display")
         self.buttonGroup_display.addButton(self.radioButton_all)
@@ -463,20 +437,20 @@ class Ui_OutputFiles(object):
 
         self.verticalLayout_13.addWidget(self.radioButton_all)
 
-        self.radioButton_mean = QRadioButton(self.scrollAreaWidgetContents)
+        self.radioButton_mean = QRadioButton(OutputFiles)
         self.buttonGroup_display.addButton(self.radioButton_mean)
         self.radioButton_mean.setObjectName(u"radioButton_mean")
 
         self.verticalLayout_13.addWidget(self.radioButton_mean)
 
-        self.radioButton_meanstd = QRadioButton(self.scrollAreaWidgetContents)
+        self.radioButton_meanstd = QRadioButton(OutputFiles)
         self.buttonGroup_display.addButton(self.radioButton_meanstd)
         self.radioButton_meanstd.setObjectName(u"radioButton_meanstd")
-        sizePolicy2 = QSizePolicy(QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Fixed)
-        sizePolicy2.setHorizontalStretch(0)
-        sizePolicy2.setVerticalStretch(0)
-        sizePolicy2.setHeightForWidth(self.radioButton_meanstd.sizePolicy().hasHeightForWidth())
-        self.radioButton_meanstd.setSizePolicy(sizePolicy2)
+        sizePolicy = QSizePolicy(QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Fixed)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.radioButton_meanstd.sizePolicy().hasHeightForWidth())
+        self.radioButton_meanstd.setSizePolicy(sizePolicy)
         self.radioButton_meanstd.setMinimumSize(QSize(0, 0))
         self.radioButton_meanstd.setChecked(True)
 
@@ -487,12 +461,12 @@ class Ui_OutputFiles(object):
 
         self.horizontalLayout_13 = QHBoxLayout()
         self.horizontalLayout_13.setObjectName(u"horizontalLayout_13")
-        self.checkBox_log = QCheckBox(self.scrollAreaWidgetContents)
+        self.checkBox_log = QCheckBox(OutputFiles)
         self.checkBox_log.setObjectName(u"checkBox_log")
 
         self.horizontalLayout_13.addWidget(self.checkBox_log)
 
-        self.checkBox_legend = QCheckBox(self.scrollAreaWidgetContents)
+        self.checkBox_legend = QCheckBox(OutputFiles)
         self.checkBox_legend.setObjectName(u"checkBox_legend")
         self.checkBox_legend.setChecked(False)
 
@@ -507,12 +481,12 @@ class Ui_OutputFiles(object):
 
         self.horizontalLayout_disp = QHBoxLayout()
         self.horizontalLayout_disp.setObjectName(u"horizontalLayout_disp")
-        self.label_13 = QLabel(self.scrollAreaWidgetContents)
+        self.label_13 = QLabel(OutputFiles)
         self.label_13.setObjectName(u"label_13")
 
         self.horizontalLayout_disp.addWidget(self.label_13)
 
-        self.fontComboBox = QFontComboBox(self.scrollAreaWidgetContents)
+        self.fontComboBox = QFontComboBox(OutputFiles)
         self.fontComboBox.setObjectName(u"fontComboBox")
 
         self.horizontalLayout_disp.addWidget(self.fontComboBox)
@@ -521,12 +495,12 @@ class Ui_OutputFiles(object):
 
         self.horizontalLayout_disp.addItem(self.horizontalSpacer_5)
 
-        self.label_FontSize = QLabel(self.scrollAreaWidgetContents)
+        self.label_FontSize = QLabel(OutputFiles)
         self.label_FontSize.setObjectName(u"label_FontSize")
 
         self.horizontalLayout_disp.addWidget(self.label_FontSize)
 
-        self.spinBox_fontsize = QSpinBox(self.scrollAreaWidgetContents)
+        self.spinBox_fontsize = QSpinBox(OutputFiles)
         self.spinBox_fontsize.setObjectName(u"spinBox_fontsize")
         self.spinBox_fontsize.setValue(12)
 
@@ -536,28 +510,28 @@ class Ui_OutputFiles(object):
 
         self.horizontalLayout_disp.addItem(self.horizontalSpacer_6)
 
-        self.label_14 = QLabel(self.scrollAreaWidgetContents)
+        self.label_14 = QLabel(OutputFiles)
         self.label_14.setObjectName(u"label_14")
 
         self.horizontalLayout_disp.addWidget(self.label_14)
 
-        self.label_16 = QLabel(self.scrollAreaWidgetContents)
+        self.label_16 = QLabel(OutputFiles)
         self.label_16.setObjectName(u"label_16")
 
         self.horizontalLayout_disp.addWidget(self.label_16)
 
-        self.spinBox_figwidth = QSpinBox(self.scrollAreaWidgetContents)
+        self.spinBox_figwidth = QSpinBox(OutputFiles)
         self.spinBox_figwidth.setObjectName(u"spinBox_figwidth")
         self.spinBox_figwidth.setValue(8)
 
         self.horizontalLayout_disp.addWidget(self.spinBox_figwidth)
 
-        self.label_15 = QLabel(self.scrollAreaWidgetContents)
+        self.label_15 = QLabel(OutputFiles)
         self.label_15.setObjectName(u"label_15")
 
         self.horizontalLayout_disp.addWidget(self.label_15)
 
-        self.spinBox_figheight = QSpinBox(self.scrollAreaWidgetContents)
+        self.spinBox_figheight = QSpinBox(OutputFiles)
         self.spinBox_figheight.setObjectName(u"spinBox_figheight")
         self.spinBox_figheight.setValue(6)
 
@@ -576,20 +550,20 @@ class Ui_OutputFiles(object):
 
         self.verticalLayout_8.addLayout(self.horizontalLayout_12)
 
-        self.verticalSpacer_5 = QSpacerItem(20, 20, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Fixed)
+        self.verticalSpacer_5 = QSpacerItem(20, 10, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Fixed)
 
         self.verticalLayout_8.addItem(self.verticalSpacer_5)
 
         self.verticalLayout_9 = QVBoxLayout()
         self.verticalLayout_9.setObjectName(u"verticalLayout_9")
-        self.label_4 = QLabel(self.scrollAreaWidgetContents)
+        self.label_4 = QLabel(OutputFiles)
         self.label_4.setObjectName(u"label_4")
 
         self.verticalLayout_9.addWidget(self.label_4)
 
         self.horizontalLayout_3 = QHBoxLayout()
         self.horizontalLayout_3.setObjectName(u"horizontalLayout_3")
-        self.lineEdit_output = QLineEdit(self.scrollAreaWidgetContents)
+        self.lineEdit_output = QLineEdit(OutputFiles)
         self.lineEdit_output.setObjectName(u"lineEdit_output")
         self.lineEdit_output.setMinimumSize(QSize(0, 0))
         self.lineEdit_output.setMaximumSize(QSize(900, 16777215))
@@ -597,7 +571,7 @@ class Ui_OutputFiles(object):
 
         self.horizontalLayout_3.addWidget(self.lineEdit_output)
 
-        self.pushButton_choose = QPushButton(self.scrollAreaWidgetContents)
+        self.pushButton_choose = QPushButton(OutputFiles)
         self.pushButton_choose.setObjectName(u"pushButton_choose")
         self.pushButton_choose.setMinimumSize(QSize(80, 0))
         self.pushButton_choose.setMaximumSize(QSize(50, 16777215))
@@ -611,7 +585,7 @@ class Ui_OutputFiles(object):
 
         self.verticalLayout_9.addLayout(self.horizontalLayout_3)
 
-        self.label_5 = QLabel(self.scrollAreaWidgetContents)
+        self.label_5 = QLabel(OutputFiles)
         self.label_5.setObjectName(u"label_5")
 
         self.verticalLayout_9.addWidget(self.label_5)
@@ -619,9 +593,8 @@ class Ui_OutputFiles(object):
 
         self.verticalLayout_8.addLayout(self.verticalLayout_9)
 
-        self.scrollArea.setWidget(self.scrollAreaWidgetContents)
 
-        self.verticalLayout_5.addWidget(self.scrollArea)
+        self.verticalLayout_5.addLayout(self.verticalLayout_8)
 
 
         self.retranslateUi(OutputFiles)

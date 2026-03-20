@@ -220,8 +220,8 @@ class SelectionStep( BaseStepView,  Ui_SelectionStep, QtWidgets.QWidget):
         self.label_4.setEnabled(bool_flag)
         self.label_5.setEnabled(bool_flag)
         self.label_7.setEnabled(bool_flag)
-        self.plainTextEdit.setEnabled(bool_flag)
-        self.plainTextEdit_2.setEnabled(bool_flag)
+        self.textEdit.setEnabled(bool_flag)
+        self.textEdit_2.setEnabled(bool_flag)
         # If the PSA is performed on annotations
         # Select all stages and do not exclude period
         if not bool_flag:

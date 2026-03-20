@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>929</width>
-    <height>753</height>
+    <width>739</width>
+    <height>546</height>
    </rect>
   </property>
   <property name="minimumSize">
@@ -25,6 +25,12 @@
   <layout class="QVBoxLayout" name="verticalLayout_2">
    <item>
     <layout class="QVBoxLayout" name="verticalLayout">
+     <property name="spacing">
+      <number>0</number>
+     </property>
+     <property name="sizeConstraint">
+      <enum>QLayout::SizeConstraint::SetMaximumSize</enum>
+     </property>
      <item>
       <widget class="QLabel" name="label_3">
        <property name="maximumSize">
@@ -47,17 +53,17 @@
       </widget>
      </item>
      <item>
-      <widget class="QPlainTextEdit" name="plainTextEdit_2">
+      <widget class="QTextEdit" name="textEdit_2">
        <property name="minimumSize">
         <size>
          <width>0</width>
-         <height>50</height>
+         <height>0</height>
         </size>
        </property>
        <property name="maximumSize">
         <size>
          <width>16777215</width>
-         <height>100</height>
+         <height>110</height>
         </size>
        </property>
        <property name="frameShape">
@@ -69,12 +75,22 @@
        <property name="lineWidth">
         <number>0</number>
        </property>
-       <property name="readOnly">
-        <bool>true</bool>
+       <property name="verticalScrollBarPolicy">
+        <enum>Qt::ScrollBarPolicy::ScrollBarAlwaysOff</enum>
        </property>
-       <property name="plainText">
-        <string>The analysis is performed by dividing the signal into multiple short windows to estimate spectral power. 
-This procedure is based on Welch’s method, which applies a Fast Fourier Transform (FFT) to each window and averages the resulting periodograms.</string>
+       <property name="horizontalScrollBarPolicy">
+        <enum>Qt::ScrollBarPolicy::ScrollBarAlwaysOff</enum>
+       </property>
+       <property name="html">
+        <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;meta charset=&quot;utf-8&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+hr { height: 1px; border-width: 0; }
+li.unchecked::marker { content: &quot;\2610&quot;; }
+li.checked::marker { content: &quot;\2612&quot;; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Roboto'; font-size:12pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;The analysis is performed by dividing the signal into multiple short windows to estimate spectral power. &lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;This procedure is based on Welch’s method, which applies a Fast Fourier Transform (FFT) to each window and averages the resulting periodograms.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
        </property>
       </widget>
      </item>
@@ -82,6 +98,9 @@ This procedure is based on Welch’s method, which applies a Fast Fourier Transf
       <layout class="QGridLayout" name="gridLayout">
        <property name="sizeConstraint">
         <enum>QLayout::SizeConstraint::SetMinimumSize</enum>
+       </property>
+       <property name="spacing">
+        <number>0</number>
        </property>
        <item row="1" column="0">
         <widget class="QLabel" name="label_2">
@@ -131,7 +150,7 @@ This procedure is based on Welch’s method, which applies a Fast Fourier Transf
        <item row="0" column="0">
         <widget class="QLabel" name="label">
          <property name="sizePolicy">
-          <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
@@ -202,7 +221,7 @@ This procedure is based on Welch’s method, which applies a Fast Fourier Transf
    <item>
     <layout class="QVBoxLayout" name="verticalLayout_5">
      <property name="sizeConstraint">
-      <enum>QLayout::SizeConstraint::SetMinAndMaxSize</enum>
+      <enum>QLayout::SizeConstraint::SetDefaultConstraint</enum>
      </property>
      <item>
       <widget class="QLabel" name="label_7">
@@ -226,7 +245,7 @@ This procedure is based on Welch’s method, which applies a Fast Fourier Transf
       </widget>
      </item>
      <item>
-      <widget class="QPlainTextEdit" name="plainTextEdit">
+      <widget class="QTextEdit" name="textEdit">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
          <horstretch>0</horstretch>
@@ -236,13 +255,19 @@ This procedure is based on Welch’s method, which applies a Fast Fourier Transf
        <property name="minimumSize">
         <size>
          <width>0</width>
-         <height>200</height>
+         <height>0</height>
         </size>
        </property>
        <property name="maximumSize">
         <size>
          <width>16777215</width>
-         <height>300</height>
+         <height>16777215</height>
+        </size>
+       </property>
+       <property name="sizeIncrement">
+        <size>
+         <width>0</width>
+         <height>0</height>
         </size>
        </property>
        <property name="frameShape">
@@ -254,22 +279,38 @@ This procedure is based on Welch’s method, which applies a Fast Fourier Transf
        <property name="lineWidth">
         <number>0</number>
        </property>
+       <property name="verticalScrollBarPolicy">
+        <enum>Qt::ScrollBarPolicy::ScrollBarAlwaysOff</enum>
+       </property>
+       <property name="horizontalScrollBarPolicy">
+        <enum>Qt::ScrollBarPolicy::ScrollBarAlwaysOff</enum>
+       </property>
+       <property name="sizeAdjustPolicy">
+        <enum>QAbstractScrollArea::SizeAdjustPolicy::AdjustIgnored</enum>
+       </property>
        <property name="readOnly">
         <bool>true</bool>
        </property>
-       <property name="plainText">
-        <string>It is common to average the power from a few frequency bins in order to estimate the spectral power in a frequency band.
-
-The width of the mini bands has to be equal or larger than the FFT frequency bin resolution (Hz) which is :
-   1 / [fft windows length (s)]
-   i.e. 1 / 5 s = 0.2 Hz or 1 / 4 s = 0.25 Hz
-The mini bandwidth must be a multiple of the frequency bin resolution.
--&gt; bandwidth of 0.2 Hz or 1 Hz with a fft windows length of 5 s.
--&gt; bandwidth of 0.25 Hz, 0.5 Hz or 1 Hz with a fft windows length of 4 s. 
-
-The last frequency analyzed is limited to FS/2.
-   FS : Sampling rate of the channel (Hz)
-   i.e. 256 Hz / 2 = 128 Hz</string>
+       <property name="html">
+        <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;meta charset=&quot;utf-8&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+hr { height: 1px; border-width: 0; }
+li.unchecked::marker { content: &quot;\2610&quot;; }
+li.checked::marker { content: &quot;\2612&quot;; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Roboto'; font-size:12pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;It is common to average the power from a few frequency bins in order to estimate the spectral power in a frequency band.&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;The width of the mini bands has to be equal or larger than the FFT frequency bin resolution (Hz) which is :&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;   1 / [fft windows length (s)]&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;   i.e. 1 / 5 s = 0.2 Hz or 1 / 4 s = 0.25 Hz&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;The mini bandwidth must be a multiple of the frequency bin resolution.&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;-&amp;gt; bandwidth of 0.2 Hz or 1 Hz with a fft windows length of 5 s.&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;-&amp;gt; bandwidth of 0.25 Hz, 0.5 Hz or 1 Hz with a fft windows length of 4 s. &lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;The last frequency analyzed is limited to FS/2.&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;   FS : Sampling rate of the channel (Hz)&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;   i.e. 256 Hz / 2 = 128 Hz&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
        </property>
       </widget>
      </item>
@@ -546,12 +587,12 @@ The last frequency analyzed is limited to FS/2.
       <enum>Qt::Orientation::Vertical</enum>
      </property>
      <property name="sizeType">
-      <enum>QSizePolicy::Policy::Minimum</enum>
+      <enum>QSizePolicy::Policy::Preferred</enum>
      </property>
      <property name="sizeHint" stdset="0">
       <size>
        <width>20</width>
-       <height>40</height>
+       <height>0</height>
       </size>
      </property>
     </spacer>

@@ -24,13 +24,13 @@ class Ui_IntroStepYASA(object):
     def setupUi(self, IntroStepYASA):
         if not IntroStepYASA.objectName():
             IntroStepYASA.setObjectName(u"IntroStepYASA")
-        IntroStepYASA.resize(995, 799)
+        IntroStepYASA.resize(733, 340)
         IntroStepYASA.setStyleSheet(u"font: 12pt \"Roboto\";")
         self.verticalLayout_4 = QVBoxLayout(IntroStepYASA)
         self.verticalLayout_4.setObjectName(u"verticalLayout_4")
         self.label_2 = QLabel(IntroStepYASA)
         self.label_2.setObjectName(u"label_2")
-        self.label_2.setMinimumSize(QSize(0, 100))
+        self.label_2.setMinimumSize(QSize(0, 0))
         self.label_2.setMaximumSize(QSize(16777215, 16777215))
         font = QFont()
         font.setFamilies([u"Roboto"])
@@ -65,13 +65,13 @@ class Ui_IntroStepYASA(object):
         sizePolicy.setHeightForWidth(self.textEdit.sizePolicy().hasHeightForWidth())
         self.textEdit.setSizePolicy(sizePolicy)
         self.textEdit.setMinimumSize(QSize(0, 0))
-        self.textEdit.setMaximumSize(QSize(16777215, 16777215))
+        self.textEdit.setMaximumSize(QSize(16777215, 140))
         self.textEdit.setLayoutDirection(Qt.LayoutDirection.LeftToRight)
         self.textEdit.setStyleSheet(u"")
         self.textEdit.setFrameShape(QFrame.Shape.NoFrame)
         self.textEdit.setFrameShadow(QFrame.Shadow.Plain)
         self.textEdit.setLineWidth(0)
-        self.textEdit.setSizeAdjustPolicy(QAbstractScrollArea.SizeAdjustPolicy.AdjustToContents)
+        self.textEdit.setSizeAdjustPolicy(QAbstractScrollArea.SizeAdjustPolicy.AdjustIgnored)
         self.textEdit.setReadOnly(True)
 
         self.verticalLayout_3.addWidget(self.textEdit)
@@ -96,11 +96,11 @@ class Ui_IntroStepYASA(object):
         self.textEdit_2 = QTextEdit(IntroStepYASA)
         self.textEdit_2.setObjectName(u"textEdit_2")
         self.textEdit_2.setMinimumSize(QSize(0, 0))
-        self.textEdit_2.setMaximumSize(QSize(16777215, 16777215))
+        self.textEdit_2.setMaximumSize(QSize(16777215, 140))
         self.textEdit_2.setFrameShape(QFrame.Shape.NoFrame)
         self.textEdit_2.setFrameShadow(QFrame.Shadow.Plain)
         self.textEdit_2.setLineWidth(0)
-        self.textEdit_2.setSizeAdjustPolicy(QAbstractScrollArea.SizeAdjustPolicy.AdjustToContents)
+        self.textEdit_2.setSizeAdjustPolicy(QAbstractScrollArea.SizeAdjustPolicy.AdjustIgnored)
         self.textEdit_2.setReadOnly(True)
 
         self.verticalLayout_2.addWidget(self.textEdit_2)
@@ -110,7 +110,7 @@ class Ui_IntroStepYASA(object):
 
         self.verticalLayout = QVBoxLayout()
         self.verticalLayout.setObjectName(u"verticalLayout")
-        self.verticalLayout.setSizeConstraint(QLayout.SizeConstraint.SetMinimumSize)
+        self.verticalLayout.setSizeConstraint(QLayout.SizeConstraint.SetDefaultConstraint)
         self.label_3 = QLabel(IntroStepYASA)
         self.label_3.setObjectName(u"label_3")
         sizePolicy1 = QSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Fixed)
@@ -127,7 +127,7 @@ class Ui_IntroStepYASA(object):
         self.textEdit_3.setMaximumSize(QSize(16777215, 105))
         self.textEdit_3.setFrameShape(QFrame.Shape.NoFrame)
         self.textEdit_3.setLineWidth(0)
-        self.textEdit_3.setSizeAdjustPolicy(QAbstractScrollArea.SizeAdjustPolicy.AdjustToContents)
+        self.textEdit_3.setSizeAdjustPolicy(QAbstractScrollArea.SizeAdjustPolicy.AdjustIgnored)
         self.textEdit_3.setReadOnly(True)
 
         self.verticalLayout.addWidget(self.textEdit_3)
@@ -156,19 +156,18 @@ class Ui_IntroStepYASA(object):
 "li.unchecked::marker { content: \"\\2610\"; }\n"
 "li.checked::marker { content: \"\\2612\"; }\n"
 "</style></head><body style=\" font-family:'Roboto'; font-size:12pt; font-weight:400; font-style:normal;\">\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Roboto'; font-size:10pt;\"><br /></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Roboto';\">PSG files including the header and event annotations, are required:</span></p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:10pt;\"><br /></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">PSG files including the header and event annotations, are required:</p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">   - European Data Format (EDF)"
+                        " : The .edf and .tsv files must have the exact same filename and be stored in the same directory.</p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">   - Stellate : The .sig and .sts files must have the exact same filename and be stored in the same directory.</p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">   - NATUS (<span style=\" font-style:italic;\">for CEAMS users</span>) :  The entire NATUS subject folder is required.</p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">* The annotations files must include the sleep staging.</p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -q"
-                        "t-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Roboto';\">   - European Data Format (EDF) : The .edf and .tsv files must have the exact same filename and be stored in the same directory.</span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Roboto';\">   - Stellate : The .sig and .sts files must have the exact same filename and be stored in the same directory.</span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Roboto';\">   - NATUS (</span><span style=\" font-family:'Roboto'; font-style:italic;\">for CEAMS users</span><span style=\" font-family:'Roboto';\">) : </span><span style=\" font-family:'Roboto';\"> The entire NATUS subject folder is required.</span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-ind"
-                        "ent:0px;\"><span style=\" font-family:'Roboto';\">* The annotations files must include the sleep staging.</span></p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Roboto';\"><br /></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Roboto';\">Channels:</span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Roboto';\">This tool requires the selection of </span><span style=\" font-family:'Roboto'; font-weight:600;\">2</span><span style=\" font-family:'Roboto';\"> </span><span style=\" font-family:'Roboto'; font-weight:600;\">EOG</span><span style=\" font-family:'Roboto';\"> </span><span style=\" font-family:'Roboto'; font-weight:600;\">channels</span><span style=\" font-family:'Roboto';\""
-                        "> per recording for REMs detection.</span></p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Roboto';\"><br /></p></body></html>", None))
+                        "t-block-indent:0; text-indent:0px;\">Channels:</p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">This tool requires the selection of <span style=\" font-weight:600;\">2</span> <span style=\" font-weight:600;\">EOG</span> <span style=\" font-weight:600;\">channels</span> per recording for REMs detection.</p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p></body></html>", None))
         self.label_4.setText(QCoreApplication.translate("IntroStepYASA", u"<html><head/><body><p><span style=\" font-size:12pt; font-weight:600;\">Output</span></p></body></html>", None))
         self.textEdit_2.setHtml(QCoreApplication.translate("IntroStepYASA", u"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset=\"utf-8\" /><style type=\"text/css\">\n"
@@ -177,9 +176,9 @@ class Ui_IntroStepYASA(object):
 "li.unchecked::marker { content: \"\\2610\"; }\n"
 "li.checked::marker { content: \"\\2612\"; }\n"
 "</style></head><body style=\" font-family:'Roboto'; font-size:12pt; font-weight:400; font-style:normal;\">\n"
-"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Roboto';\">The REMs detected events are added in the annotations files (.tsv, .sts or .ent) depending of the format used.<br /></span><span style=\" font-family:'Roboto';\">If the annotations file already includes the group event to be added, the existing entries will be removed before adding the new ones.</span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margi"
-                        "n-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Roboto';\">Each events is defined by : </span><span style=\" font-family:'Roboto';\"><br />     1. group : The group where the events are added (i.e. REM).<br />     2. name : The name of the event (i.e. YASA_REM)<br />     3. start_sec : The onset of the event in second. <br />     4. duration_sec : The duration of the event in second.<br />     5. channels : The list of channels on which the event occurs.<br /><br /></span></p></body></html>", None))
+"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">The REMs detected events are added in the annotations files (.tsv, .sts or .ent) depending of the format used.<br />If the annotations file already includes the group event to be added, the existing entries will be removed before adding the new ones.</p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Each events is defined "
+                        "by : <br />     1. group : The group where the events are added (i.e. REM).<br />     2. name : The name of the event (i.e. YASA_REM)<br />     3. start_sec : The onset of the event in second. <br />     4. duration_sec : The duration of the event in second.<br />     5. channels : The list of channels on which the event occurs.<br /><br /></p></body></html>", None))
         self.label_3.setText(QCoreApplication.translate("IntroStepYASA", u"<html><head/><body><p><span style=\" font-size:12pt; font-weight:600;\">References</span></p></body></html>", None))
         self.textEdit_3.setHtml(QCoreApplication.translate("IntroStepYASA", u"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset=\"utf-8\" /><style type=\"text/css\">\n"
@@ -189,7 +188,7 @@ class Ui_IntroStepYASA(object):
 "li.checked::marker { content: \"\\2612\"; }\n"
 "</style></head><body style=\" font-family:'Roboto'; font-size:12pt; font-weight:400; font-style:normal;\">\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Roboto','sans-serif';\">[1] Yetton, B. D., et al. (2016). Automatic detection of rapid eye movements (REMs): A machine learning approach.     </span><span style=\" font-family:'Roboto','sans-serif'; font-style:italic;\">Journal of neuroscience methods</span><span style=\" font-family:'Roboto','sans-serif';\">,     </span><span style=\" font-family:'Roboto','sans-serif'; font"
-                        "-style:italic;\">259</span><span style=\" font-family:'Roboto','sans-serif';\">, 72\u201382.</span><span style=\" font-family:'Roboto'; font-size:10pt;\">  </span></p>\n"
+                        "-style:italic;\">259</span><span style=\" font-family:'Roboto','sans-serif';\">, 72\u201382.</span><span style=\" font-size:10pt;\">  </span></p>\n"
 "<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Roboto','sans-serif';\">[2] Agarwal, R., et al. (2005). Detection of rapid-eye movements in sleep studies.     </span><span style=\" font-family:'Roboto','sans-serif'; font-style:italic;\">IEEE Transactions on biomedical engineering</span><span style=\" font-family:'Roboto','sans-serif';\">,     </span><span style=\" font-family:'Roboto','sans-serif'; font-style:italic;\">52</span><span style=\" font-family:'Roboto','sans-serif';\">(8), 1390\u20131396.</span></p></body></html>", None))
     # retranslateUi
 

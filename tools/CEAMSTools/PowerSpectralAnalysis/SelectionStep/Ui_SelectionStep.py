@@ -16,15 +16,15 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QImage, QKeySequence, QLinearGradient, QPainter,
     QPalette, QPixmap, QRadialGradient, QTransform)
 from PySide6.QtWidgets import (QApplication, QCheckBox, QFrame, QGridLayout,
-    QHBoxLayout, QLabel, QPlainTextEdit, QRadioButton,
-    QSizePolicy, QSpacerItem, QVBoxLayout, QWidget)
+    QHBoxLayout, QLabel, QRadioButton, QSizePolicy,
+    QSpacerItem, QTextEdit, QVBoxLayout, QWidget)
 import themes_rc
 
 class Ui_SelectionStep(object):
     def setupUi(self, SelectionStep):
         if not SelectionStep.objectName():
             SelectionStep.setObjectName(u"SelectionStep")
-        SelectionStep.resize(1041, 787)
+        SelectionStep.resize(775, 787)
         self.verticalLayout_4 = QVBoxLayout(SelectionStep)
         self.verticalLayout_4.setObjectName(u"verticalLayout_4")
         self.label = QLabel(SelectionStep)
@@ -156,34 +156,6 @@ class Ui_SelectionStep(object):
 
         self.gridLayout_2 = QGridLayout()
         self.gridLayout_2.setObjectName(u"gridLayout_2")
-        self.plainTextEdit = QPlainTextEdit(SelectionStep)
-        self.plainTextEdit.setObjectName(u"plainTextEdit")
-        sizePolicy = QSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Preferred)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.plainTextEdit.sizePolicy().hasHeightForWidth())
-        self.plainTextEdit.setSizePolicy(sizePolicy)
-        self.plainTextEdit.setMinimumSize(QSize(0, 0))
-        self.plainTextEdit.setMaximumSize(QSize(16777215, 16777215))
-        self.plainTextEdit.setFrameShape(QFrame.Shape.NoFrame)
-        self.plainTextEdit.setFrameShadow(QFrame.Shadow.Plain)
-        self.plainTextEdit.setLineWidth(0)
-        self.plainTextEdit.setReadOnly(True)
-
-        self.gridLayout_2.addWidget(self.plainTextEdit, 0, 1, 1, 1)
-
-        self.plainTextEdit_2 = QPlainTextEdit(SelectionStep)
-        self.plainTextEdit_2.setObjectName(u"plainTextEdit_2")
-        sizePolicy.setHeightForWidth(self.plainTextEdit_2.sizePolicy().hasHeightForWidth())
-        self.plainTextEdit_2.setSizePolicy(sizePolicy)
-        self.plainTextEdit_2.setMaximumSize(QSize(16777215, 16777215))
-        self.plainTextEdit_2.setFrameShape(QFrame.Shape.NoFrame)
-        self.plainTextEdit_2.setFrameShadow(QFrame.Shadow.Plain)
-        self.plainTextEdit_2.setLineWidth(0)
-        self.plainTextEdit_2.setReadOnly(True)
-
-        self.gridLayout_2.addWidget(self.plainTextEdit_2, 1, 1, 1, 1)
-
         self.in_cycle_checkBox = QCheckBox(SelectionStep)
         self.in_cycle_checkBox.setObjectName(u"in_cycle_checkBox")
         self.in_cycle_checkBox.setEnabled(True)
@@ -212,6 +184,38 @@ class Ui_SelectionStep(object):
         self.verticalSpacer_2 = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
 
         self.gridLayout_2.addItem(self.verticalSpacer_2, 2, 1, 1, 1)
+
+        self.textEdit = QTextEdit(SelectionStep)
+        self.textEdit.setObjectName(u"textEdit")
+        sizePolicy = QSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Preferred)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.textEdit.sizePolicy().hasHeightForWidth())
+        self.textEdit.setSizePolicy(sizePolicy)
+        self.textEdit.setMinimumSize(QSize(0, 0))
+        self.textEdit.setMaximumSize(QSize(16777215, 16777215))
+        self.textEdit.setFrameShape(QFrame.Shape.NoFrame)
+        self.textEdit.setFrameShadow(QFrame.Shadow.Plain)
+        self.textEdit.setLineWidth(0)
+        self.textEdit.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
+        self.textEdit.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
+        self.textEdit.setReadOnly(True)
+
+        self.gridLayout_2.addWidget(self.textEdit, 0, 1, 1, 1)
+
+        self.textEdit_2 = QTextEdit(SelectionStep)
+        self.textEdit_2.setObjectName(u"textEdit_2")
+        sizePolicy.setHeightForWidth(self.textEdit_2.sizePolicy().hasHeightForWidth())
+        self.textEdit_2.setSizePolicy(sizePolicy)
+        self.textEdit_2.setMaximumSize(QSize(16777215, 16777215))
+        self.textEdit_2.setFrameShape(QFrame.Shape.NoFrame)
+        self.textEdit_2.setFrameShadow(QFrame.Shadow.Plain)
+        self.textEdit_2.setLineWidth(0)
+        self.textEdit_2.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
+        self.textEdit_2.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
+        self.textEdit_2.setReadOnly(True)
+
+        self.gridLayout_2.addWidget(self.textEdit_2, 1, 1, 1, 1)
 
 
         self.verticalLayout_3.addLayout(self.gridLayout_2)
@@ -279,12 +283,6 @@ class Ui_SelectionStep(object):
         self.nrem_checkBox.setText(QCoreApplication.translate("SelectionStep", u"NREM", None))
         self.label_4.setText(QCoreApplication.translate("SelectionStep", u"<html><head/><body><p><span style=\" font-weight:600;\">Sleep Period Selection</span></p></body></html>", None))
         self.label_7.setText(QCoreApplication.translate("SelectionStep", u"To perform the analysis on specific section of the recording.", None))
-        self.plainTextEdit.setPlainText(QCoreApplication.translate("SelectionStep", u"To analyse only the signal included in the sleep cycles.\n"
-"I.e. from sleep onset to the last asleep stage.\n"
-"Useful to analyse complete sleep cycles only (ensure incomplete cycles are excluded in the Common Settings for Sleep Cycles in the tool\u2019s introduction step).", None))
-        self.plainTextEdit_2.setPlainText(QCoreApplication.translate("SelectionStep", u"To exclude sleep periods from the spectral analysis.\n"
-"Useful to analyse NREM stages included in NREM periods only (not in REM periods). In this case, please check \u201cExclude REM periods\u201d.\n"
-"The same approach can be applied to NREM periods.", None))
 #if QT_CONFIG(tooltip)
         self.in_cycle_checkBox.setToolTip(QCoreApplication.translate("SelectionStep", u"Check to perform the PSA only on the signal included in the sleep cycles i.e. from sleep onset to the last asleep stage.", None))
 #endif // QT_CONFIG(tooltip)
@@ -297,5 +295,27 @@ class Ui_SelectionStep(object):
         self.excl_remp_checkBox.setToolTip(QCoreApplication.translate("SelectionStep", u"Check to exclude REM periods from the Power Spectral Analysis.", None))
 #endif // QT_CONFIG(tooltip)
         self.excl_remp_checkBox.setText(QCoreApplication.translate("SelectionStep", u"Exclude REM Periods", None))
+        self.textEdit.setHtml(QCoreApplication.translate("SelectionStep", u"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
+"<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset=\"utf-8\" /><style type=\"text/css\">\n"
+"p, li { white-space: pre-wrap; }\n"
+"hr { height: 1px; border-width: 0; }\n"
+"li.unchecked::marker { content: \"\\2610\"; }\n"
+"li.checked::marker { content: \"\\2612\"; }\n"
+"</style></head><body style=\" font-family:'Roboto'; font-size:12pt; font-weight:400; font-style:normal;\">\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">To analyse only the signal included in the sleep cycles.</p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">I.e. from sleep onset to the last asleep stage.</p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Useful to analyse complete sleep cycles on"
+                        "ly (ensure incomplete cycles are excluded in the Common Settings for Sleep Cycles in the tool\u2019s introduction step).</p></body></html>", None))
+        self.textEdit_2.setHtml(QCoreApplication.translate("SelectionStep", u"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
+"<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset=\"utf-8\" /><style type=\"text/css\">\n"
+"p, li { white-space: pre-wrap; }\n"
+"hr { height: 1px; border-width: 0; }\n"
+"li.unchecked::marker { content: \"\\2610\"; }\n"
+"li.checked::marker { content: \"\\2612\"; }\n"
+"</style></head><body style=\" font-family:'Roboto'; font-size:12pt; font-weight:400; font-style:normal;\">\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">To exclude sleep periods from the spectral analysis.</p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Useful to analyse NREM stages included in NREM periods only (not in REM periods). In this case, please check \u201cExclude REM periods\u201d.</p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-ri"
+                        "ght:0px; -qt-block-indent:0; text-indent:0px;\">The same approach can be applied to NREM periods.</p></body></html>", None))
     # retranslateUi
 

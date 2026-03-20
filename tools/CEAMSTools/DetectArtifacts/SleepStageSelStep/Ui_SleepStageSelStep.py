@@ -17,15 +17,15 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QPalette, QPixmap, QRadialGradient, QTransform)
 from PySide6.QtWidgets import (QAbstractScrollArea, QApplication, QButtonGroup, QCheckBox,
     QFrame, QGridLayout, QHBoxLayout, QLabel,
-    QPlainTextEdit, QRadioButton, QSizePolicy, QSpacerItem,
-    QTextEdit, QVBoxLayout, QWidget)
+    QRadioButton, QSizePolicy, QSpacerItem, QTextEdit,
+    QVBoxLayout, QWidget)
 import themes_rc
 
 class Ui_SleepStageSelStep(object):
     def setupUi(self, SleepStageSelStep):
         if not SleepStageSelStep.objectName():
             SleepStageSelStep.setObjectName(u"SleepStageSelStep")
-        SleepStageSelStep.resize(1075, 851)
+        SleepStageSelStep.resize(812, 840)
         SleepStageSelStep.setStyleSheet(u"font: 12pt \"Roboto\";")
         self.verticalLayout = QVBoxLayout(SleepStageSelStep)
         self.verticalLayout.setObjectName(u"verticalLayout")
@@ -39,23 +39,23 @@ class Ui_SleepStageSelStep(object):
 
         self.verticalLayout.addWidget(self.label_7)
 
-        self.plainTextEdit = QPlainTextEdit(SleepStageSelStep)
-        self.plainTextEdit.setObjectName(u"plainTextEdit")
-        sizePolicy1 = QSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Preferred)
+        self.textEdit = QTextEdit(SleepStageSelStep)
+        self.textEdit.setObjectName(u"textEdit")
+        sizePolicy1 = QSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
         sizePolicy1.setHorizontalStretch(0)
         sizePolicy1.setVerticalStretch(0)
-        sizePolicy1.setHeightForWidth(self.plainTextEdit.sizePolicy().hasHeightForWidth())
-        self.plainTextEdit.setSizePolicy(sizePolicy1)
-        self.plainTextEdit.setMinimumSize(QSize(0, 200))
-        self.plainTextEdit.setMaximumSize(QSize(16777215, 200))
-        self.plainTextEdit.setFrameShape(QFrame.Shape.Panel)
-        self.plainTextEdit.setLineWidth(0)
-        self.plainTextEdit.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAsNeeded)
-        self.plainTextEdit.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAsNeeded)
-        self.plainTextEdit.setSizeAdjustPolicy(QAbstractScrollArea.SizeAdjustPolicy.AdjustToContents)
-        self.plainTextEdit.setReadOnly(True)
+        sizePolicy1.setHeightForWidth(self.textEdit.sizePolicy().hasHeightForWidth())
+        self.textEdit.setSizePolicy(sizePolicy1)
+        self.textEdit.setMinimumSize(QSize(0, 0))
+        self.textEdit.setMaximumSize(QSize(16777215, 16777215))
+        self.textEdit.setFrameShape(QFrame.Shape.Panel)
+        self.textEdit.setLineWidth(0)
+        self.textEdit.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
+        self.textEdit.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
+        self.textEdit.setSizeAdjustPolicy(QAbstractScrollArea.SizeAdjustPolicy.AdjustIgnored)
+        self.textEdit.setReadOnly(True)
 
-        self.verticalLayout.addWidget(self.plainTextEdit)
+        self.verticalLayout.addWidget(self.textEdit)
 
         self.horizontalLayout_4 = QHBoxLayout()
         self.horizontalLayout_4.setObjectName(u"horizontalLayout_4")
@@ -150,13 +150,17 @@ class Ui_SleepStageSelStep(object):
 
         self.verticalLayout.addWidget(self.radioButton_set1)
 
-        self.textEdit = QTextEdit(SleepStageSelStep)
-        self.textEdit.setObjectName(u"textEdit")
-        self.textEdit.setFrameShape(QFrame.Shape.NoFrame)
-        self.textEdit.setLineWidth(0)
-        self.textEdit.setReadOnly(True)
+        self.textEdit1 = QTextEdit(SleepStageSelStep)
+        self.textEdit1.setObjectName(u"textEdit1")
+        sizePolicy1.setHeightForWidth(self.textEdit1.sizePolicy().hasHeightForWidth())
+        self.textEdit1.setSizePolicy(sizePolicy1)
+        self.textEdit1.setMaximumSize(QSize(16777215, 160))
+        self.textEdit1.setFrameShape(QFrame.Shape.NoFrame)
+        self.textEdit1.setLineWidth(0)
+        self.textEdit1.setSizeAdjustPolicy(QAbstractScrollArea.SizeAdjustPolicy.AdjustIgnored)
+        self.textEdit1.setReadOnly(True)
 
-        self.verticalLayout.addWidget(self.textEdit)
+        self.verticalLayout.addWidget(self.textEdit1)
 
         self.radioButton_set2 = QRadioButton(SleepStageSelStep)
         self.Theshold_sets.addButton(self.radioButton_set2)
@@ -166,7 +170,11 @@ class Ui_SleepStageSelStep(object):
 
         self.textEdit_2 = QTextEdit(SleepStageSelStep)
         self.textEdit_2.setObjectName(u"textEdit_2")
+        sizePolicy1.setHeightForWidth(self.textEdit_2.sizePolicy().hasHeightForWidth())
+        self.textEdit_2.setSizePolicy(sizePolicy1)
+        self.textEdit_2.setMaximumSize(QSize(16777215, 160))
         self.textEdit_2.setFrameShape(QFrame.Shape.NoFrame)
+        self.textEdit_2.setSizeAdjustPolicy(QAbstractScrollArea.SizeAdjustPolicy.AdjustIgnored)
         self.textEdit_2.setReadOnly(True)
 
         self.verticalLayout.addWidget(self.textEdit_2)
@@ -175,10 +183,6 @@ class Ui_SleepStageSelStep(object):
         self.label_2.setObjectName(u"label_2")
 
         self.verticalLayout.addWidget(self.label_2)
-
-        self.verticalSpacer_2 = QSpacerItem(20, 10, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
-
-        self.verticalLayout.addItem(self.verticalSpacer_2)
 
 
         self.retranslateUi(SleepStageSelStep)
@@ -197,16 +201,25 @@ class Ui_SleepStageSelStep(object):
     def retranslateUi(self, SleepStageSelStep):
         SleepStageSelStep.setWindowTitle("")
         self.label_7.setText(QCoreApplication.translate("SleepStageSelStep", u"<html><head/><body><p><span style=\" font-weight:600;\">Sleep Stage Selection</span></p></body></html>", None))
-        self.plainTextEdit.setPlainText(QCoreApplication.translate("SleepStageSelStep", u"Select the sleep stages in which you want to detect artifacts.\n"
-"\n"
-"Artifact detection performs better when similar sleep stages are selected, as the power distribution can be modeled more accurately. \n"
-"Some detectors use a 3-component Gaussian Mixture Model (GMM) to estimate the standard deviation of non-corrupted data, \n"
-"which is then used to define the threshold value.\n"
-"\n"
-"* We recommend running artifact detection separately for NREM, REM, and Awake stages.\n"
-"* Make sur to have different annotation group or name to avoid confusion.\n"
-"\n"
-"Please select \"Unscored\" if your data does not include sleep stages.", None))
+        self.textEdit.setHtml(QCoreApplication.translate("SleepStageSelStep", u"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
+"<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset=\"utf-8\" /><style type=\"text/css\">\n"
+"p, li { white-space: pre-wrap; }\n"
+"hr { height: 1px; border-width: 0; }\n"
+"li.unchecked::marker { content: \"\\2610\"; }\n"
+"li.checked::marker { content: \"\\2612\"; }\n"
+"</style></head><body style=\" font-family:'Roboto'; font-size:12pt; font-weight:400; font-style:normal;\">\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Select the sleep stages in which you want to detect artifacts.</p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Artifact detection performs better when similar slee"
+                        "p stages are selected, as the power distribution can be modeled more accurately. </p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Some detectors use a 3-component Gaussian Mixture Model (GMM) to estimate the standard deviation of non-corrupted data, </p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">which is then used to define the threshold value.</p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">* We recommend running artifact detection separately for NREM, REM, and Awake stages.</p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">* Make su"
+                        "r to have different annotation group or name to avoid confusion.</p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Please select &quot;Unscored&quot; if your data does not include sleep stages.</p></body></html>", None))
         self.checkBox_1.setText(QCoreApplication.translate("SleepStageSelStep", u"N1", None))
         self.checkBox_2.setText(QCoreApplication.translate("SleepStageSelStep", u"N2", None))
         self.checkBox_3.setText(QCoreApplication.translate("SleepStageSelStep", u"N3", None))
@@ -218,7 +231,7 @@ class Ui_SleepStageSelStep(object):
         self.label_4.setText(QCoreApplication.translate("SleepStageSelStep", u"However, two sets of default values are also available.", None))
         self.label_5.setText(QCoreApplication.translate("SleepStageSelStep", u"Clicking any of the radio buttons below will automatically apply the corresponding default values to all detectors.", None))
         self.radioButton_set1.setText(QCoreApplication.translate("SleepStageSelStep", u"Set 1 : is intended for NREM sleep stages and can also be used for Awake or Unscored stages.", None))
-        self.textEdit.setHtml(QCoreApplication.translate("SleepStageSelStep", u"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
+        self.textEdit1.setHtml(QCoreApplication.translate("SleepStageSelStep", u"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset=\"utf-8\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
 "hr { height: 1px; border-width: 0; }\n"

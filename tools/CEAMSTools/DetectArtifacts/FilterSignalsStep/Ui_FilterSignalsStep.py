@@ -25,7 +25,7 @@ class Ui_FilterSignalsStep(object):
     def setupUi(self, FilterSignalsStep):
         if not FilterSignalsStep.objectName():
             FilterSignalsStep.setObjectName(u"FilterSignalsStep")
-        FilterSignalsStep.resize(1050, 613)
+        FilterSignalsStep.resize(899, 613)
         FilterSignalsStep.setStyleSheet(u"font: 12pt \"Roboto\";")
         self.verticalLayout_2 = QVBoxLayout(FilterSignalsStep)
         self.verticalLayout_2.setObjectName(u"verticalLayout_2")
@@ -34,7 +34,7 @@ class Ui_FilterSignalsStep(object):
         self.verticalLayout.setSizeConstraint(QLayout.SizeConstraint.SetFixedSize)
         self.textBrowser = QTextBrowser(FilterSignalsStep)
         self.textBrowser.setObjectName(u"textBrowser")
-        self.textBrowser.setMaximumSize(QSize(16777215, 440))
+        self.textBrowser.setMaximumSize(QSize(16777215, 450))
         self.textBrowser.setFrameShape(QFrame.Shape.NoFrame)
         self.textBrowser.setFrameShadow(QFrame.Shadow.Plain)
         self.textBrowser.setLineWidth(0)

@@ -12,7 +12,6 @@ from qtpy import QtWidgets, QtCore
 from qtpy.QtCore import QTimer
 from PySide6.QtCore import *
 
-#from CEAMSTools.PowerSpectralAnalysis.InputFilesStep.InputFilesStep import InputFilesStep
 from CEAMSTools.ScoreSleepStagesYASA.ExportResultsStep.Ui_ExportResultsStep import Ui_ExportResultsStep
 from commons.BaseStepView import BaseStepView
 

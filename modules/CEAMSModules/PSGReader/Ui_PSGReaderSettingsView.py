@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file ''
+## Form generated from reading UI file 'Ui_PSGReaderSettingsView.ui'
 ##
 ## Created by: Qt User Interface Compiler version 6.8.2
 ##
@@ -16,24 +16,25 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QImage, QKeySequence, QLinearGradient, QPainter,
     QPalette, QPixmap, QRadialGradient, QTransform)
 from PySide6.QtWidgets import (QAbstractItemView, QApplication, QFrame, QHBoxLayout,
-    QHeaderView, QLabel, QLineEdit, QListView,
-    QPushButton, QScrollArea, QSizePolicy, QSpacerItem,
-    QSplitter, QTableView, QTreeView, QVBoxLayout,
-    QWidget)
+    QHeaderView, QLabel, QLayout, QLineEdit,
+    QListView, QPushButton, QScrollArea, QSizePolicy,
+    QSpacerItem, QSplitter, QTableView, QTreeView,
+    QVBoxLayout, QWidget)
 import themes_rc
 
 class Ui_PSGReaderSettingsView(object):
     def setupUi(self, PSGReaderSettingsView):
         if not PSGReaderSettingsView.objectName():
             PSGReaderSettingsView.setObjectName(u"PSGReaderSettingsView")
-        PSGReaderSettingsView.resize(1208, 778)
+        PSGReaderSettingsView.resize(844, 252)
         PSGReaderSettingsView.setStyleSheet(u"font: 12pt \"Roboto\";")
         self.verticalLayout_4 = QVBoxLayout(PSGReaderSettingsView)
         self.verticalLayout_4.setObjectName(u"verticalLayout_4")
+        self.verticalLayout_4.setSizeConstraint(QLayout.SizeConstraint.SetNoConstraint)
         self.splitter = QSplitter(PSGReaderSettingsView)
         self.splitter.setObjectName(u"splitter")
-        self.splitter.setOrientation(Qt.Horizontal)
-        self.splitter.setChildrenCollapsible(False)
+        self.splitter.setOrientation(Qt.Orientation.Horizontal)
+        self.splitter.setChildrenCollapsible(True)
         self.layoutWidget = QWidget(self.splitter)
         self.layoutWidget.setObjectName(u"layoutWidget")
         self.verticalLayout = QVBoxLayout(self.layoutWidget)
@@ -53,9 +54,9 @@ class Ui_PSGReaderSettingsView(object):
 
         self.files_listview = QListView(self.layoutWidget)
         self.files_listview.setObjectName(u"files_listview")
-        self.files_listview.setEditTriggers(QAbstractItemView.NoEditTriggers)
-        self.files_listview.setSelectionMode(QAbstractItemView.ExtendedSelection)
-        self.files_listview.setSelectionBehavior(QAbstractItemView.SelectItems)
+        self.files_listview.setEditTriggers(QAbstractItemView.EditTrigger.NoEditTriggers)
+        self.files_listview.setSelectionMode(QAbstractItemView.SelectionMode.ExtendedSelection)
+        self.files_listview.setSelectionBehavior(QAbstractItemView.SelectionBehavior.SelectItems)
 
         self.verticalLayout.addWidget(self.files_listview)
 
@@ -101,7 +102,7 @@ class Ui_PSGReaderSettingsView(object):
         self.scrollArea.setWidgetResizable(True)
         self.scrollAreaWidgetContents = QWidget()
         self.scrollAreaWidgetContents.setObjectName(u"scrollAreaWidgetContents")
-        self.scrollAreaWidgetContents.setGeometry(QRect(0, 0, 385, 319))
+        self.scrollAreaWidgetContents.setGeometry(QRect(0, 0, 244, 74))
         self.verticalLayout_5 = QVBoxLayout(self.scrollAreaWidgetContents)
         self.verticalLayout_5.setObjectName(u"verticalLayout_5")
         self.events_treeView = QTreeView(self.scrollAreaWidgetContents)
@@ -117,8 +118,8 @@ class Ui_PSGReaderSettingsView(object):
         self.frame_montages = QFrame(self.splitter)
         self.frame_montages.setObjectName(u"frame_montages")
         self.frame_montages.setEnabled(True)
-        self.frame_montages.setFrameShape(QFrame.StyledPanel)
-        self.frame_montages.setFrameShadow(QFrame.Raised)
+        self.frame_montages.setFrameShape(QFrame.Shape.StyledPanel)
+        self.frame_montages.setFrameShadow(QFrame.Shadow.Raised)
         self.verticalLayout_7 = QVBoxLayout(self.frame_montages)
         self.verticalLayout_7.setSpacing(8)
         self.verticalLayout_7.setObjectName(u"verticalLayout_7")
@@ -133,9 +134,9 @@ class Ui_PSGReaderSettingsView(object):
 
         self.montages_tableview = QTableView(self.frame_montages)
         self.montages_tableview.setObjectName(u"montages_tableview")
-        self.montages_tableview.setSelectionMode(QAbstractItemView.MultiSelection)
-        self.montages_tableview.setSelectionBehavior(QAbstractItemView.SelectRows)
-        self.montages_tableview.setHorizontalScrollMode(QAbstractItemView.ScrollPerPixel)
+        self.montages_tableview.setSelectionMode(QAbstractItemView.SelectionMode.MultiSelection)
+        self.montages_tableview.setSelectionBehavior(QAbstractItemView.SelectionBehavior.SelectRows)
+        self.montages_tableview.setHorizontalScrollMode(QAbstractItemView.ScrollMode.ScrollPerPixel)
         self.montages_tableview.horizontalHeader().setStretchLastSection(True)
 
         self.verticalLayout_3.addWidget(self.montages_tableview)
@@ -166,8 +167,8 @@ class Ui_PSGReaderSettingsView(object):
         self.splitter.addWidget(self.frame_montages)
         self.frame_channels = QFrame(self.splitter)
         self.frame_channels.setObjectName(u"frame_channels")
-        self.frame_channels.setFrameShape(QFrame.StyledPanel)
-        self.frame_channels.setFrameShadow(QFrame.Raised)
+        self.frame_channels.setFrameShape(QFrame.Shape.StyledPanel)
+        self.frame_channels.setFrameShadow(QFrame.Shadow.Raised)
         self.verticalLayout_2 = QVBoxLayout(self.frame_channels)
         self.verticalLayout_2.setSpacing(0)
         self.verticalLayout_2.setObjectName(u"verticalLayout_2")
@@ -186,8 +187,8 @@ class Ui_PSGReaderSettingsView(object):
 
         self.frame = QFrame(self.frame_channels)
         self.frame.setObjectName(u"frame")
-        self.frame.setFrameShape(QFrame.StyledPanel)
-        self.frame.setFrameShadow(QFrame.Raised)
+        self.frame.setFrameShape(QFrame.Shape.StyledPanel)
+        self.frame.setFrameShadow(QFrame.Shadow.Raised)
         self.horizontalLayout_2 = QHBoxLayout(self.frame)
         self.horizontalLayout_2.setSpacing(0)
         self.horizontalLayout_2.setObjectName(u"horizontalLayout_2")
@@ -219,13 +220,13 @@ class Ui_PSGReaderSettingsView(object):
 
         self.channels_tableview = QTableView(self.frame_channels)
         self.channels_tableview.setObjectName(u"channels_tableview")
-        self.channels_tableview.setEditTriggers(QAbstractItemView.SelectedClicked)
+        self.channels_tableview.setEditTriggers(QAbstractItemView.EditTrigger.SelectedClicked)
         self.channels_tableview.setDragEnabled(False)
         self.channels_tableview.setDragDropOverwriteMode(False)
-        self.channels_tableview.setDragDropMode(QAbstractItemView.NoDragDrop)
+        self.channels_tableview.setDragDropMode(QAbstractItemView.DragDropMode.NoDragDrop)
         self.channels_tableview.setAlternatingRowColors(True)
-        self.channels_tableview.setSelectionBehavior(QAbstractItemView.SelectRows)
-        self.channels_tableview.setHorizontalScrollMode(QAbstractItemView.ScrollPerPixel)
+        self.channels_tableview.setSelectionBehavior(QAbstractItemView.SelectionBehavior.SelectRows)
+        self.channels_tableview.setHorizontalScrollMode(QAbstractItemView.ScrollMode.ScrollPerPixel)
         self.channels_tableview.setSortingEnabled(False)
         self.channels_tableview.horizontalHeader().setStretchLastSection(True)
 
@@ -277,7 +278,7 @@ class Ui_PSGReaderSettingsView(object):
         PSGReaderSettingsView.setWindowTitle(QCoreApplication.translate("PSGReaderSettingsView", u"Form", None))
         self.label_PSG.setText(QCoreApplication.translate("PSGReaderSettingsView", u"PSG files", None))
         self.remove_entries_pushbutton.setText(QCoreApplication.translate("PSGReaderSettingsView", u"Remove", None))
-        self.add_folders_pushbutton.setText(QCoreApplication.translate("PSGReaderSettingsView", u"Add from folders", None))
+        self.add_folders_pushbutton.setText(QCoreApplication.translate("PSGReaderSettingsView", u"Add folders", None))
         self.add_files_pushbutton.setText(QCoreApplication.translate("PSGReaderSettingsView", u"Add files", None))
         self.label_4.setText(QCoreApplication.translate("PSGReaderSettingsView", u"Events details", None))
         self.label_Montages.setText(QCoreApplication.translate("PSGReaderSettingsView", u"Montages", None))
