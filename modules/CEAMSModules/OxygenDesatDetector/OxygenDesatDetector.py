@@ -400,10 +400,10 @@ class OxygenDesatDetector(SciNode):
         # Remove desaturation features not included in the Snooz annotations
         #----------------------------------------------------------------------
         # Keep ['group', 'name', 'start_sec', 'duration_sec', 'channels']
-        desat_df = desat_df[['group', 'name', 'start_sec', 'duration_sec', 'channels']]
+        desat_recovery_df = desat_recovery_df[['group', 'name', 'start_sec', 'duration_sec', 'channels']]
 
         # Add invalid sections to desaturation events
-        desat_df = pd.concat([desat_df, invalid_events], ignore_index=True)
+        desat_recovery_df = pd.concat([desat_recovery_df, invalid_events], ignore_index=True)
 
         if DEBUG:
             cache = {}
@@ -434,7 +434,7 @@ class OxygenDesatDetector(SciNode):
                 cache['signal_lpf'] = signal_lpf
                 cache['signal_hpf'] = signal_hpf
 
-                cache['desat_df'] = desat_df
+                cache['desat_df'] = desat_recovery_df
                 cache['plateau_df'] = plateau_df
                 cache['lmax_sec'] = lmax_indices_list[index_longuest]/fs_chan + data_starts[index_longuest]
                 cache['lmin_sec'] = lmin_indices_list[index_longuest]/fs_chan + data_starts[index_longuest]
@@ -494,7 +494,7 @@ class OxygenDesatDetector(SciNode):
         self._log_manager.log(self.identifier, f"{subject_info['filename']} has been append to {cohort_filename}")
         
         return {
-            'desat_events' : desat_df
+            'desat_events' : desat_recovery_df
         }
 
 

@@ -252,6 +252,8 @@ class OxygenDesatDetectorResultsView(Ui_OxygenDesatDetectorResultsView, QtWidget
                     else:
                         if row['name']=='desat_SpO2':
                             color_rec='green'
+                        elif row['name']=='recovery_SpO2':
+                            color_rec='blue'
                         elif row['name']=='plateau_SpO2':
                             color_rec='yellow'
                         elif row['name']=='art_SpO2':
