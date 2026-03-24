@@ -224,8 +224,12 @@ class PSGWriter(SciNode):
                 if any_signal_modified:
                     self._psg_reader_manager.save_signals(signals)
         
-        self._psg_reader_manager.save_file()
-        self._psg_reader_manager.close_file()
+        try: 
+            self._psg_reader_manager.save_file()
+        except Exception as e:
+            raise NodeRuntimeException(self.identifier, "files", f"PSGWriter cannot save signals or annotations for the file {output_filename}")
+        finally:
+            self._psg_reader_manager.close_file()
 
         return None
 
