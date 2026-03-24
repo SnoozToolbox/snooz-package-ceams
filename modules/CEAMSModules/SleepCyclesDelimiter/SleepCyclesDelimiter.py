@@ -78,6 +78,7 @@ See the file LICENCE for full license details.
 
 from flowpipe import SciNode, InputPlug, OutputPlug
 import numpy as np
+import os
 import pandas as pd
 
 from commons.NodeInputException import NodeInputException
@@ -278,11 +279,8 @@ class SleepCyclesDelimiter(SciNode):
 
         if isinstance(label, str) and len(label) > 0:
             self._filename = label
-            # remove the extension if any
-            if '.' in self._filename:
-                filename_path = self._filename.split('.')[0]
-            else:
-                filename_path = self._filename
+            # Remove the extension if any
+            filename_path = os.path.splitext(self._filename)[0]
             self._log_filename = f"{filename_path}_Cycle_WARNING.txt"
         else:
             self._log_filename = None

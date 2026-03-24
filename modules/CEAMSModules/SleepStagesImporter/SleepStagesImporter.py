@@ -149,11 +149,11 @@ class SleepStagesImporter(SciNode):
             # Extract the path and the filename of the current stage file
             stage_file_name = os.path.basename(stages_files[i])
             # Remove the extension from the current stage file
-            stage_file_name = stage_file_name.split('.')[0]
+            stage_file_name = os.path.splitext(stage_file_name)[0]
             # Extract the file name of the current PSG filename
             PSG_file_name = os.path.basename(filename)
             # Remove the extension from the PSG_file_name
-            PSG_file_name = PSG_file_name.split('.')[0]
+            PSG_file_name = os.path.splitext(PSG_file_name)[0]
             # Created stages file name
             created_stages_file = file_params['prefix_filename'] + PSG_file_name + file_params['suffix_filename']
             if file_params['case_sensitive']:

@@ -118,12 +118,11 @@ class Hypnogram(SciNode):
                 self.hypno_ax.clear()
                 # Extract filename from path
                 PSG_filename = os.path.basename(fig_name)
-                if '.' in PSG_filename:
-                    PSG_filename = PSG_filename.split('.')[0]
+                PSG_filename = os.path.splitext(PSG_filename)[0]
                 self.subject_id = PSG_filename
                 self.plot_hypnogram(sleep_stages, sleep_cycles, epoch_len=epoch_len_sec)
-                if not '.' in fig_name:
-                    fig_name = fig_name + '.pdf'
+                root, ext = os.path.splitext(fig_name)
+                if ext == '': fig_name = root + '.pdf'
                 self.figure.savefig(fig_name)
 
         return None

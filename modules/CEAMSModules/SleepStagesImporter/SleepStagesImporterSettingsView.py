@@ -5,7 +5,7 @@ See the file LICENCE for full license details.
     Settings viewer of the SleepStagesImporter plugin
 """
 
-from qtpy import QtWidgets
+from qtpy import QtCore, QtWidgets
 
 from CEAMSModules.SleepStagesImporter.Ui_SleepStagesImporterSettingsView import Ui_SleepStagesImporterSettingsView
 from commons.BaseSettingsView import BaseSettingsView
@@ -25,7 +25,11 @@ class SleepStagesImporterSettingsView(BaseSettingsView, Ui_SleepStagesImporterSe
         # Add the column label to the table 
         self.tableWidget_files.setColumnCount(1)
         self.tableWidget_files.setHorizontalHeaderLabels(['Filenames'])
-        self.tableWidget_files.horizontalHeader().setStretchLastSection(True)
+        self.tableWidget_files.horizontalHeader().setStretchLastSection(False)
+        self.tableWidget_files.horizontalHeader().setSectionResizeMode(0, QtWidgets.QHeaderView.Interactive)
+        self.tableWidget_files.setWordWrap(False)
+        self.tableWidget_files.setTextElideMode(QtCore.Qt.ElideNone)
+        self.tableWidget_files.setHorizontalScrollMode(QtWidgets.QAbstractItemView.ScrollPerPixel)
         self._files = []
         self._file_params = self.default_file_params()
 
@@ -106,7 +110,12 @@ class SleepStagesImporterSettingsView(BaseSettingsView, Ui_SleepStagesImporterSe
     def fill_table_files(self):
         self.tableWidget_files.setRowCount(len(self._files))
         for row, filename in enumerate(self._files):
-            self.tableWidget_files.setItem(row, 0, QtWidgets.QTableWidgetItem(filename))
+            item = QtWidgets.QTableWidgetItem(filename)
+            item.setToolTip(filename)
+            self.tableWidget_files.setItem(row, 0, item)
+
+        # Keep column width aligned to path content so horizontal scrolling is meaningful.
+        self.tableWidget_files.resizeColumnToContents(0)
 
 
     def default_file_params(self):
