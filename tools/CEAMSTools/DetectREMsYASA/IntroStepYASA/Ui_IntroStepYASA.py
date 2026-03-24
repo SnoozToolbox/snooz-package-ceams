@@ -24,14 +24,14 @@ class Ui_IntroStepYASA(object):
     def setupUi(self, IntroStepYASA):
         if not IntroStepYASA.objectName():
             IntroStepYASA.setObjectName(u"IntroStepYASA")
-        IntroStepYASA.resize(733, 340)
+        IntroStepYASA.resize(925, 646)
         IntroStepYASA.setStyleSheet(u"font: 12pt \"Roboto\";")
         self.verticalLayout_4 = QVBoxLayout(IntroStepYASA)
         self.verticalLayout_4.setObjectName(u"verticalLayout_4")
         self.label_2 = QLabel(IntroStepYASA)
         self.label_2.setObjectName(u"label_2")
         self.label_2.setMinimumSize(QSize(0, 0))
-        self.label_2.setMaximumSize(QSize(16777215, 16777215))
+        self.label_2.setMaximumSize(QSize(16777215, 140))
         font = QFont()
         font.setFamilies([u"Roboto"])
         font.setPointSize(12)
@@ -96,7 +96,7 @@ class Ui_IntroStepYASA(object):
         self.textEdit_2 = QTextEdit(IntroStepYASA)
         self.textEdit_2.setObjectName(u"textEdit_2")
         self.textEdit_2.setMinimumSize(QSize(0, 0))
-        self.textEdit_2.setMaximumSize(QSize(16777215, 140))
+        self.textEdit_2.setMaximumSize(QSize(16777215, 16777215))
         self.textEdit_2.setFrameShape(QFrame.Shape.NoFrame)
         self.textEdit_2.setFrameShadow(QFrame.Shadow.Plain)
         self.textEdit_2.setLineWidth(0)
@@ -156,17 +156,16 @@ class Ui_IntroStepYASA(object):
 "li.unchecked::marker { content: \"\\2610\"; }\n"
 "li.checked::marker { content: \"\\2612\"; }\n"
 "</style></head><body style=\" font-family:'Roboto'; font-size:12pt; font-weight:400; font-style:normal;\">\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:10pt;\"><br /></p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">PSG files including the header and event annotations, are required:</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">   - European Data Format (EDF)"
-                        " : The .edf and .tsv files must have the exact same filename and be stored in the same directory.</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">   - Stellate : The .sig and .sts files must have the exact same filename and be stored in the same directory.</p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">   - European Data Format (EDF) : The .edf and .tsv files must have the exact same filename and be stored in the same directory.</p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+                        "right:0px; -qt-block-indent:0; text-indent:0px;\">   - Stellate : The .sig and .sts files must have the exact same filename and be stored in the same directory.</p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">   - NATUS (<span style=\" font-style:italic;\">for CEAMS users</span>) :  The entire NATUS subject folder is required.</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">* The annotations files must include the sleep staging.</p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-weight:700;\">NOTE:</span> The annotations files must include the sleep staging.</p>\n"
 "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -q"
-                        "t-block-indent:0; text-indent:0px;\">Channels:</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">This tool requires the selection of <span style=\" font-weight:600;\">2</span> <span style=\" font-weight:600;\">EOG</span> <span style=\" font-weight:600;\">channels</span> per recording for REMs detection.</p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Channels:</p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:"
+                        "0px; -qt-block-indent:0; text-indent:0px;\">This tool requires the selection of <span style=\" font-weight:600;\">2</span> <span style=\" font-weight:600;\">EOG</span> <span style=\" font-weight:600;\">channels</span> per recording for REMs detection.</p>\n"
 "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p></body></html>", None))
         self.label_4.setText(QCoreApplication.translate("IntroStepYASA", u"<html><head/><body><p><span style=\" font-size:12pt; font-weight:600;\">Output</span></p></body></html>", None))
         self.textEdit_2.setHtml(QCoreApplication.translate("IntroStepYASA", u"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
@@ -176,9 +175,12 @@ class Ui_IntroStepYASA(object):
 "li.unchecked::marker { content: \"\\2610\"; }\n"
 "li.checked::marker { content: \"\\2612\"; }\n"
 "</style></head><body style=\" font-family:'Roboto'; font-size:12pt; font-weight:400; font-style:normal;\">\n"
-"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">The REMs detected events are added in the annotations files (.tsv, .sts or .ent) depending of the format used.<br />If the annotations file already includes the group event to be added, the existing entries will be removed before adding the new ones.</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Each events is defined "
-                        "by : <br />     1. group : The group where the events are added (i.e. REM).<br />     2. name : The name of the event (i.e. YASA_REM)<br />     3. start_sec : The onset of the event in second. <br />     4. duration_sec : The duration of the event in second.<br />     5. channels : The list of channels on which the event occurs.<br /><br /></p></body></html>", None))
+"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-weight:700;\">REMs Events<br /></span>Detected REM events are added to the annotations files (.tsv, .sts or .ent) depending on the format used. If the annotations file already includes the event group to be added, the existing entries will be removed before the new ones are inserted.</p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-bloc"
+                        "k-indent:0; text-indent:0px;\">Each events is defined by : <br />   1. group : The group where the events are added (i.e. REM).<br />   2. name : The name of the event (i.e. YASA_REM)<br />   3. start_sec : The onset of the event in second. <br />   4. duration_sec : The duration of the event in second.<br />   5. channels : The list of channels on which the event occurs.<br /><br /><span style=\" font-weight:700;\">REMs Cohort Report</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Averaged REM characteristics and REM density are reported per sleep cycle and per hour in a cohort report.</p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-weight:700; color:#ff0000;\">NOTE:</span><span style=\" color:#ff0000;\"> Please define the </span><span style=\" font-weight:700; color:#ff0000;\">sleep cycle</span><span style=\" color:#ff0000"
+                        ";\"> configuration you wish to use for the analysis using the blue panel on the left.</span></p></body></html>", None))
         self.label_3.setText(QCoreApplication.translate("IntroStepYASA", u"<html><head/><body><p><span style=\" font-size:12pt; font-weight:600;\">References</span></p></body></html>", None))
         self.textEdit_3.setHtml(QCoreApplication.translate("IntroStepYASA", u"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset=\"utf-8\" /><style type=\"text/css\">\n"
