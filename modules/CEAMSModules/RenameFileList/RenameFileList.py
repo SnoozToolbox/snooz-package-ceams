@@ -6,6 +6,7 @@ See the file LICENCE for full license details.
     Renames files based on intput parameters such as prefix, suffix, pattern to remove, number of characters to keep.
 """
 import os
+import errno
 import shutil
 
 from flowpipe import SciNode, InputPlug, OutputPlug
@@ -59,6 +60,16 @@ class RenameFileList(SciNode):
         OutputPlug('ren_file_list',self)
 
         self._is_master = False 
+
+
+    def _copy_file_portable(self, source_file, destination_file):
+        """Copy file content and preserve mode only when supported by the filesystem."""
+        shutil.copyfile(source_file, destination_file)
+        try:
+            shutil.copymode(source_file, destination_file)
+        except OSError as err:
+            if err.errno not in (errno.EOPNOTSUPP, errno.ENOTSUP, errno.EPERM):
+                raise
     
 
     def compute(self, file_list,prefix,suffix,n_char_to_keep,pattern_to_rem,ext_selection,keep_original_file):
@@ -149,7 +160,7 @@ class RenameFileList(SciNode):
                 if keep_original_file:
                     try:
                         # Copy the original file to the new name
-                        shutil.copy(file, ren_file_list[ori_file_list_to_ren.index(file)])
+                        self._copy_file_portable(file, ren_file_list[ori_file_list_to_ren.index(file)])
                         # Log message for the Logs tab
                         self._log_manager.log(self.identifier, f"{file} copied to {ren_file_list[ori_file_list_to_ren.index(file)]}.")
                     except Exception:
