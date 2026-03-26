@@ -398,7 +398,6 @@ class OxygenDesatDetector(SciNode):
         severity_integrated = {"total_severity": desat_recovery_df['area_percent_sec'].sum()/(total_stats['total_valid_min']*60)}
 
         # Remove desaturation features not included in the Snooz annotations
-        #----------------------------------------------------------------------
         # Keep ['group', 'name', 'start_sec', 'duration_sec', 'channels']
         desat_recovery_df = desat_recovery_df[['group', 'name', 'start_sec', 'duration_sec', 'channels']]
 
@@ -1457,7 +1456,7 @@ class OxygenDesatDetector(SciNode):
 
                     # Correct Lmax locations by finding actual maximum within 10s window
                     lmax_indice_org = self.correct_single_peak_index_in_window(
-                        signal, recovery_lmax_idx, window_s=10, fs_chan=fs_chan, find_max=True
+                        signal, recovery_lmax_idx, window_s=2, fs_chan=fs_chan, find_max=True
                     )
                     if lmax_indice_org is not None:
                         recovery_lmax_idx = lmax_indice_org
@@ -1465,7 +1464,7 @@ class OxygenDesatDetector(SciNode):
                         recovery_lmax_val = signal[recovery_lmax_idx]
 
                     recovery_duration = recovery_lmax_time - end_time
-                    if recovery_duration <= 0:
+                    if recovery_duration <= parameters_oxy['min_hold_drop_sec']:
                         continue
                     # evaluate recovery duration
                     if recovery_duration > max_recovery_duration_sec:
@@ -1478,7 +1477,7 @@ class OxygenDesatDetector(SciNode):
                     # Evaluate recovery rise and slope
                     recovery_rise = signal[recovery_lmax_idx] - recovery_start_value
                     recovery_slope = recovery_rise / recovery_duration if recovery_duration > 0 else 0.0
-                    if (recovery_rise >= min_recovery_rise_percent) or \
+                    if (recovery_rise >= min_recovery_rise_percent) and \
                        (recovery_slope >= min_recovery_slope_percent_per_sec):
                         all_recovery_events.append((end_time, recovery_duration, recovery_slope, recovery_rise))
                         recovery_selected = True
