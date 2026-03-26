@@ -31,7 +31,7 @@ from CEAMSModules.SleepReport import SleepReport
 from CEAMSModules.OxygenDesatDetector.OxygenDesatDetector_doc import write_doc_file
 from CEAMSModules.OxygenDesatDetector.OxygenDesatDetector_doc import _get_doc
 
-DEBUG = True
+DEBUG = False
 
 class OxygenDesatDetector(SciNode):
     """
@@ -380,7 +380,7 @@ class OxygenDesatDetector(SciNode):
         
         # Detect recovery
         #----------------------------------------------------------------------
-        recovery_df = self.detect_recovery_ABOSA(desat_df, data_starts, data_clean, fs_chan, channel, parameters_oxy)
+        recovery_df = self.detect_recovery_ABOSA(desat_df, data_starts, data_clean, data_dev_list, fs_chan, channel, parameters_oxy)
 
         desat_recovery_df = pd.concat([desat_df, recovery_df], ignore_index=True)
 
@@ -1321,7 +1321,7 @@ class OxygenDesatDetector(SciNode):
             if DEBUG: 
                 data_lpf_list.append(signal_lpf)
                 data_hpf_list.append(signal_squared)
-                data_dev_list.append(signal_derivative)
+            data_dev_list.append(signal_derivative)
 
         # Resolve overlapping desaturations by keeping events with steepest fall rate
         all_desat_events = self.resolve_overlapping_desaturations(all_desat_events)
@@ -1364,7 +1364,7 @@ class OxygenDesatDetector(SciNode):
         return desat_df, plateau_df, data_lpf_list, data_hpf_list, data_dev_list, lmax_indices_list, lmin_indices_list
 
 
-    def detect_recovery_ABOSA(self, desat_df, data_starts, data_stats, fs_chan, channel, parameters_oxy):
+    def detect_recovery_ABOSA(self, desat_df, data_starts, data_stats, data_dev_list, fs_chan, channel, parameters_oxy):
         """
         Detect recovery events following desaturation events as described in ABOSA.
 
@@ -1411,6 +1411,7 @@ class OxygenDesatDetector(SciNode):
 
             data_start = data_starts[i]
             signal_end = data_start + len(signal) / fs_chan
+            data_derivative = data_dev_list[i]
 
             # Low-pass filter to detect local maxima (recovery endpoints)
             signal_lpf = self.filter_nan_filtfilt(signal, order, fs_chan, frequency_cutoff, 'low')
@@ -1425,66 +1426,88 @@ class OxygenDesatDetector(SciNode):
 
             # For each desaturation event, find the next local maximum (Lmax) after the desaturation end (Lmin) 
             # and validate the recovery based on rise and slope criteria.
-            for _, desat_event in desat_df.iterrows():
-                end_time = desat_event['start_sec'] + desat_event['duration_sec']
+            for desat_event_i, desat_event in desat_df.iterrows():
+                desat_end_time = desat_event['start_sec'] + desat_event['duration_sec']
                 desat_duration = desat_event['duration_sec']
 
                 # Keep only desaturation ends that fall within this signal segment
-                if end_time < data_start or end_time >= signal_end:
+                if desat_end_time < data_start or desat_end_time >= signal_end:
                     continue
-                end_idx = int((end_time - data_start) * fs_chan)
-                recovery_start_value = signal[end_idx]
+                desat_end_idx = int((desat_end_time - data_start) * fs_chan)
+                recovery_start_value = signal[desat_end_idx]
                 if np.isnan(recovery_start_value): # artifact at the start of recovery - skip
                     continue
-                # Select all Lmax candidates for the current recovery
-                next_lmax = lmax_indices[lmax_indices > end_idx]
+                # Select all Lmax candidates for the current recovery event (after the curent desaturation end)
+                #   and before the next desaturation start if there is one
+                next_lmax = lmax_indices[lmax_indices > desat_end_idx]
+                next_desat = desat_df.iloc[desat_event_i + 1] if desat_event_i + 1 < len(desat_df) else None
+                if next_desat is not None:
+                    next_desat_end_idx = int((next_desat['start_sec'] - data_start) * fs_chan) if next_desat is not None else None
+                    next_lmax = next_lmax[next_lmax <= next_desat_end_idx]
                 if len(next_lmax) == 0:
                     break  # No Lmax remains in this segment for any later desaturation either
 
                 # Allowed recovery duration: 120 s or 2x desaturation duration, 
                 # the minimum of the two
-                max_recovery_duration_sec = min(120.0, 2.0 * desat_duration)
+                max_recovery_duration_sec = max(120.0, 2.0 * desat_duration)
                 recovery_selected = False
                 for recovery_lmax_idx in next_lmax:
 
-                    # Move recovery end backward to the sample just after
-                    # the last local activity (slope >= 0.05 %/s).
-                    recovery_lmax_idx, recovery_lmax_time, recovery_lmax_val = self.adjust_lmax_for_recovery_end(
-                        signal_lpf, signal_hpf, end_idx, recovery_lmax_idx, data_start, fs_chan,
-                        recovery_slope_activity_limit=min_recovery_slope_percent_per_sec
-                    )
+                    # Move recovery end backward to the sample just after the last derivative change
+                    # find the first derivative change points starting from the recovery_lmax_idx and going backward
+                    derivative_change_points = np.where(np.diff(np.sign(data_derivative)) != 0)[0]
+                    derivative_change_points = derivative_change_points[derivative_change_points <= recovery_lmax_idx]
+                    if len(derivative_change_points) > 0:
+                        rec_lmax_idx_shifted = derivative_change_points[-1] + 1
+                    else:
+                        rec_lmax_idx_shifted = recovery_lmax_idx  # No derivative change point found, the recovery end does not change
 
-                    # Correct Lmax locations by finding actual maximum within 10s window
-                    lmax_indice_org = self.correct_single_peak_index_in_window(
-                        signal, recovery_lmax_idx, window_s=2, fs_chan=fs_chan, find_max=True
-                    )
-                    if lmax_indice_org is not None:
-                        recovery_lmax_idx = lmax_indice_org
-                        recovery_lmax_time = data_start + recovery_lmax_idx / fs_chan
-                        recovery_lmax_val = signal[recovery_lmax_idx]
+                    # recovery_lmax_idx, recovery_lmax_time, recovery_lmax_val = self.adjust_lmax_for_recovery_end(
+                    #     signal_lpf, signal_hpf, end_idx, recovery_lmax_idx, data_start, fs_chan,
+                    #     recovery_slope_activity_limit=min_recovery_slope_percent_per_sec
+                    # )
 
-                    recovery_duration = recovery_lmax_time - end_time
+                    # Correct Lmax locations by finding actual maximum within 2s window
+                    lmax_indice_real = self.correct_single_peak_index_in_window(
+                        signal, rec_lmax_idx_shifted, window_s=2, fs_chan=fs_chan, find_max=True
+                    )
+                    if lmax_indice_real is not None:
+                        rec_lmax_idx_shifted = lmax_indice_real
+
+                    rec_lmax_time = data_start + rec_lmax_idx_shifted / fs_chan
+                    rec_lmax_val = signal[rec_lmax_idx_shifted]
+                    recovery_duration = rec_lmax_time - desat_end_time
                     if recovery_duration <= parameters_oxy['min_hold_drop_sec']:
+                        if DEBUG:
+                            desat_end_time_formatted = f"{int(desat_end_time // 3600):02d}:{int((desat_end_time % 3600) // 60):02d}:{int(desat_end_time % 60):02d}"
+                            print(f"No valid recovery for {desat_end_time_formatted} because of short recovery duration ({recovery_duration:.2f}s)")
                         continue
                     # evaluate recovery duration
                     if recovery_duration > max_recovery_duration_sec:
+                        if DEBUG:
+                            desat_end_time_formatted = f"{int(desat_end_time // 3600):02d}:{int((desat_end_time % 3600) // 60):02d}:{int(desat_end_time % 60):02d}"
+                            print(f"No valid recovery for {desat_end_time_formatted} because of long recovery duration ({recovery_duration:.2f}s)")
                         break
 
                     # Skip recovery candidates that contain artifacts.
-                    if np.any(np.isnan(signal[end_idx:recovery_lmax_idx + 1])):
+                    if np.any(np.isnan(signal[desat_end_idx:rec_lmax_idx_shifted + 1])):
+                        if DEBUG:
+                            desat_end_time_formatted = f"{int(desat_end_time // 3600):02d}:{int((desat_end_time % 3600) // 60):02d}:{int(desat_end_time % 60):02d}"
+                            print(f"No valid recovery for {desat_end_time_formatted} because of artifacts in the signal")
                         continue
 
                     # Evaluate recovery rise and slope
-                    recovery_rise = signal[recovery_lmax_idx] - recovery_start_value
+                    recovery_rise = rec_lmax_val - recovery_start_value
                     recovery_slope = recovery_rise / recovery_duration if recovery_duration > 0 else 0.0
                     if (recovery_rise >= min_recovery_rise_percent) and \
                        (recovery_slope >= min_recovery_slope_percent_per_sec):
-                        all_recovery_events.append((end_time, recovery_duration, recovery_slope, recovery_rise))
+                        all_recovery_events.append((desat_end_time, recovery_duration, recovery_slope, recovery_rise))
                         recovery_selected = True
-                        break
-
-                if DEBUG and (not recovery_selected):
-                    print(f"No valid recovery found for desaturation ending at {end_time:.2f}s")
+                    else:
+                        if DEBUG:
+                            desat_end_time_formatted = f"{int(desat_end_time // 3600):02d}:{int((desat_end_time % 3600) // 60):02d}:{int(desat_end_time % 60):02d}"
+                            print(f"No valid recovery for {desat_end_time_formatted} because of recovery_rise ({recovery_rise:.2f}%) or recovery_slope ({recovery_slope:.2f}%/s)")                
+                        #break no break since we resolve overlapping recoveries later
 
         all_recovery_events = self.resolve_overlapping_recoveries(all_recovery_events)
         # Compute the area under the recovery events for further analysis
