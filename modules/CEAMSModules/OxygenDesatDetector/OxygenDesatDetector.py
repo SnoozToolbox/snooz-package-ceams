@@ -2347,9 +2347,9 @@ class OxygenDesatDetector(SciNode):
         # The percentage of time spent in desaturation during the sleep period.
         desat_stats['desat_SP_percent'] = desat_df['duration_sec'].sum()/(total_stats['total_valid_min']*60)*100
         # The average duration in sec of the oxygen desaturation events in the sleep period.
-        desat_stats['desat_avg_sec'] = desat_df['duration_sec'].mean()
+        desat_stats['desat_dur_avg_sec'] = desat_df['duration_sec'].mean()
         # The median value of the duration in sec of the oxygen desaturation events in the sleep period.
-        desat_stats['desat_med_sec'] = desat_df['duration_sec'].median()
+        desat_stats['desat_dur_med_sec'] = desat_df['duration_sec'].median()
         # The average area under the desaturation events in percent*sec.
         desat_stats['desat_area_avg'] = desat_df['area_percent_sec'].mean()
         # The median area under the desaturation events in percent*sec.
@@ -2376,9 +2376,9 @@ class OxygenDesatDetector(SciNode):
         # The percentage of time spent in recovery during the sleep period.
         recovery_stats['recovery_SP_percent'] = recovery_df['duration_sec'].sum()/(total_stats['total_valid_min']*60)*100
         # The average duration in sec of the oxygen recovery events in the sleep period.
-        recovery_stats['recovery_avg_sec'] = recovery_df['duration_sec'].mean() 
+        recovery_stats['recovery_dur_avg_sec'] = recovery_df['duration_sec'].mean() 
         # The median value of the duration in sec of the oxygen recovery events in the sleep period.
-        recovery_stats['recovery_med_sec'] = recovery_df['duration_sec'].median()
+        recovery_stats['recovery_dur_med_sec'] = recovery_df['duration_sec'].median()
         # The average area under the recovery events in percent*sec.
         recovery_stats['recovery_area_avg'] = recovery_df['area_percent_sec'].mean()
         # The median area under the recovery events in percent*sec.
