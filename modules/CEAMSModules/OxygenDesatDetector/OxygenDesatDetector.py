@@ -986,16 +986,16 @@ class OxygenDesatDetector(SciNode):
         if len(event_samples) == 0 or np.all(np.isnan(event_samples)):
             return np.nan
 
-        # Baseline is the first valid sample at recovery start
-        baseline = event_samples[0] if not np.isnan(event_samples[0]) else np.nanmin(event_samples)
+        # Baseline is the last valid sample at recovery start
+        baseline = event_samples[-1] if not np.isnan(event_samples[-1]) else np.nanmax(event_samples)
 
-        # Compute rise above baseline for each sample
-        rise_above_baseline = event_samples - baseline
-        rise_above_baseline = np.clip(rise_above_baseline, 0, None)
+        # Compute drop below baseline for each sample
+        drop_below_baseline = baseline - event_samples
+        drop_below_baseline = np.clip(drop_below_baseline, 0, None)  # Only count positive drops
 
         # Compute area using sample duration
         dt = 1.0 / fs_chan
-        area = np.nansum(rise_above_baseline) * dt
+        area = np.nansum(drop_below_baseline) * dt
 
         return area
 
@@ -1515,7 +1515,7 @@ class OxygenDesatDetector(SciNode):
         for start_sec, duration_sec, slope, rise in all_recovery_events:
             # Find which signal segment contains this event
             area = np.nan
-            for samples, data_start in zip(data_stats, data_starts):
+            for samples, data_start in zip(data_stats, data_starts): # usually only one signal since edf does not support discontinuities.
                 signal_end = data_start + len(samples) / fs_chan
                 # Check if the event is within this signal segment
                 if start_sec >= data_start and start_sec < signal_end:
