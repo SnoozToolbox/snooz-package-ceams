@@ -1462,11 +1462,6 @@ class OxygenDesatDetector(SciNode):
                     else:
                         rec_lmax_idx_shifted = recovery_lmax_idx  # No derivative change point found, the recovery end does not change
 
-                    # recovery_lmax_idx, recovery_lmax_time, recovery_lmax_val = self.adjust_lmax_for_recovery_end(
-                    #     signal_lpf, signal_hpf, end_idx, recovery_lmax_idx, data_start, fs_chan,
-                    #     recovery_slope_activity_limit=min_recovery_slope_percent_per_sec
-                    # )
-
                     # Correct Lmax locations by finding actual maximum within 2s window
                     lmax_indice_real = self.correct_single_peak_index_in_window(
                         signal, rec_lmax_idx_shifted, window_s=2, fs_chan=fs_chan, find_max=True
@@ -1529,78 +1524,6 @@ class OxygenDesatDetector(SciNode):
             columns=['group', 'name', 'start_sec', 'duration_sec', 'channels', 'slope', 'depth'])
         recovery_df['area_percent_sec'] = recovery_areas
         return recovery_df
-
-
-    def adjust_lmax_for_recovery_end(self, signal, signal_hpf, lmin_idx, lmax_idx, data_start, fs_chan, recovery_slope_activity_limit=0.05):
-        """
-        Shift recovery end (Lmax) backward to the sample just after the last
-        high-frequency activity in the recovery segment.
-
-        Activity is detected from peaks in the squared high-pass signal,
-        similarly to adjust_lmax_for_fall_rate.
-
-        Parameters:
-            signal : numpy array
-                SpO2 signal (typically low-pass filtered).
-            signal_hpf : numpy array
-                High-pass filtered SpO2 signal used to detect local activity.
-            lmin_idx : int
-                Index of recovery start (desaturation end).
-            lmax_idx : int
-                Candidate index of recovery end.
-            data_start : float
-                Start time in seconds of this signal section.
-            fs_chan : float
-                Sampling frequency (Hz).
-            recovery_slope_activity_limit : float
-                Minimum positive slope (%/s) to consider as recovery activity.
-
-        Returns:
-            adjusted_lmax_idx : int
-                Adjusted index of recovery end.
-            adjusted_lmax_time : float
-                Adjusted time of recovery end.
-            adjusted_lmax_val : float
-                Adjusted value at recovery end.
-        """
-        adjusted_lmax_idx = lmax_idx
-
-        if lmax_idx > lmin_idx:
-            # Square the high-pass signal to emphasize activity in both directions.
-            signal_squared = signal_hpf ** 2
-
-            # Detect activity peaks on the whole segment with a dynamic prominence
-            # to avoid reacting to tiny isolated noise spikes.
-            min_peak_distance_samples = max(1, int(fs_chan))
-            hpf_segment = signal_hpf[lmin_idx:lmax_idx + 1]
-            if len(hpf_segment) > 1 and not np.all(np.isnan(hpf_segment)):
-                min_peak_prominence = np.nanstd(hpf_segment)
-                if np.isnan(min_peak_prominence):
-                    min_peak_prominence = 0.0
-                peaks, _ = scipysignal.find_peaks(
-                    signal_squared,
-                    distance=min_peak_distance_samples,
-                    prominence=min_peak_prominence
-                )
-
-                # Keep activity peaks inside [lmin_idx, lmax_idx).
-                possible_peaks = peaks[(peaks >= lmin_idx) & (peaks < lmax_idx)]
-                if len(possible_peaks) > 0:
-                    last_activity_idx = possible_peaks[-1]
-                    # End of recovery is set just after the last detected activity.
-                    adjusted_lmax_idx = min(lmax_idx, last_activity_idx + 1)
-
-            # Safety check: if the resulting average recovery slope is below the
-            # activity threshold, keep the original endpoint.
-            duration_sec = (adjusted_lmax_idx - lmin_idx) / fs_chan
-            if duration_sec > 0:
-                avg_slope = (signal[adjusted_lmax_idx] - signal[lmin_idx]) / duration_sec
-                if avg_slope < recovery_slope_activity_limit:
-                    adjusted_lmax_idx = lmax_idx
-
-        adjusted_lmax_time = data_start + adjusted_lmax_idx / fs_chan
-        adjusted_lmax_val = signal[adjusted_lmax_idx]
-        return adjusted_lmax_idx, adjusted_lmax_time, adjusted_lmax_val
 
 
     def filter_nan_filtfilt(self, signal, order, fs_chan, cutoff_freq, type='low'):
