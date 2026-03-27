@@ -24,7 +24,7 @@ class Ui_DetectionSettings(object):
     def setupUi(self, DetectionSettings):
         if not DetectionSettings.objectName():
             DetectionSettings.setObjectName(u"DetectionSettings")
-        DetectionSettings.resize(847, 428)
+        DetectionSettings.resize(836, 580)
         DetectionSettings.setStyleSheet(u"font: 12pt \"Roboto\";")
         self.verticalLayout = QVBoxLayout(DetectionSettings)
         self.verticalLayout.setObjectName(u"verticalLayout")
@@ -59,7 +59,7 @@ class Ui_DetectionSettings(object):
 
         self.verticalLayout.addLayout(self.horizontalLayout_2)
 
-        self.verticalSpacer_4 = QSpacerItem(20, 13, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Minimum)
+        self.verticalSpacer_4 = QSpacerItem(20, 13, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Fixed)
 
         self.verticalLayout.addItem(self.verticalSpacer_4)
 
@@ -158,9 +158,38 @@ class Ui_DetectionSettings(object):
 
         self.verticalLayout.addWidget(self.label_7)
 
-        self.verticalSpacer_6 = QSpacerItem(20, 13, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Minimum)
+        self.verticalSpacer_6 = QSpacerItem(20, 13, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Fixed)
 
         self.verticalLayout.addItem(self.verticalSpacer_6)
+
+        self.label_10 = QLabel(DetectionSettings)
+        self.label_10.setObjectName(u"label_10")
+
+        self.verticalLayout.addWidget(self.label_10)
+
+        self.label_9 = QLabel(DetectionSettings)
+        self.label_9.setObjectName(u"label_9")
+
+        self.verticalLayout.addWidget(self.label_9)
+
+        self.label_12 = QLabel(DetectionSettings)
+        self.label_12.setObjectName(u"label_12")
+
+        self.verticalLayout.addWidget(self.label_12)
+
+        self.label_11 = QLabel(DetectionSettings)
+        self.label_11.setObjectName(u"label_11")
+
+        self.verticalLayout.addWidget(self.label_11)
+
+        self.label_13 = QLabel(DetectionSettings)
+        self.label_13.setObjectName(u"label_13")
+
+        self.verticalLayout.addWidget(self.label_13)
+
+        self.verticalSpacer = QSpacerItem(20, 13, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Fixed)
+
+        self.verticalLayout.addItem(self.verticalSpacer)
 
         self.label_8 = QLabel(DetectionSettings)
         self.label_8.setObjectName(u"label_8")
@@ -215,6 +244,12 @@ class Ui_DetectionSettings(object):
         self.radioButton_180s.setText(QCoreApplication.translate("DetectionSettings", u"180 sec [1]", None))
         self.radioButton_hold_10s.setText(QCoreApplication.translate("DetectionSettings", u"10 sec [1]", None))
         self.label_7.setText(QCoreApplication.translate("DetectionSettings", u"The oximeter signal is analyzed for desaturations during the sleep period (from sleep onset to final awakening).", None))
+        self.label_10.setText(QCoreApplication.translate("DetectionSettings", u"<html><head/><body><p><span style=\" font-weight:700;\">Recovery criteria</span></p></body></html>", None))
+        self.label_9.setText(QCoreApplication.translate("DetectionSettings", u"The minimum duration is 3 sec.", None))
+        self.label_12.setText(QCoreApplication.translate("DetectionSettings", u"The maximum duration is the maximum between\n"
+"   120 sec and 2 X the desaturation event before the recovery.", None))
+        self.label_11.setText(QCoreApplication.translate("DetectionSettings", u"The minimum amplitude is 2%", None))
+        self.label_13.setText(QCoreApplication.translate("DetectionSettings", u"The minimum slope is 0.05 %/s", None))
         self.label_8.setText(QCoreApplication.translate("DetectionSettings", u"<html><head/><body><p><span style=\" font-weight:600;\">References</span></p></body></html>", None))
         self.label_5.setText(QCoreApplication.translate("DetectionSettings", u"[1] Karhu, T., Lepp\u00e4nen, T., T\u00f6yr\u00e4s, J., Oksenberg, A., Myllymaa, S., & Nikkonen, S. (2022). ABOSA \u2013 Freely available automatic blood oxygen saturation signal analysis software\u202f: Structure and validation. Computer Methods and Programs in Biomedicine, 226, 107120. https://doi.org/10.1016/j.cmpb.2022.107120\n"
 "", None))

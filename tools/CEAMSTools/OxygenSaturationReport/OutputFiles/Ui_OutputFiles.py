@@ -25,7 +25,7 @@ class Ui_OutputFiles(object):
     def setupUi(self, OutputFiles):
         if not OutputFiles.objectName():
             OutputFiles.setObjectName(u"OutputFiles")
-        OutputFiles.resize(991, 866)
+        OutputFiles.resize(991, 688)
         OutputFiles.setStyleSheet(u"font: 12pt \"Roboto\";")
         self.verticalLayout = QVBoxLayout(OutputFiles)
         self.verticalLayout.setObjectName(u"verticalLayout")
@@ -43,7 +43,9 @@ class Ui_OutputFiles(object):
         self.textEdit.setFrameShape(QFrame.Shape.NoFrame)
         self.textEdit.setFrameShadow(QFrame.Shadow.Plain)
         self.textEdit.setLineWidth(-1)
-        self.textEdit.setSizeAdjustPolicy(QAbstractScrollArea.SizeAdjustPolicy.AdjustToContents)
+        self.textEdit.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
+        self.textEdit.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
+        self.textEdit.setSizeAdjustPolicy(QAbstractScrollArea.SizeAdjustPolicy.AdjustIgnored)
         self.textEdit.setReadOnly(True)
 
         self.verticalLayout.addWidget(self.textEdit)
@@ -99,6 +101,11 @@ class Ui_OutputFiles(object):
 
         self.verticalLayout.addWidget(self.label_5)
 
+        self.label_6 = QLabel(OutputFiles)
+        self.label_6.setObjectName(u"label_6")
+
+        self.verticalLayout.addWidget(self.label_6)
+
         self.verticalSpacer_4 = QSpacerItem(20, 20, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Preferred)
 
         self.verticalLayout.addItem(self.verticalSpacer_4)
@@ -149,10 +156,6 @@ class Ui_OutputFiles(object):
 
         self.verticalLayout.addItem(self.verticalSpacer_2)
 
-        self.verticalSpacer = QSpacerItem(20, 0, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Preferred)
-
-        self.verticalLayout.addItem(self.verticalSpacer)
-
 
         self.retranslateUi(OutputFiles)
         self.pushButton_browse.clicked.connect(OutputFiles.browse_slot)
@@ -175,15 +178,22 @@ class Ui_OutputFiles(object):
 "<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">The oxygen saturation is analyzed during the sleep period, defined as the interval from the first epoch scored as sleep (N1, N2, N3, or R) to the final awakening (including the last epoch scored as s"
                         "leep).</p>\n"
 "<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Automatic artifact detection is applied to the oximeter channel: segments longer than 5 s marked as artifacts are excluded from the analysis, while shorter segments are interpolated.</p>\n"
-"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">The report contains two main categories of metrics:</p>\n"
+"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">The report contains three main categories of metrics:</p>\n"
 "<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-weight:700;\">1. Oxygen Saturation Variables</span></p>\n"
 "<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">- Minimum, maximum, mean, and variability (standard deviation) of saturation values<br />- Percentage of time spent below clinically relevant saturation thresholds (96 % to 60 %)</p>\n"
 ""
                         "<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Metrics are computed for the entire sleep period and stratified by sleep thirds, halves, sleep cycles, and sleep stages (W, N1, N2, N3, REM, NREM, N2\u2013N3, and total sleep).</p>\n"
 "<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-weight:700;\">2. Oxygen Desaturation Variables</span></p>\n"
 "<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">- Total number of events<br />- Index (ODI, events per hour)<br />- Severity (sum of areas under desaturation events, in percent\u00b7sec, over the sleep period)<br />- Percentage of sleep time spent in desaturation<br />- Average and median desaturation characteristics: Duration (s), Area (% s), Slope (% / s) and Drop (%).</p>\n"
-"<p style=\" margin-top:12px; margin-bottom:12px; margin"
-                        "-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">All metrics are stored in the Cohort Oxygen Saturation Report, with one line per recording. </p></body></html>", None))
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-l"
+                        "eft:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-weight:700;\">3. Oxygen Recovery Variables</span></p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-weight:700;\"><br /></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">- Total number of events<br />- Index (events per hour)<br />- Severity (sum of areas under recovery events, in percent\u00b7sec, over the sleep period)<br />- Percentage of sleep time spent in recovery<br />- Average and median recovery characteristics: Duration (s), Area (% s), Slope (% / s) and Amplitude (%).</p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:"
+                        "0; text-indent:0px;\">The <span style=\" font-weight:700;\">Total Severity </span>corresponds to the sum of the individual desaturation and recovery areas in percent*sec over the valid sleep period (sec).</p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">All metrics are stored in the Cohort Oxygen Saturation Report, with one line per recording. </p></body></html>", None))
         self.lineEdit_filename.setText("")
         self.lineEdit_filename.setPlaceholderText(QCoreApplication.translate("OutputFiles", u"Define the file to save the Cohort Oxygen Saturation Report...", None))
         self.pushButton_browse.setText(QCoreApplication.translate("OutputFiles", u"Browse", None))
@@ -191,6 +201,7 @@ class Ui_OutputFiles(object):
         self.label.setText(QCoreApplication.translate("OutputFiles", u"<html><head/><body><p><span style=\" font-weight:700;\">Optional outputs</span></p></body></html>", None))
         self.checkBox_writeEvts.setText(QCoreApplication.translate("OutputFiles", u"Write the desaturation events in the accessory file provided with the PSG recording.", None))
         self.label_5.setText(QCoreApplication.translate("OutputFiles", u"Oxygen desaturation events are defined as : group = SpO2; name = desat_SpO2", None))
+        self.label_6.setText(QCoreApplication.translate("OutputFiles", u"Oxygen recovery events are defined as : group = SpO2; name = recovery_SpO2", None))
         self.label_2.setText(QCoreApplication.translate("OutputFiles", u" Output directory to save the characteristics report and oxygen saturation graph for each recording", None))
         self.lineEdit_picturename.setText("")
         self.lineEdit_picturename.setPlaceholderText(QCoreApplication.translate("OutputFiles", u"Select a folder to save the optional files ...", None))
