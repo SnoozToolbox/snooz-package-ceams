@@ -820,7 +820,7 @@
                     },
                     "sample_rate": {
                         "name": "sample_rate",
-                        "value": "1",
+                        "value": "16",
                         "sub_plugs": {},
                         "connections": {}
                     },
@@ -846,7 +846,7 @@
                 "module": "CEAMSModules.Resample",
                 "identifier": "149782b2-d651-4238-8b02-1a3e318be0bc",
                 "pos_x": 288.0,
-                "pos_y": 203.0,
+                "pos_y": 204.0,
                 "activation_state": "bypass",
                 "package": {
                     "package_name": "CEAMSModules"
@@ -895,7 +895,7 @@
                     },
                     "cutoff": {
                         "name": "cutoff",
-                        "value": "1",
+                        "value": "8",
                         "sub_plugs": {},
                         "connections": {}
                     },

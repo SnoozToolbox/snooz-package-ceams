@@ -148,7 +148,7 @@ class OxygenDesatDetector(SciNode):
         # Init module variables
         self.stage_stats_labels =   ['N1',   'N2',   'N3',   'R',    'W',    'NREM',             'N2N3',         'SLEEP']
         self.stage_stats_list =     [['N1'], ['N2'], ['N3'], ['R'], ['W'],   ['N1', 'N2', 'N3'], ['N2', 'N3'], ['N1', 'N2', 'N3', 'R', 'W']]
-        self.values_below = [96, 94, 92, 90, 85, 80, 75, 70, 60]
+        self.values_below = [96, 94, 92, 90, 88, 85, 80, 75, 70, 60]
     
 
     def compute(self, artifact_group, artifact_name, arousal_group, arousal_name, \
@@ -377,27 +377,32 @@ class OxygenDesatDetector(SciNode):
             # 'min_hold_drop_sec' : 'Minimum duration (s) during which the oxygen level drop is maintained "10 or 5"',
         desat_df, plateau_df, data_lpf_list, data_hpf_list, data_dev_list, lmax_indices_list, lmin_indices_list = \
             self.detect_desaturation_ABOSA(data_starts, data_clean, fs_chan, channel, parameters_oxy)
+        
+        # Detect recovery
+        #----------------------------------------------------------------------
+        recovery_df = self.detect_recovery_ABOSA(desat_df, data_starts, data_clean, data_dev_list, fs_chan, channel, parameters_oxy)
+
+        desat_recovery_df = pd.concat([desat_df, recovery_df], ignore_index=True)
 
         # Save the list of desaturation events detected and their characteristics
         #----------------------------------------------------------------------
-        # filename including path to save the dataframe 
-        picture_dir_channel = os.path.join(picture_dir, subject_info['filename'])
-        # Save the oxygen saturation events with characteristics
         if len(picture_dir)>0:
             file_events_name = os.path.join(picture_dir, f"{subject_info['filename']}_oxygen_saturation_events.tsv")
-            pd.DataFrame.to_csv(desat_df, path_or_buf=file_events_name, sep='\t', index=False, encoding="utf_8")
+            pd.DataFrame.to_csv(desat_recovery_df, path_or_buf=file_events_name, sep='\t', index=False, encoding="utf_8")
             
         # Compute desaturation stats
         #----------------------------------------------------------------------
         desat_stats = self.compute_desat_stats(desat_df, total_stats, stage_sleep_period_df)
+        recovery_stats = self.compute_recovery_stats(recovery_df, total_stats, stage_sleep_period_df)
+        # TotalSev_integrated = Total Severity of desaturation and recovery events. Total event area (desaturation+recovery) is calculated by integrating from the start of desaturation to the end of recovery. 
+        severity_integrated = {"total_severity": desat_recovery_df['area_percent_sec'].sum()/(total_stats['total_valid_min']*60)}
 
         # Remove desaturation features not included in the Snooz annotations
-        #----------------------------------------------------------------------
         # Keep ['group', 'name', 'start_sec', 'duration_sec', 'channels']
-        desat_df = desat_df[['group', 'name', 'start_sec', 'duration_sec', 'channels']]
+        desat_recovery_df = desat_recovery_df[['group', 'name', 'start_sec', 'duration_sec', 'channels']]
 
         # Add invalid sections to desaturation events
-        desat_df = pd.concat([desat_df, invalid_events], ignore_index=True)
+        desat_recovery_df = pd.concat([desat_recovery_df, invalid_events], ignore_index=True)
 
         if DEBUG:
             cache = {}
@@ -428,7 +433,7 @@ class OxygenDesatDetector(SciNode):
                 cache['signal_lpf'] = signal_lpf
                 cache['signal_hpf'] = signal_hpf
 
-                cache['desat_df'] = desat_df
+                cache['desat_df'] = desat_recovery_df
                 cache['plateau_df'] = plateau_df
                 cache['lmax_sec'] = lmax_indices_list[index_longuest]/fs_chan + data_starts[index_longuest]
                 cache['lmin_sec'] = lmin_indices_list[index_longuest]/fs_chan + data_starts[index_longuest]
@@ -457,7 +462,7 @@ class OxygenDesatDetector(SciNode):
         # There is a new line for each channel and mini band
         output = subject_info_params | cycle_info_param | desaturation_param | invalid_section_param | \
             channel_info_param | sleep_cycle_count | total_stats | third_stats | half_stats | \
-                stage_stats | cycle_stats | desat_stats #| temporal_stats
+                stage_stats | cycle_stats | desat_stats | recovery_stats | severity_integrated #| temporal_stats
         report_df = pd.DataFrame.from_records([output])
 
         # Write the current report for the current subject into the cohort tsv file
@@ -488,7 +493,7 @@ class OxygenDesatDetector(SciNode):
         self._log_manager.log(self.identifier, f"{subject_info['filename']} has been append to {cohort_filename}")
         
         return {
-            'desat_events' : desat_df
+            'desat_events' : desat_recovery_df
         }
 
 
@@ -951,6 +956,50 @@ class OxygenDesatDetector(SciNode):
         return area
 
 
+    def compute_recovery_area(self, signal, data_start, start_sec, duration_sec, fs_chan):
+        """
+        Compute the area of a recovery event.
+
+        The area is calculated as the integral of the rise above the baseline
+        (recovery start value) over the duration of the event. The result is in
+        %-seconds.
+
+        Parameters:
+            signal : numpy array
+                SpO2 signal samples.
+            data_start : float
+                Start time in seconds of the signal array.
+            start_sec : float
+                Start time in seconds of the recovery event.
+            duration_sec : float
+                Duration in seconds of the recovery event.
+            fs_chan : float
+                Sampling frequency in Hz.
+
+        Returns:
+            area : float
+                Area of the recovery event in %-seconds.
+        """
+        # Extract samples for the recovery event
+        event_samples = self.extract_samples_from_array(signal, data_start, start_sec, duration_sec, fs_chan)
+
+        if len(event_samples) == 0 or np.all(np.isnan(event_samples)):
+            return np.nan
+
+        # Baseline is the last valid sample at recovery start
+        baseline = event_samples[-1] if not np.isnan(event_samples[-1]) else np.nanmax(event_samples)
+
+        # Compute drop below baseline for each sample
+        drop_below_baseline = baseline - event_samples
+        drop_below_baseline = np.clip(drop_below_baseline, 0, None)  # Only count positive drops
+
+        # Compute area using sample duration
+        dt = 1.0 / fs_chan
+        area = np.nansum(drop_below_baseline) * dt
+
+        return area
+
+
     def resolve_overlapping_desaturations(self, desat_events):
         """
         Resolve overlapping desaturation events by keeping the one with the steepest fall rate.
@@ -1004,6 +1053,62 @@ class OxygenDesatDetector(SciNode):
             # Move to the next non-overlapping event
             i = overlapping[-1][0] + 1
         
+        return resolved_events
+
+
+    def resolve_overlapping_recoveries(self, recovery_events):
+        """
+        Resolve overlapping recovery events by keeping the one with the highest
+        positive recovery slope.
+
+        Parameters:
+            recovery_events : list of tuples
+                List of (start_sec, duration_sec, slope, rise) tuples.
+
+        Returns:
+            resolved_events : list of tuples
+                List of non-overlapping (start_sec, duration_sec, slope, rise) tuples.
+        """
+        if len(recovery_events) == 0:
+            return recovery_events
+
+        # Sort events by start time
+        sorted_events = sorted(recovery_events, key=lambda x: x[0])
+
+        resolved_events = []
+        i = 0
+        while i < len(sorted_events):
+            current_start, current_dur, current_slope, current_rise = sorted_events[i]
+            current_end = current_start + current_dur
+
+            # Find all overlapping events
+            overlapping = [(i, current_start, current_dur, current_slope, current_rise)]
+            j = i + 1
+            while j < len(sorted_events):
+                next_start, next_dur, next_slope, next_rise = sorted_events[j]
+                next_end = next_start + next_dur
+
+                # Check for overlap: events overlap if next starts before current ends
+                if next_start < current_end:
+                    overlapping.append((j, next_start, next_dur, next_slope, next_rise))
+                    current_end = max(current_end, next_end)
+                    j += 1
+                else:
+                    break
+
+            # Select event with highest positive slope
+            best_event = max(overlapping, key=lambda x: x[3])  # x[3] is slope
+            resolved_events.append((best_event[1], best_event[2], best_event[3], best_event[4]))
+
+            if DEBUG and len(overlapping) > 1:
+                print(f"Resolved {len(overlapping)} overlapping recoveries:")
+                for idx, start, dur, slope, rise in overlapping:
+                    marker = " <-- KEPT" if (start, dur, slope, rise) == (best_event[1], best_event[2], best_event[3], best_event[4]) else ""
+                    print(f"  start={start:.2f}s, duration={dur:.2f}s, rise={rise:.3f}%, slope={slope:.3f}%/s{marker}")
+
+            # Move to the next non-overlapping event
+            i = overlapping[-1][0] + 1
+
         return resolved_events
 
     def detect_desaturation_ABOSA(self, data_starts, data_stats, fs_chan, channel, parameters_oxy):
@@ -1166,16 +1271,14 @@ class OxygenDesatDetector(SciNode):
                                                        data_starts[i], fs_chan, desat_event_slope_shallow_limit)
                                         
                     # Correct Lmax locations by finding actual maximum within 5s window on raw signal
-                    adjusted_lmax_idx = self.correct_peak_indices_in_window(
-                        signal, [adjusted_lmax_idx], window_s=5, fs_chan=fs_chan)
-                    adjusted_lmax_idx = adjusted_lmax_idx[0]
+                    adjusted_lmax_idx = self.correct_single_peak_index_in_window(
+                        signal, adjusted_lmax_idx, window_s=5, fs_chan=fs_chan, find_max=True)
                     adjusted_lmax_time = data_starts[i] + adjusted_lmax_idx / fs_chan
                     adjusted_lmax_val = signal[adjusted_lmax_idx]
 
-                    # Correct Lmin locations by finding actual maximum within 5s window on raw signal
-                    adjusted_lmin_idx = self.correct_peak_indices_in_window(
-                        signal, [adjusted_lmin_idx], window_s=5, fs_chan=fs_chan, find_max=False)
-                    adjusted_lmin_idx = adjusted_lmin_idx[0]
+                    # Correct Lmin locations by finding actual minimum within 5s window on raw signal
+                    adjusted_lmin_idx = self.correct_single_peak_index_in_window(
+                        signal, adjusted_lmin_idx, window_s=5, fs_chan=fs_chan, find_max=False)
                     adjusted_lmin_time = data_starts[i] + adjusted_lmin_idx / fs_chan
                     adjusted_lmin_val = signal[adjusted_lmin_idx]
 
@@ -1218,7 +1321,7 @@ class OxygenDesatDetector(SciNode):
             if DEBUG: 
                 data_lpf_list.append(signal_lpf)
                 data_hpf_list.append(signal_squared)
-                data_dev_list.append(signal_derivative)
+            data_dev_list.append(signal_derivative)
 
         # Resolve overlapping desaturations by keeping events with steepest fall rate
         all_desat_events = self.resolve_overlapping_desaturations(all_desat_events)
@@ -1259,6 +1362,169 @@ class OxygenDesatDetector(SciNode):
         plateau_df = manage_events.create_event_dataframe(data=plateau_events)
   
         return desat_df, plateau_df, data_lpf_list, data_hpf_list, data_dev_list, lmax_indices_list, lmin_indices_list
+
+
+    def detect_recovery_ABOSA(self, desat_df, data_starts, data_stats, data_dev_list, fs_chan, channel, parameters_oxy):
+        """
+        Detect recovery events following desaturation events as described in ABOSA.
+
+        For each desaturation end time (Lmin), the recovery event starts at the Lmin
+        and ends at the next local maximum (Lmax) found in the signal.
+
+        Parameters:
+            desat_df : pandas DataFrame
+                Dataframe of desaturation events with at least 'start_sec' and
+                'duration_sec' columns.
+            data_starts : list
+                Start time in seconds of each continuous signal section.
+            data_stats : list of numpy array
+                Cleaned oxygen saturation signal for each continuous section.
+            fs_chan : float
+                Sampling frequency (Hz).
+            channel : string
+                Channel label.
+            parameters_oxy : dict
+                'desaturation_drop_percent' : Drop level (%) for the oxygen desaturation.
+
+        Returns:
+            recovery_df : pandas DataFrame
+                df of events with columns:
+                'group': 'SpO2'
+                'name': 'recovery_SpO2'
+                'start_sec': Start time of the recovery (= desaturation end time).
+                'duration_sec': Duration of the recovery in seconds.
+                'channels': Channel label.
+        """
+        MIN_RECOVERY_DURATION_SEC = 3.0  # Minimum duration for a valid recovery event
+        all_recovery_events = []
+
+        # Parameters matching detect_desaturation_ABOSA
+        min_peak_distance_sec = 5
+        min_peak_prominence = 1
+        order = 4
+        frequency_cutoff = 0.1
+        min_recovery_rise_percent = 2.0
+        min_recovery_slope_percent_per_sec = 0.05
+
+        for i, signal in enumerate(data_stats):
+            if not np.any(~np.isnan(signal)):
+                continue
+
+            data_start = data_starts[i]
+            signal_end = data_start + len(signal) / fs_chan
+            data_derivative = data_dev_list[i]
+
+            # Low-pass filter to detect local maxima (recovery endpoints)
+            signal_lpf = self.filter_nan_filtfilt(signal, order, fs_chan, frequency_cutoff, 'low')
+            # High-pass filter the signal at 0.1 Hz (which is already low-pass filtered to 0.1 Hz)
+            signal_hpf = self.filter_nan_filtfilt(signal_lpf, order, fs_chan, frequency_cutoff, 'high')
+            min_peak_distance_samples = int(min_peak_distance_sec * fs_chan)
+            lmax_indices, _ = self.detect_local_max(
+                signal, signal_lpf, fs_chan,
+                min_peak_distance_samples, min_peak_prominence,
+                data_start
+            )
+
+            # For each desaturation event, find the next local maximum (Lmax) after the desaturation end (Lmin) 
+            # and validate the recovery based on rise and slope criteria.
+            for desat_event_i, desat_event in desat_df.iterrows():
+                desat_end_time = desat_event['start_sec'] + desat_event['duration_sec']
+                desat_duration = desat_event['duration_sec']
+
+                # Keep only desaturation ends that fall within this signal segment
+                if desat_end_time < data_start or desat_end_time >= signal_end:
+                    continue
+                desat_end_idx = int((desat_end_time - data_start) * fs_chan)
+                recovery_start_value = signal[desat_end_idx]
+                if np.isnan(recovery_start_value): # artifact at the start of recovery - skip
+                    continue
+                # Select all Lmax candidates for the current recovery event (after the curent desaturation end)
+                #   and before the next desaturation start if there is one
+                next_lmax = lmax_indices[lmax_indices > desat_end_idx]
+                next_desat = desat_df.iloc[desat_event_i + 1] if desat_event_i + 1 < len(desat_df) else None
+                if next_desat is not None:
+                    next_desat_end_idx = int((next_desat['start_sec'] - data_start) * fs_chan) if next_desat is not None else None
+                    next_lmax = next_lmax[next_lmax <= next_desat_end_idx]
+                if len(next_lmax) == 0:
+                    break  # No Lmax remains in this segment for any later desaturation either
+
+                # Allowed recovery duration: 120 s or 2x desaturation duration, 
+                # the minimum of the two
+                max_recovery_duration_sec = max(120.0, 2.0 * desat_duration)
+                recovery_selected = False
+                for recovery_lmax_idx in next_lmax:
+
+                    # Move recovery end backward to the sample just after the last derivative change
+                    # find the first derivative change points starting from the recovery_lmax_idx and going backward
+                    derivative_change_points = np.where(np.diff(np.sign(data_derivative)) != 0)[0]
+                    derivative_change_points = derivative_change_points[derivative_change_points <= recovery_lmax_idx]
+                    if len(derivative_change_points) > 0:
+                        rec_lmax_idx_shifted = derivative_change_points[-1] + 1
+                    else:
+                        rec_lmax_idx_shifted = recovery_lmax_idx  # No derivative change point found, the recovery end does not change
+
+                    # Correct Lmax locations by finding actual maximum within 2s window
+                    lmax_indice_real = self.correct_single_peak_index_in_window(
+                        signal, rec_lmax_idx_shifted, window_s=2, fs_chan=fs_chan, find_max=True
+                    )
+                    if lmax_indice_real is not None:
+                        rec_lmax_idx_shifted = lmax_indice_real
+
+                    rec_lmax_time = data_start + rec_lmax_idx_shifted / fs_chan
+                    rec_lmax_val = signal[rec_lmax_idx_shifted]
+                    recovery_duration = rec_lmax_time - desat_end_time
+                    if recovery_duration <= MIN_RECOVERY_DURATION_SEC:
+                        if DEBUG:
+                            desat_end_time_formatted = f"{int(desat_end_time // 3600):02d}:{int((desat_end_time % 3600) // 60):02d}:{int(desat_end_time % 60):02d}"
+                            print(f"No valid recovery for {desat_end_time_formatted} because of short recovery duration ({recovery_duration:.2f}s)")
+                        continue
+                    # evaluate recovery duration
+                    if recovery_duration > max_recovery_duration_sec:
+                        if DEBUG:
+                            desat_end_time_formatted = f"{int(desat_end_time // 3600):02d}:{int((desat_end_time % 3600) // 60):02d}:{int(desat_end_time % 60):02d}"
+                            print(f"No valid recovery for {desat_end_time_formatted} because of long recovery duration ({recovery_duration:.2f}s)")
+                        break
+
+                    # Skip recovery candidates that contain artifacts.
+                    if np.any(np.isnan(signal[desat_end_idx:rec_lmax_idx_shifted + 1])):
+                        if DEBUG:
+                            desat_end_time_formatted = f"{int(desat_end_time // 3600):02d}:{int((desat_end_time % 3600) // 60):02d}:{int(desat_end_time % 60):02d}"
+                            print(f"No valid recovery for {desat_end_time_formatted} because of artifacts in the signal")
+                        continue
+
+                    # Evaluate recovery rise and slope
+                    recovery_rise = rec_lmax_val - recovery_start_value
+                    recovery_slope = recovery_rise / recovery_duration if recovery_duration > 0 else 0.0
+                    if (recovery_rise >= min_recovery_rise_percent) and \
+                       (recovery_slope >= min_recovery_slope_percent_per_sec):
+                        all_recovery_events.append((desat_end_time, recovery_duration, recovery_slope, recovery_rise))
+                        recovery_selected = True
+                    else:
+                        if DEBUG:
+                            desat_end_time_formatted = f"{int(desat_end_time // 3600):02d}:{int((desat_end_time % 3600) // 60):02d}:{int(desat_end_time % 60):02d}"
+                            print(f"No valid recovery for {desat_end_time_formatted} because of recovery_rise ({recovery_rise:.2f}%) or recovery_slope ({recovery_slope:.2f}%/s)")                
+                        #break no break since we resolve overlapping recoveries later
+
+        all_recovery_events = self.resolve_overlapping_recoveries(all_recovery_events)
+        # Compute the area under the recovery events for further analysis
+        recovery_areas = []
+        for start_sec, duration_sec, slope, rise in all_recovery_events:
+            # Find which signal segment contains this event
+            area = np.nan
+            for samples, data_start in zip(data_stats, data_starts): # usually only one signal since edf does not support discontinuities.
+                signal_end = data_start + len(samples) / fs_chan
+                # Check if the event is within this signal segment
+                if start_sec >= data_start and start_sec < signal_end:
+                    area = self.compute_recovery_area(samples, data_start, start_sec, duration_sec, fs_chan)
+                    break
+            recovery_areas.append(area)
+
+        recovery_events = [('SpO2', 'recovery_SpO2', start_sec, duration_sec, channel, slope, rise)
+                   for start_sec, duration_sec, slope, rise in all_recovery_events]
+        recovery_df = pd.DataFrame(data=recovery_events,
+            columns=['group', 'name', 'start_sec', 'duration_sec', 'channels', 'slope', 'depth'])
+        recovery_df['area_percent_sec'] = recovery_areas
+        return recovery_df
 
 
     def filter_nan_filtfilt(self, signal, order, fs_chan, cutoff_freq, type='low'):
@@ -1447,6 +1713,38 @@ class OxygenDesatDetector(SciNode):
                 valid_mask[i] = False
         
         return corrected_indices[valid_mask]
+
+
+    def correct_single_peak_index_in_window(self, signal, peak_idx, window_s, fs_chan, find_max=True):
+        """
+        Correct a single peak location by finding the actual extremum in the original
+        signal within a centered time window.
+
+        Parameters:
+            signal : numpy array
+                Original SpO2 signal.
+            peak_idx : int
+                Index of the peak to correct.
+            window_s : float
+                Window duration in seconds (centered on peak_idx).
+            fs_chan : float
+                Sampling frequency (Hz).
+            find_max : bool
+                If True, find maximum within window; if False, find minimum.
+
+        Returns:
+            corrected_idx : int or None
+                Corrected index, or None if the window contains only NaN values.
+        """
+        half_window_samples = int((window_s / 2) * fs_chan)
+        ws = max(0, peak_idx - half_window_samples)
+        we = min(len(signal), peak_idx + half_window_samples)
+        window_signal = signal[ws:we]
+        if len(window_signal) == 0 or np.all(np.isnan(window_signal)):
+            return None
+        if find_max:
+            return ws + np.nanargmax(window_signal)
+        return ws + np.nanargmin(window_signal)
 
 
     def detect_local_min(self, signal, signal_lpf, fs_chan, min_peak_distance_samples, min_peak_prominence, data_start):
@@ -1973,9 +2271,9 @@ class OxygenDesatDetector(SciNode):
         # The percentage of time spent in desaturation during the sleep period.
         desat_stats['desat_SP_percent'] = desat_df['duration_sec'].sum()/(total_stats['total_valid_min']*60)*100
         # The average duration in sec of the oxygen desaturation events in the sleep period.
-        desat_stats['desat_avg_sec'] = desat_df['duration_sec'].mean()
+        desat_stats['desat_dur_avg_sec'] = desat_df['duration_sec'].mean()
         # The median value of the duration in sec of the oxygen desaturation events in the sleep period.
-        desat_stats['desat_med_sec'] = desat_df['duration_sec'].median()
+        desat_stats['desat_dur_med_sec'] = desat_df['duration_sec'].median()
         # The average area under the desaturation events in percent*sec.
         desat_stats['desat_area_avg'] = desat_df['area_percent_sec'].mean()
         # The median area under the desaturation events in percent*sec.
@@ -1990,6 +2288,35 @@ class OxygenDesatDetector(SciNode):
         desat_stats['desat_depth_med'] = desat_df['depth'].median()
 
         return desat_stats
+
+    def compute_recovery_stats(self, recovery_df, total_stats, stage_sleep_period_df):
+        recovery_stats = {}
+        # The number of oxygen recovery in the sleep period.
+        recovery_stats['recovery_count'] = len(recovery_df)
+        # The Recovery Index (RI) : number of recovery per sleep hour.
+        recovery_stats['recovery_index'] = len(recovery_df)/((total_stats['total_valid_min'])/60)
+        # Recovery severity : The sum of areas under the recovery events in percent*sec over the sleep period (sec).
+        recovery_stats['recovery_severity'] = recovery_df['area_percent_sec'].sum()/(total_stats['total_valid_min']*60)        
+        # The percentage of time spent in recovery during the sleep period.
+        recovery_stats['recovery_SP_percent'] = recovery_df['duration_sec'].sum()/(total_stats['total_valid_min']*60)*100
+        # The average duration in sec of the oxygen recovery events in the sleep period.
+        recovery_stats['recovery_dur_avg_sec'] = recovery_df['duration_sec'].mean() 
+        # The median value of the duration in sec of the oxygen recovery events in the sleep period.
+        recovery_stats['recovery_dur_med_sec'] = recovery_df['duration_sec'].median()
+        # The average area under the recovery events in percent*sec.
+        recovery_stats['recovery_area_avg'] = recovery_df['area_percent_sec'].mean()
+        # The median area under the recovery events in percent*sec.
+        recovery_stats['recovery_area_med'] = recovery_df['area_percent_sec'].median()
+        # The average slope of the recovery events in percent/sec.
+        recovery_stats['recovery_slope_avg'] = recovery_df['slope'].mean()  
+        # The median slope of the recovery events in percent/sec.
+        recovery_stats['recovery_slope_med'] = recovery_df['slope'].median()
+        # The average depth of the recovery events in percent.
+        recovery_stats['recovery_depth_avg'] = recovery_df['depth'].mean()  
+        # The median depth of the recovery events in percent.
+        recovery_stats['recovery_depth_med'] = recovery_df['depth'].median()
+
+        return recovery_stats
 
     
     def compute_temporal_link_stats(self, desat_df, arousals_selected, window_link_sec, channel):

@@ -120,8 +120,8 @@ def _get_doc(N_CYCLE, stage_stats_labels, values_below):
             'desat_ODI' : 'The Oxygen Desaturation Index (ODI) : number of desaturations per hour during the valid sleep period.',
             'desat_severity' : 'Desaturation severity : The sum of areas under the desaturation events in percent*sec over the valid sleep period (sec).',
             'desat_SP_percent' : 'The percentage of time spent in desaturation during the valid sleep period (SP).',
-            'desat_avg_sec' : 'The average duration in sec of the oxygen desaturation events occuring during the valid sleep period.',
-            'desat_med_sec' : 'The median value of the duration in sec of the oxygen desaturation events occuring during the valid sleep period.',
+            'desat_dur_avg_sec' : 'The average duration in sec of the oxygen desaturation events occuring during the valid sleep period.',
+            'desat_dur_med_sec' : 'The median value of the duration in sec of the oxygen desaturation events occuring during the valid sleep period.',
             'desat_area_avg' : 'The average area under the desaturation events in percent*sec.',
             'desat_area_med' : 'The median area under the desaturation events in percent*sec.',
             'desat_slope_avg' : 'The average slope of the desaturation events in percent/sec.',
@@ -129,6 +129,28 @@ def _get_doc(N_CYCLE, stage_stats_labels, values_below):
             'desat_depth_avg' : 'The average depth of the desaturation events in percent.',
             'desat_depth_med' : 'The median depth of the desaturation events in percent.'
     }
+
+    recovery_dict = \
+    {
+            'recovery_count' : 'The number of oxygen recovery events during the valid sleep period.',
+            'recovery_index' : 'The Recovery Index (RI): number of recovery events per hour during the valid sleep period.',
+            'recovery_severity' : 'Recovery severity: The sum of areas under the recovery events in percent*sec over the valid sleep period (sec).',
+            'recovery_SP_percent' : 'The percentage of time spent in recovery during the valid sleep period (SP).',
+            'recovery_dur_avg_sec' : 'The average duration in sec of the oxygen recovery events occurring during the valid sleep period.',
+            'recovery_dur_med_sec' : 'The median duration in sec of the oxygen recovery events occurring during the valid sleep period.',
+            'recovery_area_avg' : 'The average area under the recovery events in percent*sec.',
+            'recovery_area_med' : 'The median area under the recovery events in percent*sec.',
+            'recovery_slope_avg' : 'The average slope of the recovery events in percent/sec.',
+            'recovery_slope_med' : 'The median slope of the recovery events in percent/sec.',
+            'recovery_depth_avg' : 'The average depth of the recovery events in percent.',
+            'recovery_depth_med' : 'The median depth of the recovery events in percent.'
+    }
+
+    integrated_dict = \
+    {
+            'total_severity' : 'Total Severity of desaturation and recovery areas by summing individual desaturation and recovery areas in percent*sec over the valid sleep period (sec).'
+    }
+
 
     # temporal_link_dict = \
     #     {
@@ -144,5 +166,5 @@ def _get_doc(N_CYCLE, stage_stats_labels, values_below):
 
 
     # Ajouter les tiers
-    complete_dict = general_dict | total_dict | total_threshold_dict | third_dict | half_dict | stage_dict | cycle_dict | desat_dict #| temporal_link_dict
+    complete_dict = general_dict | total_dict | total_threshold_dict | third_dict | half_dict | stage_dict | cycle_dict | desat_dict | recovery_dict | integrated_dict #| temporal_link_dict
     return complete_dict
