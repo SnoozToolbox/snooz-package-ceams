@@ -1395,6 +1395,7 @@ class OxygenDesatDetector(SciNode):
                 'duration_sec': Duration of the recovery in seconds.
                 'channels': Channel label.
         """
+        MIN_RECOVERY_DURATION_SEC = 3.0  # Minimum duration for a valid recovery event
         all_recovery_events = []
 
         # Parameters matching detect_desaturation_ABOSA
@@ -1472,7 +1473,7 @@ class OxygenDesatDetector(SciNode):
                     rec_lmax_time = data_start + rec_lmax_idx_shifted / fs_chan
                     rec_lmax_val = signal[rec_lmax_idx_shifted]
                     recovery_duration = rec_lmax_time - desat_end_time
-                    if recovery_duration <= parameters_oxy['min_hold_drop_sec']:
+                    if recovery_duration <= MIN_RECOVERY_DURATION_SEC:
                         if DEBUG:
                             desat_end_time_formatted = f"{int(desat_end_time // 3600):02d}:{int((desat_end_time % 3600) // 60):02d}:{int(desat_end_time % 60):02d}"
                             print(f"No valid recovery for {desat_end_time_formatted} because of short recovery duration ({recovery_duration:.2f}s)")
