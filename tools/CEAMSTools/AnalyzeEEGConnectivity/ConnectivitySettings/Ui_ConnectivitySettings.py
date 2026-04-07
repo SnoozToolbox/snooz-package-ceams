@@ -15,16 +15,17 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QFont, QFontDatabase, QGradient, QIcon,
     QImage, QKeySequence, QLinearGradient, QPainter,
     QPalette, QPixmap, QRadialGradient, QTransform)
-from PySide6.QtWidgets import (QApplication, QButtonGroup, QFrame, QHBoxLayout,
-    QLabel, QLineEdit, QRadioButton, QSizePolicy,
-    QSpacerItem, QVBoxLayout, QWidget)
+from PySide6.QtWidgets import (QApplication, QButtonGroup, QDoubleSpinBox, QFrame,
+    QHBoxLayout, QLabel, QLineEdit, QRadioButton,
+    QSizePolicy, QSpacerItem, QTextEdit, QVBoxLayout,
+    QWidget)
 import themes_rc
 
 class Ui_ConnectivitySettings(object):
     def setupUi(self, ConnectivitySettings):
         if not ConnectivitySettings.objectName():
             ConnectivitySettings.setObjectName(u"ConnectivitySettings")
-        ConnectivitySettings.resize(820, 517)
+        ConnectivitySettings.resize(877, 850)
         ConnectivitySettings.setStyleSheet(u"font: 12pt \"Roboto\";")
         self.verticalLayout = QVBoxLayout(ConnectivitySettings)
         self.verticalLayout.setSpacing(25)
@@ -199,6 +200,92 @@ class Ui_ConnectivitySettings(object):
 
         self.verticalLayout.addWidget(self.frame)
 
+        self.frame_3 = QFrame(ConnectivitySettings)
+        self.frame_3.setObjectName(u"frame_3")
+        self.frame_3.setFrameShape(QFrame.Shape.NoFrame)
+        self.frame_3.setFrameShadow(QFrame.Shadow.Raised)
+        self.verticalLayout_7 = QVBoxLayout(self.frame_3)
+        self.verticalLayout_7.setObjectName(u"verticalLayout_7")
+        self.label_5 = QLabel(self.frame_3)
+        self.label_5.setObjectName(u"label_5")
+
+        self.verticalLayout_7.addWidget(self.label_5)
+
+        self.textEdit = QTextEdit(self.frame_3)
+        self.textEdit.setObjectName(u"textEdit")
+        self.textEdit.setFrameShape(QFrame.Shape.NoFrame)
+
+        self.verticalLayout_7.addWidget(self.textEdit)
+
+        self.label_6 = QLabel(self.frame_3)
+        self.label_6.setObjectName(u"label_6")
+
+        self.verticalLayout_7.addWidget(self.label_6)
+
+        self.horizontalLayout_9 = QHBoxLayout()
+        self.horizontalLayout_9.setObjectName(u"horizontalLayout_9")
+        self.verticalLayout_6 = QVBoxLayout()
+        self.verticalLayout_6.setObjectName(u"verticalLayout_6")
+        self.horizontalLayout_6 = QHBoxLayout()
+        self.horizontalLayout_6.setObjectName(u"horizontalLayout_6")
+        self.mst_radioButton = QRadioButton(self.frame_3)
+        self.buttonGroup_2 = QButtonGroup(ConnectivitySettings)
+        self.buttonGroup_2.setObjectName(u"buttonGroup_2")
+        self.buttonGroup_2.addButton(self.mst_radioButton)
+        self.mst_radioButton.setObjectName(u"mst_radioButton")
+        self.mst_radioButton.setChecked(True)
+
+        self.horizontalLayout_6.addWidget(self.mst_radioButton)
+
+        self.horizontalSpacer_8 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+
+        self.horizontalLayout_6.addItem(self.horizontalSpacer_8)
+
+        self.custom_threshold_radioButton = QRadioButton(self.frame_3)
+        self.buttonGroup_2.addButton(self.custom_threshold_radioButton)
+        self.custom_threshold_radioButton.setObjectName(u"custom_threshold_radioButton")
+
+        self.horizontalLayout_6.addWidget(self.custom_threshold_radioButton)
+
+
+        self.verticalLayout_6.addLayout(self.horizontalLayout_6)
+
+        self.horizontalLayout_8 = QHBoxLayout()
+        self.horizontalLayout_8.setObjectName(u"horizontalLayout_8")
+        self.threshold_val_label = QLabel(self.frame_3)
+        self.threshold_val_label.setObjectName(u"threshold_val_label")
+
+        self.horizontalLayout_8.addWidget(self.threshold_val_label)
+
+        self.threshold_val_doubleSpinBox = QDoubleSpinBox(self.frame_3)
+        self.threshold_val_doubleSpinBox.setObjectName(u"threshold_val_doubleSpinBox")
+        self.threshold_val_doubleSpinBox.setMinimum(0.010000000000000)
+        self.threshold_val_doubleSpinBox.setMaximum(0.990000000000000)
+        self.threshold_val_doubleSpinBox.setSingleStep(0.010000000000000)
+        self.threshold_val_doubleSpinBox.setValue(0.050000000000000)
+
+        self.horizontalLayout_8.addWidget(self.threshold_val_doubleSpinBox)
+
+        self.horizontalSpacer_9 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+
+        self.horizontalLayout_8.addItem(self.horizontalSpacer_9)
+
+
+        self.verticalLayout_6.addLayout(self.horizontalLayout_8)
+
+
+        self.horizontalLayout_9.addLayout(self.verticalLayout_6)
+
+        self.horizontalSpacer_7 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+
+        self.horizontalLayout_9.addItem(self.horizontalSpacer_7)
+
+
+        self.verticalLayout_7.addLayout(self.horizontalLayout_9)
+
+
+        self.verticalLayout.addWidget(self.frame_3)
+
         self.verticalSpacer = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
 
         self.verticalLayout.addItem(self.verticalSpacer)
@@ -228,5 +315,21 @@ class Ui_ConnectivitySettings(object):
         self.p_value_lineedit.setText(QCoreApplication.translate("ConnectivitySettings", u"0.05", None))
         self.epoch_overlap_label.setText(QCoreApplication.translate("ConnectivitySettings", u"Epoch overlap (s)", None))
         self.epoch_overlap_lineEdit.setText(QCoreApplication.translate("ConnectivitySettings", u"0", None))
+        self.label_5.setText(QCoreApplication.translate("ConnectivitySettings", u"<html><head/><body><p><span style=\" font-weight:700;\">Network Properties Settings:</span></p></body></html>", None))
+        self.textEdit.setHtml(QCoreApplication.translate("ConnectivitySettings", u"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
+"<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset=\"utf-8\" /><style type=\"text/css\">\n"
+"p, li { white-space: pre-wrap; }\n"
+"hr { height: 1px; border-width: 0; }\n"
+"li.unchecked::marker { content: \"\\2610\"; }\n"
+"li.checked::marker { content: \"\\2612\"; }\n"
+"</style></head><body style=\" font-family:'Roboto'; font-size:12pt; font-weight:400; font-style:normal;\">\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Network properties computes five major graph-theoretical properties of the network. It summarizes the network\u2019s efficiency, integration, segregation, and small-world characteristics.</p>\n"
+"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">The output contains 5 global graph metrics: Average shortest path length, Average clus"
+                        "tering coefficient, Global efficiency, Ratio of clustering to path length (binary small-worldness) and Modularity score of the network<br /><br />Netowork properties will be calculated only if there are enough channels (&gt;32 channels), and will be skipped if number of channels is below 32. There are two modes for thresholding connectivity matrix, minimum spanning tree or a custom threshold.</p>\n"
+"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-weight:700;\">minimally_spanning_tree</span>: constructs networks using a minimum spanning tree (recommended for sparse graphs)<br /><span style=\" font-weight:700;\">custom_threshold</span> : thresholds network by keeping only top X% strongest edges</p></body></html>", None))
+        self.label_6.setText(QCoreApplication.translate("ConnectivitySettings", u"<html><head/><body><p>Select threshold mode, and threshold value if threshold mode is set to custom threshold.</p></body></html>", None))
+        self.mst_radioButton.setText(QCoreApplication.translate("ConnectivitySettings", u"Minimally spanning tree", None))
+        self.custom_threshold_radioButton.setText(QCoreApplication.translate("ConnectivitySettings", u"Custom threshold", None))
+        self.threshold_val_label.setText(QCoreApplication.translate("ConnectivitySettings", u"Threshold value", None))
     # retranslateUi
 

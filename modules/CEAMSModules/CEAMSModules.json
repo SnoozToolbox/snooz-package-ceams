@@ -1181,6 +1181,20 @@
                     }
                 }
             ]
+        },
+        {
+            "item_name": "NetworkProperties",
+            "item_type": "module",
+            "item_version": "0.0.0",
+            "item_hooks": [
+                {
+                    "endpoint_name": "module_endpoint",
+                    "parameters": {
+                        "module_category": "Connectivity Analysis",
+                        "module_label": "Network Properties"
+                    }
+                }
+            ]
         }
     ]
 }

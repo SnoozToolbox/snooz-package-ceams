@@ -62,7 +62,7 @@ from CEAMSModules.PSGReader import commons
 import numpy as np
 import pandas as pd
 
-DEBUG = False
+DEBUG = True
 
 class SignalsFromEvents(SciNode):
     """

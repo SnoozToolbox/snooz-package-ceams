@@ -147,7 +147,7 @@ class FilterStep(BaseStepView, Ui_FilterStep, QtWidgets.QWidget):
             self.start_time_label.setEnabled(False)
             self.duration_time_label.setEnabled(False)
 
-        
+
     def load_settings(self):
         # Load settings is called after the constructor of all steps has been executed.
         # From this point on, you can assume that all context has been set correctly.

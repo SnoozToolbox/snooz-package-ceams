@@ -26,7 +26,7 @@ class OutputFiles(BaseStepView, Ui_OutputFiles, QtWidgets.QWidget):
         # --- 1. Set Node ID and Topic Strings ---
         self._node_id_ConnectivityDetails_wpli = "803b6207-918f-4e3e-b5be-48ad9fc8b01c"
         self._node_id_ConnectivityDetails_dpli = "cc042193-2e41-49e0-b80e-973b1174cdb9"
-        self._node_id_NetworkProperties = "8608df84-c1f5-4568-bba9-ea8c8aa456ae"
+        self._node_id_NetworkProperties = "02d58c3b-80ec-4e80-8a3c-33d9ee521c18"
 
         # --- 2. Connect UI Actions ---
         self.output_path_checkBox.stateChanged.connect(self.toggle_path_selection)
