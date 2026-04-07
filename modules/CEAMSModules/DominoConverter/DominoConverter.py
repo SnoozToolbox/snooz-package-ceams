@@ -146,8 +146,32 @@ class DominoConverter(SciNode):
                     # ---------------------------------------------
                     # Preprocess the file to evaluate the format
                     # ---------------------------------------------
-                    with open(file_to_read) as f:
-                        contents = f.readlines()
+                    contents = None
+                    file_encoding = None
+                    # Try common encodings explicitly to keep behavior consistent across OS.
+                    for encoding in ("utf-8", "cp1252", "latin-1"):
+                        try:
+                            with open(file_to_read, encoding=encoding) as f:
+                                contents = f.readlines()
+                            file_encoding = encoding
+                            break
+                        except UnicodeDecodeError:
+                            continue
+                        except OSError as error:
+                            current_warning = pd.DataFrame(
+                                data=[[edf_filename, annot_file, f"Cannot read file ({error})"]],
+                                columns=self.warning_col,
+                            )
+                            self.warning_message = pd.concat([self.warning_message, current_warning], axis=0)
+                            break
+
+                    if contents is None:
+                        current_warning = pd.DataFrame(
+                            data=[[edf_filename, annot_file, "Cannot decode file with supported encodings"]],
+                            columns=self.warning_col,
+                        )
+                        self.warning_message = pd.concat([self.warning_message, current_warning], axis=0)
+                        continue
                     # Look for the empty line
                     event_group = None
                     start_time = None
@@ -185,6 +209,7 @@ class DominoConverter(SciNode):
                     else:
                         current_warning = pd.DataFrame(data=[[edf_filename, annot_file, "Header was not found"]], columns=self.warning_col)
                         self.warning_message = pd.concat([self.warning_message,current_warning],axis=0)
+                        continue
                     # Empty
                     if n_columns==0:
                         current_warning = pd.DataFrame(data=[[edf_filename, annot_file, "empty"]], columns=self.warning_col)
@@ -207,8 +232,22 @@ class DominoConverter(SciNode):
                         # -------------------------------------------------------------
                         # Read the whole file and convert data into a pandas dataframe
                         # -------------------------------------------------------------
-                        somno_df = pd.read_csv(file_to_read, sep=self.separator, header=None, skiprows=n_rows_hdr-1, \
-                            encoding='utf_8', names=['clock_time', 'name']) 
+                        try:
+                            somno_df = pd.read_csv(
+                                file_to_read,
+                                sep=self.separator,
+                                header=None,
+                                skiprows=n_rows_hdr-1,
+                                encoding=file_encoding,
+                                names=['clock_time', 'name'],
+                            )
+                        except Exception as error:
+                            current_warning = pd.DataFrame(
+                                data=[[edf_filename, annot_file, f"Error while parsing file ({error})"]],
+                                columns=self.warning_col,
+                            )
+                            self.warning_message = pd.concat([self.warning_message, current_warning], axis=0)
+                            continue
                     # Expert Annotations
                     elif n_columns==3:
                         if event_group is None : 
@@ -226,8 +265,22 @@ class DominoConverter(SciNode):
                         # -------------------------------------------------------------
                         # Read the whole file and convert data into a pandas dataframe
                         # -------------------------------------------------------------
-                        somno_df = pd.read_csv(file_to_read, sep=self.separator, header=None, skiprows=n_rows_hdr-1, \
-                            encoding='utf_8', names=['clock_time', 'duration_sec','name']) 
+                        try:
+                            somno_df = pd.read_csv(
+                                file_to_read,
+                                sep=self.separator,
+                                header=None,
+                                skiprows=n_rows_hdr-1,
+                                encoding=file_encoding,
+                                names=['clock_time', 'duration_sec','name'],
+                            )
+                        except Exception as error:
+                            current_warning = pd.DataFrame(
+                                data=[[edf_filename, annot_file, f"Error while parsing file ({error})"]],
+                                columns=self.warning_col,
+                            )
+                            self.warning_message = pd.concat([self.warning_message, current_warning], axis=0)
+                            continue
                     else:
                         current_warning = pd.DataFrame(data=[[edf_filename, annot_file, "Unexpected number of columns ({n_columns})"]], columns=self.warning_col)
                         self.warning_message = pd.concat([self.warning_message,current_warning],axis=0)     

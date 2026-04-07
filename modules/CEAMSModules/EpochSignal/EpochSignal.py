@@ -117,14 +117,6 @@ class EpochSignal(SciNode):
                 channel_segments[ch_name] = []
             channel_segments[ch_name].append(sig)
 
-        # >>> TEMPORARY LIMITING TO FIRST 10 SEGMENTS PER CHANNEL <<<
-        for ch_name in channel_segments.keys():
-            original_count = len(channel_segments[ch_name])
-            channel_segments[ch_name] = channel_segments[ch_name][:20]
-            print(f"[DEBUG] Channel '{ch_name}': kept {len(channel_segments[ch_name])} "
-                  f"out of {original_count} segments for further analysis.")
-        # >>> END TEMPORARY CODE <<<
-
 
         for ch_name in channel_segments.keys():
             channel_segments[ch_name] = self.merge_back_to_back_segments(channel_segments[ch_name])
