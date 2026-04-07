@@ -813,47 +813,89 @@ class OxygenDesatDetector(SciNode):
         stage_dict = {}
         for stage_label, stage_list in zip(self.stage_stats_labels, self.stage_stats_list):
             stage_mask = np.zeros(stage_name.shape, dtype=bool)
-            for i in range(len(stage_list)):
-                stage_mask = stage_mask | (stage_name == commons.sleep_stages_name[stage_list[i]])
-            start_masked = stage_start_times[stage_mask]
-            dur_masked = stage_duration_times[stage_mask]
-            if any(stage_mask):
-                signals_from_stages = []
-                for start, dur in zip(start_masked, dur_masked):
-                    for samples, start_signal in zip(data_clean, data_starts):
-                        cur_samples = self.extract_samples_from_array(samples, start_signal, start, dur, fs_chan)
-                        # When the last epoch is not completed
-                        if (len(cur_samples)/fs_chan) < dur:
-                            n_miss_samples = int(round((dur-len(cur_samples)/fs_chan)*fs_chan,0))
-                            cur_samples = np.pad(cur_samples, (0, n_miss_samples), constant_values=(0,np.nan))
-                        signals_from_stages.append(cur_samples)
+            for stage_code in stage_list:
+                stage_mask = stage_mask | (stage_name == commons.sleep_stages_name[stage_code])
 
-                # Flat signals into an array
-                signals_cur_stage = np.empty(0)
-                for i_bout, samples in enumerate(signals_from_stages):
-                    if signals_cur_stage.size == 0:
-                        signals_cur_stage = samples
-                    else:
-                        signals_cur_stage = np.concatenate((signals_cur_stage, samples), axis=0)
-
-                # Clean-up invalid values
-                # signals_cur_stage[signals_cur_stage>100]=np.nan # handled in the artifact detection
-                # signals_cur_stage[signals_cur_stage<=0]=np.nan  # handled in the artifact detection
-                stage_dict[f'{stage_label}_saturation_avg'] = np.nanmean(signals_cur_stage)
-                stage_dict[f'{stage_label}_saturation_std'] = np.nanstd(signals_cur_stage)
-                stage_dict[f'{stage_label}_saturation_min'] = np.nanmin(signals_cur_stage)
-                stage_dict[f'{stage_label}_saturation_max'] = np.nanmax(signals_cur_stage)
-                for val in self.values_below:
-                    signals_flat = signals_cur_stage.flatten()
-                    n_valid = np.sum(~np.isnan(signals_flat)) # To excluded artifact from the total number of samples
-                    stage_dict[f"{stage_label}_below_{val}_percent"] = (signals_flat<val).sum()/n_valid*100 if n_valid > 0 else np.nan
-            else:
+            if not np.any(stage_mask):
                 stage_dict[f'{stage_label}_saturation_avg'] = np.nan
                 stage_dict[f'{stage_label}_saturation_std'] = np.nan
                 stage_dict[f'{stage_label}_saturation_min'] = np.nan
                 stage_dict[f'{stage_label}_saturation_max'] = np.nan
                 for val in self.values_below:
-                    stage_dict[f"{stage_label}_below_{val}_percent"] = np.nan                           
+                    stage_dict[f"{stage_label}_below_{val}_percent"] = np.nan
+                continue
+
+            start_masked = stage_start_times[stage_mask]
+            dur_masked = stage_duration_times[stage_mask]
+
+            # Incremental accumulation avoids building large temporary arrays.
+            valid_count = 0
+            sum_values = 0.0
+            sum_squares = 0.0
+            min_value = np.inf
+            max_value = -np.inf
+            below_counts = {val: 0 for val in self.values_below}
+
+            for start, dur in zip(start_masked, dur_masked):
+                end = start + dur
+                expected_samples = int(round(dur * fs_chan, 0))
+
+                epoch_segments = []
+                for samples, start_signal in zip(data_clean, data_starts):
+                    end_signal = start_signal + len(samples) / fs_chan
+                    if (start_signal < end) and (end_signal > start):
+                        epoch_segments.append(
+                            self.extract_samples_from_array(samples, start_signal, start, dur, fs_chan)
+                        )
+
+                if len(epoch_segments) == 0:
+                    epoch_samples = np.empty(0)
+                elif len(epoch_segments) == 1:
+                    epoch_samples = epoch_segments[0]
+                else:
+                    epoch_samples = np.concatenate(epoch_segments, axis=0)
+
+                # Keep the old behavior: pad missing samples with NaN for incomplete epochs.
+                if expected_samples > len(epoch_samples):
+                    epoch_samples = np.pad(
+                        epoch_samples,
+                        (0, expected_samples - len(epoch_samples)),
+                        constant_values=(0, np.nan)
+                    )
+
+                valid_mask = ~np.isnan(epoch_samples)
+                if not np.any(valid_mask):
+                    continue
+
+                valid_samples = epoch_samples[valid_mask]
+                valid_count += valid_samples.size
+                sum_values += np.sum(valid_samples)
+                sum_squares += np.sum(valid_samples * valid_samples)
+                min_value = min(min_value, np.min(valid_samples))
+                max_value = max(max_value, np.max(valid_samples))
+                for val in self.values_below:
+                    below_counts[val] += np.sum(valid_samples < val)
+
+            if valid_count == 0:
+                stage_dict[f'{stage_label}_saturation_avg'] = np.nan
+                stage_dict[f'{stage_label}_saturation_std'] = np.nan
+                stage_dict[f'{stage_label}_saturation_min'] = np.nan
+                stage_dict[f'{stage_label}_saturation_max'] = np.nan
+                for val in self.values_below:
+                    stage_dict[f"{stage_label}_below_{val}_percent"] = np.nan
+                continue
+
+            mean_value = sum_values / valid_count
+            variance_value = (sum_squares / valid_count) - (mean_value * mean_value)
+            variance_value = max(0.0, variance_value)
+
+            stage_dict[f'{stage_label}_saturation_avg'] = mean_value
+            stage_dict[f'{stage_label}_saturation_std'] = np.sqrt(variance_value)
+            stage_dict[f'{stage_label}_saturation_min'] = min_value
+            stage_dict[f'{stage_label}_saturation_max'] = max_value
+            for val in self.values_below:
+                stage_dict[f"{stage_label}_below_{val}_percent"] = (below_counts[val] / valid_count) * 100
+
         return stage_dict
 
 
