@@ -506,6 +506,11 @@ class OxygenDesatDetector(SciNode):
         new_fs = fs_chan
         data_2_plot_end = len(data_to_plot)/new_fs+data_starts
         time = np.arange(data_starts, data_2_plot_end, 1/new_fs)
+        # the sampling rate can be non integer,
+        # we have to make sure that the time vector has the same length as the data to plot
+        min_lenght = min(len(time), len(data_to_plot))
+        time = time[:min_lenght]
+        data_to_plot = data_to_plot[:min_lenght]
         ax.plot(time, data_to_plot,'-k', linewidth=1)
         
         # Add invalid section
