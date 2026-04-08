@@ -127,7 +127,7 @@
       </font>
      </property>
      <property name="text">
-      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;i&gt;Note: Gray sections mark signal discontinuities. The black marker shows the minimum saturation value. &lt;br/&gt;Exclude additional sections if this minimum looks invalid.&lt;/i&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Note: Gray sections mark signal discontinuities. The black marker shows the minimum saturation value. &lt;br/&gt;Exclude additional sections if this minimum looks invalid.&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-style:normal;&quot;&gt;Invalid sections are saved as annotations : &lt;/span&gt;&lt;span style=&quot; font-weight:700; font-style:normal;&quot;&gt;group&lt;/span&gt;&lt;span style=&quot; font-style:normal;&quot;&gt;=&lt;/span&gt;&lt;span style=&quot; font-weight:700; font-style:normal; color:#0055ff;&quot;&gt;SpO2&lt;/span&gt;&lt;span style=&quot; font-style:normal;&quot;&gt;; &lt;/span&gt;&lt;span style=&quot; font-weight:700; font-style:normal;&quot;&gt;name&lt;/span&gt;&lt;span style=&quot; font-style:normal;&quot;&gt;=&lt;/span&gt;&lt;span style=&quot; font-weight:700; font-style:normal; color:#0055ff;&quot;&gt;art_SpO2&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
      </property>
      <property name="textFormat">
       <enum>Qt::TextFormat::RichText</enum>
