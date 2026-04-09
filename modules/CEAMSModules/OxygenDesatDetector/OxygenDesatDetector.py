@@ -381,8 +381,7 @@ class OxygenDesatDetector(SciNode):
         # Detect recovery
         #----------------------------------------------------------------------
         recovery_df = self.detect_recovery_ABOSA(
-            desat_df, data_starts, data_clean, data_lpf_list, data_hpf_list,
-            data_dev_list, fs_chan, channel, parameters_oxy
+            desat_df, data_starts, data_clean, data_lpf_list, data_dev_list, fs_chan, channel, parameters_oxy
         )
 
         desat_recovery_df = pd.concat([desat_df, recovery_df], ignore_index=True)
@@ -1413,7 +1412,7 @@ class OxygenDesatDetector(SciNode):
         return desat_df, plateau_df, data_lpf_list, data_hpf_list, data_dev_list, lmax_indices_list, lmin_indices_list
 
 
-    def detect_recovery_ABOSA(self, desat_df, data_starts, data_stats, data_lpf_list, data_hpf_list, data_dev_list, fs_chan, channel, parameters_oxy):
+    def detect_recovery_ABOSA(self, desat_df, data_starts, data_stats, data_lpf_list, data_dev_list, fs_chan, channel, parameters_oxy):
         """
         Detect recovery events following desaturation events as described in ABOSA.
 
@@ -1430,8 +1429,6 @@ class OxygenDesatDetector(SciNode):
                 Cleaned oxygen saturation signal for each continuous section.
             data_lpf_list : list of numpy array
                 Low-pass filtered oxygen saturation signal for each section.
-            data_hpf_list : list of numpy array
-                High-pass filtered oxygen saturation signal for each section.
             fs_chan : float
                 Sampling frequency (Hz).
             channel : string
@@ -1465,7 +1462,6 @@ class OxygenDesatDetector(SciNode):
             signal_end = data_start + len(signal) / fs_chan
             data_derivative = data_dev_list[i]
             signal_lpf = data_lpf_list[i]
-            signal_hpf = data_hpf_list[i]
 
             min_peak_distance_samples = int(min_peak_distance_sec * fs_chan)
             lmax_indices, _ = self.detect_local_max(
