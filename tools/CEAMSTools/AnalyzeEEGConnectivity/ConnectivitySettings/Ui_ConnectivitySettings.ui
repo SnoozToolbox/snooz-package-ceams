@@ -356,9 +356,10 @@ hr { height: 1px; border-width: 0; }
 li.unchecked::marker { content: &quot;\2610&quot;; }
 li.checked::marker { content: &quot;\2612&quot;; }
 &lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Roboto'; font-size:12pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Network properties computes five major graph-theoretical properties of the network. It summarizes the network’s efficiency, integration, segregation, and small-world characteristics.&lt;/p&gt;
-&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;The output contains 5 global graph metrics: Average shortest path length, Average clustering coefficient, Global efficiency, Ratio of clustering to path length (binary small-worldness) and Modularity score of the network&lt;br /&gt;&lt;br /&gt;Netowork properties will be calculated only if there are enough channels (&amp;gt;32 channels), and will be skipped if number of channels is below 32. There are two modes for thresholding connectivity matrix, minimum spanning tree or a custom threshold.&lt;/p&gt;
-&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;minimally_spanning_tree&lt;/span&gt;: constructs networks using a minimum spanning tree (recommended for sparse graphs)&lt;br /&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;custom_threshold&lt;/span&gt; : thresholds network by keeping only top X% strongest edges&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Network Properties computes key graph metrics to characterize the network’s efficiency, integration, segregation, and small-world organization.&lt;/p&gt;
+&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;The output includes five global measures: average shortest path length, clustering coefficient, global efficiency, small-worldness (clustering/path ratio), and modularity.&lt;/p&gt;
+&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;This analysis runs only when the number of channels is greater than 32. Connectivity can be thresholded using either a minimum spanning tree or a custom threshold.&lt;/p&gt;
+&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;minimally_spanning_tree&lt;/span&gt;: finds the smallest threshold that keeps the network fully connected (recommended).&lt;br /&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;custom_threshold&lt;/span&gt; : retains the top X % of strongest edges (value between 0 and 1).&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
         </property>
        </widget>
       </item>
@@ -493,7 +494,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
  </resources>
  <connections/>
  <buttongroups>
-  <buttongroup name="buttonGroup_2"/>
   <buttongroup name="buttonGroup"/>
+  <buttongroup name="buttonGroup_2"/>
  </buttongroups>
 </ui>

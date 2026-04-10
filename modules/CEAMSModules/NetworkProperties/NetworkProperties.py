@@ -6,7 +6,7 @@ See the file LICENCE for full license details.
     Computes graph-theoretic network properties from a wPLI connectivity matrix.
     Outputs per-window and averaged metrics (characteristic path length, clustering
     coefficient, global efficiency, small-worldness, modularity, participation
-    coefficient) to CSV files.
+    coefficient) to TSV files.
 """
 from flowpipe import SciNode, InputPlug, OutputPlug
 from commons.NodeInputException import NodeInputException
@@ -16,6 +16,9 @@ import os
 import numpy as np
 import csv
 from scipy.signal import hilbert
+from numba import njit, prange
+from joblib import Parallel, delayed
+from commons.parallel_utils import normalize_n_jobs, select_joblib_backend
 
 DEBUG = False
 
@@ -28,7 +31,7 @@ class NetworkProperties(SciNode):
     computes characteristic path length, clustering coefficient, global
     efficiency, small-worldness, modularity, and participation coefficient.
     Results are normalized against a random null-model network and written
-    to two CSV files (network properties and per-channel participation
+    to two TSV files (network properties and per-channel participation
     coefficients).
 
     Parameters
@@ -53,13 +56,13 @@ class NetworkProperties(SciNode):
         connections to retain. Only used when threshold_mode is
         'custom_threshold'. Default is 0.05.
     output_path : str or None
-        Directory where CSV result files are saved. Falls back to
+        Directory where TSV result files are saved. Falls back to
         recording_path when not provided.
 
     Returns
     -------
     (no output plugs)
-        Results are written to CSV files in the output directory.
+        Results are written to TSV files in the output directory.
     """
     def __init__(self, **kwargs):
         """ Initialize module NetworkProperties """
@@ -90,7 +93,7 @@ class NetworkProperties(SciNode):
     def compute(self, recording_path,subject_info,con_dict,threshold_mode,threshold_value,output_path):
         """
         Compute network properties from a wPLI connectivity matrix and write
-        per-window results to CSV files.
+        per-window results to TSV files.
 
         Parameters
         ----------
@@ -110,12 +113,12 @@ class NetworkProperties(SciNode):
             Proportion of strongest connections to retain (0–1). Only used
             when threshold_mode is 'custom_threshold'. Default 0.05.
         output_path : str or None
-            Directory for CSV output files.
+            Directory for TSV output files.
 
         Returns
         -------
         dict
-            Empty dict (results are persisted to CSV files).
+            Empty dict (results are persisted to TSV files).
 
         Raises
         ------
@@ -167,8 +170,8 @@ class NetworkProperties(SciNode):
 
         base = f"{subject_name}_{metric}"
 
-        net_properties_csv_file = os.path.join(out_dir, f"{base}_net_properties_results.csv")
-        participation_coefficient_csv_file = os.path.join(out_dir, f"{base}_participation_coefficient_results.csv")\
+        net_properties_tsv_file = os.path.join(out_dir, f"{base}_net_properties_results.tsv")
+        participation_coefficient_tsv_file = os.path.join(out_dir, f"{base}_participation_coefficient_results.tsv")\
         
         if DEBUG:
             print("************************************")
@@ -179,17 +182,17 @@ class NetworkProperties(SciNode):
             print(f"output_path: {output_path!r}")
             print(f"Saving outputs in: {out_dir}")
             print(f"Connectivity metric: {metric}")
-            print(f"Network properties output path: {net_properties_csv_file}")
-            print(f"Participation coefficient output path: {participation_coefficient_csv_file}")
+            print(f"Network properties output path: {net_properties_tsv_file}")
+            print(f"Participation coefficient output path: {participation_coefficient_tsv_file}")
             print("************************************")
 
 
         num_windows = WPLI_matrix.shape[0]
-        num_channels = len(channel_names)
+        # num_channels = len(channel_names)
 
         threshold_range = np.arange(0.99, 0.0099, -.01)
 
-        # Define CSV fieldnames
+        # Define TSV fieldnames
         net_properties_fieldnames = ['Window_number', 'charpath', 'clustering', 'GlobalEfficiency', 'SmallWorldness', 'Modularity',
                                     'Participation_coefficient', 'MinSpanTreeThreshold']
         
@@ -203,151 +206,61 @@ class NetworkProperties(SciNode):
         modular_values         = np.zeros(num_windows)
         participation_values   = np.zeros(num_windows)
 
-        # Open CSV files in write mode and keep them open during processing
-        with open(net_properties_csv_file, mode='w', newline='') as net_properties_file, \
-            open(participation_coefficient_csv_file, mode='w', newline='') as participation_coefficient_file:
+        # --- Process all windows in parallel ---
+        effective_n_jobs = normalize_n_jobs(-1, num_windows)
 
-            # Create CSV writers
-            net_properties_writer = csv.DictWriter(net_properties_file, fieldnames=net_properties_fieldnames)
-            participation_coefficient_writer = csv.DictWriter(participation_coefficient_file, fieldnames=['Window_number'] + channel_names)
+        if effective_n_jobs == 1:
+            results = [_process_window(WPLI_matrix[w], threshold_mode,
+                                       threshold_value, threshold_range)
+                       for w in range(num_windows)]
+        else:
+            backend = select_joblib_backend()
+            parallel_kwargs = {"n_jobs": effective_n_jobs, "backend": backend}
+            if backend == "threading":
+                parallel_kwargs["prefer"] = "threads"
+            results = Parallel(**parallel_kwargs)(
+                delayed(_process_window)(WPLI_matrix[w], threshold_mode,
+                                         threshold_value, threshold_range)
+                for w in range(num_windows)
+            )
 
-            # Write headers
+        # --- Collect results and write TSVs ---
+        with open(net_properties_tsv_file, mode='w', newline='') as net_properties_file, \
+            open(participation_coefficient_tsv_file, mode='w', newline='') as participation_coefficient_file:
+
+            net_properties_writer = csv.DictWriter(net_properties_file, fieldnames=net_properties_fieldnames, delimiter='\t')
+            participation_coefficient_writer = csv.DictWriter(participation_coefficient_file, fieldnames=['Window_number'] + channel_names, delimiter='\t')
+
             net_properties_writer.writeheader()
             participation_coefficient_writer.writeheader()
 
-            if threshold_mode == "minimally_spanning_tree":
+            for win_i, (cp, cl, ge, sw, mod, part, tv, P) in enumerate(results):
+                charpath_values[win_i]      = cp
+                clustering_values[win_i]    = cl
+                geff_values[win_i]          = ge
+                bsw_values[win_i]           = sw
+                modular_values[win_i]       = mod
+                participation_values[win_i] = part
 
-                threshold_values = []
-                for win_i in range(num_windows):
-                    # Calculate PLI
-                    pli = WPLI_matrix[win_i, :, :]
-                    # Using the minimally spanning tree
-                    thresh_value = find_smallest_connected_threshold(pli, threshold_range)
-                    threshold_values.append(thresh_value)
-                    # Create a network based on top network_thresh of PLI connections
-                    b_mat = threshold_matrix(pli, thresh_value)
+                net_properties_writer.writerow({
+                    'Window_number': win_i + 1,
+                    'charpath': cp,
+                    'clustering': cl,
+                    'GlobalEfficiency': ge,
+                    'SmallWorldness': sw,
+                    'Modularity': mod,
+                    'Participation_coefficient': part,
+                    'MinSpanTreeThreshold': tv if threshold_mode == "minimally_spanning_tree" else None
+                })
 
-                    # Find average path length
-                    D = distance_matrix(b_mat)
-                    b_lambda, geff, _, _, _ = charpath(D)
-                    W0, R = null_model_und_sign(b_mat, 10, .1)
+                p_dict = {'Window_number': win_i + 1}
+                for idx, ch in enumerate(channel_names):
+                    p_dict[ch] = P[idx]
+                participation_coefficient_writer.writerow(p_dict)
 
-                    # Find clustering coefficient
-                    C = clustering_coef_bu(b_mat)
-
-                    M, modular = community_louvain(b_mat, 1)
-                    # Find participation coefficient
-                    P = participation_coef(b_mat, M)
-
-                    # Prepare participation coefficients dictionary
-                    participation_dict = {'Window_number': win_i + 1}
-
-                    for idx, ch in enumerate(channel_names):
-                        participation_dict[ch] = P[idx]
-
-                    # Write participation coefficient for each electrode to CSV
-                    participation_coefficient_writer.writerow(participation_dict)
-
-                    # Find properties for random network
-                    rlambda, rgeff, _, _, _ = charpath(distance_matrix(W0), 0, 0)
-                    rC = clustering_coef_bu(W0)
-
-                    clustering_value = np.nanmean(C) / np.nanmean(rC)
-                    charpath_value   = b_lambda / rlambda
-                    geff_value       = geff / rgeff
-                    bsw_value        = clustering_value / charpath_value
-                    modular_value    = modular
-                    participation_value = np.mean(P)
-
-                    # Store the values
-                    clustering_values[win_i]      = clustering_value
-                    charpath_values[win_i]        = charpath_value
-                    geff_values[win_i]            = geff_value
-                    bsw_values[win_i]             = bsw_value
-                    modular_values[win_i]         = modular_value
-                    participation_values[win_i]   = participation_value
-
-                    # Write net properties to CSV
-                    row = {
-                        'Window_number': win_i + 1,
-                        'charpath': charpath_value,
-                        'clustering': clustering_value,
-                        'GlobalEfficiency': geff_value,
-                        'SmallWorldness': bsw_value,
-                        'Modularity': modular_value,
-                        'Participation_coefficient': participation_value,
-                        'MinSpanTreeThreshold': thresh_value
-                    }
-                    net_properties_writer.writerow(row)
-
-                print(f'The average threshold value of all sliding windows is: {np.mean(threshold_values)}')
-
-            elif threshold_mode == "custom_threshold":
-
-                if threshold_value is None:
-                    raise NodeInputException(self.identifier, "threshold_value", "For custom_threshold mode, you have to enter a threshold input argument.")
-
-                for win_i in range(num_windows):
-                    # Calculate PLI
-                    pli = WPLI_matrix[win_i, :, :]
-                    # Create a network based on the given threshold
-                    b_mat = threshold_matrix(pli, threshold_value)
-
-                    # Find average path length
-                    D = distance_matrix(b_mat)
-                    b_lambda, geff, _, _, _ = charpath(D)
-                    W0, R = null_model_und_sign(b_mat, 10, .1)
-
-                    # Find clustering coefficient
-                    C = clustering_coef_bu(b_mat)
-
-                    M, modular = community_louvain(b_mat, 1)
-                    # Find participation coefficient
-                    P = participation_coef(b_mat, M)
-
-                    # Prepare participation coefficients dictionary
-                    participation_dict = {'Window_number': win_i + 1}
-
-                    for idx, ch in enumerate(channel_names):
-                        participation_dict[ch] = P[idx]
-
-                    # Write participation coefficient for each electrode to CSV
-                    participation_coefficient_writer.writerow(participation_dict)
-
-                    # Find properties for random network
-                    rlambda, rgeff, _, _, _ = charpath(distance_matrix(W0), 0, 0)
-                    rC = clustering_coef_bu(W0)
-
-                    clustering_value = np.nanmean(C) / np.nanmean(rC)
-                    charpath_value   = b_lambda / rlambda
-                    geff_value       = geff / rgeff
-                    bsw_value        = clustering_value / charpath_value
-                    modular_value    = modular
-                    participation_value = np.mean(P)
-
-                    # Store the values
-                    clustering_values[win_i]      = clustering_value
-                    charpath_values[win_i]        = charpath_value
-                    geff_values[win_i]            = geff_value
-                    bsw_values[win_i]             = bsw_value
-                    modular_values[win_i]         = modular_value
-                    participation_values[win_i]   = participation_value
-
-                    # Write net properties to CSV
-                    row = {
-                        'Window_number': win_i + 1,
-                        'charpath': charpath_value,
-                        'clustering': clustering_value,
-                        'GlobalEfficiency': geff_value,
-                        'SmallWorldness': bsw_value,
-                        'Modularity': modular_value,
-                        'Participation_coefficient': participation_value,
-                        'MinSpanTreeThreshold': None
-                    }
-                    net_properties_writer.writerow(row)
-
-            else:
-                raise NodeInputException(self.identifier, "threshold_mode", "Threshold mode should be 'custom_threshold' or 'minimally_spanning_tree'.")
+        if threshold_mode == "minimally_spanning_tree":
+            threshold_values = [r[6] for r in results]
+            print(f'The average threshold value of all sliding windows is: {np.mean(threshold_values)}')
 
         # Calculate average outputs
         charpath_output         = np.mean(charpath_values)
@@ -357,7 +270,7 @@ class NetworkProperties(SciNode):
         Modularity_output       = np.mean(modular_values)
         participation_output    = np.mean(participation_values)
 
-        results = {
+        results_dict = {
             'charpath': charpath_output,
             'clustering': clustering_output,
             'GlobalEfficiency': GlobalEfficiency_output,
@@ -367,8 +280,7 @@ class NetworkProperties(SciNode):
         }
 
         if threshold_mode == "minimally_spanning_tree":
-            results['minimally_spanning_tree_threshold'] = np.mean(threshold_values)
-
+            results_dict['minimally_spanning_tree_threshold'] = np.mean(threshold_values)
 
         # Log message for the Logs tab
         self._log_manager.log(self.identifier, "This module calculates network properties Based on WPLI connectivity matrix.")
@@ -383,9 +295,40 @@ class NetworkProperties(SciNode):
 
 
 
-def get_phase(signal):
-    phase = hilbert(signal)
-    return phase
+def _process_window(pli, threshold_mode, threshold_value, threshold_range):
+    """Compute network properties for a single window (called in parallel)."""
+    if threshold_mode == "minimally_spanning_tree":
+        thresh_value = find_smallest_connected_threshold(pli, threshold_range)
+    else:
+        thresh_value = threshold_value
+
+    b_mat = threshold_matrix(pli, thresh_value)
+
+    D = distance_matrix(b_mat)
+    b_lambda, geff, _, _, _ = charpath(D)
+    W0, R = null_model_und_sign(b_mat, 10, .1)
+
+    C = clustering_coef_bu(b_mat)
+    M, modular = community_louvain(b_mat, 1)
+    P = participation_coef(b_mat, M)
+
+    rlambda, rgeff, _, _, _ = charpath(distance_matrix(W0), 0, 0)
+    rC = clustering_coef_bu(W0)
+
+    clustering_value    = np.nanmean(C) / np.nanmean(rC)
+    charpath_value      = b_lambda / rlambda
+    geff_value          = geff / rgeff
+    bsw_value           = clustering_value / charpath_value
+    modular_value       = modular
+    participation_value = np.mean(P)
+
+    return (charpath_value, clustering_value, geff_value, bsw_value,
+            modular_value, participation_value, thresh_value, P)
+
+
+# def get_phase(signal):
+#     phase = hilbert(signal)
+#     return phase
 
 
 
@@ -406,10 +349,10 @@ def threshold_matrix(matrix, threshold=0.05):
     np.fill_diagonal(t_matrix, 0)
     return t_matrix
 
-def binarize_matrix(matrix):
-    binarized_matrix = matrix.copy()
-    binarized_matrix[binarized_matrix != 0.0] = 1
-    return binarized_matrix
+# def binarize_matrix(matrix):
+#     binarized_matrix = matrix.copy()
+#     binarized_matrix[binarized_matrix != 0.0] = 1
+#     return binarized_matrix
 
 
 def find_smallest_connected_threshold(pli_matrix, threshold_range):
@@ -519,7 +462,7 @@ def distance_matrix(Adj_matrix):
 def charpath(D_matrix, diagonal_dist=0, infinite_dist=0):
     D = D_matrix.astype(np.float32).copy()
     if np.any(np.isnan(D)):
-        raise NodeRuntimeException(self.identifier, "D_matrix", "The distance matrix must not contain NaN values")
+        raise ValueError("The distance matrix must not contain NaN values.")
     if diagonal_dist == 0:
         np.fill_diagonal(D, np.nan)
     if infinite_dist == 0:
@@ -583,7 +526,7 @@ def charpath(D_matrix, diagonal_dist=0, infinite_dist=0):
 def null_model_und_sign(Connection_matrix, bin_swaps=5, wei_freq=.1):
     W = Connection_matrix.copy()
     if wei_freq<=0 or wei_freq>1:
-        raise NodeInputException(self.identifier, "wei_freq", "wei_freq must be in the range of: 0 < wei_freq <= 1.")
+        raise ValueError("wei_freq must be in the range of: 0 < wei_freq <= 1.")
 
     n = W.shape[0]
     np.fill_diagonal(W, 0)
@@ -617,19 +560,18 @@ def null_model_und_sign(Connection_matrix, bin_swaps=5, wei_freq=.1):
 
         if wei_freq==1:
             for m in range(np.size(Wv),0,-1):
-                dum = np.sort(P[I, J])
                 oind = np.argsort(P[I, J])
-                r = np.ceil(np.random.random()*m)
+                r = np.random.randint(0, m)
                 o = oind[r]
                 W0[I[o],J[o]] = s*Wv[r]
-                f = 1-Wv[r]/S[I[o]]
+                f = 1 - Wv[r] / S[I[o]] if S[I[o]] != 0 else 1.0
                 P[I[o],:] = P[I[o],:]*f
                 P[:,I[o]] = P[:,I[o]]*f
-                f = 1-Wv[r]/S[J[o]]
+                f = 1 - Wv[r] / S[J[o]] if S[J[o]] != 0 else 1.0
                 P[J[o],:] = P[J[o],:]*f
-                P[:,J[0]] = P[:,J[0]]*f
+                P[:,J[o]] = P[:,J[o]]*f
 
-                S[I[o],J[o]] = S[I[0],J[0]]-Wv[r]
+                S[[I[o], J[o]]] = S[[I[o], J[o]]] - Wv[r]
                 I = np.delete(I,o)
                 J = np.delete(J,o)
                 Wv = np.delete(Wv,r)
@@ -637,7 +579,6 @@ def null_model_und_sign(Connection_matrix, bin_swaps=5, wei_freq=.1):
         else:
             wei_period = (np.round(1/wei_freq)).astype(int)
             for m in range(np.size(Wv),1,-wei_period):
-                dum = np.sort(P[I, J])
                 oind = np.argsort(P[I, J])
                 R = np.random.permutation(np.arange(m))[:min(m, wei_period)]
             # R = np.arange(m)
@@ -647,7 +588,7 @@ def null_model_und_sign(Connection_matrix, bin_swaps=5, wei_freq=.1):
                 W0[ii,jj] = s*Wv[R]
                 WA = accumarray(np.concatenate([I[o],J[o]]), Wv[np.concatenate([R,R])], n)
                 IJu = (WA!=0).astype(np.int32)
-                F = 1-WA[IJu]/S[IJu]
+                F = np.where(S[IJu] != 0, 1 - WA[IJu] / S[IJu], 1.0)
                 F = np.repeat(np.expand_dims(F,1), n, axis=1)
                 P[IJu,:] = P[IJu,:]*F             
                 P[:,IJu] = P[:,IJu]*F
@@ -658,9 +599,10 @@ def null_model_und_sign(Connection_matrix, bin_swaps=5, wei_freq=.1):
                 Lij = np.delete(Lij,o)
                 Wv = np.delete(Wv,R)
     W0 = W0 + W0.T
-    rpos = np.corrcoef(np.sum(W*(W>0).astype(np.int32),axis=0), np.sum(W0*(W0>0).astype(np.int32),axis=0))
-    rneg = np.corrcoef(np.sum(-W*(W<0).astype(np.int32),axis=0), np.sum(-W0*(W0<0).astype(np.int32),axis=0))
-    R=np.array([rpos[1,0], rneg[1,0]])
+    with np.errstate(invalid='ignore'):
+        rpos = np.corrcoef(np.sum(W*(W>0).astype(np.int32),axis=0), np.sum(W0*(W0>0).astype(np.int32),axis=0))
+        rneg = np.corrcoef(np.sum(-W*(W<0).astype(np.int32),axis=0), np.sum(-W0*(W0<0).astype(np.int32),axis=0))
+    R=np.array([np.nan_to_num(rpos[1,0]), np.nan_to_num(rneg[1,0])])
 
     return W0, R
 
@@ -668,9 +610,9 @@ def null_model_und_sign(Connection_matrix, bin_swaps=5, wei_freq=.1):
 
 def accumarray(inds, data, size):
     if inds.shape != data.shape:
-        raise NodeInputException(self.identifier, "inds/data", "first and second arrays should be of the same size")
+        raise ValueError("first and second arrays should be of the same size.")
     if np.max(inds)>=size:
-        raise NodeInputException(self.identifier, "inds", "indices maximum should be lower than size")
+        raise ValueError("indices maximum should be lower than size.")
     output = np.zeros(size)
     for i in range(size):
         output[i] = np.sum(data[inds==i])
@@ -727,18 +669,25 @@ def randmio_und_signed(W, ITER):
 #    Reference: Watts and Strogatz (1998) Nature 393:440-442.
 #    Mika Rubinov, UNSW, 2007-2010
 
+@njit(parallel=True)
 def clustering_coef_bu(A):
-
-
-    n = len(A)
-    C = np.zeros(n)
-    for u in range(n):
-        V = np.where(A[u,:])[0]
-        K = len(V)
+    n = A.shape[0]
+    C = np.zeros(n, dtype=np.float64)
+    for u in prange(n):
+        K = 0
+        for v in range(n):
+            if A[u, v] != 0:
+                K += 1
         if K >= 2:
-            S = A[np.ix_(V,V)]
-            C[u] = np.sum(S)/(K**2 - K)
-
+            S_sum = 0.0
+            for vi in range(n):
+                if A[u, vi] == 0:
+                    continue
+                for vj in range(n):
+                    if A[u, vj] == 0:
+                        continue
+                    S_sum += A[vi, vj]
+            C[u] = S_sum / (K * K - K)
     return C
 
 
@@ -812,11 +761,11 @@ def community_louvain(W,gamma=1,M0=None,B='modularity'):
             B1 = 0
 
     elif np.min(W)<-1e-10:
-        raise NodeInputException(self.identifier, "W", 'The input connection matrix contains negative weights.\n\
-        Specify "negative_sym" or "negative_asym" objective-function types.')
+        raise ValueError('The input connection matrix contains negative weights. '
+                         'Specify "negative_sym" or "negative_asym" objective-function types.')
 
     if B == 'potts' and (W.astype(np.float32) != W.astype(bool).astype(np.float32)).any():
-        raise NodeInputException(self.identifier, "W", 'Potts-model Hamiltonian requires a binary W.')
+        raise ValueError('Potts-model Hamiltonian requires a binary W.')
 
     elif B == 'modularity':
         B = (W-gamma*np.outer(np.sum(W,1),np.sum(W,0))/s)/s
@@ -830,13 +779,13 @@ def community_louvain(W,gamma=1,M0=None,B='modularity'):
     elif B == 'negative_asym':
         B = B0/s0 - B1/(s0+s1)
     else:
-        raise NodeInputException(self.identifier, "B", 'B type should be one of the ["modularity", "potts", "negative_sym", "negative_asym" ]')
+        raise ValueError('B type should be one of ["modularity", "potts", "negative_sym", "negative_asym"].')
 
     if M0 is None:
         M0 = np.arange(n)
 
     elif np.size(M0) != n:
-        raise NodeInputException(self.identifier, "M0", 'M0 vector must contain n elements')
+        raise ValueError('M0 vector must contain n elements.')
 
     _, Mb = np.unique(M0.T, return_inverse=True)
 
@@ -941,218 +890,4 @@ def participation_coef (W, Ci):
 
     return P
 
-
-
-
-
-# def network_properties(windowed_signal, info, threshold_mode, threshold=None):
-#     num_windows = windowed_signal.shape[0]
-#     num_channels = windowed_signal.shape[1]
-
-#     threshold_range = np.arange(0.99, 0.0099, -.01)
-
-#     # Load electrode order
-#     with open('files/EGI128_Electrode_Order.txt', 'r') as f:
-#         electrode_order = [line.strip() for line in f]
-
-#     # Check for channel mismatch
-#     channel_names = info['channel_names']  # List of channels in windowed_signal
-
-#     # Verify that all channels in channel_names are present in electrode_order
-#     if not set(channel_names).issubset(set(electrode_order)):
-#         raise NodeRuntimeException(self.identifier, "channel_names", "You have to first reorder your signal and then try to compute network properties again.")
-
-#     # Define CSV file names
-#     net_properties_csv_file = "net_properties_results.csv"
-#     participation_coefficient_csv_file = "participation_coefficient_results.csv"
-
-#     # Define CSV fieldnames
-#     net_properties_fieldnames = ['Window_number', 'charpath', 'clustering', 'GlobalEfficiency', 'SmallWorldness', 'Modularity',
-#                                 'Participation_coefficient', 'MinSpanTreeThreshold']
-
-#     # Initialize arrays to store values
-#     clustering_values      = np.zeros(num_windows)
-#     charpath_values        = np.zeros(num_windows)
-#     geff_values            = np.zeros(num_windows)
-#     bsw_values             = np.zeros(num_windows)
-#     modular_values         = np.zeros(num_windows)
-#     participation_values   = np.zeros(num_windows)
-
-#     # Open CSV files in write mode and keep them open during processing
-#     with open(net_properties_csv_file, mode='w', newline='') as net_properties_file, \
-#         open(participation_coefficient_csv_file, mode='w', newline='') as participation_coefficient_file:
-
-#         # Create CSV writers
-#         net_properties_writer = csv.DictWriter(net_properties_file, fieldnames=net_properties_fieldnames)
-#         participation_coefficient_writer = csv.DictWriter(participation_coefficient_file, fieldnames=['Window_number'] + electrode_order)
-
-#         # Write headers
-#         net_properties_writer.writeheader()
-#         participation_coefficient_writer.writeheader()
-
-#         if threshold_mode == "minimally_spanning_tree":
-
-#             threshold_values = []
-#             for win_i in range(num_windows):
-#                 # Calculate PLI
-#                 pli = weighted_phase_lag_index(windowed_signal[win_i, :, :])
-#                 # Using the minimally spanning tree
-#                 thresh_value = find_smallest_connected_threshold(pli, threshold_range)
-#                 threshold_values.append(thresh_value)
-#                 # Create a network based on top network_thresh of PLI connections
-#                 b_mat = threshold_matrix(pli, thresh_value)
-
-#                 # Find average path length
-#                 D = distance_matrix(b_mat)
-#                 b_lambda, geff, _, _, _ = charpath(D)
-#                 W0, R = null_model_und_sign(b_mat, 10, .1)
-
-#                 # Find clustering coefficient
-#                 C = clustering_coef_bu(b_mat)
-
-#                 M, modular = community_louvain(b_mat, 1)
-#                 # Find participation coefficient
-#                 P = participation_coef(b_mat, M)
-
-#                 # Prepare participation coefficients dictionary
-#                 participation_dict = {'Window_number': win_i + 1}
-
-#                 # Map participation coefficients to electrode_order
-#                 for electrode in electrode_order:
-#                     if electrode in channel_names:
-#                         index = channel_names.index(electrode)
-#                         participation_dict[electrode] = P[index]
-#                     else:
-#                         participation_dict[electrode] = ''  # Leave empty if electrode not present in channel_names
-
-#                 # Write participation coefficient for each electrode to CSV
-#                 participation_coefficient_writer.writerow(participation_dict)
-
-#                 # Find properties for random network
-#                 rlambda, rgeff, _, _, _ = charpath(distance_matrix(W0), 0, 0)
-#                 rC = clustering_coef_bu(W0)
-
-#                 clustering_value = np.nanmean(C) / np.nanmean(rC)
-#                 charpath_value   = b_lambda / rlambda
-#                 geff_value       = geff / rgeff
-#                 bsw_value        = clustering_value / charpath_value
-#                 modular_value    = modular
-#                 participation_value = np.mean(P)
-
-#                 # Store the values
-#                 clustering_values[win_i]      = clustering_value
-#                 charpath_values[win_i]        = charpath_value
-#                 geff_values[win_i]            = geff_value
-#                 bsw_values[win_i]             = bsw_value
-#                 modular_values[win_i]         = modular_value
-#                 participation_values[win_i]   = participation_value
-
-#                 # Write net properties to CSV
-#                 row = {
-#                     'Window_number': win_i + 1,
-#                     'charpath': charpath_value,
-#                     'clustering': clustering_value,
-#                     'GlobalEfficiency': geff_value,
-#                     'SmallWorldness': bsw_value,
-#                     'Modularity': modular_value,
-#                     'Participation_coefficient': participation_value,
-#                     'MinSpanTreeThreshold': thresh_value
-#                 }
-#                 net_properties_writer.writerow(row)
-
-#             print(f'The average threshold value of all sliding windows is: {np.mean(threshold_values)}')
-
-#         elif threshold_mode == "custom_threshold":
-
-#             if threshold is None:
-#                 raise NodeInputException(self.identifier, "threshold", "For custom_threshold mode, you have to enter a threshold input argument.")
-
-#             for win_i in range(num_windows):
-#                 # Calculate PLI
-#                 pli = weighted_phase_lag_index(windowed_signal[win_i, :, :])
-#                 # Create a network based on the given threshold
-#                 b_mat = threshold_matrix(pli, threshold)
-
-#                 # Find average path length
-#                 D = distance_matrix(b_mat)
-#                 b_lambda, geff, _, _, _ = charpath(D)
-#                 W0, R = null_model_und_sign(b_mat, 10, .1)
-
-#                 # Find clustering coefficient
-#                 C = clustering_coef_bu(b_mat)
-
-#                 M, modular = community_louvain(b_mat, 1)
-#                 # Find participation coefficient
-#                 P = participation_coef(b_mat, M)
-
-#                 # Prepare participation coefficients dictionary
-#                 participation_dict = {'Window_number': win_i + 1}
-
-#                 # Map participation coefficients to electrode_order
-#                 for electrode in electrode_order:
-#                     if electrode in channel_names:
-#                         index = channel_names.index(electrode)
-#                         participation_dict[electrode] = P[index]
-#                     else:
-#                         participation_dict[electrode] = ''  # Leave empty if electrode not present in channel_names
-
-#                 # Write participation coefficient for each electrode to CSV
-#                 participation_coefficient_writer.writerow(participation_dict)
-
-#                 # Find properties for random network
-#                 rlambda, rgeff, _, _, _ = charpath(distance_matrix(W0), 0, 0)
-#                 rC = clustering_coef_bu(W0)
-
-#                 clustering_value = np.nanmean(C) / np.nanmean(rC)
-#                 charpath_value   = b_lambda / rlambda
-#                 geff_value       = geff / rgeff
-#                 bsw_value        = clustering_value / charpath_value
-#                 modular_value    = modular
-#                 participation_value = np.mean(P)
-
-#                 # Store the values
-#                 clustering_values[win_i]      = clustering_value
-#                 charpath_values[win_i]        = charpath_value
-#                 geff_values[win_i]            = geff_value
-#                 bsw_values[win_i]             = bsw_value
-#                 modular_values[win_i]         = modular_value
-#                 participation_values[win_i]   = participation_value
-
-#                 # Write net properties to CSV
-#                 row = {
-#                     'Window_number': win_i + 1,
-#                     'charpath': charpath_value,
-#                     'clustering': clustering_value,
-#                     'GlobalEfficiency': geff_value,
-#                     'SmallWorldness': bsw_value,
-#                     'Modularity': modular_value,
-#                     'Participation_coefficient': participation_value,
-#                     'MinSpanTreeThreshold': None
-#                 }
-#                 net_properties_writer.writerow(row)
-
-#         else:
-#             raise NodeInputException(self.identifier, "threshold_mode", "Threshold mode should be 'custom_threshold' or 'minimally_spanning_tree'.")
-
-#     # Calculate average outputs
-#     charpath_output         = np.mean(charpath_values)
-#     clustering_output       = np.mean(clustering_values)
-#     GlobalEfficiency_output = np.mean(geff_values)
-#     SmallWorldness_output   = np.mean(bsw_values)
-#     Modularity_output       = np.mean(modular_values)
-#     participation_output    = np.mean(participation_values)
-
-#     results = {
-#         'charpath': charpath_output,
-#         'clustering': clustering_output,
-#         'GlobalEfficiency': GlobalEfficiency_output,
-#         'SmallWorldness': SmallWorldness_output,
-#         'Modularity': Modularity_output,
-#         'Participation_coefficient': participation_output
-#     }
-
-#     if threshold_mode == "minimally_spanning_tree":
-#         results['minimally_spanning_tree_threshold'] = np.mean(threshold_values)
-    
-#     return results
         
