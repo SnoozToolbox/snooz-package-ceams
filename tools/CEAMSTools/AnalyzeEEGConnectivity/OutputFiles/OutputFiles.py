@@ -27,6 +27,7 @@ class OutputFiles(BaseStepView, Ui_OutputFiles, QtWidgets.QWidget):
         self._node_id_ConnectivityDetails_wpli = "803b6207-918f-4e3e-b5be-48ad9fc8b01c"
         self._node_id_ConnectivityDetails_dpli = "cc042193-2e41-49e0-b80e-973b1174cdb9"
         self._node_id_NetworkProperties = "02d58c3b-80ec-4e80-8a3c-33d9ee521c18"
+        self._node_id_ConnectivityDetails_aec = "838795ca-9563-4370-918e-f8f92cc23220"
 
         # --- 2. Connect UI Actions ---
         self.output_path_checkBox.stateChanged.connect(self.toggle_path_selection)
@@ -79,17 +80,18 @@ class OutputFiles(BaseStepView, Ui_OutputFiles, QtWidgets.QWidget):
 
     def on_apply_settings(self):
         """
-        Publishes the output_path to both ConnectivityDetails nodes in the pipeline.
+        Publishes the output_path to all ConnectivityDetails nodes in the pipeline.
         If the checkbox is checked, output_path is blank (backend nodes should use recording_path as fallback).
         Otherwise, sends the user-selected path.
         """
         use_input_folder = self.output_path_checkBox.isChecked()
         chosen_path = self.path_lineEdit.text() if not use_input_folder else ""
 
-        # Publish to both nodes (assuming they have a topic named .output_path)
+        # Publish to all nodes (assuming they have a topic named .output_path)
         self._pub_sub_manager.publish(self, f"{self._node_id_ConnectivityDetails_wpli}.output_path", chosen_path)
         self._pub_sub_manager.publish(self, f"{self._node_id_ConnectivityDetails_dpli}.output_path", chosen_path)
         self._pub_sub_manager.publish(self, f"{self._node_id_NetworkProperties}.output_path", chosen_path)
+        self._pub_sub_manager.publish(self, f"{self._node_id_ConnectivityDetails_aec}.output_path", chosen_path)
 
 
     def on_validate_settings(self):

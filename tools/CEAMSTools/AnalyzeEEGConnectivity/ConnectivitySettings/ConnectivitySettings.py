@@ -16,7 +16,7 @@ from flowpipe.ActivationState import ActivationState
 class ConnectivitySettings(BaseStepView, Ui_ConnectivitySettings, QtWidgets.QWidget):
     """
     Step to let the user:
-    - Pick between wPLI and dPLI (radio buttons)
+    - Pick between wPLI, dPLI, and AEC (radio buttons)
     - Set epoch and connectivity parameters (line edits)
     - Automatically routes/activates all modules and sends parameters to the correct nodes.
     """
@@ -35,10 +35,15 @@ class ConnectivitySettings(BaseStepView, Ui_ConnectivitySettings, QtWidgets.QWid
         self.dpliconnectivity_node_id = "327736b2-6d0a-4186-a123-f0e93a85d232"
         self.epochsignal_node_id_dpli = "fdc0c057-3fb5-4c9f-92f5-23b1474f7a2d"
 
+
+        self.connectivitydetails_node_id_aec = "838795ca-9563-4370-918e-f8f92cc23220"
+        self.aecconnectivity_node_id = "a8b8a023-ed8d-4a5c-a896-1d7051ee058c"
+        self.epochsignal_node_id_aec = "829d7060-7e36-412a-9857-bfa39dfacaf0"
+
         # --- Connect radio buttons to method change handler ---
         self.dpli_radioButton.toggled.connect(self.on_method_changed)
         self.wpli_radioButton.toggled.connect(self.on_method_changed)
-
+        self.aec_radioButton.toggled.connect(self.on_method_changed)
         self.custom_threshold_radioButton.toggled.connect(self.on_threshold_mode_changed)
         self.mst_radioButton.toggled.connect(self.on_threshold_mode_changed)
 
@@ -65,31 +70,102 @@ class ConnectivitySettings(BaseStepView, Ui_ConnectivitySettings, QtWidgets.QWid
         and deactivate the irrelevant ones.
         """
         if self.wpli_radioButton.isChecked():
-            # Activate wPLI modules, deactivate dPLI modules
+            # Activate wPLI modules, deactivate dPLI modules and aec modules
             self.activate_node(self.connectivitydetails_node_id_wpli)
             self.activate_node(self.wpliconnectivity_node_id)
             self.activate_node(self.epochsignal_node_id_wpli)
             self.activate_node(self.networkproperties_node_id)
 
+            self.connectivity_settings_header_label.setEnabled(True)
+            self.connectivity_settings_label.setEnabled(True)
+
+            self.num_surr_label.setEnabled(True)
+            self.num_surr_lineedit.setEnabled(True)
+            self.p_value_label.setEnabled(True)
+            self.p_value_lineedit.setEnabled(True)
+
+            self.network_properties_header_label.setEnabled(True)
+            self.network_properties_textEdit.setEnabled(True)
+            self.select_mode_label.setEnabled(True)
+
+            self.custom_threshold_radioButton.setEnabled(True)
+            self.mst_radioButton.setEnabled(True)
+            self.threshold_val_doubleSpinBox.setEnabled(True)
+            self.threshold_val_label.setEnabled(True)
+
+
             self.deactivate_node(self.connectivitydetails_node_id_dpli)
             self.deactivate_node(self.dpliconnectivity_node_id)
             self.deactivate_node(self.epochsignal_node_id_dpli)
 
-            self.custom_threshold_radioButton.setEnabled(True)
-            self.mst_radioButton.setEnabled(True)
+            self.deactivate_node(self.connectivitydetails_node_id_aec)
+            self.deactivate_node(self.aecconnectivity_node_id)
+            self.deactivate_node(self.epochsignal_node_id_aec)
+
+
             self.on_threshold_mode_changed()  # Update threshold mode UI based on current selection
             
 
         elif self.dpli_radioButton.isChecked():
-            # Activate dPLI modules, deactivate wPLI modules
+            # Activate dPLI modules, deactivate wPLI modules and aec modules
             self.activate_node(self.connectivitydetails_node_id_dpli)
             self.activate_node(self.dpliconnectivity_node_id)
             self.activate_node(self.epochsignal_node_id_dpli)
+
+            self.connectivity_settings_header_label.setEnabled(True)
+            self.connectivity_settings_label.setEnabled(True)
+
+            self.num_surr_label.setEnabled(True)
+            self.num_surr_lineedit.setEnabled(True)
+            self.p_value_label.setEnabled(True)
+            self.p_value_lineedit.setEnabled(True)
 
             self.deactivate_node(self.connectivitydetails_node_id_wpli)
             self.deactivate_node(self.wpliconnectivity_node_id)
             self.deactivate_node(self.epochsignal_node_id_wpli)
             self.deactivate_node(self.networkproperties_node_id)
+
+            self.deactivate_node(self.connectivitydetails_node_id_aec)
+            self.deactivate_node(self.aecconnectivity_node_id)
+            self.deactivate_node(self.epochsignal_node_id_aec)
+
+            self.network_properties_header_label.setEnabled(False)
+            self.network_properties_textEdit.setEnabled(False)
+            self.select_mode_label.setEnabled(False)
+
+            self.custom_threshold_radioButton.setEnabled(False)
+            self.mst_radioButton.setEnabled(False)
+            self.threshold_val_doubleSpinBox.setEnabled(False)
+            self.threshold_val_label.setEnabled(False)
+        
+        elif self.aec_radioButton.isChecked():
+            # Activate AEC modules, deactivate wPLI and dPLI modules
+            self.activate_node(self.connectivitydetails_node_id_aec)
+            self.activate_node(self.aecconnectivity_node_id)
+            self.activate_node(self.epochsignal_node_id_aec)
+
+            self.deactivate_node(self.connectivitydetails_node_id_wpli)
+            self.deactivate_node(self.wpliconnectivity_node_id)
+            self.deactivate_node(self.epochsignal_node_id_wpli)
+            self.deactivate_node(self.networkproperties_node_id)
+
+            self.deactivate_node(self.connectivitydetails_node_id_dpli)
+            self.deactivate_node(self.dpliconnectivity_node_id)
+            self.deactivate_node(self.epochsignal_node_id_dpli)
+            
+            # For AEC, disable thresholding options and stats parameters as they are not relevant
+            self.connectivity_settings_header_label.setEnabled(False)
+            self.connectivity_settings_label.setEnabled(False)
+
+            self.network_properties_header_label.setEnabled(False)
+            self.network_properties_textEdit.setEnabled(False)
+            self.select_mode_label.setEnabled(False)
+            
+            self.num_surr_label.setEnabled(False)
+            self.num_surr_lineedit.setEnabled(False)
+            self.p_value_label.setEnabled(False)
+            self.p_value_lineedit.setEnabled(False)
+
 
             self.custom_threshold_radioButton.setEnabled(False)
             self.mst_radioButton.setEnabled(False)
@@ -145,6 +221,11 @@ class ConnectivitySettings(BaseStepView, Ui_ConnectivitySettings, QtWidgets.QWid
             # Push connectivity params to dpliconnectivity_node_id
             self._pub_sub_manager.publish(self, f"{self.dpliconnectivity_node_id}.num_surr", num_surr)
             self._pub_sub_manager.publish(self, f"{self.dpliconnectivity_node_id}.p_value", p_value)
+
+        elif self.aec_radioButton.isChecked():
+            # Push epoch parameters to epochsignal_node_id_aec
+            self._pub_sub_manager.publish(self, f"{self.epochsignal_node_id_aec}.epoch_length_sec", epoch_length)
+            self._pub_sub_manager.publish(self, f"{self.epochsignal_node_id_aec}.overlap_sec", epoch_overlap)
 
     def load_settings(self):
         # Could ping nodes for initial values to display (optional, not strictly needed)

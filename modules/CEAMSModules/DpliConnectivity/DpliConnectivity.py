@@ -225,7 +225,7 @@ class DpliConnectivity(SciNode):
 
 
 # ---------------------------------------------------------------------
-# Define dPLI methods (Numba-based):
+# Define dPLI method (Numba-based):
 # ---------------------------------------------------------------------
 
 # Parallelization approach for dpli

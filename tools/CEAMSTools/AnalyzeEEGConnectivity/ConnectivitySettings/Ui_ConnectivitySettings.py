@@ -36,10 +36,10 @@ class Ui_ConnectivitySettings(object):
         self.frame_2.setFrameShadow(QFrame.Shadow.Raised)
         self.verticalLayout_4 = QVBoxLayout(self.frame_2)
         self.verticalLayout_4.setObjectName(u"verticalLayout_4")
-        self.label_2 = QLabel(self.frame_2)
-        self.label_2.setObjectName(u"label_2")
+        self.connectivity_type_label = QLabel(self.frame_2)
+        self.connectivity_type_label.setObjectName(u"connectivity_type_label")
 
-        self.verticalLayout_4.addWidget(self.label_2)
+        self.verticalLayout_4.addWidget(self.connectivity_type_label)
 
         self.label_4 = QLabel(self.frame_2)
         self.label_4.setObjectName(u"label_4")
@@ -48,20 +48,26 @@ class Ui_ConnectivitySettings(object):
 
         self.horizontalLayout_2 = QHBoxLayout()
         self.horizontalLayout_2.setObjectName(u"horizontalLayout_2")
-        self.dpli_radioButton = QRadioButton(self.frame_2)
-        self.buttonGroup = QButtonGroup(ConnectivitySettings)
-        self.buttonGroup.setObjectName(u"buttonGroup")
-        self.buttonGroup.addButton(self.dpli_radioButton)
-        self.dpli_radioButton.setObjectName(u"dpli_radioButton")
-
-        self.horizontalLayout_2.addWidget(self.dpli_radioButton)
-
         self.wpli_radioButton = QRadioButton(self.frame_2)
-        self.buttonGroup.addButton(self.wpli_radioButton)
+        self.connectivity_buttonGroup = QButtonGroup(ConnectivitySettings)
+        self.connectivity_buttonGroup.setObjectName(u"connectivity_buttonGroup")
+        self.connectivity_buttonGroup.addButton(self.wpli_radioButton)
         self.wpli_radioButton.setObjectName(u"wpli_radioButton")
         self.wpli_radioButton.setChecked(True)
 
         self.horizontalLayout_2.addWidget(self.wpli_radioButton)
+
+        self.dpli_radioButton = QRadioButton(self.frame_2)
+        self.connectivity_buttonGroup.addButton(self.dpli_radioButton)
+        self.dpli_radioButton.setObjectName(u"dpli_radioButton")
+
+        self.horizontalLayout_2.addWidget(self.dpli_radioButton)
+
+        self.aec_radioButton = QRadioButton(self.frame_2)
+        self.connectivity_buttonGroup.addButton(self.aec_radioButton)
+        self.aec_radioButton.setObjectName(u"aec_radioButton")
+
+        self.horizontalLayout_2.addWidget(self.aec_radioButton)
 
 
         self.verticalLayout_4.addLayout(self.horizontalLayout_2)
@@ -75,16 +81,16 @@ class Ui_ConnectivitySettings(object):
         self.frame.setFrameShadow(QFrame.Shadow.Raised)
         self.verticalLayout_5 = QVBoxLayout(self.frame)
         self.verticalLayout_5.setObjectName(u"verticalLayout_5")
-        self.label_3 = QLabel(self.frame)
-        self.label_3.setObjectName(u"label_3")
+        self.connectivity_settings_header_label = QLabel(self.frame)
+        self.connectivity_settings_header_label.setObjectName(u"connectivity_settings_header_label")
 
-        self.verticalLayout_5.addWidget(self.label_3)
+        self.verticalLayout_5.addWidget(self.connectivity_settings_header_label)
 
-        self.label = QLabel(self.frame)
-        self.label.setObjectName(u"label")
-        self.label.setWordWrap(True)
+        self.connectivity_settings_label = QLabel(self.frame)
+        self.connectivity_settings_label.setObjectName(u"connectivity_settings_label")
+        self.connectivity_settings_label.setWordWrap(True)
 
-        self.verticalLayout_5.addWidget(self.label)
+        self.verticalLayout_5.addWidget(self.connectivity_settings_label)
 
         self.horizontalLayout_7 = QHBoxLayout()
         self.horizontalLayout_7.setObjectName(u"horizontalLayout_7")
@@ -206,21 +212,21 @@ class Ui_ConnectivitySettings(object):
         self.frame_3.setFrameShadow(QFrame.Shadow.Raised)
         self.verticalLayout_7 = QVBoxLayout(self.frame_3)
         self.verticalLayout_7.setObjectName(u"verticalLayout_7")
-        self.label_5 = QLabel(self.frame_3)
-        self.label_5.setObjectName(u"label_5")
+        self.network_properties_header_label = QLabel(self.frame_3)
+        self.network_properties_header_label.setObjectName(u"network_properties_header_label")
 
-        self.verticalLayout_7.addWidget(self.label_5)
+        self.verticalLayout_7.addWidget(self.network_properties_header_label)
 
-        self.textEdit = QTextEdit(self.frame_3)
-        self.textEdit.setObjectName(u"textEdit")
-        self.textEdit.setFrameShape(QFrame.Shape.NoFrame)
+        self.network_properties_textEdit = QTextEdit(self.frame_3)
+        self.network_properties_textEdit.setObjectName(u"network_properties_textEdit")
+        self.network_properties_textEdit.setFrameShape(QFrame.Shape.NoFrame)
 
-        self.verticalLayout_7.addWidget(self.textEdit)
+        self.verticalLayout_7.addWidget(self.network_properties_textEdit)
 
-        self.label_6 = QLabel(self.frame_3)
-        self.label_6.setObjectName(u"label_6")
+        self.select_mode_label = QLabel(self.frame_3)
+        self.select_mode_label.setObjectName(u"select_mode_label")
 
-        self.verticalLayout_7.addWidget(self.label_6)
+        self.verticalLayout_7.addWidget(self.select_mode_label)
 
         self.horizontalLayout_9 = QHBoxLayout()
         self.horizontalLayout_9.setObjectName(u"horizontalLayout_9")
@@ -229,9 +235,9 @@ class Ui_ConnectivitySettings(object):
         self.horizontalLayout_6 = QHBoxLayout()
         self.horizontalLayout_6.setObjectName(u"horizontalLayout_6")
         self.mst_radioButton = QRadioButton(self.frame_3)
-        self.buttonGroup_2 = QButtonGroup(ConnectivitySettings)
-        self.buttonGroup_2.setObjectName(u"buttonGroup_2")
-        self.buttonGroup_2.addButton(self.mst_radioButton)
+        self.threshold_buttonGroup = QButtonGroup(ConnectivitySettings)
+        self.threshold_buttonGroup.setObjectName(u"threshold_buttonGroup")
+        self.threshold_buttonGroup.addButton(self.mst_radioButton)
         self.mst_radioButton.setObjectName(u"mst_radioButton")
         self.mst_radioButton.setChecked(True)
 
@@ -242,7 +248,7 @@ class Ui_ConnectivitySettings(object):
         self.horizontalLayout_6.addItem(self.horizontalSpacer_8)
 
         self.custom_threshold_radioButton = QRadioButton(self.frame_3)
-        self.buttonGroup_2.addButton(self.custom_threshold_radioButton)
+        self.threshold_buttonGroup.addButton(self.custom_threshold_radioButton)
         self.custom_threshold_radioButton.setObjectName(u"custom_threshold_radioButton")
 
         self.horizontalLayout_6.addWidget(self.custom_threshold_radioButton)
@@ -298,12 +304,13 @@ class Ui_ConnectivitySettings(object):
 
     def retranslateUi(self, ConnectivitySettings):
         ConnectivitySettings.setWindowTitle("")
-        self.label_2.setText(QCoreApplication.translate("ConnectivitySettings", u"<html><head/><body><p><span style=\" font-weight:700;\">Connectivity Type:</span></p></body></html>", None))
+        self.connectivity_type_label.setText(QCoreApplication.translate("ConnectivitySettings", u"<html><head/><body><p><span style=\" font-weight:700;\">Connectivity Type:</span></p></body></html>", None))
         self.label_4.setText(QCoreApplication.translate("ConnectivitySettings", u"Choose the connectivity analysis you want to run. You may run the tool twice if you wish to use both metrics.", None))
-        self.dpli_radioButton.setText(QCoreApplication.translate("ConnectivitySettings", u"Directed Phase Lag Index (DPLI)", None))
         self.wpli_radioButton.setText(QCoreApplication.translate("ConnectivitySettings", u"Weighted Phase Lag Index (WPLI)", None))
-        self.label_3.setText(QCoreApplication.translate("ConnectivitySettings", u"<html><head/><body><p><span style=\" font-weight:700;\">Connectivity Settings:</span></p></body></html>", None))
-        self.label.setText(QCoreApplication.translate("ConnectivitySettings", u"Specify the number of surrogates and the p-value to use for the connectivity analysis:\n"
+        self.dpli_radioButton.setText(QCoreApplication.translate("ConnectivitySettings", u"Directed Phase Lag Index (DPLI)", None))
+        self.aec_radioButton.setText(QCoreApplication.translate("ConnectivitySettings", u"Amplitude Envelope Correlation (AEC)", None))
+        self.connectivity_settings_header_label.setText(QCoreApplication.translate("ConnectivitySettings", u"<html><head/><body><p><span style=\" font-weight:700;\">Connectivity Settings:</span></p></body></html>", None))
+        self.connectivity_settings_label.setText(QCoreApplication.translate("ConnectivitySettings", u"Specify the number of surrogates and the p-value to use for the connectivity analysis:\n"
 "\n"
 "Surrogates and p-value help remove connections that could appear by chance, keeping only the statistically significant brain connections.\n"
 "", None))
@@ -315,8 +322,8 @@ class Ui_ConnectivitySettings(object):
         self.p_value_lineedit.setText(QCoreApplication.translate("ConnectivitySettings", u"0.05", None))
         self.epoch_overlap_label.setText(QCoreApplication.translate("ConnectivitySettings", u"Epoch overlap (s)", None))
         self.epoch_overlap_lineEdit.setText(QCoreApplication.translate("ConnectivitySettings", u"0", None))
-        self.label_5.setText(QCoreApplication.translate("ConnectivitySettings", u"<html><head/><body><p><span style=\" font-weight:700;\">Network Properties Settings:</span></p></body></html>", None))
-        self.textEdit.setHtml(QCoreApplication.translate("ConnectivitySettings", u"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
+        self.network_properties_header_label.setText(QCoreApplication.translate("ConnectivitySettings", u"<html><head/><body><p><span style=\" font-weight:700;\">Network Properties Settings:</span></p></body></html>", None))
+        self.network_properties_textEdit.setHtml(QCoreApplication.translate("ConnectivitySettings", u"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset=\"utf-8\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
 "hr { height: 1px; border-width: 0; }\n"
@@ -328,7 +335,7 @@ class Ui_ConnectivitySettings(object):
                         "rldness (clustering/path ratio), and modularity.</p>\n"
 "<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">This analysis runs only when the number of channels is greater than 32. Connectivity can be thresholded using either a minimum spanning tree or a custom threshold.</p>\n"
 "<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-weight:700;\">minimally_spanning_tree</span>: finds the smallest threshold that keeps the network fully connected (recommended).<br /><span style=\" font-weight:700;\">custom_threshold</span> : retains the top X % of strongest edges (value between 0 and 1).</p></body></html>", None))
-        self.label_6.setText(QCoreApplication.translate("ConnectivitySettings", u"<html><head/><body><p>Select threshold mode, and threshold value if threshold mode is set to custom threshold.</p></body></html>", None))
+        self.select_mode_label.setText(QCoreApplication.translate("ConnectivitySettings", u"<html><head/><body><p>Select threshold mode, and threshold value if threshold mode is set to custom threshold.</p></body></html>", None))
         self.mst_radioButton.setText(QCoreApplication.translate("ConnectivitySettings", u"Minimally spanning tree", None))
         self.custom_threshold_radioButton.setText(QCoreApplication.translate("ConnectivitySettings", u"Custom threshold", None))
         self.threshold_val_label.setText(QCoreApplication.translate("ConnectivitySettings", u"Threshold value", None))

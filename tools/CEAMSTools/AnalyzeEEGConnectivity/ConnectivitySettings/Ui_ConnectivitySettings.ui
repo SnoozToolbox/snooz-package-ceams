@@ -30,7 +30,7 @@
      </property>
      <layout class="QVBoxLayout" name="verticalLayout_4">
       <item>
-       <widget class="QLabel" name="label_2">
+       <widget class="QLabel" name="connectivity_type_label">
         <property name="text">
          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Connectivity Type:&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
         </property>
@@ -46,16 +46,6 @@
       <item>
        <layout class="QHBoxLayout" name="horizontalLayout_2">
         <item>
-         <widget class="QRadioButton" name="dpli_radioButton">
-          <property name="text">
-           <string>Directed Phase Lag Index (DPLI)</string>
-          </property>
-          <attribute name="buttonGroup">
-           <string notr="true">buttonGroup</string>
-          </attribute>
-         </widget>
-        </item>
-        <item>
          <widget class="QRadioButton" name="wpli_radioButton">
           <property name="text">
            <string>Weighted Phase Lag Index (WPLI)</string>
@@ -64,7 +54,27 @@
            <bool>true</bool>
           </property>
           <attribute name="buttonGroup">
-           <string notr="true">buttonGroup</string>
+           <string notr="true">connectivity_buttonGroup</string>
+          </attribute>
+         </widget>
+        </item>
+        <item>
+         <widget class="QRadioButton" name="dpli_radioButton">
+          <property name="text">
+           <string>Directed Phase Lag Index (DPLI)</string>
+          </property>
+          <attribute name="buttonGroup">
+           <string notr="true">connectivity_buttonGroup</string>
+          </attribute>
+         </widget>
+        </item>
+        <item>
+         <widget class="QRadioButton" name="aec_radioButton">
+          <property name="text">
+           <string>Amplitude Envelope Correlation (AEC)</string>
+          </property>
+          <attribute name="buttonGroup">
+           <string notr="true">connectivity_buttonGroup</string>
           </attribute>
          </widget>
         </item>
@@ -83,14 +93,14 @@
      </property>
      <layout class="QVBoxLayout" name="verticalLayout_5">
       <item>
-       <widget class="QLabel" name="label_3">
+       <widget class="QLabel" name="connectivity_settings_header_label">
         <property name="text">
          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Connectivity Settings:&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
         </property>
        </widget>
       </item>
       <item>
-       <widget class="QLabel" name="label">
+       <widget class="QLabel" name="connectivity_settings_label">
         <property name="text">
          <string>Specify the number of surrogates and the p-value to use for the connectivity analysis:
 
@@ -337,14 +347,14 @@ Surrogates and p-value help remove connections that could appear by chance, keep
      </property>
      <layout class="QVBoxLayout" name="verticalLayout_7">
       <item>
-       <widget class="QLabel" name="label_5">
+       <widget class="QLabel" name="network_properties_header_label">
         <property name="text">
          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Network Properties Settings:&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
         </property>
        </widget>
       </item>
       <item>
-       <widget class="QTextEdit" name="textEdit">
+       <widget class="QTextEdit" name="network_properties_textEdit">
         <property name="frameShape">
          <enum>QFrame::Shape::NoFrame</enum>
         </property>
@@ -364,7 +374,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
        </widget>
       </item>
       <item>
-       <widget class="QLabel" name="label_6">
+       <widget class="QLabel" name="select_mode_label">
         <property name="text">
          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Select threshold mode, and threshold value if threshold mode is set to custom threshold.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
         </property>
@@ -385,7 +395,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
                <bool>true</bool>
               </property>
               <attribute name="buttonGroup">
-               <string notr="true">buttonGroup_2</string>
+               <string notr="true">threshold_buttonGroup</string>
               </attribute>
              </widget>
             </item>
@@ -408,7 +418,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
                <string>Custom threshold</string>
               </property>
               <attribute name="buttonGroup">
-               <string notr="true">buttonGroup_2</string>
+               <string notr="true">threshold_buttonGroup</string>
               </attribute>
              </widget>
             </item>
@@ -494,7 +504,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
  </resources>
  <connections/>
  <buttongroups>
-  <buttongroup name="buttonGroup"/>
-  <buttongroup name="buttonGroup_2"/>
+  <buttongroup name="connectivity_buttonGroup"/>
+  <buttongroup name="threshold_buttonGroup"/>
  </buttongroups>
 </ui>

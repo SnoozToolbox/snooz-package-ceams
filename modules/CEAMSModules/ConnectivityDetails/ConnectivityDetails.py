@@ -12,8 +12,9 @@ Expected con_dict formats:
 - New nested:
     {'wpli_results': {'final_wpli', 'average_wpli', 'channel_names'}}
     {'dpli_results': {'final_dpli', 'average_dpli', 'channel_names'}}
+    {'aec_results': {'final_aec', 'average_aec', 'channel_names'}}
 - Backward-compatible:
-    {'average_wpli', 'channel_names'}  or  {'average_dpli', 'channel_names'}
+    {'average_wpli', 'channel_names'}  or  {'average_dpli', 'channel_names'}  or  {'average_aec', 'channel_names'}
 
 Optional (future) plot_options (NOT required for now):
     {
@@ -25,6 +26,10 @@ Optional (future) plot_options (NOT required for now):
       # wPLI manual:
       'neutral_min': 0.05, 'moderate_min': 0.10, 'strong_min': 0.20, 'max_val': 0.40,
       # wPLI auto:
+      'auto_density': 0.15, 'strong_top_frac': 0.5, 'max_val': 'auto',
+      # AEC manual:
+      'neutral_min': 0.1, 'moderate_min': 0.2, 'strong_min': 0.35, 'max_val': 0.6,
+      # AEC auto:
       'auto_density': 0.15, 'strong_top_frac': 0.5, 'max_val': 'auto',
       # layout:
       'target_radius': 0.49, 'rotate_deg': 0.0, 'shift_x': 0.0, 'shift_y': 0.0,
@@ -61,7 +66,7 @@ DEBUG = False
 class ConnectivityDetails(SciNode):
     """
     Node for saving connectivity results (matrix, heatmap, and head plot) to disk.
-    Works for wPLI and dPLI results. Head plot is created only if ≥4 channels match a montage.
+    Works for wPLI, dPLI, and AEC results. Head plot is created only if ≥4 channels match a montage.
     """
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -73,7 +78,7 @@ class ConnectivityDetails(SciNode):
         self._is_master = False
 
     def _extract_results(self, con_dict):
-        """Return metric ('wpli'|'dpli'), matrix (average), channel_names (list)."""
+        """Return metric ('wpli'|'dpli'|'aec'), matrix (average), channel_names (list)."""
         if isinstance(con_dict, dict):
             if 'wpli_results' in con_dict:
                 r = con_dict['wpli_results']
@@ -81,12 +86,17 @@ class ConnectivityDetails(SciNode):
             if 'dpli_results' in con_dict:
                 r = con_dict['dpli_results']
                 return 'dpli', r['average_dpli'], r['channel_names']
+            if 'aec_results' in con_dict:
+                r = con_dict['aec_results']
+                return 'aec', r['average_aec'], r['channel_names']
         if 'average_wpli' in con_dict:
             return 'wpli', con_dict['average_wpli'], con_dict['channel_names']
         if 'average_dpli' in con_dict:
             return 'dpli', con_dict['average_dpli'], con_dict['channel_names']
+        if 'average_aec' in con_dict:
+            return 'aec', con_dict['average_aec'], con_dict['channel_names']
         raise NodeInputException(self.identifier, "con_dict",
-                                 "No wPLI/dPLI results found (expected 'wpli_results' or 'dpli_results').")
+                                 "No wPLI/dPLI/AEC results found (expected 'wpli_results', 'dpli_results', or 'aec_results').")
 
     def compute(self, recording_path, subject_info, con_dict, output_path):
         # --- Basic checks ---
@@ -141,6 +151,8 @@ class ConnectivityDetails(SciNode):
                 im = plt.imshow(matrix, cmap="jet", aspect="auto", vmin=0.0, vmax=0.3)  # <-- set limits
             elif metric == 'dpli':
                 im = plt.imshow(matrix, cmap="jet", aspect="auto", vmin=0.3, vmax=0.7)  # <-- set limits
+            elif metric == 'aec':
+                im = plt.imshow(matrix, cmap="jet", aspect="auto", vmin=0.0, vmax=0.5)  # <-- set limits
             cbar = plt.colorbar(im)
 
             # --- force formatting with 2 decimal places ---
@@ -184,7 +196,7 @@ class ConnectivityDetails(SciNode):
                     target_radius=0.49, rotate_deg=0.0, shift_x=0.0, shift_y=0.0,
                     direction_mode='gradient'  # default behavior
                 )
-            else:  # 'wpli'
+            elif metric == 'wpli':
                 fig = plot_best_wpli(
                     W=matrix,
                     raw=final_raw,
@@ -198,6 +210,19 @@ class ConnectivityDetails(SciNode):
                     moderate_min=0.10,
                     strong_min=0.20,
                     max_val=0.40,
+                    target_radius=0.49, rotate_deg=0.0, shift_x=0.0, shift_y=0.0,
+                )
+            else:  # 'aec'
+                fig = plot_best_aec(
+                    A=matrix,
+                    raw=final_raw,
+                    channel_names=channel_names,
+                    montage_name=best_montage,
+                    mode='manual',
+                    neutral_min=0.1,
+                    moderate_min=0.2,
+                    strong_min=0.35,
+                    max_val=0.6,
                     target_radius=0.49, rotate_deg=0.0, shift_x=0.0, shift_y=0.0,
                 )
 
@@ -746,6 +771,153 @@ def plot_wpli_generic(
     ax.legend(handles=handles, loc='upper right', bbox_to_anchor=(1.15,1.15), fontsize=7, frameon=True)
     return fig
 
+
+def plot_aec_generic(
+    A, raw, channel_names, montage_name,
+    mode: str = 'manual',
+    # Manual thresholds:
+    neutral_min: float = 0.1,
+    moderate_min: float = 0.2,
+    strong_min: float = 0.35,
+    max_val=0.6,
+    # Auto mode (not used unless mode='auto'):
+    auto_density: float = 0.15, strong_top_frac: float = 0.5,
+    # Layout:
+    target_radius: float = 0.49, rotate_deg: float = 0.0, shift_x: float = 0.0, shift_y: float = 0.0,
+    figsize=(8,8), dpi=300
+):
+    """
+    Plot AEC (Amplitude Envelope Correlation) connectivity on a topomap.
+    AEC is non-directional (symmetrical) like wPLI.
+    
+    Parameters are similar to wPLI but with AEC-appropriate threshold defaults.
+    """
+    m_xy = _find_topomap_coords(raw.info, picks=raw.ch_names)
+    m_names = channel_names
+
+    keep_idx = list(range(len(m_names)))
+    if _is_hc_128_129(montage_name):
+        exclude = set(NON_BRAIN_HC_128_129)
+        keep_idx = [i for i, n in enumerate(m_names) if n not in exclude]
+    m_names = [m_names[i] for i in keep_idx]; m_xy = m_xy[keep_idx]
+
+    def _norm(s): return re.sub(r"[^0-9a-z]+", "", s.lower())
+    label_norm_to_idx = {_norm(n): i for i, n in enumerate(channel_names)}
+
+    pairs = []
+    for i_m, nm in enumerate(m_names):
+        k = _norm(nm)
+        if k in label_norm_to_idx: pairs.append((i_m, label_norm_to_idx[k]))
+    if len(pairs) < 2:
+        raise RuntimeError("Not enough overlapping channels to plot AEC.")
+
+    idx_m, idx_l = zip(*pairs); idx_m, idx_l = list(idx_m), list(idx_l)
+
+    A = np.asarray(A, float)
+    Asub = A[np.ix_(idx_l, idx_l)]
+    np.fill_diagonal(Asub, 0.0)
+
+    XY_all = _normalize_xy(m_xy, target_radius, rotate_deg, shift_x, shift_y)
+    XYp = np.stack([XY_all[i_m] for i_m in idx_m], axis=0)
+    present_names = [m_names[i] for i in idx_m]
+
+    cand = []
+    nC = len(idx_l)
+    for a in range(nC):
+        for b in range(a + 1, nC):
+            cand.append((a, b, float(Asub[a, b])))
+
+    edges_thin, edges_thick = [], []
+    if mode == 'auto':
+        n_pairs = len(cand)
+        if n_pairs == 0: raise RuntimeError("No pairs for auto-density (AEC).")
+        keep_n = max(1, int(round(float(auto_density) * n_pairs)))
+        kept = sorted(cand, key=lambda x: x[2], reverse=True)[:keep_n]
+        cut = max(1, int(round((1.0 - float(strong_top_frac)) * len(kept))))
+        thin, thick = kept[:cut], kept[cut:]
+        if isinstance(max_val, str) and max_val.lower() == 'auto':
+            vals = np.array([w for *_, w in kept], float)
+            max_val = float(np.percentile(vals, 95)) or 0.05
+        for a,b,w in thin:  edges_thin.append((a,b,w))
+        for a,b,w in thick: edges_thick.append((a,b,w))
+    else:
+        for a,b,w in cand:
+            if w < neutral_min: continue
+            if w >= strong_min: edges_thick.append((a,b,w))
+            elif w >= moderate_min: edges_thin.append((a,b,w))
+
+    connected = set()
+    for i,j,_ in edges_thin + edges_thick: connected.add(i); connected.add(j)
+
+    fig, ax = plt.subplots(figsize=figsize, dpi=dpi)
+    ax.set_aspect('equal'); ax.axis('off'); ax.set_xlim(0,1); ax.set_ylim(0,1)
+    ax.add_artist(plt.Circle((0.5,0.5), target_radius, edgecolor='gray', facecolor='none', lw=2.5, zorder=0))
+
+    # Use reversed magma so darker = stronger (more perceptible)
+    cmap = cm.get_cmap('magma_r')
+    max_val_f = float(max_val) if isinstance(max_val,(int,float)) else 0.60
+    norm = plt.Normalize(vmin=0.0, vmax=max_val_f)
+
+    def add_group(recs, lw, alpha_base):
+        if not recs: return None
+        segs, cols, lws = [], [], []
+        for (a,b,w) in recs:
+            p1, p2 = XYp[a], XYp[b]
+            col = cmap(norm(w))
+            alpha = alpha_base + (min(w, max_val_f) / max_val_f) * (1.0 - alpha_base)
+            segs.append((p1,p2)); cols.append((col[0], col[1], col[2], alpha)); lws.append(lw)
+        lc = LineCollection(
+            segs, colors=cols, linewidths=lws,
+            zorder=1.2 if lw <= 2 else 1.6,
+            capstyle='butt', joinstyle='miter', antialiased=True
+        )
+        ax.add_collection(lc); return lc
+
+    # moderates faint/thin; strong bold
+    lc_mod = add_group(edges_thin, 1.2, 0.08)
+    lc_str = add_group(edges_thick, 3.6, 0.92)
+
+    all_idx = list(range(len(present_names)))
+    unconnected = [i for i in all_idx if i not in connected]
+    if unconnected:
+        ax.scatter(XYp[unconnected,0], XYp[unconnected,1], s=70, facecolor='white', edgecolor='black', linewidth=1.0, zorder=2.0)
+    if connected:
+        conn = sorted(list(connected))
+        ax.scatter(XYp[conn,0], XYp[conn,1], s=74, facecolor='black', edgecolor='white', linewidth=1.0, zorder=2.2)
+    for i,name in enumerate(present_names):
+        x,y = XYp[i]
+        if i in connected:
+            ax.text(x,y+0.014, name, fontsize=7.5, fontweight='bold', ha='center', va='center')
+        else:
+            ax.text(x,y+0.014, name, fontsize=7.0, ha='center', va='center')
+
+    sm = plt.cm.ScalarMappable(cmap=cmap, norm=norm); sm.set_array([])
+    cbar = plt.colorbar(sm, ax=ax, fraction=0.03, pad=0.02)
+    cbar.set_label("AEC strength (0–1)", fontsize=8)
+    cbar.ax.tick_params(labelsize=6)
+
+    # legend (no direction note for AEC, similar to wPLI)
+    handles = [Patch(facecolor='white', edgecolor='black', label='present, unconnected'),
+               Patch(facecolor='black', edgecolor='white', label='present, connected')]
+    if mode == 'auto':
+        if lc_mod is not None: handles.append(Line2D([0],[0], color='k', lw=1.2, alpha=0.7, label="kept (thin)"))
+        if lc_str is not None: handles.append(Line2D([0],[0], color='k', lw=3.6, alpha=1.0, label="top kept (thick)"))
+    else:
+        if lc_mod is not None: handles.append(Line2D([0],[0], color='k', lw=1.2, alpha=0.7, label=f"moderate ≥ {moderate_min:.2f}"))
+        if lc_str is not None: handles.append(Line2D([0],[0], color='k', lw=3.6, alpha=1.0, label=f"strong ≥ {strong_min:.2f}"))
+
+    ax.legend(handles=handles, loc='upper right', bbox_to_anchor=(1.15,1.15), fontsize=7, frameon=True)
+    return fig
+
+
 def plot_best_wpli(W, raw, channel_names, montage_name, **kwargs):
     # labels_for_plot = _choose_best_label_mapping(info_channel_names, final_raw)
     return plot_wpli_generic(W=W, raw=raw, channel_names=channel_names, montage_name=montage_name, **kwargs)
+
+
+def plot_best_aec(A, raw, channel_names, montage_name, **kwargs):
+    """
+    Wrapper for plotting AEC (Amplitude Envelope Correlation) connectivity.
+    AEC is non-directional (symmetrical) like wPLI, so uses similar plotting approach.
+    """
+    return plot_aec_generic(A=A, raw=raw, channel_names=channel_names, montage_name=montage_name, **kwargs)

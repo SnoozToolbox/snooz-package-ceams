@@ -132,8 +132,8 @@
                 "package": {
                     "package_name": "CEAMSModules"
                 },
-                "pos_x": 754.0,
-                "pos_y": 710.0
+                "pos_x": 754.0000000000001,
+                "pos_y": 647.5000000000001
             },
             {
                 "cls": "Dictionary",
@@ -370,8 +370,8 @@
                 "package": {
                     "package_name": "CEAMSModules"
                 },
-                "pos_x": -1192.277343749999,
-                "pos_y": 1041.8076171875
+                "pos_x": -1182.9023437499993,
+                "pos_y": 1258.9951171875002
             },
             {
                 "cls": "Constant",
@@ -405,6 +405,9 @@
                             ],
                             "02d58c3b-80ec-4e80-8a3c-33d9ee521c18": [
                                 "subject_info"
+                            ],
+                            "838795ca-9563-4370-918e-f8f92cc23220": [
+                                "subject_info"
                             ]
                         }
                     }
@@ -415,8 +418,8 @@
                 "package": {
                     "package_name": "CEAMSModules"
                 },
-                "pos_x": 348.85937499999943,
-                "pos_y": 1047.68359375
+                "pos_x": 353.5468749999994,
+                "pos_y": 1257.0585937500002
             },
             {
                 "cls": "Constant",
@@ -519,6 +522,9 @@
                             ],
                             "02d58c3b-80ec-4e80-8a3c-33d9ee521c18": [
                                 "recording_path"
+                            ],
+                            "838795ca-9563-4370-918e-f8f92cc23220": [
+                                "recording_path"
                             ]
                         }
                     }
@@ -583,6 +589,9 @@
                             ],
                             "fdc0c057-3fb5-4c9f-92f5-23b1474f7a2d": [
                                 "signals"
+                            ],
+                            "829d7060-7e36-412a-9857-bfa39dfacaf0": [
+                                "signals"
                             ]
                         }
                     },
@@ -599,8 +608,8 @@
                 "package": {
                     "package_name": "CEAMSModules"
                 },
-                "pos_x": -305.84375,
-                "pos_y": 439.60937499999955
+                "pos_x": -318.34375,
+                "pos_y": 411.4843749999996
             },
             {
                 "cls": "Dictionary",
@@ -1408,8 +1417,8 @@
                 "package": {
                     "package_name": "CEAMSModules"
                 },
-                "pos_x": 752.0,
-                "pos_y": 945.0
+                "pos_x": 748.8750000000001,
+                "pos_y": 862.1875000000001
             },
             {
                 "cls": "TrimSignal",
@@ -1486,6 +1495,9 @@
                             ],
                             "fdc0c057-3fb5-4c9f-92f5-23b1474f7a2d": [
                                 "events"
+                            ],
+                            "829d7060-7e36-412a-9857-bfa39dfacaf0": [
+                                "events"
                             ]
                         }
                     }
@@ -1538,6 +1550,187 @@
                 },
                 "pos_x": -960.0,
                 "pos_y": 880.0
+            },
+            {
+                "cls": "EpochSignal",
+                "name": "EpochSignal",
+                "metadata": {},
+                "file_location": null,
+                "module": "CEAMSModules.EpochSignal",
+                "module_label": "Epoch Signal",
+                "module_category": "Signal Processing",
+                "module_author": "",
+                "module_url": "",
+                "module_description": "",
+                "module_options": {},
+                "inputs": {
+                    "signals": {
+                        "name": "signals",
+                        "value": "",
+                        "sub_plugs": {},
+                        "connections": {
+                            "7b92caa3-9e9e-46bc-b790-6175abb7ae45": "signals_from_events"
+                        }
+                    },
+                    "events": {
+                        "name": "events",
+                        "value": "",
+                        "sub_plugs": {},
+                        "connections": {
+                            "d6266576-d0da-4a9a-adb4-2cc7e01308ef": "events"
+                        }
+                    },
+                    "epoch_length_sec": {
+                        "name": "epoch_length_sec",
+                        "value": "",
+                        "sub_plugs": {},
+                        "connections": {}
+                    },
+                    "overlap_sec": {
+                        "name": "overlap_sec",
+                        "value": "",
+                        "sub_plugs": {},
+                        "connections": {}
+                    },
+                    "droplast": {
+                        "name": "droplast",
+                        "value": "",
+                        "sub_plugs": {},
+                        "connections": {}
+                    }
+                },
+                "outputs": {
+                    "epochs": {
+                        "name": "epochs",
+                        "value": "",
+                        "sub_plugs": {},
+                        "connections": {
+                            "a8b8a023-ed8d-4a5c-a896-1d7051ee058c": [
+                                "epochs"
+                            ]
+                        }
+                    },
+                    "events": {
+                        "name": "events",
+                        "value": "",
+                        "sub_plugs": {},
+                        "connections": {
+                            "a8b8a023-ed8d-4a5c-a896-1d7051ee058c": [
+                                "events"
+                            ]
+                        }
+                    }
+                },
+                "identifier": "829d7060-7e36-412a-9857-bfa39dfacaf0",
+                "activation_state": "deactivated",
+                "package": {
+                    "package_name": "CEAMSModules"
+                },
+                "pos_x": 110.93749999999989,
+                "pos_y": 1062.4999999999998
+            },
+            {
+                "cls": "AECConnectivity",
+                "name": "AECConnectivity",
+                "metadata": {},
+                "file_location": null,
+                "module": "CEAMSModules.AECConnectivity",
+                "module_label": "AEC Connectivity",
+                "module_category": "Connectivity Analysis",
+                "module_author": "",
+                "module_url": "",
+                "module_description": "",
+                "module_options": {},
+                "inputs": {
+                    "epochs": {
+                        "name": "epochs",
+                        "value": "",
+                        "sub_plugs": {},
+                        "connections": {
+                            "829d7060-7e36-412a-9857-bfa39dfacaf0": "epochs"
+                        }
+                    },
+                    "events": {
+                        "name": "events",
+                        "value": "",
+                        "sub_plugs": {},
+                        "connections": {
+                            "829d7060-7e36-412a-9857-bfa39dfacaf0": "events"
+                        }
+                    }
+                },
+                "outputs": {
+                    "aec_results": {
+                        "name": "aec_results",
+                        "value": "",
+                        "sub_plugs": {},
+                        "connections": {
+                            "838795ca-9563-4370-918e-f8f92cc23220": [
+                                "con_dict"
+                            ]
+                        }
+                    }
+                },
+                "identifier": "a8b8a023-ed8d-4a5c-a896-1d7051ee058c",
+                "activation_state": "deactivated",
+                "package": {
+                    "package_name": "CEAMSModules"
+                },
+                "pos_x": 339.06249999999994,
+                "pos_y": 1042.1874999999998
+            },
+            {
+                "cls": "ConnectivityDetails",
+                "name": "ConnectivityDetails",
+                "metadata": {},
+                "file_location": null,
+                "module": "CEAMSModules.ConnectivityDetails",
+                "module_label": "Connectivity Details",
+                "module_category": "Events Utilities",
+                "module_author": "",
+                "module_url": "",
+                "module_description": "",
+                "module_options": {},
+                "inputs": {
+                    "recording_path": {
+                        "name": "recording_path",
+                        "value": "",
+                        "sub_plugs": {},
+                        "connections": {
+                            "c11b5d5d-f974-40bc-b215-e0a96d34337e": "output"
+                        }
+                    },
+                    "subject_info": {
+                        "name": "subject_info",
+                        "value": "",
+                        "sub_plugs": {},
+                        "connections": {
+                            "908dcc4d-5e4c-49a6-977c-26d03d271ab5": "constant"
+                        }
+                    },
+                    "con_dict": {
+                        "name": "con_dict",
+                        "value": "",
+                        "sub_plugs": {},
+                        "connections": {
+                            "a8b8a023-ed8d-4a5c-a896-1d7051ee058c": "aec_results"
+                        }
+                    },
+                    "output_path": {
+                        "name": "output_path",
+                        "value": "",
+                        "sub_plugs": {},
+                        "connections": {}
+                    }
+                },
+                "outputs": {},
+                "identifier": "838795ca-9563-4370-918e-f8f92cc23220",
+                "activation_state": "deactivated",
+                "package": {
+                    "package_name": "CEAMSModules"
+                },
+                "pos_x": 754.6874999999999,
+                "pos_y": 1034.3749999999998
             }
         ]
     }
