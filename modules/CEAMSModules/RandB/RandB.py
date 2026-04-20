@@ -12,7 +12,8 @@ from commons.NodeInputException import NodeInputException
 import numpy as np
 import math
 from fractions import Fraction
-from scipy.signal import resample_poly, periodogram
+from scipy.signal import resample_poly, periodogram, welch
+from scipy.optimize import curve_fit
 from joblib import Parallel, delayed
 import matplotlib.pyplot as plt
 
@@ -20,7 +21,7 @@ from CEAMSModules.PSGReader import SignalModel as test
 
 # Import the FOOOF object
 from fooof import FOOOF
-
+import yasa
 # Import some internal functions
 #   These are used here to demonstrate the algorithm
 #   You do not need to import these functions for standard usage of the module
@@ -139,10 +140,14 @@ class RandB(SciNode):
         win_step_sec = float(win_step_sec)
         first_freq = float(first_freq)
         last_freq = float(last_freq)
+        if isinstance(flag, str):
+            flag = flag.strip().lower() == 'true'
         # get data
 
         #sign2d = test.SignalModel.get_attribute(signals,'samples' , None)       
         fs = test.SignalModel.get_attribute(signals,'sample_rate' , None)
+        allsignals = test.SignalModel.get_attribute(signals,'samples' , None)
+        channel = test.SignalModel.get_attribute(signals,'channel' , None)
         psd = []
         # get data and split and stack accordingly
         for i, signal_model in enumerate(signals):
@@ -151,8 +156,8 @@ class RandB(SciNode):
             if flag:
                 residu, freq_bins = self.rhythmic_FOOOF(sign2d_split, fs, first_freq, last_freq, window_name)
             else:
+                #residu, psd_aperiodic, freq_bins  = self.IRASA(sign2d_split, fs,first_freq,last_freq, window_name, window_sec=win_len_sec, new_chan=new_chan)
                 residu, res_mean, freq_bins,intercept,beta,freq_raw, psd_raw  = self.rythmic_spectral_analysis(sign2d_split, fs,first_freq,last_freq, window_name)
-
             # Define output
             data = {}
             data['psd'] = residu
@@ -226,166 +231,234 @@ class RandB(SciNode):
         return new_arr, new_chan, start_time, end_time, new_dur
     
     
-    def raw_spectral_analysis(self, signals, fs, window_name):
-        """ Compute the spectral analysis of the signals using scipy.signal.periodogram
+    def raw_spectral_analysis(self, signals, fs, window_name, nfft=None):
+        """ Compute the raw PSD using scipy.signal.welch with the same parameters
+        that yasa.irasa uses internally, so that the raw PSD and the IRASA
+        aperiodic/periodic spectra share the exact same frequency grid.
 
         Parameters
         -----------
         signals        : Array (Nepocs X time)
         fs             : float
             Sampling frequency (Hz)
-        win_len_sec     : float
-            window length in sec (how much data is taken for each fft)            
+        window_name    : str
+            Window passed to scipy.signal.welch (e.g. 'hamming').
+        nfft           : int or None
+            FFT length. If None, uses n_samples (no zero-padding).
+            To match yasa.irasa, pass ``int(n_samples * hset.max())``.
+
         Returns
         -----------
-        psd_data        : ndarray [fft_win_count x 0-fs/2 Hz]
-            Power spectral density data as an array.
-            A value of the power for each frequency bin for each extracted window.
+        psd_data        : ndarray [Nepocs x n_freqs]
+            Power spectrum of the signal (scaling='spectrum', uV^2).
         freq_bins       : ndarray
             The frequency bins array (Hz)
 
         Usage : psd_data, freq_bins = compute(ts_signal, 100)
-
-        """    
-        # valid fs
+        """
         fs = fs[0]
 
-        # select segment using next power of 2
         _, n = signals.shape
-        # compute spectral analysis using scipy periodogram
-        # scaling='density' gives power spectral density in V^2/Hz
-        # we'll use 'spectrum' to get power spectrum directly
-        freq_bins, psd_data = periodogram(signals, fs=fs, window=window_name, 
-                                          nfft=n, scaling='spectrum', 
-                                          detrend=False, axis=1)
+        nperseg = n
+        if nfft is None:
+            nfft = n
+
+        # Mirror yasa.irasa: median-averaged Welch with the same window,
+        # nperseg and nfft. When the signal length equals nperseg this is a
+        # single windowed FFT (and 'average' is a no-op), which matches what
+        # the IRASA wrapper sees when it processes one epoch at a time.
+        freq_bins, psd_data = welch(
+            signals, fs=fs, window=window_name, nperseg=nperseg, nfft=nfft,
+            scaling='spectrum', detrend=False, average='median', axis=1,
+        )
 
         return psd_data, freq_bins
 
 
-    def resampled_spectral_analysis(self, signals, fs, last_freq, window_name):
-        """Compute resampled spectral analysis using scipy periodogram"""
+    def resampled_spectral_analysis(self, signals, fs, last_freq, window_name,
+                                    hset=None, nfft=None):
+        """Compute the IRASA aperiodic PSD estimate using scipy.signal.welch
+        on the h / 1/h resamplings, with the same parameters that
+        ``yasa.irasa`` uses internally.
+
+        Parameters
+        -----------
+        signals     : 1D ndarray
+            A single epoch of the signal.
+        fs          : list or tuple of float
+            ``fs[0]`` is the sampling frequency (Hz).
+        last_freq   : float
+            Upper bound of the frequency range of interest. Kept for API
+            compatibility; cropping to the band is done by the caller so that
+            the aperiodic fit is computed on the same points yasa.irasa uses.
+        window_name : str
+            Window passed to scipy.signal.welch (e.g. 'hamming').
+        hset        : 1D array_like or None
+            Resampling factors. Defaults to ``np.arange(1.05, 1.75, 0.03)``.
+        nfft        : int or None
+            FFT length. Defaults to ``int(Npoints * hset.max())``. Pass the
+            same value used by ``raw_spectral_analysis`` so the raw and
+            aperiodic spectra share the exact same frequency grid.
+
+        Returns
+        -----------
+        psd_aperiodic : 1D ndarray
+            Aperiodic (fractal) power spectrum on ``freq_bins``.
+        freq_bins     : 1D ndarray
+            Frequency grid (Hz), identical to the one produced by
+            ``scipy.signal.welch(..., fs=fs, nfft=nfft)``.
+        """
         fs = fs[0]
         Npoints = len(signals)
-        
-        # define scale
-        scale = np.arange(1.05, 1.75, 0.03)
-        nscale = len(scale)
-        
-        # Use the full signal
-        sign = signals
-        
-        # Use fixed nfft for all scales to ensure consistent frequency grids
-        max_nfft = int(Npoints * scale[-1])
-        fixed_nfft = max_nfft  # Use same nfft for all scales
-        full_Nfrac = fixed_nfft // 2 + 1
-        
-        # Calculate which indices correspond to frequencies <= last_freq
-        freq_full = np.linspace(0, fs/2, full_Nfrac)
-        idx_keep = np.where(freq_full <= last_freq)[0]
-        Nfrac = len(idx_keep)
-        
-        # initialize array for power resampling (only up to last_freq)
-        pow1 = np.full((nscale, Nfrac), np.nan)
-        pow2 = np.full((nscale, Nfrac), np.nan)
+        nperseg = Npoints
 
-        for i in range(nscale):
-            a = scale[i]
-            fraction = Fraction(a).limit_denominator()
-            num = fraction.numerator
-            dem = fraction.denominator
-            
-            # compute power scaling UP
-            sign_rescaled = resample_poly(sign, num, dem)
-            freq_up, psd_up = periodogram(sign_rescaled, fs=fs, window=window_name,
-                                         nfft=fixed_nfft, scaling='spectrum',
-                                         detrend=False)
-            # Keep only frequencies up to last_freq using consistent indexing
-            pow1[i, :] = psd_up[idx_keep]
-            
-            # compute power scaling DOWN
-            sign_rescaled = resample_poly(sign, dem, num)
-            freq_down, psd_down = periodogram(sign_rescaled, fs=fs, window=window_name,
-                                             nfft=fixed_nfft, scaling='spectrum',
-                                             detrend=False)
-            # Keep only frequencies up to last_freq using consistent indexing
-            pow2[i, :] = psd_down[idx_keep]
+        if hset is None:
+            hset = np.arange(1.05, 1.75, 0.03)
+        # Round to 4 decimals like yasa.irasa to avoid float-precision issues
+        # with np.arange and to get clean Fraction(str(h)) ratios (e.g. 21/20).
+        hset = np.round(np.asarray(hset, dtype=float), 4)
+        nscale = len(hset)
 
-        # Compute geometric mean of resampled spectra (only on frequencies up to last_freq)
-        P1P2 = np.exp(np.nanmean(0.5 * np.log(np.multiply(pow1, pow2)), axis=0))
-        
-        # Remove NaN values and get corresponding frequencies
-        YesNaN = np.argwhere(~np.isnan(P1P2))
-        psd_data = P1P2[YesNaN]
-        
-        # Create frequency array for the filtered range (0 to last_freq)
-        freq = freq_full[idx_keep]
-        freq_bins = freq[YesNaN]
+        if nfft is None:
+            nfft = int(Npoints * hset.max())
 
-        return psd_data, freq_bins
+        # Single frequency grid, built the way scipy.signal.welch builds it,
+        # so the caller can align psd_raw and psd_aperiodic bin-for-bin.
+        freq_full = np.fft.rfftfreq(nfft, d=1.0 / fs)
+        Nfrac = freq_full.size
+
+        pow_up = np.full((nscale, Nfrac), np.nan)
+        pow_dw = np.full((nscale, Nfrac), np.nan)
+
+        for i, h in enumerate(hset):
+            # Exact rational representation from the decimal string, matching
+            # yasa.irasa's Fraction(str(h)). For values like 1.05 this gives
+            # 21/20 instead of an approximation of the binary float.
+            rat = Fraction(str(float(h)))
+            up, dw = rat.numerator, rat.denominator
+
+            sig_up = resample_poly(signals, up, dw)
+            sig_dw = resample_poly(signals, dw, up)
+
+            _, psd_up = welch(
+                sig_up, fs=fs * h, window=window_name, nperseg=nperseg,
+                nfft=nfft, scaling='spectrum', detrend=False, average='median',
+            )
+            _, psd_dw = welch(
+                sig_dw, fs=fs / h, window=window_name, nperseg=nperseg,
+                nfft=nfft, scaling='spectrum', detrend=False, average='median',
+            )
+
+            pow_up[i, :] = psd_up
+            pow_dw[i, :] = psd_dw
+
+        # Geometric mean of the up/down pair for each h, then median across h.
+        # Algebraically identical to yasa's
+        #   psd_aperiodic = median(sqrt(psd_up * psd_dw), axis=0)
+        psd_aperiodic = np.nanmedian(np.sqrt(pow_up * pow_dw), axis=0)
+
+        return psd_aperiodic, freq_full
 
 
-    def _process_single_epoch(self, data, fs, first_freq, last_freq, window_name):
-        """Process a single epoch for parallel computation"""
-        # Check if segment contains NaN values
+    def _process_single_epoch(self, data, fs, first_freq, last_freq, window_name,
+                              hset=None, nfft=None):
+        """Process a single epoch for parallel computation.
+
+        Fits the IRASA aperiodic PSD with the same semilog model
+        (``log(psd) = a + b*log(f)``) and the same slope bounds
+        (``b in [-10, 2]``) as ``yasa.irasa``.
+        """
         if np.any(np.isnan(data)):
             return np.nan, np.nan
-        
+
         try:
-            pow, freq = self.resampled_spectral_analysis(data, fs, last_freq, window_name)
-            # flatten array
-            pow = np.squeeze(pow)
+            pow_ap, freq = self.resampled_spectral_analysis(
+                data, fs, last_freq, window_name, hset=hset, nfft=nfft,
+            )
+            pow_ap = np.squeeze(pow_ap)
             freq = np.squeeze(freq)
-            
-            # exclude lower boundary in case first_freq = 0
-            freqr = np.where((freq > first_freq) & (freq <= last_freq))
-            
-            # Check if we have valid data for polyfit
+
+            # Inclusive band mask like yasa.irasa (masked_outside), but also
+            # drop the 0 Hz bin. yasa.irasa asserts band[0] > 0 at entry so
+            # it can safely be inclusive; here `first_freq` is user input, so
+            # we exclude f=0 explicitly to avoid log(0) in the fit and
+            # 0**(-beta)=0 when evaluating the aperiodic power law.
+            freqr = np.where((freq >= first_freq) & (freq <= last_freq) & (freq > 0))
             freq_subset = freq[freqr]
-            pow_subset = pow[freqr]
-            
+            pow_subset = pow_ap[freqr]
+
             if len(freq_subset) == 0 or len(pow_subset) == 0:
                 return np.nan, np.nan
-            
-            # Check for NaN or invalid values in the subset
+
             if np.any(np.isnan(freq_subset)) or np.any(np.isnan(pow_subset)) or \
                np.any(freq_subset <= 0) or np.any(pow_subset <= 0):
                 return np.nan, np.nan
-            
-            beta_val, intercept_val = np.polyfit(np.log(freq_subset), np.log(pow_subset), 1)
+
+            # YASA's aperiodic model (see yasa.spectral.irasa):
+            #   func(f, a, b) = a + log(f**b) = a + b*log(f)
+            # fit against log(psd_aperiodic), with slope bounded to [-10, 2].
+            def _aperiodic_model(t, a, b):
+                return a + np.log(t ** b)
+
+            popt, _ = curve_fit(
+                _aperiodic_model, freq_subset, np.log(pow_subset),
+                p0=(2.0, -1.0),
+                bounds=((-np.inf, -10.0), (np.inf, 2.0)),
+            )
+            intercept_val, beta_val = popt[0], popt[1]
             return beta_val, intercept_val
-            
-        except:
+
+        except Exception:
             return np.nan, np.nan
 
     def rythmic_spectral_analysis(self, signals, fs, first_freq, last_freq, window_name):
+        """IRASA-style rhythmic spectrum, aligned with ``yasa.irasa``.
 
-        psd_raw, freq_raw = self.raw_spectral_analysis(signals, fs, window_name)
-        psd_raw_mean = np.nanmean(psd_raw, axis=0)
-
+        Uses scipy.signal.welch with the same window, nperseg, nfft, averaging
+        and detrending as ``yasa.irasa``; exact Fraction(str(h)) resampling
+        ratios; an inclusive [first_freq, last_freq] band; and a bounded
+        semilog fit of the aperiodic component. The residu is the raw PSD
+        divided by the aperiodic power-law fit.
+        """
         Nepocs, Npoints = signals.shape
 
-        # Use parallel processing with threading backend (avoids pickling issues)
-        # n_jobs=-1 uses all available CPU cores
+        # Single nfft shared by the raw PSD and every resampled PSD, so all
+        # spectra live on the exact same frequency grid (same rule as
+        # yasa.irasa when kwargs_welch=dict(nfft=...)).
+        hset = np.round(np.arange(1.05, 1.75, 0.03), 4)
+        fixed_nfft = int(Npoints * hset.max())
+
+        psd_raw, freq_raw = self.raw_spectral_analysis(
+            signals, fs, window_name, nfft=fixed_nfft,
+        )
+        psd_raw_mean = np.nanmean(psd_raw, axis=0)
+
         results = Parallel(n_jobs=-1, backend='threading')(
-            delayed(self._process_single_epoch)(signals[i, :], fs, first_freq, last_freq, window_name)
+            delayed(self._process_single_epoch)(
+                signals[i, :], fs, first_freq, last_freq, window_name,
+                hset=hset, nfft=fixed_nfft,
+            )
             for i in range(Nepocs)
         )
-        
-        # Unpack results
-        beta = np.array([r[0] for r in results])
-        intercept = np.array([r[1] for r in results])
-        
-        beta = beta.reshape((len(beta), 1))
-        intercept = intercept.reshape((len(intercept), 1))
-        
-        # compute freqr for indexing
-        freqr = np.where((freq_raw > first_freq) & (freq_raw <= last_freq))
+
+        beta = np.array([r[0] for r in results]).reshape(-1, 1)
+        intercept = np.array([r[1] for r in results]).reshape(-1, 1)
+
+        # Inclusive band mask like yasa.irasa (masked_outside), but also
+        # drop the 0 Hz bin so that (freq_raw[0])**(-beta) == 0**positive
+        # doesn't force the DC column of `residu` to exactly 0 for every
+        # epoch when `first_freq == 0`. yasa.irasa avoids this via its
+        # ``assert band[0] > 0``; we enforce the same invariant here.
+        freqr = np.where(
+            (freq_raw >= first_freq) & (freq_raw <= last_freq) & (freq_raw > 0)
+        )
         freqr = np.squeeze(freqr)
 
-        # compute rythmic spectrum (handles NaN in beta/intercept automatically)
-        residu = np.exp((-intercept)) * (freq_raw[freqr])**((-beta)) * (psd_raw[:, freqr])
+        # aperiodic_fit(f) = exp(intercept) * f**beta   (beta<0 for 1/f)
+        # residu = psd_raw / aperiodic_fit
+        residu = np.exp(-intercept) * (freq_raw[freqr]) ** (-beta) * (psd_raw[:, freqr])
         residu_mean = np.nanmean(residu, axis=0)
-        
+
         return residu, residu_mean, freq_raw[freqr], beta, intercept, freq_raw, psd_raw_mean
     
     def rhythmic_FOOOF(self, signals, fs, first_freq, last_freq, window_name):
@@ -415,3 +488,78 @@ class RandB(SciNode):
                 spectrum_array[i, :] = rhythmic_spectrum
         # Return frequencies excluding 0 Hz to match spectrum_array dimensions
         return spectrum_array, fm.freqs
+
+    def IRASA(self, signals, fs, first_freq, last_freq, window_name, window_sec, new_chan):
+        # Apply the IRASA technique
+        fs = fs[0]  # Use the first sampling rate (assuming all are the same)
+        n_epochs = signals.shape[0]
+        n_samples = signals.shape[1]  # Number of samples per epoch
+        # define scale
+        scale = np.arange(1.05, 1.75, 0.03)
+        # Use fixed nfft for all scales to ensure consistent frequency grids
+        fixed_nfft = int(n_samples * scale[-1])
+        # First pass: run analysis and determine target column count.
+        periodic_rows = []
+        aperiodic_rows = []
+        freqs_rows = []
+        residu_rows = []
+        target_cols = 0
+
+        for i in range(n_epochs):
+            if np.isnan(signals[i, :]).any():
+                periodic_rows.append(None)
+                aperiodic_rows.append(None)
+                freqs_rows.append(None)
+                residu_rows.append(None)
+                continue
+
+            irasa_result = yasa.irasa(
+                signals[i, :], fs, ch_names=new_chan[i],
+                band=(first_freq, last_freq), hset=scale, win_sec=window_sec, return_fit=True,
+                kwargs_welch=dict(average="median", window=window_name, nfft=fixed_nfft, scaling='spectrum', detrend=False)
+            )
+            freqs_i = np.asarray(irasa_result[0])
+            aperiodic_i = np.asarray(irasa_result[1])
+            periodic_i = np.asarray(irasa_result[2])
+            residu_i = np.exp((-irasa_result[3]['Intercept'][0])) * (freqs_i)**((-irasa_result[3]['Slope'][0])) * (aperiodic_i + periodic_i)
+            
+            periodic_rows.append(periodic_i)
+            aperiodic_rows.append(aperiodic_i)
+            freqs_rows.append(freqs_i)
+            residu_rows.append(residu_i)
+            target_cols = max(target_cols, periodic_i.shape[0], aperiodic_i.shape[0], freqs_i.shape[0])
+
+        # Second pass: allocate fixed 2D arrays and fill available values.
+        periodic_array = np.zeros((n_epochs, target_cols))
+        aperiodic_array = np.zeros((n_epochs, target_cols))
+        freqs = np.zeros(target_cols)
+        residu_array = np.zeros((n_epochs, target_cols))
+
+        for row_freqs in freqs_rows:
+            if row_freqs is not None and row_freqs.shape[0] > 0:
+                freqs[:row_freqs.shape[0]] = row_freqs
+                break
+
+        for i in range(n_epochs):
+            p_i = periodic_rows[i]
+            a_i = aperiodic_rows[i]
+            r_i = residu_rows[i]
+            if p_i is None or a_i is None:
+                periodic_array[i, :] = np.nan
+                aperiodic_array[i, :] = np.nan
+                residu_array[i, :] = np.nan
+                continue
+            if p_i.shape[1] > 0:
+                periodic_array[i, :p_i.shape[1]] = p_i
+            if a_i.shape[1] > 0:
+                aperiodic_array[i, :a_i.shape[1]] = a_i
+            if r_i.shape[1] > 0:
+                residu_array[i, :r_i.shape[1]] = r_i
+
+        # Compute ratio-style residu to match rhythmic_spectral_analysis output
+        # residu = (aperiodic + periodic) / aperiodic = 1 + (periodic / aperiodic)
+        with np.errstate(divide='ignore', invalid='ignore'):
+            residu = (aperiodic_array + periodic_array) / aperiodic_array
+            residu[~np.isfinite(residu)] = np.nan  # Handle division by zero or invalid values
+        
+        return residu_array, aperiodic_array, freqs
