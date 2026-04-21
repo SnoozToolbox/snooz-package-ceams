@@ -51,7 +51,7 @@ class PSAPicsGenerator(SciNode):
         - 'log_scale': bool, use log scale for y-axis
         - 'show_legend': bool, show legend on plots (default: True)
         - 'font': str, font family for all text (default: 'Arial')
-        - 'fontsize': int, font size for titles (default: 12)
+        - 'fontsize': int, font size for axis labels and legend (default: 12)
         - 'figure_width': float, figure width in inches (default: 6)
         - 'figure_height': float, figure height in inches (default: 8)
         - 'sleep_stage_selection': list of str, sleep stages to include
@@ -471,7 +471,7 @@ class PSAPicsGenerator(SciNode):
         log_scale = pics_param.get('log_scale', False)
         sleep_stage_selection = pics_param.get('sleep_stage_selection', ['All'])
 
-        # Build activity variable string for filename and title
+        # Build activity variable string for filename
         if pics_param['activity_var'] == 'total':
             activity_str = 'Total'
         elif pics_param['activity_var'] in ['clock_h', 'stage_h']:
@@ -479,7 +479,7 @@ class PSAPicsGenerator(SciNode):
         elif pics_param['activity_var'] == 'cyc':
             activity_str = f"{pics_param['activity_var']}{pics_param['cycle']}"
         
-        # Build stage string for title
+        # Build stage string for filename
         if len(sleep_stage_selection) == 1:
             stage_str = sleep_stage_selection[0]
         else:
@@ -546,8 +546,9 @@ class PSAPicsGenerator(SciNode):
                                 stage_idx = sleep_stage_selection.index(stage)
                                 linestyle_idx = stage_idx % len(self.linestyles)
                                 
-                                # Simplified label - just channel name
-                                label_name = f'{chan_label[i_chan]}'
+                                # Include sleep stage in the label so multiple stages on one
+                                # channel produce distinct legend entries (cohort uses stage-group).
+                                label_name = f'{chan_label[i_chan]} - {stage}'
                                 if label_name not in legend_labels:
                                     ax.plot(common_freq, mean_power, color=colors[i_chan],
                                            linestyle=self.linestyles[linestyle_idx],
@@ -590,6 +591,7 @@ class PSAPicsGenerator(SciNode):
                             freq_low = psa_data_for_file['freq_low_Hz'].values
                             
                             # Get power columns (stage-specific activity) based on stage selection
+                            # Store (column_name, stage) so legend labels can name each stage.
                             power_columns = []
                             for stage in sleep_stage_selection:
                                 if stage == 'All' and pics_param['activity_var'] == 'total':
@@ -606,10 +608,10 @@ class PSAPicsGenerator(SciNode):
                                     stage_col = f"{pics_param['activity_var']}{pics_param['cycle']}_{stage}_act"
 
                                 if stage_col in psa_data_for_file.columns:
-                                    power_columns.append(stage_col)
+                                    power_columns.append((stage_col, stage))
                             
                             if power_columns:
-                                for stage_idx, stage_col in enumerate(power_columns):
+                                for stage_idx, (stage_col, stage_name) in enumerate(power_columns):
                                     color_idx = (i_chan * len(unique_filenames) + filename_idx) % len(expanded_colors)
                                     linestyle_idx = stage_idx % len(self.linestyles)
                                     power_data = psa_data_for_file[stage_col].values
@@ -626,9 +628,9 @@ class PSAPicsGenerator(SciNode):
                                                 filename_short = str(filename_val)
                                             
                                             if n_channels > 1:
-                                                label_name = f'{chan_label[i_chan]}_{filename_short}'
+                                                label_name = f'{chan_label[i_chan]}_{filename_short} - {stage_name}'
                                             else:
-                                                label_name = f'{filename_short}'
+                                                label_name = f'{filename_short} - {stage_name}'
                                             
                                             if label_name not in legend_labels:
                                                 ax.plot(common_freq, interp_power, color=expanded_colors[color_idx], 
@@ -660,10 +662,10 @@ class PSAPicsGenerator(SciNode):
                             stage_col = f"{pics_param['activity_var']}{pics_param['cycle']}_{stage}_act"
 
                         if stage_col in psa_data_cur_chan.columns:
-                            power_columns.append(stage_col)
+                            power_columns.append((stage_col, stage))
                     
                     if power_columns:
-                        for stage_idx, stage_col in enumerate(power_columns):
+                        for stage_idx, (stage_col, stage_name) in enumerate(power_columns):
                             linestyle_idx = stage_idx % len(self.linestyles)
                             power_data = psa_data_cur_chan[stage_col].values
                             
@@ -672,7 +674,7 @@ class PSAPicsGenerator(SciNode):
                                 interp_power = np.interp(common_freq, freq_low, power_data, left=np.nan, right=np.nan)
                                 
                                 if fig_save:
-                                    label_name = f'{chan_label[i_chan]}'
+                                    label_name = f'{chan_label[i_chan]} - {stage_name}'
                                     if label_name not in legend_labels:
                                         ax.plot(common_freq, interp_power, color=colors[i_chan], 
                                                label=label_name, linewidth=2, linestyle=self.linestyles[linestyle_idx])
@@ -706,34 +708,27 @@ class PSAPicsGenerator(SciNode):
                 # Build comprehensive filename
                 base_filename = os.path.splitext(os.path.basename(base_name))[0]
                 
-                # Build filename and title based on plot type
+                # Build filename based on plot type (no figure title; filenames carry context)
                 if pics_param['subject_sel'] and 'subject_sel' in fig_save:
                     # subject_sel: always include channel name in filename
                     fig_name = f"{pics_param['output_folder']}/{base_filename}_{chan_label[0]}_psa_{activity_str}_{stage_str}"
-                    fig_title = f"{base_filename} {chan_label[0]} - {activity_str} - {stage_str}"
                 elif pics_param['subject_avg'] and 'subject_avg' in fig_save:
                     # subject_avg: include 'avg' suffix to distinguish from subject_sel
                     if len(chan_label) == 1:
                         # Single channel case: add 'avg' to differentiate from subject_sel
                         fig_name = f"{pics_param['output_folder']}/{base_filename}_{chan_label[0]}_avg_psa_{activity_str}_{stage_str}"
-                        fig_title = f"{base_filename} {chan_label[0]} - {activity_str} - {stage_str}"
                     else:
                         # Multiple channels case
                         fig_name = f"{pics_param['output_folder']}/{base_filename}_avg_psa_{activity_str}_{stage_str}"
-                        fig_title = f"{base_filename} - {activity_str} - {stage_str}"
                 else:
                     # Fallback (shouldn't happen)
                     fig_name = f"{pics_param['output_folder']}/{base_filename}_psa_{activity_str}_{stage_str}"
-                    fig_title = f"{base_filename} - {activity_str} - {stage_str}"
                 
-                # Add mean/std suffix to both filename and title
+                # Add mean/std suffix to filename
                 if 'mean' in pics_param['display']:
                     fig_name += '_mean'
-                    fig_title += ' (Mean'
                     if 'std' in pics_param['display']:
                         fig_name += '_std'
-                        fig_title += '±SD'
-                    fig_title += ')'
                 
                 fig_name += '.pdf'
 
@@ -745,7 +740,6 @@ class PSAPicsGenerator(SciNode):
 
                 # Get font settings from parameters
                 font_family = pics_param.get('font', 'Arial')
-                title_fontsize = pics_param.get('fontsize', 12) + 2
                 label_fontsize = pics_param.get('fontsize', 12)
 
                 ax.set_xlabel('Frequency (Hz)', fontsize=label_fontsize, fontfamily=font_family)
@@ -755,7 +749,6 @@ class PSAPicsGenerator(SciNode):
                 else:
                     ax.set_ylabel('Power (μV²/Hz)', fontsize=label_fontsize, fontfamily=font_family)
                 ax.grid(which='both', axis='both')
-                ax.set_title(fig_title, fontsize=title_fontsize, fontfamily=font_family)
                 
                 # Update tick label font
                 for label in ax.get_xticklabels():
@@ -765,9 +758,11 @@ class PSAPicsGenerator(SciNode):
                     label.set_fontfamily(font_family)
                     label.set_fontsize(label_fontsize)
                 
-                # Add legend based on user preference and if there are multiple items
+                # Add legend based on user preference (same rule as cohort plots).
+                # Previously required len(legend_labels) > 1, which hid the legend when
+                # every curve reused the same channel-only label across sleep stages.
                 show_legend = pics_param.get('show_legend', True)
-                if show_legend and len(legend_labels) > 1:
+                if show_legend:
                     legend = ax.legend(loc='upper right', prop={'family': font_family, 'size': label_fontsize})
                 
                 try:
@@ -800,7 +795,7 @@ class PSAPicsGenerator(SciNode):
         -----------  
             None
         """
-        # Build activity variable string for filename and title
+        # Build activity variable string for filename
         if pics_param['activity_var'] == 'total':
             activity_str = 'Total'
         elif pics_param['activity_var'] in ['clock_h', 'stage_h']:
@@ -808,10 +803,9 @@ class PSAPicsGenerator(SciNode):
         elif pics_param['activity_var'] == 'cyc':
             activity_str = f"{pics_param['activity_var']}{pics_param['cycle']}"
         
-        # Build filename and title with optional channel label
+        # Build filename with optional channel label (no figure title)
         chan_suffix = f'_{chan_label}' if chan_label else ''
         fig_name = f"{pics_param['output_folder']}/cohort_psa_{pics_param['display']}_{activity_str}{chan_suffix}.pdf"
-        fig_title = f"Cohort PSA {activity_str}{' ' + chan_label if chan_label else ''}"
 
         # Create the figure
         fig = Figure()
@@ -1051,7 +1045,6 @@ class PSAPicsGenerator(SciNode):
 
         # Get font settings from parameters
         font_family = pics_param.get('font', 'Arial')
-        title_fontsize = pics_param.get('fontsize', 12) + 2
         label_fontsize = pics_param.get('fontsize', 12)
 
         ax.grid(which='both', axis='both')
@@ -1074,12 +1067,6 @@ class PSAPicsGenerator(SciNode):
         show_legend = pics_param.get('show_legend', True)
         if show_legend:
             legend = ax.legend(loc="upper right", prop={'family': font_family, 'size': label_fontsize})
-        
-        ax.set_title(fig_title, fontsize=title_fontsize, fontfamily=font_family)
-        
-        # For cohort_avg, add overall title
-        if pics_param['cohort_avg']:
-            ax.set_title(f"{fig_title}", fontsize=title_fontsize, fontfamily=font_family)
 
         try:
             fig.savefig(fig_name)
