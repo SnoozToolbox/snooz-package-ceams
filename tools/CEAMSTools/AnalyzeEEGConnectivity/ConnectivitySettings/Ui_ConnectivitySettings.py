@@ -79,25 +79,27 @@ class Ui_ConnectivitySettings(object):
         self.frame.setObjectName(u"frame")
         self.frame.setFrameShape(QFrame.Shape.NoFrame)
         self.frame.setFrameShadow(QFrame.Shadow.Raised)
-        self.verticalLayout_5 = QVBoxLayout(self.frame)
-        self.verticalLayout_5.setObjectName(u"verticalLayout_5")
+        self.verticalLayout_2 = QVBoxLayout(self.frame)
+        self.verticalLayout_2.setObjectName(u"verticalLayout_2")
         self.connectivity_settings_header_label = QLabel(self.frame)
         self.connectivity_settings_header_label.setObjectName(u"connectivity_settings_header_label")
 
-        self.verticalLayout_5.addWidget(self.connectivity_settings_header_label)
+        self.verticalLayout_2.addWidget(self.connectivity_settings_header_label)
 
         self.connectivity_settings_label = QLabel(self.frame)
         self.connectivity_settings_label.setObjectName(u"connectivity_settings_label")
         self.connectivity_settings_label.setWordWrap(True)
 
-        self.verticalLayout_5.addWidget(self.connectivity_settings_label)
+        self.verticalLayout_2.addWidget(self.connectivity_settings_label)
 
-        self.horizontalLayout_7 = QHBoxLayout()
-        self.horizontalLayout_7.setObjectName(u"horizontalLayout_7")
-        self.verticalLayout_2 = QVBoxLayout()
-        self.verticalLayout_2.setObjectName(u"verticalLayout_2")
+        self.horizontalLayout_10 = QHBoxLayout()
+        self.horizontalLayout_10.setObjectName(u"horizontalLayout_10")
         self.horizontalLayout_5 = QHBoxLayout()
         self.horizontalLayout_5.setObjectName(u"horizontalLayout_5")
+        self.horizontalSpacer_2 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+
+        self.horizontalLayout_5.addItem(self.horizontalSpacer_2)
+
         self.num_surr_label = QLabel(self.frame)
         self.num_surr_label.setObjectName(u"num_surr_label")
         self.num_surr_label.setMinimumSize(QSize(175, 0))
@@ -116,39 +118,8 @@ class Ui_ConnectivitySettings(object):
         self.horizontalLayout_5.addItem(self.horizontalSpacer_4)
 
 
-        self.verticalLayout_2.addLayout(self.horizontalLayout_5)
+        self.horizontalLayout_10.addLayout(self.horizontalLayout_5)
 
-        self.horizontalLayout_4 = QHBoxLayout()
-        self.horizontalLayout_4.setObjectName(u"horizontalLayout_4")
-        self.epoch_length_label = QLabel(self.frame)
-        self.epoch_length_label.setObjectName(u"epoch_length_label")
-        self.epoch_length_label.setMinimumSize(QSize(175, 0))
-
-        self.horizontalLayout_4.addWidget(self.epoch_length_label)
-
-        self.epoch_length_lineEdit = QLineEdit(self.frame)
-        self.epoch_length_lineEdit.setObjectName(u"epoch_length_lineEdit")
-        self.epoch_length_lineEdit.setMaximumSize(QSize(100, 16777215))
-        self.epoch_length_lineEdit.setMaxLength(3)
-
-        self.horizontalLayout_4.addWidget(self.epoch_length_lineEdit)
-
-        self.horizontalSpacer_3 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
-
-        self.horizontalLayout_4.addItem(self.horizontalSpacer_3)
-
-
-        self.verticalLayout_2.addLayout(self.horizontalLayout_4)
-
-
-        self.horizontalLayout_7.addLayout(self.verticalLayout_2)
-
-        self.horizontalSpacer = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
-
-        self.horizontalLayout_7.addItem(self.horizontalSpacer)
-
-        self.verticalLayout_3 = QVBoxLayout()
-        self.verticalLayout_3.setObjectName(u"verticalLayout_3")
         self.horizontalLayout = QHBoxLayout()
         self.horizontalLayout.setObjectName(u"horizontalLayout")
         self.p_value_label = QLabel(self.frame)
@@ -169,7 +140,47 @@ class Ui_ConnectivitySettings(object):
         self.horizontalLayout.addItem(self.horizontalSpacer_5)
 
 
-        self.verticalLayout_3.addLayout(self.horizontalLayout)
+        self.horizontalLayout_10.addLayout(self.horizontalLayout)
+
+
+        self.verticalLayout_2.addLayout(self.horizontalLayout_10)
+
+        self.verticalSpacer_2 = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
+
+        self.verticalLayout_2.addItem(self.verticalSpacer_2)
+
+        self.select_epoch_label = QLabel(self.frame)
+        self.select_epoch_label.setObjectName(u"select_epoch_label")
+
+        self.verticalLayout_2.addWidget(self.select_epoch_label)
+
+        self.horizontalLayout_7 = QHBoxLayout()
+        self.horizontalLayout_7.setObjectName(u"horizontalLayout_7")
+        self.horizontalLayout_4 = QHBoxLayout()
+        self.horizontalLayout_4.setObjectName(u"horizontalLayout_4")
+        self.horizontalSpacer = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+
+        self.horizontalLayout_4.addItem(self.horizontalSpacer)
+
+        self.epoch_length_label = QLabel(self.frame)
+        self.epoch_length_label.setObjectName(u"epoch_length_label")
+        self.epoch_length_label.setMinimumSize(QSize(175, 0))
+
+        self.horizontalLayout_4.addWidget(self.epoch_length_label)
+
+        self.epoch_length_lineEdit = QLineEdit(self.frame)
+        self.epoch_length_lineEdit.setObjectName(u"epoch_length_lineEdit")
+        self.epoch_length_lineEdit.setMaximumSize(QSize(100, 16777215))
+        self.epoch_length_lineEdit.setMaxLength(3)
+
+        self.horizontalLayout_4.addWidget(self.epoch_length_lineEdit)
+
+        self.horizontalSpacer_3 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+
+        self.horizontalLayout_4.addItem(self.horizontalSpacer_3)
+
+
+        self.horizontalLayout_7.addLayout(self.horizontalLayout_4)
 
         self.horizontalLayout_3 = QHBoxLayout()
         self.horizontalLayout_3.setObjectName(u"horizontalLayout_3")
@@ -191,17 +202,10 @@ class Ui_ConnectivitySettings(object):
         self.horizontalLayout_3.addItem(self.horizontalSpacer_6)
 
 
-        self.verticalLayout_3.addLayout(self.horizontalLayout_3)
+        self.horizontalLayout_7.addLayout(self.horizontalLayout_3)
 
 
-        self.horizontalLayout_7.addLayout(self.verticalLayout_3)
-
-        self.horizontalSpacer_2 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
-
-        self.horizontalLayout_7.addItem(self.horizontalSpacer_2)
-
-
-        self.verticalLayout_5.addLayout(self.horizontalLayout_7)
+        self.verticalLayout_2.addLayout(self.horizontalLayout_7)
 
 
         self.verticalLayout.addWidget(self.frame)
@@ -316,10 +320,11 @@ class Ui_ConnectivitySettings(object):
 "", None))
         self.num_surr_label.setText(QCoreApplication.translate("ConnectivitySettings", u"Number of surrogrations", None))
         self.num_surr_lineedit.setText(QCoreApplication.translate("ConnectivitySettings", u"20", None))
-        self.epoch_length_label.setText(QCoreApplication.translate("ConnectivitySettings", u"Epoch length (s)", None))
-        self.epoch_length_lineEdit.setText(QCoreApplication.translate("ConnectivitySettings", u"10", None))
         self.p_value_label.setText(QCoreApplication.translate("ConnectivitySettings", u"P_value", None))
         self.p_value_lineedit.setText(QCoreApplication.translate("ConnectivitySettings", u"0.05", None))
+        self.select_epoch_label.setText(QCoreApplication.translate("ConnectivitySettings", u"Set window length and overlap for epoching the data:", None))
+        self.epoch_length_label.setText(QCoreApplication.translate("ConnectivitySettings", u"Epoch length (s)", None))
+        self.epoch_length_lineEdit.setText(QCoreApplication.translate("ConnectivitySettings", u"10", None))
         self.epoch_overlap_label.setText(QCoreApplication.translate("ConnectivitySettings", u"Epoch overlap (s)", None))
         self.epoch_overlap_lineEdit.setText(QCoreApplication.translate("ConnectivitySettings", u"0", None))
         self.network_properties_header_label.setText(QCoreApplication.translate("ConnectivitySettings", u"<html><head/><body><p><span style=\" font-weight:700;\">Network Properties Settings:</span></p></body></html>", None))

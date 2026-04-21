@@ -563,6 +563,14 @@
                             "d6266576-d0da-4a9a-adb4-2cc7e01308ef": "events"
                         }
                     },
+                    "events_groups": {
+                        "name": "events_groups",
+                        "value": "",
+                        "sub_plugs": {},
+                        "connections": {
+                            "3be09df1-eda9-4ef7-a415-74404a6ce78b": "value"
+                        }
+                    },
                     "events_names": {
                         "name": "events_names",
                         "value": "",
@@ -1539,7 +1547,11 @@
                         "name": "value",
                         "value": "",
                         "sub_plugs": {},
-                        "connections": {}
+                        "connections": {
+                            "7b92caa3-9e9e-46bc-b790-6175abb7ae45": [
+                                "events_groups"
+                            ]
+                        }
                     }
                 },
                 "module": "CEAMSModules.Dictionary",
