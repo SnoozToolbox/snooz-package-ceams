@@ -37,7 +37,7 @@ if not exists(package_path):
     package_description = {
         "package_name": package_name,
         "package_version": version,
-        "package_api_version": "2.0.0",
+        "package_api_version": "3.0.0",
         "package_author": author,
         "package_url": url,
         "package_description": description,
