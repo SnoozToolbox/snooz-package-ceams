@@ -1,7 +1,7 @@
 {
     "item_name": "AnalyzeEEGConnectivity",
     "item_type": "tool",
-    "item_url": "https://snooz-toolbox-documentation.readthedocs.io/beta-3.0.0/user_guide/tools/Processing/Analyze_EEG_connectivity.html",
+    "item_url": "https://snooz-toolbox-documentation.readthedocs.io/latest/user_guide/tools/Processing/Analyze_EEG_connectivity.html",
     "item_api_version": "2.0.0",
     "tool_params": {
         "tool_label": "Analyze EEG Connectivity",
