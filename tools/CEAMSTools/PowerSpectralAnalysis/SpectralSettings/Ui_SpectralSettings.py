@@ -299,7 +299,7 @@ class Ui_SpectralSettings(object):
         self.label_10.setText(QCoreApplication.translate("SpectralSettings", u"<html><head/><body><p><span style=\" font-size:12pt; font-style:italic;\">* Warning : The last frequency is limited to FS/2 </span></p></body></html>", None))
         self.label_6.setText(QCoreApplication.translate("SpectralSettings", u"<html><head/><body><p><span style=\" font-weight:600;\">PSA technique</span></p></body></html>", None))
         self.std_radioButton.setText(QCoreApplication.translate("SpectralSettings", u"Standard ", None))
-        self.RA_radioButton.setText(QCoreApplication.translate("SpectralSettings", u"Rhythmic (RnB)", None))
+        self.RA_radioButton.setText(QCoreApplication.translate("SpectralSettings", u"Rhythmic (IRASA)", None))
         self.FoooF_radioButton.setText(QCoreApplication.translate("SpectralSettings", u"Rhythmic (FOOOF)", None))
     # retranslateUi
 
