@@ -26,8 +26,10 @@ class HoursCyclesStep(BaseStepView, Ui_HoursCyclesStep, QtWidgets.QWidget):
         # you are interest in, this is just an example value:
         self._PSACompilation_id = "4bb8c9ac-64e8-4cec-9c2c-5a00c80b4eae"
         self._constants_report_topic = self._PSACompilation_id + ".report_constants"
-        self._PSACompilation_id_rnb = "d16022c4-3ac0-4982-aa3e-dfff4cada99a"
-        self._constants_report_topic_rnb = self._PSACompilation_id_rnb + ".report_constants"
+        self._PSACompilation_id_rhythmic_IRASA = "d16022c4-3ac0-4982-aa3e-dfff4cada99a"
+        self._constants_report_topic_rhythmic_IRASA = self._PSACompilation_id_rhythmic_IRASA + ".report_constants"
+        self._PSACompilation_id_Arhythmic_IRASA = "0ddf2d8d-943d-4583-8b2d-6184ad208119"
+        self._constants_report_topic_Arhythmic_IRASA = self._PSACompilation_id_Arhythmic_IRASA + ".report_constants"
 
         self.report_constants = {}
         self.report_constants['N_HOURS'] = 9
@@ -40,8 +42,8 @@ class HoursCyclesStep(BaseStepView, Ui_HoursCyclesStep, QtWidgets.QWidget):
         # It is a good place to do all ping calls that will request the 
         # underlying process to get the value of a module.
         self._pub_sub_manager.publish(self, self._constants_report_topic, 'ping')
-        self._pub_sub_manager.publish(self, self._constants_report_topic_rnb, 'ping')
-
+        self._pub_sub_manager.publish(self, self._constants_report_topic_rhythmic_IRASA, 'ping')
+        self._pub_sub_manager.publish(self, self._constants_report_topic_Arhythmic_IRASA, 'ping')
 
     def on_topic_update(self, topic, message, sender):
         # Whenever a value is updated within the context, all steps receives a 
@@ -63,7 +65,14 @@ class HoursCyclesStep(BaseStepView, Ui_HoursCyclesStep, QtWidgets.QWidget):
                 self.report_constants = message
             self.spinBox_hours.setValue(self.report_constants['N_HOURS'])
             self.spinBox_cycles.setValue(self.report_constants['N_CYCLES'])
-        elif topic == self._constants_report_topic_rnb:
+        elif topic == self._constants_report_topic_rhythmic_IRASA:
+            if isinstance(message, str) and not message == "":
+                message = eval(message)
+            if isinstance(message, dict) and not message == {}:
+                self.report_constants = message
+            self.spinBox_hours.setValue(self.report_constants['N_HOURS'])
+            self.spinBox_cycles.setValue(self.report_constants['N_CYCLES'])
+        elif topic == self._constants_report_topic_Arhythmic_IRASA:
             if isinstance(message, str) and not message == "":
                 message = eval(message)
             if isinstance(message, dict) and not message == {}:
@@ -71,13 +80,12 @@ class HoursCyclesStep(BaseStepView, Ui_HoursCyclesStep, QtWidgets.QWidget):
             self.spinBox_hours.setValue(self.report_constants['N_HOURS'])
             self.spinBox_cycles.setValue(self.report_constants['N_CYCLES'])
 
-
     def on_apply_settings(self):
         self.report_constants['N_HOURS'] = self.spinBox_hours.value()
         self.report_constants['N_CYCLES'] = self.spinBox_cycles.value()
         self._pub_sub_manager.publish(self, self._constants_report_topic, self.report_constants)
-        self._pub_sub_manager.publish(self, self._constants_report_topic_rnb, self.report_constants)
-
+        self._pub_sub_manager.publish(self, self._constants_report_topic_rhythmic_IRASA, self.report_constants)
+        self._pub_sub_manager.publish(self, self._constants_report_topic_Arhythmic_IRASA, self.report_constants)
 
     def on_validate_settings(self):
         # Validate that all input were set correctly by the user.

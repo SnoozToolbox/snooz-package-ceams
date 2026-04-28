@@ -33,8 +33,9 @@ class SpectralSettings(BaseStepView, Ui_SpectralSettings, QtWidgets.QWidget):
         self._node_id_IRASA = "fe5c4a13-f709-4edc-9e5f-9c7908c85e35"  # provide the win len and win step to the IRASA and activate if R&A
         self._node_id_PSA_std = "4bb8c9ac-64e8-4cec-9c2c-5a00c80b4eae" # provide the band width to the PSA Compilation
         self._node_id_PSA_evt = "9dfbe6b9-1887-452a-ac3b-33f1235f9b0a"  # provide the band width to the PSA on Events
-        #add the R&A compilation (another instance of PSA Compilation but plugged to the R&A computation)
-        self._node_id_PSA_IRASA = "d16022c4-3ac0-4982-aa3e-dfff4cada99a"  # provide the band width to the PSA on R&A
+        #add the IRASA compilation (another instance of PSA Compilation but plugged to the IRASA computation)
+        self._node_id_PSA_IRASA = "d16022c4-3ac0-4982-aa3e-dfff4cada99a"  # provide the band width to the PSA on IRASA
+        self._node_id_Arhythmic_IRASA = "0ddf2d8d-943d-4583-8b2d-6184ad208119" # provide the band width to the Arhythmic component of IRASA
 
         # Subscribe to the publisher for each node you want to talk to
         self._win_len_topic = f'{self._node_id_stft_std}.win_len_sec'                
@@ -78,6 +79,13 @@ class SpectralSettings(BaseStepView, Ui_SpectralSettings, QtWidgets.QWidget):
         self._pub_sub_manager.subscribe(self, self._first_band_IRASA_PSA_topic)
         self._last_band_IRASA_PSA_topic = f'{self._node_id_PSA_IRASA}.last_freq' 
         self._pub_sub_manager.subscribe(self, self._last_band_IRASA_PSA_topic)
+
+        self._mini_band_Arhythmic_IRASA_topic = f'{self._node_id_Arhythmic_IRASA}.mini_bandwidth'
+        self._pub_sub_manager.subscribe(self, self._mini_band_Arhythmic_IRASA_topic)
+        self._first_band_Arhythmic_IRASA_topic = f'{self._node_id_Arhythmic_IRASA}.first_freq'
+        self._pub_sub_manager.subscribe(self, self._first_band_Arhythmic_IRASA_topic)
+        self._last_band_Arhythmic_IRASA_topic = f'{self._node_id_Arhythmic_IRASA}.last_freq'
+        self._pub_sub_manager.subscribe(self, self._last_band_Arhythmic_IRASA_topic)
 
         # Connect radio buttons to update activation states immediately
         self.std_radioButton.clicked.connect(self.update_activation_states)
@@ -132,6 +140,9 @@ class SpectralSettings(BaseStepView, Ui_SpectralSettings, QtWidgets.QWidget):
         self._pub_sub_manager.publish(self, self._win_step_IRASA_topic, self.win_step_lineEdit.text())
         self._pub_sub_manager.publish(self, self.first_band_IRASA_topic, self.first_freq_lineEdit.text())        
         self._pub_sub_manager.publish(self, self.last_band_IRASA_topic, self.last_freq_lineEdit.text())
+        self._pub_sub_manager.publish(self, self._mini_band_Arhythmic_IRASA_topic, self.miniband_lineEdit.text())
+        self._pub_sub_manager.publish(self, self._first_band_Arhythmic_IRASA_topic, self.first_freq_lineEdit.text())
+        self._pub_sub_manager.publish(self, self._last_band_Arhythmic_IRASA_topic, self.last_freq_lineEdit.text())
 
         if self.FoooF_radioButton.isChecked():
             self._pub_sub_manager.publish(self, self._flag_IRASA_topic, 'True')
@@ -221,22 +232,25 @@ class SpectralSettings(BaseStepView, Ui_SpectralSettings, QtWidgets.QWidget):
             self._pub_sub_manager.publish(self, self._node_id_PSA_std+".activation_state_change", ActivationState.ACTIVATED)
             self._pub_sub_manager.publish(self, self._node_id_IRASA+".activation_state_change", ActivationState.DEACTIVATED)
             self._pub_sub_manager.publish(self, self._node_id_PSA_IRASA+".activation_state_change", ActivationState.DEACTIVATED)
+            self._pub_sub_manager.publish(self, self._node_id_Arhythmic_IRASA+".activation_state_change", ActivationState.DEACTIVATED)
         elif self.RA_radioButton.isChecked() and self._context_manager[SelectionStep.context_PSA_annot_selection]==0:
             self._pub_sub_manager.publish(self, self._node_id_stft_std+".activation_state_change", ActivationState.DEACTIVATED)
             self._pub_sub_manager.publish(self, self._node_id_PSA_std+".activation_state_change", ActivationState.DEACTIVATED)
             self._pub_sub_manager.publish(self, self._node_id_IRASA+".activation_state_change", ActivationState.ACTIVATED)
             self._pub_sub_manager.publish(self, self._node_id_PSA_IRASA+".activation_state_change", ActivationState.ACTIVATED)
+            self._pub_sub_manager.publish(self, self._node_id_Arhythmic_IRASA+".activation_state_change", ActivationState.ACTIVATED)
         elif self.FoooF_radioButton.isChecked() and self._context_manager[SelectionStep.context_PSA_annot_selection]==0:
             self._pub_sub_manager.publish(self, self._node_id_stft_std+".activation_state_change", ActivationState.DEACTIVATED)
             self._pub_sub_manager.publish(self, self._node_id_PSA_std+".activation_state_change", ActivationState.DEACTIVATED)
             self._pub_sub_manager.publish(self, self._node_id_IRASA+".activation_state_change", ActivationState.ACTIVATED)
             self._pub_sub_manager.publish(self, self._node_id_PSA_IRASA+".activation_state_change", ActivationState.ACTIVATED)
+            self._pub_sub_manager.publish(self, self._node_id_Arhythmic_IRASA+".activation_state_change", ActivationState.ACTIVATED)
         else:
             self._pub_sub_manager.publish(self, self._node_id_stft_std+".activation_state_change", ActivationState.DEACTIVATED)
             self._pub_sub_manager.publish(self, self._node_id_PSA_std+".activation_state_change", ActivationState.DEACTIVATED)
             self._pub_sub_manager.publish(self, self._node_id_IRASA+".activation_state_change", ActivationState.DEACTIVATED)
             self._pub_sub_manager.publish(self, self._node_id_PSA_IRASA+".activation_state_change", ActivationState.DEACTIVATED)
-
+            self._pub_sub_manager.publish(self, self._node_id_Arhythmic_IRASA+".activation_state_change", ActivationState.DEACTIVATED)
     def Disable_PSA_technique(self):
         if self._context_manager[SelectionStep.context_PSA_annot_selection]==1:
             self.std_radioButton.setChecked(True)
