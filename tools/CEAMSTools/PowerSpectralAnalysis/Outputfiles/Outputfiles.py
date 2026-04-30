@@ -28,7 +28,9 @@ class Outputfiles(BaseStepView, Ui_Outputfiles, QtWidgets.QWidget):
         # Define modules and nodes to talk to
         self._node_id_PSA_std = "4bb8c9ac-64e8-4cec-9c2c-5a00c80b4eae" # provide the output filename to the PSA Compilation
         self._node_id_PSA_Annot = "9dfbe6b9-1887-452a-ac3b-33f1235f9b0a" # provide the output filename to the PSA Compilation
-        self._node_id_PSA_ra = "d16022c4-3ac0-4982-aa3e-dfff4cada99a"       
+        self._node_id_rhythmic_IRASA = "d16022c4-3ac0-4982-aa3e-dfff4cada99a"
+        self._node_id_Arhythmic_IRASA = "0ddf2d8d-943d-4583-8b2d-6184ad208119"
+        self._node_id_IRASA = "fe5c4a13-f709-4edc-9e5f-9c7908c85e35" 
 
         self._dist_total_topic = f'{self._node_id_PSA_std}.dist_total'
         self._pub_sub_manager.subscribe(self, self._dist_total_topic)
@@ -40,14 +42,22 @@ class Outputfiles(BaseStepView, Ui_Outputfiles, QtWidgets.QWidget):
         self._pub_sub_manager.subscribe(self, self._filename_topic)
         self._filename_annot_topic = f'{self._node_id_PSA_Annot}.PSA_out_filename'
         self._pub_sub_manager.subscribe(self, self._filename_annot_topic)
-        self._dist_total_ra_topic = f'{self._node_id_PSA_ra}.dist_total'
-        self._pub_sub_manager.subscribe(self, self._dist_total_ra_topic)
-        self._dist_hour_ra_topic = f'{self._node_id_PSA_ra}.dist_hour'
-        self._pub_sub_manager.subscribe(self, self._dist_hour_ra_topic)
-        self._dist_cycle_ra_topic = f'{self._node_id_PSA_ra}.dist_cycle'
-        self._pub_sub_manager.subscribe(self, self._dist_cycle_ra_topic)
-        self._filename_ra_topic = f'{self._node_id_PSA_ra}.filename'
-        self._pub_sub_manager.subscribe(self, self._filename_ra_topic)
+        self._dist_total_rhythmic_topic = f'{self._node_id_rhythmic_IRASA}.dist_total'
+        self._pub_sub_manager.subscribe(self, self._dist_total_rhythmic_topic)
+        self._dist_hour_rhythmic_topic = f'{self._node_id_rhythmic_IRASA}.dist_hour'
+        self._pub_sub_manager.subscribe(self, self._dist_hour_rhythmic_topic)
+        self._dist_cycle_rhythmic_topic = f'{self._node_id_rhythmic_IRASA}.dist_cycle'
+        self._pub_sub_manager.subscribe(self, self._dist_cycle_rhythmic_topic)
+        self._filename_rhythmic_topic = f'{self._node_id_rhythmic_IRASA}.filename'
+        self._pub_sub_manager.subscribe(self, self._filename_rhythmic_topic)
+        self._dist_total_arhythmic_topic = f'{self._node_id_Arhythmic_IRASA}.dist_total'
+        self._pub_sub_manager.subscribe(self, self._dist_total_arhythmic_topic)
+        self._dist_hour_arhythmic_topic = f'{self._node_id_Arhythmic_IRASA}.dist_hour'
+        self._pub_sub_manager.subscribe(self, self._dist_hour_arhythmic_topic)
+        self._dist_cycle_arhythmic_topic = f'{self._node_id_Arhythmic_IRASA}.dist_cycle'
+        self._pub_sub_manager.subscribe(self, self._dist_cycle_arhythmic_topic)
+        self._filename_arhythmic_topic = f'{self._node_id_Arhythmic_IRASA}.filename'
+        self._pub_sub_manager.subscribe(self, self._filename_arhythmic_topic)
 
 
     # To update the Settings Views
@@ -57,11 +67,15 @@ class Outputfiles(BaseStepView, Ui_Outputfiles, QtWidgets.QWidget):
         self._pub_sub_manager.publish(self, self._dist_hour_topic, 'ping')
         self._pub_sub_manager.publish(self, self._dist_cycle_topic, 'ping')
         self._pub_sub_manager.publish(self, self._filename_topic, 'ping')
-        self._pub_sub_manager.publish(self, self._dist_total_ra_topic, 'ping')
-        self._pub_sub_manager.publish(self, self._dist_hour_ra_topic, 'ping')
-        self._pub_sub_manager.publish(self, self._dist_cycle_ra_topic, 'ping')
-        self._pub_sub_manager.publish(self, self._filename_ra_topic, 'ping')
+        self._pub_sub_manager.publish(self, self._dist_total_rhythmic_topic, 'ping')
+        self._pub_sub_manager.publish(self, self._dist_hour_rhythmic_topic, 'ping')
+        self._pub_sub_manager.publish(self, self._dist_cycle_rhythmic_topic, 'ping')
+        self._pub_sub_manager.publish(self, self._filename_rhythmic_topic, 'ping')
         self._pub_sub_manager.publish(self, self._node_id_PSA_Annot+".get_activation_state", None)
+        self._pub_sub_manager.publish(self, self._dist_total_arhythmic_topic, 'ping')
+        self._pub_sub_manager.publish(self, self._dist_hour_arhythmic_topic, 'ping')
+        self._pub_sub_manager.publish(self, self._dist_cycle_arhythmic_topic, 'ping')
+        self._pub_sub_manager.publish(self, self._filename_arhythmic_topic, 'ping')
 
 
     def on_validate_settings(self):
@@ -89,10 +103,15 @@ class Outputfiles(BaseStepView, Ui_Outputfiles, QtWidgets.QWidget):
         self._pub_sub_manager.publish(self, self._dist_cycle_topic, int(self.cycle_checkBox.isChecked()))
         self._pub_sub_manager.publish(self, self._filename_topic, self.filename_lineEdit.text())
         self._pub_sub_manager.publish(self, self._filename_annot_topic, self.filename_lineEdit.text())
-        self._pub_sub_manager.publish(self, self._dist_total_ra_topic, int(self.total_checkBox.isChecked()))
-        self._pub_sub_manager.publish(self, self._dist_hour_ra_topic, int(self.hour_checkBox.isChecked()))
-        self._pub_sub_manager.publish(self, self._dist_cycle_ra_topic, int(self.cycle_checkBox.isChecked()))
-        self._pub_sub_manager.publish(self, self._filename_ra_topic, self.filename_lineEdit.text())
+        self._pub_sub_manager.publish(self, self._dist_total_rhythmic_topic, int(self.total_checkBox.isChecked()))
+        self._pub_sub_manager.publish(self, self._dist_hour_rhythmic_topic, int(self.hour_checkBox.isChecked()))
+        self._pub_sub_manager.publish(self, self._dist_cycle_rhythmic_topic, int(self.cycle_checkBox.isChecked()))
+        self._pub_sub_manager.publish(self, self._dist_total_arhythmic_topic, int(self.total_checkBox.isChecked()))
+        self._pub_sub_manager.publish(self, self._dist_hour_arhythmic_topic, int(self.hour_checkBox.isChecked()))
+        self._pub_sub_manager.publish(self, self._dist_cycle_arhythmic_topic, int(self.cycle_checkBox.isChecked()))
+        self._pub_sub_manager.publish(self, self._filename_rhythmic_topic, self.filename_lineEdit.text()[:-4] + "_rhythmic.tsv")
+        self._pub_sub_manager.publish(self, self._filename_arhythmic_topic, self.filename_lineEdit.text()[:-4] + "_arhythmic.tsv")
+        # Filenames with flags are published when psd data arrives (see on_topic_response)
 
  
     # Called by a node in response to a ping request. 
@@ -107,14 +126,22 @@ class Outputfiles(BaseStepView, Ui_Outputfiles, QtWidgets.QWidget):
             self.cycle_checkBox.setChecked(int(message))        
         if topic == self._filename_topic:
             self.filename_lineEdit.setText(message)  
-        if topic == self._dist_total_ra_topic:
+        if topic == self._dist_total_rhythmic_topic:
             self.total_checkBox.setChecked(int(message))
-        if topic == self._dist_hour_ra_topic:
+        if topic == self._dist_hour_rhythmic_topic:
             self.hour_checkBox.setChecked(int(message))
-        if topic == self._dist_cycle_ra_topic:
+        if topic == self._dist_cycle_rhythmic_topic:
             self.cycle_checkBox.setChecked(int(message))        
-        if topic == self._filename_ra_topic:
-            self.filename_lineEdit.setText(message)  
+        if topic == self._filename_rhythmic_topic:
+            self.filename_lineEdit.setText(message)
+        if topic == self._dist_total_arhythmic_topic:
+            self.total_checkBox.setChecked(int(message))
+        if topic == self._dist_hour_arhythmic_topic:
+            self.hour_checkBox.setChecked(int(message))
+        if topic == self._dist_cycle_arhythmic_topic:
+            self.cycle_checkBox.setChecked(int(message))
+        if topic == self._filename_arhythmic_topic:
+            self.filename_lineEdit.setText(message)
         if topic == self._node_id_PSA_Annot+".get_activation_state":
             if message == ActivationState.ACTIVATED:
                 self._enable_annot_widget(True)
@@ -156,10 +183,14 @@ class Outputfiles(BaseStepView, Ui_Outputfiles, QtWidgets.QWidget):
             self._pub_sub_manager.unsubscribe(self, self._dist_cycle_topic)
             self._pub_sub_manager.unsubscribe(self, self._filename_topic)
             self._pub_sub_manager.unsubscribe(self, self._filename_annot_topic)
-            self._pub_sub_manager.unsubscribe(self, self._dist_total_ra_topic)
-            self._pub_sub_manager.unsubscribe(self, self._dist_hour_ra_topic)
-            self._pub_sub_manager.unsubscribe(self, self._dist_cycle_ra_topic)
-            self._pub_sub_manager.unsubscribe(self, self._filename_ra_topic)
+            self._pub_sub_manager.unsubscribe(self, self._dist_total_rhythmic_topic)
+            self._pub_sub_manager.unsubscribe(self, self._dist_hour_rhythmic_topic)
+            self._pub_sub_manager.unsubscribe(self, self._dist_cycle_rhythmic_topic)
+            self._pub_sub_manager.unsubscribe(self, self._filename_rhythmic_topic)
+            self._pub_sub_manager.unsubscribe(self, self._dist_total_arhythmic_topic)
+            self._pub_sub_manager.unsubscribe(self, self._dist_hour_arhythmic_topic)
+            self._pub_sub_manager.unsubscribe(self, self._dist_cycle_arhythmic_topic)
+            self._pub_sub_manager.unsubscribe(self, self._filename_arhythmic_topic)
 
     # To enable/disable the PSA on annotations widget
     def _enable_annot_widget(self, annot_label):

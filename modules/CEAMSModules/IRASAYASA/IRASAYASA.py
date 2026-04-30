@@ -154,6 +154,7 @@ class IRASAYASA(SciNode):
             data_rhythmic['start_time'] = start_time[0]
             data_rhythmic['end_time'] = end_time[-1]
             data_rhythmic['duration'] = sum(new_dur)
+            data_rhythmic['flag'] = "rhythmic"
 
             data_arhythmic = {}
             data_arhythmic['psd'] = psd_aperiodic
@@ -165,7 +166,7 @@ class IRASAYASA(SciNode):
             data_arhythmic['start_time'] = start_time[0]
             data_arhythmic['end_time'] = end_time[-1]
             data_arhythmic['duration'] = sum(new_dur)
-
+            data_arhythmic['flag'] = "arhythmic"
             '''cache['psd'] = res_mean
             cache['freq_bins'] = data['freq_bins']
             cache['channel'] = signals[i].channel
