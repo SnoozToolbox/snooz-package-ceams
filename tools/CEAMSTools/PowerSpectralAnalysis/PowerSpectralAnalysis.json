@@ -97,6 +97,92 @@
         "subgraph_params": {},
         "nodes": [
             {
+                "cls": "Constant",
+                "name": "Constant",
+                "metadata": {},
+                "file_location": "",
+                "module_label": "Constant",
+                "module_category": "Parameters",
+                "module_options": {},
+                "inputs": {
+                    "constant": {
+                        "name": "constant",
+                        "value": "5",
+                        "sub_plugs": {},
+                        "connections": {}
+                    }
+                },
+                "outputs": {
+                    "constant": {
+                        "name": "constant",
+                        "value": "5",
+                        "sub_plugs": {},
+                        "connections": {
+                            "fe5c4a13-f709-4edc-9e5f-9c7908c85e35": [
+                                "win_step_sec"
+                            ],
+                            "159bfdad-5000-474b-ae38-8e95ff4142b2": [
+                                "win_step_sec"
+                            ],
+                            "ea31a87d-038c-4e24-a9c2-66b54aaca483": [
+                                "win_step_sec"
+                            ]
+                        }
+                    }
+                },
+                "module": "CEAMSModules.Constant",
+                "identifier": "1279a45a-d0d2-4f7e-85f9-e365ecdcd1d6",
+                "activation_state": "activated",
+                "package": {
+                    "package_name": "CEAMSModules"
+                },
+                "pos_x": 157.4999999999999,
+                "pos_y": 953.7499999999993
+            },
+            {
+                "cls": "Constant",
+                "name": "Constant",
+                "metadata": {},
+                "file_location": "",
+                "module_label": "Constant",
+                "module_category": "Parameters",
+                "module_options": {},
+                "inputs": {
+                    "constant": {
+                        "name": "constant",
+                        "value": "5",
+                        "sub_plugs": {},
+                        "connections": {}
+                    }
+                },
+                "outputs": {
+                    "constant": {
+                        "name": "constant",
+                        "value": "5",
+                        "sub_plugs": {},
+                        "connections": {
+                            "fe5c4a13-f709-4edc-9e5f-9c7908c85e35": [
+                                "win_len_sec"
+                            ],
+                            "159bfdad-5000-474b-ae38-8e95ff4142b2": [
+                                "win_len_sec"
+                            ],
+                            "ea31a87d-038c-4e24-a9c2-66b54aaca483": [
+                                "win_len_sec"
+                            ]
+                        }
+                    }
+                },
+                "module": "CEAMSModules.Constant",
+                "identifier": "989ef4f7-2ce1-4727-bc80-5b6d18c34390",
+                "activation_state": "activated",
+                "package": {
+                    "package_name": "CEAMSModules"
+                },
+                "pos_x": 159.9999999999998,
+                "pos_y": 831.2499999999992
+            },
+            {
                 "cls": "PSACompilationFOOOF",
                 "name": "PSACompilationFOOOF",
                 "metadata": {},
@@ -145,37 +231,49 @@
                         "name": "mini_bandwidth",
                         "value": "",
                         "sub_plugs": {},
-                        "connections": {}
+                        "connections": {
+                            "fb63a9cd-9858-4aab-b33c-5b584702f23d": "constant"
+                        }
                     },
                     "first_freq": {
                         "name": "first_freq",
                         "value": "",
                         "sub_plugs": {},
-                        "connections": {}
+                        "connections": {
+                            "414a9746-fee0-4807-8d2e-44aba2369c16": "constant"
+                        }
                     },
                     "last_freq": {
                         "name": "last_freq",
                         "value": "",
                         "sub_plugs": {},
-                        "connections": {}
+                        "connections": {
+                            "64038a3b-6640-437a-96b1-2d9bf7f5db7f": "constant"
+                        }
                     },
                     "dist_total": {
                         "name": "dist_total",
                         "value": "",
                         "sub_plugs": {},
-                        "connections": {}
+                        "connections": {
+                            "6d0d60d8-a16f-4b24-b04e-95883536f52d": "constant"
+                        }
                     },
                     "dist_hour": {
                         "name": "dist_hour",
                         "value": "",
                         "sub_plugs": {},
-                        "connections": {}
+                        "connections": {
+                            "83e327c4-36fe-4231-9e6a-9b7ef04e6fc8": "constant"
+                        }
                     },
                     "dist_cycle": {
                         "name": "dist_cycle",
                         "value": "",
                         "sub_plugs": {},
-                        "connections": {}
+                        "connections": {
+                            "f2103119-88d0-4edb-958c-6243a7d0674f": "constant"
+                        }
                     },
                     "parameters_cycle": {
                         "name": "parameters_cycle",
@@ -211,7 +309,10 @@
                     },
                     "report_constants": {
                         "name": "report_constants",
-                        "value": "",
+                        "value": {
+                            "N_HOURS": 9,
+                            "N_CYCLES": 6
+                        },
                         "sub_plugs": {},
                         "connections": {}
                     },
@@ -224,7 +325,7 @@
                 },
                 "outputs": {},
                 "identifier": "05044aa2-4a45-44ae-a5a8-b6182ecf8ec2",
-                "activation_state": "activated",
+                "activation_state": "deactivated",
                 "package": {
                     "package_name": "CEAMSModules"
                 },
@@ -254,15 +355,19 @@
                     },
                     "win_len_sec": {
                         "name": "win_len_sec",
-                        "value": "5",
+                        "value": "",
                         "sub_plugs": {},
-                        "connections": {}
+                        "connections": {
+                            "989ef4f7-2ce1-4727-bc80-5b6d18c34390": "constant"
+                        }
                     },
                     "win_step_sec": {
                         "name": "win_step_sec",
-                        "value": "5",
+                        "value": "",
                         "sub_plugs": {},
-                        "connections": {}
+                        "connections": {
+                            "1279a45a-d0d2-4f7e-85f9-e365ecdcd1d6": "constant"
+                        }
                     },
                     "window_name": {
                         "name": "window_name",
@@ -272,15 +377,19 @@
                     },
                     "first_freq": {
                         "name": "first_freq",
-                        "value": "0",
+                        "value": "",
                         "sub_plugs": {},
-                        "connections": {}
+                        "connections": {
+                            "414a9746-fee0-4807-8d2e-44aba2369c16": "constant"
+                        }
                     },
                     "last_freq": {
                         "name": "last_freq",
-                        "value": "30",
+                        "value": "",
                         "sub_plugs": {},
-                        "connections": {}
+                        "connections": {
+                            "64038a3b-6640-437a-96b1-2d9bf7f5db7f": "constant"
+                        }
                     },
                     "flag": {
                         "name": "flag",
@@ -486,21 +595,27 @@
                     },
                     "mini_bandwidth": {
                         "name": "mini_bandwidth",
-                        "value": "1",
+                        "value": "",
                         "sub_plugs": {},
-                        "connections": {}
+                        "connections": {
+                            "fb63a9cd-9858-4aab-b33c-5b584702f23d": "constant"
+                        }
                     },
                     "first_freq": {
                         "name": "first_freq",
-                        "value": "0",
+                        "value": "",
                         "sub_plugs": {},
-                        "connections": {}
+                        "connections": {
+                            "414a9746-fee0-4807-8d2e-44aba2369c16": "constant"
+                        }
                     },
                     "last_freq": {
                         "name": "last_freq",
-                        "value": "30",
+                        "value": "",
                         "sub_plugs": {},
-                        "connections": {}
+                        "connections": {
+                            "64038a3b-6640-437a-96b1-2d9bf7f5db7f": "constant"
+                        }
                     },
                     "artifact_group": {
                         "name": "artifact_group",
@@ -730,15 +845,19 @@
                     },
                     "win_len_sec": {
                         "name": "win_len_sec",
-                        "value": "5",
+                        "value": "",
                         "sub_plugs": {},
-                        "connections": {}
+                        "connections": {
+                            "989ef4f7-2ce1-4727-bc80-5b6d18c34390": "constant"
+                        }
                     },
                     "win_step_sec": {
                         "name": "win_step_sec",
-                        "value": "5",
+                        "value": "",
                         "sub_plugs": {},
-                        "connections": {}
+                        "connections": {
+                            "1279a45a-d0d2-4f7e-85f9-e365ecdcd1d6": "constant"
+                        }
                     },
                     "zeros_pad": {
                         "name": "zeros_pad",
@@ -971,39 +1090,51 @@
                     },
                     "mini_bandwidth": {
                         "name": "mini_bandwidth",
-                        "value": "1",
+                        "value": "",
                         "sub_plugs": {},
-                        "connections": {}
+                        "connections": {
+                            "fb63a9cd-9858-4aab-b33c-5b584702f23d": "constant"
+                        }
                     },
                     "first_freq": {
                         "name": "first_freq",
-                        "value": "0",
+                        "value": "",
                         "sub_plugs": {},
-                        "connections": {}
+                        "connections": {
+                            "414a9746-fee0-4807-8d2e-44aba2369c16": "constant"
+                        }
                     },
                     "last_freq": {
                         "name": "last_freq",
-                        "value": "30",
+                        "value": "",
                         "sub_plugs": {},
-                        "connections": {}
+                        "connections": {
+                            "64038a3b-6640-437a-96b1-2d9bf7f5db7f": "constant"
+                        }
                     },
                     "dist_total": {
                         "name": "dist_total",
-                        "value": 1,
+                        "value": "",
                         "sub_plugs": {},
-                        "connections": {}
+                        "connections": {
+                            "6d0d60d8-a16f-4b24-b04e-95883536f52d": "constant"
+                        }
                     },
                     "dist_hour": {
                         "name": "dist_hour",
-                        "value": 1,
+                        "value": "",
                         "sub_plugs": {},
-                        "connections": {}
+                        "connections": {
+                            "83e327c4-36fe-4231-9e6a-9b7ef04e6fc8": "constant"
+                        }
                     },
                     "dist_cycle": {
                         "name": "dist_cycle",
-                        "value": 1,
+                        "value": "",
                         "sub_plugs": {},
-                        "connections": {}
+                        "connections": {
+                            "f2103119-88d0-4edb-958c-6243a7d0674f": "constant"
+                        }
                     },
                     "parameters_cycle": {
                         "name": "parameters_cycle",
@@ -1143,8 +1274,8 @@
                 },
                 "module": "CEAMSModules.Constant",
                 "identifier": "b848091d-f5ac-4b52-b236-28f7218adca6",
-                "pos_x": 934.0,
-                "pos_y": 550.0,
+                "pos_x": 936.5,
+                "pos_y": 593.75,
                 "activation_state": "activated",
                 "package": {
                     "package_name": "CEAMSModules"
@@ -1799,15 +1930,19 @@
                     },
                     "win_len_sec": {
                         "name": "win_len_sec",
-                        "value": "5",
+                        "value": "",
                         "sub_plugs": {},
-                        "connections": {}
+                        "connections": {
+                            "989ef4f7-2ce1-4727-bc80-5b6d18c34390": "constant"
+                        }
                     },
                     "win_step_sec": {
                         "name": "win_step_sec",
-                        "value": "5",
+                        "value": "",
                         "sub_plugs": {},
-                        "connections": {}
+                        "connections": {
+                            "1279a45a-d0d2-4f7e-85f9-e365ecdcd1d6": "constant"
+                        }
                     },
                     "zeros_pad": {
                         "name": "zeros_pad",
@@ -2402,39 +2537,51 @@
                     },
                     "mini_bandwidth": {
                         "name": "mini_bandwidth",
-                        "value": "1",
+                        "value": "",
                         "sub_plugs": {},
-                        "connections": {}
+                        "connections": {
+                            "fb63a9cd-9858-4aab-b33c-5b584702f23d": "constant"
+                        }
                     },
                     "first_freq": {
                         "name": "first_freq",
-                        "value": "0",
+                        "value": "",
                         "sub_plugs": {},
-                        "connections": {}
+                        "connections": {
+                            "414a9746-fee0-4807-8d2e-44aba2369c16": "constant"
+                        }
                     },
                     "last_freq": {
                         "name": "last_freq",
-                        "value": "30",
+                        "value": "",
                         "sub_plugs": {},
-                        "connections": {}
+                        "connections": {
+                            "64038a3b-6640-437a-96b1-2d9bf7f5db7f": "constant"
+                        }
                     },
                     "dist_total": {
                         "name": "dist_total",
-                        "value": 1,
+                        "value": "",
                         "sub_plugs": {},
-                        "connections": {}
+                        "connections": {
+                            "6d0d60d8-a16f-4b24-b04e-95883536f52d": "constant"
+                        }
                     },
                     "dist_hour": {
                         "name": "dist_hour",
-                        "value": 1,
+                        "value": "",
                         "sub_plugs": {},
-                        "connections": {}
+                        "connections": {
+                            "83e327c4-36fe-4231-9e6a-9b7ef04e6fc8": "constant"
+                        }
                     },
                     "dist_cycle": {
                         "name": "dist_cycle",
-                        "value": 1,
+                        "value": "",
                         "sub_plugs": {},
-                        "connections": {}
+                        "connections": {
+                            "f2103119-88d0-4edb-958c-6243a7d0674f": "constant"
+                        }
                     },
                     "parameters_cycle": {
                         "name": "parameters_cycle",
@@ -2537,39 +2684,51 @@
                     },
                     "mini_bandwidth": {
                         "name": "mini_bandwidth",
-                        "value": "1",
+                        "value": "",
                         "sub_plugs": {},
-                        "connections": {}
+                        "connections": {
+                            "fb63a9cd-9858-4aab-b33c-5b584702f23d": "constant"
+                        }
                     },
                     "first_freq": {
                         "name": "first_freq",
-                        "value": "0",
+                        "value": "",
                         "sub_plugs": {},
-                        "connections": {}
+                        "connections": {
+                            "414a9746-fee0-4807-8d2e-44aba2369c16": "constant"
+                        }
                     },
                     "last_freq": {
                         "name": "last_freq",
-                        "value": "30",
+                        "value": "",
                         "sub_plugs": {},
-                        "connections": {}
+                        "connections": {
+                            "64038a3b-6640-437a-96b1-2d9bf7f5db7f": "constant"
+                        }
                     },
                     "dist_total": {
                         "name": "dist_total",
-                        "value": 1,
+                        "value": "",
                         "sub_plugs": {},
-                        "connections": {}
+                        "connections": {
+                            "6d0d60d8-a16f-4b24-b04e-95883536f52d": "constant"
+                        }
                     },
                     "dist_hour": {
                         "name": "dist_hour",
-                        "value": 1,
+                        "value": "",
                         "sub_plugs": {},
-                        "connections": {}
+                        "connections": {
+                            "83e327c4-36fe-4231-9e6a-9b7ef04e6fc8": "constant"
+                        }
                     },
                     "dist_cycle": {
                         "name": "dist_cycle",
-                        "value": 1,
+                        "value": "",
                         "sub_plugs": {},
-                        "connections": {}
+                        "connections": {
+                            "f2103119-88d0-4edb-958c-6243a7d0674f": "constant"
+                        }
                     },
                     "parameters_cycle": {
                         "name": "parameters_cycle",
@@ -2628,6 +2787,297 @@
                 },
                 "pos_x": 1534.0,
                 "pos_y": 1223.0
+            },
+            {
+                "cls": "Constant",
+                "name": "Constant",
+                "metadata": {},
+                "file_location": "",
+                "module_label": "Constant",
+                "module_category": "Parameters",
+                "module_options": {},
+                "inputs": {
+                    "constant": {
+                        "name": "constant",
+                        "value": "1",
+                        "sub_plugs": {},
+                        "connections": {}
+                    }
+                },
+                "outputs": {
+                    "constant": {
+                        "name": "constant",
+                        "value": "1",
+                        "sub_plugs": {},
+                        "connections": {
+                            "05044aa2-4a45-44ae-a5a8-b6182ecf8ec2": [
+                                "mini_bandwidth"
+                            ],
+                            "d16022c4-3ac0-4982-aa3e-dfff4cada99a": [
+                                "mini_bandwidth"
+                            ],
+                            "0ddf2d8d-943d-4583-8b2d-6184ad208119": [
+                                "mini_bandwidth"
+                            ],
+                            "4bb8c9ac-64e8-4cec-9c2c-5a00c80b4eae": [
+                                "mini_bandwidth"
+                            ],
+                            "9dfbe6b9-1887-452a-ac3b-33f1235f9b0a": [
+                                "mini_bandwidth"
+                            ]
+                        }
+                    }
+                },
+                "module": "CEAMSModules.Constant",
+                "identifier": "fb63a9cd-9858-4aab-b33c-5b584702f23d",
+                "activation_state": "activated",
+                "package": {
+                    "package_name": "CEAMSModules"
+                },
+                "pos_x": 448.75,
+                "pos_y": 1643.7500000000002
+            },
+            {
+                "cls": "Constant",
+                "name": "Constant",
+                "metadata": {},
+                "file_location": "",
+                "module_label": "Constant",
+                "module_category": "Parameters",
+                "module_options": {},
+                "inputs": {
+                    "constant": {
+                        "name": "constant",
+                        "value": "0",
+                        "sub_plugs": {},
+                        "connections": {}
+                    }
+                },
+                "outputs": {
+                    "constant": {
+                        "name": "constant",
+                        "value": "0",
+                        "sub_plugs": {},
+                        "connections": {
+                            "0ddf2d8d-943d-4583-8b2d-6184ad208119": [
+                                "first_freq"
+                            ],
+                            "d16022c4-3ac0-4982-aa3e-dfff4cada99a": [
+                                "first_freq"
+                            ],
+                            "fe5c4a13-f709-4edc-9e5f-9c7908c85e35": [
+                                "first_freq"
+                            ],
+                            "05044aa2-4a45-44ae-a5a8-b6182ecf8ec2": [
+                                "first_freq"
+                            ],
+                            "4bb8c9ac-64e8-4cec-9c2c-5a00c80b4eae": [
+                                "first_freq"
+                            ],
+                            "9dfbe6b9-1887-452a-ac3b-33f1235f9b0a": [
+                                "first_freq"
+                            ]
+                        }
+                    }
+                },
+                "module": "CEAMSModules.Constant",
+                "identifier": "414a9746-fee0-4807-8d2e-44aba2369c16",
+                "activation_state": "activated",
+                "package": {
+                    "package_name": "CEAMSModules"
+                },
+                "pos_x": 459.5000000000001,
+                "pos_y": 1383.0000000000002
+            },
+            {
+                "cls": "Constant",
+                "name": "Constant",
+                "metadata": {},
+                "file_location": "",
+                "module_label": "Constant",
+                "module_category": "Parameters",
+                "module_options": {},
+                "inputs": {
+                    "constant": {
+                        "name": "constant",
+                        "value": "30",
+                        "sub_plugs": {},
+                        "connections": {}
+                    }
+                },
+                "outputs": {
+                    "constant": {
+                        "name": "constant",
+                        "value": "30",
+                        "sub_plugs": {},
+                        "connections": {
+                            "fe5c4a13-f709-4edc-9e5f-9c7908c85e35": [
+                                "last_freq"
+                            ],
+                            "0ddf2d8d-943d-4583-8b2d-6184ad208119": [
+                                "last_freq"
+                            ],
+                            "d16022c4-3ac0-4982-aa3e-dfff4cada99a": [
+                                "last_freq"
+                            ],
+                            "05044aa2-4a45-44ae-a5a8-b6182ecf8ec2": [
+                                "last_freq"
+                            ],
+                            "4bb8c9ac-64e8-4cec-9c2c-5a00c80b4eae": [
+                                "last_freq"
+                            ],
+                            "9dfbe6b9-1887-452a-ac3b-33f1235f9b0a": [
+                                "last_freq"
+                            ]
+                        }
+                    }
+                },
+                "module": "CEAMSModules.Constant",
+                "identifier": "64038a3b-6640-437a-96b1-2d9bf7f5db7f",
+                "activation_state": "activated",
+                "package": {
+                    "package_name": "CEAMSModules"
+                },
+                "pos_x": 452.25,
+                "pos_y": 1517.2500000000002
+            },
+            {
+                "cls": "Constant",
+                "name": "Constant",
+                "metadata": {},
+                "file_location": "",
+                "module_label": "Constant",
+                "module_category": "Parameters",
+                "module_options": {},
+                "inputs": {
+                    "constant": {
+                        "name": "constant",
+                        "value": 1,
+                        "sub_plugs": {},
+                        "connections": {}
+                    }
+                },
+                "outputs": {
+                    "constant": {
+                        "name": "constant",
+                        "value": 1,
+                        "sub_plugs": {},
+                        "connections": {
+                            "4bb8c9ac-64e8-4cec-9c2c-5a00c80b4eae": [
+                                "dist_total"
+                            ],
+                            "05044aa2-4a45-44ae-a5a8-b6182ecf8ec2": [
+                                "dist_total"
+                            ],
+                            "d16022c4-3ac0-4982-aa3e-dfff4cada99a": [
+                                "dist_total"
+                            ],
+                            "0ddf2d8d-943d-4583-8b2d-6184ad208119": [
+                                "dist_total"
+                            ]
+                        }
+                    }
+                },
+                "module": "CEAMSModules.Constant",
+                "identifier": "6d0d60d8-a16f-4b24-b04e-95883536f52d",
+                "activation_state": "activated",
+                "package": {
+                    "package_name": "CEAMSModules"
+                },
+                "pos_x": 464.9999999999999,
+                "pos_y": 741.2499999999999
+            },
+            {
+                "cls": "Constant",
+                "name": "Constant",
+                "metadata": {},
+                "file_location": "",
+                "module_label": "Constant",
+                "module_category": "Parameters",
+                "module_options": {},
+                "inputs": {
+                    "constant": {
+                        "name": "constant",
+                        "value": 1,
+                        "sub_plugs": {},
+                        "connections": {}
+                    }
+                },
+                "outputs": {
+                    "constant": {
+                        "name": "constant",
+                        "value": 1,
+                        "sub_plugs": {},
+                        "connections": {
+                            "0ddf2d8d-943d-4583-8b2d-6184ad208119": [
+                                "dist_hour"
+                            ],
+                            "d16022c4-3ac0-4982-aa3e-dfff4cada99a": [
+                                "dist_hour"
+                            ],
+                            "05044aa2-4a45-44ae-a5a8-b6182ecf8ec2": [
+                                "dist_hour"
+                            ],
+                            "4bb8c9ac-64e8-4cec-9c2c-5a00c80b4eae": [
+                                "dist_hour"
+                            ]
+                        }
+                    }
+                },
+                "module": "CEAMSModules.Constant",
+                "identifier": "83e327c4-36fe-4231-9e6a-9b7ef04e6fc8",
+                "activation_state": "activated",
+                "package": {
+                    "package_name": "CEAMSModules"
+                },
+                "pos_x": 462.4999999999998,
+                "pos_y": 938.7499999999998
+            },
+            {
+                "cls": "Constant",
+                "name": "Constant",
+                "metadata": {},
+                "file_location": "",
+                "module_label": "Constant",
+                "module_category": "Parameters",
+                "module_options": {},
+                "inputs": {
+                    "constant": {
+                        "name": "constant",
+                        "value": 1,
+                        "sub_plugs": {},
+                        "connections": {}
+                    }
+                },
+                "outputs": {
+                    "constant": {
+                        "name": "constant",
+                        "value": 1,
+                        "sub_plugs": {},
+                        "connections": {
+                            "0ddf2d8d-943d-4583-8b2d-6184ad208119": [
+                                "dist_cycle"
+                            ],
+                            "d16022c4-3ac0-4982-aa3e-dfff4cada99a": [
+                                "dist_cycle"
+                            ],
+                            "05044aa2-4a45-44ae-a5a8-b6182ecf8ec2": [
+                                "dist_cycle"
+                            ],
+                            "4bb8c9ac-64e8-4cec-9c2c-5a00c80b4eae": [
+                                "dist_cycle"
+                            ]
+                        }
+                    }
+                },
+                "module": "CEAMSModules.Constant",
+                "identifier": "f2103119-88d0-4edb-958c-6243a7d0674f",
+                "activation_state": "activated",
+                "package": {
+                    "package_name": "CEAMSModules"
+                },
+                "pos_x": 458.7499999999999,
+                "pos_y": 1144.9999999999998
             }
         ]
     }

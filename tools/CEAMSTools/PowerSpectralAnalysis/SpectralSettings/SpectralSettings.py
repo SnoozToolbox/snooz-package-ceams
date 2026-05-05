@@ -34,58 +34,33 @@ class SpectralSettings(BaseStepView, Ui_SpectralSettings, QtWidgets.QWidget):
         self._node_id_PSA_std = "4bb8c9ac-64e8-4cec-9c2c-5a00c80b4eae" # provide the band width to the PSA Compilation
         self._node_id_PSA_evt = "9dfbe6b9-1887-452a-ac3b-33f1235f9b0a"  # provide the band width to the PSA on Events
         #add the IRASA compilation (another instance of PSA Compilation but plugged to the IRASA computation)
-        self._node_id_PSA_IRASA = "d16022c4-3ac0-4982-aa3e-dfff4cada99a"  # provide the band width to the PSA on IRASA
-        self._node_id_Arhythmic_IRASA = "0ddf2d8d-943d-4583-8b2d-6184ad208119" # provide the band width to the Arhythmic component of IRASA
+        self._node_id_PSA_Rhythmic_IRASA = "d16022c4-3ac0-4982-aa3e-dfff4cada99a"  # provide the band width to the PSA on IRASA
+        self._node_id_PSA_Arhythmic_IRASA = "0ddf2d8d-943d-4583-8b2d-6184ad208119" # provide the band width to the Arhythmic component of IRASA
+        self._node_id_PSA_FOOOF = "05044aa2-4a45-44ae-a5a8-b6182ecf8ec2" # provide the band width to the PSA on FOOOF
+        
+        self._node_id_constant_first_freq = "414a9746-fee0-4807-8d2e-44aba2369c16"
+        self._node_id_constant_last_freq = "64038a3b-6640-437a-96b1-2d9bf7f5db7f"
+        self._node_id_constant_mini_band = "fb63a9cd-9858-4aab-b33c-5b584702f23d"
+
+        self._node_id_constant_win_len_step = "989ef4f7-2ce1-4727-bc80-5b6d18c34390"
+        self._node_id_constant_win_step_sec = "1279a45a-d0d2-4f7e-85f9-e365ecdcd1d6"
 
         # Subscribe to the publisher for each node you want to talk to
-        self._win_len_topic = f'{self._node_id_stft_std}.win_len_sec'                
-        self._pub_sub_manager.subscribe(self, self._win_len_topic)
-        self._win_step_topic = f'{self._node_id_stft_std}.win_step_sec'                
-        self._pub_sub_manager.subscribe(self, self._win_step_topic)
-        self._win_len_evt_topic = f'{self._node_id_stft_event}.win_len_sec'                
-        self._pub_sub_manager.subscribe(self, self._win_len_evt_topic)
-        self._win_step_evt_topic = f'{self._node_id_stft_event}.win_step_sec'                
-        self._pub_sub_manager.subscribe(self, self._win_step_evt_topic)
-        self._win_len_IRASA_topic = f'{self._node_id_IRASA}.win_len_sec'                
-        self._pub_sub_manager.subscribe(self, self._win_len_IRASA_topic)
-        self._win_step_IRASA_topic = f'{self._node_id_IRASA}.win_step_sec'                
-        self._pub_sub_manager.subscribe(self, self._win_step_IRASA_topic)
-        self.first_band_IRASA_topic = f'{self._node_id_IRASA}.first_freq'
-        self._pub_sub_manager.subscribe(self, self.first_band_IRASA_topic)
-        self.last_band_IRASA_topic = f'{self._node_id_IRASA}.last_freq'
-        self._pub_sub_manager.subscribe(self, self.last_band_IRASA_topic)
         self._win_name_IRASA_topic = f'{self._node_id_IRASA}.window_name'
         self._pub_sub_manager.subscribe(self, self._win_name_IRASA_topic)
         self._flag_IRASA_topic = f'{self._node_id_IRASA}.flag'
         self._pub_sub_manager.subscribe(self, self._flag_IRASA_topic)
 
-        self._mini_band_topic = f'{self._node_id_PSA_std}.mini_bandwidth'                
-        self._pub_sub_manager.subscribe(self, self._mini_band_topic)
-        self._first_band_topic = f'{self._node_id_PSA_std}.first_freq' 
-        self._pub_sub_manager.subscribe(self, self._first_band_topic)
-        self._last_band_topic = f'{self._node_id_PSA_std}.last_freq' 
-        self._pub_sub_manager.subscribe(self, self._last_band_topic)
-
-        self._mini_band_evt_topic = f'{self._node_id_PSA_evt}.mini_bandwidth'                
-        self._pub_sub_manager.subscribe(self, self._mini_band_evt_topic)
-        self._first_band_evt_topic = f'{self._node_id_PSA_evt}.first_freq' 
-        self._pub_sub_manager.subscribe(self, self._first_band_evt_topic)
-        self._last_band_evt_topic = f'{self._node_id_PSA_evt}.last_freq' 
-        self._pub_sub_manager.subscribe(self, self._last_band_evt_topic)
-
-        self._mini_band_IRASA_topic = f'{self._node_id_PSA_IRASA}.mini_bandwidth'                
-        self._pub_sub_manager.subscribe(self, self._mini_band_IRASA_topic)
-        self._first_band_IRASA_PSA_topic = f'{self._node_id_PSA_IRASA}.first_freq'
-        self._pub_sub_manager.subscribe(self, self._first_band_IRASA_PSA_topic)
-        self._last_band_IRASA_PSA_topic = f'{self._node_id_PSA_IRASA}.last_freq' 
-        self._pub_sub_manager.subscribe(self, self._last_band_IRASA_PSA_topic)
-
-        self._mini_band_Arhythmic_IRASA_topic = f'{self._node_id_Arhythmic_IRASA}.mini_bandwidth'
-        self._pub_sub_manager.subscribe(self, self._mini_band_Arhythmic_IRASA_topic)
-        self._first_band_Arhythmic_IRASA_topic = f'{self._node_id_Arhythmic_IRASA}.first_freq'
-        self._pub_sub_manager.subscribe(self, self._first_band_Arhythmic_IRASA_topic)
-        self._last_band_Arhythmic_IRASA_topic = f'{self._node_id_Arhythmic_IRASA}.last_freq'
-        self._pub_sub_manager.subscribe(self, self._last_band_Arhythmic_IRASA_topic)
+        self._constant_first_freq_topic = f'{self._node_id_constant_first_freq}.constant'
+        self._pub_sub_manager.subscribe(self, self._constant_first_freq_topic)
+        self._constant_last_freq_topic = f'{self._node_id_constant_last_freq}.constant'
+        self._pub_sub_manager.subscribe(self, self._constant_last_freq_topic)
+        self._constant_mini_band_topic = f'{self._node_id_constant_mini_band}.constant'
+        self._pub_sub_manager.subscribe(self, self._constant_mini_band_topic)
+        self._constant_win_len_topic = f'{self._node_id_constant_win_len_step}.constant'
+        self._pub_sub_manager.subscribe(self, self._constant_win_len_topic)
+        self._constant_win_step_topic = f'{self._node_id_constant_win_step_sec}.constant'
+        self._pub_sub_manager.subscribe(self, self._constant_win_step_topic)
 
         # Connect radio buttons to update activation states immediately
         self.std_radioButton.clicked.connect(self.update_activation_states)
@@ -94,26 +69,21 @@ class SpectralSettings(BaseStepView, Ui_SpectralSettings, QtWidgets.QWidget):
 
     def load_settings(self):
         # Ask for the settings to the publisher to display on the SettingsView
-        self._pub_sub_manager.publish(self, self._win_len_topic, 'ping')
-        self._pub_sub_manager.publish(self, self._win_step_topic, 'ping')
-        self._pub_sub_manager.publish(self, self._mini_band_topic, 'ping')
-        self._pub_sub_manager.publish(self, self._first_band_topic, 'ping')
-        self._pub_sub_manager.publish(self, self._last_band_topic, 'ping')
 
         self._pub_sub_manager.publish(self, self._node_id_stft_std+".get_activation_state", None)
+        self._pub_sub_manager.publish(self, self._node_id_PSA_std+".get_activation_state", None)
+        self._pub_sub_manager.publish(self, self._node_id_IRASA+".get_activation_state", None)
+        self._pub_sub_manager.publish(self, self._node_id_PSA_FOOOF+".get_activation_state", None)
 
-        self._pub_sub_manager.publish(self, self._win_len_evt_topic, 'ping')
-        self._pub_sub_manager.publish(self, self._win_step_evt_topic, 'ping')
-        self._pub_sub_manager.publish(self, self._mini_band_evt_topic, 'ping')
-        self._pub_sub_manager.publish(self, self._first_band_evt_topic, 'ping')
-        self._pub_sub_manager.publish(self, self._last_band_evt_topic, 'ping')
-        self._pub_sub_manager.publish(self, self._win_len_IRASA_topic, 'ping')
-        self._pub_sub_manager.publish(self, self._win_step_IRASA_topic, 'ping')
-        self._pub_sub_manager.publish(self, self._first_band_IRASA_PSA_topic, 'ping')
-        self._pub_sub_manager.publish(self, self._last_band_IRASA_PSA_topic, 'ping')
         self._pub_sub_manager.publish(self, self._win_name_IRASA_topic, 'ping')
         self._pub_sub_manager.publish(self, self._flag_IRASA_topic, 'ping')
-        
+
+        self._pub_sub_manager.publish(self, self._constant_first_freq_topic, 'ping')
+        self._pub_sub_manager.publish(self, self._constant_last_freq_topic, 'ping')
+        self._pub_sub_manager.publish(self, self._constant_mini_band_topic, 'ping')
+        self._pub_sub_manager.publish(self, self._constant_win_len_topic, 'ping')
+        self._pub_sub_manager.publish(self, self._constant_win_step_topic, 'ping')
+
         # Update activation states based on current radio button selection
         self.update_activation_states()
 
@@ -123,31 +93,13 @@ class SpectralSettings(BaseStepView, Ui_SpectralSettings, QtWidgets.QWidget):
         # Double check the values in case the user did not fix them
         self.miniband_edit_slot()
         self.lastfreq_edit_slot()
-        self._pub_sub_manager.publish(self, self._win_len_topic, self.win_len_lineEdit.text())
-        self._pub_sub_manager.publish(self, self._win_step_topic, self.win_step_lineEdit.text())
-        self._pub_sub_manager.publish(self, self._win_len_evt_topic, self.win_len_lineEdit.text())
-        self._pub_sub_manager.publish(self, self._win_step_evt_topic, self.win_step_lineEdit.text())
-        self._pub_sub_manager.publish(self, self._mini_band_topic, self.miniband_lineEdit.text())
-        self._pub_sub_manager.publish(self, self._first_band_topic, self.first_freq_lineEdit.text())        
-        self._pub_sub_manager.publish(self, self._last_band_topic, self.last_freq_lineEdit.text())        
-        self._pub_sub_manager.publish(self, self._mini_band_evt_topic, self.miniband_lineEdit.text())
-        self._pub_sub_manager.publish(self, self._first_band_evt_topic, self.first_freq_lineEdit.text()) 
-        self._pub_sub_manager.publish(self, self._last_band_evt_topic, self.last_freq_lineEdit.text())
-        self._pub_sub_manager.publish(self, self._mini_band_IRASA_topic, self.miniband_lineEdit.text())
-        self._pub_sub_manager.publish(self, self._first_band_IRASA_PSA_topic, self.first_freq_lineEdit.text()) 
-        self._pub_sub_manager.publish(self, self._last_band_IRASA_PSA_topic, self.last_freq_lineEdit.text())
-        self._pub_sub_manager.publish(self, self._win_len_IRASA_topic, self.win_len_lineEdit.text())
-        self._pub_sub_manager.publish(self, self._win_step_IRASA_topic, self.win_step_lineEdit.text())
-        self._pub_sub_manager.publish(self, self.first_band_IRASA_topic, self.first_freq_lineEdit.text())        
-        self._pub_sub_manager.publish(self, self.last_band_IRASA_topic, self.last_freq_lineEdit.text())
-        self._pub_sub_manager.publish(self, self._mini_band_Arhythmic_IRASA_topic, self.miniband_lineEdit.text())
-        self._pub_sub_manager.publish(self, self._first_band_Arhythmic_IRASA_topic, self.first_freq_lineEdit.text())
-        self._pub_sub_manager.publish(self, self._last_band_Arhythmic_IRASA_topic, self.last_freq_lineEdit.text())
 
-        if self.FoooF_radioButton.isChecked():
-            self._pub_sub_manager.publish(self, self._flag_IRASA_topic, 'True')
-        else:
-            self._pub_sub_manager.publish(self, self._flag_IRASA_topic, 'False')
+        self._pub_sub_manager.publish(self, self._constant_first_freq_topic, self.first_freq_lineEdit.text())
+        self._pub_sub_manager.publish(self, self._constant_last_freq_topic, self.last_freq_lineEdit.text())
+        self._pub_sub_manager.publish(self, self._constant_mini_band_topic, self.miniband_lineEdit.text())
+        self._pub_sub_manager.publish(self, self._constant_win_len_topic, self.win_len_lineEdit.text())
+        self._pub_sub_manager.publish(self, self._constant_win_step_topic, self.win_step_lineEdit.text())
+
         # Update activation states based on radio button selection
         self.update_activation_states()
             
@@ -188,6 +140,9 @@ class SpectralSettings(BaseStepView, Ui_SpectralSettings, QtWidgets.QWidget):
             end_freq = float(self.last_freq_lineEdit.text())
         except:
             WarningDialog(f"Unable to convert the text entered for 'Last frequency analyzed' into a float number (expected format: x.x) in step '6 - Spectral Settings'.")
+            return False
+        if self.RA_radioButton.isChecked() and start_freq == 0:
+            WarningDialog(f"First frequency analyzed cannot be set to 0 Hz when IRASA method is selected in step '6 - Spectral Settings'.")
             return False
 
         return True
@@ -231,26 +186,31 @@ class SpectralSettings(BaseStepView, Ui_SpectralSettings, QtWidgets.QWidget):
             self._pub_sub_manager.publish(self, self._node_id_stft_std+".activation_state_change", ActivationState.ACTIVATED)
             self._pub_sub_manager.publish(self, self._node_id_PSA_std+".activation_state_change", ActivationState.ACTIVATED)
             self._pub_sub_manager.publish(self, self._node_id_IRASA+".activation_state_change", ActivationState.DEACTIVATED)
-            self._pub_sub_manager.publish(self, self._node_id_PSA_IRASA+".activation_state_change", ActivationState.DEACTIVATED)
-            self._pub_sub_manager.publish(self, self._node_id_Arhythmic_IRASA+".activation_state_change", ActivationState.DEACTIVATED)
+            self._pub_sub_manager.publish(self, self._node_id_PSA_Rhythmic_IRASA+".activation_state_change", ActivationState.DEACTIVATED)
+            self._pub_sub_manager.publish(self, self._node_id_PSA_Arhythmic_IRASA+".activation_state_change", ActivationState.DEACTIVATED)
+            self._pub_sub_manager.publish(self, self._node_id_PSA_FOOOF+".activation_state_change", ActivationState.DEACTIVATED)
         elif self.RA_radioButton.isChecked() and self._context_manager[SelectionStep.context_PSA_annot_selection]==0:
             self._pub_sub_manager.publish(self, self._node_id_stft_std+".activation_state_change", ActivationState.DEACTIVATED)
             self._pub_sub_manager.publish(self, self._node_id_PSA_std+".activation_state_change", ActivationState.DEACTIVATED)
             self._pub_sub_manager.publish(self, self._node_id_IRASA+".activation_state_change", ActivationState.ACTIVATED)
-            self._pub_sub_manager.publish(self, self._node_id_PSA_IRASA+".activation_state_change", ActivationState.ACTIVATED)
-            self._pub_sub_manager.publish(self, self._node_id_Arhythmic_IRASA+".activation_state_change", ActivationState.ACTIVATED)
+            self._pub_sub_manager.publish(self, self._node_id_PSA_Rhythmic_IRASA+".activation_state_change", ActivationState.ACTIVATED)
+            self._pub_sub_manager.publish(self, self._node_id_PSA_Arhythmic_IRASA+".activation_state_change", ActivationState.ACTIVATED)
+            self._pub_sub_manager.publish(self, self._node_id_PSA_FOOOF+".activation_state_change", ActivationState.DEACTIVATED)
         elif self.FoooF_radioButton.isChecked() and self._context_manager[SelectionStep.context_PSA_annot_selection]==0:
-            self._pub_sub_manager.publish(self, self._node_id_stft_std+".activation_state_change", ActivationState.DEACTIVATED)
+            self._pub_sub_manager.publish(self, self._node_id_stft_std+".activation_state_change", ActivationState.ACTIVATED)
             self._pub_sub_manager.publish(self, self._node_id_PSA_std+".activation_state_change", ActivationState.DEACTIVATED)
-            self._pub_sub_manager.publish(self, self._node_id_IRASA+".activation_state_change", ActivationState.ACTIVATED)
-            self._pub_sub_manager.publish(self, self._node_id_PSA_IRASA+".activation_state_change", ActivationState.ACTIVATED)
-            self._pub_sub_manager.publish(self, self._node_id_Arhythmic_IRASA+".activation_state_change", ActivationState.ACTIVATED)
+            self._pub_sub_manager.publish(self, self._node_id_IRASA+".activation_state_change", ActivationState.DEACTIVATED)
+            self._pub_sub_manager.publish(self, self._node_id_PSA_Rhythmic_IRASA+".activation_state_change", ActivationState.DEACTIVATED)
+            self._pub_sub_manager.publish(self, self._node_id_PSA_Arhythmic_IRASA+".activation_state_change", ActivationState.DEACTIVATED)
+            self._pub_sub_manager.publish(self, self._node_id_PSA_FOOOF+".activation_state_change", ActivationState.ACTIVATED)
         else:
             self._pub_sub_manager.publish(self, self._node_id_stft_std+".activation_state_change", ActivationState.DEACTIVATED)
             self._pub_sub_manager.publish(self, self._node_id_PSA_std+".activation_state_change", ActivationState.DEACTIVATED)
             self._pub_sub_manager.publish(self, self._node_id_IRASA+".activation_state_change", ActivationState.DEACTIVATED)
-            self._pub_sub_manager.publish(self, self._node_id_PSA_IRASA+".activation_state_change", ActivationState.DEACTIVATED)
-            self._pub_sub_manager.publish(self, self._node_id_Arhythmic_IRASA+".activation_state_change", ActivationState.DEACTIVATED)
+            self._pub_sub_manager.publish(self, self._node_id_PSA_Rhythmic_IRASA+".activation_state_change", ActivationState.DEACTIVATED)
+            self._pub_sub_manager.publish(self, self._node_id_PSA_Arhythmic_IRASA+".activation_state_change", ActivationState.DEACTIVATED)
+            self._pub_sub_manager.publish(self, self._node_id_PSA_FOOOF+".activation_state_change", ActivationState.DEACTIVATED)
+    
     def Disable_PSA_technique(self):
         if self._context_manager[SelectionStep.context_PSA_annot_selection]==1:
             self.std_radioButton.setChecked(True)
@@ -264,34 +224,37 @@ class SpectralSettings(BaseStepView, Ui_SpectralSettings, QtWidgets.QWidget):
     # Called by a node in response to a ping request. 
     # Ping request are sent whenever we need to know the value of a parameter of a node.
     def on_topic_response(self, topic, message, sender):
-        if topic == self._win_len_topic:
-            self.win_len_lineEdit.setText(message)
-        if topic == self._win_step_topic:
-            self.win_step_lineEdit.setText(message)
-        if topic == self._mini_band_topic:
-            self.miniband_lineEdit.setText(message)
-        if topic == self._first_band_topic:
-            self.first_freq_lineEdit.setText(message)            
-        if topic == self._last_band_topic:
+
+        if topic == self._constant_first_freq_topic:
+            self.first_freq_lineEdit.setText(message)
+        if topic == self._constant_last_freq_topic: 
             self.last_freq_lineEdit.setText(message)
-        if topic == self._node_id_stft_std+".get_activation_state":
+        if topic == self._constant_mini_band_topic:
+            self.miniband_lineEdit.setText(message)
+        if topic == self._constant_win_len_topic:
+            self.win_len_lineEdit.setText(message)
+        if topic == self._constant_win_step_topic:
+            self.win_step_lineEdit.setText(message)
+            
+        if topic == self._node_id_PSA_std+".get_activation_state":
             # Store the activation state to use with flag handling
-            self._stft_std_activated = (message == ActivationState.ACTIVATED)
-            if self._stft_std_activated:
+            self._PSA_std_activated = (message == ActivationState.ACTIVATED)
+            if self._PSA_std_activated:
                 self.std_radioButton.setChecked(True)
                 self.RA_radioButton.setChecked(False)
                 self.FoooF_radioButton.setChecked(False)
-        if topic == self._flag_IRASA_topic:
-            # Only update radio buttons based on flag if stft_std is deactivated
-            if hasattr(self, '_stft_std_activated') and not self._stft_std_activated:
-                if message == 'True':
-                    self.FoooF_radioButton.setChecked(True)
-                    self.std_radioButton.setChecked(False)
-                    self.RA_radioButton.setChecked(False)
-                else:
-                    self.RA_radioButton.setChecked(True)
-                    self.FoooF_radioButton.setChecked(False)
-                    self.std_radioButton.setChecked(False)
+        if topic == self._node_id_IRASA+".get_activation_state":
+            self._IRASA_activated = (message == ActivationState.ACTIVATED)
+            if self._IRASA_activated:
+                self.RA_radioButton.setChecked(True)
+                self.std_radioButton.setChecked(False)
+                self.FoooF_radioButton.setChecked(False)
+        if topic == self._node_id_PSA_FOOOF+".get_activation_state":
+            self._FOOOF_activated = (message == ActivationState.ACTIVATED)
+            if self._FOOOF_activated:
+                self.FoooF_radioButton.setChecked(True)
+                self.std_radioButton.setChecked(False)
+                self.RA_radioButton.setChecked(False)
 
     def on_topic_update(self, topic, message, sender):
         """ Called by the publisher to init settings in the SettingsView 
@@ -311,22 +274,11 @@ class SpectralSettings(BaseStepView, Ui_SpectralSettings, QtWidgets.QWidget):
     # Called when the user delete an instance of the plugin
     def __del__(self):
         if self._pub_sub_manager is not None:
-            # std
-            self._pub_sub_manager.unsubscribe(self, self._win_len_topic)
-            self._pub_sub_manager.unsubscribe(self, self._win_step_topic)
-            self._pub_sub_manager.unsubscribe(self, self._mini_band_topic)
-            self._pub_sub_manager.unsubscribe(self, self._first_band_topic)
-            self._pub_sub_manager.unsubscribe(self, self._last_band_topic)
-            # on events
-            self._pub_sub_manager.unsubscribe(self, self._win_len_evt_topic)
-            self._pub_sub_manager.unsubscribe(self, self._win_step_evt_topic)
-            self._pub_sub_manager.unsubscribe(self, self._mini_band_evt_topic)
-            self._pub_sub_manager.unsubscribe(self, self._first_band_evt_topic)
-            self._pub_sub_manager.unsubscribe(self, self._last_band_evt_topic)
-            # IRASA
-            self._pub_sub_manager.unsubscribe(self, self._win_len_IRASA_topic)
-            self._pub_sub_manager.unsubscribe(self, self._win_step_IRASA_topic)
-            self._pub_sub_manager.unsubscribe(self, self.first_band_IRASA_topic)
-            self._pub_sub_manager.unsubscribe(self, self.last_band_IRASA_topic)
             self._pub_sub_manager.unsubscribe(self, self._win_name_IRASA_topic)
             self._pub_sub_manager.unsubscribe(self, self._flag_IRASA_topic)
+
+            self._pub_sub_manager.unsubscribe(self, self._constant_first_freq_topic)
+            self._pub_sub_manager.unsubscribe(self, self._constant_last_freq_topic)
+            self._pub_sub_manager.unsubscribe(self, self._constant_mini_band_topic)
+            self._pub_sub_manager.unsubscribe(self, self._constant_win_len_topic)
+            self._pub_sub_manager.unsubscribe(self, self._constant_win_step_topic)

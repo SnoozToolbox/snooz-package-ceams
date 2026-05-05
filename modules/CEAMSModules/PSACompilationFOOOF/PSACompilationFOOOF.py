@@ -735,7 +735,11 @@ class PSACompilationFOOOF(SciNode):
             arhythmic_act_param[n_fft_valid_label] = div_n_fft_win_valid
             
             # Apply FOOOF to get rhythmic and arhythmic signals
-            rhythmic_signal, arhythmic_signal = self.FOOOF(np.nanmean(psd_data_cur_stage,axis=0), first_freq, last_freq, freq_bins)
+            if len(psd_data_cur_stage) > 0 and not np.all(np.isnan(psd_data_cur_stage)):
+                rhythmic_signal, arhythmic_signal = self.FOOOF(np.nanmean(psd_data_cur_stage,axis=0), first_freq, last_freq, freq_bins)
+            else:
+                rhythmic_signal = np.nanmean(psd_data_cur_stage,axis=0)
+                arhythmic_signal = np.nanmean(psd_data_cur_stage,axis=0)
             PSD_rhythmic_avg_per_stage.append(rhythmic_signal)
             PSD_arhythmic_avg_per_stage.append(arhythmic_signal)
         
@@ -752,7 +756,11 @@ class PSACompilationFOOOF(SciNode):
         
         # Average the activity through the recording
         self.PSD_avg_per_stage[f'{label_stat_div}_act']= np.nanmean(psd_data_tot,axis=0)
-        PSD_rhythmic_avg_total, PSD_arhythmic_avg_total = self.FOOOF(np.nanmean(psd_data_tot,axis=0), first_freq, last_freq, freq_bins)
+        if len(psd_data_tot) > 0 and not np.all(np.isnan(psd_data_tot)):
+            PSD_rhythmic_avg_total, PSD_arhythmic_avg_total = self.FOOOF(np.nanmean(psd_data_tot,axis=0), first_freq, last_freq, freq_bins)
+        else:
+            PSD_rhythmic_avg_total = np.nanmean(psd_data_tot,axis=0)
+            PSD_arhythmic_avg_total = np.nanmean(psd_data_tot,axis=0)
 
         return PSD_rhythmic_avg_total, PSD_arhythmic_avg_total, PSD_rhythmic_avg_per_stage, PSD_arhythmic_avg_per_stage
 
@@ -944,7 +952,7 @@ class PSACompilationFOOOF(SciNode):
                 arhythmic_act_param[f'stage_h{hour_label+1}_{stage_label}_fft_win_valid_count'] = 0
             
             # Calculate average PSD for this stage and hour, then apply FOOOF
-            if len(psd_data_cur_stage_cur_hour) > 0:
+            if len(psd_data_cur_stage_cur_hour) > 0 and not np.all(np.isnan(psd_data_cur_stage_cur_hour)):
                 rhythmic_signal, arhythmic_signal = self.FOOOF(np.nanmean(psd_data_cur_stage_cur_hour, axis=0), first_freq, last_freq, freq_bins)
                 PSD_rhythmic_avg_per_stage.append(rhythmic_signal)
                 PSD_arhythmic_avg_per_stage.append(arhythmic_signal)
@@ -984,7 +992,7 @@ class PSACompilationFOOOF(SciNode):
             arhythmic_act_param[f'stage_h{hour_label+1}_fft_win_valid_count'] = 0
 
         # Calculate total average PSD for this hour and apply FOOOF
-        if len(psd_data_tot) > 0:
+        if len(psd_data_tot) > 0 and not np.all(np.isnan(psd_data_tot)):
             PSD_rhythmic_avg_total, PSD_arhythmic_avg_total = self.FOOOF(np.nanmean(psd_data_tot, axis=0), first_freq, last_freq, freq_bins)
         else:
             PSD_rhythmic_avg_total = np.array([np.NaN] * len(psd_data[0]) if len(psd_data) > 0 else [])
@@ -1016,7 +1024,7 @@ class PSACompilationFOOOF(SciNode):
             - 'error': Error of the fit
         """
         # Average PSD across all windows for this stage
-        if len(psd_data) > 0:
+        if psd_data.size > 0 and not np.all(np.isnan(psd_data)):
             # Initialize FOOOF model with default parameters (can be modified as needed)
             fm = FOOOF(peak_width_limits=[0.5, 12], max_n_peaks=np.inf, min_peak_height=0, peak_threshold=2.0, aperiodic_mode='fixed')     
             # Fit the model to the average PSD data for this stage
@@ -1025,5 +1033,5 @@ class PSACompilationFOOOF(SciNode):
             fooof_results = {
                 'aperiodic_params': fm._ap_fit,
                 'periodic_fit': fm._peak_fit}
-            
-        return fm._peak_fit, fm._ap_fit
+            # FOOOF outputs the periodic and aperiodic fit in log10 space, so we convert it back to linear space for both aperiodic and periodic components
+        return 10**fm._peak_fit, 10**fm._ap_fit
