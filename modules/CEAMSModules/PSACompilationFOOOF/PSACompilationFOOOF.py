@@ -4,7 +4,7 @@ See the file LICENCE for full license details.
 """
 """
     PSACompilationFOOOF
-    Class to analyse and report the PSD output. 
+    Class to analyse and report the PSD output designed specifically for FOOOF analysis.
     Average the PSD per channel, stage, cycle, hour...
     Append all subjects in the same output file, using FOOOF algorithm
 """
@@ -27,7 +27,7 @@ DEBUG = False
 
 class PSACompilationFOOOF(SciNode):
     """
-    Class to analyse and report the PSD output. 
+    Class to analyse and report the PSD output designed specifically for FOOOF analysis.
     Average the PSD per channel, stage, cycle, hour...
     Append all subjects in the same output file.
 
@@ -1013,15 +1013,16 @@ class PSACompilationFOOOF(SciNode):
             The lower bound of the frequency range to fit with FOOOF
         last_freq : float
             The upper bound of the frequency range to fit with FOOOF
-
+        freq_bins : array
+            The frequency bins corresponding to the PSD data
+            
         Returns:
         --------
-        fooof_results : dict
-            Dictionary containing FOOOF results for each sleep stage, including:
-            - 'aperiodic_params': Aperiodic parameters (offset and exponent)
-            - 'peak_params': Peak parameters (center frequency, amplitude, bandwidth)
-            - 'r_squared': R-squared value of the fit
-            - 'error': Error of the fit
+        PSD_rhythmic : array
+            The total rhythmic average PSD corresponding to the input psd_data (whether is the average across the recording or the average for a specific hour, cycle or stage).
+        PSD_arhythmic : array
+            The total arhythmic average PSD corresponding to the input psd_data (whether is the average across the recording or the average for a specific hour, cycle or stage).
+
         """
         # Average PSD across all windows for this stage
         if psd_data.size > 0 and not np.all(np.isnan(psd_data)):
@@ -1029,7 +1030,7 @@ class PSACompilationFOOOF(SciNode):
             fm = FOOOF(peak_width_limits=[0.5, 12], max_n_peaks=np.inf, min_peak_height=0, peak_threshold=2.0, aperiodic_mode='fixed')     
             # Fit the model to the average PSD data for this stage
             fm.fit(freq_bins, psd_data, [first_freq, last_freq])
-            # Store results in the dictionary
+            # Store results in the dictionary, we do not return this dictionary for now but it can be useful in the future if we want to add more FOOOF outputs in the report
             fooof_results = {
                 'aperiodic_params': fm._ap_fit,
                 'periodic_fit': fm._peak_fit}

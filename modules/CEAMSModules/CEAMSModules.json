@@ -1085,34 +1085,6 @@
             ]
         },
         {
-            "item_name": "RandB",
-            "item_type": "module",
-            "item_version": "0.0.0",
-            "item_hooks": [
-                {
-                    "endpoint_name": "module_endpoint",
-                    "parameters": {
-                        "module_category": "Signal Processing",
-                        "module_label": "Rhythm and background"
-                    }
-                }
-            ]
-        },
-        {
-            "item_name": "RnB",
-            "item_type": "module",
-            "item_version": "0.0.0",
-            "item_hooks": [
-                {
-                    "endpoint_name": "module_endpoint",
-                    "parameters": {
-                        "module_category": "Signal Processing",
-                        "module_label": "Rhythm and background wavelet"
-                    }
-                }
-            ]
-        },
-        {
             "item_name": "IRASAYASA",
             "item_type": "module",
             "item_version": "0.0.0",

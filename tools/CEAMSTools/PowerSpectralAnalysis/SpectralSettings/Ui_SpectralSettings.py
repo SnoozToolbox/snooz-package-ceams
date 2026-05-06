@@ -16,8 +16,8 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QImage, QKeySequence, QLinearGradient, QPainter,
     QPalette, QPixmap, QRadialGradient, QTransform)
 from PySide6.QtWidgets import (QApplication, QFrame, QGridLayout, QHBoxLayout,
-    QLabel, QLayout, QLineEdit, QPlainTextEdit,
-    QRadioButton, QSizePolicy, QSpacerItem, QVBoxLayout,
+    QLabel, QLayout, QLineEdit, QRadioButton,
+    QSizePolicy, QSpacerItem, QTextEdit, QVBoxLayout,
     QWidget)
 import themes_rc
 
@@ -25,10 +25,10 @@ class Ui_SpectralSettings(object):
     def setupUi(self, SpectralSettings):
         if not SpectralSettings.objectName():
             SpectralSettings.setObjectName(u"SpectralSettings")
-        SpectralSettings.resize(1139, 775)
+        SpectralSettings.resize(1191, 872)
         SpectralSettings.setMinimumSize(QSize(0, 0))
-        self.verticalLayout_2 = QVBoxLayout(SpectralSettings)
-        self.verticalLayout_2.setObjectName(u"verticalLayout_2")
+        self.verticalLayout_11 = QVBoxLayout(SpectralSettings)
+        self.verticalLayout_11.setObjectName(u"verticalLayout_11")
         self.verticalLayout = QVBoxLayout()
         self.verticalLayout.setObjectName(u"verticalLayout")
         self.label_3 = QLabel(SpectralSettings)
@@ -43,16 +43,20 @@ class Ui_SpectralSettings(object):
 
         self.verticalLayout.addWidget(self.label_3)
 
-        self.plainTextEdit_2 = QPlainTextEdit(SpectralSettings)
-        self.plainTextEdit_2.setObjectName(u"plainTextEdit_2")
-        self.plainTextEdit_2.setMinimumSize(QSize(0, 45))
-        self.plainTextEdit_2.setMaximumSize(QSize(16777215, 80))
-        self.plainTextEdit_2.setFrameShape(QFrame.Shape.NoFrame)
-        self.plainTextEdit_2.setFrameShadow(QFrame.Shadow.Plain)
-        self.plainTextEdit_2.setLineWidth(0)
-        self.plainTextEdit_2.setReadOnly(True)
+        self.textEdit_2 = QTextEdit(SpectralSettings)
+        self.textEdit_2.setObjectName(u"textEdit_2")
+        sizePolicy = QSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.textEdit_2.sizePolicy().hasHeightForWidth())
+        self.textEdit_2.setSizePolicy(sizePolicy)
+        self.textEdit_2.setMaximumSize(QSize(16777215, 70))
+        self.textEdit_2.setFrameShape(QFrame.Shape.NoFrame)
+        self.textEdit_2.setFrameShadow(QFrame.Shadow.Plain)
+        self.textEdit_2.setLineWidth(0)
+        self.textEdit_2.setReadOnly(True)
 
-        self.verticalLayout.addWidget(self.plainTextEdit_2)
+        self.verticalLayout.addWidget(self.textEdit_2)
 
         self.gridLayout = QGridLayout()
         self.gridLayout.setObjectName(u"gridLayout")
@@ -60,11 +64,11 @@ class Ui_SpectralSettings(object):
         self.gridLayout.setContentsMargins(-1, -1, -1, 1)
         self.label = QLabel(SpectralSettings)
         self.label.setObjectName(u"label")
-        sizePolicy = QSizePolicy(QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Preferred)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.label.sizePolicy().hasHeightForWidth())
-        self.label.setSizePolicy(sizePolicy)
+        sizePolicy1 = QSizePolicy(QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Preferred)
+        sizePolicy1.setHorizontalStretch(0)
+        sizePolicy1.setVerticalStretch(0)
+        sizePolicy1.setHeightForWidth(self.label.sizePolicy().hasHeightForWidth())
+        self.label.setSizePolicy(sizePolicy1)
         self.label.setMinimumSize(QSize(450, 0))
         self.label.setMaximumSize(QSize(500, 500))
 
@@ -72,8 +76,8 @@ class Ui_SpectralSettings(object):
 
         self.label_2 = QLabel(SpectralSettings)
         self.label_2.setObjectName(u"label_2")
-        sizePolicy.setHeightForWidth(self.label_2.sizePolicy().hasHeightForWidth())
-        self.label_2.setSizePolicy(sizePolicy)
+        sizePolicy1.setHeightForWidth(self.label_2.sizePolicy().hasHeightForWidth())
+        self.label_2.setSizePolicy(sizePolicy1)
         self.label_2.setMinimumSize(QSize(200, 0))
 
         self.gridLayout.addWidget(self.label_2, 1, 0, 1, 1)
@@ -102,11 +106,11 @@ class Ui_SpectralSettings(object):
         self.verticalLayout.addLayout(self.gridLayout)
 
 
-        self.verticalLayout_2.addLayout(self.verticalLayout)
+        self.verticalLayout_11.addLayout(self.verticalLayout)
 
         self.verticalSpacer_3 = QSpacerItem(20, 20, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Fixed)
 
-        self.verticalLayout_2.addItem(self.verticalSpacer_3)
+        self.verticalLayout_11.addItem(self.verticalSpacer_3)
 
         self.verticalLayout_5 = QVBoxLayout()
         self.verticalLayout_5.setObjectName(u"verticalLayout_5")
@@ -117,31 +121,24 @@ class Ui_SpectralSettings(object):
 
         self.verticalLayout_5.addWidget(self.label_7)
 
-        self.plainTextEdit = QPlainTextEdit(SpectralSettings)
-        self.plainTextEdit.setObjectName(u"plainTextEdit")
-        sizePolicy1 = QSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
-        sizePolicy1.setHorizontalStretch(0)
-        sizePolicy1.setVerticalStretch(0)
-        sizePolicy1.setHeightForWidth(self.plainTextEdit.sizePolicy().hasHeightForWidth())
-        self.plainTextEdit.setSizePolicy(sizePolicy1)
-        self.plainTextEdit.setMinimumSize(QSize(0, 300))
-        self.plainTextEdit.setMaximumSize(QSize(16777215, 16777215))
-        self.plainTextEdit.setFrameShape(QFrame.Shape.NoFrame)
-        self.plainTextEdit.setFrameShadow(QFrame.Shadow.Plain)
-        self.plainTextEdit.setLineWidth(0)
-        self.plainTextEdit.setReadOnly(True)
+        self.textEdit = QTextEdit(SpectralSettings)
+        self.textEdit.setObjectName(u"textEdit")
+        self.textEdit.setFrameShape(QFrame.Shape.NoFrame)
+        self.textEdit.setFrameShadow(QFrame.Shadow.Plain)
+        self.textEdit.setLineWidth(0)
+        self.textEdit.setReadOnly(True)
 
-        self.verticalLayout_5.addWidget(self.plainTextEdit)
+        self.verticalLayout_5.addWidget(self.textEdit)
 
 
-        self.verticalLayout_2.addLayout(self.verticalLayout_5)
+        self.verticalLayout_11.addLayout(self.verticalLayout_5)
 
         self.gridLayout_2 = QGridLayout()
         self.gridLayout_2.setObjectName(u"gridLayout_2")
         self.label_8 = QLabel(SpectralSettings)
         self.label_8.setObjectName(u"label_8")
-        sizePolicy.setHeightForWidth(self.label_8.sizePolicy().hasHeightForWidth())
-        self.label_8.setSizePolicy(sizePolicy)
+        sizePolicy1.setHeightForWidth(self.label_8.sizePolicy().hasHeightForWidth())
+        self.label_8.setSizePolicy(sizePolicy1)
         self.label_8.setMinimumSize(QSize(450, 0))
         self.label_8.setMaximumSize(QSize(450, 16777215))
 
@@ -177,8 +174,8 @@ class Ui_SpectralSettings(object):
 
         self.label_9 = QLabel(SpectralSettings)
         self.label_9.setObjectName(u"label_9")
-        sizePolicy.setHeightForWidth(self.label_9.sizePolicy().hasHeightForWidth())
-        self.label_9.setSizePolicy(sizePolicy)
+        sizePolicy1.setHeightForWidth(self.label_9.sizePolicy().hasHeightForWidth())
+        self.label_9.setSizePolicy(sizePolicy1)
         self.label_9.setMinimumSize(QSize(300, 0))
         self.label_9.setMaximumSize(QSize(16777215, 16777215))
 
@@ -196,18 +193,18 @@ class Ui_SpectralSettings(object):
         self.gridLayout_2.addItem(self.horizontalSpacer_5, 2, 2, 1, 1)
 
 
-        self.verticalLayout_2.addLayout(self.gridLayout_2)
+        self.verticalLayout_11.addLayout(self.gridLayout_2)
 
         self.label_10 = QLabel(SpectralSettings)
         self.label_10.setObjectName(u"label_10")
         self.label_10.setFont(font)
         self.label_10.setAlignment(Qt.AlignmentFlag.AlignLeading|Qt.AlignmentFlag.AlignLeft|Qt.AlignmentFlag.AlignVCenter)
 
-        self.verticalLayout_2.addWidget(self.label_10)
+        self.verticalLayout_11.addWidget(self.label_10)
 
         self.verticalSpacer_4 = QSpacerItem(20, 20, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Fixed)
 
-        self.verticalLayout_2.addItem(self.verticalSpacer_4)
+        self.verticalLayout_11.addItem(self.verticalSpacer_4)
 
         self.verticalLayout_4 = QVBoxLayout()
         self.verticalLayout_4.setObjectName(u"verticalLayout_4")
@@ -219,26 +216,91 @@ class Ui_SpectralSettings(object):
 
         self.horizontalLayout_3 = QHBoxLayout()
         self.horizontalLayout_3.setObjectName(u"horizontalLayout_3")
+        self.verticalLayout_7 = QVBoxLayout()
+        self.verticalLayout_7.setObjectName(u"verticalLayout_7")
         self.std_radioButton = QRadioButton(SpectralSettings)
         self.std_radioButton.setObjectName(u"std_radioButton")
         self.std_radioButton.setEnabled(True)
         self.std_radioButton.setMinimumSize(QSize(225, 0))
         self.std_radioButton.setMaximumSize(QSize(500, 16777215))
+        font1 = QFont()
+        font1.setFamilies([u"Roboto"])
+        font1.setPointSize(12)
+        font1.setBold(True)
+        font1.setItalic(False)
+        font1.setUnderline(False)
+        font1.setStrikeOut(False)
+        font1.setKerning(True)
+        self.std_radioButton.setFont(font1)
+        self.std_radioButton.setStyleSheet(u"font: 700 12pt \"Roboto\";")
         self.std_radioButton.setChecked(True)
 
-        self.horizontalLayout_3.addWidget(self.std_radioButton)
+        self.verticalLayout_7.addWidget(self.std_radioButton)
 
+        self.label_5 = QLabel(SpectralSettings)
+        self.label_5.setObjectName(u"label_5")
+
+        self.verticalLayout_7.addWidget(self.label_5)
+
+        self.verticalSpacer_2 = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
+
+        self.verticalLayout_7.addItem(self.verticalSpacer_2)
+
+
+        self.horizontalLayout_3.addLayout(self.verticalLayout_7)
+
+        self.horizontalSpacer_7 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+
+        self.horizontalLayout_3.addItem(self.horizontalSpacer_7)
+
+        self.verticalLayout_9 = QVBoxLayout()
+        self.verticalLayout_9.setObjectName(u"verticalLayout_9")
         self.RA_radioButton = QRadioButton(SpectralSettings)
         self.RA_radioButton.setObjectName(u"RA_radioButton")
         self.RA_radioButton.setEnabled(True)
         self.RA_radioButton.setMinimumSize(QSize(225, 0))
+        font2 = QFont()
+        font2.setFamilies([u"Roboto"])
+        font2.setPointSize(12)
+        font2.setBold(True)
+        font2.setItalic(False)
+        self.RA_radioButton.setFont(font2)
+        self.RA_radioButton.setStyleSheet(u"font: 700 12pt \"Roboto\";")
 
-        self.horizontalLayout_3.addWidget(self.RA_radioButton)
+        self.verticalLayout_9.addWidget(self.RA_radioButton)
 
+        self.label_11 = QLabel(SpectralSettings)
+        self.label_11.setObjectName(u"label_11")
+
+        self.verticalLayout_9.addWidget(self.label_11)
+
+        self.verticalLayout_10 = QVBoxLayout()
+        self.verticalLayout_10.setObjectName(u"verticalLayout_10")
         self.FoooF_radioButton = QRadioButton(SpectralSettings)
         self.FoooF_radioButton.setObjectName(u"FoooF_radioButton")
+        self.FoooF_radioButton.setFont(font2)
+        self.FoooF_radioButton.setStyleSheet(u"font: 700 12pt \"Roboto\";")
 
-        self.horizontalLayout_3.addWidget(self.FoooF_radioButton)
+        self.verticalLayout_10.addWidget(self.FoooF_radioButton)
+
+        self.label_12 = QLabel(SpectralSettings)
+        self.label_12.setObjectName(u"label_12")
+
+        self.verticalLayout_10.addWidget(self.label_12)
+
+
+        self.verticalLayout_9.addLayout(self.verticalLayout_10)
+
+
+        self.horizontalLayout_3.addLayout(self.verticalLayout_9)
+
+        self.horizontalSpacer_9 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+
+        self.horizontalLayout_3.addItem(self.horizontalSpacer_9)
+
+        self.horizontalSpacer_8 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+
+        self.horizontalLayout_3.addItem(self.horizontalSpacer_8)
 
         self.horizontalSpacer = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
 
@@ -248,11 +310,11 @@ class Ui_SpectralSettings(object):
         self.verticalLayout_4.addLayout(self.horizontalLayout_3)
 
 
-        self.verticalLayout_2.addLayout(self.verticalLayout_4)
+        self.verticalLayout_11.addLayout(self.verticalLayout_4)
 
         self.verticalSpacer = QSpacerItem(709, 19, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
 
-        self.verticalLayout_2.addItem(self.verticalSpacer)
+        self.verticalLayout_11.addItem(self.verticalSpacer)
 
 
         self.retranslateUi(SpectralSettings)
@@ -267,8 +329,16 @@ class Ui_SpectralSettings(object):
         SpectralSettings.setWindowTitle("")
         SpectralSettings.setStyleSheet(QCoreApplication.translate("SpectralSettings", u"font: 12pt \"Roboto\";", None))
         self.label_3.setText(QCoreApplication.translate("SpectralSettings", u"<html><head/><body><p><span style=\" font-weight:600;\">Short Time Fourier Transform Settings</span></p></body></html>", None))
-        self.plainTextEdit_2.setPlainText(QCoreApplication.translate("SpectralSettings", u"The PSA is performed through many short windows in order to estimate the spectral power.  The procedure is called Short Time Fourier Transform (STFT).\n"
-"Define the window length (s) used to perform each FFT (Fast Fourier Transform) and at which window steps (s) each FFT is performed.", None))
+        self.textEdit_2.setHtml(QCoreApplication.translate("SpectralSettings", u"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
+"<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset=\"utf-8\" /><style type=\"text/css\">\n"
+"p, li { white-space: pre-wrap; }\n"
+"hr { height: 1px; border-width: 0; }\n"
+"li.unchecked::marker { content: \"\\2610\"; }\n"
+"li.checked::marker { content: \"\\2612\"; }\n"
+"</style></head><body style=\" font-family:'Roboto'; font-size:12pt; font-weight:400; font-style:normal;\">\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">The PSA is performed through many short windows in order to estimate the spectral power.  The procedure is called Short Time Fourier Transform (STFT).</p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Define the window length (s) used to perform each FFT (Fast Fourier Transform) and at which window steps (s) each FFT is perf"
+                        "ormed.</p></body></html>", None))
         self.label.setText(QCoreApplication.translate("SpectralSettings", u"Window length (s)", None))
         self.label_2.setText(QCoreApplication.translate("SpectralSettings", u"Window step (s)", None))
 #if QT_CONFIG(tooltip)
@@ -278,18 +348,27 @@ class Ui_SpectralSettings(object):
         self.win_step_lineEdit.setToolTip(QCoreApplication.translate("SpectralSettings", u"At which window steps (s) the FFT (Fast Fourier Transform) is performed.", None))
 #endif // QT_CONFIG(tooltip)
         self.label_7.setText(QCoreApplication.translate("SpectralSettings", u"<html><head/><body><p><span style=\" font-weight:600;\">Frequency bands</span></p></body></html>", None))
-        self.plainTextEdit.setPlainText(QCoreApplication.translate("SpectralSettings", u"It is common to average the power from a few frequency bins in order to estimate the spectral power in a frequency band.\n"
-"\n"
-"The width of the mini bands has to be equal or larger than the FFT frequency bin resolution (Hz) which is :\n"
-"   1 / [fft windows length (s)]\n"
-"   i.e. 1 / 5 s = 0.2 Hz or 1 / 4 s = 0.25 Hz\n"
-"The mini bandwidth must be a multiple of the frequency bin resolution.\n"
-"-> bandwidth of 0.2 Hz or 1 Hz with a fft windows length of 5 s.\n"
-"-> bandwidth of 0.25 Hz, 0.5 Hz or 1 Hz with a fft windows length of 4 s. \n"
-"\n"
-"The last frequency analyzed is limited to FS/2.\n"
-"   FS : Sampling rate of the channel (Hz)\n"
-"   i.e. 256 Hz / 2 = 128 Hz", None))
+        self.textEdit.setHtml(QCoreApplication.translate("SpectralSettings", u"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
+"<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset=\"utf-8\" /><style type=\"text/css\">\n"
+"p, li { white-space: pre-wrap; }\n"
+"hr { height: 1px; border-width: 0; }\n"
+"li.unchecked::marker { content: \"\\2610\"; }\n"
+"li.checked::marker { content: \"\\2612\"; }\n"
+"</style></head><body style=\" font-family:'Roboto'; font-size:12pt; font-weight:400; font-style:normal;\">\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">It is common to average the power from a few frequency bins in order to estimate the spectral power in a frequency band.</p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0"
+                        "px;\">The width of the mini bands has to be equal or larger than the FFT frequency bin resolution (Hz) which is :</p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">   1 / [fft windows length (s)]</p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">   i.e. 1 / 5 s = 0.2 Hz or 1 / 4 s = 0.25 Hz</p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">The mini bandwidth must be a multiple of the frequency bin resolution.</p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">-&gt; bandwidth of 0.2 Hz or 1 Hz with a fft windows length of 5 s.</p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">-&gt; bandwidth of 0.25 Hz, 0.5 Hz or 1 Hz with a"
+                        " fft windows length of 4 s. </p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">The last frequency analyzed is limited to FS/2.</p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">   FS : Sampling rate of the channel (Hz)</p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">   i.e. 256 Hz / 2 = 128 Hz</p></body></html>", None))
         self.label_8.setText(QCoreApplication.translate("SpectralSettings", u"Width of each mini band (Hz) (the first band can be smaller)", None))
         self.miniband_lineEdit.setText(QCoreApplication.translate("SpectralSettings", u"0.5", None))
         self.label_4.setText(QCoreApplication.translate("SpectralSettings", u"First frequency analyzed (Hz)", None))
@@ -298,8 +377,11 @@ class Ui_SpectralSettings(object):
         self.last_freq_lineEdit.setText(QCoreApplication.translate("SpectralSettings", u"64", None))
         self.label_10.setText(QCoreApplication.translate("SpectralSettings", u"<html><head/><body><p><span style=\" font-size:12pt; font-style:italic;\">* Warning : The last frequency is limited to FS/2 </span></p></body></html>", None))
         self.label_6.setText(QCoreApplication.translate("SpectralSettings", u"<html><head/><body><p><span style=\" font-weight:600;\">PSA technique</span></p></body></html>", None))
-        self.std_radioButton.setText(QCoreApplication.translate("SpectralSettings", u"Standard ", None))
-        self.RA_radioButton.setText(QCoreApplication.translate("SpectralSettings", u"Rhythmic (IRASA)", None))
-        self.FoooF_radioButton.setText(QCoreApplication.translate("SpectralSettings", u"Rhythmic (FOOOF)", None))
+        self.std_radioButton.setText(QCoreApplication.translate("SpectralSettings", u"Standard Spectrum (Welch)", None))
+        self.label_5.setText(QCoreApplication.translate("SpectralSettings", u"Traditional power spectral density estimation", None))
+        self.RA_radioButton.setText(QCoreApplication.translate("SpectralSettings", u"Periodic/Aperiodic Decomposition (IRASA)", None))
+        self.label_11.setText(QCoreApplication.translate("SpectralSettings", u"Separates oscillatory and fractal components using signal resampling", None))
+        self.FoooF_radioButton.setText(QCoreApplication.translate("SpectralSettings", u"Periodic/Aperiodic Decomposition (FOOOF)", None))
+        self.label_12.setText(QCoreApplication.translate("SpectralSettings", u"Models oscillatory peaks and background activity using parametric fitting", None))
     # retranslateUi
 

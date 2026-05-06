@@ -3,7 +3,10 @@
 See the file LICENCE for full license details.
 
     IRASAYASA
-    TODO CLASS DESCRIPTION
+    
+    This class implements signal decomposition to separate rhythmic (periodic/oscillatory) components 
+    from arhythmic (aperiodic/broadband) components of EEG or other time-series signals. The algorithm 
+    uses the YASA library's IRASA implementation to perform the spectral decomposition.
 """
 from flowpipe import SciNode, InputPlug, OutputPlug
 from commons.NodeInputException import NodeInputException
@@ -24,33 +27,76 @@ DEBUG = False
 
 class IRASAYASA(SciNode):
     """
-    TODO CLASS DESCRIPTION
+    Spectral power decomposition using IRASA algorithm (Iterative Rational Autocorrelation Decomposition Analysis).
+    
+    This class implements signal decomposition to separate rhythmic (periodic/oscillatory) components 
+    from arhythmic (aperiodic/broadband) components of EEG or other time-series signals. The algorithm 
+    uses the YASA library's IRASA implementation to perform the spectral decomposition.
 
-    Parameters
-    ----------
-        signals: TODO TYPE
-            TODO DESCRIPTION
-        win_len_sec: TODO TYPE
-            TODO DESCRIPTION
-        win_step_sec: TODO TYPE
-            TODO DESCRIPTION
-        window_name: TODO TYPE
-            TODO DESCRIPTION
-        first_freq: TODO TYPE
-            TODO DESCRIPTION
-        last_freq: TODO TYPE
-            TODO DESCRIPTION
-        flag: TODO TYPE
-            TODO DESCRIPTION
-        
-
-    Returns
+    Inputs:
     -------
-        rhythmic_psd: TODO TYPE
-            TODO DESCRIPTION
-        arhythmic_psd: TODO TYPE
-            TODO DESCRIPTION
+        signals : list of SignalModel objects
+            - signal.samples : numpy array of shape (N_samples,) containing the raw signal data
+            - signal.sample_rate : float, sampling rate of the signal in Hz
+            - signal.channel : str, channel label/name for identification
+            - signal.start_time : float, start time of the signal in seconds (optional)
         
+        win_len_sec : float or str
+            Window length in seconds for the spectral analysis (e.g., 4.0)
+            Determines the time-frequency resolution of the analysis.
+        
+        win_step_sec : float or str
+            Window step/overlap in seconds between consecutive FFT windows.
+            Controls  the temporal resolution of the PSD computation.
+        
+        window_name : str
+            Name of the windowing function to apply before FFT (e.g., 'hann', 'hamming', 'blackman').
+            Reduces spectral leakage from windowing effects.
+        
+        first_freq : float or str
+            Lower frequency boundary (Hz) for the IRASA decomposition analysis.
+            Only frequency components within [first_freq, last_freq] are analyzed.
+        
+        last_freq : float or str
+            Upper frequency boundary (Hz) for the IRASA decomposition analysis.
+            Only frequency components within [first_freq, last_freq] are analyzed.
+        
+        flag : bool or str, optional (default: False)
+            It does nothing right now and can be used in the future to control whether to bypass the computation or not.
+
+    Outputs:
+    --------
+        rhythmic_psd : list of dicts
+            List of dictionaries (one per input signal) containing rhythmic spectral components.
+            Each dictionary contains:
+                - 'psd' : numpy array of shape (N_epochs, N_freq_bins)
+                  Rhythmic power spectral density (periodic component ratio)
+                - 'freq_bins' : numpy array of shape (N_freq_bins,)
+                  Frequency bins in Hz corresponding to the PSD spectrum
+                - 'win_len' : float
+                  Window length used for FFT in seconds
+                - 'win_step' : float
+                  Window step/overlap in seconds
+                - 'sample_rate' : float
+                  Sampling rate of the original signal in Hz
+                - 'chan_label' : str
+                  Channel label from the input signal
+                - 'start_time' : float
+                  Start time of the signal in seconds
+                - 'end_time' : float
+                  End time of the signal in seconds
+                - 'duration' : float
+                  Total duration of the signal in seconds
+                - 'flag' : str (value: 'rhythmic')
+                  Flag indicating this is the rhythmic component
+        
+        arhythmic_psd : list of dicts
+            List of dictionaries (one per input signal) containing arhythmic spectral components.
+            Each dictionary has identical structure to rhythmic_psd but with:
+                - 'psd' : numpy array of shape (N_epochs, N_freq_bins)
+                  Arhythmic power spectral density (aperiodic component)
+                - 'flag' : str (value: 'arhythmic')
+                  Flag indicating this is the arhythmic component
     """
     def __init__(self, **kwargs):
         """ Initialize module IRASAYASA """
@@ -73,43 +119,99 @@ class IRASAYASA(SciNode):
         
         self._is_master = False 
     
-    def compute(self, signals,win_len_sec,win_step_sec,window_name,first_freq,last_freq,flag=False):
+    def compute(self, signals, win_len_sec, win_step_sec, window_name, first_freq, last_freq, flag=False):
         """
-        Compute the rhytmic spectrum for each epoch of a 2D array (NepocsXNsamples)
+        Decompose input signals into rhythmic and arhythmic spectral components using IRASA algorithm.
+        
+        This function processes each input signal by:
+        1. Splitting the signal into overlapping windows of specified length
+        2. Stacking windows to create a 2D signal matrix (epochs x samples)
+        3. Applying IRASA decomposition to separate periodic (rhythmic) and aperiodic (arhythmic) components
+        4. Computing power spectral densities for both components
+        5. Returning structured output dictionaries with all spectral and metadata information
 
-        Parameters
+        Parameters:
         -----------
-            signals    : a list of SignalModel
-                        signal.samples : The actual signal data as numpy list
-                        signal.sample_rate : sampling rate of the signal (used to STFT)
-                        signal.channel : current channel label
-            win_len_sec     : float
-                window length in sec (how much data is taken for each fft)
-            win_step_sec    : float 
-                window step in sec (each time the fft is applied)
-            window_name     : string, optional
-                Window's name to scale the extracted time series before applying the fft
+            signals : list of SignalModel objects
+                List containing one or more SignalModel objects with:
+                    - samples : numpy array of raw signal data (N_samples,)
+                    - sample_rate : float, sampling rate in Hz
+                    - channel : str, channel label/identifier
+                    - start_time : float, optional start time of signal in seconds
             
-
-        Outputs:
-            "psd": list of dicts (length of signals)
-                key of each dict:
-                    psd : power (µV^2) narray [Nepocs x Nsamples]
-                    freq_bins : frequency bins (Hz)
-                    win_len : windows length (s)
-                    win_step : windows step (s)
-                    sample_rate : sampling rate of the original signal (Hz)
-                    chan_label : channel label
-                    start_time : start (s) of the signal (item of signals) on which the ffts are performed
-                    end_time : end (s) of the signal (item of signals) on which the ffts are performed
-                    duration : duraiton (s) of the signal (item of signals) on which the ffts are performed            
-                    
-            "slope": list
-                beta : slope characterizing the arhytmic spectrum for each epoch  
-            "intercept": list
-                intercept : intercept characterizing the arhytmic spectrum  for each epoch 
+            win_len_sec : float or str
+                Window length in seconds for spectral analysis.
+                Controls frequency resolution (lower = better frequency resolution)
+                Typical range: 2.0 to 10.0 seconds
             
-
+            win_step_sec : float or str
+                Window step/stride in seconds between consecutive windows.
+                Determines temporal resolution of the spectral analysis.
+                Controls overlap between windows.
+            
+            window_name : str
+                Name of windowing function to apply before FFT.
+                Common options: 'hann', 'hamming', 'blackman', 'boxcar'
+                Reduces spectral leakage from finite-length signal segments.
+            
+            first_freq : float or str
+                Lower frequency boundary (Hz) for IRASA band-limited analysis.
+                Only spectral components above this frequency are decomposed.
+            
+            last_freq : float or str
+                Upper frequency boundary (Hz) for IRASA band-limited analysis.
+                Only spectral components below this frequency are decomposed.
+            
+            flag : bool or str, optional (default: False)
+                Currently does not affect computation. Can be used in the future to control bypassing the analysis.
+        Returns:
+        --------
+            dict with two keys:
+            
+            'rhythmic_psd' : list of dicts
+                Rhythmic (periodic/oscillatory) spectral components.
+                One dict per input signal containing:
+                    - 'psd' : numpy array (N_epochs, N_freq_bins)
+                      Rhythmic power (ratio of combined to aperiodic spectrum)
+                      Values > 1 indicate presence of periodic oscillations
+                    - 'freq_bins' : numpy array (N_freq_bins,)
+                      Frequency values in Hz for corresponding PSD bins
+                    - 'win_len' : float
+                      Window length in seconds
+                    - 'win_step' : float
+                      Window step in seconds
+                    - 'sample_rate' : float
+                      Sampling rate in Hz
+                    - 'chan_label' : str
+                      Input signal channel label
+                    - 'start_time' : float
+                      Start time of analysis in seconds
+                    - 'end_time' : float
+                      End time of analysis in seconds
+                    - 'duration' : float
+                      Total duration analyzed in seconds
+                    - 'flag' : str = 'rhythmic'
+                      Component type identifier
+            
+            'arhythmic_psd' : list of dicts
+                Arhythmic (aperiodic/broadband) spectral components.
+                One dict per input signal containing same structure as rhythmic_psd but:
+                    - 'psd' : numpy array (N_epochs, N_freq_bins)
+                      Background aperiodic power spectrum typically 1/f shaped
+                    - 'flag' : str = 'arhythmic'
+                      Component type identifier
+        
+        Raises:
+        -------
+            NodeInputException
+                If signals is not a list
+        
+        Notes:
+        ------
+            - Windows with all NaN values are handled gracefully with NaN output
+            - Output arrays are padded to consistent size across epochs
+            - Division by zero in residu calculation is handled with NaN replacement
+            - All output values are in power units (µV^2) for EEG signals
         """
 
         # Code examples
@@ -167,17 +269,7 @@ class IRASAYASA(SciNode):
             data_arhythmic['end_time'] = end_time[-1]
             data_arhythmic['duration'] = sum(new_dur)
             data_arhythmic['flag'] = "arhythmic"
-            '''cache['psd'] = res_mean
-            cache['freq_bins'] = data['freq_bins']
-            cache['channel'] = signals[i].channel
-            cache['sample_rate'] = signals[i].sample_rate
-            cache['win_step_sec'] = win_step_sec
-            cache['win_len'] = win_len_sec
-            cache['psd_raw'] = psd_raw
-            cache['freq_raw'] = freq_raw
-            cache['first_freq'] = first_freq
-            cache['last_freq'] = last_freq
-            self._cache_manager.write_mem_cache(self.identifier, cache)'''
+
             rhythmic_psd.append(data_rhythmic.copy())
             arhythmic_psd.append(data_arhythmic.copy())
         return {
