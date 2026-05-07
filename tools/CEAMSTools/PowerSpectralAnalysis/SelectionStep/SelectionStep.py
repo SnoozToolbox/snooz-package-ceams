@@ -41,12 +41,16 @@ class SelectionStep( BaseStepView,  Ui_SelectionStep, QtWidgets.QWidget):
         self._node_id_ResetSignalArtefact = "1211ee97-72e4-45da-9850-44d4aa249c78"  # to activate when PSA is performed on stages 
         self._node_id_STFT_std = "159bfdad-5000-474b-ae38-8e95ff4142b2"  # to activate when PSA is performed on stages 
         self._node_id_PSA_Compilation_std = "4bb8c9ac-64e8-4cec-9c2c-5a00c80b4eae" # to activate when PSA is performed on stages
-
         # Define modules to activate or bypass
         self._node_id_SignalsFromEvents_Annot = "d3620a6b-03f5-444f-b93e-e3ca23983b56" # To activate for PSA on annot
         self._node_id_STFT_Annot = "ea31a87d-038c-4e24-a9c2-66b54aaca483" # To activate for PSA on annot
         self._node_id_ResetSignal_art = "83092505-93c5-4688-acc7-208d00a72ba0" # To activate for PSA on annot
         self._node_id_PSA_Annot = "9dfbe6b9-1887-452a-ac3b-33f1235f9b0a"  # provide the band width to the PSA on Events 
+
+        self._node_id_IRASA = "fe5c4a13-f709-4edc-9e5f-9c7908c85e35"  # provide the win len and win step to the IRASA and activate if R&A
+        self._node_id_PSA_Rhythmic_IRASA = "d16022c4-3ac0-4982-aa3e-dfff4cada99a"  # provide the band width to the PSA on IRASA
+        self._node_id_PSA_Arhythmic_IRASA = "0ddf2d8d-943d-4583-8b2d-6184ad208119" # provide the band width to the Arhythmic component of IRASA
+        self._node_id_PSA_FOOOF = "05044aa2-4a45-44ae-a5a8-b6182ecf8ec2" # provide the band width to the PSA on FOOOF
 
         self._context_manager[SelectionStep.context_PSA_annot_selection] = 0
 
@@ -58,8 +62,10 @@ class SelectionStep( BaseStepView,  Ui_SelectionStep, QtWidgets.QWidget):
         self._pub_sub_manager.subscribe(self, self._exclude_nremp_topic)
         self._exclude_remp_topic = f'{self._node_id_SleepStageEvent}.exclude_remp'
         self._pub_sub_manager.subscribe(self, self._exclude_remp_topic)
-        self._in_cycle_topic = f'{self._node_id_SleepStageEvent}.in_cycle'    
+        self._in_cycle_topic = f'{self._node_id_SleepStageEvent}.in_cycle'
 
+        self.radioButton_sleep.clicked.connect(self.Activate_sleep_annotation_modules) 
+        self.radioButton_annotations.clicked.connect(self.Activate_sleep_annotation_modules)
 
     def load_settings(self):
         self._pub_sub_manager.publish(self, self._stages_topic, 'ping')
@@ -72,7 +78,6 @@ class SelectionStep( BaseStepView,  Ui_SelectionStep, QtWidgets.QWidget):
         self.NREM_stages_and_periods_slot()
         self.REM_stages_and_periods_slot()
 
-
     # Called when the user clic on RUN
     # Message are sent to the publisher
     def on_apply_settings(self):
@@ -81,60 +86,8 @@ class SelectionStep( BaseStepView,  Ui_SelectionStep, QtWidgets.QWidget):
         self._pub_sub_manager.publish(self, self._stages_topic, str(stages_str))
         self._pub_sub_manager.publish(self, self._exclude_nremp_topic, self.excl_nremp_checkBox.isChecked())
         self._pub_sub_manager.publish(self, self._exclude_remp_topic, self.excl_remp_checkBox.isChecked())
-        self._pub_sub_manager.publish(self, self._in_cycle_topic, self.in_cycle_checkBox.isChecked())   
-
-        if self.radioButton_sleep.isChecked():
-
-            # Activate the modules needed to run on sleep stages
-            self._pub_sub_manager.publish(self, self._node_id_SleepCycleDelimiter\
-                +".activation_state_change", ActivationState.ACTIVATED)
-            self._pub_sub_manager.publish(self, self._node_id_SleepStageEvent\
-                +".activation_state_change", ActivationState.ACTIVATED)
-            self._pub_sub_manager.publish(self, self._node_id_SignalsFromEvents\
-                +".activation_state_change", ActivationState.ACTIVATED)       
-            self._pub_sub_manager.publish(self, self._node_id_ResetSignalArtefact\
-                +".activation_state_change", ActivationState.ACTIVATED)
-            self._pub_sub_manager.publish(self, self._node_id_STFT_std\
-                +".activation_state_change", ActivationState.ACTIVATED)
-            self._pub_sub_manager.publish(self, self._node_id_PSA_Compilation_std\
-                +".activation_state_change", ActivationState.ACTIVATED)    
-
-            # Deactivate the modules needed to run on annotations
-            self._pub_sub_manager.publish(self, self._node_id_SignalsFromEvents_Annot\
-                +".activation_state_change", ActivationState.DEACTIVATED)
-            self._pub_sub_manager.publish(self, self._node_id_STFT_Annot\
-                +".activation_state_change", ActivationState.DEACTIVATED)
-            self._pub_sub_manager.publish(self, self._node_id_ResetSignal_art\
-                +".activation_state_change", ActivationState.DEACTIVATED)
-            self._pub_sub_manager.publish(self, self._node_id_PSA_Annot\
-                +".activation_state_change",ActivationState.DEACTIVATED)        
-
-        if self.radioButton_annotations.isChecked():
-
-            # Activate the modules needed to run on annotations
-            self._pub_sub_manager.publish(self, self._node_id_SignalsFromEvents_Annot\
-                +".activation_state_change", ActivationState.ACTIVATED)
-            self._pub_sub_manager.publish(self, self._node_id_STFT_Annot\
-                +".activation_state_change", ActivationState.ACTIVATED)
-            self._pub_sub_manager.publish(self, self._node_id_ResetSignal_art\
-                +".activation_state_change", ActivationState.ACTIVATED)
-            self._pub_sub_manager.publish(self, self._node_id_PSA_Annot\
-                +".activation_state_change",ActivationState.ACTIVATED)
-
-            # Deactivate the modules needed to run on sleep stages
-            self._pub_sub_manager.publish(self, self._node_id_SleepCycleDelimiter\
-                +".activation_state_change", ActivationState.DEACTIVATED)
-            self._pub_sub_manager.publish(self, self._node_id_SleepStageEvent\
-                +".activation_state_change", ActivationState.DEACTIVATED)
-            self._pub_sub_manager.publish(self, self._node_id_SignalsFromEvents\
-                +".activation_state_change", ActivationState.DEACTIVATED)       
-            self._pub_sub_manager.publish(self, self._node_id_ResetSignalArtefact\
-                +".activation_state_change", ActivationState.DEACTIVATED)
-            self._pub_sub_manager.publish(self, self._node_id_STFT_std\
-                +".activation_state_change", ActivationState.DEACTIVATED)
-            self._pub_sub_manager.publish(self, self._node_id_PSA_Compilation_std\
-                +".activation_state_change", ActivationState.DEACTIVATED)            
-
+        self._pub_sub_manager.publish(self, self._in_cycle_topic, self.in_cycle_checkBox.isChecked())               
+        self.Activate_sleep_annotation_modules()
 
     # Called by a node in response to a ping request. 
     # Ping request are sent whenever we need to know the value of a parameter of a node.
@@ -296,3 +249,70 @@ class SelectionStep( BaseStepView,  Ui_SelectionStep, QtWidgets.QWidget):
             else:
                 stages_str = stages_str+',9'     
         return stages_str
+    
+    def Activate_sleep_annotation_modules(self):
+        if self.radioButton_sleep.isChecked():
+            # Activate the modules needed to run on sleep stages
+            self._pub_sub_manager.publish(self, self._node_id_SleepCycleDelimiter\
+                +".activation_state_change", ActivationState.ACTIVATED)
+            self._pub_sub_manager.publish(self, self._node_id_SleepStageEvent\
+                +".activation_state_change", ActivationState.ACTIVATED)
+            self._pub_sub_manager.publish(self, self._node_id_SignalsFromEvents\
+                +".activation_state_change", ActivationState.ACTIVATED)       
+            self._pub_sub_manager.publish(self, self._node_id_ResetSignalArtefact\
+                +".activation_state_change", ActivationState.ACTIVATED)
+            self._pub_sub_manager.publish(self, self._node_id_STFT_std\
+                +".activation_state_change", ActivationState.ACTIVATED)
+            self._pub_sub_manager.publish(self, self._node_id_PSA_Compilation_std\
+                +".activation_state_change", ActivationState.ACTIVATED)
+            self._pub_sub_manager.publish(self, self._node_id_IRASA\
+                +".activation_state_change", ActivationState.ACTIVATED)
+            self._pub_sub_manager.publish(self, self._node_id_PSA_Rhythmic_IRASA\
+                +".activation_state_change", ActivationState.ACTIVATED)
+            self._pub_sub_manager.publish(self, self._node_id_PSA_Arhythmic_IRASA\
+                +".activation_state_change", ActivationState.ACTIVATED)
+            self._pub_sub_manager.publish(self, self._node_id_PSA_FOOOF\
+                +".activation_state_change", ActivationState.ACTIVATED)    
+
+            # Deactivate the modules needed to run on annotations
+            self._pub_sub_manager.publish(self, self._node_id_SignalsFromEvents_Annot\
+                +".activation_state_change", ActivationState.DEACTIVATED)
+            self._pub_sub_manager.publish(self, self._node_id_STFT_Annot\
+                +".activation_state_change", ActivationState.DEACTIVATED)
+            self._pub_sub_manager.publish(self, self._node_id_ResetSignal_art\
+                +".activation_state_change", ActivationState.DEACTIVATED)
+            self._pub_sub_manager.publish(self, self._node_id_PSA_Annot\
+                +".activation_state_change",ActivationState.DEACTIVATED)        
+
+        if self.radioButton_annotations.isChecked():
+            # Activate the modules needed to run on annotations
+            self._pub_sub_manager.publish(self, self._node_id_SignalsFromEvents_Annot\
+                +".activation_state_change", ActivationState.ACTIVATED)
+            self._pub_sub_manager.publish(self, self._node_id_STFT_Annot\
+                +".activation_state_change", ActivationState.ACTIVATED)
+            self._pub_sub_manager.publish(self, self._node_id_ResetSignal_art\
+                +".activation_state_change", ActivationState.ACTIVATED)
+            self._pub_sub_manager.publish(self, self._node_id_PSA_Annot\
+                +".activation_state_change",ActivationState.ACTIVATED)
+
+            # Deactivate the modules needed to run on sleep stages
+            self._pub_sub_manager.publish(self, self._node_id_SleepCycleDelimiter\
+                +".activation_state_change", ActivationState.DEACTIVATED)
+            self._pub_sub_manager.publish(self, self._node_id_SleepStageEvent\
+                +".activation_state_change", ActivationState.DEACTIVATED)
+            self._pub_sub_manager.publish(self, self._node_id_SignalsFromEvents\
+                +".activation_state_change", ActivationState.DEACTIVATED)       
+            self._pub_sub_manager.publish(self, self._node_id_ResetSignalArtefact\
+                +".activation_state_change", ActivationState.DEACTIVATED)
+            self._pub_sub_manager.publish(self, self._node_id_STFT_std\
+                +".activation_state_change", ActivationState.DEACTIVATED)
+            self._pub_sub_manager.publish(self, self._node_id_PSA_Compilation_std\
+                +".activation_state_change", ActivationState.DEACTIVATED)
+            self._pub_sub_manager.publish(self, self._node_id_IRASA\
+                +".activation_state_change", ActivationState.DEACTIVATED)
+            self._pub_sub_manager.publish(self, self._node_id_PSA_Rhythmic_IRASA\
+                +".activation_state_change", ActivationState.DEACTIVATED)
+            self._pub_sub_manager.publish(self, self._node_id_PSA_Arhythmic_IRASA\
+                +".activation_state_change", ActivationState.DEACTIVATED)
+            self._pub_sub_manager.publish(self, self._node_id_PSA_FOOOF\
+                +".activation_state_change", ActivationState.DEACTIVATED)

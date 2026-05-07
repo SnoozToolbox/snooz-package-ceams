@@ -1,6 +1,6 @@
 {
     "package_name": "CEAMSModules",
-    "package_version": "7.3.0",
+    "package_version": "7.4.0",
     "package_author": "",
     "package_url": "",
     "package_description": "",
@@ -1178,6 +1178,34 @@
                     "parameters": {
                         "module_category": "Events Utilities",
                         "module_label": "REMs Details"
+                    }
+                }
+            ]
+        },
+        {
+            "item_name": "IRASAYASA",
+            "item_type": "module",
+            "item_version": "0.0.0",
+            "item_hooks": [
+                {
+                    "endpoint_name": "module_endpoint",
+                    "parameters": {
+                        "module_category": "Signal Processing",
+                        "module_label": "IRASA YASA"
+                    }
+                }
+            ]
+        },
+        {
+            "item_name": "PSACompilationFOOOF",
+            "item_type": "module",
+            "item_version": "0.0.0",
+            "item_hooks": [
+                {
+                    "endpoint_name": "module_endpoint",
+                    "parameters": {
+                        "module_category": "Signal Processing",
+                        "module_label": "PSA Compilation FOOOF"
                     }
                 }
             ]
