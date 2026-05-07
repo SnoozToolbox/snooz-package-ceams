@@ -217,10 +217,16 @@ class SpectralSettings(BaseStepView, Ui_SpectralSettings, QtWidgets.QWidget):
             self.std_radioButton.setEnabled(False)
             self.RA_radioButton.setEnabled(False)
             self.FoooF_radioButton.setEnabled(False)
+            self.label_5.setEnabled(False)
+            self.label_11.setEnabled(False)
+            self.label_12.setEnabled(False)
         else:
             self.std_radioButton.setEnabled(True)
             self.RA_radioButton.setEnabled(True)
             self.FoooF_radioButton.setEnabled(True)
+            self.label_5.setEnabled(True)
+            self.label_11.setEnabled(True)
+            self.label_12.setEnabled(True)
     # Called by a node in response to a ping request. 
     # Ping request are sent whenever we need to know the value of a parameter of a node.
     def on_topic_response(self, topic, message, sender):

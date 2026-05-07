@@ -65,45 +65,75 @@ class Ui_SpectralSettings(object):
         self.gridLayout.setObjectName(u"gridLayout")
         self.gridLayout.setSizeConstraint(QLayout.SizeConstraint.SetNoConstraint)
         self.gridLayout.setContentsMargins(-1, -1, -1, 1)
-        self.label = QLabel(SpectralSettings)
-        self.label.setObjectName(u"label")
-        sizePolicy1 = QSizePolicy(QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Preferred)
-        sizePolicy1.setHorizontalStretch(0)
-        sizePolicy1.setVerticalStretch(0)
-        sizePolicy1.setHeightForWidth(self.label.sizePolicy().hasHeightForWidth())
-        self.label.setSizePolicy(sizePolicy1)
-        self.label.setMinimumSize(QSize(450, 0))
-        self.label.setMaximumSize(QSize(500, 500))
+        self.win_step_lineEdit = QLineEdit(SpectralSettings)
+        self.win_step_lineEdit.setObjectName(u"win_step_lineEdit")
+        self.win_step_lineEdit.setMaximumSize(QSize(80, 16777215))
 
-        self.gridLayout.addWidget(self.label, 0, 0, 1, 1)
-
-        self.label_2 = QLabel(SpectralSettings)
-        self.label_2.setObjectName(u"label_2")
-        sizePolicy1.setHeightForWidth(self.label_2.sizePolicy().hasHeightForWidth())
-        self.label_2.setSizePolicy(sizePolicy1)
-        self.label_2.setMinimumSize(QSize(200, 0))
-
-        self.gridLayout.addWidget(self.label_2, 1, 0, 1, 1)
+        self.gridLayout.addWidget(self.win_step_lineEdit, 7, 1, 1, 1)
 
         self.win_len_lineEdit = QLineEdit(SpectralSettings)
         self.win_len_lineEdit.setObjectName(u"win_len_lineEdit")
         self.win_len_lineEdit.setMaximumSize(QSize(80, 16777215))
 
-        self.gridLayout.addWidget(self.win_len_lineEdit, 0, 1, 1, 1)
+        self.gridLayout.addWidget(self.win_len_lineEdit, 1, 1, 1, 1)
 
         self.horizontalSpacer_3 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
 
-        self.gridLayout.addItem(self.horizontalSpacer_3, 1, 3, 1, 1)
+        self.gridLayout.addItem(self.horizontalSpacer_3, 7, 3, 1, 1)
 
-        self.win_step_lineEdit = QLineEdit(SpectralSettings)
-        self.win_step_lineEdit.setObjectName(u"win_step_lineEdit")
-        self.win_step_lineEdit.setMaximumSize(QSize(80, 16777215))
+        self.verticalLayout_3 = QVBoxLayout()
+        self.verticalLayout_3.setObjectName(u"verticalLayout_3")
+        self.label_2 = QLabel(SpectralSettings)
+        self.label_2.setObjectName(u"label_2")
+        sizePolicy1 = QSizePolicy(QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Preferred)
+        sizePolicy1.setHorizontalStretch(0)
+        sizePolicy1.setVerticalStretch(0)
+        sizePolicy1.setHeightForWidth(self.label_2.sizePolicy().hasHeightForWidth())
+        self.label_2.setSizePolicy(sizePolicy1)
+        self.label_2.setMinimumSize(QSize(200, 0))
 
-        self.gridLayout.addWidget(self.win_step_lineEdit, 1, 1, 1, 1)
+        self.verticalLayout_3.addWidget(self.label_2)
+
+        self.label_14 = QLabel(SpectralSettings)
+        self.label_14.setObjectName(u"label_14")
+
+        self.verticalLayout_3.addWidget(self.label_14)
+
+
+        self.gridLayout.addLayout(self.verticalLayout_3, 7, 0, 1, 1)
 
         self.horizontalSpacer_2 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
 
-        self.gridLayout.addItem(self.horizontalSpacer_2, 0, 3, 1, 1)
+        self.gridLayout.addItem(self.horizontalSpacer_2, 1, 3, 1, 1)
+
+        self.verticalLayout_2 = QVBoxLayout()
+        self.verticalLayout_2.setObjectName(u"verticalLayout_2")
+        self.label = QLabel(SpectralSettings)
+        self.label.setObjectName(u"label")
+        sizePolicy1.setHeightForWidth(self.label.sizePolicy().hasHeightForWidth())
+        self.label.setSizePolicy(sizePolicy1)
+        self.label.setMinimumSize(QSize(450, 0))
+        self.label.setMaximumSize(QSize(500, 500))
+        self.label.setFont(font)
+
+        self.verticalLayout_2.addWidget(self.label)
+
+        self.label_13 = QLabel(SpectralSettings)
+        self.label_13.setObjectName(u"label_13")
+
+        self.verticalLayout_2.addWidget(self.label_13)
+
+
+        self.gridLayout.addLayout(self.verticalLayout_2, 1, 0, 1, 1)
+
+        self.line = QFrame(SpectralSettings)
+        self.line.setObjectName(u"line")
+        self.line.setFrameShadow(QFrame.Shadow.Raised)
+        self.line.setLineWidth(0)
+        self.line.setMidLineWidth(0)
+        self.line.setFrameShape(QFrame.Shape.HLine)
+
+        self.gridLayout.addWidget(self.line, 2, 0, 3, 1)
 
 
         self.verticalLayout.addLayout(self.gridLayout)
@@ -295,6 +325,10 @@ class Ui_SpectralSettings(object):
 
         self.verticalLayout_10.addWidget(self.label_12)
 
+        self.verticalSpacer_5 = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
+
+        self.verticalLayout_10.addItem(self.verticalSpacer_5)
+
 
         self.verticalLayout_9.addLayout(self.verticalLayout_10)
 
@@ -348,15 +382,17 @@ class Ui_SpectralSettings(object):
 "li.checked::marker { content: \"\\2612\"; }\n"
 "</style></head><body style=\" font-family:'Roboto'; font-size:12pt; font-weight:400; font-style:normal;\">\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">The analysis is performed by dividing the signal into multiple short windows to estimate spectral power.</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">This procedure is based on Welch\u2019s method, which applies a Fast Fourier Transform (FFT) to each window and averages the resulting periodograms</p></body></html>", None))
-        self.label.setText(QCoreApplication.translate("SpectralSettings", u"Window length (s)", None))
-        self.label_2.setText(QCoreApplication.translate("SpectralSettings", u"Window step (s)", None))
-#if QT_CONFIG(tooltip)
-        self.win_len_lineEdit.setToolTip(QCoreApplication.translate("SpectralSettings", u"Window length (s) used to perform the FFT (Fast Fourier Transform).", None))
-#endif // QT_CONFIG(tooltip)
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">This procedure is based on Welch\u2019s method, which applies a Fast Fourier Transform (FFT) to each window and averages the resulting periodograms.</p></body></html>", None))
 #if QT_CONFIG(tooltip)
         self.win_step_lineEdit.setToolTip(QCoreApplication.translate("SpectralSettings", u"At which window steps (s) the FFT (Fast Fourier Transform) is performed.", None))
 #endif // QT_CONFIG(tooltip)
+#if QT_CONFIG(tooltip)
+        self.win_len_lineEdit.setToolTip(QCoreApplication.translate("SpectralSettings", u"Window length (s) used to perform the FFT (Fast Fourier Transform).", None))
+#endif // QT_CONFIG(tooltip)
+        self.label_2.setText(QCoreApplication.translate("SpectralSettings", u"<html><head/><body><p><span style=\" font-weight:700;\">Window step (s)</span></p></body></html>", None))
+        self.label_14.setText(QCoreApplication.translate("SpectralSettings", u"Time shift between consecutive FFT windows, controlling overlap and temporal resolution.", None))
+        self.label.setText(QCoreApplication.translate("SpectralSettings", u"<html><head/><body><p><span style=\" font-weight:700;\">Window length (s)</span></p></body></html>", None))
+        self.label_13.setText(QCoreApplication.translate("SpectralSettings", u"Duration of each analysis window used to compute the FFT and determine frequency resolution.", None))
         self.label_7.setText(QCoreApplication.translate("SpectralSettings", u"<html><head/><body><p><span style=\" font-weight:600;\">Frequency bands</span></p></body></html>", None))
         self.textEdit.setHtml(QCoreApplication.translate("SpectralSettings", u"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset=\"utf-8\" /><style type=\"text/css\">\n"

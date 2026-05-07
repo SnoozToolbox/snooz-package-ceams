@@ -42,7 +42,7 @@ class SelectionStep( BaseStepView,  Ui_SelectionStep, QtWidgets.QWidget):
         self._node_id_STFT_std = "159bfdad-5000-474b-ae38-8e95ff4142b2"  # to activate when PSA is performed on stages 
         self._node_id_PSA_Compilation_std = "4bb8c9ac-64e8-4cec-9c2c-5a00c80b4eae" # to activate when PSA is performed on stages
         # Define modules to activate or bypass
-        self._node_id_SignalsFromEvents_Annot = "d3620a6b-03f5-444f-b93e-e3ca23983b56" # To activate for PSA on annot
+        self._node_id_SignalsFromEvents_Annot = "4c9b0f26-21d7-404c-bd38-22326468f129" # To activate for PSA on annot
         self._node_id_STFT_Annot = "ea31a87d-038c-4e24-a9c2-66b54aaca483" # To activate for PSA on annot
         self._node_id_ResetSignal_art = "83092505-93c5-4688-acc7-208d00a72ba0" # To activate for PSA on annot
         self._node_id_PSA_Annot = "9dfbe6b9-1887-452a-ac3b-33f1235f9b0a"  # provide the band width to the PSA on Events 

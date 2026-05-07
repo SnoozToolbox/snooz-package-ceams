@@ -44,7 +44,7 @@ class AnnotationsSelStep( NonValidEventStep):
         self._artefact_name_topic = f'{self._node_id_Dictionary_name}.{self.name_input_label}'
         self._pub_sub_manager.subscribe(self, self._artefact_name_topic)
 
-        self._node_id_SignalsFromEvents_Annot = "d3620a6b-03f5-444f-b93e-e3ca23983b56" # To activate for PSA on annot
+        self._node_id_SignalsFromEvents_Annot = "4c9b0f26-21d7-404c-bd38-22326468f129" # To activate for PSA on annot
 
 
     def load_settings(self):
