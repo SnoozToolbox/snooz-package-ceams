@@ -15,16 +15,16 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QFont, QFontDatabase, QGradient, QIcon,
     QImage, QKeySequence, QLinearGradient, QPainter,
     QPalette, QPixmap, QRadialGradient, QTransform)
-from PySide6.QtWidgets import (QApplication, QFormLayout, QHBoxLayout, QLabel,
-    QLineEdit, QSizePolicy, QSpacerItem, QSpinBox,
-    QVBoxLayout, QWidget)
+from PySide6.QtWidgets import (QApplication, QComboBox, QFormLayout, QHBoxLayout,
+    QLabel, QLineEdit, QSizePolicy, QSpacerItem,
+    QSpinBox, QVBoxLayout, QWidget)
 import themes_rc
 
 class Ui_MiniEpochDefinition(object):
     def setupUi(self, MiniEpochDefinition):
         if not MiniEpochDefinition.objectName():
             MiniEpochDefinition.setObjectName(u"MiniEpochDefinition")
-        MiniEpochDefinition.resize(761, 590)
+        MiniEpochDefinition.resize(757, 582)
         MiniEpochDefinition.setStyleSheet(u"font: 12pt \"Roboto\";")
         self.verticalLayout = QVBoxLayout(MiniEpochDefinition)
         self.verticalLayout.setObjectName(u"verticalLayout")
@@ -128,15 +128,18 @@ class Ui_MiniEpochDefinition(object):
 
         self.formLayout_2.setWidget(2, QFormLayout.LabelRole, self.label_9)
 
-        self.spinBox_length = QSpinBox(MiniEpochDefinition)
-        self.spinBox_length.setObjectName(u"spinBox_length")
-
-        self.formLayout_2.setWidget(1, QFormLayout.FieldRole, self.spinBox_length)
-
         self.spinBox_number = QSpinBox(MiniEpochDefinition)
         self.spinBox_number.setObjectName(u"spinBox_number")
 
         self.formLayout_2.setWidget(2, QFormLayout.FieldRole, self.spinBox_number)
+
+        self.comboBox_length = QComboBox(MiniEpochDefinition)
+        self.comboBox_length.addItem("")
+        self.comboBox_length.addItem("")
+        self.comboBox_length.addItem("")
+        self.comboBox_length.setObjectName(u"comboBox_length")
+
+        self.formLayout_2.setWidget(1, QFormLayout.FieldRole, self.comboBox_length)
 
 
         self.horizontalLayout_2.addLayout(self.formLayout_2)
@@ -170,5 +173,9 @@ class Ui_MiniEpochDefinition(object):
         self.label_7.setText(QCoreApplication.translate("MiniEpochDefinition", u"Stage name", None))
         self.label_8.setText(QCoreApplication.translate("MiniEpochDefinition", u"Window length (sec)", None))
         self.label_9.setText(QCoreApplication.translate("MiniEpochDefinition", u"Number of windows", None))
+        self.comboBox_length.setItemText(0, QCoreApplication.translate("MiniEpochDefinition", u"3", None))
+        self.comboBox_length.setItemText(1, QCoreApplication.translate("MiniEpochDefinition", u"5", None))
+        self.comboBox_length.setItemText(2, QCoreApplication.translate("MiniEpochDefinition", u"10", None))
+
     # retranslateUi
 

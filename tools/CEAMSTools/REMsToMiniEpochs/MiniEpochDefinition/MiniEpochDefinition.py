@@ -68,7 +68,7 @@ class MiniEpochDefinition(BaseStepView, Ui_MiniEpochDefinition, QtWidgets.QWidge
         elif topic == self._events_names_topic:
             self.lineEdit_stage.setText(message)
         elif topic == self._window_sec_topic:
-            self.spinBox_length.setValue(message)
+            self.comboBox_length.setCurrentText(str(message))
         elif topic == self._n_window_topic:
             self.spinBox_number.setValue(message)
 
@@ -80,7 +80,7 @@ class MiniEpochDefinition(BaseStepView, Ui_MiniEpochDefinition, QtWidgets.QWidge
         }
         self._pub_sub_manager.publish(self, self._parameters_topic, str(parameters))
         self._pub_sub_manager.publish(self, self._events_names_topic, self.lineEdit_stage.text())
-        self._pub_sub_manager.publish(self, self._window_sec_topic, self.spinBox_length.value())
+        self._pub_sub_manager.publish(self, self._window_sec_topic, int(self.comboBox_length.currentText()))
         self._pub_sub_manager.publish(self, self._n_window_topic, self.spinBox_number.value())
 
     def on_validate_settings(self):
@@ -93,7 +93,7 @@ class MiniEpochDefinition(BaseStepView, Ui_MiniEpochDefinition, QtWidgets.QWidge
         if self.lineEdit_name_Tonic.text() == "":
             QtWidgets.QMessageBox.critical(self, "Error", "The tonic name cannot be empty.")
             return False
-        if self.spinBox_length.value() == 0:
+        if int(self.comboBox_length.currentText()) == 0:
             QtWidgets.QMessageBox.critical(self, "Error", "The length of the mini-epoch cannot be 0.")
             return False
         if self.spinBox_number.value() == 0:
