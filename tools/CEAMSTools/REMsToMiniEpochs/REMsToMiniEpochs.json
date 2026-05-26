@@ -2,6 +2,7 @@
     "item_name": "REMsToMiniEpochs",
     "item_type": "tool",
     "item_api_version": "3.0.0",
+    "item_url": "https://snooz-toolbox-documentation.readthedocs.io/latest/user_guide/tools/Processing/Classify_REMs_Phasic_Tonic_from_EOG.html",
     "tool_params": {
         "tool_label": "Classify REMs into Phasic/Tonic States from EOG",
         "tool_category": "Processing",
