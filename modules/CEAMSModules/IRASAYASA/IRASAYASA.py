@@ -360,6 +360,8 @@ class IRASAYASA(SciNode):
             target_cols = max(target_cols, periodic_i.shape[0], aperiodic_i.shape[0], freqs_i.shape[0])
 
         # Second pass: allocate fixed 2D arrays and fill available values.
+        if target_cols == 0: # Add this exception in case all the segments of a signal were Nan values
+            target_cols = int(last_freq * window_sec)
         periodic_array = np.zeros((n_epochs, target_cols))
         aperiodic_array = np.zeros((n_epochs, target_cols))
         freqs = np.zeros(target_cols)
@@ -369,6 +371,8 @@ class IRASAYASA(SciNode):
             if row_freqs is not None and row_freqs.shape[0] > 0:
                 freqs[:row_freqs.shape[0]] = row_freqs
                 break
+            else:
+                freqs = np.linspace(0, last_freq, num = target_cols+1)
 
         for i in range(n_epochs):
             p_i = periodic_rows[i]
