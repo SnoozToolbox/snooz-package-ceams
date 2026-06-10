@@ -60,7 +60,10 @@ class ChannelsTableModel(QtCore.QAbstractTableModel):
 
     def remove_by_filename(self, filename):
         """ Remove all rows for a filename """
+        #self.beginResetModel()
         self._data = self._data[self._data.Filename != filename]
+        #self.endResetModel()
+        #self.dataChangedWithCheckState.emit(self.checkedItemCount())
 
     def get_data(self):
         """ return the Data """

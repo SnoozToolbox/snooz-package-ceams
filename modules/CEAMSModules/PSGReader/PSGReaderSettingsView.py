@@ -19,9 +19,10 @@ import sys
 from . import commons
 from commons.CheckBoxDelegate import CheckBoxDelegate
 from commons.BaseSettingsView import BaseSettingsView
-from commons.NodeRuntimeException import NodeRuntimeException
+from widgets.TableDialog import TableDialog
 from commons.Utils import deleteItemsOfLayout
 from widgets.WarningDialog import WarningDialog
+
 
 from CEAMSModules.PSGReader.PSGReaderManager import PSGReaderManager
 from CEAMSModules.PSGReader.Ui_PSGReaderSettingsView import Ui_PSGReaderSettingsView
@@ -130,6 +131,8 @@ class PSGReaderSettingsView( BaseSettingsView,  Ui_PSGReaderSettingsView, QtWidg
         """  Called to load files asked (saved) in the file list.
              data is a dict with the parameters to init PSGReader.files input.
              Each key of the dict data is the filename of the PSG file loaded.
+
+                             Returns True if at least one file is loaded, False otherwise.
         """
         # A model which includes files, events
         self.files_model.clear()
@@ -151,7 +154,7 @@ class PSGReaderSettingsView( BaseSettingsView,  Ui_PSGReaderSettingsView, QtWidg
         for filename in data:
             # Check if the file exist
             if not os.path.isfile(filename):
-                removed_files.append(filename)
+                removed_files.append(f"{filename} (missing file)")
                 continue
 
             self.files_details[filename] = {
@@ -160,7 +163,11 @@ class PSGReaderSettingsView( BaseSettingsView,  Ui_PSGReaderSettingsView, QtWidg
             }
             
             # tree item : parent=file, child=group and count, child=name and count
-            item, item_stages = self.create_file_item_count(filename)
+            item, item_stages = self.create_file_item_count(filename, show_error_dialog=False) # The file is read
+            if item is None or item_stages is None:
+                removed_files.append(f"{filename} (could not read metadata)")
+                self._remove_file_from_models(filename)
+                continue
             self.files_model.appendRow(item) 
             self.files_stages_model.appendRow(item_stages) 
 
@@ -197,16 +204,7 @@ class PSGReaderSettingsView( BaseSettingsView,  Ui_PSGReaderSettingsView, QtWidg
                         }
                         self.channels_table_model._data = pd.concat([self.channels_table_model._data,pd.DataFrame(data=channel_dict, index=[0])], ignore_index=True)
 
-        if len(removed_files) > 0:
-            error_message = "These files were removed from the selection because they could not be found:\n"
-            for filepath in removed_files:
-                error_message = error_message + filepath + "\n"
-
-            msg = QtWidgets.QMessageBox()
-            msg.setIcon(QtWidgets.QMessageBox.Critical)
-            msg.setText(error_message)
-            msg.setWindowTitle("File not found")
-            msg.exec()
+        self._show_batch_load_warnings(removed_files, title="Workspace loaded partially")
 
         if self._options['file_selection_only']['value'] == "0":
             # Invalide the models so it refreshes the UI
@@ -223,7 +221,24 @@ class PSGReaderSettingsView( BaseSettingsView,  Ui_PSGReaderSettingsView, QtWidg
         if self._options['file_selection_only']['value'] == "0":
             # Generate signals to inform that Montage and Channel tables have been updated and the check state has changed
             self.montages_table_model.dataChangedWithCheckState.emit(self.montages_table_model.checkedItemCount())
-            self.channels_table_model.dataChangedWithCheckState.emit(self.channels_table_model.checkedItemCount())      
+            self.channels_table_model.dataChangedWithCheckState.emit(self.channels_table_model.checkedItemCount())
+
+        return self.files_model.rowCount() > 0
+
+
+    def _remove_file_from_models(self, filename, row=None):
+        self.montages_table_model.remove_by_filename(filename)
+        self.channels_table_model.remove_by_filename(filename)
+        self.files_details.pop(filename, None)
+
+        if row is None:
+            file_item = self.get_file_item(filename, self.files_model)
+            if isinstance(file_item, QtGui.QStandardItem):
+                row = file_item.row()
+
+        if row is not None and row >= 0:
+            self.files_model.removeRow(row)
+            self.files_stages_model.removeRow(row)
 
 
     def _refresh_geometry(self):
@@ -238,6 +253,32 @@ class PSGReaderSettingsView( BaseSettingsView,  Ui_PSGReaderSettingsView, QtWidg
         """Resize table columns while capping widths for small-screen layouts."""
         self._resize_table_columns_with_cap(self.montages_tableview)
         self._resize_table_columns_with_cap(self.channels_tableview)
+
+
+    def _show_batch_load_warnings(self, removed_files, title="Workspace loaded partially"):
+        if len(removed_files) == 0:
+            return
+
+        rows = []
+        for detail in removed_files:
+            if detail.endswith(")") and " (" in detail:
+                file_path, reason = detail.rsplit(" (", 1)
+                rows.append({
+                    "Filename": os.path.basename(file_path),
+                    "Path": file_path,
+                    "Reason": reason[:-1]
+                })
+            else:
+                rows.append({
+                    "Filename": os.path.basename(detail),
+                    "Path": detail,
+                    "Reason": "unknown"
+                })
+
+        details_df = pd.DataFrame(rows, columns=["Filename", "Path", "Reason"])
+        message = f"{len(removed_files)} file(s) were skipped while loading."
+        table_dialog_msg = TableDialog(df=details_df, title=title, message=message, showDownloadButton=True)
+        table_dialog_msg.exec_()
 
 
     def _resize_table_columns_with_cap(self, table_view):
@@ -411,20 +452,27 @@ class PSGReaderSettingsView( BaseSettingsView,  Ui_PSGReaderSettingsView, QtWidg
             progress.setMinimumDuration(0) # Settings a minimum time greater than 0 makes the UI update slower
             progress.show()
 
+            removed_files = []
+
             # Add the file only if is it not already added
             for i, filename in enumerate(filenames):
                 progress.setValue(i)
                 matches = self.files_model.findItems(os.path.basename(filename),QtCore.Qt.MatchExactly)
                 if len(matches) == 0:
-                    success = self.load_file_info(filename) # self._psg_reader_manager is used
+                    success = self.load_file_info(filename, show_error_dialog=False) # self._psg_reader_manager is used
 
                     if success:
                         # tree item : parent=file, child=group and count, child=name and count
-                        item, item_stages = self.create_file_item_count(filename) # The file is read
+                        item, item_stages = self.create_file_item_count(filename, show_error_dialog=False) # The file is read
+                        if item is None or item_stages is None:
+                            removed_files.append(f"{filename} (could not read metadata)")
+                            continue
                         self.files_model.setColumnCount(2)
                         self.files_model.appendRow(item)  
                         self.files_stages_model.setColumnCount(2)
                         self.files_stages_model.appendRow(item_stages)  
+                    else:
+                        removed_files.append(f"{filename} (could not open file)")
 
             progress.setValue(n_files)
             progress.close()
@@ -433,6 +481,7 @@ class PSGReaderSettingsView( BaseSettingsView,  Ui_PSGReaderSettingsView, QtWidg
             self.label_PSG.setText(f"PSG files ({self.files_model.rowCount()})")
             # Generate a signal to inform that self.files_model has been updated
             self.model_updated_signal.emit() 
+            self._show_batch_load_warnings(removed_files, title="File load completed with warnings")
 
         for i in range(self.files_model.columnCount()):
             self.events_treeView.hideColumn(i)
@@ -441,7 +490,7 @@ class PSGReaderSettingsView( BaseSettingsView,  Ui_PSGReaderSettingsView, QtWidg
     # Return 2 tree items : parent=file, child=group and count, child=name and count
     # file_item includes events
     # file_stages_item includes stages (Useful for NATUS and Stellate because the sleep stages are renamed within Snooz)
-    def create_file_item_count(self, filename):
+    def create_file_item_count(self, filename, show_error_dialog=True):
         """
         Create an file item as parent with its children : group and count, name and count.
         The file "filename" is opened and its events are read.
@@ -467,7 +516,14 @@ class PSGReaderSettingsView( BaseSettingsView,  Ui_PSGReaderSettingsView, QtWidg
         file_stages_item.setToolTip(filename)
         file_stages_item.setData(filename, Qt.UserRole + 1) # "file_item.setData(filename, 0)" overwrites file_item.text()
 
-        self._psg_reader_manager.open_file(filename)
+        success, error = self._psg_reader_manager.open_file(filename)
+        if not success:
+            if error is None:
+                error = f"PSGReader could not open file:{filename}"
+            if show_error_dialog:
+                QtWidgets.QMessageBox.critical(self, "Data Load Error",
+                        f"An error occurred while loading data:\n{error}")
+            return None, None
         stages = self._psg_reader_manager.get_sleep_stages() # need to make them visible from the settings view
         events = self._psg_reader_manager.get_events()
         self._psg_reader_manager.close_file()
@@ -545,7 +601,7 @@ class PSGReaderSettingsView( BaseSettingsView,  Ui_PSGReaderSettingsView, QtWidg
 
     # Return an tree item : parent=file, child=group and count, child=name and count
     #   Only the sleep stages are read (instead of the events)
-    def create_file_item_stage_count(self, filename):
+    def create_file_item_stage_count(self, filename, show_error_dialog=True):
         """
         Create an file item as parent with its children : group and count, name and count.
         The file "filename" is opened and its sleep stages are read.
@@ -566,7 +622,14 @@ class PSGReaderSettingsView( BaseSettingsView,  Ui_PSGReaderSettingsView, QtWidg
         file_item = QtGui.QStandardItem(os.path.basename(filename))
         file_item.setToolTip(filename)
         file_item.setData(filename, Qt.UserRole + 1) # "file_item.setData(filename, 0)" overwrites file_item.text()
-        self._psg_reader_manager.open_file(filename)
+        success, error = self._psg_reader_manager.open_file(filename)
+        if not success:
+            if error is None:
+                error = f"PSGReader could not open file:{filename}"
+            if show_error_dialog:
+                QtWidgets.QMessageBox.critical(self, "Data Load Error",
+                        f"An error occurred while loading data:\n{error}")
+            return None
         stages = self._psg_reader_manager.get_sleep_stages() # need to make them visible from the settings view
         #events = self._psg_reader_manager.get_events()
         self._psg_reader_manager.close_file()
@@ -752,6 +815,7 @@ class PSGReaderSettingsView( BaseSettingsView,  Ui_PSGReaderSettingsView, QtWidg
 
         if file_dialog.exec():
             folders = file_dialog.selectedFiles()
+            removed_files = []
 
             # Add a QProgressDialog to show the progression bar
             n_files = len(folders)
@@ -776,15 +840,20 @@ class PSGReaderSettingsView( BaseSettingsView,  Ui_PSGReaderSettingsView, QtWidg
                     matches = self.files_model.findItems(os.path.basename(filename),QtCore.Qt.MatchExactly)
                     if len(matches) == 0:
                         if filename is not None:
-                            success = self.load_file_info(filename) # self._psg_reader_manager is used
+                            success = self.load_file_info(filename, show_error_dialog=False) # self._psg_reader_manager is used
 
                             if success:
                                 # tree item : parent=file, child=group and count, child=name and count
-                                item, item_stages = self.create_file_item_count(filename) # The file is read
+                                item, item_stages = self.create_file_item_count(filename, show_error_dialog=False) # The file is read
+                                if item is None or item_stages is None:
+                                    removed_files.append(f"{filename} (could not read metadata)")
+                                    continue
                                 self.files_model.setColumnCount(2)
                                 self.files_model.appendRow(item)    
                                 self.files_stages_model.setColumnCount(2)
                                 self.files_stages_model.appendRow(item_stages)    
+                            else:
+                                removed_files.append(f"{filename} (could not open file)")
                         else:
                             #TODO Log empty folders
                             # Couldnt find PSG file in folder:{folder}
@@ -798,38 +867,28 @@ class PSGReaderSettingsView( BaseSettingsView,  Ui_PSGReaderSettingsView, QtWidg
             self.label_PSG.setText(f"PSG files ({self.files_model.rowCount()})")
             # Generate a signal to inform that self.files_model has been updated
             self.model_updated_signal.emit() 
+            self._show_batch_load_warnings(removed_files, title="File load completed with warnings")
 
     
     # Called when the user press on Remove push button
     def remove_entries_slot(self):
-        # The rows have to be removed once all the models are updated because
-        # the self.files_listview.selectedIndexes() is not in sync with the model
-        # With this technic the multiple selection from top to bottom or bottom up works
-        row_selected = [] # To keep track of the rows to remove from the model
+        selected_rows = set()
         for index in self.files_listview.selectedIndexes():
-            row_selected.append(index.row())
-            filename_item = self.files_model.takeItem(index.row())
+            selected_rows.add(index.row())
+
+        # Remove from bottom to top to avoid row-shift side effects.
+        for row in sorted(selected_rows, reverse=True):
+            filename_item = self.files_model.item(row, 0)
+            if filename_item is None:
+                continue
             filename = filename_item.data(Qt.UserRole + 1)
+            self._remove_file_from_models(filename, row=row)
 
-            self.montages_table_model.remove_by_filename(filename)
-            self.montages_proxy_model.invalidate()
-            self.montages_tableview.resizeColumnsToContents() # Especially important for the check mark column or it will not appear properly
-
-            self.channels_table_model.remove_by_filename(filename)
-            self.channels_proxy_model.invalidate()
-            self.channels_tableview.resizeColumnsToContents() # Especially important for the check mark column or it will not appear properly
-
-            self.files_details.pop(filename, None)
-            #self.events_treeView.setTreePosition(-1)
-            for i in range(self.files_model.columnCount()):
-                self.events_treeView.hideColumn(i)
-
-        # Important to remove the last row first since the model is updated after each removeRow
-        # we dont want to change file index.
-        row_selected.sort(reverse=True) 
-        for row in row_selected:
-            self.files_model.removeRow(row)
-            self.files_stages_model.removeRow(row)
+        self.montages_proxy_model.invalidate()
+        self.channels_proxy_model.invalidate()
+        self._apply_responsive_table_columns()
+        for i in range(self.files_model.columnCount()):
+            self.events_treeView.hideColumn(i)
 
         # Update the number of files in the title
         self.label_PSG.setText(f"PSG files ({self.files_model.rowCount()})")
@@ -875,12 +934,18 @@ class PSGReaderSettingsView( BaseSettingsView,  Ui_PSGReaderSettingsView, QtWidg
                         WarningDialog(f"At least one recording has no channel selected, check the channel selection of the file : {file}.")
                         return False
                     # Check for sleep stage 4 in annotations and warn user
-                    success = self._psg_reader_manager.open_file(file)
-                    if success:
-                        sleep_stages = self._psg_reader_manager.get_sleep_stages()
-                        if sleep_stages is not None and 'name' in sleep_stages.columns:
-                            if (sleep_stages['name'] == '4').any():
-                                WarningDialog(f"Sleep stage 'N4' detected in annotation file {file}. It will be converted to 'N3' automatically.")
+                    success, error = self._psg_reader_manager.open_file(file)
+                    if not success:
+                        if error is None:
+                            error = f"PSGReader could not open file: {file}"
+                        WarningDialog(f"Could not validate sleep stages for file {file}.\n{error}")
+                        return False
+
+                    sleep_stages = self._psg_reader_manager.get_sleep_stages()
+                    self._psg_reader_manager.close_file()
+                    if sleep_stages is not None and 'name' in sleep_stages.columns:
+                        if (sleep_stages['name'] == '4').any():
+                            WarningDialog(f"Sleep stage 'N4' detected in annotation file {file}. It will be converted to 'N3' automatically.")
         else:
             WarningDialog(f"Add files before running the pipeline.")
             return False
@@ -1019,7 +1084,9 @@ class PSGReaderSettingsView( BaseSettingsView,  Ui_PSGReaderSettingsView, QtWidg
                     information_dict = eval(information_read)
                     if 'files' in information_dict:
                         files = information_dict['files']
-                        self.load_files_from_data(files)
+                        if not self.load_files_from_data(files):
+                            self._close_loading_dialog()
+                            return
 
                         # Get the list of alias if any
                         alias = self.get_alias()
@@ -1146,27 +1213,23 @@ class PSGReaderSettingsView( BaseSettingsView,  Ui_PSGReaderSettingsView, QtWidg
             self._pub_sub_manager.publish(self, self._alias_topic, 'ping')
 
 
-    def load_file_info(self, filename):
+    def load_file_info(self, filename, show_error_dialog=True):
         """ Function to read the file, init the table montage model, the channel model and self.files_details.
 
             self.files_details[filename] = 
                 'event_groups':event_groups,
         """
-        error = None
-        output = self._psg_reader_manager.open_file(filename)
-        if isinstance(output, tuple) and len(output) == 2:
-            success, error = output
-        else:
-            success = output
+        success, error = self._psg_reader_manager.open_file(filename)
         if not success:
-            msg = QtWidgets.QMessageBox()
-            msg.setIcon(QtWidgets.QMessageBox.Critical)
-            if error is not None:
-                msg.setText(error)
-            else:
-                msg.setText(f"Could not open the PSG or the accessory file. The format is not valid for {filename}")
-            msg.setWindowTitle("File load error")
-            msg.exec()
+            if show_error_dialog:
+                msg = QtWidgets.QMessageBox()
+                msg.setIcon(QtWidgets.QMessageBox.Critical)
+                if error is not None:
+                    msg.setText(error)
+                else:
+                    msg.setText(f"Could not open the PSG or the accessory file. The format is not valid for {filename}")
+                msg.setWindowTitle("File load error")
+                msg.exec()
             return False
 
         if self._options['file_selection_only']['value'] == "0":
@@ -1270,7 +1333,7 @@ class PSGReaderSettingsView( BaseSettingsView,  Ui_PSGReaderSettingsView, QtWidg
         if isinstance(file_item, QtGui.QStandardItem):
             return files_model.indexFromItem(file_item)
         else:
-            return []
+            return QtCore.QModelIndex()
 
 
     # Return the item of a filename
@@ -1280,7 +1343,7 @@ class PSGReaderSettingsView( BaseSettingsView,  Ui_PSGReaderSettingsView, QtWidg
             if len(file_item)>0:
                 return file_item[0]
             else:
-                return file_item
+                return None
         else:
             return None
 

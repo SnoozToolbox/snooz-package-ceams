@@ -6,7 +6,7 @@
     "item_author": "CEAMS",
     "item_description": "Tool to remove and rename annotations.",
     "tool_params": {
-        "tool_version": "2.2.0",
+        "tool_version": "2.3.0",
         "tool_label": "Edit Annotations",
         "tool_category": "1-Preprocessing",
         "asset_directory": "",

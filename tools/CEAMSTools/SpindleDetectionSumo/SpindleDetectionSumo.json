@@ -9,7 +9,7 @@
         "tool_author": "",
         "tool_url": "",
         "tool_description": "Spindle detection using SUMO",
-        "tool_version": "2.8.0",
+        "tool_version": "2.9.0",
         "package_name": "CEAMSTools",
         "steps": [
             {

@@ -64,12 +64,12 @@ class TemporalLinkStep( BaseStepView,  Ui_TemporalLinkStep, QtWidgets.QWidget):
             model = self.file_tableview.model()
             for filename, reports in message.items():
                 file_item = model.get_file_item_by_name(filename)
-                
-                for report in reports:
-                    for temporal_link in file_item.temporal_links_model.temporal_links:
-                        if temporal_link[1] == report[1] and \
-                            temporal_link[2] == report[2]:
-                            temporal_link[0] = report[0]
+                if file_item is not None:
+                    for report in reports:
+                        for temporal_link in file_item.temporal_links_model.temporal_links:
+                            if temporal_link[1] == report[1] and \
+                                temporal_link[2] == report[2]:
+                                temporal_link[0] = report[0]
             model.update_reports_count()
             self._update_context()
 

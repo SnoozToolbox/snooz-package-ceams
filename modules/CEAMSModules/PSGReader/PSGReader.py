@@ -143,12 +143,7 @@ class PSGReader(SciNode):
                 f"PSGReader file not found:{filename}")
 
         # Try to open the file
-        error = None
-        output = self._psg_reader_manager.open_file(filename)
-        if isinstance(output, tuple) and len(output) == 2:
-            success, error = output
-        else:
-            success = output
+        success, error = self._psg_reader_manager.open_file(filename)
         if not success:
             if error is None:
                 error = f"PSGReader could not open file:{filename}"

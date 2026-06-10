@@ -6,7 +6,7 @@
     "item_author": "",
     "item_description": "Detect artifacts.",
     "tool_params": {
-        "tool_version": "2.6.0",
+        "tool_version": "2.7.0",
         "tool_label": "Detect EEG Artifacts",
         "tool_category": "1-Preprocessing",
         "asset_directory": "",

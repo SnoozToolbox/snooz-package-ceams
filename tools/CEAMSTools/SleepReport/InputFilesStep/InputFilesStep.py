@@ -6,9 +6,10 @@ See the file LICENCE for full license details.
     InputFilesStep
     TODO CLASS DESCRIPTION
 """
-import os
-import sys
 from datetime import datetime, timedelta
+import os
+import pandas as pd
+import sys
 from qtpy import QtWidgets, QtCore, QtGui
 from qtpy.QtCore import QDateTime
 
@@ -19,6 +20,7 @@ from CEAMSModules.PSGReader.PSGReaderManager import PSGReaderManager
 from CEAMSTools.SleepReport.Commons import ContextConstants
 from CEAMSTools.SleepReport.Commons.SleepReportModel import SleepReportModel
 from CEAMSTools.SleepReport.InputFilesStep.Ui_InputFilesStep import Ui_InputFilesStep
+from widgets.TableDialog import TableDialog
 from widgets.WarningDialog import WarningDialog
 
 class InputFilesStep( BaseStepView,  Ui_InputFilesStep, QtWidgets.QWidget):
@@ -128,8 +130,11 @@ class InputFilesStep( BaseStepView,  Ui_InputFilesStep, QtWidgets.QWidget):
         """
         if topic == self._psg_reader_files_topic:
             # message is a dict and the keys are the filenames
+            removed_files = []
             for filename in message.keys():
-                self._add_file(filename)
+                removed_files = self._add_file(filename, removed_files=removed_files)
+            if len(removed_files) > 0:
+                self._show_batch_load_warnings(removed_files, title="Some files were not loaded")
         if topic == self._dict_subject_info_topic:
             # message is a dict and the keys are the filenames
             model = self.file_tableview.model()
@@ -226,28 +231,33 @@ class InputFilesStep( BaseStepView,  Ui_InputFilesStep, QtWidgets.QWidget):
         id_data['waistline_unit'] = self.waistline_unit_combobox.currentText()
 
 
-    def _add_file(self, filename):
+    def _add_file(self, filename, removed_files=None):
         file_item = self._model.get_file_item_by_name(filename)
 
         if file_item is None:
-            success = self._psg_reader_manager.open_file(filename)
+            success, error = self._psg_reader_manager.open_file(filename)
+
             if not success:
-                msg = QtWidgets.QMessageBox()
-                msg.setIcon(QtWidgets.QMessageBox.Critical)
-                msg.setText("Could not open file")
-                msg.setInformativeText("Format is not compatible.")
-                msg.setWindowTitle("Error loading file")
-                msg.exec()
-                return
+                if removed_files is not None:
+                    removed_files.append(f"{filename}: ({error})")
+                    return removed_files
+                else: # single add from file dialog, show error message box
+                    WarningDialog(f"Could not open file:{filename}")
+                    return
             id_data = self._psg_reader_manager.get_subject_info()
             events_data = self._psg_reader_manager.get_events()
             sleep_stages = self._psg_reader_manager.get_sleep_stages()
 
             if len(sleep_stages) == 0 or len(sleep_stages[sleep_stages["name"] != "9"]) == 0:
-                WarningDialog(f"This file has not been scored and will be not added:{filename}")
+                if removed_files is not None:
+                    removed_files.append(f"{filename} (not scored)")
+                    return removed_files
+                else: # single add from file dialog, show warning message box
+                    WarningDialog(f"This file has not been scored and will be not added:{filename}")
             else:
                 self._model.add_file(filename, id_data, events_data)
                 self.file_tableview.resizeColumnsToContents()
+        return removed_files
 
 
     def on_add_files(self):
@@ -333,3 +343,29 @@ class InputFilesStep( BaseStepView,  Ui_InputFilesStep, QtWidgets.QWidget):
     def get_current_filename(self):
         ind = self.file_tableview.currentIndex()
         return 
+
+
+    def _show_batch_load_warnings(self, removed_files, title="Workspace loaded partially"):
+        if len(removed_files) == 0:
+            return
+
+        rows = []
+        for detail in removed_files:
+            if detail.endswith(")") and " (" in detail:
+                file_path, reason = detail.rsplit(" (", 1)
+                rows.append({
+                    "Filename": os.path.basename(file_path),
+                    "Path": file_path,
+                    "Reason": reason[:-1]
+                })
+            else:
+                rows.append({
+                    "Filename": os.path.basename(detail),
+                    "Path": detail,
+                    "Reason": "unknown"
+                })
+
+        details_df = pd.DataFrame(rows, columns=["Filename", "Path", "Reason"])
+        message = f"{len(removed_files)} file(s) were skipped while loading."
+        table_dialog_msg = TableDialog(df=details_df, title=title, message=message, showDownloadButton=True)
+        table_dialog_msg.exec_()
