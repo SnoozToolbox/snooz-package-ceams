@@ -189,6 +189,14 @@ def shape_valid_bsl_as_act_win( detection_win_activity, win_len, win_step, \
 
     nwindows = len(detection_win_activity)
 
+    # If there is not enough baseline window to compute the stats, return NaN for all windows
+    if nbaseline_win < 3 or nwindows < 3:
+        if median_use:
+            # Median activity of the baseline window.
+            return np.full(nwindows, np.nan)
+        # Mean and standard deviation of the baseline activity.
+        return np.vstack((np.full(nwindows, np.nan), np.full(nwindows, np.nan)))
+
     if VERBOSE:
         start_time_bsl = time.time()
 
