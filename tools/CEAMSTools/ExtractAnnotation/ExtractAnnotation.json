@@ -6,7 +6,7 @@
     "item_author": "Karine Lacourse",
     "item_description": "To extract annotations from EDF(.tsv), Natus(.ent) or Stellate(.sts) and write them in a .tsv file.",
     "tool_params": {
-        "tool_version": "2.2.0",
+        "tool_version": "2.3.0",
         "tool_label": "Extract Snooz Annotations",
         "tool_category": "1-Preprocessing",
         "asset_directory": "",
