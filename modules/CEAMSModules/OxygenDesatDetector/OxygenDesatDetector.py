@@ -375,7 +375,7 @@ class OxygenDesatDetector(SciNode):
             # 'desaturation_drop_percent' : 'Drop level (%) for the oxygen desaturation "3 or 4"',
             # 'max_slope_drop_sec' : 'The maximum duration (s) during which the oxygen level is dropping "180 or 20"',
             # 'min_hold_drop_sec' : 'Minimum duration (s) during which the oxygen level drop is maintained "10 or 5"',
-        desat_df, plateau_df, data_lpf_list, data_hpf_list, data_dev_list, lmax_indices_list, lmin_indices_list = \
+        desat_df, plateau_df, data_lpf_list, data_dev_list, lmax_indices_list, lmin_indices_list = \
             self.detect_desaturation_ABOSA(data_starts, data_clean, fs_chan, channel, parameters_oxy)
         
         # Detect recovery
@@ -420,7 +420,6 @@ class OxygenDesatDetector(SciNode):
                 signal_raw = signals[index_longuest].clone(clone_samples=False)
                 signal_lpf = signals[index_longuest].clone(clone_samples=False)
                 signal_hpf = signals[index_longuest].clone(clone_samples=False)
-                #signal_squared = signals[index_longuest].clone(clone_samples=False)
                 signal_raw.samples = data_stats[index_longuest]
                 signal_raw.start_time = data_starts[index_longuest]
                 signal_lpf.samples = data_lpf_list[index_longuest]
@@ -1199,7 +1198,6 @@ class OxygenDesatDetector(SciNode):
             https://doi.org/10.1016/j.cmpb.2022.107120
         """   
         data_lpf_list = []
-        data_hpf_list = []
         data_dev_list = []
         all_desat_events = []
         plateau_lst = []
@@ -1368,7 +1366,6 @@ class OxygenDesatDetector(SciNode):
 
             # Useful to detect recovery events later
             data_lpf_list.append(signal_lpf)
-            data_hpf_list.append(signal_squared)
             data_dev_list.append(signal_derivative)
 
         # Resolve overlapping desaturations by keeping events with steepest fall rate
@@ -1409,7 +1406,7 @@ class OxygenDesatDetector(SciNode):
         desat_df['area_percent_sec'] = desat_areas
         plateau_df = manage_events.create_event_dataframe(data=plateau_events)
   
-        return desat_df, plateau_df, data_lpf_list, data_hpf_list, data_dev_list, lmax_indices_list, lmin_indices_list
+        return desat_df, plateau_df, data_lpf_list, data_dev_list, lmax_indices_list, lmin_indices_list
 
 
     def detect_recovery_ABOSA(self, desat_df, data_starts, data_stats, data_lpf_list, data_dev_list, fs_chan, channel, parameters_oxy):
