@@ -265,29 +265,33 @@ class EventCombine(SciNode):
                 'events': ''
             } 
 
-        if isinstance(channel2_name, list):
-            if len(channel2_name)==0:
-                channel2_name = ''
-            elif len(channel2_name)>1:
-                err_message = "channel2_name should have only one channel, only the first one is taken {}".format(channel2_name[0])
-                self._log_manager.log(self.identifier, err_message)
-                channel2_name = channel2_name[0]
-            else:
-                channel2_name = channel2_name[0]
-
-        # If the user wants to filter for a specific channel only
-        if isinstance(channel1_name, str) and len(channel1_name)>0:
-            channel_lst = [channel1_name]
+        # Normalize channel filters to lists.
+        if isinstance(channel1_name, str):
+            channel1_filter = [channel1_name] if len(channel1_name)>0 else []
         elif isinstance(channel1_name, list):
-            channel_lst = channel1_name
-        # Channels are not filtered in events1
-        elif isinstance(events2, pd.DataFrame):
-            channel2_lst = pd.unique(events2_chan.channels)
-            # Create the master list of unique channels
-            channel_lst = [item for sublist in [channel1_lst,channel2_lst] for item in sublist]
-            channel_lst = list(set(channel_lst))
+            channel1_filter = [chan for chan in channel1_name if len(chan)>0]
         else:
-            channel_lst = channel1_lst
+            channel1_filter = []
+
+        if isinstance(channel2_name, str):
+            channel2_filter = [channel2_name] if len(channel2_name)>0 else []
+        elif isinstance(channel2_name, list):
+            channel2_filter = [chan for chan in channel2_name if len(chan)>0]
+        else:
+            channel2_filter = []
+
+        # If the user wants to filter for specific channels, keep all selected channels.
+        if len(channel1_filter)>0:
+            events1_chan = events1_chan[events1_chan['channels'].isin(channel1_filter)]
+            events1_chan.reset_index(inplace=True, drop=True)
+
+        if isinstance(events2, pd.DataFrame) and len(channel2_filter)>0:
+            events2_chan = events2_chan[events2_chan['channels'].isin(channel2_filter)]
+            events2_chan.reset_index(inplace=True, drop=True)
+
+        # Combine per channel from events1 only.
+        # events2 is independently filtered by event2_name/channel2_name, then matched on i_chan below.
+        channel_lst = pd.unique(events1_chan.channels)
 
         # Loop accross all channels
         events_df = manage_events.create_event_dataframe(None)
@@ -298,9 +302,10 @@ class EventCombine(SciNode):
             events1_chan_cur.reset_index(inplace=True, drop=True)
 
             if isinstance(events2, pd.DataFrame):
-                # If the user wants to filter for a specific event name           
-                if len(channel2_name)>0:
-                    events2_chan_cur = events2_chan[events2_chan['channels']==channel2_name]
+                # When channel2_filter is provided, use all selected channels from events2.
+                # Otherwise, match events2 on the current events1 channel.
+                if len(channel2_filter)>0:
+                    events2_chan_cur = events2_chan
                 else:
                     events2_chan_cur = events2_chan[events2_chan['channels']==i_chan]
                 # Reset index of the events

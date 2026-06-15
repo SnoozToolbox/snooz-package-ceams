@@ -6,7 +6,7 @@
     "item_author": "Karine Lacourse",
     "item_description": "To convert the XML (Compumedics format) to Snooz accessory tsv file.",
     "tool_params": {
-        "tool_version": "2.2.0",
+        "tool_version": "2.3.0",
         "tool_label": "Convert Annotations from XML",
         "tool_category": "1-Preprocessing",
         "asset_directory": "",
