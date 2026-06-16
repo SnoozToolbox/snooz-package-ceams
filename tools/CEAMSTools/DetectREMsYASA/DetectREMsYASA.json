@@ -20,7 +20,7 @@
                     "label": "More information and sleep cycles setting:",
                     "list": [
                         {
-                            "name": "Algorithm's Detatils",
+                            "name": "Algorithm's Details",
                             "description": "Explain more details of the YASA algorithm.",
                             "custom_step_name": "AlgorithmDetail"
                         },
