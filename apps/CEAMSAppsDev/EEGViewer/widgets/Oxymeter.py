@@ -196,11 +196,11 @@ class Oxymeter(QWidget, Ui_Oxymeter):
             return
 
         psg_reader_manager = PSGReaderManager()
-        success = psg_reader_manager.open_file(self._current_filename)
+        success, error = psg_reader_manager.open_file(self._current_filename)
         if not success:
             log_msg = QMessageBox()
             log_msg.setWindowTitle("Error")
-            log_msg.setText(f"Could not save file {self._current_filename}")
+            log_msg.setText(error if error is not None else f"Could not save file {self._current_filename}")
             log_msg.setIcon(QMessageBox.Critical)
             log_msg.exec_()
 

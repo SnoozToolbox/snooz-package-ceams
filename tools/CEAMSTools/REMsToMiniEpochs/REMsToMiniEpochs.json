@@ -9,7 +9,7 @@
         "tool_author": "CEAMS",
         "tool_url": "",
         "tool_description": "To Classify REMs into Phasic/Tonic States from EOG",
-        "tool_version": "0.0.0",
+        "tool_version": "0.1.0",
         "package_name": "CEAMSTools",
         "steps": [
             {

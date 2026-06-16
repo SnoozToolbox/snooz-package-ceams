@@ -65,7 +65,7 @@
         {
             "item_name": "DetectREMsYASA",
             "item_type": "tool",
-            "item_version": "3.3.0",
+            "item_version": "3.4.0",
             "item_hooks": [
                 {
                     "endpoint_name": "menu_endpoint",
@@ -79,7 +79,7 @@
         {
             "item_name": "EditAnnotations",
             "item_type": "tool",
-            "item_version": "2.2.0",
+            "item_version": "2.3.0",
             "item_hooks": [
                 {
                     "endpoint_name": "menu_endpoint",
@@ -177,7 +177,7 @@
         {
             "item_name": "ScoreSleepStagesYASA",
             "item_type": "tool",
-            "item_version": "2.3.0",
+            "item_version": "2.4.0",
             "item_hooks": [
                 {
                     "endpoint_name": "menu_endpoint",
@@ -205,7 +205,7 @@
         {
             "item_name": "AnalyzeEEGConnectivity",
             "item_type": "tool",
-            "item_version": "2.4.0",
+            "item_version": "2.5.0",
             "item_hooks": [
                 {
                     "endpoint_name": "menu_endpoint",
@@ -219,7 +219,7 @@
         {
             "item_name": "PowerSpectralAnalysis",
             "item_type": "tool",
-            "item_version": "3.0.0",
+            "item_version": "3.1.0",
             "item_hooks": [
                 {
                     "endpoint_name": "menu_endpoint",
@@ -233,7 +233,7 @@
         {
             "item_name": "REMsToMiniEpochs",
             "item_type": "tool",
-            "item_version": "0.0.0",
+            "item_version": "0.1.0",
             "item_hooks": [
                 {
                     "endpoint_name": "menu_endpoint",
@@ -345,7 +345,7 @@
         {
             "item_name": "SleepReport",
             "item_type": "tool",
-            "item_version": "2.6.0",
+            "item_version": "2.7.0",
             "item_hooks": [
                 {
                     "endpoint_name": "menu_endpoint",
@@ -429,7 +429,7 @@
         {
             "item_name": "SlowWaveImages",
             "item_type": "tool",
-            "item_version": "2.3.0",
+            "item_version": "2.4.0",
             "item_hooks": [
                 {
                     "endpoint_name": "menu_endpoint",

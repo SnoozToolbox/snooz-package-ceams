@@ -32,6 +32,7 @@ from qtpy import QtWidgets
 from commons.CheckBoxDelegate import CheckBoxDelegate
 from commons.BaseStepView import BaseStepView
 from widgets.WarningDialog import WarningDialog
+from widgets.TableDialog import TableDialog
 
 from CEAMSModules.PSGReader.PSGReaderManager import PSGReaderManager
 from CEAMSModules.PSGReader.MontagesTableModel import MontagesTableModel
@@ -136,7 +137,7 @@ class InputFilesStep( BaseStepView,  Ui_InputFilesStep, QtWidgets.QWidget):
         for filename in data:
             # Check if the file exist
             if not os.path.isfile(filename):
-                removed_files.append(filename)
+                removed_files.append(f"{filename} (missing file)")
                 continue
 
             self.files_details[filename] = {
@@ -146,6 +147,10 @@ class InputFilesStep( BaseStepView,  Ui_InputFilesStep, QtWidgets.QWidget):
             
             # tree item : parent=file, child=group and count, child=name and count
             item, item_stages = self.create_file_item_count(filename)
+            if item is None or item_stages is None:
+                removed_files.append(f"{filename} (could not read file)")
+                self.files_details.pop(filename, None)
+                continue
             self.files_model.appendRow(item) 
             self.files_stages_model.appendRow(item_stages) 
 
@@ -181,16 +186,7 @@ class InputFilesStep( BaseStepView,  Ui_InputFilesStep, QtWidgets.QWidget):
                     }
                     self.channels_table_model._data = pd.concat([self.channels_table_model._data,pd.DataFrame(data=channel_dict, index=[0])], ignore_index=True)
 
-        if len(removed_files) > 0:
-            error_message = "These files were removed from the selection because they could not be found:\n"
-            for filepath in removed_files:
-                error_message = error_message + filepath + "\n"
-
-            msg = QtWidgets.QMessageBox()
-            msg.setIcon(QtWidgets.QMessageBox.Critical)
-            msg.setText(error_message)
-            msg.setWindowTitle("File not found")
-            msg.exec()
+        self._show_batch_load_warnings(removed_files, title="Workspace loaded partially")
 
 
         # Invalide the models so it refreshes the UI
@@ -226,6 +222,32 @@ class InputFilesStep( BaseStepView,  Ui_InputFilesStep, QtWidgets.QWidget):
         files_model.setHeaderData(1, QtCore.Qt.Horizontal, 'Original label')
         files_model.setHorizontalHeaderLabels(['Group-Name', 'Original label'])
         return files_model
+
+
+    def _show_batch_load_warnings(self, removed_files, title="Workspace loaded partially"):
+        if len(removed_files) == 0:
+            return
+
+        rows = []
+        for detail in removed_files:
+            if detail.endswith(")") and " (" in detail:
+                file_path, reason = detail.rsplit(" (", 1)
+                rows.append({
+                    "Filename": os.path.basename(file_path),
+                    "Path": file_path,
+                    "Reason": reason[:-1]
+                })
+            else:
+                rows.append({
+                    "Filename": os.path.basename(detail),
+                    "Path": detail,
+                    "Reason": "unknown"
+                })
+
+        details_df = pd.DataFrame(rows, columns=["Filename", "Path", "Reason"])
+        message = f"{len(removed_files)} file(s) were skipped while loading."
+        table_dialog_msg = TableDialog(df=details_df, title=title, message=message, showDownloadButton=True)
+        table_dialog_msg.exec_()
 
 
     def init_montage_table_model(self):
@@ -268,6 +290,7 @@ class InputFilesStep( BaseStepView,  Ui_InputFilesStep, QtWidgets.QWidget):
 
         if dlg.exec_():
             filenames = dlg.selectedFiles()
+            removed_files = []
 
             # Add a QProgressDialog to show the progression bar
             n_files = len(filenames)
@@ -286,10 +309,15 @@ class InputFilesStep( BaseStepView,  Ui_InputFilesStep, QtWidgets.QWidget):
                     if success:
                         # tree item : parent=file, child=group and count, child=name and count
                         item, item_stages = self.create_file_item_count(filename) # The file is read
+                        if item is None or item_stages is None:
+                            removed_files.append(f"{filename} (could not read metadata)")
+                            continue
                         self.files_model.setColumnCount(2)
                         self.files_model.appendRow(item)  
                         self.files_stages_model.setColumnCount(2)
                         self.files_stages_model.appendRow(item_stages)  
+                    else:
+                        removed_files.append(f"{filename} (could not open file)")
 
             progress.setValue(n_files)
             progress.close()
@@ -298,6 +326,7 @@ class InputFilesStep( BaseStepView,  Ui_InputFilesStep, QtWidgets.QWidget):
             self.label_PSG.setText(f"PSG files ({self.files_model.rowCount()})")
             # To inform that self.files_model has been updated
             self._context_manager[self.context_files_view] = self
+            self._show_batch_load_warnings(removed_files, title="File load completed with warnings")
 
         for i in range(self.files_model.columnCount()):
             self.events_treeView.hideColumn(i)
@@ -617,6 +646,7 @@ class InputFilesStep( BaseStepView,  Ui_InputFilesStep, QtWidgets.QWidget):
 
         if file_dialog.exec():
             folders = file_dialog.selectedFiles()
+            removed_files = []
 
             # Add a QProgressDialog to show the progression bar
             n_files = len(folders)
@@ -646,10 +676,15 @@ class InputFilesStep( BaseStepView,  Ui_InputFilesStep, QtWidgets.QWidget):
                             if success:
                                 # tree item : parent=file, child=group and count, child=name and count
                                 item, item_stages = self.create_file_item_count(filename) # The file is read
+                                if item is None or item_stages is None:
+                                    removed_files.append(f"{filename} (could not read metadata)")
+                                    continue
                                 self.files_model.setColumnCount(2)
                                 self.files_model.appendRow(item)    
                                 self.files_stages_model.setColumnCount(2)
-                                self.files_stages_model.appendRow(item_stages)    
+                                self.files_stages_model.appendRow(item_stages)
+                            else:
+                                removed_files.append(f"{filename} (could not open file)")
                         else:
                             #TODO Log empty folders
                             # Couldnt find PSG file in folder:{folder}
@@ -663,6 +698,7 @@ class InputFilesStep( BaseStepView,  Ui_InputFilesStep, QtWidgets.QWidget):
             self.label_PSG.setText(f"PSG files ({self.files_model.rowCount()})")
             # To inform that self.files_model has been updated
             self._context_manager[self.context_files_view] = self
+            self._show_batch_load_warnings(removed_files, title="File load completed with warnings")
     
     
     # Called when the user press on Remove push button
@@ -732,7 +768,7 @@ class InputFilesStep( BaseStepView,  Ui_InputFilesStep, QtWidgets.QWidget):
                     WarningDialog(f"At least one recording has no channel selected, check the channel selection of the file : {file}.")
                     return False
                 # Check for sleep stage 4 in annotations and warn user
-                success = self._psg_reader_manager.open_file(file)
+                success, _ = self._psg_reader_manager.open_file(file)
                 if success:
                     sleep_stages = self._psg_reader_manager.get_sleep_stages()
                     if sleep_stages is not None and 'name' in sleep_stages.columns:
@@ -993,12 +1029,7 @@ class InputFilesStep( BaseStepView,  Ui_InputFilesStep, QtWidgets.QWidget):
             self.files_details[filename] = 
                 'event_groups':event_groups,
         """
-        error = None
-        output = self._psg_reader_manager.open_file(filename)
-        if isinstance(output, tuple) and len(output) == 2:
-            success, error = output
-        else:
-            success = output
+        success, error = self._psg_reader_manager.open_file(filename)
         if not success:
             msg = QtWidgets.QMessageBox()
             msg.setIcon(QtWidgets.QMessageBox.Critical)

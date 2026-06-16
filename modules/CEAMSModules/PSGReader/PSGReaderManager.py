@@ -110,13 +110,14 @@ class PSGReaderManager:
             success, error = output
         else:
             success = output
+            error = None
         if not success:
             if error is None:
                 error = f'ERROR PSGReaderManager could not open file:{filename}'
             return False, error
 
         self.current_filename = filename
-        return True
+        return True, None
 
 
     def copy_file(self, source_filename, dest_filename):

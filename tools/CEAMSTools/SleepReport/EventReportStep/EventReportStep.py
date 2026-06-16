@@ -320,7 +320,9 @@ class EventReportStep( BaseStepView,  Ui_EventReportStep, QtWidgets.QWidget):
         '''Add a report to group or event for a file '''
         # Get file_item by filename
         file_item = self._get_file_item_by_filename(filename)
-
+        if file_item is None:
+            return False
+        
         # Find the report model for the group_name/event_name combinaison
         events_model = file_item.events_model
         group_item = events_model.find_group_by_name(group_name)
