@@ -211,7 +211,7 @@
                     "endpoint_name": "menu_endpoint",
                     "parameters": {
                         "menu_category": "2-Processing",
-                        "menu_label": "Analyze EEG Connectivity"
+                        "menu_label": "Analyze EEG Functional Connectivity"
                     }
                 }
             ]
