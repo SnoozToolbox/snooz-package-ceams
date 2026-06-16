@@ -169,6 +169,10 @@ class EventSubdivision(SciNode):
             duration_times = events.loc[events['name'].isin(event_name), 'duration_sec'].to_numpy()
             df = events.loc[events['name'].isin(event_name)].reset_index(drop=True).copy()
             new_events = events.loc[events['name'].isin(event_name)].reset_index(drop=True).copy()
+
+        # Ignore tiny floating-point residues such as 29.99345 when the
+        # duration is effectively meant to be a whole number of seconds.
+        duration_times = np.round(duration_times).astype(int)
         
         if int(n_window)<= 1:
             # Check if window_sec is a divider of windows lenght
