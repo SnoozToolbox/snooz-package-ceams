@@ -15,15 +15,15 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QFont, QFontDatabase, QGradient, QIcon,
     QImage, QKeySequence, QLinearGradient, QPainter,
     QPalette, QPixmap, QRadialGradient, QTransform)
-from PySide6.QtWidgets import (QApplication, QFrame, QSizePolicy, QSpacerItem,
-    QTextEdit, QVBoxLayout, QWidget)
+from PySide6.QtWidgets import (QApplication, QFrame, QSizePolicy, QTextEdit,
+    QVBoxLayout, QWidget)
 import themes_rc
 
 class Ui_IntroStep(object):
     def setupUi(self, IntroStep):
         if not IntroStep.objectName():
             IntroStep.setObjectName(u"IntroStep")
-        IntroStep.resize(726, 582)
+        IntroStep.resize(832, 429)
         IntroStep.setStyleSheet(u"font: 10pt \"Roboto-Regular\";")
         self.verticalLayout = QVBoxLayout(IntroStep)
         self.verticalLayout.setSpacing(25)
@@ -45,10 +45,6 @@ class Ui_IntroStep(object):
 
         self.verticalLayout_2.addWidget(self.textEdit)
 
-        self.verticalSpacer = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
-
-        self.verticalLayout_2.addItem(self.verticalSpacer)
-
 
         self.verticalLayout.addLayout(self.verticalLayout_2)
 
@@ -67,9 +63,18 @@ class Ui_IntroStep(object):
 "li.unchecked::marker { content: \"\\2610\"; }\n"
 "li.checked::marker { content: \"\\2612\"; }\n"
 "</style></head><body style=\" font-family:'Roboto-Regular'; font-size:10pt; font-weight:400; font-style:normal;\">\n"
-"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:12pt;\">This tool classifies REM sleep into phasic and tonic mini-epochs based on previously detected Rapid Eye Movement events stored in the annotation file using EOG signal.</span></p>\n"
-"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:12pt; font-weight:700;\">Tonic "
-                        "REM</span><span style=\" font-size:12pt;\"> corresponds to more stable REM activity with minimal eye movements and lower physiological variability, whereas </span><span style=\" font-size:12pt; font-weight:700;\">phasic REM</span><span style=\" font-size:12pt;\"> is characterized by bursts of rapid eye movements, transient muscle activity, and increased neural and autonomic activation. This separation enables more detailed investigation of REM sleep dynamics and related biomarkers.</span></p>\n"
-"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:12pt;\">Configurable mini-epoch lengths (e.g., 3, 5, or 10 s) enable finer characterization of REM microstructure by capturing brief phasic bursts and separating tonic and phasic activity within standard 30-s REM epochs.</span></p></body></html>", None))
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:12pt; font-weight:700;\">Classify REMs into Phasic/Tonic States</span></p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:12pt;\"><br /></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0p"
+                        "x;\"><span style=\" font-size:12pt;\">This tool classifies REM sleep mini-epochs as phasic or tonic using only the Rapid Eye Movement (REM) events previously detected from the EOG signal and stored in the annotation file. </span></p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:12pt;\"><br /></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:12pt;\">The classification is entirely based on these existing REM detections.</span></p>\n"
+"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:12pt; font-weight:700;\">General definition</span></p>\n"
+"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:12pt; text-deco"
+                        "ration: underline;\">Tonic REM</span><span style=\" font-size:12pt;\"> corresponds to more stable REM activity with minimal eye movements and lower physiological variability.</span></p>\n"
+"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:12pt; text-decoration: underline;\">Phasic REM</span><span style=\" font-size:12pt;\"> is characterized by bursts of rapid eye movements, transient muscle activity, and increased neural and autonomic activation. This separation enables more detailed investigation of REM sleep dynamics and related biomarkers.</span></p>\n"
+"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:12pt; font-weight:700;\">Configurable mini-epoch lengths</span></p>\n"
+"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font"
+                        "-size:12pt;\">Configurable mini-epoch lengths (e.g., 3, 5, or 10 s) enable finer characterization of REM microstructure by capturing brief phasic bursts and separating tonic and phasic activity within standard 30-s REM epochs.</span></p></body></html>", None))
     # retranslateUi
 
