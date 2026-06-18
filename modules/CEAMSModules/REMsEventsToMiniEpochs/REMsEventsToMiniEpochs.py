@@ -116,6 +116,7 @@ class REMsEventsToMiniEpochs(SciNode):
                 f"REMsEventsToMiniEpochs this input is expected to be a dictionary and not {type(parameters)}.")
 
         # By defaul all the epochs_to_proceed are considered as NO_DET
+        epochs_to_proceed['channels'] = REMs_events['channels'].iloc[0]
         mini_epochs_events = epochs_to_proceed
         mini_epochs_events['name'] = parameters["mini_epoch_name_Tonic"]
         # Change the group value for det_MOR_3s
