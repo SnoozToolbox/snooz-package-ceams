@@ -6,7 +6,7 @@
     "item_author": "",
     "item_description": "",
     "tool_params": {
-        "tool_version": "2.7.0",
+        "tool_version": "2.8.0",
         "tool_label": "Detect Slow Waves",
         "tool_category": "2-Processing",
         "asset_directory": "",

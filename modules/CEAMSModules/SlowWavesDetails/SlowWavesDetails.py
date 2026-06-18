@@ -509,8 +509,8 @@ class SlowWavesDetails(SciNode):
 
         # Extract characteristics to average
         sw_cur_chan_tot = sw_cur_chan_sort[self.sw_characteristics]
-        # Format the sw_cur_chan_stage dataframe values into float
-        sw_cur_chan_tot = sw_cur_chan_tot.applymap(float)        
+        # Keep numeric dtypes even when no row is present so total keys are still generated.
+        sw_cur_chan_tot = sw_cur_chan_tot.astype(float)
         mean_char_series = sw_cur_chan_tot.mean(axis=0, skipna=True, numeric_only=True)
         mean_char_series = mean_char_series.round(decimals=2)
         mean_char_tot = mean_char_series.to_dict()
@@ -537,7 +537,7 @@ class SlowWavesDetails(SciNode):
                     sw_cur_chan_stage = pd.concat([sw_cur_chan_stage, sw_cur_chan_sub_stage])
             sw_cur_chan_stage = sw_cur_chan_stage[self.sw_characteristics]
             # Format the sw_cur_chan_stage dataframe values into float
-            sw_cur_chan_stage = sw_cur_chan_stage.applymap(float)
+            sw_cur_chan_stage = sw_cur_chan_stage.astype(float)
             # Compute the number of detection per stage
             n_sw = len(sw_cur_chan_stage)
             sw_count_stage[f'{label_stats}_{stage}_sw_count'] = n_sw
@@ -626,7 +626,7 @@ class SlowWavesDetails(SciNode):
             # Extract characteristics to average
             sw_sel_to_mean = sw_sel_df[self.sw_characteristics]
             # Format the sw_cur_chan_stage dataframe values into float
-            sw_sel_to_mean = sw_sel_to_mean.applymap(float)
+            sw_sel_to_mean = sw_sel_to_mean.astype(float)
 
             if len(cycle_durations)>i_cycle:
                 # Compute duration (min)
@@ -679,7 +679,7 @@ class SlowWavesDetails(SciNode):
 
                 sw_cur_to_mean = sw_cur_chan_stage[self.sw_characteristics]
                 # Format the sw_cur_chan_stage dataframe values into float
-                sw_cur_to_mean = sw_cur_to_mean.applymap(float)
+                sw_cur_to_mean = sw_cur_to_mean.astype(float)
 
                 # Compute the number of detection per stage
                 n_sw = len(sw_cur_chan_stage)
