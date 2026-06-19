@@ -75,6 +75,10 @@ from CEAMSModules.EventReader import manage_events
 from CEAMSModules.PSGReader.SignalModel import SignalModel
 
 DEBUG = False
+# Filter design selector.
+# False: legacy FIR design (original behavior)
+# True: IIR Butterworth SOS design (faster)
+USE_IIR_FILTER = True
 
 class SlowWaveDetector(SciNode):
     """
@@ -308,6 +312,9 @@ class SlowWaveDetector(SciNode):
         """
         
         fmin_max = [f_min, f_max]
+        # Cache filter coefficients by sampling rate to avoid redesigning per epoch.
+        iir_sos_cache = {}
+        fir_coef_cache = {}
 
         for signal_model in self.reshaped_signals:
             fs = float(signal_model.sample_rate)
@@ -321,22 +328,30 @@ class SlowWaveDetector(SciNode):
                 self.skipped_epochs += 1
                 continue                
 
-            # Filter signal in the frequency range 0.16-4.0 Hz
-            # FIR bandpass filter with Hamming window, -3dB at cutoff frequencies
-            # 2047 taps for fs=256Hz, scaled proportionally for other sampling rates
-            # To goal is to copy the tool "Detection d'oscillations lentes" from CEAMS
-            numtaps = int(fs * 8)
-            # Divide by 2 when using filtfilt (filter applied twice)
-            if zero_phase:
-                numtaps = numtaps // 2
-            # Ensure odd number of taps for Type I FIR bandpass filter
-            if numtaps % 2 == 0:
-                numtaps -= 1
-            fir_coefs = sci.firwin(numtaps, fmin_max, window='hamming', pass_zero=False, fs=fs)
-            if zero_phase:
-                signal_filtre = sci.filtfilt(fir_coefs, [1.0], signal_model.samples)
+            # Select and apply the configured filter design.
+            if USE_IIR_FILTER:
+                # Zero-phase IIR bandpass in SOS form.
+                if fs not in iir_sos_cache:
+                    iir_sos_cache[fs] = self._design_iir_bandpass_sos(fs, fmin_max[0], fmin_max[1])
+                iir_sos = iir_sos_cache[fs]
+                if zero_phase:
+                    signal_filtre = sci.sosfiltfilt(iir_sos, signal_model.samples)
+                else:
+                    signal_filtre = sci.sosfilt(iir_sos, signal_model.samples)
             else:
-                signal_filtre = sci.lfilter(fir_coefs, [1.0], signal_model.samples)
+                # Legacy FIR implementation kept for comparison/regression checks.
+                if fs not in fir_coef_cache:
+                    numtaps = int(fs * 8)
+                    if zero_phase:
+                        numtaps = numtaps // 2
+                    if numtaps % 2 == 0:
+                        numtaps -= 1
+                    fir_coef_cache[fs] = sci.firwin(numtaps, fmin_max, window='hamming', pass_zero=False, fs=fs)
+                fir_coefs = fir_coef_cache[fs]
+                if zero_phase:
+                    signal_filtre = sci.filtfilt(fir_coefs, [1.0], signal_model.samples)
+                else:
+                    signal_filtre = sci.lfilter(fir_coefs, [1.0], signal_model.samples)
 
             # Find zero-crossings
             fa = signal_filtre[1:] # signal delayed by 1 sample
@@ -392,6 +407,42 @@ class SlowWaveDetector(SciNode):
                         data = [event_group, event_name, start_sec, duration_sec, pkpk_amp_uV, -neg_amp_uV, neg_sec, pos_sec, PaP_brut, Neg_brut, mfr, trans_freq_Hz, \
                             slope_0_min, slope_min_max, slope_max_0, signal_model.channel]
                         self.sww_data.append(data)
+
+
+    def _design_iir_bandpass_sos(self, fs, f_min, f_max):
+        """
+        Design an IIR bandpass that approximates the previous FIR behavior.
+
+        The passband remains [f_min, f_max]. Stopbands are set with moderate
+        margins to keep a similar transition profile while limiting order.
+        """
+        nyquist = fs / 2.0
+
+        # Keep frequencies strictly inside (0, nyquist) for IIR design.
+        f_min = max(1e-3, float(f_min))
+        f_max = min(float(f_max), nyquist * 0.99)
+        if f_min >= f_max:
+            raise NodeRuntimeException(self.identifier, "SlowWaveDetector", f"Invalid bandpass limits: f_min={f_min}, f_max={f_max}, fs={fs}")
+
+        # Transition bands chosen to closely match the practical FIR behavior.
+        low_stop = max(1e-4, f_min * 0.75)
+        high_stop = min(nyquist * 0.999, f_max * 1.25)
+
+        # Ensure strict ordering: low_stop < f_min < f_max < high_stop.
+        if low_stop >= f_min:
+            low_stop = f_min * 0.5
+        if high_stop <= f_max:
+            high_stop = min(nyquist * 0.999, f_max + max(0.2, 0.25 * (f_max - f_min)))
+
+        return sci.iirdesign(
+            wp=[f_min, f_max],
+            ws=[low_stop, high_stop],
+            gpass=1,
+            gstop=40,
+            ftype='butter',
+            output='sos',
+            fs=fs,
+        )
 
 
     def reshape_data(self, signals):

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file ''
+## Form generated from reading UI file 'Ui_SignalsFromEventsResultsView.ui'
 ##
 ## Created by: Qt User Interface Compiler version 6.8.2
 ##
@@ -167,7 +167,7 @@ class Ui_SignalsFromEventsResultsView(object):
         self.next_but.clicked.connect(SignalsFromEventsResultsView.on_next_button)
         self.prev_but.clicked.connect(SignalsFromEventsResultsView.on_prev_button)
         self.event_index_lineEdit.editingFinished.connect(SignalsFromEventsResultsView.on_event_index_changed)
-        self.checkBox_ylim_norm.clicked.connect(SignalsFromEventsResultsView.y_limits_change_slot)
+        #self.checkBox_ylim_norm.clicked.connect(SignalsFromEventsResultsView.y_limits_change_slot)
         self.lineEdit_ylim_fixed.editingFinished.connect(SignalsFromEventsResultsView.y_limits_change_slot)
         self.checkBox_display_y.clicked.connect(SignalsFromEventsResultsView.update_y_axis_label_slot)
 
