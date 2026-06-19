@@ -79,6 +79,13 @@ DEBUG = False
 # False: legacy FIR design (original behavior)
 # True: IIR Butterworth SOS design (faster)
 USE_IIR_FILTER = True
+# IIR tuning knobs to emulate the legacy FIR detection profile.
+# Increase recall (reduce short-duration bias): decrease HIGH_PASSBAND_SCALE and/or HIGH_STOPBAND_SCALE.
+# Increase precision (reduce false positives): increase HIGH_PASSBAND_SCALE and/or HIGH_STOPBAND_SCALE.
+IIR_HIGH_PASSBAND_SCALE = 0.98
+IIR_HIGH_STOPBAND_SCALE = 1.05
+IIR_GPASS_DB = 0.25
+IIR_GSTOP_DB = 46
 
 class SlowWaveDetector(SciNode):
     """
@@ -411,10 +418,21 @@ class SlowWaveDetector(SciNode):
 
     def _design_iir_bandpass_sos(self, fs, f_min, f_max):
         """
-        Design an IIR bandpass that approximates the previous FIR behavior.
+        Design an IIR bandpass that closely matches the legacy FIR behavior.
 
-        The passband remains [f_min, f_max]. Stopbands are set with moderate
-        margins to keep a similar transition profile while limiting order.
+        The FIR (numtaps = 8*fs, Hamming window) acts as a near brick-wall
+        filter with ~43 dB stopband attenuation and ~0.02 dB passband ripple.
+        To match it:
+          - Chebyshev Type II: equiripple stopband / maximally flat passband,
+            which mirrors the Hamming window profile better than Butterworth.
+                    - Slight high-edge passband compensation (2 %) to counter the
+                        remaining tendency to shorten zero-crossing intervals.
+                    - Tight high-side transition band (5 %): the original 25 % margin
+            leaked energy above f_max, biasing zero-crossings inward and
+            producing shorter detections.
+          - Low-side margin kept wider (25 %): sub-f_min leakage shifts
+            zero-crossings outward, so it is not the limiting factor here.
+          - gstop/gpass exposed as constants for cohort-specific tuning.
         """
         nyquist = fs / 2.0
 
@@ -424,22 +442,31 @@ class SlowWaveDetector(SciNode):
         if f_min >= f_max:
             raise NodeRuntimeException(self.identifier, "SlowWaveDetector", f"Invalid bandpass limits: f_min={f_min}, f_max={f_max}, fs={fs}")
 
-        # Transition bands chosen to closely match the practical FIR behavior.
-        low_stop = max(1e-4, f_min * 0.75)
-        high_stop = min(nyquist * 0.999, f_max * 1.25)
+        # Compensate the upper passband edge to better align IIR detections
+        # with the legacy FIR morphology.
+        compensated_f_max = min(f_max * IIR_HIGH_PASSBAND_SCALE, nyquist * 0.98)
+        if compensated_f_max <= f_min:
+            compensated_f_max = min(nyquist * 0.98, f_min + max(0.05, 0.05 * f_min))
 
-        # Ensure strict ordering: low_stop < f_min < f_max < high_stop.
+        # Low-side: 25 % margin (generous — sub-band leakage makes detections
+        # longer, not shorter, so it is not the critical edge).
+        low_stop = max(1e-4, f_min * 0.75)
+        # High-side: 5 % margin — tighter to suppress residual energy just above
+        # f_max and match the FIR's sharp upper roll-off.
+        high_stop = min(nyquist * 0.999, compensated_f_max * IIR_HIGH_STOPBAND_SCALE)
+
+        # Ensure strict ordering: low_stop < f_min < compensated_f_max < high_stop.
         if low_stop >= f_min:
             low_stop = f_min * 0.5
-        if high_stop <= f_max:
-            high_stop = min(nyquist * 0.999, f_max + max(0.2, 0.25 * (f_max - f_min)))
+        if high_stop <= compensated_f_max:
+            high_stop = min(nyquist * 0.999, compensated_f_max + max(0.05, 0.05 * (compensated_f_max - f_min)))
 
         return sci.iirdesign(
-            wp=[f_min, f_max],
+            wp=[f_min, compensated_f_max],
             ws=[low_stop, high_stop],
-            gpass=1,
-            gstop=40,
-            ftype='butter',
+            gpass=IIR_GPASS_DB,
+            gstop=IIR_GSTOP_DB,
+            ftype='cheby2',
             output='sos',
             fs=fs,
         )
