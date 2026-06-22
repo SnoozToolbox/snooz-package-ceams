@@ -51,6 +51,10 @@ class AnnotationsSelStep( NonValidEventStep):
         super().load_settings()
         # To activate the PSA on annotations branch
         self._pub_sub_manager.publish(self, self._node_id_SignalsFromEvents_Annot+".get_activation_state", None)
+        if self._context_manager[SelectionStep.context_PSA_annot_selection]==1:
+            self.enable_widgets(True)
+        else:
+            self.enable_widgets(False)
 
 
     def on_topic_update(self, topic, message, sender):

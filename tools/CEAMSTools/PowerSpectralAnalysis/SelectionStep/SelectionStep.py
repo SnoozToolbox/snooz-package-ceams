@@ -77,7 +77,7 @@ class SelectionStep( BaseStepView,  Ui_SelectionStep, QtWidgets.QWidget):
         self._pub_sub_manager.publish(self, self._node_id_SleepCycleDelimiter+".get_activation_state", None)
         self.NREM_stages_and_periods_slot()
         self.REM_stages_and_periods_slot()
-
+        self.update_section_selection_slot()
     # Called when the user clic on RUN
     # Message are sent to the publisher
     def on_apply_settings(self):

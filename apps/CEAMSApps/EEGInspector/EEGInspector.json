@@ -5,12 +5,12 @@
     "dependencies": [
         {
             "package_name": "CEAMSApps",
-            "package_version": "7.4.0",
+            "package_version": "7.5.0",
             "deleteable": false
         },
         {
             "package_name": "CEAMSModules",
-            "package_version": "7.4.0"
+            "package_version": "7.5.0"
         }
     ],
     "app_params": {
