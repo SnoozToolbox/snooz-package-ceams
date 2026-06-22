@@ -754,6 +754,7 @@ class InputFilesStep( BaseStepView,  Ui_InputFilesStep, QtWidgets.QWidget):
         file_list = channels_info_df['Filename'].unique()
 
         if len(file_list)>0:
+            stage_warnings = []
 
             for file in file_list:
                 montage_used = montages_info_df[(montages_info_df['Filename']==file) & (montages_info_df['Use']==True)]
@@ -768,12 +769,43 @@ class InputFilesStep( BaseStepView,  Ui_InputFilesStep, QtWidgets.QWidget):
                     WarningDialog(f"At least one recording has no channel selected, check the channel selection of the file : {file}.")
                     return False
                 # Check for sleep stage 4 in annotations and warn user
-                success, _ = self._psg_reader_manager.open_file(file)
-                if success:
-                    sleep_stages = self._psg_reader_manager.get_sleep_stages()
-                    if sleep_stages is not None and 'name' in sleep_stages.columns:
-                        if (sleep_stages['name'] == '4').any():
-                            WarningDialog(f"Sleep stage 'N4' detected in annotation file {file}. It will be converted to 'N3' automatically.")
+                success, error = self._psg_reader_manager.open_file(file)
+                if not success:
+                    if error is None:
+                        error = f"PSGReader could not open file: {file}"
+                    WarningDialog(f"Could not validate sleep stages for file {file}.\n{error}")
+                    return False
+
+                sleep_stages = self._psg_reader_manager.get_sleep_stages()
+                self._psg_reader_manager.close_file()
+
+                duplicates_removed = self._psg_reader_manager.sleep_stage_duplicates_removed_count
+                if duplicates_removed > 0:
+                    stage_warnings.append({
+                        'Filename': os.path.basename(file),
+                        'Path': file,
+                        'Issue': 'Duplicated sleep stage rows detected',
+                        'Action': f"{duplicates_removed} duplicated row(s) will be removed (last occurrence kept)."
+                    })
+
+                if sleep_stages is not None and 'name' in sleep_stages.columns:
+                    if (sleep_stages['name'] == '4').any():
+                        stage_warnings.append({
+                            'Filename': os.path.basename(file),
+                            'Path': file,
+                            'Issue': "Sleep stage 'N4' detected",
+                            'Action': "N4 will be converted to N3 automatically."
+                        })
+
+            if len(stage_warnings) > 0:
+                warning_df = pd.DataFrame(stage_warnings, columns=['Filename', 'Path', 'Issue', 'Action'])
+                table_dialog_msg = TableDialog(
+                    df=warning_df,
+                    title="Sleep stage warnings",
+                    message="Some PSG files contain sleep-stage issues that will be auto-corrected during processing.",
+                    showDownloadButton=True,
+                )
+                table_dialog_msg.exec_()
         else:
             WarningDialog(f"Add files before running the pipeline.")
             return False

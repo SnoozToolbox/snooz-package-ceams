@@ -919,6 +919,7 @@ class PSGReaderSettingsView( BaseSettingsView,  Ui_PSGReaderSettingsView, QtWidg
 
             file_list = channels_info_df['Filename'].unique()
         if len(file_list)>0:
+            stage_warnings = []
             if self._options['file_selection_only']['value'] == "0":
 
                 for file in file_list:
@@ -943,9 +944,31 @@ class PSGReaderSettingsView( BaseSettingsView,  Ui_PSGReaderSettingsView, QtWidg
 
                     sleep_stages = self._psg_reader_manager.get_sleep_stages()
                     self._psg_reader_manager.close_file()
+                    duplicates_removed = self._psg_reader_manager.sleep_stage_duplicates_removed_count
+                    if duplicates_removed > 0:
+                        stage_warnings.append({
+                            'Filename': os.path.basename(file),
+                            'Path': file,
+                            'Issue': 'Duplicated sleep stage rows detected',
+                            'Action': f"{duplicates_removed} duplicated row(s) will be removed (last occurrence kept)."
+                        })
                     if sleep_stages is not None and 'name' in sleep_stages.columns:
                         if (sleep_stages['name'] == '4').any():
-                            WarningDialog(f"Sleep stage 'N4' detected in annotation file {file}. It will be converted to 'N3' automatically.")
+                            stage_warnings.append({
+                                'Filename': os.path.basename(file),
+                                'Path': file,
+                                'Issue': "Sleep stage 'N4' detected",
+                                'Action': "N4 will be converted to N3 automatically."
+                            })
+            if len(stage_warnings) > 0:
+                warning_df = pd.DataFrame(stage_warnings, columns=['Filename', 'Path', 'Issue', 'Action'])
+                table_dialog_msg = TableDialog(
+                    df=warning_df,
+                    title="Sleep stage warnings",
+                    message="Some PSG files contain sleep-stage issues that will be auto-corrected during processing.",
+                    showDownloadButton=True,
+                )
+                table_dialog_msg.exec_()
         else:
             WarningDialog(f"Add files before running the pipeline.")
             return False

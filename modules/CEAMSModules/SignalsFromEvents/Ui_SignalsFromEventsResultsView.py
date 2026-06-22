@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file ''
+## Form generated from reading UI file 'Ui_SignalsFromEventsResultsView.ui'
 ##
 ## Created by: Qt User Interface Compiler version 6.8.2
 ##
@@ -43,7 +43,7 @@ class Ui_SignalsFromEventsResultsView(object):
         font = QFont()
         font.setBold(True)
         self.label_2.setFont(font)
-        self.label_2.setAlignment(Qt.AlignCenter)
+        self.label_2.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
         self.horizontalLayout_2.addWidget(self.label_2)
 
@@ -77,8 +77,8 @@ class Ui_SignalsFromEventsResultsView(object):
 
         self.time_label = QLabel(SignalsFromEventsResultsView)
         self.time_label.setObjectName(u"time_label")
-        self.time_label.setLayoutDirection(Qt.LeftToRight)
-        self.time_label.setAlignment(Qt.AlignRight|Qt.AlignTrailing|Qt.AlignVCenter)
+        self.time_label.setLayoutDirection(Qt.LayoutDirection.LeftToRight)
+        self.time_label.setAlignment(Qt.AlignmentFlag.AlignRight|Qt.AlignmentFlag.AlignTrailing|Qt.AlignmentFlag.AlignVCenter)
 
         self.horizontalLayout.addWidget(self.time_label)
 
@@ -155,7 +155,7 @@ class Ui_SignalsFromEventsResultsView(object):
 
         self.result_layout = QVBoxLayout()
         self.result_layout.setObjectName(u"result_layout")
-        self.result_layout.setSizeConstraint(QLayout.SetMaximumSize)
+        self.result_layout.setSizeConstraint(QLayout.SizeConstraint.SetMaximumSize)
 
         self.verticalLayout.addLayout(self.result_layout)
 

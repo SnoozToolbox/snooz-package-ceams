@@ -25,6 +25,7 @@ class PSGReaderManager:
         self.current_filename = None
         self.extensions = {}
         self.extensionsFilters = {}
+        self.sleep_stage_duplicates_removed_count = 0
 
     def _init_readers(self):
         ''' Static function called once to init all readers '''
@@ -294,6 +295,8 @@ class PSGReaderManager:
 
 
     def get_sleep_stages(self):
+        self.sleep_stage_duplicates_removed_count = 0
+
         if self.current_reader is None:
             if config.is_dev : 
                 print(f'ERROR PSGReaderManager.get_sleep_stages file not loaded')
@@ -304,10 +307,14 @@ class PSGReaderManager:
         events =    []
 
         if isinstance(stages, pd.DataFrame):
+            stages = stages.copy()
+            before_count = len(stages)
+            if {'start_sec', 'duration_sec'}.issubset(stages.columns):
+                stages = stages.drop_duplicates(subset=['start_sec', 'duration_sec'], keep='last').reset_index(drop=True)
+                self.sleep_stage_duplicates_removed_count = before_count - len(stages)
+
             # Clean up lists of channels for a single channel (string) per event
-            channels = [""]
-            channels = channels * len(stages)
-            stages.loc[:,'channels'] = channels
+            stages.loc[:, 'channels'] = [""] * len(stages)
             return stages
 
         for stage in stages:
@@ -322,7 +329,13 @@ class PSGReaderManager:
                 df_label[1]: duration, 
                 df_label[2]: channels})
 
-        return pd.DataFrame(events)
+        stages = pd.DataFrame(events)
+        before_count = len(stages)
+        if not stages.empty and {'start_sec', 'duration_sec'}.issubset(stages.columns):
+            stages = stages.drop_duplicates(subset=['start_sec', 'duration_sec'], keep='last').reset_index(drop=True)
+            self.sleep_stage_duplicates_removed_count = before_count - len(stages)
+
+        return stages
 
 
     def add_event(self, name, group, start_sec, duration_sec, channels, montage_index):
