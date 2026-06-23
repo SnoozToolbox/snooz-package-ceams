@@ -17,45 +17,20 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QPalette, QPixmap, QRadialGradient, QTransform)
 from PySide6.QtWidgets import (QApplication, QCheckBox, QDoubleSpinBox, QFrame,
     QGridLayout, QHBoxLayout, QLabel, QLineEdit,
-    QPushButton, QSizePolicy, QSpacerItem, QSpinBox,
-    QWidget)
+    QSizePolicy, QSpacerItem, QSpinBox, QWidget)
 import themes_rc
 
 class Ui_DetectorStep(object):
     def setupUi(self, DetectorStep):
         if not DetectorStep.objectName():
             DetectorStep.setObjectName(u"DetectorStep")
-        DetectorStep.resize(934, 640)
+        DetectorStep.resize(951, 774)
         DetectorStep.setStyleSheet(u"font: 12pt \"Roboto\";")
         self.gridLayout_2 = QGridLayout(DetectorStep)
         self.gridLayout_2.setObjectName(u"gridLayout_2")
         self.gridLayout = QGridLayout()
         self.gridLayout.setSpacing(4)
         self.gridLayout.setObjectName(u"gridLayout")
-        self.frame_7 = QFrame(DetectorStep)
-        self.frame_7.setObjectName(u"frame_7")
-        self.frame_7.setFrameShape(QFrame.Shape.NoFrame)
-        self.frame_7.setFrameShadow(QFrame.Shadow.Raised)
-        self.frame_7.setLineWidth(0)
-        self.horizontalLayout_7 = QHBoxLayout(self.frame_7)
-        self.horizontalLayout_7.setObjectName(u"horizontalLayout_7")
-
-        self.gridLayout.addWidget(self.frame_7, 4, 2, 1, 1)
-
-        self.frame_6 = QFrame(DetectorStep)
-        self.frame_6.setObjectName(u"frame_6")
-        self.frame_6.setFrameShape(QFrame.Shape.NoFrame)
-        self.frame_6.setFrameShadow(QFrame.Shadow.Raised)
-        self.frame_6.setLineWidth(0)
-        self.horizontalLayout_6 = QHBoxLayout(self.frame_6)
-        self.horizontalLayout_6.setObjectName(u"horizontalLayout_6")
-
-        self.gridLayout.addWidget(self.frame_6, 5, 2, 1, 1)
-
-        self.verticalSpacer_4 = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
-
-        self.gridLayout.addItem(self.verticalSpacer_4, 15, 0, 1, 1)
-
         self.gridLayout_5 = QGridLayout()
         self.gridLayout_5.setObjectName(u"gridLayout_5")
         self.horizontalSpacer_3 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
@@ -113,12 +88,7 @@ class Ui_DetectorStep(object):
         self.label_2 = QLabel(self.frame_2)
         self.label_2.setObjectName(u"label_2")
         self.label_2.setMaximumSize(QSize(16777215, 16777215))
-        font1 = QFont()
-        font1.setFamilies([u"Roboto-Regular"])
-        font1.setPointSize(10)
-        font1.setBold(False)
-        font1.setItalic(False)
-        self.label_2.setFont(font1)
+        self.label_2.setFont(font)
         self.label_2.setLineWidth(0)
 
         self.horizontalLayout_2.addWidget(self.label_2)
@@ -129,7 +99,7 @@ class Ui_DetectorStep(object):
 
         self.label_11 = QLabel(self.frame_2)
         self.label_11.setObjectName(u"label_11")
-        self.label_11.setFont(font1)
+        self.label_11.setFont(font)
 
         self.horizontalLayout_2.addWidget(self.label_11)
 
@@ -190,7 +160,7 @@ class Ui_DetectorStep(object):
         self.label_3 = QLabel(DetectorStep)
         self.label_3.setObjectName(u"label_3")
         self.label_3.setMaximumSize(QSize(16777215, 16777215))
-        self.label_3.setFont(font1)
+        self.label_3.setFont(font)
         self.label_3.setLineWidth(0)
         self.label_3.setWordWrap(True)
 
@@ -215,7 +185,7 @@ class Ui_DetectorStep(object):
         self.label_4 = QLabel(self.frame_4)
         self.label_4.setObjectName(u"label_4")
         self.label_4.setMaximumSize(QSize(16777215, 16777215))
-        self.label_4.setFont(font1)
+        self.label_4.setFont(font)
         self.label_4.setLineWidth(0)
 
         self.horizontalLayout_4.addWidget(self.label_4)
@@ -281,7 +251,7 @@ class Ui_DetectorStep(object):
 
         self.label_8 = QLabel(DetectorStep)
         self.label_8.setObjectName(u"label_8")
-        self.label_8.setFont(font1)
+        self.label_8.setFont(font)
         self.label_8.setLineWidth(0)
 
         self.gridLayout_5.addWidget(self.label_8, 0, 1, 1, 1)
@@ -330,15 +300,48 @@ class Ui_DetectorStep(object):
 
         self.gridLayout.addLayout(self.gridLayout_5, 6, 0, 1, 4)
 
+        self.label = QLabel(DetectorStep)
+        self.label.setObjectName(u"label")
+        self.label.setMaximumSize(QSize(16777215, 16777215))
+        self.label.setFont(font)
+        self.label.setLineWidth(0)
+        self.label.setWordWrap(True)
+
+        self.gridLayout.addWidget(self.label, 5, 0, 1, 2)
+
+        self.frame_7 = QFrame(DetectorStep)
+        self.frame_7.setObjectName(u"frame_7")
+        self.frame_7.setFrameShape(QFrame.Shape.NoFrame)
+        self.frame_7.setFrameShadow(QFrame.Shadow.Raised)
+        self.frame_7.setLineWidth(0)
+        self.horizontalLayout_7 = QHBoxLayout(self.frame_7)
+        self.horizontalLayout_7.setObjectName(u"horizontalLayout_7")
+
+        self.gridLayout.addWidget(self.frame_7, 4, 2, 1, 1)
+
+        self.frame_6 = QFrame(DetectorStep)
+        self.frame_6.setObjectName(u"frame_6")
+        self.frame_6.setFrameShape(QFrame.Shape.NoFrame)
+        self.frame_6.setFrameShadow(QFrame.Shadow.Raised)
+        self.frame_6.setLineWidth(0)
+        self.horizontalLayout_6 = QHBoxLayout(self.frame_6)
+        self.horizontalLayout_6.setObjectName(u"horizontalLayout_6")
+
+        self.gridLayout.addWidget(self.frame_6, 5, 2, 1, 1)
+
         self.label_19 = QLabel(DetectorStep)
         self.label_19.setObjectName(u"label_19")
 
         self.gridLayout.addWidget(self.label_19, 1, 0, 1, 1)
 
-        self.label_10 = QLabel(DetectorStep)
-        self.label_10.setObjectName(u"label_10")
+        self.gridLayout_7 = QGridLayout()
+        self.gridLayout_7.setObjectName(u"gridLayout_7")
+        self.verticalSpacer_5 = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
 
-        self.gridLayout.addWidget(self.label_10, 17, 0, 1, 1)
+        self.gridLayout_7.addItem(self.verticalSpacer_5, 0, 0, 1, 1)
+
+
+        self.gridLayout.addLayout(self.gridLayout_7, 18, 0, 1, 4)
 
         self.gridLayout_4 = QGridLayout()
         self.gridLayout_4.setObjectName(u"gridLayout_4")
@@ -381,45 +384,6 @@ class Ui_DetectorStep(object):
 
         self.gridLayout.addLayout(self.gridLayout_4, 2, 0, 1, 4)
 
-        self.label = QLabel(DetectorStep)
-        self.label.setObjectName(u"label")
-        self.label.setMaximumSize(QSize(16777215, 16777215))
-        self.label.setFont(font1)
-        self.label.setLineWidth(0)
-        self.label.setWordWrap(True)
-
-        self.gridLayout.addWidget(self.label, 5, 0, 1, 2)
-
-        self.gridLayout_7 = QGridLayout()
-        self.gridLayout_7.setObjectName(u"gridLayout_7")
-        self.label_5 = QLabel(DetectorStep)
-        self.label_5.setObjectName(u"label_5")
-
-        self.gridLayout_7.addWidget(self.label_5, 0, 1, 1, 1)
-
-        self.pushButton_CohortFilename = QPushButton(DetectorStep)
-        self.pushButton_CohortFilename.setObjectName(u"pushButton_CohortFilename")
-
-        self.gridLayout_7.addWidget(self.pushButton_CohortFilename, 2, 2, 1, 1)
-
-        self.verticalSpacer_5 = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
-
-        self.gridLayout_7.addItem(self.verticalSpacer_5, 0, 0, 1, 1)
-
-        self.lineEdit_CohortFilename = QLineEdit(DetectorStep)
-        self.lineEdit_CohortFilename.setObjectName(u"lineEdit_CohortFilename")
-        self.lineEdit_CohortFilename.setFrame(True)
-
-        self.gridLayout_7.addWidget(self.lineEdit_CohortFilename, 2, 1, 1, 1)
-
-        self.label_21 = QLabel(DetectorStep)
-        self.label_21.setObjectName(u"label_21")
-
-        self.gridLayout_7.addWidget(self.label_21, 1, 1, 1, 1)
-
-
-        self.gridLayout.addLayout(self.gridLayout_7, 20, 0, 1, 4)
-
 
         self.gridLayout_2.addLayout(self.gridLayout, 0, 0, 1, 1)
 
@@ -447,14 +411,10 @@ class Ui_DetectorStep(object):
         self.label_22.setText("")
         self.label_13.setText(QCoreApplication.translate("DetectorStep", u"<html><head/><body><p><span style=\" font-size:12pt;\">Min:</span></p></body></html>", None))
         self.label_14.setText(QCoreApplication.translate("DetectorStep", u"<html><head/><body><p><span style=\" font-size:12pt;\">Max: </span></p></body></html>", None))
+        self.label.setText(QCoreApplication.translate("DetectorStep", u"<html><head/><body><p><span style=\" font-size:12pt; font-weight:700;\">REMs Detector Criteria</span></p></body></html>", None))
         self.label_19.setText(QCoreApplication.translate("DetectorStep", u"<html><head/><body><p><span style=\" font-size:12pt; font-weight:700;\">REMs Event Definition</span></p></body></html>", None))
-        self.label_10.setText(QCoreApplication.translate("DetectorStep", u"<html><head/><body><p><span style=\" font-size:12pt; font-weight:700;\">REMs Cohort Report</span></p></body></html>", None))
         self.label_15.setText(QCoreApplication.translate("DetectorStep", u"<html><head/><body><p><span style=\" font-size:12pt;\">Event Group</span></p></body></html>", None))
         self.label_20.setText(QCoreApplication.translate("DetectorStep", u"<html><head/><body><p><span style=\" font-size:12pt;\">Event group and name to label the new detection in the annotation file.</span></p></body></html>", None))
         self.label_9.setText(QCoreApplication.translate("DetectorStep", u"<html><head/><body><p><span style=\" font-size:12pt;\">Event Name</span></p></body></html>", None))
-        self.label.setText(QCoreApplication.translate("DetectorStep", u"<html><head/><body><p><span style=\" font-size:12pt; font-weight:700;\">REMs Detector Criteria</span></p></body></html>", None))
-        self.label_5.setText(QCoreApplication.translate("DetectorStep", u"<html><head/><body><p><span style=\" font-size:12pt;\">REMs characteristics:</span></p><p><span style=\" font-size:12pt;\">	- REMs count<br/>- Duration of the REMs in second<br/>- Amplitude of the REMs (Difference between the peak and trough of the [LOC - ROC])<br/>- Density of the REMs in cycles and hours<br/>- Variablity of the densities</span></p><p><span style=\" font-size:12pt;\">The report consists of the average of the mentioned characteristics in</span></p><p><span style=\" font-size:12pt;\">- total (all selected stages)<br/>- per sleep cycle<br/>- per clock hour<br/>- per hour spent in each stage</span></p><p><br/></p></body></html>", None))
-        self.pushButton_CohortFilename.setText(QCoreApplication.translate("DetectorStep", u"Browse", None))
-        self.label_21.setText(QCoreApplication.translate("DetectorStep", u"<html><head/><body><p><span style=\" font-size:12pt;\">Select a file name to save the report file:</span></p></body></html>", None))
     # retranslateUi
 

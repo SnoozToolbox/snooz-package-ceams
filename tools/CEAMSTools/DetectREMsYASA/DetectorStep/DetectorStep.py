@@ -54,7 +54,6 @@ class DetectorStep(BaseStepView, Ui_DetectorStep, QtWidgets.QWidget):
         # Connect checkBox_2 signal to handle frame enabling/disabling
         self.checkBox_2.setChecked(True)
         self.checkBox_2.stateChanged.connect(self.on_checkBox_2_changed)
-        self.pushButton_CohortFilename.clicked.connect(self.browse_cohort_slot)
 
         # If necessary, init the context. The context is a memory space shared by 
         # all steps of a tool. It is used to share and notice other steps whenever
@@ -106,8 +105,10 @@ class DetectorStep(BaseStepView, Ui_DetectorStep, QtWidgets.QWidget):
         self._node_id_REMsDetails = "d1489e58-7c3d-490e-9c36-f830c8dc596e"
         self._det_param_topic = f'{self._node_id_REMsDetails}.rems_det_param'
         self._pub_sub_manager.subscribe(self, self._det_param_topic)
-        self._cohort_file_topic = f'{self._node_id_REMsDetails}.cohort_filename'
-        self._pub_sub_manager.subscribe(self, self._cohort_file_topic)
+
+        self.Event_subdivision_identifier = "aff5dd4e-069f-4c61-819f-779313525b54"
+        self._events_names_topic = f'{self.Event_subdivision_identifier}.events_names'
+        self._pub_sub_manager.subscribe(self, self._events_names_topic)
 
     def on_checkBox_2_changed(self):
         """Handle the state change of checkBox_2"""
@@ -132,8 +133,7 @@ class DetectorStep(BaseStepView, Ui_DetectorStep, QtWidgets.QWidget):
         self._pub_sub_manager.publish(self, self._DurIdx1_topic, 'ping')
         self._pub_sub_manager.publish(self, self._FreqIdx0, 'ping')
         self._pub_sub_manager.publish(self, self._FreqIdx1, 'ping')
-        self._pub_sub_manager.publish(self, self._cohort_file_topic, 'ping')
-        
+        #self._pub_sub_manager.publish(self, self._events_names_topic, 'ping')
 
     def on_topic_update(self, topic, message, sender):
         # Whenever a value is updated within the context, all steps receives a 
@@ -170,9 +170,9 @@ class DetectorStep(BaseStepView, Ui_DetectorStep, QtWidgets.QWidget):
             self.doubleSpinBox.setValue(message)
         if topic == self._FreqIdx1:
             self.doubleSpinBox_3.setValue(message)
-        if topic == self._cohort_file_topic:
-            self.lineEdit_CohortFilename.setText(message)
-
+        '''if topic == self._events_names_topic:
+            self.lineEdit_3.setText(message)'''
+    
     def on_apply_settings(self):
         self._pub_sub_manager.publish(self, self._relative_prominence_topic, self.doubleSpinBox_2.value())
         self._pub_sub_manager.publish(self, self._remove_outliers_topic, self.checkBox.isChecked())
@@ -185,8 +185,7 @@ class DetectorStep(BaseStepView, Ui_DetectorStep, QtWidgets.QWidget):
         self._pub_sub_manager.publish(self, self._DurIdx1_topic, self.doubleSpinBox_5.value())
         self._pub_sub_manager.publish(self, self._FreqIdx0, self.doubleSpinBox.value())
         self._pub_sub_manager.publish(self, self._FreqIdx1, self.doubleSpinBox_3.value())
-        self._pub_sub_manager.publish(self, self._cohort_file_topic, self.lineEdit_CohortFilename.text())
-        
+        self._pub_sub_manager.publish(self, self._events_names_topic, self.lineEdit_3.text())
         # Build the dictionary of section selection to run detector and the detector parameters
         if len(self.lineEdit_3.text()) > 1:
             stage_sel = self.lineEdit_3.text().strip('[]')
@@ -221,14 +220,3 @@ class DetectorStep(BaseStepView, Ui_DetectorStep, QtWidgets.QWidget):
     def __del__(self):
         pass
 
-    # Called when the user press the browse button to define where to save the cohort report
-    def browse_cohort_slot(self):
-        # define the option to disable the warning dialog when overwriting an existing file
-        filename, _ = QtWidgets.QFileDialog.getSaveFileName(
-            None, 
-            'Save as TSV file', 
-            None, 
-            'TSV (*.tsv)',
-            options = QtWidgets.QFileDialog.DontConfirmOverwrite)
-        if filename != '':
-            self.lineEdit_CohortFilename.setText(filename)

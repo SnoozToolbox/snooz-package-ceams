@@ -108,20 +108,10 @@ class Ui_MiniEpochDefinition(object):
         self.horizontalLayout_2.setObjectName(u"horizontalLayout_2")
         self.formLayout_2 = QFormLayout()
         self.formLayout_2.setObjectName(u"formLayout_2")
-        self.label_7 = QLabel(MiniEpochDefinition)
-        self.label_7.setObjectName(u"label_7")
-
-        self.formLayout_2.setWidget(0, QFormLayout.LabelRole, self.label_7)
-
-        self.lineEdit_stage = QLineEdit(MiniEpochDefinition)
-        self.lineEdit_stage.setObjectName(u"lineEdit_stage")
-
-        self.formLayout_2.setWidget(0, QFormLayout.FieldRole, self.lineEdit_stage)
-
         self.label_8 = QLabel(MiniEpochDefinition)
         self.label_8.setObjectName(u"label_8")
 
-        self.formLayout_2.setWidget(1, QFormLayout.LabelRole, self.label_8)
+        self.formLayout_2.setWidget(0, QFormLayout.LabelRole, self.label_8)
 
         self.comboBox_length = QComboBox(MiniEpochDefinition)
         self.comboBox_length.addItem("")
@@ -129,7 +119,7 @@ class Ui_MiniEpochDefinition(object):
         self.comboBox_length.addItem("")
         self.comboBox_length.setObjectName(u"comboBox_length")
 
-        self.formLayout_2.setWidget(1, QFormLayout.FieldRole, self.comboBox_length)
+        self.formLayout_2.setWidget(0, QFormLayout.FieldRole, self.comboBox_length)
 
 
         self.horizontalLayout_2.addLayout(self.formLayout_2)
@@ -153,14 +143,13 @@ class Ui_MiniEpochDefinition(object):
 
     def retranslateUi(self, MiniEpochDefinition):
         MiniEpochDefinition.setWindowTitle("")
-        self.label_4.setText(QCoreApplication.translate("MiniEpochDefinition", u"<html><head/><body><p><span style=\" font-weight:700;\">Define the labels and thresholds of the mini-epochs for Rapid Eye Movements (REMs).</span></p></body></html>", None))
+        self.label_4.setText(QCoreApplication.translate("MiniEpochDefinition", u"<html><head/><body><p><span style=\" font-weight:700;\">Define the labels and length of the mini-epochs for Rapid Eye Movements (REMs).</span></p></body></html>", None))
         self.label_5.setText(QCoreApplication.translate("MiniEpochDefinition", u"<html><head/><body><p><span style=\" font-weight:700;\">Mini-epochs group and name definition</span></p></body></html>", None))
         self.label_6.setText(QCoreApplication.translate("MiniEpochDefinition", u"<html><head/><body><p>Each event belongs to a group and is labeled by a name.</p></body></html>", None))
         self.label.setText(QCoreApplication.translate("MiniEpochDefinition", u"Group for the mini-epoch", None))
         self.label_2.setText(QCoreApplication.translate("MiniEpochDefinition", u"Name for the Phasic mini-epoch", None))
         self.label_3.setText(QCoreApplication.translate("MiniEpochDefinition", u"Name for the Tonic mini-epoch", None))
-        self.label_10.setText(QCoreApplication.translate("MiniEpochDefinition", u"<html><head/><body><p><span style=\" font-weight:700;\">Mini-epochs thresholds definition</span></p></body></html>", None))
-        self.label_7.setText(QCoreApplication.translate("MiniEpochDefinition", u"Stage name", None))
+        self.label_10.setText(QCoreApplication.translate("MiniEpochDefinition", u"<html><head/><body><p><span style=\" font-weight:700;\">Mini-epochs length value</span></p></body></html>", None))
         self.label_8.setText(QCoreApplication.translate("MiniEpochDefinition", u"Window length (sec)", None))
         self.comboBox_length.setItemText(0, QCoreApplication.translate("MiniEpochDefinition", u"3", None))
         self.comboBox_length.setItemText(1, QCoreApplication.translate("MiniEpochDefinition", u"5", None))

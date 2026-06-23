@@ -11,7 +11,7 @@ import ast
 
 from qtpy import QtWidgets
 
-from CEAMSTools.REMsToMiniEpochs.MiniEpochDefinition.Ui_MiniEpochDefinition import Ui_MiniEpochDefinition
+from CEAMSTools.DetectREMsYASA.MiniEpochDefinition.Ui_MiniEpochDefinition import Ui_MiniEpochDefinition
 from commons.BaseStepView import BaseStepView
 
 class MiniEpochDefinition(BaseStepView, Ui_MiniEpochDefinition, QtWidgets.QWidget):
@@ -24,13 +24,11 @@ class MiniEpochDefinition(BaseStepView, Ui_MiniEpochDefinition, QtWidgets.QWidge
 
         # init UI
         self.setupUi(self)
-        self.REMs_to_mini_epochcs_identifier = "876b5373-0f77-458c-971d-1082a385f846"
-        self.Event_subdivision_identifier = "76687cc3-e1cd-4834-8f7c-8dc545d3f545"
+        self.REMs_to_mini_epochcs_identifier = "a65d75b5-b177-4cad-a36f-c9aadb5eabf7"
+        self.Event_subdivision_identifier = "aff5dd4e-069f-4c61-819f-779313525b54"
 
         self._parameters_topic = f'{self.REMs_to_mini_epochcs_identifier}.parameters'
         self._pub_sub_manager.subscribe(self, self._parameters_topic)
-        self._events_names_topic = f'{self.Event_subdivision_identifier}.events_names'
-        self._pub_sub_manager.subscribe(self, self._events_names_topic)
         self._window_sec_topic = f'{self.Event_subdivision_identifier}.window_sec'
         self._pub_sub_manager.subscribe(self, self._window_sec_topic)
 
@@ -39,7 +37,6 @@ class MiniEpochDefinition(BaseStepView, Ui_MiniEpochDefinition, QtWidgets.QWidge
         # Load the settings of the step and update the UI accordingly.
         # This is called when the step is loaded in the pipeline.
         self._pub_sub_manager.publish(self, self._parameters_topic, 'ping')
-        self._pub_sub_manager.publish(self, self._events_names_topic, 'ping')
         self._pub_sub_manager.publish(self, self._window_sec_topic, 'ping')
 
     def on_topic_update(self, topic, message, sender):
@@ -62,8 +59,6 @@ class MiniEpochDefinition(BaseStepView, Ui_MiniEpochDefinition, QtWidgets.QWidge
                 self.lineEdit_group.setText(message['mini_epoch_group'])
                 self.lineEdit_name_Phasic.setText(message['mini_epoch_name_Phasic'])
                 self.lineEdit_name_Tonic.setText(message['mini_epoch_name_Tonic'])
-        elif topic == self._events_names_topic:
-            self.lineEdit_stage.setText(message)
         elif topic == self._window_sec_topic:
             self.comboBox_length.setCurrentText(str(message))
 
@@ -74,7 +69,6 @@ class MiniEpochDefinition(BaseStepView, Ui_MiniEpochDefinition, QtWidgets.QWidge
             'mini_epoch_name_Tonic': self.lineEdit_name_Tonic.text()
         }
         self._pub_sub_manager.publish(self, self._parameters_topic, str(parameters))
-        self._pub_sub_manager.publish(self, self._events_names_topic, self.lineEdit_stage.text())
         self._pub_sub_manager.publish(self, self._window_sec_topic, int(self.comboBox_length.currentText()))
 
     def on_validate_settings(self):
@@ -89,8 +83,5 @@ class MiniEpochDefinition(BaseStepView, Ui_MiniEpochDefinition, QtWidgets.QWidge
             return False
         if int(self.comboBox_length.currentText()) == 0:
             QtWidgets.QMessageBox.critical(self, "Error", "The length of the mini-epoch cannot be 0.")
-            return False
-        if self.lineEdit_stage.text() == "":
-            QtWidgets.QMessageBox.critical(self, "Error", "The sleep stage cannot be empty.")
             return False
         return True
