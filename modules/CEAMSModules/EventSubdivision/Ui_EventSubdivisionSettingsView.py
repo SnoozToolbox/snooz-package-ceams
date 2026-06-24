@@ -29,10 +29,10 @@ class Ui_EventSubdivisionSettingsView(object):
         font = QFont()
         font.setBold(True)
         self.label_8.setFont(font)
-        self.label_8.setAlignment(Qt.AlignCenter)
+        self.label_8.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.formLayoutWidget = QWidget(EventSubdivisionSettingsView)
         self.formLayoutWidget.setObjectName(u"formLayoutWidget")
-        self.formLayoutWidget.setGeometry(QRect(10, 30, 361, 80))
+        self.formLayoutWidget.setGeometry(QRect(10, 30, 361, 84))
         self.formLayout = QFormLayout(self.formLayoutWidget)
         self.formLayout.setObjectName(u"formLayout")
         self.formLayout.setContentsMargins(0, 0, 0, 0)
@@ -77,8 +77,8 @@ class Ui_EventSubdivisionSettingsView(object):
         self.label_8.setText(QCoreApplication.translate("EventSubdivisionSettingsView", u"EventSubdivision settings", None))
         self.label.setText(QCoreApplication.translate("EventSubdivisionSettingsView", u"Event name", None))
 #if QT_CONFIG(tooltip)
-        self.events_names_lineEdit.setToolTip(QCoreApplication.translate("EventSubdivisionSettingsView", u"String of desired events separated by ; \n"
-"An empty string will do every events. (e.g N1 or N1;N2;N3;R)", None))
+        self.events_names_lineEdit.setToolTip(QCoreApplication.translate("EventSubdivisionSettingsView", u"String of desired events separated by , \n"
+"An empty string will do every events. (e.g N1 or N1,N2,N3,R)", None))
 #endif // QT_CONFIG(tooltip)
         self.label_2.setText(QCoreApplication.translate("EventSubdivisionSettingsView", u"Window lenght (sec)", None))
 #if QT_CONFIG(tooltip)

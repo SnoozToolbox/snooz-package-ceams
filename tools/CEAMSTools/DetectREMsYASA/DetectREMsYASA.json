@@ -237,7 +237,7 @@
                     },
                     "parameters": {
                         "name": "parameters",
-                        "value": "{'mini_epoch_group': 'DET_MOR', 'mini_epoch_name_Phasic': 'Snooz_MOR_Phasic', 'mini_epoch_name_Tonic': 'Snooz_MOR_Tonic'}",
+                        "value": "{'mini_epoch_group': 'REM', 'mini_epoch_name_Phasic': 'EOG_Phasic', 'mini_epoch_name_Tonic': 'EOG_Tonic'}",
                         "sub_plugs": {},
                         "connections": {}
                     }

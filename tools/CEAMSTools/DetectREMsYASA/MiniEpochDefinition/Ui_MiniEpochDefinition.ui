@@ -151,7 +151,7 @@
        <item row="0" column="0">
         <widget class="QLabel" name="label_8">
          <property name="text">
-          <string>Window length (sec)</string>
+          <string>Window length (sec)                </string>
          </property>
         </widget>
        </item>
@@ -170,6 +170,11 @@
          <item>
           <property name="text">
            <string>10</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>30</string>
           </property>
          </item>
         </widget>

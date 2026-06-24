@@ -117,6 +117,7 @@ class Ui_MiniEpochDefinition(object):
         self.comboBox_length.addItem("")
         self.comboBox_length.addItem("")
         self.comboBox_length.addItem("")
+        self.comboBox_length.addItem("")
         self.comboBox_length.setObjectName(u"comboBox_length")
 
         self.formLayout_2.setWidget(0, QFormLayout.FieldRole, self.comboBox_length)
@@ -150,10 +151,11 @@ class Ui_MiniEpochDefinition(object):
         self.label_2.setText(QCoreApplication.translate("MiniEpochDefinition", u"Name for the Phasic mini-epoch", None))
         self.label_3.setText(QCoreApplication.translate("MiniEpochDefinition", u"Name for the Tonic mini-epoch", None))
         self.label_10.setText(QCoreApplication.translate("MiniEpochDefinition", u"<html><head/><body><p><span style=\" font-weight:700;\">Mini-epochs length value</span></p></body></html>", None))
-        self.label_8.setText(QCoreApplication.translate("MiniEpochDefinition", u"Window length (sec)", None))
+        self.label_8.setText(QCoreApplication.translate("MiniEpochDefinition", u"Window length (sec)                ", None))
         self.comboBox_length.setItemText(0, QCoreApplication.translate("MiniEpochDefinition", u"3", None))
         self.comboBox_length.setItemText(1, QCoreApplication.translate("MiniEpochDefinition", u"5", None))
         self.comboBox_length.setItemText(2, QCoreApplication.translate("MiniEpochDefinition", u"10", None))
+        self.comboBox_length.setItemText(3, QCoreApplication.translate("MiniEpochDefinition", u"30", None))
 
     # retranslateUi
 

@@ -24,7 +24,6 @@
    </property>
    <property name="font">
     <font>
-     <weight>75</weight>
      <bold>true</bold>
     </font>
    </property>
@@ -32,7 +31,7 @@
     <string>EventSubdivision settings</string>
    </property>
    <property name="alignment">
-    <set>Qt::AlignCenter</set>
+    <set>Qt::AlignmentFlag::AlignCenter</set>
    </property>
   </widget>
   <widget class="QWidget" name="formLayoutWidget">
@@ -41,7 +40,7 @@
      <x>10</x>
      <y>30</y>
      <width>361</width>
-     <height>80</height>
+     <height>84</height>
     </rect>
    </property>
    <layout class="QFormLayout" name="formLayout">
@@ -55,8 +54,8 @@
     <item row="0" column="1">
      <widget class="QLineEdit" name="events_names_lineEdit">
       <property name="toolTip">
-       <string>String of desired events separated by ; 
-An empty string will do every events. (e.g N1 or N1;N2;N3;R)</string>
+       <string>String of desired events separated by , 
+An empty string will do every events. (e.g N1 or N1,N2,N3,R)</string>
       </property>
      </widget>
     </item>

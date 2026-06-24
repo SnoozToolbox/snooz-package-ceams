@@ -12,7 +12,6 @@ from commons.BaseStepView import BaseStepView
 from flowpipe.ActivationState import ActivationState
 from widgets.WarningDialog import WarningDialog
 
-
 from CEAMSTools.DetectREMsYASA.DetectorStep.Ui_DetectorStep import Ui_DetectorStep
 
 from qtpy import QtWidgets
@@ -51,9 +50,9 @@ class DetectorStep(BaseStepView, Ui_DetectorStep, QtWidgets.QWidget):
         self.doubleSpinBox.setValue(0.5)
         self.doubleSpinBox_3.setValue(5.0)
 
-        # Connect checkBox_2 signal to handle frame enabling/disabling
-        self.checkBox_2.setChecked(True)
-        self.checkBox_2.stateChanged.connect(self.on_checkBox_2_changed)
+        # Connect radioButton_scored signal to handle frame enabling/disabling
+        self.radioButton_scored.setChecked(True)
+        self.radioButton_scored.toggled.connect(self.on_radioButton_scored_changed)
 
         # If necessary, init the context. The context is a memory space shared by 
         # all steps of a tool. It is used to share and notice other steps whenever
@@ -110,12 +109,26 @@ class DetectorStep(BaseStepView, Ui_DetectorStep, QtWidgets.QWidget):
         self._events_names_topic = f'{self.Event_subdivision_identifier}.events_names'
         self._pub_sub_manager.subscribe(self, self._events_names_topic)
 
-    def on_checkBox_2_changed(self):
-        """Handle the state change of checkBox_2"""
-        is_checked = self.checkBox_2.isChecked()
-        self.label_16.setEnabled(is_checked)
-        self.frame_8.setEnabled(is_checked)
-
+    def on_radioButton_scored_changed(self):
+        """Handle the state change of radioButton_scored"""
+        is_checked = self.radioButton_scored.isChecked()
+        self.checkBox_R.setEnabled(is_checked)
+        self.checkBox_W.setEnabled(is_checked)
+        self.checkBox_N1.setEnabled(is_checked)
+        self.checkBox_N2.setEnabled(is_checked)
+        self.checkBox_N3.setEnabled(is_checked)
+        if is_checked:
+            self.checkBox_R.setChecked(True)
+            self.checkBox_W.setChecked(False)
+            self.checkBox_N1.setChecked(False)
+            self.checkBox_N2.setChecked(False)
+            self.checkBox_N3.setChecked(False)
+        else:
+            self.checkBox_R.setChecked(False)
+            self.checkBox_W.setChecked(False)
+            self.checkBox_N1.setChecked(False)
+            self.checkBox_N2.setChecked(False)
+            self.checkBox_N3.setChecked(False)
 
     def load_settings(self):
         # Load settings is called after the constructor of all steps has been executed.
@@ -156,8 +169,6 @@ class DetectorStep(BaseStepView, Ui_DetectorStep, QtWidgets.QWidget):
             self.lineEdit_2.setText(message)
         if topic == self._rems_event_group_topic:
             self.lineEdit.setText(message)
-        if topic == self._include_topic:
-            self.lineEdit_3.setText(message)
         if topic == self._AmpIdx0_topic:
             self.spinBox_2.setValue(message)
         if topic == self._AmpIdx1_topic:
@@ -170,33 +181,31 @@ class DetectorStep(BaseStepView, Ui_DetectorStep, QtWidgets.QWidget):
             self.doubleSpinBox.setValue(message)
         if topic == self._FreqIdx1:
             self.doubleSpinBox_3.setValue(message)
-        '''if topic == self._events_names_topic:
-            self.lineEdit_3.setText(message)'''
-    
+        if topic == self._include_topic:
+            stages_lst = message.split(',')
+            self.checkBox_N1.setChecked('1' in stages_lst)
+            self.checkBox_N2.setChecked('2' in stages_lst)
+            self.checkBox_N3.setChecked('3' in stages_lst)
+            self.checkBox_R.setChecked('5' in stages_lst)
+            self.checkBox_W.setChecked('0' in stages_lst)
+
     def on_apply_settings(self):
+        stages_str = self.get_stages()
         self._pub_sub_manager.publish(self, self._relative_prominence_topic, self.doubleSpinBox_2.value())
         self._pub_sub_manager.publish(self, self._remove_outliers_topic, self.checkBox.isChecked())
         self._pub_sub_manager.publish(self, self._rems_event_name_topic, self.lineEdit_2.text())
         self._pub_sub_manager.publish(self, self._rems_event_group_topic, self.lineEdit.text())
-        self._pub_sub_manager.publish(self, self._include_topic, self.lineEdit_3.text())
         self._pub_sub_manager.publish(self, self._AmpIdx0_topic, self.spinBox_2.value())
         self._pub_sub_manager.publish(self, self._AmpIdx1_topic, self.spinBox.value())
         self._pub_sub_manager.publish(self, self._DurIdx0_topic, self.doubleSpinBox_6.value())
         self._pub_sub_manager.publish(self, self._DurIdx1_topic, self.doubleSpinBox_5.value())
         self._pub_sub_manager.publish(self, self._FreqIdx0, self.doubleSpinBox.value())
         self._pub_sub_manager.publish(self, self._FreqIdx1, self.doubleSpinBox_3.value())
-        self._pub_sub_manager.publish(self, self._events_names_topic, self.lineEdit_3.text())
-        # Build the dictionary of section selection to run detector and the detector parameters
-        if len(self.lineEdit_3.text()) > 1:
-            stage_sel = self.lineEdit_3.text().strip('[]')
-        elif len(self.lineEdit_3.text()) == 1:
-            stage_sel = str(self.lineEdit_3.text())
-        else:
-            stage_sel = ''
+        self._pub_sub_manager.publish(self, self._events_names_topic, str(stages_str))
+        self._pub_sub_manager.publish(self, self._include_topic, str(stages_str))
         det_param = {}
-        det_param["stage_sel"] = stage_sel
+        det_param["stage_sel"] = stages_str
         det_param["rems_event_name"] = str(self.lineEdit_2.text())
-
         self._pub_sub_manager.publish(self, self._det_param_topic, str(det_param))
     # Slot called when the user wants to write the filename
     def on_choose(self):
@@ -211,12 +220,40 @@ class DetectorStep(BaseStepView, Ui_DetectorStep, QtWidgets.QWidget):
         # If not, display an error message to the user and return False.
         # This is called just before the apply settings function.
         # Returning False will prevent the process from executing.
-        if len(self.lineEdit_CohortFilename.text())==0:
-            WarningDialog("Define a file to write the detailed events report for the cohort. In step '3-Detector Step'")
-            return False
         return True
 
     # Called when the user delete an instance of the plugin
     def __del__(self):
         pass
 
+    def get_stages(self):
+        # Convert the sleep stage selection for the input plugin
+        stages_str = ''
+        if self.checkBox_N1.isChecked():
+            if len(stages_str)==0:
+                stages_str = '1'
+            else:
+                stages_str = stages_str+',1'
+        if self.checkBox_N2.isChecked():
+            if len(stages_str)==0:
+                stages_str = '2'
+            else:
+                stages_str = stages_str+',2'
+        if self.checkBox_N3.isChecked():
+            if len(stages_str)==0:
+                stages_str = '3'
+            else:
+                stages_str = stages_str+',3'   
+        if self.checkBox_R.isChecked():
+            if len(stages_str)==0:
+                stages_str = '5'
+            else:
+                stages_str = stages_str+',5'
+        if self.checkBox_W.isChecked():
+            if len(stages_str)==0:
+                stages_str = '0'
+            else:
+                stages_str = stages_str+',0'
+        if self.radioButton_unscored.isChecked():
+            stages_str = ''    
+        return stages_str

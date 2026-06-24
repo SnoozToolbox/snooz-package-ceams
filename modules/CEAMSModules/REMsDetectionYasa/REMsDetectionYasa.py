@@ -151,7 +151,7 @@ class REMsDetectionYasa(SciNode):
                 roc = raw._data[1, :] * 1e6
 
                 # Process inclusion list
-                if include is not None:
+                if include != "":
                     if isinstance(include, str) and include.strip() != "":
                         include = self.extract_ints(include)
                     elif isinstance(include, int):
@@ -160,6 +160,7 @@ class REMsDetectionYasa(SciNode):
                         include = include if isinstance(include, list) else []
                 else:
                     include = []
+                    hypno_up = None  # If no inclusion list is provided, set hypno_up to None
             
                 # Check if the user provided the sleep stages or not
                 if set(list(sleepstages['name'].unique())) == {'9'}:

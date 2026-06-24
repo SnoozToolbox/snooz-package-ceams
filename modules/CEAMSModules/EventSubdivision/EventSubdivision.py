@@ -142,7 +142,7 @@ class EventSubdivision(SciNode):
             return {'new_events': ''}
 
         # split list to check on the desired events
-        event_name = list(events_names.split(";"))
+        event_name = list(events_names.split(","))
         new_events = events.copy()
 
         # Check if window_sec is set to 0 in case no subdivision is done

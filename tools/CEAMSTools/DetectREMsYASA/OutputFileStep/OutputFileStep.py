@@ -11,6 +11,7 @@ from qtpy import QtWidgets
 
 from CEAMSTools.DetectREMsYASA.OutputFileStep.Ui_OutputFileStep import Ui_OutputFileStep
 from commons.BaseStepView import BaseStepView
+from widgets.WarningDialog import WarningDialog
 
 class OutputFileStep(BaseStepView, Ui_OutputFileStep, QtWidgets.QWidget):
     """
@@ -73,6 +74,9 @@ class OutputFileStep(BaseStepView, Ui_OutputFileStep, QtWidgets.QWidget):
         # If not, display an error message to the user and return False.
         # This is called just before the apply settings function.
         # Returning False will prevent the process from executing.
+        if len(self.lineEdit_CohortFilename.text())==0:
+            WarningDialog("Define a file to write the detailed events report for the cohort. In step '3-Detector Step'")
+            return False
         return True
     
     # Called when the user press the browse button to define where to save the cohort report
