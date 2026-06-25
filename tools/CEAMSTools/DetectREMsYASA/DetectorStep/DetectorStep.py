@@ -11,6 +11,7 @@ from PySide6.QtCore import *
 from commons.BaseStepView import BaseStepView
 from flowpipe.ActivationState import ActivationState
 from widgets.WarningDialog import WarningDialog
+from widgets.WarningDialogWithButtons import WarningDialogWithButtons
 
 from CEAMSTools.DetectREMsYASA.DetectorStep.Ui_DetectorStep import Ui_DetectorStep
 
@@ -35,6 +36,8 @@ class DetectorStep(BaseStepView, Ui_DetectorStep, QtWidgets.QWidget):
         - FreqIdx1: the maximum frequency of the REMs.
 
     """
+    context_REM_Report_selection = "REM_Report_selection"
+
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
@@ -109,26 +112,9 @@ class DetectorStep(BaseStepView, Ui_DetectorStep, QtWidgets.QWidget):
         self._events_names_topic = f'{self.Event_subdivision_identifier}.events_names'
         self._pub_sub_manager.subscribe(self, self._events_names_topic)
 
-    def on_radioButton_scored_changed(self):
-        """Handle the state change of radioButton_scored"""
-        is_checked = self.radioButton_scored.isChecked()
-        self.checkBox_R.setEnabled(is_checked)
-        self.checkBox_W.setEnabled(is_checked)
-        self.checkBox_N1.setEnabled(is_checked)
-        self.checkBox_N2.setEnabled(is_checked)
-        self.checkBox_N3.setEnabled(is_checked)
-        if is_checked:
-            self.checkBox_R.setChecked(True)
-            self.checkBox_W.setChecked(False)
-            self.checkBox_N1.setChecked(False)
-            self.checkBox_N2.setChecked(False)
-            self.checkBox_N3.setChecked(False)
-        else:
-            self.checkBox_R.setChecked(False)
-            self.checkBox_W.setChecked(False)
-            self.checkBox_N1.setChecked(False)
-            self.checkBox_N2.setChecked(False)
-            self.checkBox_N3.setChecked(False)
+        self.radioButton_scored.clicked.connect(self.Activate_REMSDetails_module) 
+        self.radioButton_unscored.clicked.connect(self.Activate_REMSDetails_module)
+        self._context_manager[DetectorStep.context_REM_Report_selection] = 0
 
     def load_settings(self):
         # Load settings is called after the constructor of all steps has been executed.
@@ -146,6 +132,7 @@ class DetectorStep(BaseStepView, Ui_DetectorStep, QtWidgets.QWidget):
         self._pub_sub_manager.publish(self, self._DurIdx1_topic, 'ping')
         self._pub_sub_manager.publish(self, self._FreqIdx0, 'ping')
         self._pub_sub_manager.publish(self, self._FreqIdx1, 'ping')
+        self._pub_sub_manager.publish(self, self._node_id_REMsDetails + ".get_activation_state", None)
         #self._pub_sub_manager.publish(self, self._events_names_topic, 'ping')
 
     def on_topic_update(self, topic, message, sender):
@@ -188,6 +175,16 @@ class DetectorStep(BaseStepView, Ui_DetectorStep, QtWidgets.QWidget):
             self.checkBox_N3.setChecked('3' in stages_lst)
             self.checkBox_R.setChecked('5' in stages_lst)
             self.checkBox_W.setChecked('0' in stages_lst)
+            self.radioButton_scored.setChecked(stages_lst != [''])
+            self.radioButton_unscored.setChecked(stages_lst == [''])
+        if topic == self._node_id_REMsDetails + ".get_activation_state":
+            if message == ActivationState.ACTIVATED:
+                self.radioButton_scored.setChecked(True)
+                self.Activate_REMSDetails_module()
+            else:
+                self.radioButton_unscored.setChecked(True)
+                self.Activate_REMSDetails_module()
+            self.on_radioButton_scored_changed()
 
     def on_apply_settings(self):
         stages_str = self.get_stages()
@@ -207,6 +204,7 @@ class DetectorStep(BaseStepView, Ui_DetectorStep, QtWidgets.QWidget):
         det_param["stage_sel"] = stages_str
         det_param["rems_event_name"] = str(self.lineEdit_2.text())
         self._pub_sub_manager.publish(self, self._det_param_topic, str(det_param))
+        self.Activate_REMSDetails_module()
     # Slot called when the user wants to write the filename
     def on_choose(self):
         pass
@@ -220,6 +218,18 @@ class DetectorStep(BaseStepView, Ui_DetectorStep, QtWidgets.QWidget):
         # If not, display an error message to the user and return False.
         # This is called just before the apply settings function.
         # Returning False will prevent the process from executing.
+        if self.radioButton_scored.isChecked() or self.radioButton_unscored.isChecked():
+            msg = (
+                "Make sure about the sleep stage selection in step '2-Detector Step'.\n"
+                "If you have selected 'Scored', the REMs detection will be performed only on\n"
+                "the REM sleep stage and you need to provide the annotation file.\n"
+                "If you have selected 'Unscored', the REMs detection will be performed\n"
+                "without considering the sleep stages and you don't need to provide\n"
+                "the annotation file"
+            )
+            if WarningDialogWithButtons.show_warning(msg):
+                return True
+            return False
         return True
 
     # Called when the user delete an instance of the plugin
@@ -257,3 +267,34 @@ class DetectorStep(BaseStepView, Ui_DetectorStep, QtWidgets.QWidget):
         if self.radioButton_unscored.isChecked():
             stages_str = ''    
         return stages_str
+
+    def Activate_REMSDetails_module(self):
+        # Activate the REMsDetails module if the user select scored sleep stages
+        if self.radioButton_scored.isChecked():
+            self._pub_sub_manager.publish(self, self._node_id_REMsDetails\
+                +".activation_state_change", ActivationState.ACTIVATED)
+        else:
+            self._pub_sub_manager.publish(self, self._node_id_REMsDetails\
+                +".activation_state_change", ActivationState.DEACTIVATED)
+            
+    def on_radioButton_scored_changed(self):
+        """Handle the state change of radioButton_scored"""
+        is_checked = self.radioButton_scored.isChecked()
+        self.checkBox_R.setEnabled(False)  # Always disable the REMs checkbox
+        self.checkBox_W.setEnabled(False)  # Always disable the Wake checkbox
+        self.checkBox_N1.setEnabled(False)  # Always disable the N1 checkbox
+        self.checkBox_N2.setEnabled(False)  # Always disable the N2 checkbox
+        self.checkBox_N3.setEnabled(False) # Always disable the N3 checkbox
+        if is_checked:
+            self.checkBox_R.setChecked(True)
+            self.checkBox_W.setChecked(False)
+            self.checkBox_N1.setChecked(False)
+            self.checkBox_N2.setChecked(False)
+            self.checkBox_N3.setChecked(False)
+        else:
+            self.checkBox_R.setChecked(False)
+            self.checkBox_W.setChecked(False)
+            self.checkBox_N1.setChecked(False)
+            self.checkBox_N2.setChecked(False)
+            self.checkBox_N3.setChecked(False)
+        self._context_manager[DetectorStep.context_REM_Report_selection] = 1 if self.radioButton_scored.isChecked() else 0

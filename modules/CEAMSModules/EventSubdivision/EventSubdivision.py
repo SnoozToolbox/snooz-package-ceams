@@ -163,15 +163,20 @@ class EventSubdivision(SciNode):
 
         # Transform to samples
         if (events_names == ''):
-            duration_times = events['duration_sec'].to_numpy()
+            duration_times = pd.to_numeric(events['duration_sec'], errors='coerce').to_numpy(dtype=float)
             df = events.copy()
         else:
-            duration_times = events.loc[events['name'].isin(event_name), 'duration_sec'].to_numpy()
+            duration_times = pd.to_numeric(events.loc[events['name'].isin(event_name), 'duration_sec'], errors='coerce').to_numpy(dtype=float)
             df = events.loc[events['name'].isin(event_name)].reset_index(drop=True).copy()
             new_events = events.loc[events['name'].isin(event_name)].reset_index(drop=True).copy()
 
         # Ignore tiny floating-point residues such as 29.99345 when the
         # duration is effectively meant to be a whole number of seconds.
+        if np.isnan(duration_times).any():
+            err_message = "ERROR: duration_sec contains non-numeric values"
+            self._log_manager.log(self.identifier, err_message)
+            print('EventSubdivision:' + err_message)
+            return {'new_events': ''}
         duration_times = np.round(duration_times).astype(int)
         
         if int(n_window)<= 1:

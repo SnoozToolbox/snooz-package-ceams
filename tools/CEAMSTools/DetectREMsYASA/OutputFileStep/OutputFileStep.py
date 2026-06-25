@@ -12,6 +12,7 @@ from qtpy import QtWidgets
 from CEAMSTools.DetectREMsYASA.OutputFileStep.Ui_OutputFileStep import Ui_OutputFileStep
 from commons.BaseStepView import BaseStepView
 from widgets.WarningDialog import WarningDialog
+from CEAMSTools.DetectREMsYASA.DetectorStep.DetectorStep import DetectorStep
 
 class OutputFileStep(BaseStepView, Ui_OutputFileStep, QtWidgets.QWidget):
     """
@@ -50,13 +51,13 @@ class OutputFileStep(BaseStepView, Ui_OutputFileStep, QtWidgets.QWidget):
     def on_topic_update(self, topic, message, sender):
         # Whenever a value is updated within the context, all steps receives a 
         # self._context_manager.topic message and can then act on it.
-        #if topic == self._context_manager.topic:
+        super().on_topic_update(topic, message, sender)
 
-            # The message will be the KEY of the value that's been updated inside the context.
-            # If it's the one you are looking for, we can then take the updated value and use it.
-            #if message == "context_some_other_step":
-                #updated_value = self._context_manager["context_some_other_step"]
-        pass
+        if topic==self._context_manager.topic:
+            # PSA section selection changed
+            if message==DetectorStep.context_REM_Report_selection: # key of the context dict
+                bool_flag = True if self._context_manager[DetectorStep.context_REM_Report_selection]==1 else False
+                self.enable_widgets(bool_flag)
 
     def on_topic_response(self, topic, message, sender):
         # This will be called as a response to ping request.
@@ -74,7 +75,7 @@ class OutputFileStep(BaseStepView, Ui_OutputFileStep, QtWidgets.QWidget):
         # If not, display an error message to the user and return False.
         # This is called just before the apply settings function.
         # Returning False will prevent the process from executing.
-        if len(self.lineEdit_CohortFilename.text())==0:
+        if len(self.lineEdit_CohortFilename.text())==0 and self._context_manager[DetectorStep.context_REM_Report_selection]==1:
             WarningDialog("Define a file to write the detailed events report for the cohort. In step '3-Detector Step'")
             return False
         return True
@@ -90,3 +91,10 @@ class OutputFileStep(BaseStepView, Ui_OutputFileStep, QtWidgets.QWidget):
             options = QtWidgets.QFileDialog.DontConfirmOverwrite)
         if filename != '':
             self.lineEdit_CohortFilename.setText(filename)
+
+    def enable_widgets(self, bool_flag):
+        self.gridLayout.setEnabled(bool_flag)
+        self.label_2.setEnabled(bool_flag)
+        self.label_3.setEnabled(bool_flag)
+        self.lineEdit_CohortFilename.setEnabled(bool_flag)
+        self.pushButton_CohortFilename.setEnabled(bool_flag)

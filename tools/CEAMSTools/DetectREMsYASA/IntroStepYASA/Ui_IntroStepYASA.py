@@ -147,7 +147,7 @@ class Ui_IntroStepYASA(object):
 
     def retranslateUi(self, IntroStepYASA):
         IntroStepYASA.setWindowTitle(QCoreApplication.translate("IntroStepYASA", u"Form", None))
-        self.label_2.setText(QCoreApplication.translate("IntroStepYASA", u"<html><head/><body><p><span style=\" font-weight:600;\">YASA Rapid Eye Movements Detector</span></p><p>This tool utilizes the Yet Another Spindle Algorithm (<span style=\" font-weight:600;\">YASA)</span> rapid eye movements (<span style=\" font-weight:600;\">REMs</span>) detector algorithm.</p></body></html>", None))
+        self.label_2.setText(QCoreApplication.translate("IntroStepYASA", u"<html><head/><body><p><span style=\" font-weight:600;\">YASA Rapid Eye Movements Detector</span></p><p>This tool utilizes the Yet Another Spindle Algorithm (<span style=\" font-weight:600;\">YASA)</span> rapid eye movements (<span style=\" font-weight:600;\">REMs</span>) detection algorithm to detect REMs events. It also classifies the detected REMs into Phaisc and Tonic mini-epochs.</p></body></html>", None))
         self.label.setText(QCoreApplication.translate("IntroStepYASA", u"<html><head/><body><p><span style=\" font-size:12pt; font-weight:600;\">Input</span></p></body></html>", None))
         self.textEdit.setHtml(QCoreApplication.translate("IntroStepYASA", u"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset=\"utf-8\" /><style type=\"text/css\">\n"
@@ -161,11 +161,15 @@ class Ui_IntroStepYASA(object):
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
                         "right:0px; -qt-block-indent:0; text-indent:0px;\">   - Stellate : The .sig and .sts files must have the exact same filename and be stored in the same directory.</p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">   - NATUS (<span style=\" font-style:italic;\">for CEAMS users</span>) :  The entire NATUS subject folder is required.</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-weight:700;\">NOTE:</span> The annotations files must include the sleep staging.</p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-weight:700;\">NOTE:</span> Annotation files are not required for the functionality of this tool. However, if provided, they must include sleep staging. The REMs report is only generated when an annotation file is supplied. Without one, the tool performs REMs detection solely based on the algorithm's dete"
+                        "ction criteria, and detections may occur in any sleep stage.</p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-weight:700;\">Suggestion:</span> If you do not have annotation files, we highly recommend using the &quot;<span style=\" font-weight:700;\">Score Sleep Stages with YASA</span>&quot; tool first to generate an annotation file, and then running this tool for more reliable REMs detection.</p>\n"
 "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Channels:</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:"
-                        "0px; -qt-block-indent:0; text-indent:0px;\">This tool requires the selection of <span style=\" font-weight:600;\">2</span> <span style=\" font-weight:600;\">EOG</span> <span style=\" font-weight:600;\">channels</span> per recording for REMs detection.</p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0"
+                        "px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">This tool requires the selection of <span style=\" font-weight:600;\">2</span> <span style=\" font-weight:600;\">EOG</span> <span style=\" font-weight:600;\">channels</span> per recording for REMs detection.</p>\n"
 "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p></body></html>", None))
         self.label_4.setText(QCoreApplication.translate("IntroStepYASA", u"<html><head/><body><p><span style=\" font-size:12pt; font-weight:600;\">Output</span></p></body></html>", None))
         self.textEdit_2.setHtml(QCoreApplication.translate("IntroStepYASA", u"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"

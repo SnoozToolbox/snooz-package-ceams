@@ -21,25 +21,32 @@
     <number>25</number>
    </property>
    <item>
-    <widget class="QLabel" name="label">
-     <property name="text">
-      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;REMs Cohort Report&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-     </property>
-    </widget>
-   </item>
-   <item>
     <layout class="QGridLayout" name="gridLayout">
-     <item row="2" column="2">
+     <item row="3" column="3">
+      <widget class="QLabel" name="label_3">
+       <property name="text">
+        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Select a file name to save the report file:&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="3">
+      <widget class="QLabel" name="label_2">
+       <property name="text">
+        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;REMs characteristics:&lt;/p&gt;&lt;p&gt;- REMs count&lt;br/&gt;- Duration of the REMs in second&lt;br/&gt;- Amplitude of the REMs (Difference between the peak and trough of the [LOC - ROC])&lt;br/&gt;- Density of the REMs in cycles and hours&lt;br/&gt;- Variablity of the densities&lt;/p&gt;&lt;p&gt;The report consists of the average of the mentioned characteristics in:&lt;/p&gt;&lt;p&gt;- total (all selected stages)&lt;br/&gt;- per sleep cycle&lt;br/&gt;- per clock hour&lt;br/&gt;- per hour spent in each stage&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       </property>
+      </widget>
+     </item>
+     <item row="4" column="3">
+      <widget class="QLineEdit" name="lineEdit_CohortFilename"/>
+     </item>
+     <item row="4" column="4">
       <widget class="QPushButton" name="pushButton_CohortFilename">
        <property name="text">
         <string>Browse</string>
        </property>
       </widget>
      </item>
-     <item row="2" column="1">
-      <widget class="QLineEdit" name="lineEdit_CohortFilename"/>
-     </item>
-     <item row="0" column="0">
+     <item row="1" column="2">
       <spacer name="verticalSpacer">
        <property name="orientation">
         <enum>Qt::Orientation::Vertical</enum>
@@ -52,34 +59,27 @@
        </property>
       </spacer>
      </item>
-     <item row="0" column="1">
-      <widget class="QLabel" name="label_2">
+     <item row="0" column="2" colspan="2">
+      <widget class="QLabel" name="label">
        <property name="text">
-        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;REMs characteristics:&lt;/p&gt;&lt;p&gt;- REMs count&lt;br/&gt;- Duration of the REMs in second&lt;br/&gt;- Amplitude of the REMs (Difference between the peak and trough of the [LOC - ROC])&lt;br/&gt;- Density of the REMs in cycles and hours&lt;br/&gt;- Variablity of the densities&lt;/p&gt;&lt;p&gt;The report consists of the average of the mentioned characteristics in&lt;/p&gt;&lt;p&gt;- total (all selected stages)&lt;br/&gt;- per sleep cycle&lt;br/&gt;- per clock hour&lt;br/&gt;- per hour spent in each stage&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;REMs Cohort Report&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
        </property>
       </widget>
-     </item>
-     <item row="1" column="1">
-      <widget class="QLabel" name="label_3">
-       <property name="text">
-        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Select a file name to save the report file:&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-       </property>
-      </widget>
-     </item>
-     <item row="3" column="1">
-      <spacer name="verticalSpacer_2">
-       <property name="orientation">
-        <enum>Qt::Orientation::Vertical</enum>
-       </property>
-       <property name="sizeHint" stdset="0">
-        <size>
-         <width>20</width>
-         <height>40</height>
-        </size>
-       </property>
-      </spacer>
      </item>
     </layout>
+   </item>
+   <item>
+    <spacer name="verticalSpacer_2">
+     <property name="orientation">
+      <enum>Qt::Orientation::Vertical</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>20</width>
+       <height>40</height>
+      </size>
+     </property>
+    </spacer>
    </item>
   </layout>
  </widget>
