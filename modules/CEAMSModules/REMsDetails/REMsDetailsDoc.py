@@ -82,9 +82,9 @@ def _get_doc(N_CYCLE, N_HOURS=0):
 
             'total_R_tonic_pct' : 'Total - Tonic REM percentage in REM stage. Complement of phasic REM percentage (100 - phasic REM percentage).',
 
-            'total_R_Energy_PkPk_uvs' : 'Total - Average peak-to-peak REM energy (µV²) in REM stage. Per-event energy is amplitude_uV squared.',
+            'total_R_energy_pkpk_uv2' : 'Total - Average peak-to-peak REM energy (uv2) in REM stage. Per-event energy is amplitude_uV squared.',
 
-            'total_R_PkPk_REMs_Activity_Index' : 'Total - Peak-to-peak REMs activity index in REM stage. Sum of per-event energies (amplitude_uV squared).'
+            'total_R_pkpk_rems_activity_index' : 'Total - Peak-to-peak REMs activity index in REM stage. Sum of per-event energies (amplitude_uV squared).'
 
     }
 
@@ -107,9 +107,9 @@ def _get_doc(N_CYCLE, N_HOURS=0):
 
             f'cyc{i_cycle+1}_R_tonic_pct' : f'Cycle {i_cycle+1} - Tonic REM percentage in REM stage. Complement of phasic REM percentage (100 - phasic REM percentage).',
 
-            f'cyc{i_cycle+1}_R_Energy_PkPk_uvs' : f'Cycle {i_cycle+1} - Average peak-to-peak REM energy (µV²) in REM stage. Per-event energy is amplitude_uV squared.',
+            f'cyc{i_cycle+1}_R_energy_pkpk_uv2' : f'Cycle {i_cycle+1} - Average peak-to-peak REM energy (uv2) in REM stage. Per-event energy is amplitude_uV squared.',
 
-            f'cyc{i_cycle+1}_R_PkPk_REMs_Activity_Index' : f'Cycle {i_cycle+1} - Peak-to-peak REMs activity index in REM stage. Sum of per-event energies (amplitude_uV squared).'
+            f'cyc{i_cycle+1}_R_pkpk_rems_activity_index' : f'Cycle {i_cycle+1} - Peak-to-peak REMs activity index in REM stage. Sum of per-event energies (amplitude_uV squared).'
             }
         cycle_dict = cycle_dict | current_cycle_dict
     
@@ -136,9 +136,9 @@ def _get_doc(N_CYCLE, N_HOURS=0):
 
             f'clock_h{i_hour+1}_R_tonic_pct' : f'Hour {i_hour+1} - Tonic REM percentage in REM stage. Complement of phasic REM percentage (100 - phasic REM percentage).',
 
-            f'clock_h{i_hour+1}_R_Energy_PkPk_uvs' : f'Hour {i_hour+1} - Average peak-to-peak REM energy (µV²) in REM stage. Per-event energy is amplitude_uV squared.',
+            f'clock_h{i_hour+1}_R_energy_pkpk_uv2' : f'Hour {i_hour+1} - Average peak-to-peak REM energy (uv2) in REM stage. Per-event energy is amplitude_uV squared.',
 
-            f'clock_h{i_hour+1}_R_PkPk_REMs_Activity_Index' : f'Hour {i_hour+1} - Peak-to-peak REMs activity index in REM stage. Sum of per-event energies (amplitude_uV squared).'
+            f'clock_h{i_hour+1}_R_pkpk_rems_activity_index' : f'Hour {i_hour+1} - Peak-to-peak REMs activity index in REM stage. Sum of per-event energies (amplitude_uV squared).'
             }
         clock_hour_dict = clock_hour_dict | current_hour_dict
     
@@ -165,9 +165,9 @@ def _get_doc(N_CYCLE, N_HOURS=0):
 
             f'stage_h{i_hour+1}_R_tonic_pct' : f'Stage Hour {i_hour+1} - Tonic REM percentage in REM stage. Complement of phasic REM percentage (100 - phasic REM percentage).',
 
-            f'stage_h{i_hour+1}_R_Energy_PkPk_uvs' : f'Stage Hour {i_hour+1} - Average peak-to-peak REM energy (µV²) in REM stage. Per-event energy is amplitude_uV squared.',
+            f'stage_h{i_hour+1}_R_energy_pkpk_uv2' : f'Stage Hour {i_hour+1} - Average peak-to-peak REM energy (uv2) in REM stage. Per-event energy is amplitude_uV squared.',
 
-            f'stage_h{i_hour+1}_R_PkPk_REMs_Activity_Index' : f'Stage Hour {i_hour+1} - Peak-to-peak REMs activity index in REM stage. Sum of per-event energies (amplitude_uV squared).'
+            f'stage_h{i_hour+1}_R_pkpk_rems_activity_index' : f'Stage Hour {i_hour+1} - Peak-to-peak REMs activity index in REM stage. Sum of per-event energies (amplitude_uV squared).'
             }
         stage_hour_dict = stage_hour_dict | current_stage_hour_dict
     
