@@ -218,18 +218,6 @@ class DetectorStep(BaseStepView, Ui_DetectorStep, QtWidgets.QWidget):
         # If not, display an error message to the user and return False.
         # This is called just before the apply settings function.
         # Returning False will prevent the process from executing.
-        if self.radioButton_scored.isChecked() or self.radioButton_unscored.isChecked():
-            msg = (
-                "Make sure about the sleep stage selection in step '2-Detector Step'.\n"
-                "If you have selected 'Scored', the REMs detection will be performed only on\n"
-                "the REM sleep stage and you need to provide the annotation file.\n"
-                "If you have selected 'Unscored', the REMs detection will be performed\n"
-                "without considering the sleep stages and you don't need to provide\n"
-                "the annotation file"
-            )
-            if WarningDialogWithButtons.show_warning(msg):
-                return True
-            return False
         return True
 
     # Called when the user delete an instance of the plugin

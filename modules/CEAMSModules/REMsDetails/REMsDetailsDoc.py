@@ -53,7 +53,7 @@ def _get_doc(N_CYCLE, N_HOURS=0):
 
     channel_dict = \
     {            
-            'chan_label' : 'The label of the channel.',
+            'chan_label' : 'The channel names used in the detection algorithm. The event has been added to one of the channels in this column for consistency with the annotation file format.',
             'chan_fs' : 'The sampling rate (Hz) of the channel.'
     }
 

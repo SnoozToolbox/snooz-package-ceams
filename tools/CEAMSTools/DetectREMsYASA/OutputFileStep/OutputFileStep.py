@@ -76,7 +76,7 @@ class OutputFileStep(BaseStepView, Ui_OutputFileStep, QtWidgets.QWidget):
         # This is called just before the apply settings function.
         # Returning False will prevent the process from executing.
         if len(self.lineEdit_CohortFilename.text())==0 and self._context_manager[DetectorStep.context_REM_Report_selection]==1:
-            WarningDialog("Define a file to write the detailed events report for the cohort. In step '3-Detector Step'")
+            WarningDialog("Define a file to write the detailed events report for the cohort. In step '4- Output File'")
             return False
         return True
     
