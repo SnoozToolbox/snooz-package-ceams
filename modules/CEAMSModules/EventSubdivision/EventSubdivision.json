@@ -38,6 +38,12 @@
                 "value": "",
                 "connections": {},
                 "sub_plugs": {}
+            },
+            "filename": {
+                "name": "filename",
+                "value": "",
+                "connections": {},
+                "sub_plugs": {}
             }
         },
         "outputs": {

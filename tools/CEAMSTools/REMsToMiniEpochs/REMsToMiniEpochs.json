@@ -87,6 +87,14 @@
                         "value": 1,
                         "sub_plugs": {},
                         "connections": {}
+                    },
+                    "filename": {
+                        "name": "filename",
+                        "value": "",
+                        "sub_plugs": {},
+                        "connections": {
+                            "9168dcad-ee1b-4b56-ba71-6836188d1609": "filename"
+                        }
                     }
                 },
                 "outputs": {

@@ -38,6 +38,7 @@ See the file LICENCE for full license details.
 from flowpipe import SciNode, InputPlug, OutputPlug
 from commons.NodeInputException import NodeInputException
 from commons.NodeRuntimeException import NodeRuntimeException
+import os
 import pandas as pd
 import numpy as np
 
@@ -86,6 +87,7 @@ class EventSubdivision(SciNode):
         InputPlug('events_names',self)
         InputPlug('window_sec',self)
         InputPlug('n_window',self)
+        InputPlug('filename',self)
         
 
         # Output plugs
@@ -93,16 +95,18 @@ class EventSubdivision(SciNode):
         
         self._is_master = False 
 
-    def _raise_if_no_matching_events(self, duration_times, df, events_names):
+    def _raise_if_no_matching_events(self, duration_times, df, events_names, filename):
         """Raise a runtime error when no events match events_names for the current recording."""
         if len(duration_times) == 0 or len(df) == 0:
+            recording_label = os.path.basename(filename) if isinstance(filename, str) and filename.strip() else "the current recording"
             err_message = (
-                f"No annotation file was found for the current recording."
+                f"No events matching events_names '{events_names}' were found for {recording_label}. "
+                f"Meaning no annotation file was provided for this recording."
             )
             self._log_manager.log(self.identifier, err_message)
-            raise NodeRuntimeException(self.identifier, "annotation_file", err_message)
+            raise NodeRuntimeException(self.identifier, "events_names", err_message)
     
-    def compute(self, events,events_names,window_sec,n_window):
+    def compute(self, events,events_names,window_sec,n_window,filename=''):
         """
         Create a new pandas DataFrame of events with subwindow of every input events named events_names.
 
@@ -166,7 +170,7 @@ class EventSubdivision(SciNode):
                 # last df append with new EventName_sub
                 new_events = new_events.loc[new_events['name'].isin(event_name)].reset_index(drop=True)
                 self._raise_if_no_matching_events(
-                    new_events['duration_sec'].to_numpy(), new_events, events_names)
+                    new_events['duration_sec'].to_numpy(), new_events, events_names, filename)
                 df = events.loc[events['name'].isin(event_name)].reset_index(drop=True).copy()
                 df['name'] = df['name'].values + '_sub'
                 new_events = pd.concat([new_events,df])
@@ -181,7 +185,7 @@ class EventSubdivision(SciNode):
             duration_times = pd.to_numeric(events.loc[events['name'].isin(event_name), 'duration_sec'], errors='coerce').to_numpy(dtype=float)
             df = events.loc[events['name'].isin(event_name)].reset_index(drop=True).copy()
             new_events = events.loc[events['name'].isin(event_name)].reset_index(drop=True).copy()
-            self._raise_if_no_matching_events(duration_times, df, events_names)
+            self._raise_if_no_matching_events(duration_times, df, events_names, filename)
 
         # Ignore tiny floating-point residues such as 29.99345 when the
         # duration is effectively meant to be a whole number of seconds.

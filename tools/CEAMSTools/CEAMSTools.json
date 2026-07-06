@@ -65,7 +65,7 @@
         {
             "item_name": "DetectREMsYASA",
             "item_type": "tool",
-            "item_version": "3.4.0",
+            "item_version": "3.5.0",
             "item_hooks": [
                 {
                     "endpoint_name": "menu_endpoint",
