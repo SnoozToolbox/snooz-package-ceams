@@ -37,6 +37,7 @@ See the file LICENCE for full license details.
 """
 from flowpipe import SciNode, InputPlug, OutputPlug
 from commons.NodeInputException import NodeInputException
+from commons.NodeRuntimeException import NodeRuntimeException
 import pandas as pd
 import numpy as np
 
@@ -91,6 +92,15 @@ class EventSubdivision(SciNode):
         OutputPlug('new_events',self)
         
         self._is_master = False 
+
+    def _raise_if_no_matching_events(self, duration_times, df, events_names):
+        """Raise a runtime error when no events match events_names for the current recording."""
+        if len(duration_times) == 0 or len(df) == 0:
+            err_message = (
+                f"No annotation file was found for the current recording."
+            )
+            self._log_manager.log(self.identifier, err_message)
+            raise NodeRuntimeException(self.identifier, "annotation_file", err_message)
     
     def compute(self, events,events_names,window_sec,n_window):
         """
@@ -155,6 +165,8 @@ class EventSubdivision(SciNode):
                 # Making having same format as a usual subdivision so I keep
                 # last df append with new EventName_sub
                 new_events = new_events.loc[new_events['name'].isin(event_name)].reset_index(drop=True)
+                self._raise_if_no_matching_events(
+                    new_events['duration_sec'].to_numpy(), new_events, events_names)
                 df = events.loc[events['name'].isin(event_name)].reset_index(drop=True).copy()
                 df['name'] = df['name'].values + '_sub'
                 new_events = pd.concat([new_events,df])
@@ -169,6 +181,7 @@ class EventSubdivision(SciNode):
             duration_times = pd.to_numeric(events.loc[events['name'].isin(event_name), 'duration_sec'], errors='coerce').to_numpy(dtype=float)
             df = events.loc[events['name'].isin(event_name)].reset_index(drop=True).copy()
             new_events = events.loc[events['name'].isin(event_name)].reset_index(drop=True).copy()
+            self._raise_if_no_matching_events(duration_times, df, events_names)
 
         # Ignore tiny floating-point residues such as 29.99345 when the
         # duration is effectively meant to be a whole number of seconds.
