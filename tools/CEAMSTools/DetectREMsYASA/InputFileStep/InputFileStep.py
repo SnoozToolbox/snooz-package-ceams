@@ -71,7 +71,7 @@ class InputFileStep( InputFilesStep):
             "The following recording(s) have no annotation file:\n"
             f"{files_list_msg}\n\n"
             "If you selected 'Scored' in step '2 - Detector Step', REMs detection is "
-            "performed only on the REM sleep stage and you need to provide an annotation file.\n"
+            "performed only on the REM sleep stage and you need to provide an annotation file with sleep stages included.\n"
             "If you selected 'Unscored', REMs detection is performed without considering "
             "sleep stages and an annotation file is not required.\n\n"
             "Do you want to continue?"
