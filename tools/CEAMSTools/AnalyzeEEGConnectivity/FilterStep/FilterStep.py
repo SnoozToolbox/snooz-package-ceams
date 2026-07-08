@@ -24,6 +24,9 @@ class FilterStep(BaseStepView, Ui_FilterStep, QtWidgets.QWidget):
     """
     context_Con_annot_selection = "annotation_selection"
     context_Con_sleep_stages = "sleep_stages_selection"
+    # Explicit analysis scope shared with the other steps:
+    # "sleep_stages" | "specific_annotations" | "unscored"
+    context_Con_scope = "connectivity_scope"
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -51,7 +54,9 @@ class FilterStep(BaseStepView, Ui_FilterStep, QtWidgets.QWidget):
 
         # Node‐IDs for band‐pass filters
         self._node_id_bandpass_filter = "1dbffc28-380f-4ca4-ae73-16cdd6e4b60c"
-        self._node_id_SignalsFromEvents = "7b92caa3-9e9e-46bc-b790-6175abb7ae45"  
+        self._node_id_SignalsFromEvents = "7b92caa3-9e9e-46bc-b790-6175abb7ae45"        # annotation branch
+        self._node_id_SignalsFromEvents_sleep = "57a3efc2-afb7-45ac-9384-b5ab46d77cab"  # sleep branch
+        self._node_id_sleep_stage_events = "3b6e3aba-4c49-4fd9-b41d-0a6a22004957"       # SleepStageEvents
         self._node_id_trim_signal = "d6266576-d0da-4a9a-adb4-2cc7e01308ef"  
 
         # self._events_names_topic = f"{self._node_id_SignalsFromEvents}.events_names"   
@@ -76,22 +81,55 @@ class FilterStep(BaseStepView, Ui_FilterStep, QtWidgets.QWidget):
         self.unscored_radioButton.toggled.connect(self.on_unscored_toggled)
         self.sleep_stages_radioButton.toggled.connect(self.on_sleep_stages_toggled)
         self.specific_annotations_radioButton.toggled.connect(self.on_specific_annotations_toggled)
-        
 
+        # Align the backend nodes with the default selected scope.
+        self._set_scope_nodes(self._current_scope())
+
+
+    def _current_scope(self):
+        """Return the currently selected analysis scope."""
+        if self.specific_annotations_radioButton.isChecked():
+            return "specific_annotations"
+        if self.unscored_radioButton.isChecked():
+            return "unscored"
+        return "sleep_stages"
 
     def update_section_selection_slot(self):
-        self._context_manager[FilterStep.context_Con_annot_selection] = 1 if self.specific_annotations_radioButton.isChecked() else 0
-        self._context_manager[FilterStep.context_Con_sleep_stages] = self.sleep_stages_names if self.sleep_stages_radioButton.isChecked() else ''
+        scope = self._current_scope()
+        self._context_manager[FilterStep.context_Con_scope] = scope
+        self._context_manager[FilterStep.context_Con_annot_selection] = 1 if scope == "specific_annotations" else 0
+        self._context_manager[FilterStep.context_Con_sleep_stages] = self.sleep_stages_names if scope == "sleep_stages" else ''
+
+    def _set_scope_nodes(self, scope):
+        """
+        Activate/deactivate/bypass the SignalsFromEvents (annotation and sleep
+        branches) and SleepStageEvents nodes according to the selected scope.
+        The connectivity chains (epoch/connectivity/details) are handled by the
+        ConnectivitySettings step.
+        """
+        if scope == "sleep_stages":
+            self.activate_node(self._node_id_sleep_stage_events)
+            self.activate_node(self._node_id_SignalsFromEvents_sleep)
+            self.deactivate_node(self._node_id_SignalsFromEvents)
+        elif scope == "specific_annotations":
+            self.deactivate_node(self._node_id_sleep_stage_events)
+            self.deactivate_node(self._node_id_SignalsFromEvents_sleep)
+            self.activate_node(self._node_id_SignalsFromEvents)
+        elif scope == "unscored":
+            self.deactivate_node(self._node_id_sleep_stage_events)
+            self.deactivate_node(self._node_id_SignalsFromEvents_sleep)
+            # Bypass: pass the (trimmed) full signal through without cropping by events.
+            self.bypass_node(self._node_id_SignalsFromEvents)
 
 
     def on_unscored_toggled(self, checked: bool):
         if checked:
             self.trim_checkBox.setEnabled(True)
-            self.bypass_node(self._node_id_SignalsFromEvents)
+            self._set_scope_nodes("unscored")
+            self.update_section_selection_slot()
         else:
             self.trim_checkBox.setEnabled(False)
             self.trim_checkBox.setChecked(False)
-            self.activate_node(self._node_id_SignalsFromEvents)
 
     def on_sleep_stages_toggled(self, checked: bool):
         if checked:
@@ -99,6 +137,8 @@ class FilterStep(BaseStepView, Ui_FilterStep, QtWidgets.QWidget):
             self.n2_checkBox.setEnabled(True)
             self.n3_checkBox.setEnabled(True)
             self.rem_checkBox.setEnabled(True)
+            self._set_scope_nodes("sleep_stages")
+            self.update_section_selection_slot()
         else:
             self.n1_checkBox.setEnabled(False)
             self.n2_checkBox.setEnabled(False)
@@ -107,7 +147,9 @@ class FilterStep(BaseStepView, Ui_FilterStep, QtWidgets.QWidget):
 
 
     def on_specific_annotations_toggled(self, checked: bool):
-        self.update_section_selection_slot()
+        if checked:
+            self._set_scope_nodes("specific_annotations")
+            self.update_section_selection_slot()
 
     def on_custom_radio_toggled(self, checked):
         # Enable spinboxes only when Custom radio is selected
@@ -127,10 +169,18 @@ class FilterStep(BaseStepView, Ui_FilterStep, QtWidgets.QWidget):
 
     def bypass_node(self, node_id):
         """
-        Helper to activate a module/node by its ID.
+        Helper to bypass a module/node by its ID.
         """
         self._pub_sub_manager.publish(
             self, f"{node_id}.activation_state_change", ActivationState.BYPASS
+        )
+
+    def deactivate_node(self, node_id):
+        """
+        Helper to deactivate a module/node by its ID.
+        """
+        self._pub_sub_manager.publish(
+            self, f"{node_id}.activation_state_change", ActivationState.DEACTIVATED
         )
 
     def on_trim_checkbox_toggled(self, checked):
@@ -160,6 +210,10 @@ class FilterStep(BaseStepView, Ui_FilterStep, QtWidgets.QWidget):
         # Activation state
         self._pub_sub_manager.publish(self, self._node_id_bandpass_filter+".get_activation_state", None)
         self._pub_sub_manager.publish(self, self._node_id_trim_signal+".get_activation_state", None)
+
+        # Make sure the branch nodes match the current scope selection.
+        self._set_scope_nodes(self._current_scope())
+        self.update_section_selection_slot()
 
 
 
@@ -284,23 +338,13 @@ class FilterStep(BaseStepView, Ui_FilterStep, QtWidgets.QWidget):
             cutoff = "0.16 30"
 
         self._pub_sub_manager.publish(self, self._low_high_cutoff_topic, cutoff)
-        
-        if self.unscored_radioButton.isChecked():
-            # Bypass SignalsFromEvents module
-            self._pub_sub_manager.publish(
-                self,
-                self._node_id_SignalsFromEvents + ".activation_state_change",
-                ActivationState.BYPASS
-            )
-        else:
-            # Activate SignalsFromEvents module
-            self._pub_sub_manager.publish(
-                self,
-                self._node_id_SignalsFromEvents + ".activation_state_change",
-                ActivationState.ACTIVATED
-            )
 
-        if self.sleep_stages_radioButton.isChecked():
+        scope = self._current_scope()
+        # Activate/deactivate/bypass the SignalsFromEvents + SleepStageEvents nodes
+        # according to the selected analysis scope.
+        self._set_scope_nodes(scope)
+
+        if scope == "sleep_stages":
             self.sleep_stages_names = []
             if self.n1_checkBox.isChecked():
                 self.sleep_stages_names.append("1")
@@ -310,15 +354,17 @@ class FilterStep(BaseStepView, Ui_FilterStep, QtWidgets.QWidget):
                 self.sleep_stages_names.append("3")
             if self.rem_checkBox.isChecked():
                 self.sleep_stages_names.append("5")
-            
+
             self.sleep_stages_names = ','.join(self.sleep_stages_names)
-            self.update_section_selection_slot()
-            # self._pub_sub_manager.publish(self, self._events_names_topic, events_names)
-  
-            # if self.specific_annotations_radioButton.isChecked():
-                # self._pub_sub_manager.publish(self, self._events_names_topic, events_names)
-            
-    
+            # Push the selected sleep stages to the SleepStageEvents node so that
+            # only those stages are turned into events for the sleep branch.
+            self._pub_sub_manager.publish(
+                self, f"{self._node_id_sleep_stage_events}.stages", self.sleep_stages_names)
+        else:
+            self.sleep_stages_names = ''
+
+        self.update_section_selection_slot()
+
         if self.trim_checkBox.isChecked():
             self.activate_node(self._node_id_trim_signal)
             start_sec = self.start_time_doubleSpinBox.value()

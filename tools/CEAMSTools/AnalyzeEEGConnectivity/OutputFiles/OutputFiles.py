@@ -23,11 +23,29 @@ class OutputFiles(BaseStepView, Ui_OutputFiles, QtWidgets.QWidget):
         # init UI
         self.setupUi(self)
 
-        # --- 1. Set Node ID and Topic Strings ---
+        # --- 1. Set Node IDs for every output node (both branches, all methods) ---
+        # Annotation branch
         self._node_id_ConnectivityDetails_wpli = "803b6207-918f-4e3e-b5be-48ad9fc8b01c"
         self._node_id_ConnectivityDetails_dpli = "cc042193-2e41-49e0-b80e-973b1174cdb9"
-        self._node_id_NetworkProperties = "02d58c3b-80ec-4e80-8a3c-33d9ee521c18"
         self._node_id_ConnectivityDetails_aec = "838795ca-9563-4370-918e-f8f92cc23220"
+        self._node_id_NetworkProperties = "02d58c3b-80ec-4e80-8a3c-33d9ee521c18"
+        # Sleep-stage branch
+        self._node_id_ConnectivityDetails_wpli_sleep = "209980db-ecf3-4d88-9f66-c27373268a3b"
+        self._node_id_ConnectivityDetails_dpli_sleep = "82b687e5-9cb4-43bc-80a8-b1cd735ded9b"
+        self._node_id_ConnectivityDetails_aec_sleep = "7f93939c-b105-4637-a8e9-eae8fc40ceb1"
+        self._node_id_NetworkProperties_sleep = "9b9b5bb5-f0a3-44f4-8d31-b3ee1896f725"
+
+        # All output nodes that must receive the chosen output path.
+        self._output_node_ids = [
+            self._node_id_ConnectivityDetails_wpli,
+            self._node_id_ConnectivityDetails_dpli,
+            self._node_id_ConnectivityDetails_aec,
+            self._node_id_NetworkProperties,
+            self._node_id_ConnectivityDetails_wpli_sleep,
+            self._node_id_ConnectivityDetails_dpli_sleep,
+            self._node_id_ConnectivityDetails_aec_sleep,
+            self._node_id_NetworkProperties_sleep,
+        ]
 
         # --- 2. Connect UI Actions ---
         self.output_path_checkBox.stateChanged.connect(self.toggle_path_selection)
@@ -87,11 +105,11 @@ class OutputFiles(BaseStepView, Ui_OutputFiles, QtWidgets.QWidget):
         use_input_folder = self.output_path_checkBox.isChecked()
         chosen_path = self.path_lineEdit.text() if not use_input_folder else ""
 
-        # Publish to all nodes (assuming they have a topic named .output_path)
-        self._pub_sub_manager.publish(self, f"{self._node_id_ConnectivityDetails_wpli}.output_path", chosen_path)
-        self._pub_sub_manager.publish(self, f"{self._node_id_ConnectivityDetails_dpli}.output_path", chosen_path)
-        self._pub_sub_manager.publish(self, f"{self._node_id_NetworkProperties}.output_path", chosen_path)
-        self._pub_sub_manager.publish(self, f"{self._node_id_ConnectivityDetails_aec}.output_path", chosen_path)
+        # Publish the chosen path to every output node in both branches and all
+        # methods. Only the active chain runs, so publishing to the inactive ones
+        # is harmless.
+        for node_id in self._output_node_ids:
+            self._pub_sub_manager.publish(self, f"{node_id}.output_path", chosen_path)
 
 
     def on_validate_settings(self):

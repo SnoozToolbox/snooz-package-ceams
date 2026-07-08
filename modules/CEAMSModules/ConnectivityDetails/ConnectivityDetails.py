@@ -148,11 +148,11 @@ class ConnectivityDetails(SciNode):
 
             plt.figure(figsize=(fig_w, fig_h), dpi=200)
             if metric == 'wpli':
-                im = plt.imshow(matrix, cmap="jet", aspect="auto", vmin=0.0, vmax=0.3)  # <-- set limits
+                im = plt.imshow(matrix, cmap="jet", aspect="auto", origin="lower", vmin=0.0, vmax=0.3)  # <-- set limits
             elif metric == 'dpli':
-                im = plt.imshow(matrix, cmap="jet", aspect="auto", vmin=0.3, vmax=0.7)  # <-- set limits
+                im = plt.imshow(matrix, cmap="jet", aspect="auto", origin="lower", vmin=0.3, vmax=0.7)  # <-- set limits
             elif metric == 'aec':
-                im = plt.imshow(matrix, cmap="jet", aspect="auto", vmin=0.0, vmax=0.5)  # <-- set limits
+                im = plt.imshow(matrix, cmap="jet", aspect="auto", origin="lower", vmin=0.0, vmax=0.5)  # <-- set limits
             cbar = plt.colorbar(im)
 
             # --- force formatting with 2 decimal places ---
