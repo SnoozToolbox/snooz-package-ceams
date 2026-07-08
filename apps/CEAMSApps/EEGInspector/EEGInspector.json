@@ -1,16 +1,16 @@
 {   
     "item_name": "EEGInspector",
     "item_type": "app",
-    "item_api_version": "2.0.0",
+    "item_api_version": "3.0.0",
     "dependencies": [
         {
             "package_name": "CEAMSApps",
-            "package_version": "7.3.0",
+            "package_version": "7.5.0",
             "deleteable": false
         },
         {
             "package_name": "CEAMSModules",
-            "package_version": "7.3.0"
+            "package_version": "7.5.0"
         }
     ],
     "app_params": {

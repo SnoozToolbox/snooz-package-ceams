@@ -60,7 +60,7 @@
          <item>
           <layout class="QVBoxLayout" name="verticalLayout">
            <item>
-            <widget class="QCheckBox" name="checkBox_subject_avg">
+            <widget class="QCheckBox" name="checkBox_group_avg">
              <property name="font">
               <font>
                <family>Roboto</family>
@@ -108,7 +108,7 @@
             </spacer>
            </item>
            <item>
-            <widget class="QCheckBox" name="checkBox_subject_sel">
+            <widget class="QCheckBox" name="checkBox_group_sel">
              <property name="enabled">
               <bool>true</bool>
              </property>
@@ -395,7 +395,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
          <item>
           <widget class="QCheckBox" name="checkBox_REM">
            <property name="text">
-            <string>REM</string>
+            <string>R</string>
            </property>
           </widget>
          </item>
@@ -1058,7 +1058,7 @@ and its standard deviation in a shaded area.</string>
    </hints>
   </connection>
   <connection>
-   <sender>checkBox_subject_avg</sender>
+   <sender>checkBox_group_avg</sender>
    <signal>clicked()</signal>
    <receiver>OutputFiles</receiver>
    <slot>out_options_slot()</slot>
@@ -1074,7 +1074,7 @@ and its standard deviation in a shaded area.</string>
    </hints>
   </connection>
   <connection>
-   <sender>checkBox_subject_sel</sender>
+   <sender>checkBox_group_sel</sender>
    <signal>clicked()</signal>
    <receiver>OutputFiles</receiver>
    <slot>out_options_slot()</slot>

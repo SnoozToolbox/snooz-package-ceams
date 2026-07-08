@@ -6,16 +6,13 @@ See the file LICENCE for full license details.
 """
     Results viewer of the SignalFromEvent plugin
 """
-
 import matplotlib
 matplotlib.use('QtAgg')
-import matplotlib.pyplot as plt
 from matplotlib.backends.backend_qtagg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.backends.backend_qtagg import NavigationToolbar2QT as NavigationToolbar
 from matplotlib.figure import Figure
 import numpy as np
 from qtpy import QtWidgets
-from qtpy import QtGui
 
 from widgets.WarningDialog import WarningDialog
 from CEAMSModules.PSGReader.SignalModel import SignalModel

@@ -162,12 +162,7 @@ class PSGWriter(SciNode):
             self._psg_reader_manager.copy_file(input_filename, output_filename)
 
         # Try to open the file
-        error = None
-        output = self._psg_reader_manager.open_file(output_filename)
-        if isinstance(output, tuple) and len(output) == 2:
-            is_opened, error = output
-        else:
-            is_opened = output
+        is_opened, error = self._psg_reader_manager.open_file(output_filename)
         if not is_opened:
             if error is None:
                 error = f"ERROR PSGWriter could not open file:{output_filename}"

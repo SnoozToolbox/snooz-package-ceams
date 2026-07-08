@@ -62,7 +62,7 @@ class Ui_AnalyzeEEGConnectivityDoc(object):
 
     def retranslateUi(self, AnalyzeEEGConnectivityDoc):
         AnalyzeEEGConnectivityDoc.setWindowTitle("")
-        self.label.setText(QCoreApplication.translate("AnalyzeEEGConnectivityDoc", u"<html><head/><body><p><span style=\" font-weight:700;\">Analyze EEG Connectivity</span></p></body></html>", None))
+        self.label.setText(QCoreApplication.translate("AnalyzeEEGConnectivityDoc", u"<html><head/><body><p><span style=\" font-weight:700;\">Analyze EEG Functional Connectivity</span></p></body></html>", None))
         self.textEdit.setHtml(QCoreApplication.translate("AnalyzeEEGConnectivityDoc", u"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset=\"utf-8\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"

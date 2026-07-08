@@ -87,9 +87,10 @@ class EventManager:
 
         if not new_events.empty or overwrite_checked:
             # Open file for writing
-            is_opened = self.parent._psg_reader_manager.open_file(output_file)
+            is_opened, error = self.parent._psg_reader_manager.open_file(output_file)
             if not is_opened:
-                self._show_error_message(f'ERROR PSGWriter could not open file: {output_file}')
+                error_message = error if error is not None else f'ERROR PSGWriter could not open file: {output_file}'
+                self._show_error_message(error_message)
                 return
 
         # Remove EEG inspector events if overwrite is checked

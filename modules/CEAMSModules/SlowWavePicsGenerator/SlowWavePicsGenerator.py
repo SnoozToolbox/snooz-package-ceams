@@ -240,12 +240,7 @@ class SlowWavePicsGenerator(SciNode):
                     f"SlowWavePicsGenerator file not found:{file_name}")
             
             # Try to open the file
-            error = None
-            output = self._psg_reader_manager.open_file(file_name)
-            if isinstance(output, tuple) and len(output) == 2:
-                success, error = output
-            else:
-                success = output
+            success, error = self._psg_reader_manager.open_file(file_name)
             if not success:
                 if error is None:
                     error = f"SlowWavePicsGenerator could not open file:{file_name}"

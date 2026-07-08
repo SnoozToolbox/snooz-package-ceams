@@ -137,7 +137,7 @@ class Ui_OximeterView(object):
         self.ymin_comboBox.setItemText(9, QCoreApplication.translate("OximeterView", u"90", None))
 
         self.label_filename.setText("")
-        self.label_2.setText(QCoreApplication.translate("OximeterView", u"<html><head/><body><p><i>Note: Gray sections mark signal discontinuities. The black marker shows the minimum saturation value. <br/>Exclude additional sections if this minimum looks invalid.</i></p></body></html>", None))
+        self.label_2.setText(QCoreApplication.translate("OximeterView", u"<html><head/><body><p>Note: Gray sections mark signal discontinuities. The black marker shows the minimum saturation value. <br/>Exclude additional sections if this minimum looks invalid.</p><p><span style=\" font-style:normal;\">Invalid sections are saved as annotations : </span><span style=\" font-weight:700; font-style:normal;\">group</span><span style=\" font-style:normal;\">=</span><span style=\" font-weight:700; font-style:normal; color:#0055ff;\">SpO2</span><span style=\" font-style:normal;\">; </span><span style=\" font-weight:700; font-style:normal;\">name</span><span style=\" font-style:normal;\">=</span><span style=\" font-weight:700; font-style:normal; color:#0055ff;\">art_SpO2</span></p></body></html>", None))
         self.label_3.setText(QCoreApplication.translate("OximeterView", u"Left-click and drag to select sections to exclude.\n"
 "Sudden drops in the oximeter signal are typically artifacts and don\u2019t reflect true oxygen saturation.", None))
 #if QT_CONFIG(tooltip)

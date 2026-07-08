@@ -103,7 +103,16 @@ class OximeterView(Ui_OximeterView, QtWidgets.QWidget):
             self._current_filename = filename
             psg_reader_manager = PSGReaderManager()
             psg_reader_manager._init_readers()
-            psg_reader_manager.open_file(filename)
+            success, error = psg_reader_manager.open_file(filename)
+            if not success:
+                psg_reader_manager.close_file()
+                log_msg = QMessageBox()
+                log_msg.setWindowTitle("Error")
+                log_msg.setText(error if error is not None else f"Could not open file {filename}")
+                log_msg.setIcon(QMessageBox.Critical)
+                log_msg.exec_()
+                self._close_file()
+                return
 
             self._events = psg_reader_manager.get_events() # Type DataFrame
             self._montages = psg_reader_manager.get_montages()
@@ -138,11 +147,11 @@ class OximeterView(Ui_OximeterView, QtWidgets.QWidget):
         
         psg_reader_manager = PSGReaderManager()
         psg_reader_manager._init_readers()
-        success = psg_reader_manager.open_file(self._current_filename)
+        success, error = psg_reader_manager.open_file(self._current_filename)
         if not success:
             log_msg = QMessageBox()
             log_msg.setWindowTitle("Error")
-            log_msg.setText(f"Could not save file {self._current_filename}")
+            log_msg.setText(error if error is not None else f"Could not save file {self._current_filename}")
             log_msg.setIcon(QMessageBox.Critical)
             log_msg.exec_()
 
@@ -173,7 +182,15 @@ class OximeterView(Ui_OximeterView, QtWidgets.QWidget):
 
         psg_reader_manager = PSGReaderManager()
         psg_reader_manager._init_readers()
-        success = psg_reader_manager.open_file(self._current_filename)
+        success, error = psg_reader_manager.open_file(self._current_filename)
+        if not success:
+            psg_reader_manager.close_file()
+            log_msg = QMessageBox()
+            log_msg.setWindowTitle("Error")
+            log_msg.setText(error if error is not None else f"Could not reload file {self._current_filename}")
+            log_msg.setIcon(QMessageBox.Critical)
+            log_msg.exec_()
+            return
         self._events = psg_reader_manager.get_events() # Type DataFrame
         psg_reader_manager.close_file()
         self.oximeter_draw_area.exclusion_events = self._get_exclusion_events()
@@ -217,7 +234,15 @@ class OximeterView(Ui_OximeterView, QtWidgets.QWidget):
 
             psg_reader_manager = PSGReaderManager()
             psg_reader_manager._init_readers()
-            psg_reader_manager.open_file(self._current_filename)
+            success, error = psg_reader_manager.open_file(self._current_filename)
+            if not success:
+                psg_reader_manager.close_file()
+                log_msg = QMessageBox()
+                log_msg.setWindowTitle("Error")
+                log_msg.setText(error if error is not None else f"Could not open file {self._current_filename}")
+                log_msg.setIcon(QMessageBox.Critical)
+                log_msg.exec_()
+                return
             signal_models = psg_reader_manager.get_signal_models(self._selected_montage, [self._selected_oximeter])
             psg_reader_manager.close_file()
 

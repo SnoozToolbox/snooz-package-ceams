@@ -136,6 +136,11 @@ class Ui_OutputFileStep(object):
 
         self.verticalLayout.addLayout(self.gridLayout_3)
 
+        self.label_5 = QLabel(OutputFileStep)
+        self.label_5.setObjectName(u"label_5")
+
+        self.verticalLayout.addWidget(self.label_5)
+
         self.verticalSpacer_3 = QSpacerItem(20, 12, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
 
         self.verticalLayout.addItem(self.verticalSpacer_3)
@@ -185,5 +190,6 @@ class Ui_OutputFileStep(object):
         self.filename_lineEdit.setText("")
         self.filename_lineEdit.setPlaceholderText(QCoreApplication.translate("OutputFileStep", u"Choose a directory to save file ...", None))
         self.choose_pushButton.setText(QCoreApplication.translate("OutputFileStep", u"Choose", None))
+        self.label_5.setText(QCoreApplication.translate("OutputFileStep", u"Existing output files will be overwritten.", None))
     # retranslateUi
 

@@ -6,9 +6,10 @@ See the file LICENCE for full license details.
     InputFilesStep
     TODO CLASS DESCRIPTION
 """
-import os
-import sys
 from datetime import datetime, timedelta
+import os
+import pandas as pd
+import sys
 from qtpy import QtWidgets, QtCore, QtGui
 from qtpy.QtCore import QDateTime
 
@@ -19,6 +20,7 @@ from CEAMSModules.PSGReader.PSGReaderManager import PSGReaderManager
 from CEAMSTools.SleepReport.Commons import ContextConstants
 from CEAMSTools.SleepReport.Commons.SleepReportModel import SleepReportModel
 from CEAMSTools.SleepReport.InputFilesStep.Ui_InputFilesStep import Ui_InputFilesStep
+from widgets.TableDialog import TableDialog
 from widgets.WarningDialog import WarningDialog
 
 class InputFilesStep( BaseStepView,  Ui_InputFilesStep, QtWidgets.QWidget):
@@ -29,6 +31,7 @@ class InputFilesStep( BaseStepView,  Ui_InputFilesStep, QtWidgets.QWidget):
         super().__init__(**kwargs)
         # init variables
         self._identification_mapper = None
+        self._current_id_row = None
         self._file_context = None
         self._record_info_key = 'record_info'
         self._psg_reader_identifier = 'f2eccd70-fcb6-4ee8-bea8-76103e706827'
@@ -80,6 +83,10 @@ class InputFilesStep( BaseStepView,  Ui_InputFilesStep, QtWidgets.QWidget):
 
 
     def on_apply_settings(self):
+        self._sync_current_identification_widgets_to_model()
+        if self._identification_mapper is not None:
+            self._identification_mapper.submit()
+
         # Fill input files data
         files = {}
         model = self.file_tableview.model()
@@ -94,18 +101,26 @@ class InputFilesStep( BaseStepView,  Ui_InputFilesStep, QtWidgets.QWidget):
         model = self.file_tableview.model()
         for filename in files.keys():
             file_item = model.get_file_item_by_name(filename)
-            identifications[filename] = file_item.id_model.id_data.copy()
+            identification = file_item.id_model.id_data.copy()
 
-            if isinstance(identifications[filename]["birthdate"], QDateTime):
-                identifications[filename]["birthdate"] = identifications[filename]["birthdate"].toSecsSinceEpoch()
+            # Ensure expected keys always exist in published payload.
+            identification.setdefault('first_name', '')
+            identification.setdefault('last_name', '')
+            identification.setdefault('birthdate', None)
+            identification.setdefault('creation_date', None)
 
-            if isinstance(identifications[filename]["creation_date"], QDateTime):
-                identifications[filename]["creation_date"] = identifications[filename]["creation_date"].toSecsSinceEpoch()
+            if isinstance(identification["birthdate"], QDateTime):
+                identification["birthdate"] = identification["birthdate"].toSecsSinceEpoch()
 
-            if self.deidentify_checkbox.checkState():
-                identifications[filename]['first_name'] = ''
-                identifications[filename]['last_name'] = ''
-                identifications[filename]['birthdate'] = None
+            if isinstance(identification["creation_date"], QDateTime):
+                identification["creation_date"] = identification["creation_date"].toSecsSinceEpoch()
+
+            if self.deidentify_checkbox.isChecked():
+                identification['first_name'] = ''
+                identification['last_name'] = ''
+                identification['birthdate'] = None
+
+            identifications[filename] = identification
 
         self._pub_sub_manager.publish(self, self._dict_subject_info_topic, identifications)
         
@@ -115,8 +130,11 @@ class InputFilesStep( BaseStepView,  Ui_InputFilesStep, QtWidgets.QWidget):
         """
         if topic == self._psg_reader_files_topic:
             # message is a dict and the keys are the filenames
+            removed_files = []
             for filename in message.keys():
-                self._add_file(filename)
+                removed_files = self._add_file(filename, removed_files=removed_files)
+            if len(removed_files) > 0:
+                self._show_batch_load_warnings(removed_files, title="Some files were not loaded")
         if topic == self._dict_subject_info_topic:
             # message is a dict and the keys are the filenames
             model = self.file_tableview.model()
@@ -134,6 +152,16 @@ class InputFilesStep( BaseStepView,  Ui_InputFilesStep, QtWidgets.QWidget):
 
     def on_file_selection_change(self):
         index = self.file_tableview.currentIndex()
+        if not index.isValid():
+            return
+
+        row = index.row()
+        self._sync_current_identification_widgets_to_model()
+        if self._identification_mapper is not None:
+            self._identification_mapper.submit()
+            if self._current_id_row == row:
+                return
+
         id_model = self._model.get_id_model(index.row())
         if self._identification_mapper is not None:
             self._identification_mapper.clearMapping()
@@ -155,7 +183,6 @@ class InputFilesStep( BaseStepView,  Ui_InputFilesStep, QtWidgets.QWidget):
         self._identification_mapper.addMapping(self.weight_unit_combobox, 14)
         self._identification_mapper.addMapping(self.waistline_unit_combobox, 15)
 
-        self.first_name_lineedit.textChanged.connect(self._identification_mapper.submit)
         self.id1_lineedit.textChanged.connect(self._identification_mapper.submit)
         self.id2_lineedit.textChanged.connect(self._identification_mapper.submit)
         self.first_name_lineedit.textChanged.connect(self._identification_mapper.submit)
@@ -172,31 +199,65 @@ class InputFilesStep( BaseStepView,  Ui_InputFilesStep, QtWidgets.QWidget):
         self.weight_unit_combobox.currentTextChanged.connect(self._identification_mapper.submit)
         self.waistline_unit_combobox.currentTextChanged.connect(self._identification_mapper.submit)
         
+        self._current_id_row = row
         self._identification_mapper.toFirst()
 
 
-    def _add_file(self, filename):
+    def _sync_current_identification_widgets_to_model(self):
+        if self._current_id_row is None:
+            return
+        model = self.file_tableview.model()
+        if model is None:
+            return
+        if self._current_id_row < 0 or self._current_id_row >= model.rowCount(QtCore.QModelIndex()):
+            return
+
+        id_model = self._model.get_id_model(self._current_id_row)
+        id_data = id_model.id_data
+        id_data['id1'] = self.id1_lineedit.text()
+        id_data['id2'] = self.id2_lineedit.text()
+        id_data['first_name'] = self.first_name_lineedit.text()
+        id_data['last_name'] = self.last_name_lineedit.text()
+        id_data['sex'] = self.sex_combobox.currentText()
+        id_data['birthdate'] = self.birthdate_timeedit.dateTime()
+        id_data['creation_date'] = self.record_date_timeedit.dateTime()
+        id_data['age'] = self.age_spinbox.value()
+        id_data['height'] = self.height_doublespinbox.value()
+        id_data['weight'] = self.weight_doublespinbox.value()
+        id_data['bmi'] = self.bmi_doublespinbox.value()
+        id_data['waistline'] = self.waistline_doublespinbox.value()
+        id_data['height_unit'] = self.height_unit_combobox.currentText()
+        id_data['weight_unit'] = self.weight_unit_combobox.currentText()
+        id_data['waistline_unit'] = self.waistline_unit_combobox.currentText()
+
+
+    def _add_file(self, filename, removed_files=None):
         file_item = self._model.get_file_item_by_name(filename)
 
         if file_item is None:
-            success = self._psg_reader_manager.open_file(filename)
+            success, error = self._psg_reader_manager.open_file(filename)
+
             if not success:
-                msg = QtWidgets.QMessageBox()
-                msg.setIcon(QtWidgets.QMessageBox.Critical)
-                msg.setText("Could not open file")
-                msg.setInformativeText("Format is not compatible.")
-                msg.setWindowTitle("Error loading file")
-                msg.exec()
-                return
+                if removed_files is not None:
+                    removed_files.append(f"{filename}: ({error})")
+                    return removed_files
+                else: # single add from file dialog, show error message box
+                    WarningDialog(f"Could not open file:{filename}")
+                    return
             id_data = self._psg_reader_manager.get_subject_info()
             events_data = self._psg_reader_manager.get_events()
             sleep_stages = self._psg_reader_manager.get_sleep_stages()
 
             if len(sleep_stages) == 0 or len(sleep_stages[sleep_stages["name"] != "9"]) == 0:
-                WarningDialog(f"This file has not been scored and will be not added:{filename}")
+                if removed_files is not None:
+                    removed_files.append(f"{filename} (not scored)")
+                    return removed_files
+                else: # single add from file dialog, show warning message box
+                    WarningDialog(f"This file has not been scored and will be not added:{filename}")
             else:
                 self._model.add_file(filename, id_data, events_data)
                 self.file_tableview.resizeColumnsToContents()
+        return removed_files
 
 
     def on_add_files(self):
@@ -254,7 +315,9 @@ class InputFilesStep( BaseStepView,  Ui_InputFilesStep, QtWidgets.QWidget):
 
     def on_remove_file(self):
         if self._identification_mapper is not None:
+            self._identification_mapper.submit()
             self._identification_mapper.clearMapping()
+        self._current_id_row = None
 
         index = self.file_tableview.currentIndex()
         filename = index.data(3)
@@ -280,3 +343,29 @@ class InputFilesStep( BaseStepView,  Ui_InputFilesStep, QtWidgets.QWidget):
     def get_current_filename(self):
         ind = self.file_tableview.currentIndex()
         return 
+
+
+    def _show_batch_load_warnings(self, removed_files, title="Workspace loaded partially"):
+        if len(removed_files) == 0:
+            return
+
+        rows = []
+        for detail in removed_files:
+            if detail.endswith(")") and " (" in detail:
+                file_path, reason = detail.rsplit(" (", 1)
+                rows.append({
+                    "Filename": os.path.basename(file_path),
+                    "Path": file_path,
+                    "Reason": reason[:-1]
+                })
+            else:
+                rows.append({
+                    "Filename": os.path.basename(detail),
+                    "Path": detail,
+                    "Reason": "unknown"
+                })
+
+        details_df = pd.DataFrame(rows, columns=["Filename", "Path", "Reason"])
+        message = f"{len(removed_files)} file(s) were skipped while loading."
+        table_dialog_msg = TableDialog(df=details_df, title=title, message=message, showDownloadButton=True)
+        table_dialog_msg.exec_()

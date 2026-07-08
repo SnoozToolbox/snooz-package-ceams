@@ -143,12 +143,7 @@ class PSGReader(SciNode):
                 f"PSGReader file not found:{filename}")
 
         # Try to open the file
-        error = None
-        output = self._psg_reader_manager.open_file(filename)
-        if isinstance(output, tuple) and len(output) == 2:
-            success, error = output
-        else:
-            success = output
+        success, error = self._psg_reader_manager.open_file(filename)
         if not success:
             if error is None:
                 error = f"PSGReader could not open file:{filename}"
@@ -163,6 +158,12 @@ class PSGReader(SciNode):
 
         # Extract sleep stages
         sleep_stages = self._psg_reader_manager.get_sleep_stages()
+        removed_sleep_stage_duplicates = self._psg_reader_manager.sleep_stage_duplicates_removed_count
+        if removed_sleep_stage_duplicates > 0:
+            self._log_manager.log(
+                self.identifier,
+                f"Removed {removed_sleep_stage_duplicates} duplicated sleep stage rows from {filename}; kept the last occurrence for each epoch.",
+            )
         # Fix stage 4 if present
         if sleep_stages is not None and 'name' in sleep_stages.columns:
             if (sleep_stages['name'] == '4').any():

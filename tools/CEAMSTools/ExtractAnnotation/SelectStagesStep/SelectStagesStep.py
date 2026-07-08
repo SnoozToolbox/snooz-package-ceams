@@ -81,7 +81,9 @@ class SelectStagesStep( BaseStepView,  Ui_SelectStagesStep, QtWidgets.QWidget):
         # The model for the events checkable is created locally
         self.event_treeview.setModel(self.event_proxy_model)
         # Connect selection changed signal from file list view
-        self.file_listview.selectionModel().selectionChanged.connect(self.on_file_selected())
+        self.file_listview.selectionModel().selectionChanged.connect(
+            lambda *_: self.on_file_selected()
+        )
         self.event_treeview.expandAll()
         self.event_treeview.resizeColumnToContents(0)
 
@@ -226,6 +228,8 @@ class SelectStagesStep( BaseStepView,  Ui_SelectStagesStep, QtWidgets.QWidget):
 
                 # Find in the model the index of current filename
                 file_check_index = self.reader_settings_view.get_file_index(file_key, self.files_check_event_model)
+                if not file_check_index.isValid():
+                    continue
 
                 # Set the CheckState to events listed in group_lst and name_list
                 #   and returns evt_found_tab (array of number of events)
@@ -256,7 +260,7 @@ class SelectStagesStep( BaseStepView,  Ui_SelectStagesStep, QtWidgets.QWidget):
             # if isinstance(file_checkable_index, list) and len(file_checkable_index)==0:
             #     group_dict[filename] = 'None'  # letting the field empty '' does not work
             #     name_dict[filename] = 'None'   # letting the field empty '' does not work
-            if isinstance(file_checkable_index, QtCore.QModelIndex):
+            if file_checkable_index.isValid():
                 # group_lst and name_list are list of string 
                 group_list, name_list = self.reader_settings_view.get_checked_event_lst_from_file(\
                     self.files_check_event_model, file_checkable_index)
@@ -313,6 +317,8 @@ class SelectStagesStep( BaseStepView,  Ui_SelectStagesStep, QtWidgets.QWidget):
         filenames = [f.data(Qt.UserRole + 1) for f in files]
         if len(filenames)>0:
             self.event_proxy_model.set_filenames_filters(filenames)
+        else:
+            self.event_proxy_model.set_filenames_filters(None)
         # The model for the events checkable is created locally
         self.event_treeview.setModel(self.event_proxy_model) 
         self.event_treeview.expandAll()
@@ -399,12 +405,13 @@ class SelectStagesStep( BaseStepView,  Ui_SelectStagesStep, QtWidgets.QWidget):
             for filename in updated_file_list:
                 file_item = self.reader_settings_view.get_file_item(filename, checkable_model_outdated)
                 # If it is a new file -> add it
-                if isinstance(file_item, list) and len(file_item)==0:
+                if file_item is None:
                     # Make the file item children checkable and checked (file item is copied from self.files_model)
                     # Copy a file item as parent and make its children checkable and checked : group and count, name and count.
                     # tree item : parent=file, child=group and count, child=name and count
                     item = self.reader_settings_view.make_checkable_file_item_count(filename, self.files_model)
-                    checkable_model_outdated.appendRow(item)
+                    if item is not None:
+                        checkable_model_outdated.appendRow(item)
                 # Otherwise -> nothing to do
             # remove the files from checkable_model_outdated
             if len(file_to_rem):

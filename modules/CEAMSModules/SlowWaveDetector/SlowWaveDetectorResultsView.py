@@ -6,18 +6,17 @@ See the file LICENCE for full license details.
 """
     Results viewer of the SlowWaveDetector plugin
 """
-
-from CEAMSModules.PSGReader.SignalModel import SignalModel
-
 import matplotlib
 matplotlib.use('QtAgg')
 from matplotlib.backends.backend_qtagg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.backends.backend_qtagg import NavigationToolbar2QT as NavigationToolbar
 from matplotlib.figure import Figure
-from CEAMSModules.SignalsFromEvents.Ui_SignalsFromEventsResultsView import Ui_SignalsFromEventsResultsView
-from qtpy import QtWidgets
 import numpy as np
+from qtpy import QtWidgets
 
+from widgets.WarningDialog import WarningDialog
+from CEAMSModules.PSGReader.SignalModel import SignalModel
+from CEAMSModules.SignalsFromEvents.Ui_SignalsFromEventsResultsView import Ui_SignalsFromEventsResultsView
 
 class SlowWaveDetectorResultsView( Ui_SignalsFromEventsResultsView, QtWidgets.QWidget):
     """
@@ -112,6 +111,22 @@ class SlowWaveDetectorResultsView( Ui_SignalsFromEventsResultsView, QtWidgets.QW
         else:
             self.event_index_lineEdit.setText(str(self.index))
             print("Error index outside of range")
+
+
+    # Called when the user uncheck/check the checkBox_ylim_norm or finish editing the lineEdit_ylim_fixed
+    def y_limits_change_slot(self):
+        # The line edit is enabled if the checkBox_ylim_norm is not checked
+        self.lineEdit_ylim_fixed.setEnabled(not self.checkBox_ylim_norm.isChecked())
+        y_limits = self.lineEdit_ylim_fixed.text()
+        # evaluate the string to be number only (no letters)
+        try: 
+            y_limits = float(y_limits)
+            self._y_limits = y_limits
+            self._plot_det_info()
+        except:
+            WarningDialog("Please enter a single number as y-axis limits (symmetric axis)")
+            self.lineEdit_ylim_fixed.setText('')
+            self._y_limits = None
 
 
     def _plot_det_info(self, signals, events):
@@ -267,3 +282,8 @@ class SlowWaveDetectorResultsView( Ui_SignalsFromEventsResultsView, QtWidgets.QW
 
         # Plot eeg signal.
         self._plot_det_info(signal_event, self.events) 
+
+
+    def update_y_axis_label_slot(self):
+        # Plot eeg signal with the update checkbox to display or not y axis label.
+        self._plot_det_info()

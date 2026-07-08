@@ -40,10 +40,17 @@ Optional (future) plot_options (NOT required for now):
 
 import os
 import re
+
+# Force a non-interactive backend before importing any matplotlib submodule.
+os.environ["MPLBACKEND"] = "Agg"
+import matplotlib
+matplotlib.use("Agg", force=True)
 from matplotlib import ticker
 import numpy as np
 import pandas as pd
+
 import matplotlib.pyplot as plt
+plt.switch_backend("Agg")
 from matplotlib.patches import Patch
 from matplotlib.lines import Line2D
 from matplotlib.collections import LineCollection

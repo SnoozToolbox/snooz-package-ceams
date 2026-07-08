@@ -4,6 +4,15 @@ See the file LICENCE for full license details.
 """
 from .{{ module_class }} import {{ module_class }}
 from .{{ module_class }}SettingsView import {{ module_class }}SettingsView
-from .{{ module_class }}ResultsView import {{ module_class }}ResultsView
-from .Ui_{{ module_class }}ResultsView import Ui_{{ module_class }}ResultsView
-from .Ui_{{ module_class }}SettingsView import Ui_{{ module_class }}SettingsView
+
+# Only import ResultsView and UI classes in non-headless mode to avoid matplotlib/Qt dependencies
+import config
+if not config.HEADLESS_MODE:
+    from .{{ module_class }}ResultsView import {{ module_class }}ResultsView
+    from .Ui_{{ module_class }}ResultsView import Ui_{{ module_class }}ResultsView
+    from .Ui_{{ module_class }}SettingsView import Ui_{{ module_class }}SettingsView
+else:
+    # Create stub classes for headless mode
+    {{ module_class }}ResultsView = None
+    Ui_{{ module_class }}ResultsView = None
+    Ui_{{ module_class }}SettingsView = None

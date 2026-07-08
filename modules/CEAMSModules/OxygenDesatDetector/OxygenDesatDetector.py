@@ -375,12 +375,14 @@ class OxygenDesatDetector(SciNode):
             # 'desaturation_drop_percent' : 'Drop level (%) for the oxygen desaturation "3 or 4"',
             # 'max_slope_drop_sec' : 'The maximum duration (s) during which the oxygen level is dropping "180 or 20"',
             # 'min_hold_drop_sec' : 'Minimum duration (s) during which the oxygen level drop is maintained "10 or 5"',
-        desat_df, plateau_df, data_lpf_list, data_hpf_list, data_dev_list, lmax_indices_list, lmin_indices_list = \
+        desat_df, plateau_df, data_lpf_list, data_dev_list, lmax_indices_list, lmin_indices_list = \
             self.detect_desaturation_ABOSA(data_starts, data_clean, fs_chan, channel, parameters_oxy)
         
         # Detect recovery
         #----------------------------------------------------------------------
-        recovery_df = self.detect_recovery_ABOSA(desat_df, data_starts, data_clean, data_dev_list, fs_chan, channel, parameters_oxy)
+        recovery_df = self.detect_recovery_ABOSA(
+            desat_df, data_starts, data_clean, data_lpf_list, data_dev_list, fs_chan, channel, parameters_oxy
+        )
 
         desat_recovery_df = pd.concat([desat_df, recovery_df], ignore_index=True)
 
@@ -418,7 +420,6 @@ class OxygenDesatDetector(SciNode):
                 signal_raw = signals[index_longuest].clone(clone_samples=False)
                 signal_lpf = signals[index_longuest].clone(clone_samples=False)
                 signal_hpf = signals[index_longuest].clone(clone_samples=False)
-                #signal_squared = signals[index_longuest].clone(clone_samples=False)
                 signal_raw.samples = data_stats[index_longuest]
                 signal_raw.start_time = data_starts[index_longuest]
                 signal_lpf.samples = data_lpf_list[index_longuest]
@@ -813,47 +814,89 @@ class OxygenDesatDetector(SciNode):
         stage_dict = {}
         for stage_label, stage_list in zip(self.stage_stats_labels, self.stage_stats_list):
             stage_mask = np.zeros(stage_name.shape, dtype=bool)
-            for i in range(len(stage_list)):
-                stage_mask = stage_mask | (stage_name == commons.sleep_stages_name[stage_list[i]])
-            start_masked = stage_start_times[stage_mask]
-            dur_masked = stage_duration_times[stage_mask]
-            if any(stage_mask):
-                signals_from_stages = []
-                for start, dur in zip(start_masked, dur_masked):
-                    for samples, start_signal in zip(data_clean, data_starts):
-                        cur_samples = self.extract_samples_from_array(samples, start_signal, start, dur, fs_chan)
-                        # When the last epoch is not completed
-                        if (len(cur_samples)/fs_chan) < dur:
-                            n_miss_samples = int(round((dur-len(cur_samples)/fs_chan)*fs_chan,0))
-                            cur_samples = np.pad(cur_samples, (0, n_miss_samples), constant_values=(0,np.nan))
-                        signals_from_stages.append(cur_samples)
+            for stage_code in stage_list:
+                stage_mask = stage_mask | (stage_name == commons.sleep_stages_name[stage_code])
 
-                # Flat signals into an array
-                signals_cur_stage = np.empty(0)
-                for i_bout, samples in enumerate(signals_from_stages):
-                    if signals_cur_stage.size == 0:
-                        signals_cur_stage = samples
-                    else:
-                        signals_cur_stage = np.concatenate((signals_cur_stage, samples), axis=0)
-
-                # Clean-up invalid values
-                # signals_cur_stage[signals_cur_stage>100]=np.nan # handled in the artifact detection
-                # signals_cur_stage[signals_cur_stage<=0]=np.nan  # handled in the artifact detection
-                stage_dict[f'{stage_label}_saturation_avg'] = np.nanmean(signals_cur_stage)
-                stage_dict[f'{stage_label}_saturation_std'] = np.nanstd(signals_cur_stage)
-                stage_dict[f'{stage_label}_saturation_min'] = np.nanmin(signals_cur_stage)
-                stage_dict[f'{stage_label}_saturation_max'] = np.nanmax(signals_cur_stage)
-                for val in self.values_below:
-                    signals_flat = signals_cur_stage.flatten()
-                    n_valid = np.sum(~np.isnan(signals_flat)) # To excluded artifact from the total number of samples
-                    stage_dict[f"{stage_label}_below_{val}_percent"] = (signals_flat<val).sum()/n_valid*100 if n_valid > 0 else np.nan
-            else:
+            if not np.any(stage_mask):
                 stage_dict[f'{stage_label}_saturation_avg'] = np.nan
                 stage_dict[f'{stage_label}_saturation_std'] = np.nan
                 stage_dict[f'{stage_label}_saturation_min'] = np.nan
                 stage_dict[f'{stage_label}_saturation_max'] = np.nan
                 for val in self.values_below:
-                    stage_dict[f"{stage_label}_below_{val}_percent"] = np.nan                           
+                    stage_dict[f"{stage_label}_below_{val}_percent"] = np.nan
+                continue
+
+            start_masked = stage_start_times[stage_mask]
+            dur_masked = stage_duration_times[stage_mask]
+
+            # Incremental accumulation avoids building large temporary arrays.
+            valid_count = 0
+            sum_values = 0.0
+            sum_squares = 0.0
+            min_value = np.inf
+            max_value = -np.inf
+            below_counts = {val: 0 for val in self.values_below}
+
+            for start, dur in zip(start_masked, dur_masked):
+                end = start + dur
+                expected_samples = int(round(dur * fs_chan, 0))
+
+                epoch_segments = []
+                for samples, start_signal in zip(data_clean, data_starts):
+                    end_signal = start_signal + len(samples) / fs_chan
+                    if (start_signal < end) and (end_signal > start):
+                        epoch_segments.append(
+                            self.extract_samples_from_array(samples, start_signal, start, dur, fs_chan)
+                        )
+
+                if len(epoch_segments) == 0:
+                    epoch_samples = np.empty(0)
+                elif len(epoch_segments) == 1:
+                    epoch_samples = epoch_segments[0]
+                else:
+                    epoch_samples = np.concatenate(epoch_segments, axis=0)
+
+                # Keep the old behavior: pad missing samples with NaN for incomplete epochs.
+                if expected_samples > len(epoch_samples):
+                    epoch_samples = np.pad(
+                        epoch_samples,
+                        (0, expected_samples - len(epoch_samples)),
+                        constant_values=(0, np.nan)
+                    )
+
+                valid_mask = ~np.isnan(epoch_samples)
+                if not np.any(valid_mask):
+                    continue
+
+                valid_samples = epoch_samples[valid_mask]
+                valid_count += valid_samples.size
+                sum_values += np.sum(valid_samples)
+                sum_squares += np.sum(valid_samples * valid_samples)
+                min_value = min(min_value, np.min(valid_samples))
+                max_value = max(max_value, np.max(valid_samples))
+                for val in self.values_below:
+                    below_counts[val] += np.sum(valid_samples < val)
+
+            if valid_count == 0:
+                stage_dict[f'{stage_label}_saturation_avg'] = np.nan
+                stage_dict[f'{stage_label}_saturation_std'] = np.nan
+                stage_dict[f'{stage_label}_saturation_min'] = np.nan
+                stage_dict[f'{stage_label}_saturation_max'] = np.nan
+                for val in self.values_below:
+                    stage_dict[f"{stage_label}_below_{val}_percent"] = np.nan
+                continue
+
+            mean_value = sum_values / valid_count
+            variance_value = (sum_squares / valid_count) - (mean_value * mean_value)
+            variance_value = max(0.0, variance_value)
+
+            stage_dict[f'{stage_label}_saturation_avg'] = mean_value
+            stage_dict[f'{stage_label}_saturation_std'] = np.sqrt(variance_value)
+            stage_dict[f'{stage_label}_saturation_min'] = min_value
+            stage_dict[f'{stage_label}_saturation_max'] = max_value
+            for val in self.values_below:
+                stage_dict[f"{stage_label}_below_{val}_percent"] = (below_counts[val] / valid_count) * 100
+
         return stage_dict
 
 
@@ -1155,7 +1198,6 @@ class OxygenDesatDetector(SciNode):
             https://doi.org/10.1016/j.cmpb.2022.107120
         """   
         data_lpf_list = []
-        data_hpf_list = []
         data_dev_list = []
         all_desat_events = []
         plateau_lst = []
@@ -1322,10 +1364,8 @@ class OxygenDesatDetector(SciNode):
                                   f"duration={duration:.2f}s, drop={drop:.1f}%, "
                                   f"fall_rate={avg_fall_rate:.3f}%/s")
 
-            # Debug output for the result view
-            if DEBUG: 
-                data_lpf_list.append(signal_lpf)
-                data_hpf_list.append(signal_squared)
+            # Useful to detect recovery events later
+            data_lpf_list.append(signal_lpf)
             data_dev_list.append(signal_derivative)
 
         # Resolve overlapping desaturations by keeping events with steepest fall rate
@@ -1366,10 +1406,10 @@ class OxygenDesatDetector(SciNode):
         desat_df['area_percent_sec'] = desat_areas
         plateau_df = manage_events.create_event_dataframe(data=plateau_events)
   
-        return desat_df, plateau_df, data_lpf_list, data_hpf_list, data_dev_list, lmax_indices_list, lmin_indices_list
+        return desat_df, plateau_df, data_lpf_list, data_dev_list, lmax_indices_list, lmin_indices_list
 
 
-    def detect_recovery_ABOSA(self, desat_df, data_starts, data_stats, data_dev_list, fs_chan, channel, parameters_oxy):
+    def detect_recovery_ABOSA(self, desat_df, data_starts, data_stats, data_lpf_list, data_dev_list, fs_chan, channel, parameters_oxy):
         """
         Detect recovery events following desaturation events as described in ABOSA.
 
@@ -1384,6 +1424,8 @@ class OxygenDesatDetector(SciNode):
                 Start time in seconds of each continuous signal section.
             data_stats : list of numpy array
                 Cleaned oxygen saturation signal for each continuous section.
+            data_lpf_list : list of numpy array
+                Low-pass filtered oxygen saturation signal for each section.
             fs_chan : float
                 Sampling frequency (Hz).
             channel : string
@@ -1406,8 +1448,6 @@ class OxygenDesatDetector(SciNode):
         # Parameters matching detect_desaturation_ABOSA
         min_peak_distance_sec = 5
         min_peak_prominence = 1
-        order = 4
-        frequency_cutoff = 0.1
         min_recovery_rise_percent = 2.0
         min_recovery_slope_percent_per_sec = 0.05
 
@@ -1418,11 +1458,8 @@ class OxygenDesatDetector(SciNode):
             data_start = data_starts[i]
             signal_end = data_start + len(signal) / fs_chan
             data_derivative = data_dev_list[i]
+            signal_lpf = data_lpf_list[i]
 
-            # Low-pass filter to detect local maxima (recovery endpoints)
-            signal_lpf = self.filter_nan_filtfilt(signal, order, fs_chan, frequency_cutoff, 'low')
-            # High-pass filter the signal at 0.1 Hz (which is already low-pass filtered to 0.1 Hz)
-            signal_hpf = self.filter_nan_filtfilt(signal_lpf, order, fs_chan, frequency_cutoff, 'high')
             min_peak_distance_samples = int(min_peak_distance_sec * fs_chan)
             lmax_indices, _ = self.detect_local_max(
                 signal, signal_lpf, fs_chan,
@@ -1454,7 +1491,7 @@ class OxygenDesatDetector(SciNode):
                     break  # No Lmax remains in this segment for any later desaturation either
 
                 # Allowed recovery duration: 120 s or 2x desaturation duration, 
-                # the minimum of the two
+                # the maximum of the two
                 max_recovery_duration_sec = max(120.0, 2.0 * desat_duration)
                 recovery_selected = False
                 for recovery_lmax_idx in next_lmax:

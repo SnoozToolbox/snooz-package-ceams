@@ -190,7 +190,10 @@ class FilterEvents(SciNode):
                     # A single name
                     if (isinstance(name_selection,str) and len(name_selection)>0):
                         events_selected = events_selected[events_selected['name']==name_selection]
-                    # # patch for slow wave detection because of the duration of the events that is not taken into account in the selection. It is possible that some events are not selected because they are not totally included in the sleep stage selection but they could be partially included. In this case, we keep the part of the event that is included in the sleep stage selection.
+                    # # patch for OscLente detection from LEGACY tool.
+                    # # The detection is actually a maker (not an event) and the duration is zero.
+                    # # The event is not selected when we look at the overlap between OscLente and the selected stage
+                    # # We force a duration of 1 sec around the marker.
                     # if group_selection=="DetecteOLentes" and name_selection=="OscLente":
                     #     print("patch!!! slow wave")
                     #     events_selected['start_sec'] = events_selected['start_sec']-0.5

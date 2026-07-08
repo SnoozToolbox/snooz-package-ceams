@@ -69,6 +69,7 @@ class FilterStep(BaseStepView, Ui_FilterStep, QtWidgets.QWidget):
 
         self._trim_start_time_topic = f'{self._node_id_trim_signal}.start_sec'
         self._trim_duration_time_topic = f'{self._node_id_trim_signal}.duration_sec'
+        self._sleep_stages_topic = f'{self._node_id_sleep_stage_events}.stages'
         self._pub_sub_manager.subscribe(self, self._trim_start_time_topic)
         self._pub_sub_manager.subscribe(self, self._trim_duration_time_topic)
         
@@ -144,6 +145,8 @@ class FilterStep(BaseStepView, Ui_FilterStep, QtWidgets.QWidget):
             self.n2_checkBox.setEnabled(False)
             self.n3_checkBox.setEnabled(False)
             self.rem_checkBox.setEnabled(False)
+        self.update_section_selection_slot()
+        self._set_scope_nodes()
 
 
     def on_specific_annotations_toggled(self, checked: bool):

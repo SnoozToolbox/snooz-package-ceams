@@ -17,6 +17,8 @@ class DataProcessor(QThread):
 
     def __init__(self, input_dir, selected_channels, selected_montage):
         super().__init__()
+        # macOS ARM worker threads can overflow their default stack in OpenBLAS.
+        self.setStackSize(16 * 1024 * 1024)
         self.input_dir = input_dir
         self.selected_channels = selected_channels
         self._selected_montage = selected_montage
@@ -89,11 +91,7 @@ class DataProcessor(QThread):
         psg_reader_manager._init_readers()
         
         # Open file and get signal models
-        output = psg_reader_manager.open_file(self.input_dir)
-        if isinstance(output, tuple) and len(output) == 2:
-            success, error = output
-        else:
-            success = output
+        success, error = psg_reader_manager.open_file(self.input_dir)
             
         if not success:
             error_msg = error if error else "ERROR PSGReaderManager could not open the file"

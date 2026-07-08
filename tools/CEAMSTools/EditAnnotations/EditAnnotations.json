@@ -1,11 +1,12 @@
 {
     "item_name": "EditAnnotations",
     "item_type": "tool",
-    "item_api_version": "2.0.0",
+    "item_api_version": "3.0.0",
     "item_url": "https://snooz-toolbox-documentation.readthedocs.io/latest/user_guide/tools/Preprocessing/Annotations_Editor.html#edit-annotations",
     "item_author": "CEAMS",
     "item_description": "Tool to remove and rename annotations.",
     "tool_params": {
+        "tool_version": "2.3.0",
         "tool_label": "Edit Annotations",
         "tool_category": "1-Preprocessing",
         "asset_directory": "",
@@ -34,11 +35,11 @@
     "dependencies": [
         {
             "package_name": "CEAMSModules",
-            "package_version": "7.3.0"
+            "package_version": "7.5.0"
         },
         {
             "package_name": "CEAMSTools",
-            "package_version": "7.3.0",
+            "package_version": "7.5.0",
             "deleteable": false
         }
     ],

@@ -16,7 +16,10 @@ class MontagesTableModel(QtCore.QAbstractTableModel):
         self._data = data
 
     def remove_by_filename(self, filename):
+        #self.beginResetModel()
         self._data = self._data[self._data.Filename != filename]
+        #self.endResetModel()
+        #self.dataChangedWithCheckState.emit(self.checkedItemCount())
 
     """ data function is called when showing the data in the table """
     def data(self, index, role):

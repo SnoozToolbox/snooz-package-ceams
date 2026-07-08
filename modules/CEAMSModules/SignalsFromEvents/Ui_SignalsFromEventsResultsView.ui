@@ -34,7 +34,6 @@
          </property>
          <property name="font">
           <font>
-           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
@@ -42,7 +41,7 @@
           <string>Display signals from events</string>
          </property>
          <property name="alignment">
-          <set>Qt::AlignCenter</set>
+          <set>Qt::AlignmentFlag::AlignCenter</set>
          </property>
         </widget>
        </item>
@@ -99,13 +98,13 @@
        <item>
         <widget class="QLabel" name="time_label">
          <property name="layoutDirection">
-          <enum>Qt::LeftToRight</enum>
+          <enum>Qt::LayoutDirection::LeftToRight</enum>
          </property>
          <property name="text">
           <string>Time elapsed (HH:MM:SS)</string>
          </property>
          <property name="alignment">
-          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+          <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
          </property>
         </widget>
        </item>
@@ -132,7 +131,7 @@ Press enter to display the detection window.</string>
        <item>
         <spacer name="horizontalSpacer">
          <property name="orientation">
-          <enum>Qt::Horizontal</enum>
+          <enum>Qt::Orientation::Horizontal</enum>
          </property>
          <property name="sizeHint" stdset="0">
           <size>
@@ -221,7 +220,7 @@ Press enter to display the detection window.</string>
          <item>
           <spacer name="horizontalSpacer_2">
            <property name="orientation">
-            <enum>Qt::Horizontal</enum>
+            <enum>Qt::Orientation::Horizontal</enum>
            </property>
            <property name="sizeHint" stdset="0">
             <size>
@@ -238,7 +237,7 @@ Press enter to display the detection window.</string>
      <item>
       <layout class="QVBoxLayout" name="result_layout">
        <property name="sizeConstraint">
-        <enum>QLayout::SetMaximumSize</enum>
+        <enum>QLayout::SizeConstraint::SetMaximumSize</enum>
        </property>
       </layout>
      </item>
@@ -353,8 +352,6 @@ Press enter to display the detection window.</string>
   </connection>
  </connections>
  <slots>
-  <slot>on_choose_button()</slot>
-  <slot>on_show_button()</slot>
   <slot>on_next_button()</slot>
   <slot>on_prev_button()</slot>
   <slot>on_event_index_changed()</slot>

@@ -8,7 +8,6 @@ See the file LICENCE for full license details.
 """
 
 from qtpy import QtWidgets
-from flowpipe.ActivationState import ActivationState
 
 from CEAMSTools.PowerSpectralAnalysis.NonValidEventStep.NonValidEventStep import NonValidEventStep
 from CEAMSTools.AnalyzeEEGConnectivity.FilterStep.FilterStep import FilterStep
