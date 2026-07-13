@@ -680,7 +680,7 @@
                     },
                     "filename": {
                         "name": "filename",
-                        "value": "_arhythmic.tsv",
+                        "value": "_aperiodic.tsv",
                         "sub_plugs": {},
                         "connections": {}
                     }
@@ -827,7 +827,7 @@
                     },
                     "filename": {
                         "name": "filename",
-                        "value": "_rhythmic.tsv",
+                        "value": "_periodic.tsv",
                         "sub_plugs": {},
                         "connections": {}
                     }

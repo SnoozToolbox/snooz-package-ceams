@@ -563,8 +563,8 @@ class PSACompilationFOOOF(SciNode):
         # Write the rhythmic and arhythmic reports
         # Split filename to add suffix before extension
         file_name, file_extension = os.path.splitext(filename)
-        filename_rhythmic = file_name + "_rhythmic" + file_extension
-        filename_arhythmic = file_name + "_arhythmic" + file_extension
+        filename_rhythmic = file_name + "_periodic" + file_extension
+        filename_arhythmic = file_name + "_aperiodic" + file_extension
         
         # Write rhythmic report
         write_header_rhythmic = not os.path.exists(filename_rhythmic)
@@ -585,7 +585,7 @@ class PSACompilationFOOOF(SciNode):
         # Write the info text files to describe the variable names
         if write_header_rhythmic:
             # Write the documentation file for rhythmic
-            doc_filepath_rhythmic = file_name + "_rhythmic_info" + file_extension
+            doc_filepath_rhythmic = file_name + "_periodic_info" + file_extension
             if not os.path.exists(doc_filepath_rhythmic):
                 try:
                     write_doc_file(doc_filepath_rhythmic, self.N_HOURS, self.N_CYCLES)
@@ -596,7 +596,7 @@ class PSACompilationFOOOF(SciNode):
         
         if write_header_arhythmic:
             # Write the documentation file for arhythmic
-            doc_filepath_arhythmic = file_name + "_arhythmic_info" + file_extension
+            doc_filepath_arhythmic = file_name + "_aperiodic_info" + file_extension
             if not os.path.exists(doc_filepath_arhythmic):
                 try:
                     write_doc_file(doc_filepath_arhythmic, self.N_HOURS, self.N_CYCLES)

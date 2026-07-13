@@ -92,8 +92,8 @@ class Outputfiles(BaseStepView, Ui_Outputfiles, QtWidgets.QWidget):
 
         self._pub_sub_manager.publish(self, self._filename_topic, self.filename_lineEdit.text())
         self._pub_sub_manager.publish(self, self._filename_annot_topic, self.filename_lineEdit.text())
-        self._pub_sub_manager.publish(self, self._filename_rhythmic_topic, self.filename_lineEdit.text()[:-4] + "_rhythmic.tsv")
-        self._pub_sub_manager.publish(self, self._filename_arhythmic_topic, self.filename_lineEdit.text()[:-4] + "_arhythmic.tsv")
+        self._pub_sub_manager.publish(self, self._filename_rhythmic_topic, self.filename_lineEdit.text()[:-4] + "_periodic.tsv")
+        self._pub_sub_manager.publish(self, self._filename_arhythmic_topic, self.filename_lineEdit.text()[:-4] + "_aperiodic.tsv")
         self._pub_sub_manager.publish(self, self._filename_fooof_topic, self.filename_lineEdit.text())
         # Filenames with flags are published when psd data arrives (see on_topic_response)
         self._pub_sub_manager.publish(self, self._dist_total_constant_topic, int(self.total_checkBox.isChecked()))
@@ -108,12 +108,12 @@ class Outputfiles(BaseStepView, Ui_Outputfiles, QtWidgets.QWidget):
         if topic == self._filename_topic:
             self.filename_lineEdit.setText(message)          
         if topic == self._filename_rhythmic_topic:
-            if message == "_rhythmic.tsv":
+            if message == "_periodic.tsv":
                 self.filename_lineEdit.setText(message[:-13])
             else:
                 self.filename_lineEdit.setText(message[:-13] + ".tsv")
         if topic == self._filename_arhythmic_topic:
-            if message == "_arhythmic.tsv":
+            if message == "_aperiodic.tsv":
                 self.filename_lineEdit.setText(message[:-14])
             else:
                 self.filename_lineEdit.setText(message[:-14] + ".tsv")
