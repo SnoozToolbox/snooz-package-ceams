@@ -343,8 +343,9 @@ class SpindlesDetails(SciNode):
         sleep_stage_df.reset_index(inplace=True, drop=True)
         sleep_stage_df['name'] = sleep_stage_df['name'].apply(int)
 
-        # Edit the cycle number 
-        cycle_cnt = 0
+        # Edit the cycle number
+        # User prefer sleep cycles that start at 1, and avoid sleep cycle=0
+        cycle_cnt = 1
         for index, row in sleep_cycles_df.iterrows():
             sleep_cycles_df.loc[index,'name']=cycle_cnt
             cycle_cnt = cycle_cnt+1
@@ -621,6 +622,7 @@ class SpindlesDetails(SciNode):
         cycle_end_all = np.round(cycle_end_all,2)
         cycle_name_all = sleep_cycle_df['name'].to_numpy()
 
+        # Extract spindle info
         ss_start_time = spindle_events['start_sec'].to_numpy()
         ss_end_time = ss_start_time + spindle_events['duration_sec'].to_numpy()
         ss_stage = []
