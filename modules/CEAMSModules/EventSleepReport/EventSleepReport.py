@@ -23,6 +23,10 @@ from CEAMSModules.EventCompare import performance as perf
 
 DEBUG = False
 
+# events_section values that act as an event-name mask (any temporal overlap)
+# instead of a sleep-period selector.
+EVENT_MASK_SECTIONS = ("EOG_Phasic", "EOG_Tonic")
+
 class EventSleepReport(SciNode):
     """
     Generate event sleep report.
@@ -162,7 +166,7 @@ class EventSleepReport(SciNode):
                     "The event occurs in sleep but the next epoch is awake or "+\
                         "the event occurs in awake but the preceding epoch is sleep."])
             info.append(["asleep_percent", "Results: '%' of time slept occupied by the event" ])
-            if report['events_section'] == "Recording time":
+            if report['events_section'] == "Recording time" or self.is_event_mask_section(report['events_section']):
                 info.append(["record_percent", "Results: '%' of recording "+\
                     "(from first epoch scored to last epoch scored) occupied by the event" ])
             else:
@@ -338,6 +342,33 @@ class EventSleepReport(SciNode):
                     if unicodedata.category(c) != 'Mn')
 
 
+    def is_event_mask_section(self, events_section):
+        """True when events_section is an event-name mask (e.g. EOG_Phasic), not a sleep period."""
+        return events_section in EVENT_MASK_SECTIONS
+
+
+    def filter_events_by_any_overlap(self, loc_events, mask_events):
+        """
+        Keep primary events that have any temporal overlap with at least one mask event.
+
+        Overlap rule (same as EventTemporalLink):
+            mask.end > evt.start AND mask.start < evt.end
+        """
+        if len(loc_events) == 0 or len(mask_events) == 0:
+            return loc_events.iloc[0:0].copy()
+
+        idx_keep = []
+        for i_evt, evt in loc_events.iterrows():
+            evt_end = evt.start_sec + evt.duration_sec
+            overlapping = mask_events[
+                ((mask_events.start_sec + mask_events.duration_sec) > evt.start_sec)
+                & (mask_events.start_sec < evt_end)
+            ]
+            if len(overlapping) > 0:
+                idx_keep.append(i_evt)
+        return loc_events.loc[idx_keep]
+
+
     # Function to filter events based on the report criterias.
     # Function returns the events filtered and the number of events excluded 
     def filter_events_by_criteria(self, events, sleep_stages, report, events_resp):
@@ -361,7 +392,9 @@ class EventSleepReport(SciNode):
                     "end_period_delay": delay to end a period of events
                     "sleep_event_association_min": minimum interval to considered a respiratory events (i.e. -3.5 s)
                     "sleep_event_association_max": maximum interval to considered a respiratory events (i.e. 8 s)
-                    "events_section": i.e. Sleep only, Recording time, Awake in sleep period, Before sleep onset
+                    "events_section": Sleep only, Recording time, Awake in sleep period,
+                        Before sleep onset (sleep-period selectors), or EOG_Phasic / EOG_Tonic
+                        (event masks: keep primary events that overlap those mask events)
                     "graphics": None for now
             events_resp : Pandas DataFrame
                 Respiratory events ('group','name','start_sec','duration_sec','channels')
@@ -390,7 +423,19 @@ class EventSleepReport(SciNode):
         n_events_ori = len(index_unique)
 
         #------------------------------
+        # Event-mask section (e.g. EOG_Phasic / EOG_Tonic):
+        # Keep primary events (from events_definition) that have any overlap
+        # with mask events of that name in the full events list.
+        # Sleep-period sections are handled below as before.
+        #------------------------------
+        events_section = report['events_section']
+        if self.is_event_mask_section(events_section):
+            mask_events = events[events.name == events_section].copy()
+            loc_events = self.filter_events_by_any_overlap(loc_events, mask_events)
+
+        #------------------------------
         # Remove events occuring outside event section and sleep stage
+        # For event-mask sections, use Recording time as the time window.
         #------------------------------
         # Extract sleep stage (not cycles)
         sleep_stages_nocycle = sleep_stages[sleep_stages.group == commons.sleep_stages_group].copy()
@@ -405,17 +450,17 @@ class EventSleepReport(SciNode):
         valid_start_i = valid_epoch.index[0]
         last_valid_i = valid_epoch.index[-1]
         # Select the portion of the recording
-        if report['events_section'] == "Sleep only":
+        if events_section == "Sleep only":
             # Extract first to the last asleep epoch
             recording_stages = sleep_stages_nocycle.iloc[sleep_latency_i:last_sleep_i+1].copy()
-        elif report['events_section'] == "Awake in sleep period":
+        elif events_section == "Awake in sleep period":
             # Extract first to the last asleep epoch
             recording_stages = sleep_stages_nocycle.iloc[sleep_latency_i:last_sleep_i+1].copy()
-        elif report['events_section'] == "Before sleep onset":
+        elif events_section == "Before sleep onset":
             # Extract the valid stages before sleep onset
             recording_stages = sleep_stages_nocycle.iloc[valid_start_i:sleep_latency_i].copy()
         else:
-            # Extract the valid stages during the whole recording
+            # Recording time, or event-mask sections (EOG_Phasic / EOG_Tonic)
             recording_stages = sleep_stages_nocycle.iloc[valid_start_i:last_valid_i+1].copy()
         recording_stages.reset_index(inplace=True, drop=True)
         recording_stages.sort_values('start_sec', axis=0, inplace=True, ignore_index='True') 
@@ -427,10 +472,10 @@ class EventSleepReport(SciNode):
             idx_stop = recording_stages[ (recording_stages.start_sec+recording_stages.duration_sec) > evt.start_sec].index
             idx_select_stage = idx_start.intersection(idx_stop)
             if len(idx_select_stage) >0 :
-                if report['events_section'] == "Sleep only":
+                if events_section == "Sleep only":
                     if not (recording_stages.loc[idx_select_stage[0]]['name'] in commons.asleep_stages):
                         idx_2_rm.append(i_evt)
-                elif report['events_section'] == "Awake in sleep period":
+                elif events_section == "Awake in sleep period":
                     if not (recording_stages.loc[idx_select_stage[0]]['name'] == '0'):
                         idx_2_rm.append(i_evt)
             else:
@@ -607,7 +652,8 @@ class EventSleepReport(SciNode):
             "crit_end_period_delay_min" : report['end_period_delay'] # Not exactly at the same position than the previous software
         }
         info.append(["crit_evt_section", \
-            "Report Event Criteria : event selection (Sleep only, recording time, Awake in sleep period, Before sleep onset)"])
+            "Report Event Criteria : sleep period (Sleep only, Recording time, Awake in sleep period, "\
+            "Before sleep onset) or event mask (EOG_Phasic, EOG_Tonic: keep events that overlap those mask events)"])
         info.append(["crit_evt_min_sec", "Report Event Criteria : minimum event duration (s). i.e. 0.5"])
         info.append(["crit_evt_max_sec", "Report Event Criteria : maximum event duration (s). i.e. 10"])
         info.append(["crit_evt_min_interval_sec", "Report Event Criteria : minimum interval (s) to create a series. i.e. 5"])

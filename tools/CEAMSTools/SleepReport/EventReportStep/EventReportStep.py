@@ -745,7 +745,13 @@ class EventReportStep( BaseStepView,  Ui_EventReportStep, QtWidgets.QWidget):
         report["min_duration"] = 1
         reports.append(report)        
         report = self.create_report("Events report without criteria-sleep only")
-        reports.append(report)                
+        reports.append(report)
+        report = self.create_report("Events report without criteria-EOG_Phasic")
+        report["events_section"] = "EOG_Phasic"
+        reports.append(report)
+        report = self.create_report("Events report without criteria-EOG_Tonic")
+        report["events_section"] = "EOG_Tonic"
+        reports.append(report)           
         self._default_reports = reports
 
     def create_report(self, report_name):
@@ -759,6 +765,8 @@ class EventReportStep( BaseStepView,  Ui_EventReportStep, QtWidgets.QWidget):
             "end_period_delay":0,
             "sleep_event_association_min":0,
             "sleep_event_association_max":0,
-            "events_section":"Sleep only", # Sleep Only, Recording time, Awake in sleep period, Before sleep onset
+            # Sleep period: Sleep only, Recording time, Awake in sleep period, Before sleep onset
+            # Event mask: EOG_Phasic, EOG_Tonic (primary events kept if they overlap those mask events)
+            "events_section":"Sleep only",
             "graphics":None
         }

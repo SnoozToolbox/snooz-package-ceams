@@ -54,6 +54,7 @@ class ModifyCriteriaDialog(QtWidgets.QDialog, Ui_ModifyCriteriaDialog):
             self.report_criteria_mapper.addMapping(self.end_period_after_doublespinbox,6)
             self.report_criteria_mapper.addMapping(self.se_from_doublespinbox,7)
             self.report_criteria_mapper.addMapping(self.se_to_doublespinbox,8)
+            self.report_criteria_mapper.addMapping(self.events_in_combobox,9,b"currentText")
             self.report_criteria_mapper.setCurrentIndex(row)
         self.report_name = None
 
@@ -142,7 +143,6 @@ class ModifyCriteriaDialog(QtWidgets.QDialog, Ui_ModifyCriteriaDialog):
         report_data["sleep_event_association_min"] = self.se_from_doublespinbox.value()
         report_data["sleep_event_association_max"] = self.se_to_doublespinbox.value()
         report_data["events_section"] = self.events_in_combobox.currentText()
-        report_data["graphics"] = self.graphic_combobox.currentText()
 
         # Call the callback and close the dialog
         return report_data
