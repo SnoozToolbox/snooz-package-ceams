@@ -25,7 +25,6 @@
         <font>
          <family>Roboto</family>
          <pointsize>12</pointsize>
-         <weight>50</weight>
          <italic>false</italic>
          <bold>false</bold>
         </font>
@@ -38,13 +37,13 @@
      <item>
       <widget class="QListView" name="file_listview">
        <property name="editTriggers">
-        <set>QAbstractItemView::NoEditTriggers</set>
+        <set>QAbstractItemView::EditTrigger::NoEditTriggers</set>
        </property>
        <property name="selectionMode">
-        <enum>QAbstractItemView::ExtendedSelection</enum>
+        <enum>QAbstractItemView::SelectionMode::ExtendedSelection</enum>
        </property>
        <property name="selectionBehavior">
-        <enum>QAbstractItemView::SelectItems</enum>
+        <enum>QAbstractItemView::SelectionBehavior::SelectItems</enum>
        </property>
       </widget>
      </item>
@@ -58,7 +57,6 @@
         <font>
          <family>Roboto</family>
          <pointsize>12</pointsize>
-         <weight>50</weight>
          <italic>false</italic>
          <bold>false</bold>
         </font>
@@ -71,16 +69,16 @@
      <item>
       <widget class="QTreeView" name="event_treeview">
        <property name="editTriggers">
-        <set>QAbstractItemView::NoEditTriggers</set>
+        <set>QAbstractItemView::EditTrigger::NoEditTriggers</set>
        </property>
        <property name="dragDropMode">
-        <enum>QAbstractItemView::NoDragDrop</enum>
+        <enum>QAbstractItemView::DragDropMode::NoDragDrop</enum>
        </property>
        <property name="selectionMode">
-        <enum>QAbstractItemView::SingleSelection</enum>
+        <enum>QAbstractItemView::SelectionMode::SingleSelection</enum>
        </property>
        <property name="selectionBehavior">
-        <enum>QAbstractItemView::SelectItems</enum>
+        <enum>QAbstractItemView::SelectionBehavior::SelectItems</enum>
        </property>
       </widget>
      </item>
@@ -119,6 +117,16 @@
       <widget class="QCheckBox" name="reset_excl_event_checkBox">
        <property name="text">
         <string>Reset the signal of excluded events </string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QCheckBox" name="match_event_channels_checkBox">
+       <property name="text">
+        <string>Analyze events only on their annotated channel</string>
+       </property>
+       <property name="checked">
+        <bool>true</bool>
        </property>
       </widget>
      </item>

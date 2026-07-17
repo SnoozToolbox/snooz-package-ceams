@@ -124,6 +124,7 @@ class SignalsFromEvents(SciNode):
         InputPlug('events_groups', self)
         InputPlug('events_names', self)     
         InputPlug('create', self)
+        InputPlug('match_event_channels', self)
         OutputPlug('signals_from_events', self)
         OutputPlug('epochs_to_process', self)
 
@@ -133,7 +134,7 @@ class SignalsFromEvents(SciNode):
         pass
 
 
-    def compute(self, signals, events, events_names, events_groups, create):
+    def compute(self, signals, events, events_names, events_groups, create, match_event_channels=True):
         """
         Manage a list of SignalModel from specific events during a recording.  
 
@@ -173,6 +174,10 @@ class SignalsFromEvents(SciNode):
             create : bool
                 True to create a new list of SignalModel based on the events.
                 False to select items from the list of SignalModel based on the events.
+            match_event_channels : bool
+                If True, channel-specific events are extracted only from the signal
+                carrying the same channel label. If False, event start times and
+                durations are applied to every selected signal.
 
         Returns
         -----------    
@@ -259,6 +264,20 @@ class SignalsFromEvents(SciNode):
         if type(create) != bool :
             raise NodeInputException(self.identification, "create", "SignalsFromEvents create parameter must be set")
 
+        if match_event_channels in ("", None):
+            match_event_channels = True
+        elif isinstance(match_event_channels, str):
+            if match_event_channels.lower() == "true":
+                match_event_channels = True
+            elif match_event_channels.lower() == "false":
+                match_event_channels = False
+        if type(match_event_channels) != bool:
+            raise NodeInputException(
+                self.identifier,
+                "match_event_channels",
+                "SignalsFromEvents match_event_channels parameter must be a boolean"
+            )
+
         if create==True:
             if DEBUG: 
                 # Warn user of slower version
@@ -283,7 +302,7 @@ class SignalsFromEvents(SciNode):
                     # Because of the discontinuity
                     # we have to verify if the signal includes at least partially the events
                     # Look for the Right windows time
-                    if len(chan)>0: # events are not applied to all channels (not a stage or a clean selection)
+                    if match_event_channels and len(chan)>0: # Apply channel-specific events only to their annotated channel
                         if (signal_start_samples<evt_end_samples) and (signal_end_samples>evt_start_samples) and (signal.channel == chan):
                             # Extract and define the new extracted channel_cur
                             channel_cur = self.extract_events_from_signal(signal, evt_start_samples, evt_dur_samples)
@@ -297,7 +316,10 @@ class SignalsFromEvents(SciNode):
                     else:
                         channel_cur = None
                     if channel_cur is not None:
-                        real_events_to_write.append([group, name, channel_cur.start_time, channel_cur.duration, chan])
+                        # Keep the extracted signal channel, not only the annotation
+                        # channel, so cross-channel analysis stays consistent.
+                        out_chan = chan if (match_event_channels and len(chan)>0) else signal.channel
+                        real_events_to_write.append([group, name, channel_cur.start_time, channel_cur.duration, out_chan])
                     # else:
                     #     # It is normal to miss some events if not all the channels have been selected.
                     #     # Log the missing event

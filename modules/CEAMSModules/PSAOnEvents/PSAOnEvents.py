@@ -83,6 +83,7 @@ class PSAOnEvents(SciNode):
         InputPlug('artifact_group',self)
         InputPlug('artifact_name',self)
         InputPlug('PSA_out_filename',self)
+        InputPlug('match_event_channels',self)
 
         # A master module allows the process to be reexcuted multiple time.
         # For exemple, this is useful when the process must be repeated over multiple
@@ -96,7 +97,7 @@ class PSAOnEvents(SciNode):
         self.PSD_avg_per_event ={}
     
     def compute(self, subject_info,PSD,events,PSA_event_group,PSA_event_name,mini_bandwidth,\
-        first_freq,last_freq,artifact_group,artifact_name,PSA_out_filename):
+        first_freq,last_freq,artifact_group,artifact_name,PSA_out_filename,match_event_channels=True):
         """
         Compile the PSA run on selected events.  The compilation is for a cohort.
 
@@ -136,6 +137,9 @@ class PSAOnEvents(SciNode):
                 Event name to ignore, each name is separated by a comma.
             "PSA_out_filename": string
                 Path and filename to write the output.
+            "match_event_channels": bool
+                If True, compile each event only on its annotated channel. If
+                False, use the event intervals for every analyzed PSD channel.
 
         Outputs: None, a file is saved.
             
@@ -150,6 +154,19 @@ class PSAOnEvents(SciNode):
         if not isinstance(PSD,list):
             raise NodeInputException(self.identifier, "PSD", \
                 f"PSAOnEvents input of wrong type. Expected: <class 'list'> received: {type(PSD)}")   
+        if match_event_channels in ("", None):
+            match_event_channels = True
+        elif isinstance(match_event_channels, str):
+            if match_event_channels.lower() == "true":
+                match_event_channels = True
+            elif match_event_channels.lower() == "false":
+                match_event_channels = False
+        if type(match_event_channels) != bool:
+            raise NodeInputException(
+                self.identifier,
+                "match_event_channels",
+                "PSAOnEvents match_event_channels parameter must be a boolean"
+            )
         try:
             mini_bandwidth = float(mini_bandwidth)
         except ValueError:
@@ -252,7 +269,12 @@ class PSAOnEvents(SciNode):
 
             # Compute the number of artefacts for the current channel and selected sleep stage
             channel_info_param['channel_artefact_count'] = \
-                self.get_n_artefact_sel(artifact_selected, channel, PSA_evt_selected)  
+                self.get_n_artefact_sel(
+                    artifact_selected,
+                    channel,
+                    PSA_evt_selected,
+                    match_event_channels
+                )
 
             # Extract the fft length and step
             PSD_info_params = PSA.get_PSD_info(self.identifier, PSD, channel)
@@ -264,7 +286,11 @@ class PSAOnEvents(SciNode):
             freq_bin_chan, psd_start_time, psd_end_time = PSA.get_PSD_attribute_chan(self.identifier, PSD, channel)
 
             # Extract PSA Events for the current channel if any
-            PSA_evt_channel = PSA_evt_selected[ (PSA_evt_selected['channels']==channel) | (PSA_evt_selected['channels']=="") ]
+            PSA_evt_channel = self.select_events_for_channel(
+                PSA_evt_selected,
+                channel,
+                match_event_channels
+            )
 
             # --------------------------------------------------------------------------
             # Compute the total and the valid number of fft windows and 
@@ -406,9 +432,22 @@ class PSAOnEvents(SciNode):
 
 
     # Compute the number of artefact for the current channel and selected events
-    def get_n_artefact_sel(self, art_selected, channel, PSA_evt_selected):
+    def select_events_for_channel(self, events, channel, match_event_channels):
+        if not match_event_channels:
+            return events
+        return events[
+            (events['channels'] == channel) |
+            (events['channels'] == "")
+        ]
+
+
+    def get_n_artefact_sel(self, art_selected, channel, PSA_evt_selected, match_event_channels):
         # Extract PSA Events for the current channel if any
-        PSA_evt_channel = PSA_evt_selected[ (PSA_evt_selected['channels']==channel) | (PSA_evt_selected['channels']=="") ]
+        PSA_evt_channel = self.select_events_for_channel(
+            PSA_evt_selected,
+            channel,
+            match_event_channels
+        )
         # Extract PSA Events info
         PSA_evt_start_all = PSA_evt_channel['start_sec'].to_numpy()
         PSA_evt_start_all = np.around(PSA_evt_start_all)
@@ -459,12 +498,24 @@ class PSAOnEvents(SciNode):
             # Get the event name of each psd start of the selected events
             # event_name_unique = PSA_evt_selected['name'].unique()
             # Loop for each different event name (i.e. M-EVE, MOR, clean_bsl, ...)
+            if PSA_evt_selected is None or len(PSA_evt_selected) == 0:
+                for cur_event_name in event_name_unique:
+                    self.PSD_act_param[f'fft_win_{cur_event_name}_count'] = 0
+                    self.PSD_act_param[f'fft_win_valid_{cur_event_name}_count'] = 0
+                    self.PSD_avg_per_event[f'act_{cur_event_name}']= np.NaN
+                self.PSD_act_param[f'fft_win_count'] = 0
+                self.PSD_act_param[f'fft_win_valid_count'] = 0
+                self.PSD_avg_per_event[f'act_total']= np.NaN
+                return
+
             for cur_event_name in event_name_unique:
 
                 # Compute the number of fft win total and valid
                 psd_data_cur_event = np.empty([0,0])
-                # Extract right event name and right channel if any
-                psd_starts_cur = psd_start_time[(PSA_evt_selected['name']==cur_event_name) & ((PSA_evt_selected['channels']==channel) | (PSA_evt_selected['channels']==""))]
+                # Channel filtering is already applied by the caller via
+                # select_events_for_channel(match_event_channels=...).
+                # Keep only the current event name here.
+                psd_starts_cur = psd_start_time[PSA_evt_selected['name']==cur_event_name]
                 # For each event of the group
                 for psd_start_cur in psd_starts_cur:
                     # Extract the psd data for the current channel and start_time

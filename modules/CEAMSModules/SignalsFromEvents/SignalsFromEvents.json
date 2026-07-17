@@ -44,6 +44,12 @@
                 "value": true,
                 "connections": {},
                 "sub_plugs": {}
+            },
+            "match_event_channels": {
+                "name": "match_event_channels",
+                "value": true,
+                "connections": {},
+                "sub_plugs": {}
             }
         },
         "outputs": {

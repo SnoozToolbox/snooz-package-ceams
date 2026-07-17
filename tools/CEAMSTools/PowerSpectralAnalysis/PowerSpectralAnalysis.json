@@ -142,6 +142,14 @@
                         "value": true,
                         "sub_plugs": {},
                         "connections": {}
+                    },
+                    "match_event_channels": {
+                        "name": "match_event_channels",
+                        "value": true,
+                        "sub_plugs": {},
+                        "connections": {
+                            "6f9b0e64-2f8d-4a30-b1f7-97f6c41325e2": "constant"
+                        }
                     }
                 },
                 "outputs": {
@@ -2716,6 +2724,14 @@
                         "value": "",
                         "sub_plugs": {},
                         "connections": {}
+                    },
+                    "match_event_channels": {
+                        "name": "match_event_channels",
+                        "value": true,
+                        "sub_plugs": {},
+                        "connections": {
+                            "6f9b0e64-2f8d-4a30-b1f7-97f6c41325e2": "constant"
+                        }
                     }
                 },
                 "outputs": {},
@@ -3178,6 +3194,46 @@
                 },
                 "pos_x": 157.4999999999999,
                 "pos_y": 953.7499999999993
+            },
+            {
+                "cls": "Constant",
+                "name": "Constant",
+                "metadata": {},
+                "file_location": "",
+                "module_label": "Constant",
+                "module_category": "Parameters",
+                "module_options": {},
+                "inputs": {
+                    "constant": {
+                        "name": "constant",
+                        "value": true,
+                        "sub_plugs": {},
+                        "connections": {}
+                    }
+                },
+                "outputs": {
+                    "constant": {
+                        "name": "constant",
+                        "value": true,
+                        "sub_plugs": {},
+                        "connections": {
+                            "4c9b0f26-21d7-404c-bd38-22326468f129": [
+                                "match_event_channels"
+                            ],
+                            "9dfbe6b9-1887-452a-ac3b-33f1235f9b0a": [
+                                "match_event_channels"
+                            ]
+                        }
+                    }
+                },
+                "module": "CEAMSModules.Constant",
+                "identifier": "6f9b0e64-2f8d-4a30-b1f7-97f6c41325e2",
+                "activation_state": "activated",
+                "package": {
+                    "package_name": "CEAMSModules"
+                },
+                "pos_x": 650.0,
+                "pos_y": -520.0
             }
         ]
     }

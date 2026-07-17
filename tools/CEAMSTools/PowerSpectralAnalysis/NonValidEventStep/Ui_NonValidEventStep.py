@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file ''
+## Form generated from reading UI file 'Ui_NonValidEventStep.ui'
 ##
 ## Created by: Qt User Interface Compiler version 6.8.2
 ##
@@ -43,9 +43,9 @@ class Ui_NonValidEventStep(object):
 
         self.file_listview = QListView(NonValidEventStep)
         self.file_listview.setObjectName(u"file_listview")
-        self.file_listview.setEditTriggers(QAbstractItemView.NoEditTriggers)
-        self.file_listview.setSelectionMode(QAbstractItemView.ExtendedSelection)
-        self.file_listview.setSelectionBehavior(QAbstractItemView.SelectItems)
+        self.file_listview.setEditTriggers(QAbstractItemView.EditTrigger.NoEditTriggers)
+        self.file_listview.setSelectionMode(QAbstractItemView.SelectionMode.ExtendedSelection)
+        self.file_listview.setSelectionBehavior(QAbstractItemView.SelectionBehavior.SelectItems)
 
         self.verticalLayout.addWidget(self.file_listview)
 
@@ -62,10 +62,10 @@ class Ui_NonValidEventStep(object):
 
         self.event_treeview = QTreeView(NonValidEventStep)
         self.event_treeview.setObjectName(u"event_treeview")
-        self.event_treeview.setEditTriggers(QAbstractItemView.NoEditTriggers)
-        self.event_treeview.setDragDropMode(QAbstractItemView.NoDragDrop)
-        self.event_treeview.setSelectionMode(QAbstractItemView.SingleSelection)
-        self.event_treeview.setSelectionBehavior(QAbstractItemView.SelectItems)
+        self.event_treeview.setEditTriggers(QAbstractItemView.EditTrigger.NoEditTriggers)
+        self.event_treeview.setDragDropMode(QAbstractItemView.DragDropMode.NoDragDrop)
+        self.event_treeview.setSelectionMode(QAbstractItemView.SelectionMode.SingleSelection)
+        self.event_treeview.setSelectionBehavior(QAbstractItemView.SelectionBehavior.SelectItems)
 
         self.verticalLayout_2.addWidget(self.event_treeview)
 
@@ -95,6 +95,12 @@ class Ui_NonValidEventStep(object):
 
         self.verticalLayout_2.addWidget(self.reset_excl_event_checkBox)
 
+        self.match_event_channels_checkBox = QCheckBox(NonValidEventStep)
+        self.match_event_channels_checkBox.setObjectName(u"match_event_channels_checkBox")
+        self.match_event_channels_checkBox.setChecked(True)
+
+        self.verticalLayout_2.addWidget(self.match_event_channels_checkBox)
+
 
         self.horizontalLayout_2.addLayout(self.verticalLayout_2)
 
@@ -117,5 +123,6 @@ class Ui_NonValidEventStep(object):
         self.search_lineEdit.setPlaceholderText(QCoreApplication.translate("NonValidEventStep", u"Event group search", None))
         self.reset_all_files_pushButton.setText(QCoreApplication.translate("NonValidEventStep", u"Reset all files", None))
         self.reset_excl_event_checkBox.setText(QCoreApplication.translate("NonValidEventStep", u"Reset the signal of excluded events ", None))
+        self.match_event_channels_checkBox.setText(QCoreApplication.translate("NonValidEventStep", u"Analyze events only on their annotated channel", None))
     # retranslateUi
 
