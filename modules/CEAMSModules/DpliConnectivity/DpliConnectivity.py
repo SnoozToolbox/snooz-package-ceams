@@ -82,12 +82,6 @@ class DpliConnectivity(SciNode):
         Execute dPLI connectivity computation with artifact removal (NaN/Inf/zero).
         """
 
-        # -- Convert input parameters if they're strings --
-        # if isinstance(num_surr, str):
-        #     num_surr = int(num_surr)
-        # if isinstance(p_value, str):
-        #     p_value = float(p_value)
-
         # Normalize possible None/strings from UI before validating
         if num_surr is None: num_surr = 20
         if isinstance(num_surr, str): num_surr = int(num_surr)
@@ -112,13 +106,7 @@ class DpliConnectivity(SciNode):
             raise NodeInputException(self.identifier, "epochs",
                 f"At least two channels are required for connectivity; got {len(epochs)}.")
         
-        # if num_surr is None:
-        #     num_surr = 20
-        # if p_value is None:
-        #     p_value = 0.05
 
-
-        # fs = epochs[0].sample_rate
         # --- Sampling frequency must be identical across channels ---
         fs_list = [float(e.sample_rate) for e in epochs]
         fs0 = fs_list[0]
@@ -157,19 +145,36 @@ class DpliConnectivity(SciNode):
             windowed_signal[~np.isfinite(windowed_signal)] = np.nan
 
 
-        # ------------- ARTIFACT REMOVAL (Remove windows with any NaN) -------------
-        # valid_windows is a boolean mask: True for windows (epochs) WITHOUT NaNs
-
-        # Find windows with no NaN and no zeros (across all channels and samples)
-        valid_windows = (~np.isnan(windowed_signal).any(axis=(1, 2))) & (~(windowed_signal == 0).any(axis=(1, 2)))
+        # ------------- ARTIFACT REMOVAL -------------
+        # Reject an epoch if any sample is NaN/Inf (real artefacts from
+        # ResetSignalArtefact) or if the entire epoch is exactly zero
+        # (all channels, all samples — a completely flat/dead segment).
+        nan_epoch_mask = np.isnan(windowed_signal).any(axis=(1, 2))
+        zero_epoch_mask = (windowed_signal == 0).all(axis=(1, 2))
+        valid_windows = (~nan_epoch_mask) & (~zero_epoch_mask)
         clean_windowed_signal = windowed_signal[valid_windows]
+
+        if DEBUG:
+            n_nan = int(np.sum(nan_epoch_mask))
+            n_zero_only = int(np.sum(zero_epoch_mask & ~nan_epoch_mask))
+            print(f"[DpliConnectivity] Epochs: {windowed_signal.shape[0]} | "
+                  f"dropped NaN/Inf: {n_nan} | dropped all-zero: {n_zero_only} | "
+                  f"kept: {int(np.sum(valid_windows))}")
+            if n_nan > 0:
+                nan_epochs_per_channel = np.isnan(windowed_signal).any(axis=2).sum(axis=0)
+                nan_offenders = [(channel_names[c], int(nan_epochs_per_channel[c]))
+                                 for c in np.argsort(nan_epochs_per_channel)[::-1]
+                                 if nan_epochs_per_channel[c] > 0]
+                print(f"[DpliConnectivity] Channels with NaN/Inf samples "
+                      f"(channel: #epochs affected): {nan_offenders}")
+            if n_zero_only > 0:
+                print(f"[DpliConnectivity] Rejected {n_zero_only} epoch(s) "
+                      f"where all channels and samples were exactly zero.")
+            print(f"Shape after artifact removal: {clean_windowed_signal.shape}")
 
         if clean_windowed_signal.shape[0] == 0:
             raise NodeRuntimeException(self.identifier, "ArtifactRemoval",
                 "All epochs were rejected (NaN/Inf/zero). Nothing to compute.")
-        if DEBUG:
-            print(f"Removed {np.sum(~valid_windows)} epochs due to NaN/Inf/zero.")
-            print(f"Shape after artifact removal: {clean_windowed_signal.shape}")
 
 
         info = {
@@ -187,26 +192,6 @@ class DpliConnectivity(SciNode):
             raise NodeRuntimeException(self.identifier, "DPLIComputation",
                 f"Error in dpli_parallel_numba: {str(e)}")
 
-        # Cache results
-        # cache = {
-        #     'final_dpli': final_dpli,  # shape (num_windows, C, C)
-        #     'average_dpli': average_dpli,  # shape (C, C)
-        #     'channel_names': info['channel_names']
-        # }
-        # self._cache_manager.write_mem_cache(self.identifier, cache)
-
-        # num_windows = final_dpli.shape[0]
-        # num_channels = final_dpli.shape[1]
-        # self._log_manager.log(self.identifier,
-        #     f"DPLI computed over {num_windows} epochs and {num_channels} channels.")
-
-        # return {
-        #     'dpli_results': {
-        #         'final_dpli': final_dpli,
-        #         'average_dpli': average_dpli,
-        #         'channel_names': info['channel_names']
-        #     }
-        # }
 
         return {
             'dpli_results': {
@@ -429,9 +414,6 @@ def dpli_parallel_numba(windowed_signal, info, num_surrogates, p_value, n_jobs=-
     final_dpli : ndarray, shape (W, C, C)
     average_dpli : ndarray, shape (C, C)
     """
-    # num_windows = windowed_signal.shape[0]
-    # num_channels = info['num_channels']
-    # final_dpli = np.zeros((num_windows, num_channels, num_channels))
 
     num_windows, num_channels, num_samples = windowed_signal.shape
     final_dpli = np.zeros((num_windows, num_channels, num_channels), dtype=np.float64)

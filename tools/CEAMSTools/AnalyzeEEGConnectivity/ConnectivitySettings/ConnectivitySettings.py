@@ -16,7 +16,6 @@ from qtpy import QtWidgets
 
 from CEAMSTools.AnalyzeEEGConnectivity.ConnectivitySettings.Ui_ConnectivitySettings import Ui_ConnectivitySettings
 from CEAMSTools.AnalyzeEEGConnectivity.FilterStep.FilterStep import FilterStep
-from CEAMSTools.AnalyzeEEGConnectivity.FilterStep.FilterStep import FilterStep
 from commons.BaseStepView import BaseStepView
 from flowpipe.ActivationState import ActivationState
 
@@ -189,7 +188,7 @@ class ConnectivitySettings(BaseStepView, Ui_ConnectivitySettings, QtWidgets.QWid
         num_surr = self.num_surr_lineedit.text().strip()
         p_value = self.p_value_lineedit.text().strip()
 
-        self._sync_method_scope_activation()
+        self._sync_activation()
 
         chain = self._active_chain()
         method = self._active_method()

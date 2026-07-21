@@ -145,8 +145,6 @@ class FilterStep(BaseStepView, Ui_FilterStep, QtWidgets.QWidget):
             self.n2_checkBox.setEnabled(False)
             self.n3_checkBox.setEnabled(False)
             self.rem_checkBox.setEnabled(False)
-        self.update_section_selection_slot()
-        self._set_scope_nodes()
 
 
     def on_specific_annotations_toggled(self, checked: bool):

@@ -5,8 +5,7 @@
 ConnectivityDetails
 ----------------------------------------------------------
 - outputs (matrix TSV + heatmap PNG + head-shaped connectivity plot (if montage ≥4 matched channels)
-- For now uses MANUAL thresholds by default (standard values below)
-- Auto mode is implemented but disabled by default (ready for a future 'mode' input)
+- Uses fixed manual thresholds for head-plot edge selection (standard values below)
 
 Expected con_dict formats:
 - New nested:
@@ -15,27 +14,6 @@ Expected con_dict formats:
     {'aec_results': {'final_aec', 'average_aec', 'channel_names'}}
 - Backward-compatible:
     {'average_wpli', 'channel_names'}  or  {'average_dpli', 'channel_names'}  or  {'average_aec', 'channel_names'}
-
-Optional (future) plot_options (NOT required for now):
-    {
-      'mode': 'manual' | 'auto',   # default 'manual'
-      # dPLI manual:
-      'neutral_abs': 0.01, 'moderate_abs': 0.02, 'strong_abs': 0.08, 'max_abs': 0.25,
-      # dPLI auto:
-      'auto_density': 0.15, 'strong_top_frac': 0.5, 'max_abs': 'auto',
-      # wPLI manual:
-      'neutral_min': 0.05, 'moderate_min': 0.10, 'strong_min': 0.20, 'max_val': 0.40,
-      # wPLI auto:
-      'auto_density': 0.15, 'strong_top_frac': 0.5, 'max_val': 'auto',
-      # AEC manual:
-      'neutral_min': 0.1, 'moderate_min': 0.2, 'strong_min': 0.35, 'max_val': 0.6,
-      # AEC auto:
-      'auto_density': 0.15, 'strong_top_frac': 0.5, 'max_val': 'auto',
-      # layout:
-      'target_radius': 0.49, 'rotate_deg': 0.0, 'shift_x': 0.0, 'shift_y': 0.0,
-      # dPLI direction visualization:
-      'direction_mode': 'gradient' | 'order'   # default 'gradient'
-    }
 """
 
 import os
@@ -176,7 +154,7 @@ class ConnectivityDetails(SciNode):
         except Exception as e:
             raise NodeRuntimeException(self.identifier, "Image", f"Failed to save PNG: {str(e)}")
 
-        # --- NEW: Try to save head plot (manual thresholds by default) ---
+        # --- Try to save head plot ---
         try:
             # 1) Best montage from names (dummy zeros; very fast)
             final_raw, best_montage, matched = find_best_montage_from_names(channel_names, sfreq=1.0)
@@ -185,23 +163,18 @@ class ConnectivityDetails(SciNode):
                     print("[INFO] <4 matched EEG channels -> skipping head plot.")
                 return {}
 
-            # 2) Manual standard parameters (current default). Auto code is present but off.
             if metric == 'dpli':
                 fig = plot_best_dpli(
                     M=matrix,
                     raw=final_raw,
                     channel_names=channel_names,
                     montage_name=best_montage,
-                    # info_channel_names=channel_names,
-                    # final_raw=final_raw,
-                    # best_montage_name=best_montage,
-                    mode='manual',
                     neutral_abs=0.01,
                     moderate_abs=0.02,
                     strong_abs=0.08,
                     max_abs=0.25,
                     target_radius=0.49, rotate_deg=0.0, shift_x=0.0, shift_y=0.0,
-                    direction_mode='gradient'  # default behavior
+                    direction_mode='gradient'
                 )
             elif metric == 'wpli':
                 fig = plot_best_wpli(
@@ -209,10 +182,6 @@ class ConnectivityDetails(SciNode):
                     raw=final_raw,
                     channel_names=channel_names,
                     montage_name=best_montage,
-                    # info_channel_names=channel_names,
-                    # final_raw=final_raw,
-                    # best_montage_name=best_montage,
-                    mode='manual',
                     neutral_min=0.05,
                     moderate_min=0.10,
                     strong_min=0.20,
@@ -225,7 +194,6 @@ class ConnectivityDetails(SciNode):
                     raw=final_raw,
                     channel_names=channel_names,
                     montage_name=best_montage,
-                    mode='manual',
                     neutral_min=0.1,
                     moderate_min=0.2,
                     strong_min=0.35,
@@ -402,23 +370,16 @@ def find_best_montage_from_names(channel_names, sfreq=1.0):
 
 
 # -------------------------------
-# dPLI plotting (manual + auto ready; NO title)
+# dPLI plotting
 # -------------------------------
 def plot_dpli_generic(
     M, raw, channel_names, montage_name,
-    mode: str = 'manual',
-    # Manual-threshold defaults:
     neutral_abs: float = 0.01,
     moderate_abs: float = 0.02,
     strong_abs: float = 0.08,
-    max_abs=0.25,
-    # Auto mode knobs (not used unless mode='auto'):
-    auto_density: float = 0.15,
-    strong_top_frac: float = 0.5,
-    # Layout:
+    max_abs: float = 0.25,
     target_radius: float = 0.49, rotate_deg: float = 0.0, shift_x: float = 0.0, shift_y: float = 0.0,
     figsize=(8,8), dpi=300,
-    # Direction visualization:
     direction_mode: str = 'gradient'   # 'gradient' (default) or 'order'
 ):
     # montage coords (exclude HydroCel non-brain)
@@ -462,23 +423,13 @@ def plot_dpli_generic(
             cand.append((a, b, bias, abs(bias)))
 
     edges_strong, edges_mod = [], []
-    if mode == 'auto':
-        n_pairs = len(cand)
-        if n_pairs == 0: raise RuntimeError("No pairs for auto-density.")
-        keep_n = max(1, int(round(float(auto_density) * n_pairs)))
-        kept = sorted(cand, key=lambda x: x[3], reverse=True)[:keep_n]
-        cut = max(1, int(round((1.0 - float(strong_top_frac)) * len(kept))))
-        thin, thick = kept[:cut], kept[cut:]
-        if isinstance(max_abs, str) and max_abs.lower() == 'auto':
-            abs_vals = np.array([ab for *_, ab in kept], float)
-            max_abs = float(np.percentile(abs_vals, 95)) or 0.01
-        for a,b,bias,_ in thin:  edges_mod.append((a,b,bias))
-        for a,b,bias,_ in thick: edges_strong.append((a,b,bias))
-    else:
-        for a,b,bias,ab in cand:
-            if ab < neutral_abs: continue
-            if ab >= strong_abs: edges_strong.append((a,b,bias))
-            elif ab >= moderate_abs: edges_mod.append((a,b,bias))
+    for a, b, bias, ab in cand:
+        if ab < neutral_abs:
+            continue
+        if ab >= strong_abs:
+            edges_strong.append((a, b, bias))
+        elif ab >= moderate_abs:
+            edges_mod.append((a, b, bias))
 
     connected = set()
     for i,j,_ in edges_mod + edges_strong: connected.add(i); connected.add(j)
@@ -501,7 +452,7 @@ def plot_dpli_generic(
         N=256,
     )
 
-    max_abs_val = float(max_abs) if isinstance(max_abs,(int,float)) else 0.25
+    max_abs_val = float(max_abs)
     norm = plt.Normalize(vmin=-max_abs_val, vmax=+max_abs_val)
 
     # ---- helpers for solid edges ----
@@ -617,12 +568,10 @@ def plot_dpli_generic(
     # legend
     handles = [Patch(facecolor='white', edgecolor='black', label='present, unconnected'),
                Patch(facecolor='black', edgecolor='white', label='present, connected')]
-    if mode == 'auto':
-        if lc_mod is not None: handles.append(Line2D([0],[0], color='k', lw=1.2, alpha=0.7, label="kept (thin)"))
-        if lc_str is not None: handles.append(Line2D([0],[0], color='k', lw=3.6, alpha=1.0, label="top kept (thick)"))
-    else:
-        if lc_mod is not None: handles.append(Line2D([0],[0], color='k', lw=1.2, alpha=0.7, label=f"moderate ≥ {moderate_abs:.2f}"))
-        if lc_str is not None: handles.append(Line2D([0],[0], color='k', lw=3.6, alpha=1.0, label=f"strong ≥ {strong_abs:.2f}"))
+    if lc_mod is not None:
+        handles.append(Line2D([0],[0], color='k', lw=1.2, alpha=0.7, label=f"moderate ≥ {moderate_abs:.2f}"))
+    if lc_str is not None:
+        handles.append(Line2D([0],[0], color='k', lw=3.6, alpha=1.0, label=f"strong ≥ {strong_abs:.2f}"))
 
     if direction_mode == 'gradient':
         handles.append(Line2D([0],[0], color='none', label="Edges fade: leader (red) → lagger (blue)"))
@@ -643,19 +592,14 @@ def plot_best_dpli(M, raw, channel_names, montage_name, **kwargs):
     return plot_dpli_generic(M=M, raw=raw, channel_names=channel_names, montage_name=montage_name, **kwargs)
 
 # -------------------------------
-# wPLI plotting (manual + auto ready; NO title)
+# wPLI plotting
 # -------------------------------
 def plot_wpli_generic(
     W, raw, channel_names, montage_name,
-    mode: str = 'manual',
-    # Manual thresholds:
     neutral_min: float = 0.05,
     moderate_min: float = 0.10,
     strong_min: float = 0.20,
-    max_val=0.40,
-    # Auto mode (not used unless mode='auto'):
-    auto_density: float = 0.15, strong_top_frac: float = 0.5,
-    # Layout:
+    max_val: float = 0.40,
     target_radius: float = 0.49, rotate_deg: float = 0.0, shift_x: float = 0.0, shift_y: float = 0.0,
     figsize=(8,8), dpi=300
 ):
@@ -697,23 +641,13 @@ def plot_wpli_generic(
             cand.append((a, b, float(Wsub[a, b])))
 
     edges_thin, edges_thick = [], []
-    if mode == 'auto':
-        n_pairs = len(cand)
-        if n_pairs == 0: raise RuntimeError("No pairs for auto-density (wPLI).")
-        keep_n = max(1, int(round(float(auto_density) * n_pairs)))
-        kept = sorted(cand, key=lambda x: x[2], reverse=True)[:keep_n]
-        cut = max(1, int(round((1.0 - float(strong_top_frac)) * len(kept))))
-        thin, thick = kept[:cut], kept[cut:]
-        if isinstance(max_val, str) and max_val.lower() == 'auto':
-            vals = np.array([w for *_, w in kept], float)
-            max_val = float(np.percentile(vals, 95)) or 0.05
-        for a,b,w in thin:  edges_thin.append((a,b,w))
-        for a,b,w in thick: edges_thick.append((a,b,w))
-    else:
-        for a,b,w in cand:
-            if w < neutral_min: continue
-            if w >= strong_min: edges_thick.append((a,b,w))
-            elif w >= moderate_min: edges_thin.append((a,b,w))
+    for a, b, w in cand:
+        if w < neutral_min:
+            continue
+        if w >= strong_min:
+            edges_thick.append((a, b, w))
+        elif w >= moderate_min:
+            edges_thin.append((a, b, w))
 
     connected = set()
     for i,j,_ in edges_thin + edges_thick: connected.add(i); connected.add(j)
@@ -724,7 +658,7 @@ def plot_wpli_generic(
 
     # Use reversed magma so darker = stronger (more perceptible)
     cmap = cm.get_cmap('magma_r')
-    max_val_f = float(max_val) if isinstance(max_val,(int,float)) else 0.40
+    max_val_f = float(max_val)
     norm = plt.Normalize(vmin=0.0, vmax=max_val_f)
 
     def add_group(recs, lw, alpha_base):
@@ -742,7 +676,7 @@ def plot_wpli_generic(
         )
         ax.add_collection(lc); return lc
 
-    # moderates faint/thin; strong bold (thresholds unchanged)
+    # moderates faint/thin; strong bold
     lc_mod = add_group(edges_thin, 1.2, 0.08)
     lc_str = add_group(edges_thick, 3.6, 0.92)
 
@@ -765,15 +699,12 @@ def plot_wpli_generic(
     cbar.set_label("wPLI strength (0–1)", fontsize=8)
     cbar.ax.tick_params(labelsize=6)
 
-    # legend (no direction note for wPLI)
     handles = [Patch(facecolor='white', edgecolor='black', label='present, unconnected'),
                Patch(facecolor='black', edgecolor='white', label='present, connected')]
-    if mode == 'auto':
-        if lc_mod is not None: handles.append(Line2D([0],[0], color='k', lw=1.2, alpha=0.7, label="kept (thin)"))
-        if lc_str is not None: handles.append(Line2D([0],[0], color='k', lw=3.6, alpha=1.0, label="top kept (thick)"))
-    else:
-        if lc_mod is not None: handles.append(Line2D([0],[0], color='k', lw=1.2, alpha=0.7, label=f"moderate ≥ {moderate_min:.2f}"))
-        if lc_str is not None: handles.append(Line2D([0],[0], color='k', lw=3.6, alpha=1.0, label=f"strong ≥ {strong_min:.2f}"))
+    if lc_mod is not None:
+        handles.append(Line2D([0],[0], color='k', lw=1.2, alpha=0.7, label=f"moderate ≥ {moderate_min:.2f}"))
+    if lc_str is not None:
+        handles.append(Line2D([0],[0], color='k', lw=3.6, alpha=1.0, label=f"strong ≥ {strong_min:.2f}"))
 
     ax.legend(handles=handles, loc='upper right', bbox_to_anchor=(1.15,1.15), fontsize=7, frameon=True)
     return fig
@@ -781,15 +712,10 @@ def plot_wpli_generic(
 
 def plot_aec_generic(
     A, raw, channel_names, montage_name,
-    mode: str = 'manual',
-    # Manual thresholds:
     neutral_min: float = 0.1,
     moderate_min: float = 0.2,
     strong_min: float = 0.35,
-    max_val=0.6,
-    # Auto mode (not used unless mode='auto'):
-    auto_density: float = 0.15, strong_top_frac: float = 0.5,
-    # Layout:
+    max_val: float = 0.6,
     target_radius: float = 0.49, rotate_deg: float = 0.0, shift_x: float = 0.0, shift_y: float = 0.0,
     figsize=(8,8), dpi=300
 ):
@@ -835,23 +761,13 @@ def plot_aec_generic(
             cand.append((a, b, float(Asub[a, b])))
 
     edges_thin, edges_thick = [], []
-    if mode == 'auto':
-        n_pairs = len(cand)
-        if n_pairs == 0: raise RuntimeError("No pairs for auto-density (AEC).")
-        keep_n = max(1, int(round(float(auto_density) * n_pairs)))
-        kept = sorted(cand, key=lambda x: x[2], reverse=True)[:keep_n]
-        cut = max(1, int(round((1.0 - float(strong_top_frac)) * len(kept))))
-        thin, thick = kept[:cut], kept[cut:]
-        if isinstance(max_val, str) and max_val.lower() == 'auto':
-            vals = np.array([w for *_, w in kept], float)
-            max_val = float(np.percentile(vals, 95)) or 0.05
-        for a,b,w in thin:  edges_thin.append((a,b,w))
-        for a,b,w in thick: edges_thick.append((a,b,w))
-    else:
-        for a,b,w in cand:
-            if w < neutral_min: continue
-            if w >= strong_min: edges_thick.append((a,b,w))
-            elif w >= moderate_min: edges_thin.append((a,b,w))
+    for a, b, w in cand:
+        if w < neutral_min:
+            continue
+        if w >= strong_min:
+            edges_thick.append((a, b, w))
+        elif w >= moderate_min:
+            edges_thin.append((a, b, w))
 
     connected = set()
     for i,j,_ in edges_thin + edges_thick: connected.add(i); connected.add(j)
@@ -862,7 +778,7 @@ def plot_aec_generic(
 
     # Use reversed magma so darker = stronger (more perceptible)
     cmap = cm.get_cmap('magma_r')
-    max_val_f = float(max_val) if isinstance(max_val,(int,float)) else 0.60
+    max_val_f = float(max_val)
     norm = plt.Normalize(vmin=0.0, vmax=max_val_f)
 
     def add_group(recs, lw, alpha_base):
@@ -903,15 +819,13 @@ def plot_aec_generic(
     cbar.set_label("AEC strength (0–1)", fontsize=8)
     cbar.ax.tick_params(labelsize=6)
 
-    # legend (no direction note for AEC, similar to wPLI)
+    # legend
     handles = [Patch(facecolor='white', edgecolor='black', label='present, unconnected'),
                Patch(facecolor='black', edgecolor='white', label='present, connected')]
-    if mode == 'auto':
-        if lc_mod is not None: handles.append(Line2D([0],[0], color='k', lw=1.2, alpha=0.7, label="kept (thin)"))
-        if lc_str is not None: handles.append(Line2D([0],[0], color='k', lw=3.6, alpha=1.0, label="top kept (thick)"))
-    else:
-        if lc_mod is not None: handles.append(Line2D([0],[0], color='k', lw=1.2, alpha=0.7, label=f"moderate ≥ {moderate_min:.2f}"))
-        if lc_str is not None: handles.append(Line2D([0],[0], color='k', lw=3.6, alpha=1.0, label=f"strong ≥ {strong_min:.2f}"))
+    if lc_mod is not None:
+        handles.append(Line2D([0],[0], color='k', lw=1.2, alpha=0.7, label=f"moderate ≥ {moderate_min:.2f}"))
+    if lc_str is not None:
+        handles.append(Line2D([0],[0], color='k', lw=3.6, alpha=1.0, label=f"strong ≥ {strong_min:.2f}"))
 
     ax.legend(handles=handles, loc='upper right', bbox_to_anchor=(1.15,1.15), fontsize=7, frameon=True)
     return fig

@@ -149,16 +149,36 @@ class AECConnectivity(SciNode):
             windowed_signal = windowed_signal.copy()
             windowed_signal[~np.isfinite(windowed_signal)] = np.nan
         
-        # Find windows with no NaN and no zeros (across all channels and samples)
-        valid_windows = (~np.isnan(windowed_signal).any(axis=(1, 2))) & (~(windowed_signal == 0).any(axis=(1, 2)))
+        # ------------- ARTIFACT REMOVAL -------------
+        # Reject an epoch if any sample is NaN/Inf (real artefacts from
+        # ResetSignalArtefact) or if the entire epoch is exactly zero
+        # (all channels, all samples — a completely flat/dead segment).
+        nan_epoch_mask = np.isnan(windowed_signal).any(axis=(1, 2))
+        zero_epoch_mask = (windowed_signal == 0).all(axis=(1, 2))
+        valid_windows = (~nan_epoch_mask) & (~zero_epoch_mask)
         clean_windowed_signal = windowed_signal[valid_windows]
+
+        if DEBUG:
+            n_nan = int(np.sum(nan_epoch_mask))
+            n_zero_only = int(np.sum(zero_epoch_mask & ~nan_epoch_mask))
+            print(f"[AECConnectivity] Epochs: {windowed_signal.shape[0]} | "
+                  f"dropped NaN/Inf: {n_nan} | dropped all-zero: {n_zero_only} | "
+                  f"kept: {int(np.sum(valid_windows))}")
+            if n_nan > 0:
+                nan_epochs_per_channel = np.isnan(windowed_signal).any(axis=2).sum(axis=0)
+                nan_offenders = [(channel_names[c], int(nan_epochs_per_channel[c]))
+                                 for c in np.argsort(nan_epochs_per_channel)[::-1]
+                                 if nan_epochs_per_channel[c] > 0]
+                print(f"[AECConnectivity] Channels with NaN/Inf samples "
+                      f"(channel: #epochs affected): {nan_offenders}")
+            if n_zero_only > 0:
+                print(f"[AECConnectivity] Rejected {n_zero_only} epoch(s) "
+                      f"where all channels and samples were exactly zero.")
+            print(f"Shape after artifact removal: {clean_windowed_signal.shape}")
 
         if clean_windowed_signal.shape[0] == 0:
             raise NodeRuntimeException(self.identifier, "ArtifactRemoval",
                 "All epochs were rejected (NaN/Inf/zero). Nothing to compute.")
-        if DEBUG:
-            print(f"Removed {np.sum(~valid_windows)} epochs due to NaN/Inf/zero.")
-            print(f"Shape after artifact removal: {clean_windowed_signal.shape}")
 
 
         info = {

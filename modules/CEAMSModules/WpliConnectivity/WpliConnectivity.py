@@ -89,11 +89,6 @@ class WpliConnectivity(SciNode):
         - return results + channel names.
         """
 
-        # -- Convert input parameters if they're strings --
-        # if isinstance(num_surr, str):
-        #     num_surr = int(num_surr)
-        # if isinstance(p_value, str):
-        #     p_value = float(p_value)
 
         # Normalize possible None/strings from UI before validating
         if num_surr is None: num_surr = 20
@@ -118,14 +113,7 @@ class WpliConnectivity(SciNode):
         if len(epochs) < 2:
             raise NodeInputException(self.identifier, "epochs",
                 f"At least two channels are required for connectivity; got {len(epochs)}.")
-        
-        # if num_surr is None:
-        #     num_surr = 20
-        # if p_value is None:
-        #     p_value = 0.05
 
-
-        # fs = epochs[0].sample_rate
         # --- Sampling frequency must be identical across channels ---
         fs_list = [float(e.sample_rate) for e in epochs]
         fs0 = fs_list[0]
@@ -165,22 +153,37 @@ class WpliConnectivity(SciNode):
 
 
         
-        # ------------- ARTIFACT REMOVAL (Remove windows with any NaN) -------------
-        # valid_windows is a boolean mask: True for windows (epochs) WITHOUT NaNs
-        
-        # Find epochs (windows) that do NOT have any NaN (across all channels and samples)
-        # valid_windows = ~np.isnan(windowed_signal).any(axis=(1, 2))
-        valid_windows = (~np.isnan(windowed_signal).any(axis=(1, 2))) & (~(windowed_signal == 0).any(axis=(1, 2)))
+        # ------------- ARTIFACT REMOVAL -------------
+        # Reject an epoch if any sample is NaN/Inf (real artefacts from
+        # ResetSignalArtefact) or if the entire epoch is exactly zero
+        # (all channels, all samples — a completely flat/dead segment).
+        nan_epoch_mask = np.isnan(windowed_signal).any(axis=(1, 2))
+        zero_epoch_mask = (windowed_signal == 0).all(axis=(1, 2))
+        valid_windows = (~nan_epoch_mask) & (~zero_epoch_mask)
         clean_windowed_signal = windowed_signal[valid_windows]
+
+        if DEBUG:
+            n_nan = int(np.sum(nan_epoch_mask))
+            n_zero_only = int(np.sum(zero_epoch_mask & ~nan_epoch_mask))
+            print(f"[WpliConnectivity] Epochs: {windowed_signal.shape[0]} | "
+                  f"dropped NaN/Inf: {n_nan} | dropped all-zero: {n_zero_only} | "
+                  f"kept: {int(np.sum(valid_windows))}")
+            if n_nan > 0:
+                nan_epochs_per_channel = np.isnan(windowed_signal).any(axis=2).sum(axis=0)
+                nan_offenders = [(channel_names[c], int(nan_epochs_per_channel[c]))
+                                 for c in np.argsort(nan_epochs_per_channel)[::-1]
+                                 if nan_epochs_per_channel[c] > 0]
+                print(f"[WpliConnectivity] Channels with NaN/Inf samples "
+                      f"(channel: #epochs affected): {nan_offenders}")
+            if n_zero_only > 0:
+                print(f"[WpliConnectivity] Rejected {n_zero_only} epoch(s) "
+                      f"where all channels and samples were exactly zero.")
+            print(f"Shape after artifact removal: {clean_windowed_signal.shape}")
 
         if clean_windowed_signal.shape[0] == 0:
             raise NodeRuntimeException(self.identifier, "ArtifactRemoval",
                 "All epochs were rejected (NaN/Inf/zero). Nothing to compute.")
         
-        if DEBUG:
-            print(f"Removed {np.sum(~valid_windows)} windowed signals with artifacts (NaNs).")
-            print(f"Shape after removing NaN windows: {clean_windowed_signal.shape}")
-
 
         info = {
             'sample_rate': fs,
@@ -196,19 +199,6 @@ class WpliConnectivity(SciNode):
         except Exception as e:
             raise NodeRuntimeException(self.identifier, "WPLIComputation",
                 f"Error in wpli_parallel_numba: {str(e)}")
-
-        # Cache results
-        # cache = {
-        #     'final_wpli': final_wpli,  # shape (num_windows, C, C)
-        #     'average_wpli': average_wpli,  # shape (C, C)
-        #     'channel_names': info['channel_names']
-        # }
-        # self._cache_manager.write_mem_cache(self.identifier, cache)
-
-        # num_windows = final_wpli.shape[0]
-        # num_channels = final_wpli.shape[1]
-        # self._log_manager.log(self.identifier,
-        #     f"WPLI computed over {num_windows} epochs and {num_channels} channels.")
 
         return {
             'wpli_results': {
