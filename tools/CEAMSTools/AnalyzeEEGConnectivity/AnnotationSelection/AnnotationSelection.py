@@ -43,24 +43,42 @@ class AnnotationSelection(NonValidEventStep):
 
 
     def on_apply_settings(self):
-        if self.annot_selection_scope:
-            super().on_apply_settings()
-            return
 
-        # In sleep-stage / unscored scopes, make sure dictionaries always contain
-        # all files with string values (never None), so SignalsFromEvents can split safely.
-        files_list = self.reader_settings_view.get_files_list(self.files_check_event_model)
-        group_dict = {file: "" for file in files_list}
-        name_dict = {file: "" for file in files_list}
-        self._pub_sub_manager.publish(self, self._artefact_group_topic, str(group_dict))
-        self._pub_sub_manager.publish(self, self._artefact_name_topic, str(name_dict))
+        if self.annot_selection_scope:
+            # Specific annotations: publish the user-selected group/name dicts so
+            # SignalsFromEvents crops the signal on those annotations.
+            super().on_apply_settings()
+        else:
+            # Sleep stages OR unscored: publish empty group/name dicts.
+            # For the sleep branch, SleepStageEvents has already filtered the events
+            # to the selected stages, and SignalsFromEvents keeps ALL received
+            # events when events_groups == ''. Empty strings (not None) also avoid
+            # the downstream None.split() crash.
+            files_list = self.reader_settings_view.get_files_list(self.files_check_event_model)
+            empty_dict = {file: "" for file in files_list}
+            self._pub_sub_manager.publish(self, self._artefact_group_topic, str(empty_dict))
+            self._pub_sub_manager.publish(self, self._artefact_name_topic, str(empty_dict))
 
 
 
     def load_settings(self):
         super().load_settings()
+        # Sync the scope from the context (it may have been set by FilterStep
+        # before this step subscribed to the context manager).
+        self._sync_scope_from_context()
         # To activate the Signals From Events on annotations branch
         self._pub_sub_manager.publish(self, self._node_id_SignalsFromEvents+".get_activation_state", None)
+
+
+    def _sync_scope_from_context(self):
+        try:
+            scope = self._context_manager[FilterStep.context_Con_scope]
+        except (KeyError, TypeError):
+            scope = "sleep_stages"
+        self.annot_selection_scope = (scope == "specific_annotations")
+        self.sleep_stage_scope = (scope == "sleep_stages")
+        # Only enable the annotation selection widgets for the annotation scope.
+        self.enable_widgets(self.annot_selection_scope)
 
 
     def on_topic_update(self, topic, message, sender):
@@ -71,11 +89,9 @@ class AnnotationSelection(NonValidEventStep):
         super().on_topic_update(topic, message, sender)
 
         if topic==self._context_manager.topic:
-            if message == FilterStep.context_Con_scope:
-                scope = self._context_manager.get(FilterStep.context_Con_scope, "specific_annotations")
-                self.annot_selection_scope = scope == "specific_annotations"
-                self.sleep_stage_scope = scope == "sleep_stages"
-                self.enable_widgets(self.annot_selection_scope)
+            # The analysis scope changed in FilterStep.
+            if message==FilterStep.context_Con_scope:
+                self._sync_scope_from_context()
 
 
     # Answer to a ping
