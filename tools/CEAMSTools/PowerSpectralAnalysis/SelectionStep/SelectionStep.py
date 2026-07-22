@@ -45,7 +45,7 @@ class SelectionStep( BaseStepView,  Ui_SelectionStep, QtWidgets.QWidget):
         self._node_id_SignalsFromEvents_Annot = "4c9b0f26-21d7-404c-bd38-22326468f129" # To activate for PSA on annot
         self._node_id_STFT_Annot = "ea31a87d-038c-4e24-a9c2-66b54aaca483" # To activate for PSA on annot
         self._node_id_ResetSignal_art = "83092505-93c5-4688-acc7-208d00a72ba0" # To activate for PSA on annot
-        self._node_id_PSA_Annot = "9dfbe6b9-1887-452a-ac3b-33f1235f9b0a"  # provide the band width to the PSA on Events 
+        self._node_id_PSA_Annot = "bd2ef4ac-7b23-4494-8c5b-22f188fd1f87"  # provide the band width to the PSA on Events 
 
         self._node_id_IRASA = "fe5c4a13-f709-4edc-9e5f-9c7908c85e35"  # provide the win len and win step to the IRASA and activate if R&A
         self._node_id_PSA_Rhythmic_IRASA = "d16022c4-3ac0-4982-aa3e-dfff4cada99a"  # provide the band width to the PSA on IRASA
@@ -72,12 +72,13 @@ class SelectionStep( BaseStepView,  Ui_SelectionStep, QtWidgets.QWidget):
         self._pub_sub_manager.publish(self, self._exclude_nremp_topic, 'ping')
         self._pub_sub_manager.publish(self, self._exclude_remp_topic, 'ping')
         self._pub_sub_manager.publish(self, self._in_cycle_topic, 'ping')
+        self._pub_sub_manager.publish(self, self._node_id_PSA_Annot+".get_activation_state", None)
 
         # To activate the PSA on sleep stage or annotations branch
-        self._pub_sub_manager.publish(self, self._node_id_SleepCycleDelimiter+".get_activation_state", None)
         self.NREM_stages_and_periods_slot()
         self.REM_stages_and_periods_slot()
         self.update_section_selection_slot()
+        self.Activate_sleep_annotation_modules()
     # Called when the user clic on RUN
     # Message are sent to the publisher
     def on_apply_settings(self):
@@ -108,11 +109,11 @@ class SelectionStep( BaseStepView,  Ui_SelectionStep, QtWidgets.QWidget):
             self.excl_remp_checkBox.setChecked(int(message))
         if topic == self._in_cycle_topic:
             self.in_cycle_checkBox.setChecked(int(message))
-        if topic == self._node_id_SleepCycleDelimiter+".get_activation_state":
+        if topic == self._node_id_PSA_Annot+".get_activation_state":
             if message == ActivationState.ACTIVATED:
-                self.radioButton_sleep.setChecked(True)
-            else:
                 self.radioButton_annotations.setChecked(True)
+            else:
+                self.radioButton_sleep.setChecked(True)
             self.update_section_selection_slot()
 
 
@@ -253,8 +254,6 @@ class SelectionStep( BaseStepView,  Ui_SelectionStep, QtWidgets.QWidget):
     def Activate_sleep_annotation_modules(self):
         if self.radioButton_sleep.isChecked():
             # Activate the modules needed to run on sleep stages
-            self._pub_sub_manager.publish(self, self._node_id_SleepCycleDelimiter\
-                +".activation_state_change", ActivationState.ACTIVATED)
             self._pub_sub_manager.publish(self, self._node_id_SleepStageEvent\
                 +".activation_state_change", ActivationState.ACTIVATED)
             self._pub_sub_manager.publish(self, self._node_id_SignalsFromEvents\
@@ -296,8 +295,6 @@ class SelectionStep( BaseStepView,  Ui_SelectionStep, QtWidgets.QWidget):
                 +".activation_state_change",ActivationState.ACTIVATED)
 
             # Deactivate the modules needed to run on sleep stages
-            self._pub_sub_manager.publish(self, self._node_id_SleepCycleDelimiter\
-                +".activation_state_change", ActivationState.DEACTIVATED)
             self._pub_sub_manager.publish(self, self._node_id_SleepStageEvent\
                 +".activation_state_change", ActivationState.DEACTIVATED)
             self._pub_sub_manager.publish(self, self._node_id_SignalsFromEvents\

@@ -27,7 +27,7 @@ class Outputfiles(BaseStepView, Ui_Outputfiles, QtWidgets.QWidget):
 
         # Define modules and nodes to talk to
         self._node_id_PSA_std = "4bb8c9ac-64e8-4cec-9c2c-5a00c80b4eae" # provide the output filename to the PSA Compilation
-        self._node_id_PSA_Annot = "9dfbe6b9-1887-452a-ac3b-33f1235f9b0a" # provide the output filename to the PSA Compilation
+        self._node_id_PSA_Annot = "bd2ef4ac-7b23-4494-8c5b-22f188fd1f87" # provide the output filename to the PSA Compilation
         self._node_id_rhythmic_IRASA = "d16022c4-3ac0-4982-aa3e-dfff4cada99a"
         self._node_id_Arhythmic_IRASA = "0ddf2d8d-943d-4583-8b2d-6184ad208119"
         self._node_id_PSA_FOOOF = "05044aa2-4a45-44ae-a5a8-b6182ecf8ec2"
@@ -79,11 +79,6 @@ class Outputfiles(BaseStepView, Ui_Outputfiles, QtWidgets.QWidget):
             WarningDialog(f"The output file has to be defined by the user, see step '7-Output Files'.")
             return False
         
-        # Verify if at least one checkbox is checked when the raddio button self.radioButton_stage is checked
-        if self.radioButton_stage.isChecked():
-            if not self.total_checkBox.isChecked() and not self.hour_checkBox.isChecked() and not self.cycle_checkBox.isChecked():
-                WarningDialog(f"At least one output variable type must be selected, see step '7-Output Files'.")
-                return False
         return True   
 
 
@@ -117,11 +112,6 @@ class Outputfiles(BaseStepView, Ui_Outputfiles, QtWidgets.QWidget):
                 self.filename_lineEdit.setText(message[:-14])
             else:
                 self.filename_lineEdit.setText(message[:-14] + ".tsv")
-        if topic == self._node_id_PSA_Annot+".get_activation_state":
-            if message == ActivationState.ACTIVATED:
-                self._enable_annot_widget(True)
-            else:
-                self._enable_annot_widget(False)
         if topic == self._filename_fooof_topic:
             self.filename_lineEdit.setText(message)
         if topic == self._dist_total_constant_topic:
@@ -136,11 +126,7 @@ class Outputfiles(BaseStepView, Ui_Outputfiles, QtWidgets.QWidget):
             at any update, does not necessary answer to a ping.
             To listen to any modification not only when you ask (ping)
         """
-        if topic==self._context_manager.topic:
-            # PSA section selection changed
-            if message==SelectionStep.context_PSA_annot_selection: # key of the context dict
-                annot_flag = True if self._context_manager[SelectionStep.context_PSA_annot_selection]==1 else False
-                self._enable_annot_widget(annot_flag)
+        pass
 
 
     # Called when the user press on the Choose button
@@ -169,19 +155,3 @@ class Outputfiles(BaseStepView, Ui_Outputfiles, QtWidgets.QWidget):
             self._pub_sub_manager.unsubscribe(self, self._dist_hour_constant_topic)
             self._pub_sub_manager.unsubscribe(self, self._dist_cycle_constant_topic)
 
-    # To enable/disable the PSA on annotations widget
-    def _enable_annot_widget(self, annot_label):
-        #self.total_checkBox.setEnabled(not annot_label)
-        self.hour_checkBox.setEnabled(not annot_label)
-        self.cycle_checkBox.setEnabled(not annot_label)
-        self.textEdit_tot.setEnabled(not annot_label)
-        self.textEdit_hour.setEnabled(not annot_label)
-        self.textEdit_cycle.setEnabled(not annot_label)
-
-        self.radioButton_annot.setEnabled(True)
-        self.radioButton_annot.setChecked(annot_label)
-        self.radioButton_annot.setEnabled(annot_label) #We don't want the user to be able to change it here.
-
-        self.radioButton_stage.setEnabled(True)
-        self.radioButton_stage.setChecked(not annot_label)
-        self.radioButton_stage.setEnabled(not annot_label) #We don't want the user to be able to change it here.

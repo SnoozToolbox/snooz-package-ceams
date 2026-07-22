@@ -32,7 +32,7 @@ class SpectralSettings(BaseStepView, Ui_SpectralSettings, QtWidgets.QWidget):
         self._node_id_stft_event = "ea31a87d-038c-4e24-a9c2-66b54aaca483" # provide the win len and win step to the stft and activate if std and on events
         self._node_id_IRASA = "fe5c4a13-f709-4edc-9e5f-9c7908c85e35"  # provide the win len and win step to the IRASA and activate if R&A
         self._node_id_PSA_std = "4bb8c9ac-64e8-4cec-9c2c-5a00c80b4eae" # provide the band width to the PSA Compilation
-        self._node_id_PSA_evt = "9dfbe6b9-1887-452a-ac3b-33f1235f9b0a"  # provide the band width to the PSA on Events
+        self._node_id_PSA_evt = "bd2ef4ac-7b23-4494-8c5b-22f188fd1f87"  # provide the band width to the PSA on Events
         #add the IRASA compilation (another instance of PSA Compilation but plugged to the IRASA computation)
         self._node_id_PSA_Rhythmic_IRASA = "d16022c4-3ac0-4982-aa3e-dfff4cada99a"  # provide the band width to the PSA on IRASA
         self._node_id_PSA_Arhythmic_IRASA = "0ddf2d8d-943d-4583-8b2d-6184ad208119" # provide the band width to the Arhythmic component of IRASA
@@ -71,10 +71,10 @@ class SpectralSettings(BaseStepView, Ui_SpectralSettings, QtWidgets.QWidget):
         # Ask for the settings to the publisher to display on the SettingsView
 
         self._pub_sub_manager.publish(self, self._node_id_stft_std+".get_activation_state", None)
-        self._pub_sub_manager.publish(self, self._node_id_PSA_std+".get_activation_state", None)
         self._pub_sub_manager.publish(self, self._node_id_IRASA+".get_activation_state", None)
         self._pub_sub_manager.publish(self, self._node_id_PSA_FOOOF+".get_activation_state", None)
-
+        self._pub_sub_manager.publish(self, self._node_id_PSA_std+".get_activation_state", None)
+        
         self._pub_sub_manager.publish(self, self._win_name_IRASA_topic, 'ping')
         self._pub_sub_manager.publish(self, self._flag_IRASA_topic, 'ping')
 

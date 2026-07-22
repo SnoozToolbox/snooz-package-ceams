@@ -49,18 +49,9 @@
     </spacer>
    </item>
    <item>
-    <widget class="QRadioButton" name="radioButton_stage">
-     <property name="enabled">
-      <bool>false</bool>
-     </property>
-     <property name="toolTip">
-      <string>To enable the radio button go to the Section Selection Step.</string>
-     </property>
+    <widget class="QLabel" name="label_2">
      <property name="text">
-      <string>The spectral power is computed per sleep stage and per hour and/or sleep cycle acording to these selected options:</string>
-     </property>
-     <property name="checked">
-      <bool>true</bool>
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Spectral power is computed based on the selected section type in &lt;span style=&quot; font-weight:700;&quot;&gt;step 4&lt;/span&gt;:&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Sleep Stages:&lt;/span&gt; Power is computed per sleep stage and per hour and/or sleep cycle, according to the selected &lt;br/&gt;options below.&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Specific Annotations:&lt;/span&gt; Power is computed on selected events, per hour and/or sleep cycle, according to the &lt;br/&gt;selected options below.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
      </property>
     </widget>
    </item>
@@ -398,19 +389,6 @@ li.checked::marker { content: &quot;\2612&quot;; }
           </size>
          </property>
         </spacer>
-       </item>
-       <item>
-        <widget class="QRadioButton" name="radioButton_annot">
-         <property name="enabled">
-          <bool>false</bool>
-         </property>
-         <property name="toolTip">
-          <string>To enable the radio button go to the Section Selection Step.</string>
-         </property>
-         <property name="text">
-          <string>The spectral power is computed on selected events.</string>
-         </property>
-        </widget>
        </item>
       </layout>
      </item>

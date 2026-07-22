@@ -49,6 +49,7 @@ class AnnotationsSelStep( NonValidEventStep):
 
         self._node_id_SignalsFromEvents_Annot = "4c9b0f26-21d7-404c-bd38-22326468f129" # To activate for PSA on annot
 
+        self.match_event_channels_checkBox.setToolTip("When unchecked, this option allows the analysis to be applied to selected channels in the Input Files step using the time stamps of the annotated events.\nFor instance, if the user wishes to compute power spectra on the EEG F3 channel based on the time stamps of REM events originally scored on the EOG channel, this checkbox should remain unchecked.")
 
     def load_settings(self):
         super().load_settings()

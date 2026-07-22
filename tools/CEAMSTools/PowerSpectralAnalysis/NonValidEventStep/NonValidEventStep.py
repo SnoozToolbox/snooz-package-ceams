@@ -67,6 +67,10 @@ class NonValidEventStep( BaseStepView,  Ui_NonValidEventStep, QtWidgets.QWidget)
             self.reset_excl_event_checkBox.setChecked(False)
             self.reset_excl_event_checkBox.setEnabled(False)
         
+        self.match_event_channels_checkBox.setChecked(False)
+        self.match_event_channels_checkBox.setEnabled(False)
+        #self.match_event_channels_checkBox.setVisible(False)
+        self.match_event_channels_checkBox.setToolTip("This checkbox is not available for this step.")
 
     def init_models(self):
         # Access to the PsgReaderSettingsView to access easily informations about the files

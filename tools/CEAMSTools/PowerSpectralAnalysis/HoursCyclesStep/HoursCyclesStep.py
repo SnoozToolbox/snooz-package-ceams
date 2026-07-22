@@ -40,6 +40,10 @@ class HoursCyclesStep(BaseStepView, Ui_HoursCyclesStep, QtWidgets.QWidget):
         self.constant_report_FOOOF_topic = self.PSACompilationFOOOF_id + ".report_constants"
         self._pub_sub_manager.subscribe(self, self.constant_report_FOOOF_topic)
 
+        self._node_id_PSA_Annot = "bd2ef4ac-7b23-4494-8c5b-22f188fd1f87"
+        self.constant_report_OnEvents_topic = self._node_id_PSA_Annot + ".report_constants"
+        self._pub_sub_manager.subscribe(self, self.constant_report_OnEvents_topic)
+
         self.report_constants = {}
         self.report_constants['N_HOURS'] = 9
         self.report_constants['N_CYCLES'] = 6
@@ -54,6 +58,7 @@ class HoursCyclesStep(BaseStepView, Ui_HoursCyclesStep, QtWidgets.QWidget):
         self._pub_sub_manager.publish(self, self._constants_report_rhythmic_IRASA_topic, 'ping')
         self._pub_sub_manager.publish(self, self._constants_report_arhythmic_IRASA_topic, 'ping')
         self._pub_sub_manager.publish(self, self.constant_report_FOOOF_topic, 'ping')
+        self._pub_sub_manager.publish(self, self.constant_report_OnEvents_topic, 'ping')
 
     def on_topic_update(self, topic, message, sender):
         # Whenever a value is updated within the context, all steps receives a 
@@ -96,6 +101,13 @@ class HoursCyclesStep(BaseStepView, Ui_HoursCyclesStep, QtWidgets.QWidget):
                 self.report_constants = message
             self.spinBox_hours.setValue(self.report_constants['N_HOURS'])
             self.spinBox_cycles.setValue(self.report_constants['N_CYCLES'])
+        elif topic == self.constant_report_OnEvents_topic:
+            if isinstance(message, str) and not message == "":
+                message = eval(message)
+            if isinstance(message, dict) and not message == {}:
+                self.report_constants = message
+            self.spinBox_hours.setValue(self.report_constants['N_HOURS'])
+            self.spinBox_cycles.setValue(self.report_constants['N_CYCLES'])
 
     def on_apply_settings(self):
         self.report_constants['N_HOURS'] = self.spinBox_hours.value()
@@ -104,6 +116,7 @@ class HoursCyclesStep(BaseStepView, Ui_HoursCyclesStep, QtWidgets.QWidget):
         self._pub_sub_manager.publish(self, self._constants_report_rhythmic_IRASA_topic, self.report_constants)
         self._pub_sub_manager.publish(self, self._constants_report_arhythmic_IRASA_topic, self.report_constants)
         self._pub_sub_manager.publish(self, self.constant_report_FOOOF_topic, self.report_constants)
+        self._pub_sub_manager.publish(self, self.constant_report_OnEvents_topic, self.report_constants)
 
     def on_validate_settings(self):
         # Validate that all input were set correctly by the user.

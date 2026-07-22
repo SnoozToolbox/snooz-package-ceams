@@ -4,7 +4,7 @@ See the file LICENCE for full license details.
 """
 
 """
-    Manage a list of SignalModel from specific events during a recording.  
+    Manage a list of SignalModel from specific events during a recording.
 
     The goal is to extract signals from events (segments : sleep stages or 
     clean segments for analysis). Could also be spindles.
@@ -23,19 +23,20 @@ See the file LICENCE for full license details.
                 signal.end_time : The end time of the signal in sec
                 (for more info : look into common/SignalModel)
         events : pandas DataFrame
-            df of events with field
-            'group': Group of events this event is part of (String)
-            'name': Name of the event (String)
-            'start_sec': Starting time of the event in sec (Float)
-            'duration_sec': Duration of the event in sec (Float)
-            'channels' : Channel where the event occures (String)
-            (For now events are expected to be on all channels)
-        events_groups : String
-            String of the desired event groups to take in account. Separated by a 
-            comma. ex)'group_1' or ex)'group_1,group2,group3'
-        events_names : String
-            String of the desired events to take in account. Separated by a 
-            comma. ex)'stage_2' or ex)'stage_1,stage2,stage3'
+            Columns: group, name, start_sec, duration_sec, channels.
+        events_groups : str
+            Comma-separated event groups to keep, paired 1:1 with events_names.
+            Example: 'group_1' or 'group_1,group_2'. Empty string keeps all events.
+        events_names : str
+            Comma-separated event names to keep, paired 1:1 with events_groups.
+            Example: 'stage_2' or 'stage_1,stage_2'. Length must match events_groups.
+        create : bool
+            True: cut new SignalModel segments from continuous signals using event
+            start/duration. False: filter an already event-split signals list.
+        match_event_channels : bool
+            True (default): apply a channel-tagged event only on that channel
+            (empty channels still apply to all signals). False: apply event times
+            to every input signal (cross-channel analysis).
 
     Returns
     -----------    
@@ -66,7 +67,7 @@ DEBUG = True
 
 class SignalsFromEvents(SciNode):
     """
-        Manage a list of SignalModel from specific events during a recording.  
+        Manage a list of SignalModel from specific events during a recording.
 
         The goal is to extract signals from events (segments : sleep stages or 
         clean segments for analysis). Could also be spindles.
@@ -99,8 +100,12 @@ class SignalsFromEvents(SciNode):
                 String of the desired events to take in account. Separated by a 
                 comma. ex)'stage_2' or ex)'stage_1,stage2,stage3'
             create : bool
-                True to create a new list of SignalModel based on the events.
-                False to select items from the list of SignalModel based on the events.
+                True: cut new SignalModel segments from continuous signals using event
+                start/duration. False: filter an already event-split signals list.
+            match_event_channels : bool
+                True (default): apply a channel-tagged event only on that channel
+                (empty channels still apply to all signals). False: apply event times
+                to every input signal (cross-channel analysis).
 
         Returns
         -----------    
@@ -136,7 +141,7 @@ class SignalsFromEvents(SciNode):
 
     def compute(self, signals, events, events_names, events_groups, create, match_event_channels=True):
         """
-        Manage a list of SignalModel from specific events during a recording.  
+        Manage a list of SignalModel from specific events during a recording.
 
         The goal is to extract signals from events (segments : sleep stages or 
         clean segments for analysis) that are valid for all the channels.
@@ -172,12 +177,12 @@ class SignalsFromEvents(SciNode):
                 String of the desired event groups to take in account. Separated by a 
                 comma. ex)'group_1' or ex)'group_1,group2,group3'
             create : bool
-                True to create a new list of SignalModel based on the events.
-                False to select items from the list of SignalModel based on the events.
+                True: cut new SignalModel segments from continuous signals using event
+                start/duration. False: filter an already event-split signals list.
             match_event_channels : bool
-                If True, channel-specific events are extracted only from the signal
-                carrying the same channel label. If False, event start times and
-                durations are applied to every selected signal.
+                True (default): apply a channel-tagged event only on that channel
+                (empty channels still apply to all signals). False: apply event times
+                to every input signal (cross-channel analysis).
 
         Returns
         -----------    

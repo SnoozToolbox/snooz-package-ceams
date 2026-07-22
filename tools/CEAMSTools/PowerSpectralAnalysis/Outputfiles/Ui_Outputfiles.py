@@ -16,9 +16,8 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QImage, QKeySequence, QLinearGradient, QPainter,
     QPalette, QPixmap, QRadialGradient, QTransform)
 from PySide6.QtWidgets import (QApplication, QCheckBox, QFrame, QHBoxLayout,
-    QLabel, QLineEdit, QPushButton, QRadioButton,
-    QSizePolicy, QSpacerItem, QTextEdit, QVBoxLayout,
-    QWidget)
+    QLabel, QLineEdit, QPushButton, QSizePolicy,
+    QSpacerItem, QTextEdit, QVBoxLayout, QWidget)
 import themes_rc
 
 class Ui_Outputfiles(object):
@@ -43,12 +42,10 @@ class Ui_Outputfiles(object):
 
         self.verticalLayout_3.addItem(self.verticalSpacer_4)
 
-        self.radioButton_stage = QRadioButton(Outputfiles)
-        self.radioButton_stage.setObjectName(u"radioButton_stage")
-        self.radioButton_stage.setEnabled(False)
-        self.radioButton_stage.setChecked(True)
+        self.label_2 = QLabel(Outputfiles)
+        self.label_2.setObjectName(u"label_2")
 
-        self.verticalLayout_3.addWidget(self.radioButton_stage)
+        self.verticalLayout_3.addWidget(self.label_2)
 
         self.horizontalLayout_5 = QHBoxLayout()
         self.horizontalLayout_5.setObjectName(u"horizontalLayout_5")
@@ -170,12 +167,6 @@ class Ui_Outputfiles(object):
 
         self.verticalLayout.addItem(self.verticalSpacer_3)
 
-        self.radioButton_annot = QRadioButton(Outputfiles)
-        self.radioButton_annot.setObjectName(u"radioButton_annot")
-        self.radioButton_annot.setEnabled(False)
-
-        self.verticalLayout.addWidget(self.radioButton_annot)
-
 
         self.horizontalLayout_5.addLayout(self.verticalLayout)
 
@@ -246,10 +237,7 @@ class Ui_Outputfiles(object):
         Outputfiles.setWindowTitle("")
         Outputfiles.setStyleSheet(QCoreApplication.translate("Outputfiles", u"font: 12pt \"Roboto\";", None))
         self.label.setText(QCoreApplication.translate("Outputfiles", u"<html><head/><body><p><span style=\" font-weight:600;\">Spectral power distribution to export</span></p></body></html>", None))
-#if QT_CONFIG(tooltip)
-        self.radioButton_stage.setToolTip(QCoreApplication.translate("Outputfiles", u"To enable the radio button go to the Section Selection Step.", None))
-#endif // QT_CONFIG(tooltip)
-        self.radioButton_stage.setText(QCoreApplication.translate("Outputfiles", u"The spectral power is computed per sleep stage and per hour and/or sleep cycle acording to these selected options:", None))
+        self.label_2.setText(QCoreApplication.translate("Outputfiles", u"<html><head/><body><p>Spectral power is computed based on the selected section type in <span style=\" font-weight:700;\">step 4</span>:</p><p><span style=\" font-weight:700;\">Sleep Stages:</span> Power is computed per sleep stage and per hour and/or sleep cycle, according to the selected <br/>options below.</p><p><span style=\" font-weight:700;\">Specific Annotations:</span> Power is computed on selected events, per hour and/or sleep cycle, according to the <br/>selected options below.</p></body></html>", None))
 #if QT_CONFIG(tooltip)
         self.total_checkBox.setToolTip("")
 #endif // QT_CONFIG(tooltip)
@@ -301,10 +289,6 @@ class Ui_Outputfiles(object):
                         "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">The spectral power value will be empty if the cycle does not exist.</p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">The maximum number of cycles included in the report is defined in the optional settings under &quot;<span style=\" font-weight:600;\">Hours and Cycles</span>&quot;.</p></body></html>", None))
-#if QT_CONFIG(tooltip)
-        self.radioButton_annot.setToolTip(QCoreApplication.translate("Outputfiles", u"To enable the radio button go to the Section Selection Step.", None))
-#endif // QT_CONFIG(tooltip)
-        self.radioButton_annot.setText(QCoreApplication.translate("Outputfiles", u"The spectral power is computed on selected events.", None))
         self.label_4.setText(QCoreApplication.translate("Outputfiles", u"<html><head/><body><p><span style=\" font-weight:600;\">Output</span></p></body></html>", None))
         self.textEdit_4.setHtml(QCoreApplication.translate("Outputfiles", u"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset=\"utf-8\" /><style type=\"text/css\">\n"
