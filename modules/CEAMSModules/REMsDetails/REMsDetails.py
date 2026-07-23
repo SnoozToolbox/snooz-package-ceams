@@ -407,6 +407,9 @@ class REMsDetails(SciNode):
             write_header = not os.path.exists(cohort_filename)
             # Order columns as the doc file
             out_columns = list(_get_doc(self.N_CYCLES, self.N_HOURS).keys())
+            for col in out_columns:
+                if col not in cohort_characteristics_df.columns:
+                    cohort_characteristics_df[col] = np.nan
             cohort_characteristics_df = cohort_characteristics_df[out_columns]
             try : 
                 cohort_characteristics_df.to_csv(path_or_buf=cohort_filename, sep='\t', \
@@ -537,7 +540,11 @@ class REMsDetails(SciNode):
         valid_dur_filtered = {k: v for k, v in valid_dur.items() 
                              if not (k == f'{label_stats}_valid_min' and f'{label_stats}_R_valid_min' in valid_dur)}
         
-        tot_stats =  valid_dur_filtered | rems_count_stage | mean_stage | rems_density_stage
+        phasic_pct_stage = self.compute_phasic_rems_pct(rems_cur_chan_sort, stage_in_cycle_df, \
+            sleep_stages_name, label_stats)
+        energy_stats = self.compute_rems_energy_stats(rems_cur_chan_sort, sleep_stages_name, label_stats)
+
+        tot_stats =  valid_dur_filtered | rems_count_stage | mean_stage | rems_density_stage | phasic_pct_stage | energy_stats
         return tot_stats
 
 
@@ -567,6 +574,8 @@ class REMsDetails(SciNode):
         mean_stage = {}
         rems_count_stage = {}
         rems_density_stage = {}
+        phasic_pct_stage = {}
+        energy_stats_stage = {}
         # For each sleep cycle
         for i_cycle in range(self.N_CYCLES):
             cycle_label = label_stats+str(i_cycle+1)
@@ -644,6 +653,10 @@ class REMsDetails(SciNode):
                     else:
                         mean_stage[f'{cycle_label}_{stage}_{key}'] = value
 
+            phasic_pct_stage = phasic_pct_stage | self.compute_phasic_rems_pct(rems_sel_df, stage_sel_df, \
+                sleep_stages_name, cycle_label)
+            energy_stats_stage = energy_stats_stage | self.compute_rems_energy_stats(rems_sel_df, sleep_stages_name, cycle_label)
+
             # Calculate variance of densities across cycles using R stage densities
             density_values = [rems_density_stage.get(f'cyc{i+1}_R_rems_density', np.nan) 
                             for i in range(self.N_CYCLES)]
@@ -664,7 +677,7 @@ class REMsDetails(SciNode):
                         continue  # Skip this redundant entry
                 valid_dur_filtered[k] = v
             
-            cyc_stats =  valid_dur_filtered | rec_dur | rems_count_stage | mean_stage | rems_density_stage | rems_density_variance
+            cyc_stats =  valid_dur_filtered | rec_dur | rems_count_stage | mean_stage | rems_density_stage | phasic_pct_stage | energy_stats_stage | rems_density_variance
         return cyc_stats
 
     def compute_clock_h_stats_per_stage(self, rems_cur_chan_sort, artifact_cur_chan_df, stage_in_cycle_df, \
@@ -744,7 +757,8 @@ class REMsDetails(SciNode):
 
                 # Compute the rems count and characteristics per stage
                 rems_stats_cur = self.compute_rems_stats_per_stage(valid_dur_stats_cur, rems_sel_df, stage_sel, hour_label, stage_stats_labels)
-                hour_rems_stats = hour_rems_stats | rems_stats_cur
+                phasic_pct_cur = self.compute_phasic_rems_pct(rems_sel_df, stage_sel_df, sleep_stages_name, hour_label)
+                hour_rems_stats = hour_rems_stats | rems_stats_cur | phasic_pct_cur
             else:
                 # No stages in this hour - set R stage values to NaN (skip totals since they're redundant)
                 # REMs only occur in R stage
@@ -754,6 +768,10 @@ class REMsDetails(SciNode):
                 hour_rems_stats[f'{hour_label}_{stage}_rems_sec'] = np.NaN
                 hour_rems_stats[f'{hour_label}_{stage}_amplitude_uV'] = np.NaN
                 hour_rems_stats[f'{hour_label}_{stage}_rems_density'] = np.NaN
+                hour_rems_stats[f'{hour_label}_{stage}_phasic_pct'] = np.NaN
+                hour_rems_stats[f'{hour_label}_{stage}_tonic_pct'] = np.NaN
+                hour_rems_stats[f'{hour_label}_{stage}_Energy_PkPk_uvs'] = np.NaN
+                hour_rems_stats[f'{hour_label}_{stage}_PkPk_REMs_Activity_Index'] = np.NaN
 
         # Calculate variance of densities across clock hours using R stage densities
         density_values = [hour_rems_stats.get(f'clock_h{i+1}_R_rems_density', np.nan) 
@@ -881,8 +899,8 @@ class REMsDetails(SciNode):
                 stage_hour_valid_dur_stats = stage_hour_valid_dur_stats | valid_dur_stats_cur
 
                 # Only compute rems statistics if we have rems
+                # Compute statistics for R stage only
                 if len(rems_sel_df) > 0:
-                    # Compute statistics for R stage only
                     rems_stats_cur = self.compute_rems_stats_for_single_stage(valid_dur_stats_cur, rems_sel_df, stage_label, hour_label)
                     stage_hour_rems_stats = stage_hour_rems_stats | rems_stats_cur
                 else:
@@ -891,6 +909,10 @@ class REMsDetails(SciNode):
                     stage_hour_rems_stats[f'{hour_label}_{stage_label}_rems_sec'] = np.NaN
                     stage_hour_rems_stats[f'{hour_label}_{stage_label}_amplitude_uV'] = np.NaN
                     stage_hour_rems_stats[f'{hour_label}_{stage_label}_rems_density'] = np.NaN
+                phasic_pct_cur = self.compute_phasic_rems_pct(rems_sel_df, stage_sel_df, sleep_stages_name, hour_label)
+                stage_hour_rems_stats = stage_hour_rems_stats | phasic_pct_cur
+                energy_stats_cur = self.compute_rems_energy_stats(rems_sel_df, sleep_stages_name, hour_label)
+                stage_hour_rems_stats = stage_hour_rems_stats | energy_stats_cur
             else:
                 # No stages in this hour - set all values to NaN
                 stage_hour_valid_dur_stats[f'{hour_label}_{stage_label}_valid_min'] = np.NaN
@@ -898,6 +920,10 @@ class REMsDetails(SciNode):
                 stage_hour_rems_stats[f'{hour_label}_{stage_label}_rems_sec'] = np.NaN
                 stage_hour_rems_stats[f'{hour_label}_{stage_label}_amplitude_uV'] = np.NaN
                 stage_hour_rems_stats[f'{hour_label}_{stage_label}_rems_density'] = np.NaN
+                stage_hour_rems_stats[f'{hour_label}_{stage_label}_phasic_pct'] = np.NaN
+                stage_hour_rems_stats[f'{hour_label}_{stage_label}_tonic_pct'] = np.NaN
+                stage_hour_rems_stats[f'{hour_label}_{stage_label}_Energy_PkPk_uvs'] = np.NaN
+                stage_hour_rems_stats[f'{hour_label}_{stage_label}_PkPk_REMs_Activity_Index'] = np.NaN
             
             # Compute total statistics for this hour (same as R since REMs only occur in R)
             # Apply window segmentation for totals
@@ -981,10 +1007,12 @@ class REMsDetails(SciNode):
             rems_sec[f'{label_stats}_{stage}_rems_sec'] = np.NaN
             amplitude_uV[f'{label_stats}_{stage}_amplitude_uV'] = np.NaN
 
+        energy_stats = self.compute_rems_energy_stats(rems_cur_stage, commons.sleep_stages_name, label_stats)
+
         # Skip total stats since they're identical to R stage values (REMs only occur in R)
         # Only return R stage values to avoid repetition
 
-        rems_stats = rems_count | rems_sec | amplitude_uV | rems_density
+        rems_stats = rems_count | rems_sec | amplitude_uV | rems_density | energy_stats
         return rems_stats
 
     def compute_rems_stats_for_single_stage(self, valid_dur, rems_cur_chan_df, stage_label, label_stats):
@@ -1043,4 +1071,96 @@ class REMsDetails(SciNode):
             result[f'{label_stats}_{stage_label}_amplitude_uV'] = np.nan
             
         return result
+
+    def compute_rems_energy_stats(self, rems_df, sleep_stages_name, label_stats, stage='R'):
+        """""
+        Compute peak-to-peak REM energy statistics from amplitude_uV.
+
+        Per-event energy is defined as amplitude_uV squared (µV²).
+        Energy_PkPk_uvs is the average per-event energy.
+        PkPk_REMs_Activity_Index is the sum of all per-event energies.
+
+        Parameters
+        -----------
+            rems_df : pandas DataFrame
+                REMs events for the current time window.
+            sleep_stages_name : dict
+                Dict of sleep stage label to number (commons.sleep_stages_name)
+            label_stats : str
+                The label of the statistics to export. I.e. : 'total', 'cyc1', 'clock_h1', ...
+            stage : str
+                Sleep stage label (default 'R').
+
+        Returns
+        -----------  
+            energy_stats : dict
+                Average energy and activity index for the given stage and time window.
+        """""
+        energy_key = f'{label_stats}_{stage}_Energy_PkPk_uvs'
+        activity_key = f'{label_stats}_{stage}_PkPk_REMs_Activity_Index'
+        rem_stage_num = int(sleep_stages_name[stage])
+
+        if len(rems_df) > 0 and 'Stage' in rems_df.columns:
+            rems_in_stage = rems_df[rems_df['Stage'] == rem_stage_num]
+        else:
+            rems_in_stage = rems_df
+
+        if len(rems_in_stage) > 0:
+            amplitudes = rems_in_stage['amplitude_uV'].astype(float).dropna()
+        else:
+            amplitudes = pd.Series(dtype=float)
+
+        if len(amplitudes) > 0:
+            energies = amplitudes ** 2
+            return {
+                energy_key: round(float(energies.mean()), 2),
+                activity_key: round(float(energies.sum()), 2),
+            }
+        return {energy_key: np.nan, activity_key: 0}
+
+    def compute_phasic_rems_pct(self, rems_df, stage_df, sleep_stages_name, label_stats, stage='R'):
+        """""
+        Compute phasic and tonic REM percentages.
+
+        Phasic REM percentage = sum(REM event durations) / sum(REM stage epoch durations).
+        Tonic REM percentage = 100 - phasic REM percentage.
+
+        Parameters
+        -----------
+            rems_df : pandas DataFrame
+                REMs events for the current time window.
+            stage_df : pandas DataFrame
+                Sleep stage epochs for the current time window.
+            sleep_stages_name : dict
+                Dict of sleep stage label to number (commons.sleep_stages_name)
+            label_stats : str
+                The label of the statistics to export. I.e. : 'total', 'cyc1', 'clock_h1', ...
+            stage : str
+                Sleep stage label (default 'R').
+
+        Returns
+        -----------  
+            phasic_tonic_pct : dict
+                Phasic and tonic REM percentages (0-100) for the given stage and time window.
+        """""
+        rem_stage_num = int(sleep_stages_name[stage])
+        phasic_key = f'{label_stats}_{stage}_phasic_pct'
+        tonic_key = f'{label_stats}_{stage}_tonic_pct'
+
+        if len(stage_df) > 0:
+            rem_stages = stage_df[stage_df['name'] == rem_stage_num]
+            rem_stage_dur_sec = rem_stages['duration_sec'].astype(float).sum()
+        else:
+            rem_stage_dur_sec = 0
+
+        if len(rems_df) > 0 and 'Stage' in rems_df.columns:
+            rems_in_stage = rems_df[rems_df['Stage'] == rem_stage_num]
+        else:
+            rems_in_stage = rems_df
+        rems_dur_sec = rems_in_stage['duration_sec'].astype(float).sum() if len(rems_in_stage) > 0 else 0
+
+        if rem_stage_dur_sec > 0:
+            phasic_pct = round(rems_dur_sec / rem_stage_dur_sec * 100, 2)
+            return {phasic_key: phasic_pct, tonic_key: round(100 - phasic_pct, 2)}
+        return {phasic_key: np.nan, tonic_key: np.nan}
 
