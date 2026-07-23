@@ -172,6 +172,26 @@ class Ui_SpectralSettings(object):
 
         self.gridLayout_2 = QGridLayout()
         self.gridLayout_2.setObjectName(u"gridLayout_2")
+        self.label_4 = QLabel(SpectralSettings)
+        self.label_4.setObjectName(u"label_4")
+
+        self.gridLayout_2.addWidget(self.label_4, 1, 0, 1, 1)
+
+        self.last_freq_lineEdit = QLineEdit(SpectralSettings)
+        self.last_freq_lineEdit.setObjectName(u"last_freq_lineEdit")
+        self.last_freq_lineEdit.setMaximumSize(QSize(80, 16777215))
+        self.last_freq_lineEdit.setAlignment(Qt.AlignmentFlag.AlignRight|Qt.AlignmentFlag.AlignTrailing|Qt.AlignmentFlag.AlignVCenter)
+
+        self.gridLayout_2.addWidget(self.last_freq_lineEdit, 2, 1, 1, 1)
+
+        self.horizontalSpacer_4 = QSpacerItem(58, 13, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+
+        self.gridLayout_2.addItem(self.horizontalSpacer_4, 0, 2, 1, 1)
+
+        self.horizontalSpacer_5 = QSpacerItem(58, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+
+        self.gridLayout_2.addItem(self.horizontalSpacer_5, 2, 2, 1, 1)
+
         self.label_8 = QLabel(SpectralSettings)
         self.label_8.setObjectName(u"label_8")
         sizePolicy1.setHeightForWidth(self.label_8.sizePolicy().hasHeightForWidth())
@@ -180,34 +200,6 @@ class Ui_SpectralSettings(object):
         self.label_8.setMaximumSize(QSize(450, 16777215))
 
         self.gridLayout_2.addWidget(self.label_8, 0, 0, 1, 1)
-
-        self.miniband_lineEdit = QLineEdit(SpectralSettings)
-        self.miniband_lineEdit.setObjectName(u"miniband_lineEdit")
-        self.miniband_lineEdit.setMinimumSize(QSize(0, 0))
-        self.miniband_lineEdit.setMaximumSize(QSize(80, 16777215))
-        self.miniband_lineEdit.setAlignment(Qt.AlignmentFlag.AlignRight|Qt.AlignmentFlag.AlignTrailing|Qt.AlignmentFlag.AlignVCenter)
-
-        self.gridLayout_2.addWidget(self.miniband_lineEdit, 0, 1, 1, 1)
-
-        self.horizontalSpacer_4 = QSpacerItem(58, 13, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
-
-        self.gridLayout_2.addItem(self.horizontalSpacer_4, 0, 2, 1, 1)
-
-        self.label_4 = QLabel(SpectralSettings)
-        self.label_4.setObjectName(u"label_4")
-
-        self.gridLayout_2.addWidget(self.label_4, 1, 0, 1, 1)
-
-        self.first_freq_lineEdit = QLineEdit(SpectralSettings)
-        self.first_freq_lineEdit.setObjectName(u"first_freq_lineEdit")
-        self.first_freq_lineEdit.setMaximumSize(QSize(80, 16777215))
-        self.first_freq_lineEdit.setAlignment(Qt.AlignmentFlag.AlignRight|Qt.AlignmentFlag.AlignTrailing|Qt.AlignmentFlag.AlignVCenter)
-
-        self.gridLayout_2.addWidget(self.first_freq_lineEdit, 1, 1, 1, 1)
-
-        self.horizontalSpacer_6 = QSpacerItem(58, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
-
-        self.gridLayout_2.addItem(self.horizontalSpacer_6, 1, 2, 1, 1)
 
         self.label_9 = QLabel(SpectralSettings)
         self.label_9.setObjectName(u"label_9")
@@ -218,16 +210,24 @@ class Ui_SpectralSettings(object):
 
         self.gridLayout_2.addWidget(self.label_9, 2, 0, 1, 1)
 
-        self.last_freq_lineEdit = QLineEdit(SpectralSettings)
-        self.last_freq_lineEdit.setObjectName(u"last_freq_lineEdit")
-        self.last_freq_lineEdit.setMaximumSize(QSize(80, 16777215))
-        self.last_freq_lineEdit.setAlignment(Qt.AlignmentFlag.AlignRight|Qt.AlignmentFlag.AlignTrailing|Qt.AlignmentFlag.AlignVCenter)
+        self.miniband_lineEdit = QLineEdit(SpectralSettings)
+        self.miniband_lineEdit.setObjectName(u"miniband_lineEdit")
+        self.miniband_lineEdit.setMinimumSize(QSize(0, 0))
+        self.miniband_lineEdit.setMaximumSize(QSize(80, 16777215))
+        self.miniband_lineEdit.setAlignment(Qt.AlignmentFlag.AlignRight|Qt.AlignmentFlag.AlignTrailing|Qt.AlignmentFlag.AlignVCenter)
 
-        self.gridLayout_2.addWidget(self.last_freq_lineEdit, 2, 1, 1, 1)
+        self.gridLayout_2.addWidget(self.miniband_lineEdit, 0, 1, 1, 1)
 
-        self.horizontalSpacer_5 = QSpacerItem(58, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+        self.horizontalSpacer_6 = QSpacerItem(58, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
 
-        self.gridLayout_2.addItem(self.horizontalSpacer_5, 2, 2, 1, 1)
+        self.gridLayout_2.addItem(self.horizontalSpacer_6, 1, 2, 1, 1)
+
+        self.first_freq_lineEdit = QLineEdit(SpectralSettings)
+        self.first_freq_lineEdit.setObjectName(u"first_freq_lineEdit")
+        self.first_freq_lineEdit.setMaximumSize(QSize(80, 16777215))
+        self.first_freq_lineEdit.setAlignment(Qt.AlignmentFlag.AlignRight|Qt.AlignmentFlag.AlignTrailing|Qt.AlignmentFlag.AlignVCenter)
+
+        self.gridLayout_2.addWidget(self.first_freq_lineEdit, 1, 1, 1, 1)
 
 
         self.verticalLayout_11.addLayout(self.gridLayout_2)
@@ -415,13 +415,13 @@ class Ui_SpectralSettings(object):
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">The last frequency analyzed is limited to FS/2.</p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">   FS : Sampling rate of the channel (Hz)</p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">   i.e. 256 Hz / 2 = 128 Hz</p></body></html>", None))
-        self.label_8.setText(QCoreApplication.translate("SpectralSettings", u"Width of each mini band (Hz) (the first band can be smaller)", None))
-        self.miniband_lineEdit.setText(QCoreApplication.translate("SpectralSettings", u"0.5", None))
         self.label_4.setText(QCoreApplication.translate("SpectralSettings", u"First frequency analyzed (Hz)", None))
-        self.first_freq_lineEdit.setText(QCoreApplication.translate("SpectralSettings", u"0.0", None))
-        self.label_9.setText(QCoreApplication.translate("SpectralSettings", u"Last frequency analyzed (Hz)", None))
         self.last_freq_lineEdit.setText(QCoreApplication.translate("SpectralSettings", u"64", None))
-        self.label_10.setText(QCoreApplication.translate("SpectralSettings", u"<html><head/><body><p><span style=\" font-size:12pt; font-style:italic;\">* Warning : The last frequency is limited to FS/2 </span></p></body></html>", None))
+        self.label_8.setText(QCoreApplication.translate("SpectralSettings", u"Width of each mini band (Hz) (the first band can be smaller)", None))
+        self.label_9.setText(QCoreApplication.translate("SpectralSettings", u"Last frequency analyzed (Hz)", None))
+        self.miniband_lineEdit.setText(QCoreApplication.translate("SpectralSettings", u"0.5", None))
+        self.first_freq_lineEdit.setText(QCoreApplication.translate("SpectralSettings", u"0.0", None))
+        self.label_10.setText(QCoreApplication.translate("SpectralSettings", u"<html><head/><body><p><span style=\" font-style:italic;\">* Warning : The last frequency is limited to FS/2 </span></p><p><span style=\" font-style:italic;\">* Warning: Zero frequency is not supported by IRASA</span></p></body></html>", None))
         self.label_6.setText(QCoreApplication.translate("SpectralSettings", u"<html><head/><body><p><span style=\" font-weight:600;\">Power Spectral Analysis</span></p></body></html>", None))
         self.std_radioButton.setText(QCoreApplication.translate("SpectralSettings", u"Standard Spectrum (Welch)", None))
         self.label_5.setText(QCoreApplication.translate("SpectralSettings", u"Traditional power spectral density estimation", None))
