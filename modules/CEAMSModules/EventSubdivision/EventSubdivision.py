@@ -22,6 +22,8 @@ See the file LICENCE for full license details.
             events.
         n_window: Integer [Optionnal]
             Number of windows in one window.
+        filename: String
+            The filename of the input recording.
 
     Returns
     -----------    
@@ -65,6 +67,8 @@ class EventSubdivision(SciNode):
                 events.
             n_window: Integer [Optionnal]
                 Number of windows in one window.
+            filename: String
+                The filename of the input recording.
 
         Returns
         -----------    
@@ -127,6 +131,8 @@ class EventSubdivision(SciNode):
                     events.
                 n_window: Integer [Optionnal]
                     Number of windows in one window.
+                filename: String
+                    The filename of the input recording.
 
             Returns
             -----------    
