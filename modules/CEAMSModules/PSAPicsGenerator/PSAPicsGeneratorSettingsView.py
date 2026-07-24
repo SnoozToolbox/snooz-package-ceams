@@ -842,6 +842,16 @@ class PSAPicsGeneratorSettingsView(BaseSettingsView, Ui_PSAPicsGeneratorSettings
         self.message_textEdit.append(f"Available subjects: {list(self.subject_chans_label.keys())}")
         roi_count = 0
         channel_count = 0
+
+        # Saved selection only lists checked items. Channel/ROI states are
+        # initialized to True when files are loaded, so clear them first and
+        # re-check only what was stored.
+        for chan_data in self.subject_chans_label.values():
+            if len(chan_data) >= 3:
+                chan_data[self.chan_state_col][:] = [False] * len(chan_data[self.chan_state_col])
+        for subject in self.ROIs_subjects:
+            for roi in self.ROIs_subjects[subject]:
+                roi[1] = False
         
         # First, collect all ROIs that need to be processed
         rois_to_process = []
