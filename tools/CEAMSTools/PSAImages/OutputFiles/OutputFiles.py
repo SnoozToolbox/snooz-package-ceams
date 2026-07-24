@@ -31,9 +31,11 @@ class OutputFiles(BaseStepView, Ui_OutputFiles, QtWidgets.QWidget):
         self._load_embedded_image()
 
         # Connect the log scale checkbox to the options slot
-        if hasattr(self, 'checkBox_log'):
-            self.checkBox_log.clicked.connect(self.out_options_slot)
+        if hasattr(self, 'checkBox_log_y'):
+            self.checkBox_log_y.clicked.connect(self.out_options_slot)
         
+        if hasattr(self, 'checkBox_log_x'):
+            self.checkBox_log_x.clicked.connect(self.out_options_slot)
         # Connect force axis checkbox to enable/disable spinboxes
         if hasattr(self, 'checkBox_force_axis'):
             self.checkBox_force_axis.clicked.connect(self.out_options_slot)
@@ -65,7 +67,8 @@ class OutputFiles(BaseStepView, Ui_OutputFiles, QtWidgets.QWidget):
             'display': "mean_std", # all, mean, mean_std
             'hour': 1,
             'cycle': 1,
-            'log_scale': True,  # Default to logarithmic scale
+            'log_scale_y': True,  # Default to logarithmic y-scale
+            'log_scale_x': False,  # Default to linear x-scale
             'show_legend': True,  # Default to showing legend
             'force_axis': False, # False or [xmin, xmax, ymin, ymax]
             'font': 'Arial',
@@ -209,7 +212,8 @@ class OutputFiles(BaseStepView, Ui_OutputFiles, QtWidgets.QWidget):
         elif self.radioButton_meanstd.isChecked():
             self.pics_param["display"] = "mean_std"
         
-        self.pics_param["log_scale"] = self.checkBox_log.isChecked()
+        self.pics_param["log_scale_y"] = self.checkBox_log_y.isChecked()
+        self.pics_param["log_scale_x"] = self.checkBox_log_x.isChecked()
         self.pics_param["show_legend"] = self.checkBox_legend.isChecked()
         self.pics_param["font"] = self.fontComboBox.currentText()
         self.pics_param["fontsize"] = self.spinBox_fontsize.value()
@@ -348,7 +352,8 @@ class OutputFiles(BaseStepView, Ui_OutputFiles, QtWidgets.QWidget):
         elif self.pics_param.get("display") == "mean_std":
             self.radioButton_meanstd.setChecked(True)
 
-        self.checkBox_log.setChecked(self.pics_param.get("log_scale", True))  # Default to True
+        self.checkBox_log_y.setChecked(self.pics_param.get("log_scale_y", True))  # Default to True
+        self.checkBox_log_x.setChecked(self.pics_param.get("log_scale_x", False))  # Default to False
         self.checkBox_legend.setChecked(self.pics_param.get("show_legend", True))  # Default to True
         self.fontComboBox.setCurrentText(self.pics_param.get("font", "Arial"))
         self.spinBox_fontsize.setValue(self.pics_param.get("fontsize", 12))
@@ -423,7 +428,8 @@ class OutputFiles(BaseStepView, Ui_OutputFiles, QtWidgets.QWidget):
         self.radioButton_meanstd.setChecked(True)
         
         # Set default logarithmic scale
-        self.checkBox_log.setChecked(True)
+        self.checkBox_log_y.setChecked(True)
+        self.checkBox_log_x.setChecked(False)
         self.checkBox_legend.setChecked(True)
         
         # Set default spinbox values

@@ -145,7 +145,8 @@ class PSAPicsGeneratorSettingsView(BaseSettingsView, Ui_PSAPicsGeneratorSettings
             'display': "mean_std", # all, mean, mean_std
             'hour': 0,
             'cycle': 0,
-            'log_scale': False,  # Logarithmic scale option
+            'log_scale_y': True,  # Logarithmic y-scale option
+            'log_scale_x': False,  # Logarithmic x-scale option
             'show_legend': True,  # Show legend option
             'force_axis': False, # False or [xmin, xmax, ymin, ymax]
             'font': 'Arial',

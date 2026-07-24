@@ -769,9 +769,16 @@ and its standard deviation in a shaded area.</string>
          <item row="2" column="0">
           <layout class="QHBoxLayout" name="horizontalLayout_13">
            <item>
-            <widget class="QCheckBox" name="checkBox_log">
+            <widget class="QCheckBox" name="checkBox_log_y">
              <property name="text">
-              <string>Logarithmic Scale</string>
+              <string>Logarithmic Scale-Y axis</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QCheckBox" name="checkBox_log_x">
+             <property name="text">
+              <string>Logarithmic Scale-X axis</string>
              </property>
             </widget>
            </item>
@@ -1095,8 +1102,8 @@ and its standard deviation in a shaded area.</string>
   <slot>out_options_slot()</slot>
  </slots>
  <buttongroups>
-  <buttongroup name="buttonGroup_level"/>
   <buttongroup name="buttonGroup_section"/>
+  <buttongroup name="buttonGroup_level"/>
   <buttongroup name="buttonGroup_display"/>
  </buttongroups>
 </ui>

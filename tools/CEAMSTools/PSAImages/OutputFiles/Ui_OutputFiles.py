@@ -461,10 +461,15 @@ class Ui_OutputFiles(object):
 
         self.horizontalLayout_13 = QHBoxLayout()
         self.horizontalLayout_13.setObjectName(u"horizontalLayout_13")
-        self.checkBox_log = QCheckBox(OutputFiles)
-        self.checkBox_log.setObjectName(u"checkBox_log")
+        self.checkBox_log_y = QCheckBox(OutputFiles)
+        self.checkBox_log_y.setObjectName(u"checkBox_log_y")
 
-        self.horizontalLayout_13.addWidget(self.checkBox_log)
+        self.horizontalLayout_13.addWidget(self.checkBox_log_y)
+
+        self.checkBox_log_x = QCheckBox(OutputFiles)
+        self.checkBox_log_x.setObjectName(u"checkBox_log_x")
+
+        self.horizontalLayout_13.addWidget(self.checkBox_log_x)
 
         self.checkBox_legend = QCheckBox(OutputFiles)
         self.checkBox_legend.setObjectName(u"checkBox_legend")
@@ -666,7 +671,8 @@ class Ui_OutputFiles(object):
         self.radioButton_mean.setText(QCoreApplication.translate("OutputFiles", u"MEAN : Display only the mean of EEG spectral power curve", None))
         self.radioButton_meanstd.setText(QCoreApplication.translate("OutputFiles", u"MEAN + STD : Display the mean of EEG spectral power curve in bold line\n"
 "and its standard deviation in a shaded area.", None))
-        self.checkBox_log.setText(QCoreApplication.translate("OutputFiles", u"Logarithmic Scale", None))
+        self.checkBox_log_y.setText(QCoreApplication.translate("OutputFiles", u"Logarithmic Scale-Y axis", None))
+        self.checkBox_log_x.setText(QCoreApplication.translate("OutputFiles", u"Logarithmic Scale-X axis", None))
         self.checkBox_legend.setText(QCoreApplication.translate("OutputFiles", u"Show Legend", None))
         self.label_13.setText(QCoreApplication.translate("OutputFiles", u"Font", None))
         self.label_FontSize.setText(QCoreApplication.translate("OutputFiles", u"Font Size", None))

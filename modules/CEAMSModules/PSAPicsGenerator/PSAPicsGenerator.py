@@ -48,7 +48,8 @@ class PSAPicsGenerator(SciNode):
         - 'force_axis': bool or [xmin, xmax, ymin, ymax]
         - 'output_folder': str, path to save figures
         - 'freq_range': [float, float], frequency range to display
-        - 'log_scale': bool, use log scale for y-axis
+        - 'log_scale_y': bool, use log scale for y-axis
+        - 'log_scale_x': bool, use log scale for x-axis
         - 'show_legend': bool, show legend on plots (default: True)
         - 'font': str, font family for all text (default: 'Arial')
         - 'fontsize': int, font size for axis labels and legend (default: 12)
@@ -143,6 +144,11 @@ class PSAPicsGenerator(SciNode):
         if not isinstance(pics_param, dict):
             raise NodeInputException(self.identifier, "pics_param", \
                 f"PSAPicsGenerator : dict is expected for pics_param and it is {type(pics_param)}")
+        # Backward compatibility: old pipelines used a single 'log_scale' flag for the y-axis
+        if 'log_scale_y' not in pics_param and 'log_scale' in pics_param:
+            pics_param['log_scale_y'] = pics_param['log_scale']
+        pics_param.setdefault('log_scale_y', False)
+        pics_param.setdefault('log_scale_x', False)
 
         if isinstance(file_group, str) and not file_group=='':
             file_group = eval(file_group)
@@ -473,7 +479,8 @@ class PSAPicsGenerator(SciNode):
             
         # Get frequency range from parameters
         freq_range = pics_param.get('freq_range', self.default_freq_range)
-        log_scale = pics_param.get('log_scale', False)
+        log_scale_y = pics_param.get('log_scale_y', False)
+        log_scale_x = pics_param.get('log_scale_x', False)
         sleep_stage_selection = pics_param.get('sleep_stage_selection', ['All'])
 
         # Build activity variable string for filename
@@ -508,7 +515,7 @@ class PSAPicsGenerator(SciNode):
                     # Check if we should compute mean across groups
                     if 'mean' in pics_param['display']:
                         # Use common frequency grid spanning full range
-                        common_freq = np.linspace(freq_range[0], freq_range[1], 100)
+                        common_freq = self._freq_grid(freq_range, 100, log_scale_x)
                         
                         # Collect data from all groups for mean/std calculation
                         for stage in sleep_stage_selection:
@@ -565,7 +572,7 @@ class PSAPicsGenerator(SciNode):
                                 
                                 # Plot std band if requested
                                 if 'std' in pics_param['display']:
-                                    if log_scale:
+                                    if log_scale_y:
                                         log_mean = np.log10(mean_power + 1e-10)
                                         log_std = std_power / (mean_power + 1e-10) / np.log(10)
                                         lower_bound = 10 ** (log_mean - log_std)
@@ -588,7 +595,7 @@ class PSAPicsGenerator(SciNode):
                         expanded_colors = self._expand_colors(colors, total_items)
                         
                         # Use common frequency grid for all groups
-                        common_freq = np.linspace(freq_range[0], freq_range[1], 200)
+                        common_freq = self._freq_grid(freq_range, 200, log_scale_x)
                         
                         for filename_idx, filename_val in enumerate(unique_filenames):
                             psa_data_for_file = psa_data_cur_chan[psa_data_cur_chan['filename'] == filename_val]
@@ -646,7 +653,7 @@ class PSAPicsGenerator(SciNode):
                                                        linewidth=2, linestyle=self.linestyles[linestyle_idx])
                 else:
                     # Single filename - use interpolation for consistency
-                    common_freq = np.linspace(freq_range[0], freq_range[1], 200)
+                    common_freq = self._freq_grid(freq_range, 200, log_scale_x)
                     
                     freq_low = psa_data_cur_chan['freq_low_Hz'].values
                     
@@ -737,22 +744,12 @@ class PSAPicsGenerator(SciNode):
                 
                 fig_name += '.pdf'
 
-                if pics_param['force_axis']:
-                    ax.set_xlim(pics_param['force_axis'][0], pics_param['force_axis'][1])
-                    ax.set_ylim(pics_param['force_axis'][2], pics_param['force_axis'][3])
-                else:
-                    ax.set_xlim(freq_range[0], freq_range[1])
-
                 # Get font settings from parameters
                 font_family = pics_param.get('font', 'Arial')
                 label_fontsize = pics_param.get('fontsize', 12)
 
-                ax.set_xlabel('Frequency (Hz)', fontsize=label_fontsize, fontfamily=font_family)
-                if log_scale:
-                    ax.set_yscale('log')
-                    ax.set_ylabel('Log Power (μV²/Hz)', fontsize=label_fontsize, fontfamily=font_family)
-                else:
-                    ax.set_ylabel('Power (μV²/Hz)', fontsize=label_fontsize, fontfamily=font_family)
+                self._apply_axis_scales(ax, pics_param, freq_range, log_scale_x, log_scale_y,
+                                        font_family, label_fontsize)
                 ax.grid(which='both', axis='both')
                 
                 # Update tick label font
@@ -821,7 +818,8 @@ class PSAPicsGenerator(SciNode):
 
         # Get frequency range from parameters
         freq_range = pics_param.get('freq_range', self.default_freq_range)
-        log_scale = pics_param.get('log_scale', False)
+        log_scale_y = pics_param.get('log_scale_y', False)
+        log_scale_x = pics_param.get('log_scale_x', False)
         sleep_stage_selection = pics_param.get('sleep_stage_selection', ['All'])
 
         # Create the unique list of keys of psa_data
@@ -893,7 +891,7 @@ class PSAPicsGenerator(SciNode):
                         # Process this stage's data for this subject
                         if stage_power_data and len(stage_power_data) > 0:
                             # Interpolate all channels to common frequency grid spanning full range
-                            common_freq = np.linspace(freq_range[0], freq_range[1], 100)
+                            common_freq = self._freq_grid(freq_range, 100, log_scale_x)
                             
                             interpolated_power = []
                             for i, power_data in enumerate(stage_power_data):
@@ -984,7 +982,7 @@ class PSAPicsGenerator(SciNode):
                                     
                                     if 'mean' in pics_param['display']:
                                         # Interpolate to common grid for accumulation
-                                        common_freq = np.linspace(freq_range[0], freq_range[1], 100)
+                                        common_freq = self._freq_grid(freq_range, 100, log_scale_x)
                                         interp_power = np.interp(common_freq, freq_low, power_data, left=np.nan, right=np.nan)
                                         
                                         if cohort_group in signal_to_plot_grp.keys():
@@ -997,7 +995,7 @@ class PSAPicsGenerator(SciNode):
                                             signal_to_plot_grp[cohort_group][f'stage_{stage}'] = interp_power.reshape(-1,1)
                                     else:
                                         # Display all - use interpolation for consistent axis coverage
-                                        common_freq = np.linspace(freq_range[0], freq_range[1], 200)
+                                        common_freq = self._freq_grid(freq_range, 200, log_scale_x)
                                         interp_power = np.interp(common_freq, freq_low, power_data, left=np.nan, right=np.nan)
                                         
                                         if f'stage_{stage}-{cohort_group}' not in legend_labels:
@@ -1021,14 +1019,15 @@ class PSAPicsGenerator(SciNode):
                         
                         # Create frequency array (assuming all subjects have same frequency grid)
                         # We need to get the frequency array from the data
-                        freq_array = np.linspace(freq_range[0], freq_range[1], len(signal_to_plot_mean))
+                        # Create frequency array matching the interpolated grid used above
+                        freq_array = self._freq_grid(freq_range, len(signal_to_plot_mean), log_scale_x)
                         
                         # Plot the channels with a specific linestyle and the stages with a specific color
                         ax.plot(freq_array, signal_to_plot_mean, color=colors[i_grp],
                                 linestyle=self.linestyles[stage_idx % len(self.linestyles)], label=f'{stage}-{cohort_group}')
                         if 'std' in pics_param['display']:
                             # Plot standard deviation as shaded area
-                            if log_scale:
+                            if log_scale_y:
                                 # For log scale, use multiplicative std (more appropriate for log-transformed data)
                                 # Convert to log space, add/subtract std, then convert back
                                 log_mean = np.log10(signal_to_plot_mean + 1e-10)  # Add small epsilon to avoid log(0)
@@ -1046,25 +1045,13 @@ class PSAPicsGenerator(SciNode):
                                                 alpha=0.3, edgecolor=colors[i_grp],
                                                 linestyle=self.linestyles[stage_idx % len(self.linestyles)], linewidth=1.5)
 
-        # Set the limits of the axes
-        if pics_param['force_axis']:
-            ax.set_xlim(pics_param['force_axis'][0], pics_param['force_axis'][1])
-            ax.set_ylim(pics_param['force_axis'][2], pics_param['force_axis'][3])
-        else:
-            # Always set x-axis to freq_range
-            ax.set_xlim(freq_range[0], freq_range[1])
-
         # Get font settings from parameters
         font_family = pics_param.get('font', 'Arial')
         label_fontsize = pics_param.get('fontsize', 12)
 
+        self._apply_axis_scales(ax, pics_param, freq_range, log_scale_x, log_scale_y,
+                                font_family, label_fontsize)
         ax.grid(which='both', axis='both')
-        ax.set_xlabel('Frequency (Hz)', fontsize=label_fontsize, fontfamily=font_family)
-        if log_scale:
-            ax.set_yscale('log')
-            ax.set_ylabel('Log Power (μV²/Hz)', fontsize=label_fontsize, fontfamily=font_family)
-        else:
-            ax.set_ylabel('Power (μV²/Hz)', fontsize=label_fontsize, fontfamily=font_family)
         
         # Update tick label font
         for label in ax.get_xticklabels():
@@ -1086,6 +1073,58 @@ class PSAPicsGenerator(SciNode):
         if DEBUG:
             print(f"{fig_name} is saved...")
         fig.clf()
+
+    def _freq_grid(self, freq_range, n_points, log_scale_x=False):
+        """
+        Build a frequency sampling grid spanning freq_range.
+
+        Uses a logarithmic grid when log_scale_x is True so interpolated
+        traces align with a log-scaled x-axis.
+        """
+        fmin = float(freq_range[0])
+        fmax = float(freq_range[1])
+        if log_scale_x:
+            fmin = self._positive_freq_min(fmin)
+            if fmax <= fmin:
+                fmax = fmin * 10.0
+            return np.logspace(np.log10(fmin), np.log10(fmax), n_points)
+        return np.linspace(fmin, fmax, n_points)
+
+    def _positive_freq_min(self, fmin):
+        """Return a strictly positive lower frequency bound for log x-scale."""
+        if fmin is None or fmin <= 0:
+            return max(self.default_freq_range[0], 1e-3)
+        return float(fmin)
+
+    def _apply_axis_scales(self, ax, pics_param, freq_range, log_scale_x, log_scale_y,
+                           font_family, label_fontsize):
+        """Apply x/y limits and optional log scales, then set axis labels."""
+        if pics_param['force_axis']:
+            xmin, xmax, ymin, ymax = pics_param['force_axis']
+            if log_scale_x:
+                xmin = self._positive_freq_min(xmin)
+                if xmax <= xmin:
+                    xmax = xmin * 10.0
+            ax.set_xlim(xmin, xmax)
+            ax.set_ylim(ymin, ymax)
+        else:
+            xmin, xmax = float(freq_range[0]), float(freq_range[1])
+            if log_scale_x:
+                xmin = self._positive_freq_min(xmin)
+                if xmax <= xmin:
+                    xmax = xmin * 10.0
+            ax.set_xlim(xmin, xmax)
+
+        if log_scale_x:
+            ax.set_xscale('log')
+            ax.set_xlabel('Log Frequency (Hz)', fontsize=label_fontsize, fontfamily=font_family)
+        else:
+            ax.set_xlabel('Frequency (Hz)', fontsize=label_fontsize, fontfamily=font_family)
+        if log_scale_y:
+            ax.set_yscale('log')
+            ax.set_ylabel('Log Power (μV²/Hz)', fontsize=label_fontsize, fontfamily=font_family)
+        else:
+            ax.set_ylabel('Power (μV²/Hz)', fontsize=label_fontsize, fontfamily=font_family)
 
     def _expand_colors(self, base_colors, n_needed):
         """
