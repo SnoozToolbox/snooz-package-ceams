@@ -12,9 +12,9 @@ class EventManager:
         self.parent = parent_widget
 
     def save_annotations(self, selected_non_brain_channels, marked_bad_chs, bad_epoch_idxs, 
-                        input_dir, save_path, same_file_checked, overwrite_checked, 
+                        input_dir, overwrite_checked, 
                         start_time, duration, epoch_dur, epochs, selected_montage):
-        """Save artifact annotations to file with proper incomplete epoch handling""" 
+        """Save artifact annotations to the original input file with proper incomplete epoch handling""" 
         
         # Calculate proper durations for bad epochs
         epoch_durations = []
@@ -41,12 +41,7 @@ class EventManager:
             epoch_durations.append(actual_duration)
             epoch_starts.append(epoch_start)
 
-        # Determine output file
-        if (not same_file_checked) and save_path != input_dir:
-            output_file = save_path
-            self.parent._psg_reader_manager.copy_file(input_dir, output_file)
-        else:
-            output_file = input_dir    
+        output_file = input_dir
 
         # Create DataFrames for different artifact types
         artifact_df_non_brain = pd.DataFrame({

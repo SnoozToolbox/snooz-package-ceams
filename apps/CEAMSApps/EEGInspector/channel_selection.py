@@ -2,7 +2,22 @@
 
 from PySide6.QtWidgets import *
 from PySide6.QtCore import Qt
-from .constants import GSN_HYDRO_129_NON_BRAIN_CHANNELS, NON_BRAIN_CHANNEL_KEYWORDS, GSN_HYDRO_129_MONTAGE_NAME
+from .constants import (
+    GSN_HYDRO_129_NON_BRAIN_CHANNELS,
+    GSN_HYDRO_256_NON_BRAIN_CHANNELS,
+    NON_BRAIN_CHANNEL_KEYWORDS,
+    GSN_HYDRO_129_MONTAGE_NAME,
+    GSN_HYDRO_256_MONTAGE_NAME,
+    EGI_256_MONTAGE_NAME,
+    GSN_HYDRO_257_MONTAGE_NAME,
+)
+
+GSN_HYDRO_256_MONTAGE_NAMES = (
+    GSN_HYDRO_256_MONTAGE_NAME,
+    EGI_256_MONTAGE_NAME,
+    GSN_HYDRO_257_MONTAGE_NAME,
+)
+
 
 class ChannelSelector:
     """Handles channel selection logic and UI"""
@@ -58,6 +73,8 @@ class ChannelSelector:
         # Add montage-specific channels
         if best_montage == GSN_HYDRO_129_MONTAGE_NAME:
             self.initial_non_brain_chs = GSN_HYDRO_129_NON_BRAIN_CHANNELS.copy()
+        elif best_montage in GSN_HYDRO_256_MONTAGE_NAMES:
+            self.initial_non_brain_chs = GSN_HYDRO_256_NON_BRAIN_CHANNELS.copy()
         
         # Add keyword-detected channels
         for ch in channel_names:

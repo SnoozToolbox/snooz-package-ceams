@@ -69,6 +69,21 @@ GSN_HYDRO_129_NON_BRAIN_CHANNELS = [
     'EEG 73', 'EEG 88', 'EEG 68', 'EEG 94', 'EEG 63', 'EEG 99', 'EEG 56', 'EEG 107'
 ]
 
+EGI_256_NON_BRAIN_NUMBERS = [
+    31, 241, 242, 243, 244, 245, 246, 247, 248, 249, 250, 251,
+    252, 253, 254, 255, 256, 67, 73, 82, 91, 92, 93, 102, 103,
+    104, 105, 111, 112, 113, 114, 120, 121, 122, 123, 133, 134,
+    135, 136, 145, 146, 147, 148, 156, 157, 158, 165, 166, 167,
+    168, 174, 175, 176, 177, 187, 188, 189, 199, 200, 201, 208,
+    209, 216, 217, 218, 219, 225, 226, 227, 228, 229, 230, 231,
+    232, 233, 234, 235, 236, 237, 238, 239, 240,
+]
+
+GSN_HYDRO_256_NON_BRAIN_CHANNELS = (
+    [f'E{n}' for n in EGI_256_NON_BRAIN_NUMBERS]
+    + [f'EEG {n}' for n in EGI_256_NON_BRAIN_NUMBERS]
+)
+
 # Non-brain channel keywords for automatic detection
 NON_BRAIN_CHANNEL_KEYWORDS = [
     'eog', 'emg', 'ecg', 'cardiac', 'ekg', 'spo2', 'resp', 'sao2', 'loc', 'roc',
@@ -83,5 +98,8 @@ EVENT_NAME_NON_BRAIN = 'non_brain'
 EVENT_NAME_BAD_CHANNEL = 'art_channel'
 EVENT_NAME_BAD_EPOCH = 'art_epoch'
 
-# Montage name constant
+# Montage name constants
 GSN_HYDRO_129_MONTAGE_NAME = 'GSN-HydroCel-129'
+GSN_HYDRO_256_MONTAGE_NAME = 'GSN-HydroCel-256'
+EGI_256_MONTAGE_NAME = 'EGI_256'
+GSN_HYDRO_257_MONTAGE_NAME = 'GSN-HydroCel-257'

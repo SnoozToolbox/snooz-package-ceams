@@ -97,14 +97,10 @@ class EEGInspectorView(Ui_EEGInspectorView, QWidget):
         self.BackButton4.clicked.connect(self.on_back_page4)
         self.ApplyButton.clicked.connect(self.on_apply_epochs)
         self.SaveButton.clicked.connect(self.on_save)
-        self.BrowseButton.clicked.connect(self.on_browse_save)
-        self.checkBox_same_file.toggled.connect(self.on_same_file)
 
     def _setup_ui(self):
         """Initial UI setup"""
         self.StackedWidget.setCurrentIndex(0)
-        # Disable the SaveButton until the checkBox_same_file is checked or a different path is provided
-        #self.SaveButton.setEnabled(False) # by default the save same file is checked now.
 
 
     def on_choose_file(self):
@@ -337,8 +333,6 @@ class EEGInspectorView(Ui_EEGInspectorView, QWidget):
                     self._convert_epochs_for_psd(self.eeg_bad_chs_removed)
                     if self.epoch_processor.epoch_dur in self.epoch_processor.bad_epochs_by_duration:
                         bad_epochs = self.epoch_processor.bad_epochs_by_duration[self.epoch_processor.epoch_dur]
-        
-            self.save_lineedit.clear()
 
             # Get current epochs after bad channel removal
             epochs = self.epoch_processor.epochs.copy()
@@ -435,14 +429,12 @@ class EEGInspectorView(Ui_EEGInspectorView, QWidget):
             # Mark the epochs as clean only
             epochs.drop_bad()
             
-            # Use EventManager to save annotations
+            # Use EventManager to save annotations to the original input file
             self.event_manager.save_annotations(
                 selected_non_brain_channels=self.selected_non_brain_channels,
                 marked_bad_chs=self.bad_channels,
                 bad_epoch_idxs=bad_epochs,
                 input_dir=self.input_dir,
-                save_path=self.save_lineedit.text(),
-                same_file_checked=self.checkBox_same_file.isChecked(),
                 overwrite_checked=self.checkBox_overwrite.isChecked(),
                 start_time=self._start_time,
                 duration=self._duration,
@@ -452,44 +444,6 @@ class EEGInspectorView(Ui_EEGInspectorView, QWidget):
             )
         except Exception as e:
             self.on_data_error(str(e))
-
-    def on_browse_save(self):
-        """Browse for save file location"""
-        dlg = QFileDialog()
-        dlg.setFileMode(QFileDialog.AnyFile)
-        
-        # Set appropriate file extension filter
-        if self.input_dir.find('.edf') != -1:
-            extension = 'EDF (*.edf)'
-        elif self.input_dir.find('.sts') != -1:
-            extension = 'Harmonie (*.sts)'
-        elif self.input_dir.find('.eeg') != -1:
-            extension = 'Xltek (*.eeg)'
-        else:
-            extension = f'(*.{self.input_dir[-3:]})'
-
-        dlg.setNameFilters([extension])
-        if dlg.exec_():
-            filenames = dlg.selectedFiles()
-            if len(filenames) == 1:
-                self.save_lineedit.setText(filenames[0])
-                self.SaveButton.setEnabled(True)
-
-    def on_same_file(self):
-        """Handle same file checkbox toggle"""
-        if self.checkBox_same_file.isChecked():
-            self.BrowseButton.setEnabled(False)
-            self.save_lineedit.setEnabled(False)
-            self.desc_label42.setEnabled(False)
-            self.SaveButton.setEnabled(True)
-        else:
-            self.BrowseButton.setEnabled(True)
-            self.save_lineedit.setEnabled(True)
-            self.desc_label42.setEnabled(True)
-            if len(self.save_lineedit.text()) > 0:
-                self.SaveButton.setEnabled(True)
-            else:
-                self.SaveButton.setEnabled(False)
 
     def on_data_error(self, error_message):
         """Handle data loading errors"""

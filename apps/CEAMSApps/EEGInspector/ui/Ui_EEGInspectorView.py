@@ -355,23 +355,6 @@ class Ui_EEGInspectorView(object):
 
         self.verticalLayout_4.addItem(self.verticalSpacer)
 
-        self.horizontalLayout_4 = QHBoxLayout()
-        self.horizontalLayout_4.setObjectName(u"horizontalLayout_4")
-        self.horizontalSpacer = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
-
-        self.horizontalLayout_4.addItem(self.horizontalSpacer)
-
-        self.checkBox_same_file = QCheckBox(self.Page4)
-        self.checkBox_same_file.setObjectName(u"checkBox_same_file")
-        self.checkBox_same_file.setFont(font)
-        self.checkBox_same_file.setLayoutDirection(Qt.LayoutDirection.RightToLeft)
-        self.checkBox_same_file.setChecked(True)
-
-        self.horizontalLayout_4.addWidget(self.checkBox_same_file)
-
-
-        self.verticalLayout_4.addLayout(self.horizontalLayout_4)
-
         self.horizontalLayout_5 = QHBoxLayout()
         self.horizontalLayout_5.setObjectName(u"horizontalLayout_5")
         self.horizontalSpacer_5 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
@@ -388,29 +371,6 @@ class Ui_EEGInspectorView(object):
 
 
         self.verticalLayout_4.addLayout(self.horizontalLayout_5)
-
-        self.horizontalLayout_41 = QHBoxLayout()
-        self.horizontalLayout_41.setObjectName(u"horizontalLayout_41")
-        self.desc_label42 = QLabel(self.Page4)
-        self.desc_label42.setObjectName(u"desc_label42")
-        self.desc_label42.setFont(font)
-
-        self.horizontalLayout_41.addWidget(self.desc_label42)
-
-        self.save_lineedit = QLineEdit(self.Page4)
-        self.save_lineedit.setObjectName(u"save_lineedit")
-
-        self.horizontalLayout_41.addWidget(self.save_lineedit)
-
-        self.BrowseButton = QPushButton(self.Page4)
-        self.BrowseButton.setObjectName(u"BrowseButton")
-        self.BrowseButton.setEnabled(False)
-        self.BrowseButton.setFont(font)
-
-        self.horizontalLayout_41.addWidget(self.BrowseButton)
-
-
-        self.verticalLayout_4.addLayout(self.horizontalLayout_41)
 
         self.horizontalLayout_42 = QHBoxLayout()
         self.horizontalLayout_42.setObjectName(u"horizontalLayout_42")
@@ -505,10 +465,7 @@ class Ui_EEGInspectorView(object):
         self.NextButton3.setText(QCoreApplication.translate("EEGInspectorView", u"Next", None))
         self.desc_label41.setText(QCoreApplication.translate("EEGInspectorView", u"EEG visual inspection is complete. The Power Spectral Density (PSD) is displayed without bad channels or epochs.\n"
 "If you are satisfied with the results, save the artifact inspector events to exclude them from future analyses.", None))
-        self.checkBox_same_file.setText(QCoreApplication.translate("EEGInspectorView", u"Check here if you want to write the event on your original input file. Otherwise, browse a directory to save a new file.", None))
         self.checkBox_overwrite.setText(QCoreApplication.translate("EEGInspectorView", u"Check here if you want to delete old events with the same group and name and replace the new ones", None))
-        self.desc_label42.setText(QCoreApplication.translate("EEGInspectorView", u"Please select your destination to save the artifacts event file:", None))
-        self.BrowseButton.setText(QCoreApplication.translate("EEGInspectorView", u"Browse", None))
         self.BackButton4.setText(QCoreApplication.translate("EEGInspectorView", u"Back", None))
         self.SaveButton.setText(QCoreApplication.translate("EEGInspectorView", u"save", None))
     # retranslateUi
