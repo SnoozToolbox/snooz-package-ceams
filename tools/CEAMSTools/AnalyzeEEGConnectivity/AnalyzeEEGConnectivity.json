@@ -611,6 +611,12 @@
                         "value": true,
                         "sub_plugs": {},
                         "connections": {}
+                    },
+                    "match_event_channels": {
+                        "name": "match_event_channels",
+                        "value": true,
+                        "sub_plugs": {},
+                        "connections": {}
                     }
                 },
                 "outputs": {
@@ -1914,6 +1920,12 @@
                     },
                     "create": {
                         "name": "create",
+                        "value": true,
+                        "sub_plugs": {},
+                        "connections": {}
+                    },
+                    "match_event_channels": {
+                        "name": "match_event_channels",
                         "value": true,
                         "sub_plugs": {},
                         "connections": {}

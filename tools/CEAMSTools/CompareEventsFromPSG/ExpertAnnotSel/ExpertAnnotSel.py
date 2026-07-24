@@ -23,6 +23,9 @@ class ExpertAnnotSel( NonValidEventStep ):
     node_id_Dictionary_group = "f56c85a8-529b-44f5-9a23-c4be67fc8742" # select the list of group for the current filename
     node_id_Dictionary_name = "c98b07ef-a32d-44e5-9ca0-72bb271c108d" # select the list of name for the current filename
 
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.match_event_channels_checkBox.setChecked(True)
 
     def on_validate_settings(self):
         # Validate that all input were set correctly by the user.

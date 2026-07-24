@@ -40,6 +40,7 @@ class AnnotationSelection(NonValidEventStep):
         self.sleep_stage_scope = False
         self.annot_selection_scope = False
         self.enable_widgets(False)
+        self.match_event_channels_checkBox.setChecked(True)
 
 
     def on_apply_settings(self):
