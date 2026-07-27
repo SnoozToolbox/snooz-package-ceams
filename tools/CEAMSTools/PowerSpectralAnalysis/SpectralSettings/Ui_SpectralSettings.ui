@@ -165,7 +165,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
          <item>
           <widget class="QLabel" name="label_14">
            <property name="text">
-            <string>Time shift between consecutive FFT windows, controlling overlap and temporal resolution.</string>
+            <string>Time between start point of consecutive FFT windows, controlling overlap and temporal resolution.</string>
            </property>
           </widget>
          </item>
@@ -222,7 +222,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
          <item>
           <widget class="QLabel" name="label_13">
            <property name="text">
-            <string>Duration of each analysis window used to compute the FFT and determine frequency resolution.</string>
+            <string>Duration of signal used to compute each FFT. (Longer windows give finer frequency resolution)</string>
            </property>
           </widget>
          </item>

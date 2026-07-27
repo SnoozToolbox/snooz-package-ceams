@@ -390,9 +390,9 @@ class Ui_SpectralSettings(object):
         self.win_len_lineEdit.setToolTip(QCoreApplication.translate("SpectralSettings", u"Window length (s) used to perform the FFT (Fast Fourier Transform).", None))
 #endif // QT_CONFIG(tooltip)
         self.label_2.setText(QCoreApplication.translate("SpectralSettings", u"<html><head/><body><p><span style=\" font-weight:700;\">Window step (s)</span></p></body></html>", None))
-        self.label_14.setText(QCoreApplication.translate("SpectralSettings", u"Time shift between consecutive FFT windows, controlling overlap and temporal resolution.", None))
+        self.label_14.setText(QCoreApplication.translate("SpectralSettings", u"Time between start point of consecutive FFT windows, controlling overlap and temporal resolution.", None))
         self.label.setText(QCoreApplication.translate("SpectralSettings", u"<html><head/><body><p><span style=\" font-weight:700;\">Window length (s)</span></p></body></html>", None))
-        self.label_13.setText(QCoreApplication.translate("SpectralSettings", u"Duration of each analysis window used to compute the FFT and determine frequency resolution.", None))
+        self.label_13.setText(QCoreApplication.translate("SpectralSettings", u"Duration of signal used to compute each FFT. (Longer windows give finer frequency resolution)", None))
         self.label_7.setText(QCoreApplication.translate("SpectralSettings", u"<html><head/><body><p><span style=\" font-weight:600;\">Frequency bands</span></p></body></html>", None))
         self.textEdit.setHtml(QCoreApplication.translate("SpectralSettings", u"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset=\"utf-8\" /><style type=\"text/css\">\n"
