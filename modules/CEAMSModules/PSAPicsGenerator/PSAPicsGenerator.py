@@ -40,7 +40,9 @@ class PSAPicsGenerator(SciNode):
         Keys are ROI names and values are [channels_list, blank_flag].
         blank_flag=True requires all channels to be present.
     chans_ROIs_sel : dict
-        Keys are channel labels or ROI names. Values are boolean selection flags.
+        Selected channels/ROIs. Prefer per-subject format
+        {subject_id: {channel_or_roi: bool}}. Legacy flat format
+        {channel_or_roi: bool} is still accepted.
     pics_param : dict
         Plotting parameters with keys:
         - 'cohort_avg', 'cohort_sel', 'group_avg', 'group_sel': bool flags for plot types
@@ -102,7 +104,8 @@ class PSAPicsGenerator(SciNode):
         ROIs_def : dict
             Keys are ROI names and values are [channels_list, blank_flag].
         chans_ROIs_sel : dict
-            Keys are channel labels or ROI names. Values are boolean selection flags.
+            Either legacy flat format {channel_or_roi: bool}, or per-subject
+            format {subject_id: {channel_or_roi: bool}}.
         pics_param : dict
             Plotting parameters (see class docstring for details).
         colors_param : dict
@@ -197,63 +200,57 @@ class PSAPicsGenerator(SciNode):
                 raise NodeRuntimeException(self.identifier, "filenames", \
                     f"PSAPicsGenerator no power columns found in {file_name}. Expected columns with '_act' suffix.")
 
-            # Process each selected channel/ROI
+            # Process each selected channel/ROI for this subject/file
             psa_data_all_chan = []
             chan_label_all_chan = []
-            
-            # For each channel in chans_ROIs_sel dict
-            for ch in chans_ROIs_sel.keys():
-                # if the channel is selected
-                if chans_ROIs_sel[ch]:
+            selected_channels = self._get_selected_channels_for_subject(
+                chans_ROIs_sel, psa_data_subject)
+
+            for ch in selected_channels:
+                chan_label = ch
+                if DEBUG:
+                    print(f"Processing selected channel/ROI: {ch}")
+                # Extract PSA data for the current channel or ROI
+                psa_data_ch_sel = self.extract_psa_data_ch(psa_data_subject, ch, ROIs_def)
+                if psa_data_ch_sel is not None and len(psa_data_ch_sel) > 0:
                     if DEBUG:
-                        print(f"Processing selected channel/ROI: {ch}")
-                    # Extract PSA data for the current channel or ROI
-                    psa_data_ch_sel = self.extract_psa_data_ch(psa_data_subject, ch, ROIs_def)
-                    if psa_data_ch_sel is not None and len(psa_data_ch_sel) > 0:
-                        if DEBUG:
-                            print(f"Successfully extracted data for {ch}, shape: {psa_data_ch_sel.shape}")
-                        # Generate the pictures
-                        if "roi" in ch.lower():
-                            # Use the full ROI label to distinguish between different ROIs
-                            chan_label = ch
-                        else:
-                            chan_label = ch
-                        chan_label_all_chan.append(chan_label)
-                        if DEBUG:
-                            print(f"Added {chan_label} to chan_label_all_chan. Current list: {chan_label_all_chan}")
+                        print(f"Successfully extracted data for {ch}, shape: {psa_data_ch_sel.shape}")
+                    chan_label_all_chan.append(chan_label)
+                    if DEBUG:
+                        print(f"Added {chan_label} to chan_label_all_chan. Current list: {chan_label_all_chan}")
+                else:
+                    if DEBUG:
+                        print(f"No data extracted for {ch}")
+
+                # **********************************************
+                # One figure for the current group : one picture per channel or ROI
+                # **********************************************
+                if pics_param['group_sel'] | pics_param['cohort_sel']:
+                    # Save figure for a group and a channel.
+                    if pics_param['group_sel']:
+                        fig_save = 'group_sel'
                     else:
-                        if DEBUG:
-                            print(f"No data extracted for {ch}")
-
-                    # **********************************************
-                    # One figure for the current group : one picture per channel or ROI
-                    # **********************************************
-                    if pics_param['group_sel'] | pics_param['cohort_sel']:
-                        # Save figure for a group and a channel.
-                        if pics_param['group_sel']:
-                            fig_save = 'group_sel'
+                        fig_save = False
+                    
+                    # Only call plotting function if we need to save group figure
+                    if fig_save:
+                        self._save_group_chan_fig_psa(psa_data_ch_sel, \
+                            pics_param, file_name, chan_label, fig_save, colors_param['group_sel'])
+                        self._log_manager.log(self.identifier, \
+                            f"Images are generated for the file {file_name} and channel/ROI {ch}.")
+                    
+                    # Accumulate full DataFrame for cohort analysis
+                    if pics_param['cohort_sel']:
+                        if chan_label in psa_data_per_chan.keys():
+                            psa_data_per_chan[chan_label].append(\
+                                [psa_data_ch_sel, file_group_name])
                         else:
-                            fig_save = False
-                        
-                        # Only call plotting function if we need to save group figure
-                        if fig_save:
-                            self._save_group_chan_fig_psa(psa_data_ch_sel, \
-                                pics_param, file_name, chan_label, fig_save, colors_param['group_sel'])
-                            self._log_manager.log(self.identifier, \
-                                f"Images are generated for the file {file_name} and channel/ROI {ch}.")
-                        
-                        # Accumulate full DataFrame for cohort analysis
-                        if pics_param['cohort_sel']:
-                            if chan_label in psa_data_per_chan.keys():
-                                psa_data_per_chan[chan_label].append(\
-                                    [psa_data_ch_sel, file_group_name])
-                            else:
-                                psa_data_per_chan[chan_label] = \
-                                    [[psa_data_ch_sel, file_group_name]]
+                            psa_data_per_chan[chan_label] = \
+                                [[psa_data_ch_sel, file_group_name]]
 
-                    if pics_param['group_avg'] | pics_param['cohort_avg']:
-                        if psa_data_ch_sel is not None and len(psa_data_ch_sel) > 0:
-                            psa_data_all_chan.append(psa_data_ch_sel) # psa_data_all_chan is a list of DataFrame
+                if pics_param['group_avg'] | pics_param['cohort_avg']:
+                    if psa_data_ch_sel is not None and len(psa_data_ch_sel) > 0:
+                        psa_data_all_chan.append(psa_data_ch_sel) # psa_data_all_chan is a list of DataFrame
 
             # **********************************************
             # One figure for the current group : one picture for all channels
@@ -319,6 +316,30 @@ class PSAPicsGenerator(SciNode):
 
         return {
         }
+
+    def _get_selected_channels_for_subject(self, chans_ROIs_sel, psa_data_subject):
+        """
+        Resolve selected channel/ROI labels for the current subject file.
+
+        Supports:
+        - per-subject format: {subject_id: {channel_or_roi: bool}}
+        - legacy flat format: {channel_or_roi: bool}
+        """
+        if not chans_ROIs_sel:
+            return []
+
+        first_val = next(iter(chans_ROIs_sel.values()))
+        if isinstance(first_val, dict):
+            subject_ids = psa_data_subject['filename'].dropna().unique().tolist()
+            selected = []
+            for subject_id in subject_ids:
+                subject_sel = chans_ROIs_sel.get(subject_id, {})
+                for ch, is_selected in subject_sel.items():
+                    if is_selected and ch not in selected:
+                        selected.append(ch)
+            return selected
+
+        return [ch for ch, is_selected in chans_ROIs_sel.items() if is_selected]
 
     def extract_psa_data_ch(self, psa_data_subject, ch, ROIs_def):
         """

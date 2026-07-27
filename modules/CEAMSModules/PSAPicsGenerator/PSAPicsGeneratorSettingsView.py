@@ -793,24 +793,29 @@ class PSAPicsGeneratorSettingsView(BaseSettingsView, Ui_PSAPicsGeneratorSettings
             self._pub_sub_manager.unsubscribe(self, self._colors_param_topic)
 
     def _create_chans_ROIs_sel_dict(self):
-        """Create the chans_ROIs_sel dictionary from subject_chans_label and ROIs_subjects"""
+        """Create per-subject chans_ROIs_sel from subject_chans_label and ROIs_subjects.
+
+        Format: {subject_id: {channel_or_roi_label: True, ...}, ...}
+        Only checked items are stored for each subject.
+        """
         chans_ROIs_sel = {}
-        
-        # Add individual channels from subject_chans_label
+
         for subject, chan_data in self.subject_chans_label.items():
+            subject_sel = {}
             if len(chan_data) >= 3:  # [original_chan_labels, modified_chan_labels, states]
                 chan_labels = chan_data[1]  # modified channel labels
                 chan_states = chan_data[2]  # selection states
                 for i, chan_label in enumerate(chan_labels):
                     if chan_states[i]:
-                        chans_ROIs_sel[chan_label] = True
-        
-        # Add ROIs from ROIs_subjects
-        for subject, roi_list in self.ROIs_subjects.items():
-            for roi_label, roi_state in roi_list:
-                if roi_state:
-                    chans_ROIs_sel[roi_label] = True
-        
+                        subject_sel[chan_label] = True
+
+            if subject in self.ROIs_subjects:
+                for roi_label, roi_state in self.ROIs_subjects[subject]:
+                    if roi_state:
+                        subject_sel[roi_label] = True
+
+            chans_ROIs_sel[subject] = subject_sel
+
         return chans_ROIs_sel
 
     def _initialize_ROIs_from_cohort(self):
@@ -833,81 +838,67 @@ class PSAPicsGeneratorSettingsView(BaseSettingsView, Ui_PSAPicsGeneratorSettings
                     self.ROIs_subjects[subject].append([roi_name, True])
 
     def _process_stored_chans_ROIs_sel(self):
-        """Process the stored chans_ROIs_sel data to populate ROIs_subjects and update channel states"""
+        """Restore per-subject channel/ROI check states from saved chans_ROIs_sel."""
         if not self._stored_chans_ROIs_sel:
             self.message_textEdit.append("No stored channel/ROI selections to process")
             return
-            
-        self.message_textEdit.append(f"Processing {len(self._stored_chans_ROIs_sel)} stored selections...")
-        self.message_textEdit.append(f"Available subjects: {list(self.subject_chans_label.keys())}")
-        roi_count = 0
-        channel_count = 0
 
-        # Saved selection only lists checked items. Channel/ROI states are
-        # initialized to True when files are loaded, so clear them first and
-        # re-check only what was stored.
+        self.message_textEdit.append(f"Processing stored selections for {len(self._stored_chans_ROIs_sel)} entries...")
+        self.message_textEdit.append(f"Available subjects: {list(self.subject_chans_label.keys())}")
+
+        # Saved selection only lists checked items. Defaults are all checked on load,
+        # so clear first, then restore only what was stored.
         for chan_data in self.subject_chans_label.values():
             if len(chan_data) >= 3:
                 chan_data[self.chan_state_col][:] = [False] * len(chan_data[self.chan_state_col])
         for subject in self.ROIs_subjects:
             for roi in self.ROIs_subjects[subject]:
                 roi[1] = False
-        
-        # First, collect all ROIs that need to be processed
-        rois_to_process = []
-        channels_to_process = []
-        
-        for chan_or_roi, is_selected in self._stored_chans_ROIs_sel.items():
-            if is_selected:
-                if 'ROI' in chan_or_roi.upper():
-                    rois_to_process.append(chan_or_roi)
-                else:
-                    channels_to_process.append(chan_or_roi)
-        
-        # Process all ROIs for all subjects
-        if rois_to_process:
-            self.message_textEdit.append(f"Processing {len(rois_to_process)} ROIs: {rois_to_process}")
-            roi_count = len(rois_to_process)
-            
-            # Ensure all subjects have ROIs_subjects entry
+
+        first_val = next(iter(self._stored_chans_ROIs_sel.values()))
+        per_subject = isinstance(first_val, dict)
+
+        if per_subject:
+            for subject, subject_sel in self._stored_chans_ROIs_sel.items():
+                if subject not in self.subject_chans_label:
+                    continue
+                self._apply_subject_channel_selection(subject, subject_sel)
+        else:
+            # Legacy flat format {channel: True}: apply the same selection to all subjects
+            self.message_textEdit.append("Legacy flat channel selection detected; applying to all subjects")
             for subject in self.subject_chans_label.keys():
-                if subject not in self.ROIs_subjects:
-                    self.ROIs_subjects[subject] = []
-            
-            # Add each ROI to all subjects
-            for roi_name in rois_to_process:
-                self.message_textEdit.append(f"Processing ROI: {roi_name}")
-                for subject in self.subject_chans_label.keys():
-                    # Check if ROI already exists for this subject
-                    roi_exists = False
-                    for existing_roi in self.ROIs_subjects[subject]:
-                        if existing_roi[0] == roi_name:
-                            existing_roi[1] = True  # Set as selected
-                            roi_exists = True
-                            break
-                    if not roi_exists:
-                        self.ROIs_subjects[subject].append([roi_name, True])
-                        self.message_textEdit.append(f"Added ROI {roi_name} to subject {subject}")
-        
-        # Process all channels
-        if channels_to_process:
-            self.message_textEdit.append(f"Processing {len(channels_to_process)} channels: {channels_to_process}")
-            channel_count = len(channels_to_process)
-            
-            for chan_name in channels_to_process:
-                self.message_textEdit.append(f"Processing channel: {chan_name}")
-                for subject, chan_data in self.subject_chans_label.items():
-                    if len(chan_data) >= 3:
-                        chan_labels = chan_data[1]  # modified channel labels
-                        chan_states = chan_data[2]  # selection states
-                        for i, chan_label in enumerate(chan_labels):
-                            if chan_label == chan_name:
-                                chan_states[i] = True
-                                self.message_textEdit.append(f"Selected channel {chan_name} for subject {subject}")
-                                break
-        
-        self.message_textEdit.append(f"Processed {roi_count} ROIs and {channel_count} channels")
+                self._apply_subject_channel_selection(subject, self._stored_chans_ROIs_sel)
+
         self.message_textEdit.append(f"Final ROIs_subjects: {self.ROIs_subjects}")
+
+    def _apply_subject_channel_selection(self, subject, subject_sel):
+        """Apply a {channel_or_roi: bool} selection map to one subject."""
+        if not subject_sel:
+            return
+
+        chan_data = self.subject_chans_label.get(subject)
+        if chan_data is not None and len(chan_data) >= 3:
+            chan_labels = chan_data[1]
+            chan_states = chan_data[2]
+            for i, chan_label in enumerate(chan_labels):
+                if subject_sel.get(chan_label, False):
+                    chan_states[i] = True
+                    self.message_textEdit.append(f"Selected channel {chan_label} for subject {subject}")
+
+        for chan_or_roi, is_selected in subject_sel.items():
+            if not is_selected or 'ROI' not in str(chan_or_roi).upper():
+                continue
+            if subject not in self.ROIs_subjects:
+                self.ROIs_subjects[subject] = []
+            roi_exists = False
+            for existing_roi in self.ROIs_subjects[subject]:
+                if existing_roi[0] == chan_or_roi:
+                    existing_roi[1] = True
+                    roi_exists = True
+                    break
+            if not roi_exists:
+                self.ROIs_subjects[subject].append([chan_or_roi, True])
+                self.message_textEdit.append(f"Added ROI {chan_or_roi} to subject {subject}")
 
 
     def _debug_print_state(self):
