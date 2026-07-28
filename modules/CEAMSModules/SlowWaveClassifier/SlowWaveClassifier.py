@@ -268,6 +268,8 @@ class SlowWaveClassifier(SciNode):
         else:
             self.MIN_DISTRIBUTIONS = int(num_categories)
             self.MAX_DISTRIBUTIONS = int(num_categories)
+
+        sw_cohort_df = self._prevalidate_inputs(sw_char_files, sw_stages_files, sw_cohort_file)
         
         #-----------------------------------------
         # Read slow wave characteristics from each file in sw_char_files
@@ -276,10 +278,6 @@ class SlowWaveClassifier(SciNode):
             # self.slow_wave_df is a concatenation of all slow wave characteristics
             # self.slow_wave_list is a list of all slow wave characteristics (one item per filename)
         self.read_slow_wave_characteristics(sw_char_files)
-
-        # Read sw_cohort_file
-        # Read the csv file and convert the content into a Data Frame
-        sw_cohort_df = pd.read_csv(sw_cohort_file, delimiter='\t', header=0, encoding='utf-8')        
 
         # Get data for gaussian mixture ready
         tfr_data = self.slow_wave_df['trans_freq_Hz'].tolist()
@@ -391,6 +389,148 @@ class SlowWaveClassifier(SciNode):
             self.slow_wave_list.append(slow_wave_df)
             self.slow_wave_df = pd.concat([self.slow_wave_df, slow_wave_df])
             self.slow_wave_df.reset_index(drop=True, inplace=True)
+
+
+    def _prevalidate_inputs(self, sw_char_files, sw_stages_files, sw_cohort_file):
+        """
+        Validate cross-input consistency early to fail with explicit errors.
+
+        Returns
+        -----------
+            sw_cohort_df : pandas.DataFrame
+                Parsed cohort dataframe reused by compute.
+        """
+
+        if len(sw_char_files) == 0:
+            raise NodeInputException(self.identifier, "sw_char_files", "SlowWaveClassifier requires at least one sw_char file.")
+
+        if len(sw_stages_files) == 0:
+            raise NodeInputException(self.identifier, "sw_stages_files", "SlowWaveClassifier requires at least one sw_stages file.")
+
+        missing_sw_char_files = [path for path in sw_char_files if not os.path.exists(path)]
+        if len(missing_sw_char_files) > 0:
+            raise NodeInputException(
+                self.identifier,
+                "sw_char_files",
+                "SlowWaveClassifier could not find sw_char files: " + ", ".join(missing_sw_char_files)
+            )
+
+        missing_sw_stages_files = [path for path in sw_stages_files if not os.path.exists(path)]
+        if len(missing_sw_stages_files) > 0:
+            raise NodeInputException(
+                self.identifier,
+                "sw_stages_files",
+                "SlowWaveClassifier could not find sw_stages files: " + ", ".join(missing_sw_stages_files)
+            )
+
+        if not os.path.exists(sw_cohort_file):
+            raise NodeInputException(
+                self.identifier,
+                "sw_cohort_file",
+                f"SlowWaveClassifier could not find sw_cohort_file: {sw_cohort_file}"
+            )
+
+        try:
+            sw_cohort_df = pd.read_csv(sw_cohort_file, delimiter='\t', header=0, encoding='utf-8')
+        except Exception as exc:
+            raise NodeInputException(
+                self.identifier,
+                "sw_cohort_file",
+                f"SlowWaveClassifier could not read sw_cohort_file: {sw_cohort_file}. {str(exc)}"
+            )
+
+        required_cohort_cols = ['sw_event_name', 'filename', 'chan_label', 'total_valid_min', 'recording_min', 'sleep_period_min']
+        missing_cohort_cols = [col for col in required_cohort_cols if col not in sw_cohort_df.columns]
+        if len(missing_cohort_cols) > 0:
+            raise NodeInputException(
+                self.identifier,
+                "sw_cohort_file",
+                "SlowWaveClassifier sw_cohort_file is missing required columns: " + ", ".join(missing_cohort_cols)
+            )
+
+        cycle_cols = [f'cyc{i_cycle+1}_valid_min' for i_cycle in range(self.N_CYCLES)]
+        missing_cycle_cols = [col for col in cycle_cols if col not in sw_cohort_df.columns]
+        if len(missing_cycle_cols) > 0:
+            raise NodeInputException(
+                self.identifier,
+                "sw_cohort_file",
+                "SlowWaveClassifier sw_cohort_file is missing cycle columns required by report_constants[N_CYCLES]: "
+                + ", ".join(missing_cycle_cols)
+            )
+
+        sw_event_names = [str(name) for name in sw_cohort_df['sw_event_name'].dropna().unique().tolist()]
+        if len(sw_event_names) != 1:
+            raise NodeInputException(
+                self.identifier,
+                "sw_cohort_file",
+                "SlowWaveClassifier expects exactly one non-empty sw_event_name in sw_cohort_file. "
+                + f"Found {len(sw_event_names)}: {sw_event_names}"
+            )
+        sw_event_name = sw_event_names[0]
+
+        stage_files_by_basename = {}
+        for stages_path in sw_stages_files:
+            stage_base_name = os.path.basename(stages_path)
+            if stage_base_name not in stage_files_by_basename:
+                stage_files_by_basename[stage_base_name] = []
+            stage_files_by_basename[stage_base_name].append(stages_path)
+
+        cohort_filenames = set(sw_cohort_df['filename'].dropna().astype(str).tolist())
+        validation_errors = []
+
+        for sw_char_path in sw_char_files:
+            sw_char_base_name = os.path.splitext(os.path.basename(sw_char_path))[0]
+            sw_event_suffix = f'_{sw_event_name}'
+            if sw_char_base_name.endswith(sw_event_suffix):
+                cohort_recording_name = sw_char_base_name[:-len(sw_event_suffix)]
+            else:
+                cohort_recording_name = sw_char_base_name
+
+            if cohort_recording_name not in cohort_filenames:
+                validation_errors.append(
+                    f"Missing cohort row for recording '{cohort_recording_name}' derived from sw_char file '{sw_char_path}'"
+                )
+
+            expected_stages_file = f"{sw_char_base_name}_stages.tsv"
+            matching_stage_files = stage_files_by_basename.get(expected_stages_file, [])
+            if len(matching_stage_files) == 0:
+                validation_errors.append(
+                    f"Missing stages file '{expected_stages_file}' for sw_char file '{sw_char_path}'"
+                )
+            elif len(matching_stage_files) > 1:
+                validation_errors.append(
+                    f"Multiple stages files found for '{expected_stages_file}': {matching_stage_files}"
+                )
+
+            try:
+                sw_char_df = pd.read_csv(sw_char_path, delimiter='\t', header=0, encoding='utf-8')
+            except Exception as exc:
+                validation_errors.append(f"Could not read sw_char file '{sw_char_path}': {str(exc)}")
+                continue
+
+            if 'channels' not in sw_char_df.columns:
+                validation_errors.append(
+                    f"sw_char file '{sw_char_path}' is missing required column 'channels'"
+                )
+                continue
+
+            cohort_rows = sw_cohort_df[sw_cohort_df['filename'].astype(str) == cohort_recording_name]
+            cohort_channel_labels = set(cohort_rows['chan_label'].dropna().astype(str).tolist())
+            sw_char_channels = set(sw_char_df['channels'].dropna().astype(str).tolist())
+            missing_channels = sorted([chan for chan in sw_char_channels if chan not in cohort_channel_labels])
+            if len(missing_channels) > 0:
+                validation_errors.append(
+                    f"Missing chan_label in sw_cohort_file for recording '{cohort_recording_name}': {missing_channels}"
+                )
+
+        if len(validation_errors) > 0:
+            raise NodeRuntimeException(
+                self.identifier,
+                "sw_char_files",
+                "SlowWaveClassifier input consistency validation failed:\n- " + "\n- ".join(validation_errors)
+            )
+
+        return sw_cohort_df
 
 
     # Write the information in self.slow_wave_list to each file of the sw_char_files list
