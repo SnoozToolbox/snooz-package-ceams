@@ -12,9 +12,12 @@ class EventManager:
         self.parent = parent_widget
 
     def save_annotations(self, selected_non_brain_channels, marked_bad_chs, bad_epoch_idxs, 
-                        input_dir, overwrite_checked, 
-                        start_time, duration, epoch_dur, epochs, selected_montage):
-        """Save artifact annotations to the original input file with proper incomplete epoch handling""" 
+                        input_dir, start_time, duration, epoch_dur, epochs, selected_montage):
+        """Save artifact annotations to the original input file.
+
+        Always replaces existing EEG Inspector events (group art_inspector with
+        names non_brain, art_channel, art_epoch). Other annotations are left unchanged.
+        """
         
         # Calculate proper durations for bad epochs
         epoch_durations = []
@@ -80,28 +83,23 @@ class EventManager:
         else:
             new_events = pd.DataFrame()
 
-        if not new_events.empty or overwrite_checked:
-            # Open file for writing
-            is_opened, error = self.parent._psg_reader_manager.open_file(output_file)
-            if not is_opened:
-                error_message = error if error is not None else f'ERROR PSGWriter could not open file: {output_file}'
-                self._show_error_message(error_message)
-                return
+        # Open file for writing
+        is_opened, error = self.parent._psg_reader_manager.open_file(output_file)
+        if not is_opened:
+            error_message = error if error is not None else f'ERROR PSGWriter could not open file: {output_file}'
+            self._show_error_message(error_message)
+            return
 
-        # Remove EEG inspector events if overwrite is checked
-        # Remove any existing event with the group EVENT_GROUP_NAME, 
-        #   and the name EVENT_NAME_NON_BRAIN = 'non_brain', EVENT_NAME_BAD_CHANNEL = 'art_channel' or EVENT_NAME_BAD_EPOCH = 'art_epoch'
-        if overwrite_checked:
-            events_to_remove = set()
-            events_to_remove.add((EVENT_GROUP_NAME, EVENT_NAME_NON_BRAIN))
-            events_to_remove.add((EVENT_GROUP_NAME, EVENT_NAME_BAD_CHANNEL))
-            events_to_remove.add((EVENT_GROUP_NAME, EVENT_NAME_BAD_EPOCH))
-            for (group_name, event_name) in events_to_remove:
-                self.parent._psg_reader_manager.remove_events_by_name(event_name, group_name)   
+        # Always remove existing EEG Inspector events before writing the new set
+        events_to_remove = {
+            (EVENT_GROUP_NAME, EVENT_NAME_NON_BRAIN),
+            (EVENT_GROUP_NAME, EVENT_NAME_BAD_CHANNEL),
+            (EVENT_GROUP_NAME, EVENT_NAME_BAD_EPOCH),
+        }
+        for group_name, event_name in events_to_remove:
+            self.parent._psg_reader_manager.remove_events_by_name(event_name, group_name)
 
-        # Continue with existing save logic...
         if not new_events.empty:
-            # Add new events (still need to handle duplicated events)
             for index, event in new_events.iterrows():
                 self.parent._psg_reader_manager.add_event(
                     name=event['name'],
@@ -111,12 +109,11 @@ class EventManager:
                     channels=event['channels'],
                     montage_index=selected_montage
                 )
-        
-            self.parent._psg_reader_manager.save_file()
-            self.parent._psg_reader_manager.close_file()
 
-        # Show success message
-        self._show_info_message("Events saved")
+        self.parent._psg_reader_manager.save_file()
+        self.parent._psg_reader_manager.close_file()
+
+        self._show_info_message("EEG Inspector events saved.")
 
     def _show_error_message(self, message):
         """Show error message dialog"""

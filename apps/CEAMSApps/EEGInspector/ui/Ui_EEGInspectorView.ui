@@ -35,7 +35,7 @@
    <item>
     <widget class="QStackedWidget" name="StackedWidget">
      <property name="currentIndex">
-      <number>1</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="Page1">
       <layout class="QVBoxLayout" name="verticalLayout">
@@ -674,7 +674,11 @@ li.checked::marker { content: &quot;\2612&quot;; }
          </property>
          <property name="text">
           <string>EEG visual inspection is complete. The Power Spectral Density (PSD) is displayed without bad channels or epochs.
-If you are satisfied with the results, save the artifact inspector events to exclude them from future analyses.</string>
+If you are satisfied with the results, click Save.
+Any previous EEG Inspector annotations will be replaced with the new ones.</string>
+         </property>
+         <property name="wordWrap">
+          <bool>true</bool>
          </property>
         </widget>
        </item>
@@ -720,44 +724,6 @@ If you are satisfied with the results, save the artifact inspector events to exc
           </size>
          </property>
         </spacer>
-       </item>
-       <item>
-        <layout class="QHBoxLayout" name="horizontalLayout_5">
-         <item>
-          <spacer name="horizontalSpacer_5">
-           <property name="orientation">
-            <enum>Qt::Orientation::Horizontal</enum>
-           </property>
-           <property name="sizeHint" stdset="0">
-            <size>
-             <width>40</width>
-             <height>20</height>
-            </size>
-           </property>
-          </spacer>
-         </item>
-         <item>
-          <widget class="QCheckBox" name="checkBox_overwrite">
-           <property name="font">
-            <font>
-             <family>Roboto</family>
-             <pointsize>12</pointsize>
-             <italic>false</italic>
-             <bold>false</bold>
-            </font>
-           </property>
-           <property name="layoutDirection">
-            <enum>Qt::LayoutDirection::RightToLeft</enum>
-           </property>
-           <property name="text">
-            <string>Check here if you want to delete old events with the same group and name and replace the new ones</string>
-           </property>
-           <property name="checked">
-            <bool>true</bool>
-           </property>
-          </widget>
-         </item>
-        </layout>
        </item>
        <item>
         <layout class="QHBoxLayout" name="horizontalLayout_42">

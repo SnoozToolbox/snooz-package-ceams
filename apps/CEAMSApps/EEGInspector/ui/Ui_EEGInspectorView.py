@@ -15,10 +15,10 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QFont, QFontDatabase, QGradient, QIcon,
     QImage, QKeySequence, QLinearGradient, QPainter,
     QPalette, QPixmap, QRadialGradient, QTransform)
-from PySide6.QtWidgets import (QApplication, QCheckBox, QComboBox, QFrame,
-    QHBoxLayout, QLabel, QLayout, QLineEdit,
-    QPushButton, QSizePolicy, QSpacerItem, QStackedWidget,
-    QTextEdit, QVBoxLayout, QWidget)
+from PySide6.QtWidgets import (QApplication, QComboBox, QFrame, QHBoxLayout,
+    QLabel, QLayout, QLineEdit, QPushButton,
+    QSizePolicy, QSpacerItem, QStackedWidget, QTextEdit,
+    QVBoxLayout, QWidget)
 import themes_rc
 
 class Ui_EEGInspectorView(object):
@@ -331,6 +331,7 @@ class Ui_EEGInspectorView(object):
         self.desc_label41 = QLabel(self.Page4)
         self.desc_label41.setObjectName(u"desc_label41")
         self.desc_label41.setFont(font)
+        self.desc_label41.setWordWrap(True)
 
         self.verticalLayout_4.addWidget(self.desc_label41)
 
@@ -354,23 +355,6 @@ class Ui_EEGInspectorView(object):
         self.verticalSpacer = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
 
         self.verticalLayout_4.addItem(self.verticalSpacer)
-
-        self.horizontalLayout_5 = QHBoxLayout()
-        self.horizontalLayout_5.setObjectName(u"horizontalLayout_5")
-        self.horizontalSpacer_5 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
-
-        self.horizontalLayout_5.addItem(self.horizontalSpacer_5)
-
-        self.checkBox_overwrite = QCheckBox(self.Page4)
-        self.checkBox_overwrite.setObjectName(u"checkBox_overwrite")
-        self.checkBox_overwrite.setFont(font)
-        self.checkBox_overwrite.setLayoutDirection(Qt.LayoutDirection.RightToLeft)
-        self.checkBox_overwrite.setChecked(True)
-
-        self.horizontalLayout_5.addWidget(self.checkBox_overwrite)
-
-
-        self.verticalLayout_4.addLayout(self.horizontalLayout_5)
 
         self.horizontalLayout_42 = QHBoxLayout()
         self.horizontalLayout_42.setObjectName(u"horizontalLayout_42")
@@ -401,7 +385,7 @@ class Ui_EEGInspectorView(object):
 
         self.retranslateUi(EEGInspectorView)
 
-        self.StackedWidget.setCurrentIndex(1)
+        self.StackedWidget.setCurrentIndex(0)
 
 
         QMetaObject.connectSlotsByName(EEGInspectorView)
@@ -464,8 +448,8 @@ class Ui_EEGInspectorView(object):
         self.desc_label_33.setText(QCoreApplication.translate("EEGInspectorView", u"Click on \"Next\" once your selection is finished.", None))
         self.NextButton3.setText(QCoreApplication.translate("EEGInspectorView", u"Next", None))
         self.desc_label41.setText(QCoreApplication.translate("EEGInspectorView", u"EEG visual inspection is complete. The Power Spectral Density (PSD) is displayed without bad channels or epochs.\n"
-"If you are satisfied with the results, save the artifact inspector events to exclude them from future analyses.", None))
-        self.checkBox_overwrite.setText(QCoreApplication.translate("EEGInspectorView", u"Check here if you want to delete old events with the same group and name and replace the new ones", None))
+"If you are satisfied with the results, click Save.\n"
+"Any previous EEG Inspector annotations will be replaced with the new ones.", None))
         self.BackButton4.setText(QCoreApplication.translate("EEGInspectorView", u"Back", None))
         self.SaveButton.setText(QCoreApplication.translate("EEGInspectorView", u"save", None))
     # retranslateUi

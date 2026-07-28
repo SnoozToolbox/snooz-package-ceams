@@ -428,14 +428,19 @@ class EEGInspectorView(Ui_EEGInspectorView, QWidget):
             epochs.drop(bad_epochs, reason='USER')
             # Mark the epochs as clean only
             epochs.drop_bad()
+
+            # Auto-save PSD of the cleaned signal next to the input file
+            subject_name = self.file_name_label1.text() or os.path.splitext(os.path.basename(self.input_dir))[0]
+            psd_path = os.path.join(os.path.dirname(self.input_dir), f"{subject_name}_PSD.png")
+            self.psd_visualizer.save_psd(psd_path)
             
             # Use EventManager to save annotations to the original input file
+            # Existing art_inspector events are always replaced
             self.event_manager.save_annotations(
                 selected_non_brain_channels=self.selected_non_brain_channels,
                 marked_bad_chs=self.bad_channels,
                 bad_epoch_idxs=bad_epochs,
                 input_dir=self.input_dir,
-                overwrite_checked=self.checkBox_overwrite.isChecked(),
                 start_time=self._start_time,
                 duration=self._duration,
                 epoch_dur=self.epoch_processor.epoch_dur,

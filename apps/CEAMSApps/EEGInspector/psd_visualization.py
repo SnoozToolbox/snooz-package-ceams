@@ -1,5 +1,6 @@
 """PSD visualization components"""
 
+import os
 from PySide6.QtWidgets import QWidget, QVBoxLayout
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from .constants import PSD_FMAX_HZ
@@ -47,6 +48,20 @@ class PSDVisualizer:
         # Setup canvas in placeholder
         placeholder4 = self.parent.findChild(QWidget, "figure_placeholder4")
         self._setup_canvas_in_placeholder(placeholder4, self.canvas_psd)
+
+    def save_psd(self, output_path):
+        """Save the current PSD figure to output_path (e.g. subject_PSD.png)."""
+        figure = None
+        if self.canvas_psd is not None:
+            figure = self.canvas_psd.figure
+        elif self.psd_plot is not None and hasattr(self.psd_plot, 'canvas'):
+            figure = self.psd_plot.canvas.figure
+
+        if figure is None:
+            raise RuntimeError("No PSD figure available to save.")
+
+        os.makedirs(os.path.dirname(output_path) or '.', exist_ok=True)
+        figure.savefig(output_path, dpi=150, bbox_inches='tight')
 
     def _setup_canvas_in_placeholder(self, placeholder, canvas):
         """Setup canvas widget in placeholder"""
