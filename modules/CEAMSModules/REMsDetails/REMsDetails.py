@@ -770,8 +770,8 @@ class REMsDetails(SciNode):
                 hour_rems_stats[f'{hour_label}_{stage}_rems_density'] = np.NaN
                 hour_rems_stats[f'{hour_label}_{stage}_phasic_pct'] = np.NaN
                 hour_rems_stats[f'{hour_label}_{stage}_tonic_pct'] = np.NaN
-                hour_rems_stats[f'{hour_label}_{stage}_Energy_PkPk_uvs'] = np.NaN
-                hour_rems_stats[f'{hour_label}_{stage}_PkPk_REMs_Activity_Index'] = np.NaN
+                hour_rems_stats[f'{hour_label}_{stage}_energy_pkpk_uv2'] = np.NaN
+                hour_rems_stats[f'{hour_label}_{stage}_pkpk_rems_activity_index'] = np.NaN
 
         # Calculate variance of densities across clock hours using R stage densities
         density_values = [hour_rems_stats.get(f'clock_h{i+1}_R_rems_density', np.nan) 
@@ -922,8 +922,8 @@ class REMsDetails(SciNode):
                 stage_hour_rems_stats[f'{hour_label}_{stage_label}_rems_density'] = np.NaN
                 stage_hour_rems_stats[f'{hour_label}_{stage_label}_phasic_pct'] = np.NaN
                 stage_hour_rems_stats[f'{hour_label}_{stage_label}_tonic_pct'] = np.NaN
-                stage_hour_rems_stats[f'{hour_label}_{stage_label}_Energy_PkPk_uvs'] = np.NaN
-                stage_hour_rems_stats[f'{hour_label}_{stage_label}_PkPk_REMs_Activity_Index'] = np.NaN
+                stage_hour_rems_stats[f'{hour_label}_{stage_label}_energy_pkpk_uv2'] = np.NaN
+                stage_hour_rems_stats[f'{hour_label}_{stage_label}_pkpk_rems_activity_index'] = np.NaN
             
             # Compute total statistics for this hour (same as R since REMs only occur in R)
             # Apply window segmentation for totals
@@ -1077,8 +1077,8 @@ class REMsDetails(SciNode):
         Compute peak-to-peak REM energy statistics from amplitude_uV.
 
         Per-event energy is defined as amplitude_uV squared (µV²).
-        Energy_PkPk_uvs is the average per-event energy.
-        PkPk_REMs_Activity_Index is the sum of all per-event energies.
+        energy_pkpk_uv2 is the average per-event energy.
+        pkpk_rems_activity_index is the sum of all per-event energies.
 
         Parameters
         -----------
@@ -1096,8 +1096,8 @@ class REMsDetails(SciNode):
             energy_stats : dict
                 Average energy and activity index for the given stage and time window.
         """""
-        energy_key = f'{label_stats}_{stage}_Energy_PkPk_uvs'
-        activity_key = f'{label_stats}_{stage}_PkPk_REMs_Activity_Index'
+        energy_key = f'{label_stats}_{stage}_energy_pkpk_uv2'
+        activity_key = f'{label_stats}_{stage}_pkpk_rems_activity_index'
         rem_stage_num = int(sleep_stages_name[stage])
 
         if len(rems_df) > 0 and 'Stage' in rems_df.columns:
