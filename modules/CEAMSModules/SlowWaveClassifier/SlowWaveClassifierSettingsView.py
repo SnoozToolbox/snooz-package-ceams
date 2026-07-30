@@ -39,8 +39,10 @@ class SlowWaveClassifierSettingsView( BaseSettingsView,  Ui_SlowWaveClassifierSe
         """
         
         self._pub_sub_manager.publish(self, self._automatic_classification_topic, 'ping')
+        self._pub_sub_manager.publish(self, self._num_categories_topic, 'ping')
+
     # Slot called when user changes the radiobutton to activate categories selection
-    def on_input_format_changed(self, checked):
+    def on_input_format_changed(self):
         if self.radioButton_automatic_classification.isChecked():
             self.num_categories_spinBox.setEnabled(False)
             self.categories_label.setEnabled(False)
@@ -64,13 +66,12 @@ class SlowWaveClassifierSettingsView( BaseSettingsView,  Ui_SlowWaveClassifierSe
     def on_topic_response(self, topic, message, sender):
         if topic == self._automatic_classification_topic:
             self.radioButton_automatic_classification.setChecked(eval(message))
+            self.radioButton_categories.setChecked(not eval(message))
             # Update UI state after setting the radio button
-            self.on_input_format_changed(None)
+            self.on_input_format_changed()
         if topic == self._num_categories_topic:
             self.num_categories_spinBox.setValue(int(message))
-            self.radioButton_automatic_classification.setChecked(eval(message))
-        if topic == self._num_categories_topic:
-            self.num_categories_spinBox.setValue(int(message))
+            self.on_input_format_changed()
         
 
    # Called when the user delete an instance of the plugin

@@ -15,9 +15,10 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QFont, QFontDatabase, QGradient, QIcon,
     QImage, QKeySequence, QLinearGradient, QPainter,
     QPalette, QPixmap, QRadialGradient, QTransform)
-from PySide6.QtWidgets import (QApplication, QFormLayout, QFrame, QHBoxLayout,
-    QLabel, QRadioButton, QSizePolicy, QSpacerItem,
-    QSpinBox, QTextEdit, QVBoxLayout, QWidget)
+from PySide6.QtWidgets import (QApplication, QButtonGroup, QFormLayout, QFrame,
+    QHBoxLayout, QLabel, QRadioButton, QSizePolicy,
+    QSpacerItem, QSpinBox, QTextEdit, QVBoxLayout,
+    QWidget)
 import themes_rc
 
 class Ui_SlowWaveClassifierSettingsView(object):
@@ -44,17 +45,14 @@ class Ui_SlowWaveClassifierSettingsView(object):
         self.textEdit.setLineWidth(0)
         self.textEdit.setReadOnly(True)
 
-        self.formLayout.setWidget(1, QFormLayout.SpanningRole, self.textEdit)
-
-        self.radioButton_automatic_classification = QRadioButton(SlowWaveClassifierSettingsView)
-        self.radioButton_automatic_classification.setObjectName(u"radioButton_automatic_classification")
-        self.radioButton_automatic_classification.setChecked(True)
-
-        self.formLayout.setWidget(3, QFormLayout.SpanningRole, self.radioButton_automatic_classification)
+        self.formLayout.setWidget(2, QFormLayout.SpanningRole, self.textEdit)
 
         self.horizontalLayout_2 = QHBoxLayout()
         self.horizontalLayout_2.setObjectName(u"horizontalLayout_2")
         self.radioButton_categories = QRadioButton(SlowWaveClassifierSettingsView)
+        self.buttonGroup = QButtonGroup(SlowWaveClassifierSettingsView)
+        self.buttonGroup.setObjectName(u"buttonGroup")
+        self.buttonGroup.addButton(self.radioButton_categories)
         self.radioButton_categories.setObjectName(u"radioButton_categories")
 
         self.horizontalLayout_2.addWidget(self.radioButton_categories)
@@ -79,11 +77,18 @@ class Ui_SlowWaveClassifierSettingsView(object):
         self.horizontalLayout_2.addItem(self.horizontalSpacer)
 
 
-        self.formLayout.setLayout(4, QFormLayout.SpanningRole, self.horizontalLayout_2)
+        self.formLayout.setLayout(5, QFormLayout.SpanningRole, self.horizontalLayout_2)
 
         self.verticalSpacer_2 = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
 
-        self.formLayout.setItem(5, QFormLayout.LabelRole, self.verticalSpacer_2)
+        self.formLayout.setItem(6, QFormLayout.LabelRole, self.verticalSpacer_2)
+
+        self.radioButton_automatic_classification = QRadioButton(SlowWaveClassifierSettingsView)
+        self.buttonGroup.addButton(self.radioButton_automatic_classification)
+        self.radioButton_automatic_classification.setObjectName(u"radioButton_automatic_classification")
+        self.radioButton_automatic_classification.setChecked(True)
+
+        self.formLayout.setWidget(4, QFormLayout.LabelRole, self.radioButton_automatic_classification)
 
 
         self.verticalLayout.addLayout(self.formLayout)
@@ -109,8 +114,8 @@ class Ui_SlowWaveClassifierSettingsView(object):
 "li.checked::marker { content: \"\\2612\"; }\n"
 "</style></head><body style=\" font-family:'Roboto'; font-size:12pt; font-weight:400; font-style:normal;\">\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">For an automatic classification, you can keep the parameters as they are. If you want to specify the number of categories, please uncheck the automatic classification option and change the number in the box for the number of categories desired.</p></body></html>", None))
-        self.radioButton_automatic_classification.setText(QCoreApplication.translate("SlowWaveClassifierSettingsView", u"Classify sleep slow waves automatically with a gaussian mixture and Akaike Criterion Information (AIC)", None))
         self.radioButton_categories.setText(QCoreApplication.translate("SlowWaveClassifierSettingsView", u"Specify the number of categories                          ", None))
         self.categories_label.setText(QCoreApplication.translate("SlowWaveClassifierSettingsView", u"Number of sleep slow waves categories               ", None))
+        self.radioButton_automatic_classification.setText(QCoreApplication.translate("SlowWaveClassifierSettingsView", u"Classify sleep slow waves automatically with a gaussian mixture and Akaike Criterion Information (AIC)", None))
     # retranslateUi
 
