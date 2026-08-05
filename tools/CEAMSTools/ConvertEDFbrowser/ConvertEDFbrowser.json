@@ -6,7 +6,7 @@
     "item_author": "Karine Lacourse",
     "item_description": "\"To convert the EDFbrowser .txt accessory files to Snooz accessory tsv file.\"",
     "tool_params": {
-        "tool_version": "2.1.0",
+        "tool_version": "2.2.0",
         "tool_label": "Convert Annotations from EDFbrowser",
         "tool_category": "1-Preprocessing",
         "asset_directory": "",
