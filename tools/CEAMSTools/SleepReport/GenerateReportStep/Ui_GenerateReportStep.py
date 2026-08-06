@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file ''
+## Form generated from reading UI file 'Ui_GenerateReportStep.ui'
 ##
 ## Created by: Qt User Interface Compiler version 6.8.2
 ##
@@ -24,7 +24,7 @@ class Ui_GenerateReportStep(object):
     def setupUi(self, GenerateReportStep):
         if not GenerateReportStep.objectName():
             GenerateReportStep.setObjectName(u"GenerateReportStep")
-        GenerateReportStep.resize(731, 590)
+        GenerateReportStep.resize(839, 590)
         self.verticalLayout = QVBoxLayout(GenerateReportStep)
         self.verticalLayout.setSpacing(6)
         self.verticalLayout.setObjectName(u"verticalLayout")
@@ -42,6 +42,8 @@ class Ui_GenerateReportStep(object):
         self.horizontalLayout.setObjectName(u"horizontalLayout")
         self.label = QLabel(GenerateReportStep)
         self.label.setObjectName(u"label")
+        self.label.setMouseTracking(True)
+        self.label.setAcceptDrops(True)
 
         self.horizontalLayout.addWidget(self.label)
 
@@ -62,6 +64,8 @@ class Ui_GenerateReportStep(object):
         self.horizontalLayout_2.setObjectName(u"horizontalLayout_2")
         self.label_3 = QLabel(GenerateReportStep)
         self.label_3.setObjectName(u"label_3")
+        self.label_3.setMouseTracking(True)
+        self.label_3.setAcceptDrops(True)
 
         self.horizontalLayout_2.addWidget(self.label_3)
 
@@ -80,7 +84,7 @@ class Ui_GenerateReportStep(object):
 
         self.event_report_listwidget = QListWidget(GenerateReportStep)
         self.event_report_listwidget.setObjectName(u"event_report_listwidget")
-        self.event_report_listwidget.setEditTriggers(QAbstractItemView.CurrentChanged|QAbstractItemView.DoubleClicked|QAbstractItemView.EditKeyPressed)
+        self.event_report_listwidget.setEditTriggers(QAbstractItemView.EditTrigger.CurrentChanged|QAbstractItemView.EditTrigger.DoubleClicked|QAbstractItemView.EditTrigger.EditKeyPressed)
         self.event_report_listwidget.setAlternatingRowColors(True)
 
         self.verticalLayout.addWidget(self.event_report_listwidget)
@@ -108,14 +112,20 @@ class Ui_GenerateReportStep(object):
         GenerateReportStep.setStyleSheet(QCoreApplication.translate("GenerateReportStep", u"font: 12pt \"Roboto\";", None))
         self.label_5.setText(QCoreApplication.translate("GenerateReportStep", u"<html><head/><body><p><span style=\" font-weight:600;\">Sleep Report</span></p></body></html>", None))
         self.csv_report_checkbox.setText(QCoreApplication.translate("GenerateReportStep", u"Generate the TSV report : distribution of sleep stages and transitions between different sleep stages.", None))
-        self.label.setText(QCoreApplication.translate("GenerateReportStep", u"Output directory", None))
 #if QT_CONFIG(tooltip)
-        self.output_lineedit.setToolTip(QCoreApplication.translate("GenerateReportStep", u"Choose the output directory for all the reports to generate.", None))
+        self.label.setToolTip(QCoreApplication.translate("GenerateReportStep", u"Choose the output directory for all the reports to generate.", None))
+#endif // QT_CONFIG(tooltip)
+        self.label.setText(QCoreApplication.translate("GenerateReportStep", u"Output directory     ", None))
+#if QT_CONFIG(tooltip)
+        self.output_lineedit.setToolTip("")
 #endif // QT_CONFIG(tooltip)
         self.choose_pushbutton.setText(QCoreApplication.translate("GenerateReportStep", u"Choose", None))
-        self.label_3.setText(QCoreApplication.translate("GenerateReportStep", u"Report prefix", None))
 #if QT_CONFIG(tooltip)
-        self.prefix_lineedit.setToolTip(QCoreApplication.translate("GenerateReportStep", u"Label added to each report to identify your reports.", None))
+        self.label_3.setToolTip(QCoreApplication.translate("GenerateReportStep", u"Label added to each report to identify your reports.", None))
+#endif // QT_CONFIG(tooltip)
+        self.label_3.setText(QCoreApplication.translate("GenerateReportStep", u"Report prefix     ", None))
+#if QT_CONFIG(tooltip)
+        self.prefix_lineedit.setToolTip("")
 #endif // QT_CONFIG(tooltip)
         self.label_2.setText(QCoreApplication.translate("GenerateReportStep", u"<html><head/><body><p>List of <span style=\" font-weight:600;\">Events Reports</span> to generate (distribution of events by sleep stage, cycle, and thirds and halves of the night)</p></body></html>", None))
         self.label_4.setText(QCoreApplication.translate("GenerateReportStep", u"<html><head/><body><p>List of <span style=\" font-weight:600;\">Temporal Links Reports</span> to generate (occurrence of event 1 starting before the start of event 2)</p></body></html>", None))

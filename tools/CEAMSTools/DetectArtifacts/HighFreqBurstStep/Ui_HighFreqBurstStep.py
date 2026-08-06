@@ -9,23 +9,22 @@
 ################################################################################
 
 from PySide6.QtCore import (QCoreApplication, QDate, QDateTime, QLocale,
-        QMetaObject, QObject, QPoint,
+    QMetaObject, QObject, QPoint, QRect,
     QSize, QTime, QUrl, Qt)
 from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QFont, QFontDatabase, QGradient, QIcon,
     QImage, QKeySequence, QLinearGradient, QPainter,
     QPalette, QPixmap, QRadialGradient, QTransform)
-from PySide6.QtWidgets import (QApplication, QFormLayout, QFrame, QGridLayout,
-    QHBoxLayout, QLabel, QLayout, QLineEdit,
-        QSizePolicy, QSpacerItem, QTextEdit,
-    QVBoxLayout, QWidget)
+from PySide6.QtWidgets import (QApplication, QFrame, QGridLayout, QHBoxLayout,
+    QLabel, QLayout, QLineEdit, QSizePolicy,
+    QSpacerItem, QTextEdit, QVBoxLayout, QWidget)
 import themes_rc
 
 class Ui_HighFreqBurstStep(object):
     def setupUi(self, HighFreqBurstStep):
         if not HighFreqBurstStep.objectName():
             HighFreqBurstStep.setObjectName(u"HighFreqBurstStep")
-        HighFreqBurstStep.resize(734, 535)
+        HighFreqBurstStep.resize(991, 742)
         HighFreqBurstStep.setStyleSheet(u"font: 12pt \"Roboto\";")
         self.verticalLayout_2 = QVBoxLayout(HighFreqBurstStep)
         self.verticalLayout_2.setObjectName(u"verticalLayout_2")
@@ -43,6 +42,7 @@ class Ui_HighFreqBurstStep(object):
         self.label_10.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
         self.horizontalLayout.addWidget(self.label_10)
+
 
         self.verticalLayout_2.addWidget(self.widget)
 
@@ -82,48 +82,60 @@ class Ui_HighFreqBurstStep(object):
 
         self.horizontalLayout_3 = QHBoxLayout()
         self.horizontalLayout_3.setObjectName(u"horizontalLayout_3")
-        self.formLayout = QFormLayout()
-        self.formLayout.setObjectName(u"formLayout")
+        self.gridLayout_3 = QGridLayout()
+        self.gridLayout_3.setObjectName(u"gridLayout_3")
+        self.horizontalSpacer_2 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+
+        self.gridLayout_3.addItem(self.horizontalSpacer_2, 1, 2, 1, 1)
+
         self.label_3 = QLabel(HighFreqBurstStep)
         self.label_3.setObjectName(u"label_3")
-        self.label_3.setMinimumSize(QSize(140, 0))
-        self.label_3.setMaximumSize(QSize(210, 16777215))
-        self.label_3.setFont(font)
-
-        self.formLayout.setWidget(0, QFormLayout.LabelRole, self.label_3)
-
-        self.group_lineEdit = QLineEdit(HighFreqBurstStep)
-        self.group_lineEdit.setObjectName(u"group_lineEdit")
-        self.group_lineEdit.setEnabled(False)
-        sizePolicy1 = QSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Fixed)
+        sizePolicy1 = QSizePolicy(QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Preferred)
         sizePolicy1.setHorizontalStretch(0)
         sizePolicy1.setVerticalStretch(0)
-        sizePolicy1.setHeightForWidth(self.group_lineEdit.sizePolicy().hasHeightForWidth())
-        self.group_lineEdit.setSizePolicy(sizePolicy1)
-        self.group_lineEdit.setMinimumSize(QSize(500, 0))
-        self.group_lineEdit.setMaximumSize(QSize(500, 16777215))
+        sizePolicy1.setHeightForWidth(self.label_3.sizePolicy().hasHeightForWidth())
+        self.label_3.setSizePolicy(sizePolicy1)
+        self.label_3.setMinimumSize(QSize(110, 0))
+        self.label_3.setMaximumSize(QSize(80, 16777215))
+        self.label_3.setFont(font)
 
-        self.formLayout.setWidget(0, QFormLayout.FieldRole, self.group_lineEdit)
+        self.gridLayout_3.addWidget(self.label_3, 0, 0, 1, 1)
 
         self.label_7 = QLabel(HighFreqBurstStep)
         self.label_7.setObjectName(u"label_7")
-        self.label_7.setMinimumSize(QSize(140, 0))
+        sizePolicy1.setHeightForWidth(self.label_7.sizePolicy().hasHeightForWidth())
+        self.label_7.setSizePolicy(sizePolicy1)
+        self.label_7.setMinimumSize(QSize(110, 0))
+        self.label_7.setMaximumSize(QSize(80, 16777215))
         self.label_7.setFont(font)
 
-        self.formLayout.setWidget(1, QFormLayout.LabelRole, self.label_7)
+        self.gridLayout_3.addWidget(self.label_7, 1, 0, 1, 1)
 
         self.name_burst_lineEdit = QLineEdit(HighFreqBurstStep)
         self.name_burst_lineEdit.setObjectName(u"name_burst_lineEdit")
         self.name_burst_lineEdit.setEnabled(False)
-        sizePolicy1.setHeightForWidth(self.name_burst_lineEdit.sizePolicy().hasHeightForWidth())
-        self.name_burst_lineEdit.setSizePolicy(sizePolicy1)
+        sizePolicy2 = QSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Fixed)
+        sizePolicy2.setHorizontalStretch(0)
+        sizePolicy2.setVerticalStretch(0)
+        sizePolicy2.setHeightForWidth(self.name_burst_lineEdit.sizePolicy().hasHeightForWidth())
+        self.name_burst_lineEdit.setSizePolicy(sizePolicy2)
         self.name_burst_lineEdit.setMinimumSize(QSize(500, 0))
         self.name_burst_lineEdit.setMaximumSize(QSize(500, 16777215))
 
-        self.formLayout.setWidget(1, QFormLayout.FieldRole, self.name_burst_lineEdit)
+        self.gridLayout_3.addWidget(self.name_burst_lineEdit, 1, 1, 1, 1)
+
+        self.group_lineEdit = QLineEdit(HighFreqBurstStep)
+        self.group_lineEdit.setObjectName(u"group_lineEdit")
+        self.group_lineEdit.setEnabled(False)
+        sizePolicy2.setHeightForWidth(self.group_lineEdit.sizePolicy().hasHeightForWidth())
+        self.group_lineEdit.setSizePolicy(sizePolicy2)
+        self.group_lineEdit.setMinimumSize(QSize(500, 0))
+        self.group_lineEdit.setMaximumSize(QSize(500, 16777215))
+
+        self.gridLayout_3.addWidget(self.group_lineEdit, 0, 1, 1, 1)
 
 
-        self.horizontalLayout_3.addLayout(self.formLayout)
+        self.horizontalLayout_3.addLayout(self.gridLayout_3)
 
 
         self.verticalLayout.addLayout(self.horizontalLayout_3)
@@ -149,22 +161,27 @@ class Ui_HighFreqBurstStep(object):
         self.gridLayout = QGridLayout()
         self.gridLayout.setObjectName(u"gridLayout")
         self.gridLayout.setSizeConstraint(QLayout.SizeConstraint.SetFixedSize)
-        self.label_5 = QLabel(HighFreqBurstStep)
-        self.label_5.setObjectName(u"label_5")
-        sizePolicy1.setHeightForWidth(self.label_5.sizePolicy().hasHeightForWidth())
-        self.label_5.setSizePolicy(sizePolicy1)
-        self.label_5.setMinimumSize(QSize(140, 0))
-        self.label_5.setMaximumSize(QSize(315, 16777215))
-        self.label_5.setFont(font)
-        self.label_5.setMidLineWidth(0)
-        self.label_5.setTextFormat(Qt.TextFormat.RichText)
+        self.label_11 = QLabel(HighFreqBurstStep)
+        self.label_11.setObjectName(u"label_11")
+        sizePolicy2.setHeightForWidth(self.label_11.sizePolicy().hasHeightForWidth())
+        self.label_11.setSizePolicy(sizePolicy2)
+        self.label_11.setMaximumSize(QSize(315, 16777215))
+        self.label_11.setFont(font)
 
-        self.gridLayout.addWidget(self.label_5, 0, 0, 1, 1)
+        self.gridLayout.addWidget(self.label_11, 2, 0, 1, 1)
+
+        self.label_14 = QLabel(HighFreqBurstStep)
+        self.label_14.setObjectName(u"label_14")
+        sizePolicy2.setHeightForWidth(self.label_14.sizePolicy().hasHeightForWidth())
+        self.label_14.setSizePolicy(sizePolicy2)
+        self.label_14.setMaximumSize(QSize(220, 16777215))
+
+        self.gridLayout.addWidget(self.label_14, 2, 2, 1, 1)
 
         self.tresh_fixe_lineEdit = QLineEdit(HighFreqBurstStep)
         self.tresh_fixe_lineEdit.setObjectName(u"tresh_fixe_lineEdit")
-        sizePolicy1.setHeightForWidth(self.tresh_fixe_lineEdit.sizePolicy().hasHeightForWidth())
-        self.tresh_fixe_lineEdit.setSizePolicy(sizePolicy1)
+        sizePolicy2.setHeightForWidth(self.tresh_fixe_lineEdit.sizePolicy().hasHeightForWidth())
+        self.tresh_fixe_lineEdit.setSizePolicy(sizePolicy2)
         self.tresh_fixe_lineEdit.setMinimumSize(QSize(0, 0))
         self.tresh_fixe_lineEdit.setMaximumSize(QSize(100, 16777215))
 
@@ -172,16 +189,38 @@ class Ui_HighFreqBurstStep(object):
 
         self.label_12 = QLabel(HighFreqBurstStep)
         self.label_12.setObjectName(u"label_12")
-        sizePolicy1.setHeightForWidth(self.label_12.sizePolicy().hasHeightForWidth())
-        self.label_12.setSizePolicy(sizePolicy1)
+        sizePolicy2.setHeightForWidth(self.label_12.sizePolicy().hasHeightForWidth())
+        self.label_12.setSizePolicy(sizePolicy2)
         self.label_12.setMaximumSize(QSize(220, 16777215))
 
         self.gridLayout.addWidget(self.label_12, 0, 2, 1, 1)
 
+        self.thresh_adp_lineEdit = QLineEdit(HighFreqBurstStep)
+        self.thresh_adp_lineEdit.setObjectName(u"thresh_adp_lineEdit")
+        sizePolicy2.setHeightForWidth(self.thresh_adp_lineEdit.sizePolicy().hasHeightForWidth())
+        self.thresh_adp_lineEdit.setSizePolicy(sizePolicy2)
+        self.thresh_adp_lineEdit.setMaximumSize(QSize(100, 16777215))
+
+        self.gridLayout.addWidget(self.thresh_adp_lineEdit, 1, 1, 1, 1)
+
+        self.label_15 = QLabel(HighFreqBurstStep)
+        self.label_15.setObjectName(u"label_15")
+        self.label_15.setMouseTracking(True)
+
+        self.gridLayout.addWidget(self.label_15, 0, 0, 1, 1)
+
+        self.label_13 = QLabel(HighFreqBurstStep)
+        self.label_13.setObjectName(u"label_13")
+        sizePolicy2.setHeightForWidth(self.label_13.sizePolicy().hasHeightForWidth())
+        self.label_13.setSizePolicy(sizePolicy2)
+        self.label_13.setMaximumSize(QSize(220, 16777215))
+
+        self.gridLayout.addWidget(self.label_13, 1, 2, 1, 1)
+
         self.label_2 = QLabel(HighFreqBurstStep)
         self.label_2.setObjectName(u"label_2")
-        sizePolicy1.setHeightForWidth(self.label_2.sizePolicy().hasHeightForWidth())
-        self.label_2.setSizePolicy(sizePolicy1)
+        sizePolicy2.setHeightForWidth(self.label_2.sizePolicy().hasHeightForWidth())
+        self.label_2.setSizePolicy(sizePolicy2)
         self.label_2.setMinimumSize(QSize(210, 0))
         self.label_2.setMaximumSize(QSize(315, 16777215))
         self.label_2.setFont(font)
@@ -189,46 +228,17 @@ class Ui_HighFreqBurstStep(object):
 
         self.gridLayout.addWidget(self.label_2, 1, 0, 1, 1)
 
-        self.thresh_adp_lineEdit = QLineEdit(HighFreqBurstStep)
-        self.thresh_adp_lineEdit.setObjectName(u"thresh_adp_lineEdit")
-        sizePolicy1.setHeightForWidth(self.thresh_adp_lineEdit.sizePolicy().hasHeightForWidth())
-        self.thresh_adp_lineEdit.setSizePolicy(sizePolicy1)
-        self.thresh_adp_lineEdit.setMaximumSize(QSize(100, 16777215))
-
-        self.gridLayout.addWidget(self.thresh_adp_lineEdit, 1, 1, 1, 1)
-
-        self.label_13 = QLabel(HighFreqBurstStep)
-        self.label_13.setObjectName(u"label_13")
-        sizePolicy1.setHeightForWidth(self.label_13.sizePolicy().hasHeightForWidth())
-        self.label_13.setSizePolicy(sizePolicy1)
-        self.label_13.setMaximumSize(QSize(220, 16777215))
-
-        self.gridLayout.addWidget(self.label_13, 1, 2, 1, 1)
-
-        self.label_11 = QLabel(HighFreqBurstStep)
-        self.label_11.setObjectName(u"label_11")
-        sizePolicy1.setHeightForWidth(self.label_11.sizePolicy().hasHeightForWidth())
-        self.label_11.setSizePolicy(sizePolicy1)
-        self.label_11.setMaximumSize(QSize(315, 16777215))
-        self.label_11.setFont(font)
-
-        self.gridLayout.addWidget(self.label_11, 2, 0, 1, 1)
-
         self.thresh_ratio_lineEdit = QLineEdit(HighFreqBurstStep)
         self.thresh_ratio_lineEdit.setObjectName(u"thresh_ratio_lineEdit")
-        sizePolicy1.setHeightForWidth(self.thresh_ratio_lineEdit.sizePolicy().hasHeightForWidth())
-        self.thresh_ratio_lineEdit.setSizePolicy(sizePolicy1)
+        sizePolicy2.setHeightForWidth(self.thresh_ratio_lineEdit.sizePolicy().hasHeightForWidth())
+        self.thresh_ratio_lineEdit.setSizePolicy(sizePolicy2)
         self.thresh_ratio_lineEdit.setMaximumSize(QSize(100, 16777215))
 
         self.gridLayout.addWidget(self.thresh_ratio_lineEdit, 2, 1, 1, 1)
 
-        self.label_14 = QLabel(HighFreqBurstStep)
-        self.label_14.setObjectName(u"label_14")
-        sizePolicy1.setHeightForWidth(self.label_14.sizePolicy().hasHeightForWidth())
-        self.label_14.setSizePolicy(sizePolicy1)
-        self.label_14.setMaximumSize(QSize(220, 16777215))
+        self.horizontalSpacer = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
 
-        self.gridLayout.addWidget(self.label_14, 2, 2, 1, 1)
+        self.gridLayout.addItem(self.horizontalSpacer, 2, 3, 1, 1)
 
 
         self.verticalLayout.addLayout(self.gridLayout)
@@ -285,30 +295,39 @@ class Ui_HighFreqBurstStep(object):
 "via spectral power (STFT :  Short Term Fourier Transform).\n"
 "A glitch or a noise burst may be caused by a bad connection of the electrode.", None))
         self.label_4.setText(QCoreApplication.translate("HighFreqBurstStep", u"<html><head/><body><p><span style=\" font-weight:700;\">Event Settings</span></p></body></html>", None))
-        self.label_3.setText(QCoreApplication.translate("HighFreqBurstStep", u"Event Group", None))
 #if QT_CONFIG(tooltip)
-        self.group_lineEdit.setToolTip(QCoreApplication.translate("HighFreqBurstStep", u"In which \"Event Group\" the detected artifact are added (how they will be written to  the annotation file). Go to the general Detectors Settings to edit the group.", None))
+        self.label_3.setToolTip(QCoreApplication.translate("HighFreqBurstStep", u"In which \"Event Group\" the detected artifact are added (how they will be written to  the annotation file). Go to the general Detectors Settings to edit the group.", None))
 #endif // QT_CONFIG(tooltip)
-        self.group_lineEdit.setText(QCoreApplication.translate("HighFreqBurstStep", u"art_snooz", None))
+        self.label_3.setText(QCoreApplication.translate("HighFreqBurstStep", u"<html><head/><body><p>Event Group</p></body></html>", None))
+#if QT_CONFIG(tooltip)
+        self.label_7.setToolTip(QCoreApplication.translate("HighFreqBurstStep", u"The event name of the detected artifact (how they will be wrtten to the annotation file).  Go to the general Detectors Settings to edit the name.", None))
+#endif // QT_CONFIG(tooltip)
         self.label_7.setText(QCoreApplication.translate("HighFreqBurstStep", u"Event Name", None))
 #if QT_CONFIG(tooltip)
-        self.name_burst_lineEdit.setToolTip(QCoreApplication.translate("HighFreqBurstStep", u"The event name of the detected artifact (how they will be wrtten to the annotation file).  Go to the general Detectors Settings to edit the name.", None))
+        self.name_burst_lineEdit.setToolTip("")
 #endif // QT_CONFIG(tooltip)
         self.name_burst_lineEdit.setText(QCoreApplication.translate("HighFreqBurstStep", u"art_snooz", None))
+#if QT_CONFIG(tooltip)
+        self.group_lineEdit.setToolTip("")
+#endif // QT_CONFIG(tooltip)
+        self.group_lineEdit.setText(QCoreApplication.translate("HighFreqBurstStep", u"art_snooz", None))
         self.label.setText(QCoreApplication.translate("HighFreqBurstStep", u"<html><head/><body><p><span style=\" font-weight:700;\">Thresholds</span></p></body></html>", None))
         self.label_8.setText(QCoreApplication.translate("HighFreqBurstStep", u"Artifact when A and B and C", None))
-        self.label_5.setText(QCoreApplication.translate("HighFreqBurstStep", u"<html><head/><body><p>(A) Fixed (mean + x STD) of main gaussian</p></body></html>", None))
+        self.label_11.setText(QCoreApplication.translate("HighFreqBurstStep", u"(C) Power ratio (25-64 Hz/8-64Hz)", None))
+        self.label_14.setText(QCoreApplication.translate("HighFreqBurstStep", u"optimal value from 0.05 to 0.4", None))
 #if QT_CONFIG(tooltip)
-        self.tresh_fixe_lineEdit.setToolTip(QCoreApplication.translate("HighFreqBurstStep", u"The threshold value to identify the artifact.  Its units is x times the baseline standard deviation.", None))
+        self.tresh_fixe_lineEdit.setToolTip("")
 #endif // QT_CONFIG(tooltip)
         self.tresh_fixe_lineEdit.setText(QCoreApplication.translate("HighFreqBurstStep", u"4", None))
         self.label_12.setText(QCoreApplication.translate("HighFreqBurstStep", u"optimal value from 3 to 5", None))
-        self.label_2.setText(QCoreApplication.translate("HighFreqBurstStep", u"<html><head/><body><p>(B) Adaptive (x BSL MEDIAN)</p></body></html>", None))
         self.thresh_adp_lineEdit.setText(QCoreApplication.translate("HighFreqBurstStep", u"8", None))
+#if QT_CONFIG(tooltip)
+        self.label_15.setToolTip(QCoreApplication.translate("HighFreqBurstStep", u"The threshold value to identify the artifact.  Its units is x times the baseline standard deviation.", None))
+#endif // QT_CONFIG(tooltip)
+        self.label_15.setText(QCoreApplication.translate("HighFreqBurstStep", u"(A) Fixed (mean + x STD) of main gaussian     ", None))
         self.label_13.setText(QCoreApplication.translate("HighFreqBurstStep", u"optimal value from 6 to 10", None))
-        self.label_11.setText(QCoreApplication.translate("HighFreqBurstStep", u"(C) Power ratio (25-64 Hz/8-64Hz)", None))
+        self.label_2.setText(QCoreApplication.translate("HighFreqBurstStep", u"<html><head/><body><p>(B) Adaptive (x BSL MEDIAN) </p></body></html>", None))
         self.thresh_ratio_lineEdit.setText(QCoreApplication.translate("HighFreqBurstStep", u"0.1", None))
-        self.label_14.setText(QCoreApplication.translate("HighFreqBurstStep", u"optimal value from 0.05 to 0.4", None))
         self.textEdit.setHtml(QCoreApplication.translate("HighFreqBurstStep", u"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset=\"utf-8\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"

@@ -606,7 +606,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
               <string>Enable this option for consistent axes across all pictures and define the axes limits. Otherwise, the axes are automatically determined based on the data.</string>
              </property>
              <property name="text">
-              <string>Force axis limits</string>
+              <string>Force axis limits   </string>
              </property>
             </widget>
            </item>
@@ -1102,8 +1102,8 @@ and its standard deviation in a shaded area.</string>
   <slot>out_options_slot()</slot>
  </slots>
  <buttongroups>
-  <buttongroup name="buttonGroup_section"/>
   <buttongroup name="buttonGroup_level"/>
+  <buttongroup name="buttonGroup_section"/>
   <buttongroup name="buttonGroup_display"/>
  </buttongroups>
 </ui>

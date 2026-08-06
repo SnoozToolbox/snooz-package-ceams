@@ -147,6 +147,9 @@ li.checked::marker { content: &quot;\2612&quot;; }
          <height>16777215</height>
         </size>
        </property>
+       <property name="toolTip">
+        <string>Edit the low cutoff frequency in Hz (i.e. 0.3).</string>
+       </property>
        <property name="text">
         <string>Low cutoff</string>
        </property>
@@ -161,7 +164,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
         </size>
        </property>
        <property name="toolTip">
-        <string>Edit the low cutoff frequency in Hz (i.e. 0.3).</string>
+        <string/>
        </property>
        <property name="text">
         <string>0.3</string>
@@ -192,6 +195,9 @@ li.checked::marker { content: &quot;\2612&quot;; }
          <height>16777215</height>
         </size>
        </property>
+       <property name="toolTip">
+        <string>Edit the high cutoff frequency in Hz (i.e. 100).</string>
+       </property>
        <property name="text">
         <string>High cutoff</string>
        </property>
@@ -206,7 +212,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
         </size>
        </property>
        <property name="toolTip">
-        <string>Edit the high cutoff frequency in Hz (i.e. 100).</string>
+        <string/>
        </property>
        <property name="text">
         <string>100</string>

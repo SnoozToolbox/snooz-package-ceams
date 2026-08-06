@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1045</width>
+    <width>1273</width>
     <height>923</height>
    </rect>
   </property>
@@ -118,6 +118,19 @@ for each channel or ROI are displayed.</string>
         </layout>
        </item>
        <item>
+        <spacer name="horizontalSpacer_4">
+         <property name="orientation">
+          <enum>Qt::Orientation::Horizontal</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>40</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item>
         <layout class="QVBoxLayout" name="verticalLayout_4">
          <item>
           <widget class="QLabel" name="label_10">
@@ -152,7 +165,7 @@ All SW curves are displayed.</string>
          <item>
           <widget class="QLabel" name="label_18">
            <property name="text">
-            <string>Example of a figure showing all SW detected for one channel.</string>
+            <string>Example of a figure showing all SW detected for one channel.                                                  </string>
            </property>
           </widget>
          </item>
@@ -232,83 +245,10 @@ All SW curves are displayed.</string>
          </item>
          <item>
           <layout class="QGridLayout" name="gridLayout">
-           <item row="3" column="1">
-            <widget class="QLabel" name="label_cohort_pic_all">
-             <property name="enabled">
-              <bool>true</bool>
-             </property>
-             <property name="sizePolicy">
-              <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-               <horstretch>0</horstretch>
-               <verstretch>0</verstretch>
-              </sizepolicy>
-             </property>
-             <property name="minimumSize">
-              <size>
-               <width>0</width>
-               <height>0</height>
-              </size>
-             </property>
-             <property name="maximumSize">
-              <size>
-               <width>16777215</width>
-               <height>16777215</height>
-              </size>
-             </property>
-             <property name="frameShape">
-              <enum>QFrame::Shape::NoFrame</enum>
-             </property>
-             <property name="text">
-              <string/>
-             </property>
-             <property name="scaledContents">
-              <bool>false</bool>
-             </property>
-             <property name="alignment">
-              <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter</set>
-             </property>
-            </widget>
-           </item>
-           <item row="0" column="1">
-            <widget class="QRadioButton" name="radioButton_all">
-             <property name="text">
-              <string>Display all the SW signal curves on the picture.</string>
-             </property>
-             <attribute name="buttonGroup">
-              <string notr="true">buttonGroup_mean</string>
-             </attribute>
-            </widget>
-           </item>
            <item row="1" column="0">
             <widget class="QRadioButton" name="radioButton_mean">
              <property name="text">
               <string>MEAN : Display only the mean SW curve</string>
-             </property>
-             <attribute name="buttonGroup">
-              <string notr="true">buttonGroup_mean</string>
-             </attribute>
-            </widget>
-           </item>
-           <item row="0" column="0">
-            <widget class="QRadioButton" name="radioButton_meanstd">
-             <property name="sizePolicy">
-              <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
-               <horstretch>0</horstretch>
-               <verstretch>0</verstretch>
-              </sizepolicy>
-             </property>
-             <property name="minimumSize">
-              <size>
-               <width>0</width>
-               <height>0</height>
-              </size>
-             </property>
-             <property name="text">
-              <string>MEAN + STD : Display the mean SW curve in bold line
-and the SW curve standard deviation in gray shaded area.</string>
-             </property>
-             <property name="checked">
-              <bool>true</bool>
              </property>
              <attribute name="buttonGroup">
               <string notr="true">buttonGroup_mean</string>
@@ -346,6 +286,87 @@ and the SW curve standard deviation in gray shaded area.</string>
              </property>
             </widget>
            </item>
+           <item row="2" column="2">
+            <widget class="QLabel" name="label_7">
+             <property name="text">
+              <string>Example of a figure showing the averaged SW of each recording.
+The averaged curve is computed across all channels.</string>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="0">
+            <widget class="QRadioButton" name="radioButton_meanstd">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="minimumSize">
+              <size>
+               <width>0</width>
+               <height>0</height>
+              </size>
+             </property>
+             <property name="text">
+              <string>MEAN + STD : Display the mean SW curve in bold line
+and the SW curve standard deviation in gray shaded area.</string>
+             </property>
+             <property name="checked">
+              <bool>true</bool>
+             </property>
+             <attribute name="buttonGroup">
+              <string notr="true">buttonGroup_mean</string>
+             </attribute>
+            </widget>
+           </item>
+           <item row="3" column="2">
+            <widget class="QLabel" name="label_cohort_pic_all">
+             <property name="enabled">
+              <bool>true</bool>
+             </property>
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="minimumSize">
+              <size>
+               <width>0</width>
+               <height>0</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>16777215</width>
+               <height>16777215</height>
+              </size>
+             </property>
+             <property name="frameShape">
+              <enum>QFrame::Shape::NoFrame</enum>
+             </property>
+             <property name="text">
+              <string/>
+             </property>
+             <property name="scaledContents">
+              <bool>false</bool>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter</set>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="2">
+            <widget class="QRadioButton" name="radioButton_all">
+             <property name="text">
+              <string>Display all the SW signal curves on the picture.                                                                   </string>
+             </property>
+             <attribute name="buttonGroup">
+              <string notr="true">buttonGroup_mean</string>
+             </attribute>
+            </widget>
+           </item>
            <item row="2" column="0">
             <widget class="QLabel" name="label_6">
              <property name="text">
@@ -354,13 +375,18 @@ Average and STD displayed are across the subjects of each group.</string>
              </property>
             </widget>
            </item>
-           <item row="2" column="1">
-            <widget class="QLabel" name="label_7">
-             <property name="text">
-              <string>Example of a figure showing the averaged SW of each recording.
-The averaged curve is computed across all channels.</string>
+           <item row="1" column="1">
+            <spacer name="horizontalSpacer_5">
+             <property name="orientation">
+              <enum>Qt::Orientation::Horizontal</enum>
              </property>
-            </widget>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>40</width>
+               <height>20</height>
+              </size>
+             </property>
+            </spacer>
            </item>
           </layout>
          </item>
@@ -846,7 +872,7 @@ The averaged curve is computed across all channels.</string>
   <slot>out_options_slot()</slot>
  </slots>
  <buttongroups>
-  <buttongroup name="buttonGroup_subject_pics"/>
   <buttongroup name="buttonGroup_mean"/>
+  <buttongroup name="buttonGroup_subject_pics"/>
  </buttongroups>
 </ui>

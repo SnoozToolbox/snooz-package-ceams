@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>734</width>
-    <height>535</height>
+    <width>991</width>
+    <height>742</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -18,25 +18,25 @@
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_2">
    <item>
-        <widget class="QWidget" name="widget" native="true">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <layout class="QHBoxLayout" name="horizontalLayout">
-          <item>
-           <widget class="QLabel" name="label_10">
-                <property name="text">
-                 <string/>
-                </property>
-                <property name="alignment">
-                 <set>Qt::AlignmentFlag::AlignCenter</set>
-                </property>
-           </widget>
-          </item>
-         </layout>
+    <widget class="QWidget" name="widget" native="true">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <layout class="QHBoxLayout" name="horizontalLayout">
+      <item>
+       <widget class="QLabel" name="label_10">
+        <property name="text">
+         <string/>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignmentFlag::AlignCenter</set>
+        </property>
+       </widget>
+      </item>
+     </layout>
     </widget>
    </item>
    <item>
@@ -127,71 +127,38 @@ A glitch or a noise burst may be caused by a bad connection of the electrode.</s
        <item>
         <layout class="QHBoxLayout" name="horizontalLayout_3">
          <item>
-          <layout class="QFormLayout" name="formLayout">
+          <layout class="QGridLayout" name="gridLayout_3">
+           <item row="1" column="2">
+            <spacer name="horizontalSpacer_2">
+             <property name="orientation">
+              <enum>Qt::Orientation::Horizontal</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>40</width>
+               <height>20</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
            <item row="0" column="0">
             <widget class="QLabel" name="label_3">
-             <property name="minimumSize">
-              <size>
-               <width>140</width>
-               <height>0</height>
-              </size>
-             </property>
-             <property name="maximumSize">
-              <size>
-               <width>210</width>
-               <height>16777215</height>
-              </size>
-             </property>
-             <property name="font">
-              <font>
-               <family>Roboto</family>
-               <pointsize>12</pointsize>
-               <italic>false</italic>
-               <bold>false</bold>
-              </font>
-             </property>
-             <property name="text">
-              <string>Event Group</string>
-             </property>
-            </widget>
-           </item>
-           <item row="0" column="1">
-            <widget class="QLineEdit" name="group_lineEdit">
-             <property name="enabled">
-              <bool>false</bool>
-             </property>
              <property name="sizePolicy">
-              <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+              <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
                <horstretch>0</horstretch>
                <verstretch>0</verstretch>
               </sizepolicy>
              </property>
              <property name="minimumSize">
               <size>
-               <width>500</width>
+               <width>110</width>
                <height>0</height>
               </size>
              </property>
              <property name="maximumSize">
               <size>
-               <width>500</width>
+               <width>80</width>
                <height>16777215</height>
-              </size>
-             </property>
-             <property name="toolTip">
-              <string>In which &quot;Event Group&quot; the detected artifact are added (how they will be written to  the annotation file). Go to the general Detectors Settings to edit the group.</string>
-             </property>
-             <property name="text">
-              <string>art_snooz</string>
-             </property>
-            </widget>
-           </item>
-           <item row="1" column="0">
-            <widget class="QLabel" name="label_7">
-             <property name="minimumSize">
-              <size>
-               <width>140</width>
-               <height>0</height>
               </size>
              </property>
              <property name="font">
@@ -201,6 +168,45 @@ A glitch or a noise burst may be caused by a bad connection of the electrode.</s
                <italic>false</italic>
                <bold>false</bold>
               </font>
+             </property>
+             <property name="toolTip">
+              <string>In which &quot;Event Group&quot; the detected artifact are added (how they will be written to  the annotation file). Go to the general Detectors Settings to edit the group.</string>
+             </property>
+             <property name="text">
+              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Event Group&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="0">
+            <widget class="QLabel" name="label_7">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="minimumSize">
+              <size>
+               <width>110</width>
+               <height>0</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>80</width>
+               <height>16777215</height>
+              </size>
+             </property>
+             <property name="font">
+              <font>
+               <family>Roboto</family>
+               <pointsize>12</pointsize>
+               <italic>false</italic>
+               <bold>false</bold>
+              </font>
+             </property>
+             <property name="toolTip">
+              <string>The event name of the detected artifact (how they will be wrtten to the annotation file).  Go to the general Detectors Settings to edit the name.</string>
              </property>
              <property name="text">
               <string>Event Name</string>
@@ -231,7 +237,38 @@ A glitch or a noise burst may be caused by a bad connection of the electrode.</s
               </size>
              </property>
              <property name="toolTip">
-              <string>The event name of the detected artifact (how they will be wrtten to the annotation file).  Go to the general Detectors Settings to edit the name.</string>
+              <string/>
+             </property>
+             <property name="text">
+              <string>art_snooz</string>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="1">
+            <widget class="QLineEdit" name="group_lineEdit">
+             <property name="enabled">
+              <bool>false</bool>
+             </property>
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="minimumSize">
+              <size>
+               <width>500</width>
+               <height>0</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>500</width>
+               <height>16777215</height>
+              </size>
+             </property>
+             <property name="toolTip">
+              <string/>
              </property>
              <property name="text">
               <string>art_snooz</string>
@@ -305,19 +342,13 @@ A glitch or a noise burst may be caused by a bad connection of the electrode.</s
          <property name="sizeConstraint">
           <enum>QLayout::SizeConstraint::SetFixedSize</enum>
          </property>
-         <item row="0" column="0">
-          <widget class="QLabel" name="label_5">
+         <item row="2" column="0">
+          <widget class="QLabel" name="label_11">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
              <horstretch>0</horstretch>
              <verstretch>0</verstretch>
             </sizepolicy>
-           </property>
-           <property name="minimumSize">
-            <size>
-             <width>140</width>
-             <height>0</height>
-            </size>
            </property>
            <property name="maximumSize">
             <size>
@@ -333,14 +364,27 @@ A glitch or a noise burst may be caused by a bad connection of the electrode.</s
              <bold>false</bold>
             </font>
            </property>
-           <property name="midLineWidth">
-            <number>0</number>
+           <property name="text">
+            <string>(C) Power ratio (25-64 Hz/8-64Hz)</string>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="2">
+          <widget class="QLabel" name="label_14">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>220</width>
+             <height>16777215</height>
+            </size>
            </property>
            <property name="text">
-            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;(A) Fixed (mean + x STD) of main gaussian&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-           </property>
-           <property name="textFormat">
-            <enum>Qt::TextFormat::RichText</enum>
+            <string>optimal value from 0.05 to 0.4</string>
            </property>
           </widget>
          </item>
@@ -365,7 +409,7 @@ A glitch or a noise burst may be caused by a bad connection of the electrode.</s
             </size>
            </property>
            <property name="toolTip">
-            <string>The threshold value to identify the artifact.  Its units is x times the baseline standard deviation.</string>
+            <string/>
            </property>
            <property name="text">
             <string>4</string>
@@ -388,6 +432,57 @@ A glitch or a noise burst may be caused by a bad connection of the electrode.</s
            </property>
            <property name="text">
             <string>optimal value from 3 to 5</string>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="1">
+          <widget class="QLineEdit" name="thresh_adp_lineEdit">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>100</width>
+             <height>16777215</height>
+            </size>
+           </property>
+           <property name="text">
+            <string>8</string>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="0">
+          <widget class="QLabel" name="label_15">
+           <property name="mouseTracking">
+            <bool>true</bool>
+           </property>
+           <property name="toolTip">
+            <string>The threshold value to identify the artifact.  Its units is x times the baseline standard deviation.</string>
+           </property>
+           <property name="text">
+            <string>(A) Fixed (mean + x STD) of main gaussian     </string>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="2">
+          <widget class="QLabel" name="label_13">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>220</width>
+             <height>16777215</height>
+            </size>
+           </property>
+           <property name="text">
+            <string>optimal value from 6 to 10</string>
            </property>
           </widget>
          </item>
@@ -420,75 +515,10 @@ A glitch or a noise burst may be caused by a bad connection of the electrode.</s
             </font>
            </property>
            <property name="text">
-            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;(B) Adaptive (x BSL MEDIAN)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;(B) Adaptive (x BSL MEDIAN) &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
            </property>
            <property name="textFormat">
             <enum>Qt::TextFormat::RichText</enum>
-           </property>
-          </widget>
-         </item>
-         <item row="1" column="1">
-          <widget class="QLineEdit" name="thresh_adp_lineEdit">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="maximumSize">
-            <size>
-             <width>100</width>
-             <height>16777215</height>
-            </size>
-           </property>
-           <property name="text">
-            <string>8</string>
-           </property>
-          </widget>
-         </item>
-         <item row="1" column="2">
-          <widget class="QLabel" name="label_13">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="maximumSize">
-            <size>
-             <width>220</width>
-             <height>16777215</height>
-            </size>
-           </property>
-           <property name="text">
-            <string>optimal value from 6 to 10</string>
-           </property>
-          </widget>
-         </item>
-         <item row="2" column="0">
-          <widget class="QLabel" name="label_11">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="maximumSize">
-            <size>
-             <width>315</width>
-             <height>16777215</height>
-            </size>
-           </property>
-           <property name="font">
-            <font>
-             <family>Roboto</family>
-             <pointsize>12</pointsize>
-             <italic>false</italic>
-             <bold>false</bold>
-            </font>
-           </property>
-           <property name="text">
-            <string>(C) Power ratio (25-64 Hz/8-64Hz)</string>
            </property>
           </widget>
          </item>
@@ -511,24 +541,18 @@ A glitch or a noise burst may be caused by a bad connection of the electrode.</s
            </property>
           </widget>
          </item>
-         <item row="2" column="2">
-          <widget class="QLabel" name="label_14">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
+         <item row="2" column="3">
+          <spacer name="horizontalSpacer">
+           <property name="orientation">
+            <enum>Qt::Orientation::Horizontal</enum>
            </property>
-           <property name="maximumSize">
+           <property name="sizeHint" stdset="0">
             <size>
-             <width>220</width>
-             <height>16777215</height>
+             <width>40</width>
+             <height>20</height>
             </size>
            </property>
-           <property name="text">
-            <string>optimal value from 0.05 to 0.4</string>
-           </property>
-          </widget>
+          </spacer>
          </item>
         </layout>
        </item>

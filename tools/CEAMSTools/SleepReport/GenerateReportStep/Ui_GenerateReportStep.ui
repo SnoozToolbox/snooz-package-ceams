@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>731</width>
+    <width>839</width>
     <height>590</height>
    </rect>
   </property>
@@ -38,15 +38,24 @@
     <layout class="QHBoxLayout" name="horizontalLayout">
      <item>
       <widget class="QLabel" name="label">
+       <property name="mouseTracking">
+        <bool>true</bool>
+       </property>
+       <property name="acceptDrops">
+        <bool>true</bool>
+       </property>
+       <property name="toolTip">
+        <string>Choose the output directory for all the reports to generate.</string>
+       </property>
        <property name="text">
-        <string>Output directory</string>
+        <string>Output directory     </string>
        </property>
       </widget>
      </item>
      <item>
       <widget class="QLineEdit" name="output_lineedit">
        <property name="toolTip">
-        <string>Choose the output directory for all the reports to generate.</string>
+        <string/>
        </property>
       </widget>
      </item>
@@ -63,15 +72,24 @@
     <layout class="QHBoxLayout" name="horizontalLayout_2">
      <item>
       <widget class="QLabel" name="label_3">
+       <property name="mouseTracking">
+        <bool>true</bool>
+       </property>
+       <property name="acceptDrops">
+        <bool>true</bool>
+       </property>
+       <property name="toolTip">
+        <string>Label added to each report to identify your reports.</string>
+       </property>
        <property name="text">
-        <string>Report prefix</string>
+        <string>Report prefix     </string>
        </property>
       </widget>
      </item>
      <item>
       <widget class="QLineEdit" name="prefix_lineedit">
        <property name="toolTip">
-        <string>Label added to each report to identify your reports.</string>
+        <string/>
        </property>
       </widget>
      </item>
@@ -87,7 +105,7 @@
    <item>
     <widget class="QListWidget" name="event_report_listwidget">
      <property name="editTriggers">
-      <set>QAbstractItemView::CurrentChanged|QAbstractItemView::DoubleClicked|QAbstractItemView::EditKeyPressed</set>
+      <set>QAbstractItemView::EditTrigger::CurrentChanged|QAbstractItemView::EditTrigger::DoubleClicked|QAbstractItemView::EditTrigger::EditKeyPressed</set>
      </property>
      <property name="alternatingRowColors">
       <bool>true</bool>

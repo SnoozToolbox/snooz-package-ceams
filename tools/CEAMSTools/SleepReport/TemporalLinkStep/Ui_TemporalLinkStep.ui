@@ -20,7 +20,7 @@
    <item>
     <widget class="QSplitter" name="splitter">
      <property name="orientation">
-      <enum>Qt::Horizontal</enum>
+      <enum>Qt::Orientation::Horizontal</enum>
      </property>
      <property name="childrenCollapsible">
       <bool>false</bool>
@@ -33,10 +33,10 @@
           <bool>true</bool>
          </property>
          <property name="selectionMode">
-          <enum>QAbstractItemView::SingleSelection</enum>
+          <enum>QAbstractItemView::SelectionMode::SingleSelection</enum>
          </property>
          <property name="selectionBehavior">
-          <enum>QAbstractItemView::SelectRows</enum>
+          <enum>QAbstractItemView::SelectionBehavior::SelectRows</enum>
          </property>
          <attribute name="horizontalHeaderStretchLastSection">
           <bool>true</bool>
@@ -48,7 +48,7 @@
          <item>
           <spacer name="horizontalSpacer_2">
            <property name="orientation">
-            <enum>Qt::Horizontal</enum>
+            <enum>Qt::Orientation::Horizontal</enum>
            </property>
            <property name="sizeHint" stdset="0">
             <size>
@@ -117,7 +117,7 @@
          <item>
           <spacer name="horizontalSpacer">
            <property name="orientation">
-            <enum>Qt::Horizontal</enum>
+            <enum>Qt::Orientation::Horizontal</enum>
            </property>
            <property name="sizeHint" stdset="0">
             <size>
@@ -133,7 +133,7 @@
             <string>Reset all previous selections and apply this one to all files.</string>
            </property>
            <property name="text">
-            <string>Apply to all files</string>
+            <string>   Apply to all files   </string>
            </property>
           </widget>
          </item>

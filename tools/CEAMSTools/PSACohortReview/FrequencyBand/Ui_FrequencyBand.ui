@@ -35,7 +35,7 @@
           <string>The frequency band is defined as the low bin is included and the high bin is excluded in order to avoid twice averaging the energy from the same frequency bin. </string>
          </property>
          <property name="text">
-          <string>Frequency Bins Available [low, high[ </string>
+          <string>Frequency Bins Available [low, high[      </string>
          </property>
         </widget>
        </item>

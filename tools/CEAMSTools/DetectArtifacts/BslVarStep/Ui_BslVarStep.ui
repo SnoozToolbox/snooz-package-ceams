@@ -169,16 +169,25 @@ li.checked::marker { content: &quot;\2612&quot;; }
          <item>
           <widget class="QLabel" name="label_3">
            <property name="sizePolicy">
-            <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+            <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
              <horstretch>0</horstretch>
              <verstretch>0</verstretch>
             </sizepolicy>
            </property>
            <property name="minimumSize">
             <size>
-             <width>120</width>
+             <width>110</width>
              <height>0</height>
             </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>100</width>
+             <height>16777215</height>
+            </size>
+           </property>
+           <property name="toolTip">
+            <string>In which &quot;Event Group&quot; the detected artifact are added (how they will be written to  the annotation file). Go to the general Detectors Settings to edit the group.</string>
            </property>
            <property name="text">
             <string>Event Group</string>
@@ -197,7 +206,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
             </size>
            </property>
            <property name="toolTip">
-            <string>In which &quot;Event Group&quot; the detected artifact are added (how they will be written to  the annotation file). Go to the general Detectors Settings to edit the group.</string>
+            <string/>
            </property>
            <property name="text">
             <string>art_snooz</string>
@@ -211,16 +220,25 @@ li.checked::marker { content: &quot;\2612&quot;; }
          <item>
           <widget class="QLabel" name="label_11">
            <property name="sizePolicy">
-            <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+            <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
              <horstretch>0</horstretch>
              <verstretch>0</verstretch>
             </sizepolicy>
            </property>
            <property name="minimumSize">
             <size>
-             <width>120</width>
+             <width>110</width>
              <height>0</height>
             </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>100</width>
+             <height>16777215</height>
+            </size>
+           </property>
+           <property name="toolTip">
+            <string>The event name of the detected artifact (how they will be wrtten to the annotation file).  Go to the general Detectors Settings to edit the name.</string>
            </property>
            <property name="text">
             <string>Event Name</string>
@@ -239,7 +257,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
             </size>
            </property>
            <property name="toolTip">
-            <string>The event name of the detected artifact (how they will be wrtten to the annotation file).  Go to the general Detectors Settings to edit the name.</string>
+            <string/>
            </property>
            <property name="text">
             <string>art_snooz</string>
@@ -302,9 +320,12 @@ li.checked::marker { content: &quot;\2612&quot;; }
        </property>
        <property name="minimumSize">
         <size>
-         <width>140</width>
+         <width>157</width>
          <height>0</height>
         </size>
+       </property>
+       <property name="toolTip">
+        <string>The threshold value to identify the artifact.  Its units is x times the baseline standard deviation.</string>
        </property>
        <property name="midLineWidth">
         <number>0</number>
@@ -326,7 +347,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
         </size>
        </property>
        <property name="toolTip">
-        <string>The threshold value to identify the artifact.  Its units is x times the baseline standard deviation.</string>
+        <string/>
        </property>
        <property name="text">
         <string>4</string>
@@ -343,12 +364,12 @@ li.checked::marker { content: &quot;\2612&quot;; }
        </property>
        <property name="maximumSize">
         <size>
-         <width>200</width>
+         <width>234</width>
          <height>16777215</height>
         </size>
        </property>
        <property name="text">
-        <string>optimal value from 3.5 to 5</string>
+        <string>*(optimal value from 3.5 to 5)</string>
        </property>
        <property name="alignment">
         <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter</set>

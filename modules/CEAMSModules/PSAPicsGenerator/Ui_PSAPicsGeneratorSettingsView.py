@@ -150,7 +150,7 @@ class Ui_PSAPicsGeneratorSettingsView(object):
 #if QT_CONFIG(tooltip)
         self.add_ROI_pushButton.setToolTip(QCoreApplication.translate("PSAPicsGeneratorSettingsView", u"Rename your channel labels first. Adding the ROIs must be the final step.", None))
 #endif // QT_CONFIG(tooltip)
-        self.add_ROI_pushButton.setText(QCoreApplication.translate("PSAPicsGeneratorSettingsView", u"Add ROI", None))
+        self.add_ROI_pushButton.setText(QCoreApplication.translate("PSAPicsGeneratorSettingsView", u"   Add ROI   ", None))
         self.label_4.setText(QCoreApplication.translate("PSAPicsGeneratorSettingsView", u"EEG Spectral Power File Information", None))
     # retranslateUi
 

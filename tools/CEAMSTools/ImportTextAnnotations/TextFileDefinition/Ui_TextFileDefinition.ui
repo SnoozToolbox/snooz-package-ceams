@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>755</width>
-    <height>699</height>
+    <width>1030</width>
+    <height>771</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -46,6 +46,15 @@
         <layout class="QGridLayout" name="gridLayout_3">
          <item row="0" column="0">
           <widget class="QLabel" name="label_11">
+           <property name="maximumSize">
+            <size>
+             <width>150</width>
+             <height>16777215</height>
+            </size>
+           </property>
+           <property name="toolTip">
+            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;For tabulation write \t.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+           </property>
            <property name="text">
             <string>File item separator</string>
            </property>
@@ -54,7 +63,7 @@
          <item row="0" column="1">
           <widget class="QLineEdit" name="delimiter_lineedit">
            <property name="toolTip">
-            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;For tabulation write \t.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            <string/>
            </property>
            <property name="inputMethodHints">
             <set>Qt::InputMethodHint::ImhDialableCharactersOnly</set>
@@ -69,6 +78,9 @@
          </item>
          <item row="1" column="0">
           <widget class="QLabel" name="label">
+           <property name="toolTip">
+            <string>Blank rows are skipped automatically, so do not include them in the row count to skip. This feature is important to prevent issues with files that end with blank rows.</string>
+           </property>
            <property name="text">
             <string>Number of rows to skip (reserved for the header)
 *Do not include blank rows in the count
@@ -79,7 +91,7 @@
          <item row="1" column="1">
           <widget class="QSpinBox" name="spinBox_nrows_hdr">
            <property name="toolTip">
-            <string>Blank rows are skipped automatically, so do not include them in the row count to skip. This feature is important to prevent issues with files that end with blank rows.</string>
+            <string/>
            </property>
           </widget>
          </item>
@@ -132,6 +144,157 @@
          </item>
          <item>
           <layout class="QGridLayout" name="gridLayout_2">
+           <item row="0" column="1">
+            <widget class="QRadioButton" name="sample_radiobutton">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="text">
+              <string>Samples</string>
+             </property>
+             <attribute name="buttonGroup">
+              <string notr="true">buttonGroup_2</string>
+             </attribute>
+            </widget>
+           </item>
+           <item row="3" column="0">
+            <widget class="QLabel" name="label_14">
+             <property name="text">
+              <string>Duration time format if not seconds</string>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="1">
+            <widget class="QLineEdit" name="sample_rate_lineedit">
+             <property name="enabled">
+              <bool>false</bool>
+             </property>
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="text">
+              <string>256</string>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="1">
+            <widget class="QLineEdit" name="lineEdit_onset_time_format">
+             <property name="toolTip">
+              <string/>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="0">
+            <widget class="QLabel" name="label_12">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="minimumSize">
+              <size>
+               <width>250</width>
+               <height>0</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>16777215</width>
+               <height>16777215</height>
+              </size>
+             </property>
+             <property name="toolTip">
+              <string>Let empty to define the time elapsed in seconds. Otherwise define the string format (see https://strftime.org/). </string>
+             </property>
+             <property name="text">
+              <string>Onset time format if not seconds</string>
+             </property>
+            </widget>
+           </item>
+           <item row="6" column="0" colspan="2">
+            <widget class="QTextEdit" name="textEdit">
+             <property name="frameShape">
+              <enum>QFrame::Shape::NoFrame</enum>
+             </property>
+             <property name="frameShadow">
+              <enum>QFrame::Shadow::Plain</enum>
+             </property>
+             <property name="lineWidth">
+              <number>0</number>
+             </property>
+             <property name="readOnly">
+              <bool>true</bool>
+             </property>
+             <property name="html">
+              <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;meta charset=&quot;utf-8&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+hr { height: 1px; border-width: 0; }
+li.unchecked::marker { content: &quot;\2610&quot;; }
+li.checked::marker { content: &quot;\2612&quot;; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Roboto'; font-size:12pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;For the complete definition see : https://strftime.org/&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Examples of string format code for time :&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;	%H:%M:%S             for 14:30:45&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;	%H.%M.%S             for 14.30.45&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;	%H:%M:%S.%f        for 14:30:45.123456&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;	%I:%M:%S %p        for 02:30:45 PM&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="0">
+            <widget class="QRadioButton" name="time_radiobutton">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="text">
+              <string>Time</string>
+             </property>
+             <property name="checked">
+              <bool>true</bool>
+             </property>
+             <attribute name="buttonGroup">
+              <string notr="true">buttonGroup_2</string>
+             </attribute>
+            </widget>
+           </item>
+           <item row="4" column="0">
+            <widget class="QLabel" name="label_13">
+             <property name="text">
+              <string>File encoding</string>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="0">
+            <widget class="QLabel" name="label_6">
+             <property name="layoutDirection">
+              <enum>Qt::LayoutDirection::LeftToRight</enum>
+             </property>
+             <property name="text">
+              <string>Sample rate</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter</set>
+             </property>
+            </widget>
+           </item>
+           <item row="5" column="0" colspan="2">
+            <widget class="QLabel" name="label_7">
+             <property name="text">
+              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;NOTE:&lt;/span&gt; Leave the time format empty if it is provided as seconds elapsed.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+             </property>
+            </widget>
+           </item>
            <item row="4" column="1">
             <widget class="QComboBox" name="comboBox_encoding">
              <item>
@@ -171,138 +334,8 @@
              </item>
             </widget>
            </item>
-           <item row="6" column="0" colspan="2">
-            <widget class="QTextEdit" name="textEdit">
-             <property name="frameShape">
-              <enum>QFrame::Shape::NoFrame</enum>
-             </property>
-             <property name="frameShadow">
-              <enum>QFrame::Shadow::Plain</enum>
-             </property>
-             <property name="lineWidth">
-              <number>0</number>
-             </property>
-             <property name="readOnly">
-              <bool>true</bool>
-             </property>
-             <property name="html">
-              <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
-&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;meta charset=&quot;utf-8&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
-p, li { white-space: pre-wrap; }
-hr { height: 1px; border-width: 0; }
-li.unchecked::marker { content: &quot;\2610&quot;; }
-li.checked::marker { content: &quot;\2612&quot;; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Roboto'; font-size:12pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;For the complete definition see : https://strftime.org/&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Examples of string format code for time :&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;	%H:%M:%S             for 14:30:45&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;	%H.%M.%S             for 14.30.45&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;	%H:%M:%S.%f        for 14:30:45.123456&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;	%I:%M:%S %p        for 02:30:45 PM&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-             </property>
-            </widget>
-           </item>
-           <item row="2" column="1">
-            <widget class="QLineEdit" name="lineEdit_onset_time_format">
-             <property name="toolTip">
-              <string>Let empty to define the time elapsed in seconds. Otherwise define the string format (see https://strftime.org/). </string>
-             </property>
-            </widget>
-           </item>
-           <item row="1" column="1">
-            <widget class="QLineEdit" name="sample_rate_lineedit">
-             <property name="enabled">
-              <bool>false</bool>
-             </property>
-             <property name="sizePolicy">
-              <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-               <horstretch>0</horstretch>
-               <verstretch>0</verstretch>
-              </sizepolicy>
-             </property>
-             <property name="text">
-              <string>256</string>
-             </property>
-            </widget>
-           </item>
-           <item row="4" column="0">
-            <widget class="QLabel" name="label_13">
-             <property name="text">
-              <string>File encoding</string>
-             </property>
-            </widget>
-           </item>
-           <item row="2" column="0">
-            <widget class="QLabel" name="label_12">
-             <property name="text">
-              <string>Onset time format if not seconds</string>
-             </property>
-            </widget>
-           </item>
-           <item row="0" column="1">
-            <widget class="QRadioButton" name="sample_radiobutton">
-             <property name="sizePolicy">
-              <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-               <horstretch>0</horstretch>
-               <verstretch>0</verstretch>
-              </sizepolicy>
-             </property>
-             <property name="text">
-              <string>Samples</string>
-             </property>
-             <attribute name="buttonGroup">
-              <string notr="true">buttonGroup_2</string>
-             </attribute>
-            </widget>
-           </item>
-           <item row="1" column="0">
-            <widget class="QLabel" name="label_6">
-             <property name="layoutDirection">
-              <enum>Qt::LayoutDirection::LeftToRight</enum>
-             </property>
-             <property name="text">
-              <string>Sample rate</string>
-             </property>
-             <property name="alignment">
-              <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter</set>
-             </property>
-            </widget>
-           </item>
-           <item row="3" column="0">
-            <widget class="QLabel" name="label_14">
-             <property name="text">
-              <string>Duration time format if not seconds</string>
-             </property>
-            </widget>
-           </item>
-           <item row="0" column="0">
-            <widget class="QRadioButton" name="time_radiobutton">
-             <property name="sizePolicy">
-              <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-               <horstretch>0</horstretch>
-               <verstretch>0</verstretch>
-              </sizepolicy>
-             </property>
-             <property name="text">
-              <string>Time</string>
-             </property>
-             <property name="checked">
-              <bool>true</bool>
-             </property>
-             <attribute name="buttonGroup">
-              <string notr="true">buttonGroup_2</string>
-             </attribute>
-            </widget>
-           </item>
            <item row="3" column="1">
             <widget class="QLineEdit" name="lineEdit_dur_time_format"/>
-           </item>
-           <item row="5" column="0" colspan="2">
-            <widget class="QLabel" name="label_7">
-             <property name="text">
-              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;NOTE:&lt;/span&gt; Leave the time format empty if it is provided as seconds elapsed.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-             </property>
-            </widget>
            </item>
           </layout>
          </item>
@@ -363,6 +396,9 @@ li.checked::marker { content: &quot;\2612&quot;; }
                <height>0</height>
               </size>
              </property>
+             <property name="toolTip">
+              <string/>
+             </property>
              <property name="text">
               <string>Group Label</string>
              </property>
@@ -399,6 +435,9 @@ li.checked::marker { content: &quot;\2612&quot;; }
              <property name="enabled">
               <bool>false</bool>
              </property>
+             <property name="toolTip">
+              <string>To define a default event group (when group index column is 0).</string>
+             </property>
              <property name="text">
               <string>Define a group</string>
              </property>
@@ -410,7 +449,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
               <bool>false</bool>
              </property>
              <property name="toolTip">
-              <string>To define a default event group (when group index column is 0).</string>
+              <string/>
              </property>
              <property name="placeholderText">
               <string>Define the group label for all the annotations.</string>
@@ -451,6 +490,9 @@ li.checked::marker { content: &quot;\2612&quot;; }
              <property name="enabled">
               <bool>false</bool>
              </property>
+             <property name="toolTip">
+              <string>To define a default event name (when name index column is 0).</string>
+             </property>
              <property name="text">
               <string>Define a name</string>
              </property>
@@ -468,7 +510,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
               </size>
              </property>
              <property name="toolTip">
-              <string>To define a default event name (when name index column is 0).</string>
+              <string/>
              </property>
              <property name="placeholderText">
               <string>Define the name label for all the annotations.</string>
@@ -558,8 +600,11 @@ li.checked::marker { content: &quot;\2612&quot;; }
              <property name="enabled">
               <bool>false</bool>
              </property>
+             <property name="toolTip">
+              <string>Enter a fixed duration for all events. Use the &quot;Annotation Time Format&quot; defined above.</string>
+             </property>
              <property name="text">
-              <string>Define a duration</string>
+              <string>Define a duration   </string>
              </property>
             </widget>
            </item>
@@ -569,7 +614,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
               <bool>false</bool>
              </property>
              <property name="toolTip">
-              <string>Enter a fixed duration for all events. Use the &quot;Annotation Time Format&quot; defined above.</string>
+              <string/>
              </property>
              <property name="placeholderText">
               <string>Define a duration for all the annotations.</string>
@@ -578,6 +623,15 @@ li.checked::marker { content: &quot;\2612&quot;; }
            </item>
            <item row="4" column="0">
             <widget class="QLabel" name="label_8">
+             <property name="maximumSize">
+              <size>
+               <width>90</width>
+               <height>16777215</height>
+              </size>
+             </property>
+             <property name="toolTip">
+              <string>Mark 0 if events are not channel specific (as sleep stage).</string>
+             </property>
              <property name="text">
               <string>Channels</string>
              </property>
@@ -605,7 +659,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
               </sizepolicy>
              </property>
              <property name="toolTip">
-              <string>Mark 0 if events are not channel specific (as sleep stage).</string>
+              <string/>
              </property>
              <property name="value">
               <number>5</number>

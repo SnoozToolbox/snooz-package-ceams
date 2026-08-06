@@ -317,7 +317,7 @@
             <string>Check to perform the PSA only on the signal included in the sleep cycles i.e. from sleep onset to the last asleep stage.</string>
            </property>
            <property name="text">
-            <string>Analyse power in sleep cycle only</string>
+            <string>Analyse power in sleep cycle only   </string>
            </property>
            <property name="checkable">
             <bool>true</bool>

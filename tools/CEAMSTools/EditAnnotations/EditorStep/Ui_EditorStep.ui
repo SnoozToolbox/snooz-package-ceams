@@ -20,7 +20,7 @@
    <item>
     <widget class="QSplitter" name="splitter_2">
      <property name="orientation">
-      <enum>Qt::Horizontal</enum>
+      <enum>Qt::Orientation::Horizontal</enum>
      </property>
      <widget class="QWidget" name="layoutWidget">
       <layout class="QVBoxLayout" name="verticalLayout">
@@ -30,7 +30,6 @@
           <font>
            <family>Roboto</family>
            <pointsize>12</pointsize>
-           <weight>50</weight>
            <italic>false</italic>
            <bold>false</bold>
           </font>
@@ -43,7 +42,7 @@
        <item>
         <widget class="QListView" name="file_listview">
          <property name="editTriggers">
-          <set>QAbstractItemView::NoEditTriggers</set>
+          <set>QAbstractItemView::EditTrigger::NoEditTriggers</set>
          </property>
         </widget>
        </item>
@@ -51,7 +50,7 @@
      </widget>
      <widget class="QSplitter" name="splitter">
       <property name="orientation">
-       <enum>Qt::Horizontal</enum>
+       <enum>Qt::Orientation::Horizontal</enum>
       </property>
       <widget class="QWidget" name="layoutWidget">
        <layout class="QVBoxLayout" name="verticalLayout_2">
@@ -61,7 +60,6 @@
            <font>
             <family>Roboto</family>
             <pointsize>12</pointsize>
-            <weight>50</weight>
             <italic>false</italic>
             <bold>false</bold>
            </font>
@@ -74,13 +72,13 @@
         <item>
          <widget class="QTreeView" name="treeView_subject">
           <property name="editTriggers">
-           <set>QAbstractItemView::AllEditTriggers</set>
+           <set>QAbstractItemView::EditTrigger::AllEditTriggers</set>
           </property>
           <property name="selectionMode">
-           <enum>QAbstractItemView::NoSelection</enum>
+           <enum>QAbstractItemView::SelectionMode::NoSelection</enum>
           </property>
           <property name="selectionBehavior">
-           <enum>QAbstractItemView::SelectItems</enum>
+           <enum>QAbstractItemView::SelectionBehavior::SelectItems</enum>
           </property>
          </widget>
         </item>
@@ -94,7 +92,6 @@
            <font>
             <family>Roboto</family>
             <pointsize>12</pointsize>
-            <weight>50</weight>
             <italic>false</italic>
             <bold>false</bold>
            </font>
@@ -125,7 +122,7 @@
              <string>To return to the original labels saved in the file.</string>
             </property>
             <property name="text">
-             <string>Back to original labels</string>
+             <string>   Back to original labels   </string>
             </property>
            </widget>
           </item>

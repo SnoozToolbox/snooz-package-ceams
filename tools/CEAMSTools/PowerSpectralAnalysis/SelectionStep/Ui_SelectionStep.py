@@ -286,7 +286,7 @@ class Ui_SelectionStep(object):
 #if QT_CONFIG(tooltip)
         self.in_cycle_checkBox.setToolTip(QCoreApplication.translate("SelectionStep", u"Check to perform the PSA only on the signal included in the sleep cycles i.e. from sleep onset to the last asleep stage.", None))
 #endif // QT_CONFIG(tooltip)
-        self.in_cycle_checkBox.setText(QCoreApplication.translate("SelectionStep", u"Analyse power in sleep cycle only", None))
+        self.in_cycle_checkBox.setText(QCoreApplication.translate("SelectionStep", u"Analyse power in sleep cycle only   ", None))
 #if QT_CONFIG(tooltip)
         self.excl_nremp_checkBox.setToolTip(QCoreApplication.translate("SelectionStep", u"Check to exclude NREM periods from the Power Spectral Analysis.", None))
 #endif // QT_CONFIG(tooltip)

@@ -18,44 +18,43 @@
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_2">
    <item>
-        <widget class="QWidget" name="imageWidget" native="true">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="maximumSize">
-          <size>
-           <width>16777215</width>
-           <height>160</height>
-          </size>
-         </property>
-         <layout class="QHBoxLayout" name="horizontalLayout">
-          <item>
-           <widget class="QLabel" name="picture_label">
-                <property name="sizePolicy">
-                 <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
-                  <horstretch>0</horstretch>
-                  <verstretch>0</verstretch>
-                 </sizepolicy>
-                </property>
-                <property name="maximumSize">
-                 <size>
-                  <width>16777215</width>
-                  <height>160</height>
-                 </size>
-                </property>
-                <property name="text">
-                 <string/>
-                </property>
-                <property name="text"><string/></property>
-                <property name="alignment">
-                 <set>Qt::AlignmentFlag::AlignCenter</set>
-                </property>
-           </widget>
-          </item>
-         </layout>
+    <widget class="QWidget" name="imageWidget" native="true">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="maximumSize">
+      <size>
+       <width>16777215</width>
+       <height>160</height>
+      </size>
+     </property>
+     <layout class="QHBoxLayout" name="horizontalLayout">
+      <item>
+       <widget class="QLabel" name="picture_label">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>16777215</width>
+          <height>160</height>
+         </size>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignmentFlag::AlignCenter</set>
+        </property>
+       </widget>
+      </item>
+     </layout>
     </widget>
    </item>
    <item>
@@ -383,41 +382,8 @@ li.checked::marker { content: &quot;\2612&quot;; }
          <property name="sizeConstraint">
           <enum>QLayout::SizeConstraint::SetMinimumSize</enum>
          </property>
-         <item row="0" column="0">
-          <widget class="QLabel" name="label_5">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="minimumSize">
-            <size>
-             <width>230</width>
-             <height>0</height>
-            </size>
-           </property>
-           <property name="font">
-            <font>
-             <family>Roboto</family>
-             <pointsize>12</pointsize>
-             <italic>false</italic>
-             <bold>false</bold>
-            </font>
-           </property>
-           <property name="midLineWidth">
-            <number>0</number>
-           </property>
-           <property name="text">
-            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;(A) High applied on EEG&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-           </property>
-           <property name="textFormat">
-            <enum>Qt::TextFormat::RichText</enum>
-           </property>
-          </widget>
-         </item>
-         <item row="0" column="1">
-          <widget class="QLineEdit" name="EEG_lineEdit">
+         <item row="1" column="1">
+          <widget class="QLineEdit" name="EMG_lineEdit">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
              <horstretch>0</horstretch>
@@ -438,16 +404,13 @@ li.checked::marker { content: &quot;\2612&quot;; }
              <bold>false</bold>
             </font>
            </property>
-           <property name="toolTip">
-            <string>The threshold value to identify the artifact.  Its units is x times the baseline standard deviation.</string>
-           </property>
            <property name="text">
-            <string>4.5</string>
+            <string>4</string>
            </property>
           </widget>
          </item>
-         <item row="0" column="2">
-          <widget class="QLabel" name="label_10">
+         <item row="2" column="2">
+          <widget class="QLabel" name="label_13">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
              <horstretch>0</horstretch>
@@ -461,7 +424,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
             </size>
            </property>
            <property name="text">
-            <string>optimal value from 5 to 9</string>
+            <string>*(optimal value from 4 to 6)</string>
            </property>
           </widget>
          </item>
@@ -492,8 +455,8 @@ li.checked::marker { content: &quot;\2612&quot;; }
            </property>
           </widget>
          </item>
-         <item row="1" column="1">
-          <widget class="QLineEdit" name="EMG_lineEdit">
+         <item row="0" column="1">
+          <widget class="QLineEdit" name="EEG_lineEdit">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
              <horstretch>0</horstretch>
@@ -514,37 +477,33 @@ li.checked::marker { content: &quot;\2612&quot;; }
              <bold>false</bold>
             </font>
            </property>
+           <property name="toolTip">
+            <string/>
+           </property>
            <property name="text">
-            <string>4</string>
+            <string>4.5</string>
            </property>
           </widget>
          </item>
-         <item row="1" column="2">
-          <widget class="QLabel" name="label_12">
+         <item row="0" column="0">
+          <widget class="QLabel" name="label_5">
            <property name="sizePolicy">
-            <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+            <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
              <horstretch>0</horstretch>
              <verstretch>0</verstretch>
             </sizepolicy>
+           </property>
+           <property name="minimumSize">
+            <size>
+             <width>190</width>
+             <height>0</height>
+            </size>
            </property>
            <property name="maximumSize">
             <size>
-             <width>210</width>
+             <width>190</width>
              <height>16777215</height>
             </size>
-           </property>
-           <property name="text">
-            <string>optimal value from 4 to 6</string>
-           </property>
-          </widget>
-         </item>
-         <item row="2" column="0">
-          <widget class="QLabel" name="label_6">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
            </property>
            <property name="font">
             <font>
@@ -554,8 +513,17 @@ li.checked::marker { content: &quot;\2612&quot;; }
              <bold>false</bold>
             </font>
            </property>
+           <property name="toolTip">
+            <string>The threshold value to identify the artifact.  Its units is x times the baseline standard deviation.</string>
+           </property>
+           <property name="midLineWidth">
+            <number>0</number>
+           </property>
            <property name="text">
-            <string>(C) Low applied on EEG</string>
+            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;(A) High applied on EEG&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+           </property>
+           <property name="textFormat">
+            <enum>Qt::TextFormat::RichText</enum>
            </property>
           </widget>
          </item>
@@ -586,8 +554,8 @@ li.checked::marker { content: &quot;\2612&quot;; }
            </property>
           </widget>
          </item>
-         <item row="2" column="2">
-          <widget class="QLabel" name="label_13">
+         <item row="1" column="2">
+          <widget class="QLabel" name="label_12">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
              <horstretch>0</horstretch>
@@ -601,9 +569,62 @@ li.checked::marker { content: &quot;\2612&quot;; }
             </size>
            </property>
            <property name="text">
-            <string>optimal value from 4 to 6</string>
+            <string>*(optimal value from 4 to 6)</string>
            </property>
           </widget>
+         </item>
+         <item row="0" column="2">
+          <widget class="QLabel" name="label_10">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>210</width>
+             <height>16777215</height>
+            </size>
+           </property>
+           <property name="text">
+            <string>*(optimal value from 5 to 9)</string>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="0">
+          <widget class="QLabel" name="label_6">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="font">
+            <font>
+             <family>Roboto</family>
+             <pointsize>12</pointsize>
+             <italic>false</italic>
+             <bold>false</bold>
+            </font>
+           </property>
+           <property name="text">
+            <string>(C) Low applied on EEG</string>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="3">
+          <spacer name="horizontalSpacer">
+           <property name="orientation">
+            <enum>Qt::Orientation::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
          </item>
         </layout>
        </item>
@@ -709,7 +730,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
   </layout>
  </widget>
  <resources>
-    <include location="../../../../../snooz-toolbox/src/main/python/ui/themes/themes.qrc"/>
+  <include location="../../../../../snooz-toolbox/src/main/python/ui/themes/themes.qrc"/>
  </resources>
  <connections/>
  <slots>

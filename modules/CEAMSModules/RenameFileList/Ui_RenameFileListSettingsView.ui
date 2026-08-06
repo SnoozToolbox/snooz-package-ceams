@@ -27,7 +27,7 @@
        <item>
         <spacer name="horizontalSpacer_2">
          <property name="orientation">
-          <enum>Qt::Horizontal</enum>
+          <enum>Qt::Orientation::Horizontal</enum>
          </property>
          <property name="sizeHint" stdset="0">
           <size>
@@ -53,7 +53,7 @@
        <item>
         <spacer name="horizontalSpacer_4">
          <property name="orientation">
-          <enum>Qt::Horizontal</enum>
+          <enum>Qt::Orientation::Horizontal</enum>
          </property>
          <property name="sizeHint" stdset="0">
           <size>
@@ -79,7 +79,7 @@
        <item>
         <spacer name="horizontalSpacer_3">
          <property name="orientation">
-          <enum>Qt::Horizontal</enum>
+          <enum>Qt::Orientation::Horizontal</enum>
          </property>
          <property name="sizeHint" stdset="0">
           <size>
@@ -94,10 +94,10 @@
      <item>
       <spacer name="verticalSpacer_6">
        <property name="orientation">
-        <enum>Qt::Vertical</enum>
+        <enum>Qt::Orientation::Vertical</enum>
        </property>
        <property name="sizeType">
-        <enum>QSizePolicy::Fixed</enum>
+        <enum>QSizePolicy::Policy::Fixed</enum>
        </property>
        <property name="sizeHint" stdset="0">
         <size>
@@ -119,6 +119,9 @@
              <height>0</height>
             </size>
            </property>
+           <property name="toolTip">
+            <string>e.g. tsv, txt, csv, xml, edf</string>
+           </property>
            <property name="text">
             <string>File extension of the file to rename (to filter the file list)</string>
            </property>
@@ -127,10 +130,10 @@
          <item>
           <widget class="QLineEdit" name="ext_selection_lineedit">
            <property name="toolTip">
-            <string>e.g. tsv, txt, csv, xml, edf</string>
+            <string/>
            </property>
            <property name="alignment">
-            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+            <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
            </property>
            <property name="placeholderText">
             <string>tsv</string>
@@ -144,10 +147,10 @@
      <item>
       <spacer name="verticalSpacer_5">
        <property name="orientation">
-        <enum>Qt::Vertical</enum>
+        <enum>Qt::Orientation::Vertical</enum>
        </property>
        <property name="sizeType">
-        <enum>QSizePolicy::Fixed</enum>
+        <enum>QSizePolicy::Policy::Fixed</enum>
        </property>
        <property name="sizeHint" stdset="0">
         <size>
@@ -168,6 +171,9 @@
              <width>450</width>
              <height>0</height>
             </size>
+           </property>
+           <property name="toolTip">
+            <string>e.g. keeping 9 characters renames &quot;subject01 filtered.tsv&quot; to &quot;subject01.tsv&quot;. Use -1 to keep all characters.</string>
            </property>
            <property name="text">
             <string>Number of characters to keep from the original name</string>
@@ -193,7 +199,7 @@
             <bool>false</bool>
            </property>
            <property name="toolTip">
-            <string>e.g. keeping 9 characters renames &quot;subject01 filtered.tsv&quot; to &quot;subject01.tsv&quot;. Use -1 to keep all characters.</string>
+            <string/>
            </property>
            <property name="minimum">
             <number>-1</number>
@@ -210,10 +216,10 @@
      <item>
       <spacer name="verticalSpacer_4">
        <property name="orientation">
-        <enum>Qt::Vertical</enum>
+        <enum>Qt::Orientation::Vertical</enum>
        </property>
        <property name="sizeType">
-        <enum>QSizePolicy::Fixed</enum>
+        <enum>QSizePolicy::Policy::Fixed</enum>
        </property>
        <property name="sizeHint" stdset="0">
         <size>
@@ -235,6 +241,9 @@
              <height>0</height>
             </size>
            </property>
+           <property name="toolTip">
+            <string>e.g. remove &quot;_annotations&quot; to rename &quot;subject01_annotations.txt&quot; as &quot;subject01.txt&quot;</string>
+           </property>
            <property name="text">
             <string>Pattern to remove from the original name</string>
            </property>
@@ -243,7 +252,7 @@
          <item>
           <widget class="QLineEdit" name="pattern_to_rem_lineedit">
            <property name="toolTip">
-            <string>e.g. remove &quot;_annotations&quot; to rename &quot;subject01_annotations.txt&quot; as &quot;subject01.txt&quot;</string>
+            <string/>
            </property>
           </widget>
          </item>
@@ -254,10 +263,10 @@
      <item>
       <spacer name="verticalSpacer_3">
        <property name="orientation">
-        <enum>Qt::Vertical</enum>
+        <enum>Qt::Orientation::Vertical</enum>
        </property>
        <property name="sizeType">
-        <enum>QSizePolicy::Fixed</enum>
+        <enum>QSizePolicy::Policy::Fixed</enum>
        </property>
        <property name="sizeHint" stdset="0">
         <size>
@@ -277,6 +286,9 @@
            <height>0</height>
           </size>
          </property>
+         <property name="toolTip">
+          <string>e.g. &quot;visit1_&quot; to rename &quot;subject01.tsv&quot; to &quot;visit1_subject01.tsv&quot;</string>
+         </property>
          <property name="text">
           <string>Prefix to add to the original filename</string>
          </property>
@@ -285,7 +297,7 @@
        <item>
         <widget class="QLineEdit" name="prefix_lineedit">
          <property name="toolTip">
-          <string>e.g. &quot;visit1_&quot; to rename &quot;subject01.tsv&quot; to &quot;visit1_subject01.tsv&quot;</string>
+          <string/>
          </property>
         </widget>
        </item>
@@ -294,10 +306,10 @@
      <item>
       <spacer name="verticalSpacer_2">
        <property name="orientation">
-        <enum>Qt::Vertical</enum>
+        <enum>Qt::Orientation::Vertical</enum>
        </property>
        <property name="sizeType">
-        <enum>QSizePolicy::Fixed</enum>
+        <enum>QSizePolicy::Policy::Fixed</enum>
        </property>
        <property name="sizeHint" stdset="0">
         <size>
@@ -317,6 +329,9 @@
            <height>0</height>
           </size>
          </property>
+         <property name="toolTip">
+          <string>e.g. &quot;_visit1&quot; to rename &quot;subject01.tsv&quot; to &quot;subject01_visit1.tsv&quot;</string>
+         </property>
          <property name="text">
           <string>Suffix to add to the original filename</string>
          </property>
@@ -325,7 +340,7 @@
        <item>
         <widget class="QLineEdit" name="suffix_lineedit">
          <property name="toolTip">
-          <string>e.g. &quot;_visit1&quot; to rename &quot;subject01.tsv&quot; to &quot;subject01_visit1.tsv&quot;</string>
+          <string/>
          </property>
         </widget>
        </item>
@@ -334,10 +349,10 @@
      <item>
       <spacer name="verticalSpacer_7">
        <property name="orientation">
-        <enum>Qt::Vertical</enum>
+        <enum>Qt::Orientation::Vertical</enum>
        </property>
        <property name="sizeType">
-        <enum>QSizePolicy::Fixed</enum>
+        <enum>QSizePolicy::Policy::Fixed</enum>
        </property>
        <property name="sizeHint" stdset="0">
         <size>
@@ -371,7 +386,7 @@ Check to save a copy of the file before renaming it.</string>
      <item>
       <spacer name="verticalSpacer">
        <property name="orientation">
-        <enum>Qt::Vertical</enum>
+        <enum>Qt::Orientation::Vertical</enum>
        </property>
        <property name="sizeHint" stdset="0">
         <size>

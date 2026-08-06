@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file ''
+## Form generated from reading UI file 'Ui_EditorStep.ui'
 ##
 ## Created by: Qt User Interface Compiler version 6.8.2
 ##
@@ -30,7 +30,7 @@ class Ui_EditorStep(object):
         self.verticalLayout_4.setObjectName(u"verticalLayout_4")
         self.splitter_2 = QSplitter(EditorStep)
         self.splitter_2.setObjectName(u"splitter_2")
-        self.splitter_2.setOrientation(Qt.Horizontal)
+        self.splitter_2.setOrientation(Qt.Orientation.Horizontal)
         self.layoutWidget = QWidget(self.splitter_2)
         self.layoutWidget.setObjectName(u"layoutWidget")
         self.verticalLayout = QVBoxLayout(self.layoutWidget)
@@ -49,14 +49,14 @@ class Ui_EditorStep(object):
 
         self.file_listview = QListView(self.layoutWidget)
         self.file_listview.setObjectName(u"file_listview")
-        self.file_listview.setEditTriggers(QAbstractItemView.NoEditTriggers)
+        self.file_listview.setEditTriggers(QAbstractItemView.EditTrigger.NoEditTriggers)
 
         self.verticalLayout.addWidget(self.file_listview)
 
         self.splitter_2.addWidget(self.layoutWidget)
         self.splitter = QSplitter(self.splitter_2)
         self.splitter.setObjectName(u"splitter")
-        self.splitter.setOrientation(Qt.Horizontal)
+        self.splitter.setOrientation(Qt.Orientation.Horizontal)
         self.layoutWidget1 = QWidget(self.splitter)
         self.layoutWidget1.setObjectName(u"layoutWidget1")
         self.verticalLayout_2 = QVBoxLayout(self.layoutWidget1)
@@ -70,9 +70,9 @@ class Ui_EditorStep(object):
 
         self.treeView_subject = QTreeView(self.layoutWidget1)
         self.treeView_subject.setObjectName(u"treeView_subject")
-        self.treeView_subject.setEditTriggers(QAbstractItemView.AllEditTriggers)
-        self.treeView_subject.setSelectionMode(QAbstractItemView.NoSelection)
-        self.treeView_subject.setSelectionBehavior(QAbstractItemView.SelectItems)
+        self.treeView_subject.setEditTriggers(QAbstractItemView.EditTrigger.AllEditTriggers)
+        self.treeView_subject.setSelectionMode(QAbstractItemView.SelectionMode.NoSelection)
+        self.treeView_subject.setSelectionBehavior(QAbstractItemView.SelectionBehavior.SelectItems)
 
         self.verticalLayout_2.addWidget(self.treeView_subject)
 
@@ -140,7 +140,7 @@ class Ui_EditorStep(object):
 #if QT_CONFIG(tooltip)
         self.reset_all_files_pushButton.setToolTip(QCoreApplication.translate("EditorStep", u"To return to the original labels saved in the file.", None))
 #endif // QT_CONFIG(tooltip)
-        self.reset_all_files_pushButton.setText(QCoreApplication.translate("EditorStep", u"Back to original labels", None))
+        self.reset_all_files_pushButton.setText(QCoreApplication.translate("EditorStep", u"   Back to original labels   ", None))
 #if QT_CONFIG(tooltip)
         self.pushButton_export.setToolTip(QCoreApplication.translate("EditorStep", u"To display all changes that will be performed at runtime.", None))
 #endif // QT_CONFIG(tooltip)

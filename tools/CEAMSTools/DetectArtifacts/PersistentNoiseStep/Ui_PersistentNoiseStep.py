@@ -9,15 +9,15 @@
 ################################################################################
 
 from PySide6.QtCore import (QCoreApplication, QDate, QDateTime, QLocale,
-        QMetaObject, QObject, QPoint,
+    QMetaObject, QObject, QPoint, QRect,
     QSize, QTime, QUrl, Qt)
 from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QFont, QFontDatabase, QGradient, QIcon,
     QImage, QKeySequence, QLinearGradient, QPainter,
     QPalette, QPixmap, QRadialGradient, QTransform)
 from PySide6.QtWidgets import (QApplication, QFrame, QGridLayout, QHBoxLayout,
-        QLabel, QLineEdit, QSizePolicy,
-    QSpacerItem, QTextEdit, QVBoxLayout, QWidget)
+    QLabel, QLineEdit, QSizePolicy, QSpacerItem,
+    QTextEdit, QVBoxLayout, QWidget)
 import themes_rc
 
 class Ui_PersistentNoiseStep(object):
@@ -42,6 +42,7 @@ class Ui_PersistentNoiseStep(object):
         self.label_10.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
         self.horizontalLayout.addWidget(self.label_10)
+
 
         self.verticalLayout_2.addWidget(self.imageWidget)
 
@@ -87,6 +88,15 @@ class Ui_PersistentNoiseStep(object):
 
         self.gridLayout_2 = QGridLayout()
         self.gridLayout_2.setObjectName(u"gridLayout_2")
+        self.textEdit = QTextEdit(PersistentNoiseStep)
+        self.textEdit.setObjectName(u"textEdit")
+        self.textEdit.setMaximumSize(QSize(16777215, 130))
+        self.textEdit.setFrameShape(QFrame.Shape.HLine)
+        self.textEdit.setLineWidth(0)
+        self.textEdit.setReadOnly(True)
+
+        self.gridLayout_2.addWidget(self.textEdit, 1, 0, 1, 1)
+
         self.verticalLayout = QVBoxLayout()
         self.verticalLayout.setObjectName(u"verticalLayout")
         self.label_4 = QLabel(PersistentNoiseStep)
@@ -103,17 +113,16 @@ class Ui_PersistentNoiseStep(object):
 
         self.gridLayout = QGridLayout()
         self.gridLayout.setObjectName(u"gridLayout")
-        self.label_3 = QLabel(PersistentNoiseStep)
-        self.label_3.setObjectName(u"label_3")
-        sizePolicy3 = QSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Preferred)
-        sizePolicy3.setHorizontalStretch(0)
-        sizePolicy3.setVerticalStretch(0)
-        sizePolicy3.setHeightForWidth(self.label_3.sizePolicy().hasHeightForWidth())
-        self.label_3.setSizePolicy(sizePolicy3)
-        self.label_3.setMinimumSize(QSize(140, 0))
-        self.label_3.setFont(font)
+        self.label_6 = QLabel(PersistentNoiseStep)
+        self.label_6.setObjectName(u"label_6")
+        self.label_6.setMaximumSize(QSize(250, 16777215))
 
-        self.gridLayout.addWidget(self.label_3, 0, 0, 1, 1)
+        self.gridLayout.addWidget(self.label_6, 5, 2, 1, 1)
+
+        self.label_7 = QLabel(PersistentNoiseStep)
+        self.label_7.setObjectName(u"label_7")
+
+        self.gridLayout.addWidget(self.label_7, 4, 0, 1, 1)
 
         self.group_lineEdit = QLineEdit(PersistentNoiseStep)
         self.group_lineEdit.setObjectName(u"group_lineEdit")
@@ -123,12 +132,23 @@ class Ui_PersistentNoiseStep(object):
 
         self.gridLayout.addWidget(self.group_lineEdit, 0, 1, 1, 1)
 
-        self.label_11 = QLabel(PersistentNoiseStep)
-        self.label_11.setObjectName(u"label_11")
-        self.label_11.setMinimumSize(QSize(140, 0))
-        self.label_11.setFont(font)
+        self.label_5 = QLabel(PersistentNoiseStep)
+        self.label_5.setObjectName(u"label_5")
+        sizePolicy3 = QSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Preferred)
+        sizePolicy3.setHorizontalStretch(0)
+        sizePolicy3.setVerticalStretch(0)
+        sizePolicy3.setHeightForWidth(self.label_5.sizePolicy().hasHeightForWidth())
+        self.label_5.setSizePolicy(sizePolicy3)
+        self.label_5.setMaximumSize(QSize(110, 16777215))
 
-        self.gridLayout.addWidget(self.label_11, 1, 0, 1, 1)
+        self.gridLayout.addWidget(self.label_5, 0, 0, 1, 1)
+
+        self.tresh_fixe_lineEdit = QLineEdit(PersistentNoiseStep)
+        self.tresh_fixe_lineEdit.setObjectName(u"tresh_fixe_lineEdit")
+        self.tresh_fixe_lineEdit.setMaximumSize(QSize(250, 16777215))
+        self.tresh_fixe_lineEdit.setFont(font)
+
+        self.gridLayout.addWidget(self.tresh_fixe_lineEdit, 4, 1, 1, 1)
 
         self.name_fixe_lineEdit = QLineEdit(PersistentNoiseStep)
         self.name_fixe_lineEdit.setObjectName(u"name_fixe_lineEdit")
@@ -136,37 +156,13 @@ class Ui_PersistentNoiseStep(object):
         self.name_fixe_lineEdit.setMaximumSize(QSize(250, 16777215))
         self.name_fixe_lineEdit.setFont(font)
 
-        self.gridLayout.addWidget(self.name_fixe_lineEdit, 1, 1, 1, 1)
-
-        self.label_5 = QLabel(PersistentNoiseStep)
-        self.label_5.setObjectName(u"label_5")
-        self.label_5.setMinimumSize(QSize(140, 0))
-        self.label_5.setMaximumSize(QSize(270, 16777215))
-        self.label_5.setFont(font)
-        self.label_5.setMidLineWidth(0)
-        self.label_5.setTextFormat(Qt.TextFormat.RichText)
-
-        self.gridLayout.addWidget(self.label_5, 2, 0, 1, 1)
-
-        self.tresh_fixe_lineEdit = QLineEdit(PersistentNoiseStep)
-        self.tresh_fixe_lineEdit.setObjectName(u"tresh_fixe_lineEdit")
-        self.tresh_fixe_lineEdit.setMaximumSize(QSize(250, 16777215))
-        self.tresh_fixe_lineEdit.setFont(font)
-
-        self.gridLayout.addWidget(self.tresh_fixe_lineEdit, 2, 1, 1, 1)
+        self.gridLayout.addWidget(self.name_fixe_lineEdit, 2, 1, 1, 1)
 
         self.label_2 = QLabel(PersistentNoiseStep)
         self.label_2.setObjectName(u"label_2")
         self.label_2.setMaximumSize(QSize(250, 16777215))
 
-        self.gridLayout.addWidget(self.label_2, 2, 2, 1, 1)
-
-        self.label = QLabel(PersistentNoiseStep)
-        self.label.setObjectName(u"label")
-        self.label.setMaximumSize(QSize(270, 16777215))
-        self.label.setFont(font)
-
-        self.gridLayout.addWidget(self.label, 3, 0, 1, 1)
+        self.gridLayout.addWidget(self.label_2, 4, 2, 1, 1)
 
         self.thres_ratio_lineEdit = QLineEdit(PersistentNoiseStep)
         self.thres_ratio_lineEdit.setObjectName(u"thres_ratio_lineEdit")
@@ -174,13 +170,20 @@ class Ui_PersistentNoiseStep(object):
         self.thres_ratio_lineEdit.setMaximumSize(QSize(250, 16777215))
         self.thres_ratio_lineEdit.setFont(font)
 
-        self.gridLayout.addWidget(self.thres_ratio_lineEdit, 3, 1, 1, 1)
+        self.gridLayout.addWidget(self.thres_ratio_lineEdit, 5, 1, 1, 1)
 
-        self.label_6 = QLabel(PersistentNoiseStep)
-        self.label_6.setObjectName(u"label_6")
-        self.label_6.setMaximumSize(QSize(250, 16777215))
+        self.label = QLabel(PersistentNoiseStep)
+        self.label.setObjectName(u"label")
+        self.label.setMaximumSize(QSize(281, 16777215))
+        self.label.setFont(font)
 
-        self.gridLayout.addWidget(self.label_6, 3, 2, 1, 1)
+        self.gridLayout.addWidget(self.label, 5, 0, 1, 1)
+
+        self.label_3 = QLabel(PersistentNoiseStep)
+        self.label_3.setObjectName(u"label_3")
+        self.label_3.setMaximumSize(QSize(110, 16777215))
+
+        self.gridLayout.addWidget(self.label_3, 2, 0, 1, 1)
 
 
         self.verticalLayout.addLayout(self.gridLayout)
@@ -201,15 +204,6 @@ class Ui_PersistentNoiseStep(object):
         self.settings_textEdit.setReadOnly(True)
 
         self.gridLayout_2.addWidget(self.settings_textEdit, 0, 1, 2, 1)
-
-        self.textEdit = QTextEdit(PersistentNoiseStep)
-        self.textEdit.setObjectName(u"textEdit")
-        self.textEdit.setMaximumSize(QSize(16777215, 130))
-        self.textEdit.setFrameShape(QFrame.Shape.HLine)
-        self.textEdit.setLineWidth(0)
-        self.textEdit.setReadOnly(True)
-
-        self.gridLayout_2.addWidget(self.textEdit, 1, 0, 1, 1)
 
 
         self.verticalLayout_2.addLayout(self.gridLayout_2)
@@ -246,26 +240,44 @@ class Ui_PersistentNoiseStep(object):
 "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-rig"
                         "ht:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">A segment whose power exceeds the 2 thresholds is considered an artifact.</p></body></html>", None))
+        self.textEdit.setHtml(QCoreApplication.translate("PersistentNoiseStep", u"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
+"<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset=\"utf-8\" /><style type=\"text/css\">\n"
+"p, li { white-space: pre-wrap; }\n"
+"hr { height: 1px; border-width: 0; }\n"
+"li.unchecked::marker { content: \"\\2610\"; }\n"
+"li.checked::marker { content: \"\\2612\"; }\n"
+"</style></head><body style=\" font-family:'Roboto'; font-size:12pt; font-weight:400; font-style:normal;\">\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">To reduce the number of false positives, especially during low amplitude R stage, please first increase the power ratio threshold value.</p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">A greater proportion of the signal in the 25-64 Hz frequency band will be needed to mark the segment as an artifact.</p></body></html>", None))
         self.label_4.setText(QCoreApplication.translate("PersistentNoiseStep", u"<html><head/><body><p><span style=\" font-weight:700;\">Event Settings</span></p></body></html>", None))
-        self.label_3.setText(QCoreApplication.translate("PersistentNoiseStep", u"Event Group", None))
+        self.label_6.setText(QCoreApplication.translate("PersistentNoiseStep", u"optimal value from 0.1 to 0.4", None))
 #if QT_CONFIG(tooltip)
-        self.group_lineEdit.setToolTip(QCoreApplication.translate("PersistentNoiseStep", u"In which \"Event Group\" the detected artifact are added (label in the annotation file). Go to the general Detectors Settings to edit the group.", None))
+        self.label_7.setToolTip(QCoreApplication.translate("PersistentNoiseStep", u"The threshold value to identify the artefact.  Its units is x times the baseline standard deviation.", None))
+#endif // QT_CONFIG(tooltip)
+        self.label_7.setText(QCoreApplication.translate("PersistentNoiseStep", u"(A) Fixed threshold (mean + x STD)     ", None))
+#if QT_CONFIG(tooltip)
+        self.group_lineEdit.setToolTip("")
 #endif // QT_CONFIG(tooltip)
         self.group_lineEdit.setText(QCoreApplication.translate("PersistentNoiseStep", u"art_snooz", None))
-        self.label_11.setText(QCoreApplication.translate("PersistentNoiseStep", u"Event Name", None))
 #if QT_CONFIG(tooltip)
-        self.name_fixe_lineEdit.setToolTip(QCoreApplication.translate("PersistentNoiseStep", u"The event name of the detected artifact (label in the annotation file). Go to the general Detectors Settings to edit the name.", None))
+        self.label_5.setToolTip(QCoreApplication.translate("PersistentNoiseStep", u"In which \"Event Group\" the detected artifact are added (label in the annotation file). Go to the general Detectors Settings to edit the group.", None))
 #endif // QT_CONFIG(tooltip)
-        self.name_fixe_lineEdit.setText(QCoreApplication.translate("PersistentNoiseStep", u"art_snooz", None))
-        self.label_5.setText(QCoreApplication.translate("PersistentNoiseStep", u"<html><head/><body><p>(A) Fixed threshold (mean + x STD)</p></body></html>", None))
+        self.label_5.setText(QCoreApplication.translate("PersistentNoiseStep", u"Event Group", None))
 #if QT_CONFIG(tooltip)
-        self.tresh_fixe_lineEdit.setToolTip(QCoreApplication.translate("PersistentNoiseStep", u"The threshold value to identify the artefact.  Its units is x times the baseline standard deviation.", None))
+        self.tresh_fixe_lineEdit.setToolTip("")
 #endif // QT_CONFIG(tooltip)
         self.tresh_fixe_lineEdit.setText(QCoreApplication.translate("PersistentNoiseStep", u"4", None))
+#if QT_CONFIG(tooltip)
+        self.name_fixe_lineEdit.setToolTip("")
+#endif // QT_CONFIG(tooltip)
+        self.name_fixe_lineEdit.setText(QCoreApplication.translate("PersistentNoiseStep", u"art_snooz", None))
         self.label_2.setText(QCoreApplication.translate("PersistentNoiseStep", u"optimal value from 3 to 5", None))
-        self.label.setText(QCoreApplication.translate("PersistentNoiseStep", u"(B) Power ratio (25-64 Hz/1-64 Hz)", None))
         self.thres_ratio_lineEdit.setText(QCoreApplication.translate("PersistentNoiseStep", u"0.25", None))
-        self.label_6.setText(QCoreApplication.translate("PersistentNoiseStep", u"optimal value from 0.1 to 0.4", None))
+        self.label.setText(QCoreApplication.translate("PersistentNoiseStep", u"(B) Power ratio (25-64 Hz/1-64 Hz)", None))
+#if QT_CONFIG(tooltip)
+        self.label_3.setToolTip(QCoreApplication.translate("PersistentNoiseStep", u"The event name of the detected artifact (label in the annotation file). Go to the general Detectors Settings to edit the name.", None))
+#endif // QT_CONFIG(tooltip)
+        self.label_3.setText(QCoreApplication.translate("PersistentNoiseStep", u"Event Name", None))
         self.settings_textEdit.setHtml(QCoreApplication.translate("PersistentNoiseStep", u"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset=\"utf-8\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
@@ -278,14 +290,5 @@ class Ui_PersistentNoiseStep(object):
                         "ge of the true spectrum (units\u00b2 ex. \u00b5V\u00b2) as suggested in [1].</span></p>\n"
 "<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><a href=\"https://pubmed.ncbi.nlm.nih.gov/12723066/\"><span style=\" text-decoration: underline; color:#000000;\">Reference</span></a></p>\n"
 "<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" color:#000000;\">[1] Cox, R. &amp; Fell, J. Analyzing human sleep EEG: A methodological primer with code implementation. Sleep Medicine Reviews54, 101353 (2020).</span></p></body></html>", None))
-        self.textEdit.setHtml(QCoreApplication.translate("PersistentNoiseStep", u"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
-"<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset=\"utf-8\" /><style type=\"text/css\">\n"
-"p, li { white-space: pre-wrap; }\n"
-"hr { height: 1px; border-width: 0; }\n"
-"li.unchecked::marker { content: \"\\2610\"; }\n"
-"li.checked::marker { content: \"\\2612\"; }\n"
-"</style></head><body style=\" font-family:'Roboto'; font-size:12pt; font-weight:400; font-style:normal;\">\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">To reduce the number of false positives, especially during low amplitude R stage, please first increase the power ratio threshold value.</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">A greater proportion of the signal in the 25-64 Hz frequency band will be needed to mark the segment as an artifact.</p></body></html>", None))
     # retranslateUi
 

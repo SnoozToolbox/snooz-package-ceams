@@ -115,7 +115,7 @@
            <item row="0" column="1">
             <widget class="QLineEdit" name="lineEdit_prefix">
              <property name="toolTip">
-              <string>Optionally, define the prefix to insert before the PSG filename to identify the stages filename.</string>
+              <string/>
              </property>
             </widget>
            </item>
@@ -136,9 +136,12 @@
             <widget class="QLabel" name="label_18">
              <property name="minimumSize">
               <size>
-               <width>50</width>
+               <width>60</width>
                <height>0</height>
               </size>
+             </property>
+             <property name="toolTip">
+              <string>Optionally, define the prefix to insert before the PSG filename to identify the stages filename.</string>
              </property>
              <property name="text">
               <string>prefix</string>
@@ -147,6 +150,15 @@
            </item>
            <item row="1" column="0">
             <widget class="QLabel" name="label_19">
+             <property name="minimumSize">
+              <size>
+               <width>60</width>
+               <height>0</height>
+              </size>
+             </property>
+             <property name="toolTip">
+              <string>Optionally, define the suffix to append to the PSG filename to identify the stages filename.</string>
+             </property>
              <property name="text">
               <string>suffix</string>
              </property>
@@ -155,7 +167,7 @@
            <item row="1" column="1">
             <widget class="QLineEdit" name="lineEdit_suffix">
              <property name="toolTip">
-              <string>Optionally, define the suffix to append to the PSG filename to identify the stages filename.</string>
+              <string/>
              </property>
             </widget>
            </item>
@@ -405,7 +417,7 @@ in file to read</string>
                 </size>
                </property>
                <property name="toolTip">
-                <string>Let the default label when not applicable.</string>
+                <string/>
                </property>
                <property name="text">
                 <string>Tech</string>
@@ -421,7 +433,7 @@ in file to read</string>
                 </size>
                </property>
                <property name="toolTip">
-                <string>Let the default label when not applicable.</string>
+                <string/>
                </property>
                <property name="text">
                 <string>Mov</string>
@@ -430,8 +442,23 @@ in file to read</string>
              </item>
              <item row="7" column="0">
               <widget class="QLabel" name="label_40">
+               <property name="minimumSize">
+                <size>
+                 <width>20</width>
+                 <height>0</height>
+                </size>
+               </property>
+               <property name="maximumSize">
+                <size>
+                 <width>100</width>
+                 <height>16777215</height>
+                </size>
+               </property>
+               <property name="toolTip">
+                <string>Let the default label when not applicable.</string>
+               </property>
                <property name="text">
-                <string>Movement</string>
+                <string>Movement     </string>
                </property>
               </widget>
              </item>
@@ -532,6 +559,9 @@ in file to read</string>
                  <height>0</height>
                 </size>
                </property>
+               <property name="toolTip">
+                <string>Let the default label when not applicable.</string>
+               </property>
                <property name="text">
                 <string>Tech
 Intervention</string>
@@ -606,7 +636,7 @@ Intervention</string>
          <item row="4" column="1">
           <widget class="QSpinBox" name="spinBox_colstage">
            <property name="toolTip">
-            <string>Define the column index to extract the stage labels. 1 means the first column.</string>
+            <string/>
            </property>
            <property name="minimum">
             <number>1</number>
@@ -621,6 +651,9 @@ Intervention</string>
              <height>0</height>
             </size>
            </property>
+           <property name="toolTip">
+            <string>Number of rows to skip before reading the sleep stages.</string>
+           </property>
            <property name="text">
             <string>Number of rows to skip.</string>
            </property>
@@ -629,9 +662,7 @@ Intervention</string>
          <item row="2" column="1">
           <widget class="QComboBox" name="comboBox_sep">
            <property name="toolTip">
-            <string>Delimiter character or pattern for the sleep stages file.
-Set to None if unknown, and the engine will detect it.
-Open the file in a text editor to see the separator.</string>
+            <string/>
            </property>
            <item>
             <property name="text">
@@ -662,6 +693,9 @@ Open the file in a text editor to see the separator.</string>
          </item>
          <item row="4" column="0">
           <widget class="QLabel" name="label_14">
+           <property name="toolTip">
+            <string>Define the column index to extract the stage labels. 1 means the first column.</string>
+           </property>
            <property name="text">
             <string>Column Index for stage</string>
            </property>
@@ -670,7 +704,7 @@ Open the file in a text editor to see the separator.</string>
          <item row="5" column="1">
           <widget class="QComboBox" name="comboBox_stage_s">
            <property name="toolTip">
-            <string>Define the duration (s) of the stage corresponding to one row in the sleep stages text file.</string>
+            <string/>
            </property>
            <property name="currentText">
             <string>1</string>
@@ -720,12 +754,17 @@ Open the file in a text editor to see the separator.</string>
          <item row="0" column="1">
           <widget class="QSpinBox" name="spinBox_n_rows">
            <property name="toolTip">
-            <string>Number of rows to skip before reading the sleep stages.</string>
+            <string/>
            </property>
           </widget>
          </item>
          <item row="2" column="0">
           <widget class="QLabel" name="label_2">
+           <property name="toolTip">
+            <string>Delimiter character or pattern for the sleep stages file.
+Set to None if unknown, and the engine will detect it.
+Open the file in a text editor to see the separator.</string>
+           </property>
            <property name="text">
             <string>Item separator</string>
            </property>
@@ -734,7 +773,7 @@ Open the file in a text editor to see the separator.</string>
          <item row="3" column="1">
           <widget class="QComboBox" name="comboBox_encoding">
            <property name="toolTip">
-            <string>Define the sleep stage file encoding. You can open in Notepad++ to find out.</string>
+            <string/>
            </property>
            <item>
             <property name="text">
@@ -770,6 +809,9 @@ Open the file in a text editor to see the separator.</string>
          </item>
          <item row="3" column="0">
           <widget class="QLabel" name="label_13">
+           <property name="toolTip">
+            <string>Define the sleep stage file encoding. You can open in Notepad++ to find out.</string>
+           </property>
            <property name="text">
             <string>Encoding</string>
            </property>
@@ -777,6 +819,9 @@ Open the file in a text editor to see the separator.</string>
          </item>
          <item row="5" column="0">
           <widget class="QLabel" name="label_15">
+           <property name="toolTip">
+            <string>Define the duration (s) of the stage corresponding to one row in the sleep stages text file.</string>
+           </property>
            <property name="text">
             <string>Stage duration (s)</string>
            </property>

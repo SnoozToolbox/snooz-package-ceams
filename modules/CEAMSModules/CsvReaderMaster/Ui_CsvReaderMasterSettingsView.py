@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file ''
+## Form generated from reading UI file 'Ui_CsvReaderMasterSettingsView.ui'
 ##
 ## Created by: Qt User Interface Compiler version 6.8.2
 ##
@@ -24,7 +24,7 @@ class Ui_CsvReaderMasterSettingsView(object):
     def setupUi(self, CsvReaderMasterSettingsView):
         if not CsvReaderMasterSettingsView.objectName():
             CsvReaderMasterSettingsView.setObjectName(u"CsvReaderMasterSettingsView")
-        CsvReaderMasterSettingsView.resize(725, 353)
+        CsvReaderMasterSettingsView.resize(751, 497)
         self.horizontalLayout_4 = QHBoxLayout(CsvReaderMasterSettingsView)
         self.horizontalLayout_4.setObjectName(u"horizontalLayout_4")
         self.horizontalLayout_2 = QHBoxLayout()
@@ -39,8 +39,8 @@ class Ui_CsvReaderMasterSettingsView(object):
         font.setPointSize(12)
         font.setBold(True)
         self.label.setFont(font)
-        self.label.setLayoutDirection(Qt.LeftToRight)
-        self.label.setAlignment(Qt.AlignCenter)
+        self.label.setLayoutDirection(Qt.LayoutDirection.LeftToRight)
+        self.label.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
         self.horizontalLayout.addWidget(self.label)
 
@@ -75,8 +75,8 @@ class Ui_CsvReaderMasterSettingsView(object):
         self.label_7 = QLabel(CsvReaderMasterSettingsView)
         self.label_7.setObjectName(u"label_7")
         self.label_7.setFont(font)
-        self.label_7.setLayoutDirection(Qt.LeftToRight)
-        self.label_7.setAlignment(Qt.AlignCenter)
+        self.label_7.setLayoutDirection(Qt.LayoutDirection.LeftToRight)
+        self.label_7.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
         self.verticalLayout_2.addWidget(self.label_7)
 
@@ -104,14 +104,14 @@ class Ui_CsvReaderMasterSettingsView(object):
 
         self.label_10 = QLabel(CsvReaderMasterSettingsView)
         self.label_10.setObjectName(u"label_10")
-        self.label_10.setAlignment(Qt.AlignRight|Qt.AlignTrailing|Qt.AlignVCenter)
+        self.label_10.setAlignment(Qt.AlignmentFlag.AlignRight|Qt.AlignmentFlag.AlignTrailing|Qt.AlignmentFlag.AlignVCenter)
 
         self.gridLayout.addWidget(self.label_10, 5, 0, 1, 1)
 
         self.label_6 = QLabel(CsvReaderMasterSettingsView)
         self.label_6.setObjectName(u"label_6")
-        self.label_6.setLayoutDirection(Qt.LeftToRight)
-        self.label_6.setAlignment(Qt.AlignLeading|Qt.AlignLeft|Qt.AlignVCenter)
+        self.label_6.setLayoutDirection(Qt.LayoutDirection.LeftToRight)
+        self.label_6.setAlignment(Qt.AlignmentFlag.AlignLeading|Qt.AlignmentFlag.AlignLeft|Qt.AlignmentFlag.AlignVCenter)
 
         self.gridLayout.addWidget(self.label_6, 3, 1, 1, 1)
 
@@ -126,13 +126,13 @@ class Ui_CsvReaderMasterSettingsView(object):
 
         self.label_8 = QLabel(CsvReaderMasterSettingsView)
         self.label_8.setObjectName(u"label_8")
-        self.label_8.setAlignment(Qt.AlignRight|Qt.AlignTrailing|Qt.AlignVCenter)
+        self.label_8.setAlignment(Qt.AlignmentFlag.AlignRight|Qt.AlignmentFlag.AlignTrailing|Qt.AlignmentFlag.AlignVCenter)
 
         self.gridLayout.addWidget(self.label_8, 10, 0, 1, 1)
 
         self.label_5 = QLabel(CsvReaderMasterSettingsView)
         self.label_5.setObjectName(u"label_5")
-        self.label_5.setAlignment(Qt.AlignRight|Qt.AlignTrailing|Qt.AlignVCenter)
+        self.label_5.setAlignment(Qt.AlignmentFlag.AlignRight|Qt.AlignmentFlag.AlignTrailing|Qt.AlignmentFlag.AlignVCenter)
 
         self.gridLayout.addWidget(self.label_5, 1, 0, 1, 1)
 
@@ -151,8 +151,8 @@ class Ui_CsvReaderMasterSettingsView(object):
 
         self.label_2 = QLabel(CsvReaderMasterSettingsView)
         self.label_2.setObjectName(u"label_2")
-        self.label_2.setLayoutDirection(Qt.LeftToRight)
-        self.label_2.setAlignment(Qt.AlignRight|Qt.AlignTrailing|Qt.AlignVCenter)
+        self.label_2.setLayoutDirection(Qt.LayoutDirection.LeftToRight)
+        self.label_2.setAlignment(Qt.AlignmentFlag.AlignRight|Qt.AlignmentFlag.AlignTrailing|Qt.AlignmentFlag.AlignVCenter)
 
         self.gridLayout.addWidget(self.label_2, 7, 0, 1, 1)
 
@@ -166,8 +166,8 @@ class Ui_CsvReaderMasterSettingsView(object):
 
         self.label_4 = QLabel(CsvReaderMasterSettingsView)
         self.label_4.setObjectName(u"label_4")
-        self.label_4.setLayoutDirection(Qt.LeftToRight)
-        self.label_4.setAlignment(Qt.AlignRight|Qt.AlignTrailing|Qt.AlignVCenter)
+        self.label_4.setLayoutDirection(Qt.LayoutDirection.LeftToRight)
+        self.label_4.setAlignment(Qt.AlignmentFlag.AlignRight|Qt.AlignmentFlag.AlignTrailing|Qt.AlignmentFlag.AlignVCenter)
 
         self.gridLayout.addWidget(self.label_4, 9, 0, 1, 1)
 
@@ -177,7 +177,7 @@ class Ui_CsvReaderMasterSettingsView(object):
 
         self.label_9 = QLabel(CsvReaderMasterSettingsView)
         self.label_9.setObjectName(u"label_9")
-        self.label_9.setAlignment(Qt.AlignRight|Qt.AlignTrailing|Qt.AlignVCenter)
+        self.label_9.setAlignment(Qt.AlignmentFlag.AlignRight|Qt.AlignmentFlag.AlignTrailing|Qt.AlignmentFlag.AlignVCenter)
 
         self.gridLayout.addWidget(self.label_9, 11, 0, 1, 1)
 
@@ -196,8 +196,8 @@ class Ui_CsvReaderMasterSettingsView(object):
 
         self.label_3 = QLabel(CsvReaderMasterSettingsView)
         self.label_3.setObjectName(u"label_3")
-        self.label_3.setLayoutDirection(Qt.LeftToRight)
-        self.label_3.setAlignment(Qt.AlignRight|Qt.AlignTrailing|Qt.AlignVCenter)
+        self.label_3.setLayoutDirection(Qt.LayoutDirection.LeftToRight)
+        self.label_3.setAlignment(Qt.AlignmentFlag.AlignRight|Qt.AlignmentFlag.AlignTrailing|Qt.AlignmentFlag.AlignVCenter)
 
         self.gridLayout.addWidget(self.label_3, 8, 0, 1, 1)
 
@@ -253,7 +253,7 @@ class Ui_CsvReaderMasterSettingsView(object):
 
         self.label_11 = QLabel(CsvReaderMasterSettingsView)
         self.label_11.setObjectName(u"label_11")
-        self.label_11.setAlignment(Qt.AlignRight|Qt.AlignTrailing|Qt.AlignVCenter)
+        self.label_11.setAlignment(Qt.AlignmentFlag.AlignRight|Qt.AlignmentFlag.AlignTrailing|Qt.AlignmentFlag.AlignVCenter)
 
         self.gridLayout.addWidget(self.label_11, 0, 0, 1, 1)
 
@@ -307,38 +307,53 @@ class Ui_CsvReaderMasterSettingsView(object):
         self.clear_pushButton.setText(QCoreApplication.translate("CsvReaderMasterSettingsView", u"Clear", None))
         self.label_7.setText(QCoreApplication.translate("CsvReaderMasterSettingsView", u"Csv Reader Master Settings", None))
 #if QT_CONFIG(tooltip)
-        self.group_spinbox.setToolTip(QCoreApplication.translate("CsvReaderMasterSettingsView", u"The index of the column for the event group. To disable the group mark 0.", None))
+        self.group_spinbox.setToolTip("")
 #endif // QT_CONFIG(tooltip)
 #if QT_CONFIG(tooltip)
         self.center_checkBox.setToolTip(QCoreApplication.translate("CsvReaderMasterSettingsView", u"Check if the event is identified by its center instead of its onset.", None))
 #endif // QT_CONFIG(tooltip)
-        self.center_checkBox.setText(QCoreApplication.translate("CsvReaderMasterSettingsView", u"Event identified by its center", None))
-        self.label_10.setText(QCoreApplication.translate("CsvReaderMasterSettingsView", u"Event group column", None))
+        self.center_checkBox.setText(QCoreApplication.translate("CsvReaderMasterSettingsView", u"Event identified by its center   ", None))
+#if QT_CONFIG(tooltip)
+        self.label_10.setToolTip(QCoreApplication.translate("CsvReaderMasterSettingsView", u"The index of the column for the event group. To disable the group mark 0.", None))
+#endif // QT_CONFIG(tooltip)
+        self.label_10.setText(QCoreApplication.translate("CsvReaderMasterSettingsView", u"Event group column    ", None))
         self.label_6.setText(QCoreApplication.translate("CsvReaderMasterSettingsView", u"Sample rate", None))
 #if QT_CONFIG(tooltip)
         self.personnalized_header_checkBox.setToolTip(QCoreApplication.translate("CsvReaderMasterSettingsView", u"Check to keep the read file header, otherwise the header will be replaced with the Snooz header.", None))
 #endif // QT_CONFIG(tooltip)
-        self.personnalized_header_checkBox.setText(QCoreApplication.translate("CsvReaderMasterSettingsView", u"Personnalized header", None))
-        self.label_8.setText(QCoreApplication.translate("CsvReaderMasterSettingsView", u"Fixed duration", None))
+        self.personnalized_header_checkBox.setText(QCoreApplication.translate("CsvReaderMasterSettingsView", u"Personnalized header   ", None))
+#if QT_CONFIG(tooltip)
+        self.label_8.setToolTip(QCoreApplication.translate("CsvReaderMasterSettingsView", u"Enter a fixed duration for all events.", None))
+#endif // QT_CONFIG(tooltip)
+        self.label_8.setText(QCoreApplication.translate("CsvReaderMasterSettingsView", u"Fixed duration    ", None))
         self.label_5.setText(QCoreApplication.translate("CsvReaderMasterSettingsView", u"Input format", None))
         self.time_radiobutton.setText(QCoreApplication.translate("CsvReaderMasterSettingsView", u"Time(s)", None))
-        self.label_2.setText(QCoreApplication.translate("CsvReaderMasterSettingsView", u"Event name column", None))
-        self.label_4.setText(QCoreApplication.translate("CsvReaderMasterSettingsView", u"Duration column", None))
+#if QT_CONFIG(tooltip)
+        self.label_2.setToolTip(QCoreApplication.translate("CsvReaderMasterSettingsView", u"The index of the column for the event name. Can not be disabled.", None))
+#endif // QT_CONFIG(tooltip)
+        self.label_2.setText(QCoreApplication.translate("CsvReaderMasterSettingsView", u"Event name column    ", None))
+#if QT_CONFIG(tooltip)
+        self.label_4.setToolTip(QCoreApplication.translate("CsvReaderMasterSettingsView", u"The index of the column for the event duration. To disable the duration mark 0.", None))
+#endif // QT_CONFIG(tooltip)
+        self.label_4.setText(QCoreApplication.translate("CsvReaderMasterSettingsView", u"Duration column    ", None))
         self.label_9.setText(QCoreApplication.translate("CsvReaderMasterSettingsView", u"Channel column", None))
 #if QT_CONFIG(tooltip)
-        self.onset_spinbox.setToolTip(QCoreApplication.translate("CsvReaderMasterSettingsView", u"The index of the column for the event onset or center. Can not be disabled.", None))
+        self.onset_spinbox.setToolTip("")
 #endif // QT_CONFIG(tooltip)
-        self.label_3.setText(QCoreApplication.translate("CsvReaderMasterSettingsView", u"Onset/Center column", None))
+#if QT_CONFIG(tooltip)
+        self.label_3.setToolTip(QCoreApplication.translate("CsvReaderMasterSettingsView", u"The index of the column for the event onset or center. Can not be disabled.", None))
+#endif // QT_CONFIG(tooltip)
+        self.label_3.setText(QCoreApplication.translate("CsvReaderMasterSettingsView", u"Onset/Center column    ", None))
         self.sample_rate_lineedit.setText(QCoreApplication.translate("CsvReaderMasterSettingsView", u"256", None))
         self.sample_radiobutton.setText(QCoreApplication.translate("CsvReaderMasterSettingsView", u"Samples", None))
 #if QT_CONFIG(tooltip)
-        self.fixed_dur_lineEdit.setToolTip(QCoreApplication.translate("CsvReaderMasterSettingsView", u"Enter a fixed duration for all events.", None))
+        self.fixed_dur_lineEdit.setToolTip("")
 #endif // QT_CONFIG(tooltip)
 #if QT_CONFIG(tooltip)
-        self.event_name_spinbox.setToolTip(QCoreApplication.translate("CsvReaderMasterSettingsView", u"The index of the column for the event name. Can not be disabled.", None))
+        self.event_name_spinbox.setToolTip("")
 #endif // QT_CONFIG(tooltip)
 #if QT_CONFIG(tooltip)
-        self.duration_spinbox.setToolTip(QCoreApplication.translate("CsvReaderMasterSettingsView", u"The index of the column for the event duration. To disable the duration mark 0.", None))
+        self.duration_spinbox.setToolTip("")
 #endif // QT_CONFIG(tooltip)
         self.label_11.setText(QCoreApplication.translate("CsvReaderMasterSettingsView", u"File format separator", None))
         self.radioButton_tab.setText(QCoreApplication.translate("CsvReaderMasterSettingsView", u"tab", None))

@@ -9,16 +9,15 @@
 ################################################################################
 
 from PySide6.QtCore import (QCoreApplication, QDate, QDateTime, QLocale,
-    QMetaObject, QObject, QPoint,
+    QMetaObject, QObject, QPoint, QRect,
     QSize, QTime, QUrl, Qt)
 from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QFont, QFontDatabase, QGradient, QIcon,
     QImage, QKeySequence, QLinearGradient, QPainter,
     QPalette, QPixmap, QRadialGradient, QTransform)
 from PySide6.QtWidgets import (QApplication, QFrame, QGridLayout, QHBoxLayout,
-    QLabel, QLayout, QLineEdit,
-    QSizePolicy, QSpacerItem, QTextEdit, QVBoxLayout,
-    QWidget)
+    QLabel, QLayout, QLineEdit, QSizePolicy,
+    QSpacerItem, QTextEdit, QVBoxLayout, QWidget)
 import themes_rc
 
 class Ui_PowerLineStep(object):
@@ -52,6 +51,7 @@ class Ui_PowerLineStep(object):
         self.label_10.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
         self.horizontalLayout.addWidget(self.label_10)
+
 
         self.verticalLayout_4.addWidget(self.imageWidget)
 
@@ -117,13 +117,13 @@ class Ui_PowerLineStep(object):
         self.horizontalLayout_2.setSizeConstraint(QLayout.SizeConstraint.SetFixedSize)
         self.label_3 = QLabel(PowerLineStep)
         self.label_3.setObjectName(u"label_3")
-        sizePolicy3 = QSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Fixed)
+        sizePolicy3 = QSizePolicy(QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Fixed)
         sizePolicy3.setHorizontalStretch(0)
         sizePolicy3.setVerticalStretch(0)
         sizePolicy3.setHeightForWidth(self.label_3.sizePolicy().hasHeightForWidth())
         self.label_3.setSizePolicy(sizePolicy3)
-        self.label_3.setMinimumSize(QSize(120, 0))
-        self.label_3.setMaximumSize(QSize(120, 16777215))
+        self.label_3.setMinimumSize(QSize(110, 0))
+        self.label_3.setMaximumSize(QSize(90, 16777215))
         self.label_3.setFont(font)
 
         self.horizontalLayout_2.addWidget(self.label_3)
@@ -131,8 +131,11 @@ class Ui_PowerLineStep(object):
         self.group_lineEdit = QLineEdit(PowerLineStep)
         self.group_lineEdit.setObjectName(u"group_lineEdit")
         self.group_lineEdit.setEnabled(False)
-        sizePolicy3.setHeightForWidth(self.group_lineEdit.sizePolicy().hasHeightForWidth())
-        self.group_lineEdit.setSizePolicy(sizePolicy3)
+        sizePolicy4 = QSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Fixed)
+        sizePolicy4.setHorizontalStretch(0)
+        sizePolicy4.setVerticalStretch(0)
+        sizePolicy4.setHeightForWidth(self.group_lineEdit.sizePolicy().hasHeightForWidth())
+        self.group_lineEdit.setSizePolicy(sizePolicy4)
         self.group_lineEdit.setMinimumSize(QSize(300, 0))
         self.group_lineEdit.setMaximumSize(QSize(300, 16777215))
         self.group_lineEdit.setFont(font)
@@ -149,8 +152,8 @@ class Ui_PowerLineStep(object):
         self.label_11.setObjectName(u"label_11")
         sizePolicy3.setHeightForWidth(self.label_11.sizePolicy().hasHeightForWidth())
         self.label_11.setSizePolicy(sizePolicy3)
-        self.label_11.setMinimumSize(QSize(120, 0))
-        self.label_11.setMaximumSize(QSize(120, 16777215))
+        self.label_11.setMinimumSize(QSize(110, 0))
+        self.label_11.setMaximumSize(QSize(90, 16777215))
         self.label_11.setFont(font)
 
         self.horizontalLayout_3.addWidget(self.label_11)
@@ -158,8 +161,8 @@ class Ui_PowerLineStep(object):
         self.name_rel_lineEdit = QLineEdit(PowerLineStep)
         self.name_rel_lineEdit.setObjectName(u"name_rel_lineEdit")
         self.name_rel_lineEdit.setEnabled(False)
-        sizePolicy3.setHeightForWidth(self.name_rel_lineEdit.sizePolicy().hasHeightForWidth())
-        self.name_rel_lineEdit.setSizePolicy(sizePolicy3)
+        sizePolicy4.setHeightForWidth(self.name_rel_lineEdit.sizePolicy().hasHeightForWidth())
+        self.name_rel_lineEdit.setSizePolicy(sizePolicy4)
         self.name_rel_lineEdit.setMinimumSize(QSize(300, 0))
         self.name_rel_lineEdit.setMaximumSize(QSize(300, 16777215))
         self.name_rel_lineEdit.setFont(font)
@@ -306,14 +309,20 @@ class Ui_PowerLineStep(object):
 "<p style=\""
                         " margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">A segment whose power exceeds the 2 thresholds is considered an artifact.</p></body></html>", None))
         self.label_4.setText(QCoreApplication.translate("PowerLineStep", u"<html><head/><body><p><span style=\" font-weight:700;\">Event Settings</span></p></body></html>", None))
+#if QT_CONFIG(tooltip)
+        self.label_3.setToolTip(QCoreApplication.translate("PowerLineStep", u"In which \"Event Group\" the detected artifact are added (label in the annotation file). Go to the general Detectors Settings to edit the group.", None))
+#endif // QT_CONFIG(tooltip)
         self.label_3.setText(QCoreApplication.translate("PowerLineStep", u"Event Group", None))
 #if QT_CONFIG(tooltip)
-        self.group_lineEdit.setToolTip(QCoreApplication.translate("PowerLineStep", u"In which \"Event Group\" the detected artifact are added (label in the annotation file). Go to the general Detectors Settings to edit the group.", None))
+        self.group_lineEdit.setToolTip("")
 #endif // QT_CONFIG(tooltip)
         self.group_lineEdit.setText(QCoreApplication.translate("PowerLineStep", u"art_snooz", None))
+#if QT_CONFIG(tooltip)
+        self.label_11.setToolTip(QCoreApplication.translate("PowerLineStep", u"The event name of the detected artifact based on the absolute power. Go to the general Detectors Settings to edit the name.", None))
+#endif // QT_CONFIG(tooltip)
         self.label_11.setText(QCoreApplication.translate("PowerLineStep", u"Event Name", None))
 #if QT_CONFIG(tooltip)
-        self.name_rel_lineEdit.setToolTip(QCoreApplication.translate("PowerLineStep", u"The event name of the detected artifact based on the absolute power. Go to the general Detectors Settings to edit the name.", None))
+        self.name_rel_lineEdit.setToolTip("")
 #endif // QT_CONFIG(tooltip)
         self.name_rel_lineEdit.setText(QCoreApplication.translate("PowerLineStep", u"art_snooz", None))
         self.settings_textEdit.setHtml(QCoreApplication.translate("PowerLineStep", u"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"

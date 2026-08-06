@@ -67,7 +67,7 @@ class Ui_FilterSignalsStep(object):
 
         self.label = QLabel(FilterSignalsStep)
         self.label.setObjectName(u"label")
-        self.label.setMinimumSize(QSize(80, 0))
+        self.label.setMinimumSize(QSize(100, 0))
 
         self.gridLayout.addWidget(self.label, 1, 0, 1, 1)
 
@@ -79,7 +79,7 @@ class Ui_FilterSignalsStep(object):
 
         self.label_6 = QLabel(FilterSignalsStep)
         self.label_6.setObjectName(u"label_6")
-        self.label_6.setMinimumSize(QSize(80, 0))
+        self.label_6.setMinimumSize(QSize(100, 0))
 
         self.gridLayout.addWidget(self.label_6, 2, 0, 1, 1)
 
@@ -176,15 +176,21 @@ class Ui_FilterSignalsStep(object):
 "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p></body></html>", None))
         self.notch_checkBox.setText(QCoreApplication.translate("FilterSignalsStep", u"Power line notch filter", None))
         self.radioButton_50Hz.setText(QCoreApplication.translate("FilterSignalsStep", u"50 Hz", None))
+#if QT_CONFIG(tooltip)
+        self.label.setToolTip(QCoreApplication.translate("FilterSignalsStep", u"Edit the low cutoff frequency in Hz (i.e. 0.3).", None))
+#endif // QT_CONFIG(tooltip)
         self.label.setText(QCoreApplication.translate("FilterSignalsStep", u"Low cutoff", None))
 #if QT_CONFIG(tooltip)
-        self.low_cutoff_lineEdit.setToolTip(QCoreApplication.translate("FilterSignalsStep", u"Edit the low cutoff frequency in Hz (i.e. 0.3).", None))
+        self.low_cutoff_lineEdit.setToolTip("")
 #endif // QT_CONFIG(tooltip)
         self.low_cutoff_lineEdit.setText(QCoreApplication.translate("FilterSignalsStep", u"0", None))
+#if QT_CONFIG(tooltip)
+        self.label_6.setToolTip(QCoreApplication.translate("FilterSignalsStep", u"Edit the high cutoff frequency in Hz (i.e. 100).", None))
+#endif // QT_CONFIG(tooltip)
         self.label_6.setText(QCoreApplication.translate("FilterSignalsStep", u"High cutoff", None))
         self.bp_checkBox.setText(QCoreApplication.translate("FilterSignalsStep", u"Bandpass filter", None))
 #if QT_CONFIG(tooltip)
-        self.high_cutoff_lineEdit.setToolTip(QCoreApplication.translate("FilterSignalsStep", u"Edit the high cutoff frequency in Hz (i.e. 100).", None))
+        self.high_cutoff_lineEdit.setToolTip("")
 #endif // QT_CONFIG(tooltip)
         self.high_cutoff_lineEdit.setText(QCoreApplication.translate("FilterSignalsStep", u"100", None))
         self.radioButton_60Hz.setText(QCoreApplication.translate("FilterSignalsStep", u"60 Hz", None))

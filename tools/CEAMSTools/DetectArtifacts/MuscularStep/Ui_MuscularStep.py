@@ -9,7 +9,7 @@
 ################################################################################
 
 from PySide6.QtCore import (QCoreApplication, QDate, QDateTime, QLocale,
-        QMetaObject, QObject, QPoint,
+    QMetaObject, QObject, QPoint, QRect,
     QSize, QTime, QUrl, Qt)
 from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QFont, QFontDatabase, QGradient, QIcon,
@@ -17,8 +17,8 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QPalette, QPixmap, QRadialGradient, QTransform)
 from PySide6.QtWidgets import (QApplication, QFormLayout, QFrame, QGridLayout,
     QHBoxLayout, QLabel, QLayout, QLineEdit,
-        QSizePolicy, QSpacerItem, QTextEdit,
-    QVBoxLayout, QWidget)
+    QSizePolicy, QSpacerItem, QTextEdit, QVBoxLayout,
+    QWidget)
 import themes_rc
 
 class Ui_MuscularStep(object):
@@ -50,6 +50,7 @@ class Ui_MuscularStep(object):
         self.picture_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
         self.horizontalLayout.addWidget(self.picture_label)
+
 
         self.verticalLayout_2.addWidget(self.imageWidget)
 
@@ -176,33 +177,22 @@ class Ui_MuscularStep(object):
         self.gridLayout = QGridLayout()
         self.gridLayout.setObjectName(u"gridLayout")
         self.gridLayout.setSizeConstraint(QLayout.SizeConstraint.SetMinimumSize)
-        self.label_5 = QLabel(MuscularStep)
-        self.label_5.setObjectName(u"label_5")
-        sizePolicy2.setHeightForWidth(self.label_5.sizePolicy().hasHeightForWidth())
-        self.label_5.setSizePolicy(sizePolicy2)
-        self.label_5.setMinimumSize(QSize(230, 0))
-        self.label_5.setFont(font)
-        self.label_5.setMidLineWidth(0)
-        self.label_5.setTextFormat(Qt.TextFormat.RichText)
+        self.EMG_lineEdit = QLineEdit(MuscularStep)
+        self.EMG_lineEdit.setObjectName(u"EMG_lineEdit")
+        sizePolicy2.setHeightForWidth(self.EMG_lineEdit.sizePolicy().hasHeightForWidth())
+        self.EMG_lineEdit.setSizePolicy(sizePolicy2)
+        self.EMG_lineEdit.setMaximumSize(QSize(100, 16777215))
+        self.EMG_lineEdit.setFont(font)
 
-        self.gridLayout.addWidget(self.label_5, 0, 0, 1, 1)
+        self.gridLayout.addWidget(self.EMG_lineEdit, 1, 1, 1, 1)
 
-        self.EEG_lineEdit = QLineEdit(MuscularStep)
-        self.EEG_lineEdit.setObjectName(u"EEG_lineEdit")
-        sizePolicy2.setHeightForWidth(self.EEG_lineEdit.sizePolicy().hasHeightForWidth())
-        self.EEG_lineEdit.setSizePolicy(sizePolicy2)
-        self.EEG_lineEdit.setMaximumSize(QSize(100, 16777215))
-        self.EEG_lineEdit.setFont(font)
+        self.label_13 = QLabel(MuscularStep)
+        self.label_13.setObjectName(u"label_13")
+        sizePolicy2.setHeightForWidth(self.label_13.sizePolicy().hasHeightForWidth())
+        self.label_13.setSizePolicy(sizePolicy2)
+        self.label_13.setMaximumSize(QSize(210, 16777215))
 
-        self.gridLayout.addWidget(self.EEG_lineEdit, 0, 1, 1, 1)
-
-        self.label_10 = QLabel(MuscularStep)
-        self.label_10.setObjectName(u"label_10")
-        sizePolicy2.setHeightForWidth(self.label_10.sizePolicy().hasHeightForWidth())
-        self.label_10.setSizePolicy(sizePolicy2)
-        self.label_10.setMaximumSize(QSize(210, 16777215))
-
-        self.gridLayout.addWidget(self.label_10, 0, 2, 1, 1)
+        self.gridLayout.addWidget(self.label_13, 2, 2, 1, 1)
 
         self.label_2 = QLabel(MuscularStep)
         self.label_2.setObjectName(u"label_2")
@@ -213,30 +203,29 @@ class Ui_MuscularStep(object):
 
         self.gridLayout.addWidget(self.label_2, 1, 0, 1, 1)
 
-        self.EMG_lineEdit = QLineEdit(MuscularStep)
-        self.EMG_lineEdit.setObjectName(u"EMG_lineEdit")
-        sizePolicy2.setHeightForWidth(self.EMG_lineEdit.sizePolicy().hasHeightForWidth())
-        self.EMG_lineEdit.setSizePolicy(sizePolicy2)
-        self.EMG_lineEdit.setMaximumSize(QSize(100, 16777215))
-        self.EMG_lineEdit.setFont(font)
+        self.EEG_lineEdit = QLineEdit(MuscularStep)
+        self.EEG_lineEdit.setObjectName(u"EEG_lineEdit")
+        sizePolicy2.setHeightForWidth(self.EEG_lineEdit.sizePolicy().hasHeightForWidth())
+        self.EEG_lineEdit.setSizePolicy(sizePolicy2)
+        self.EEG_lineEdit.setMaximumSize(QSize(100, 16777215))
+        self.EEG_lineEdit.setFont(font)
 
-        self.gridLayout.addWidget(self.EMG_lineEdit, 1, 1, 1, 1)
+        self.gridLayout.addWidget(self.EEG_lineEdit, 0, 1, 1, 1)
 
-        self.label_12 = QLabel(MuscularStep)
-        self.label_12.setObjectName(u"label_12")
-        sizePolicy2.setHeightForWidth(self.label_12.sizePolicy().hasHeightForWidth())
-        self.label_12.setSizePolicy(sizePolicy2)
-        self.label_12.setMaximumSize(QSize(210, 16777215))
+        self.label_5 = QLabel(MuscularStep)
+        self.label_5.setObjectName(u"label_5")
+        sizePolicy4 = QSizePolicy(QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Fixed)
+        sizePolicy4.setHorizontalStretch(0)
+        sizePolicy4.setVerticalStretch(0)
+        sizePolicy4.setHeightForWidth(self.label_5.sizePolicy().hasHeightForWidth())
+        self.label_5.setSizePolicy(sizePolicy4)
+        self.label_5.setMinimumSize(QSize(190, 0))
+        self.label_5.setMaximumSize(QSize(190, 16777215))
+        self.label_5.setFont(font)
+        self.label_5.setMidLineWidth(0)
+        self.label_5.setTextFormat(Qt.TextFormat.RichText)
 
-        self.gridLayout.addWidget(self.label_12, 1, 2, 1, 1)
-
-        self.label_6 = QLabel(MuscularStep)
-        self.label_6.setObjectName(u"label_6")
-        sizePolicy2.setHeightForWidth(self.label_6.sizePolicy().hasHeightForWidth())
-        self.label_6.setSizePolicy(sizePolicy2)
-        self.label_6.setFont(font)
-
-        self.gridLayout.addWidget(self.label_6, 2, 0, 1, 1)
+        self.gridLayout.addWidget(self.label_5, 0, 0, 1, 1)
 
         self.both_lineEdit = QLineEdit(MuscularStep)
         self.both_lineEdit.setObjectName(u"both_lineEdit")
@@ -247,13 +236,33 @@ class Ui_MuscularStep(object):
 
         self.gridLayout.addWidget(self.both_lineEdit, 2, 1, 1, 1)
 
-        self.label_13 = QLabel(MuscularStep)
-        self.label_13.setObjectName(u"label_13")
-        sizePolicy2.setHeightForWidth(self.label_13.sizePolicy().hasHeightForWidth())
-        self.label_13.setSizePolicy(sizePolicy2)
-        self.label_13.setMaximumSize(QSize(210, 16777215))
+        self.label_12 = QLabel(MuscularStep)
+        self.label_12.setObjectName(u"label_12")
+        sizePolicy2.setHeightForWidth(self.label_12.sizePolicy().hasHeightForWidth())
+        self.label_12.setSizePolicy(sizePolicy2)
+        self.label_12.setMaximumSize(QSize(210, 16777215))
 
-        self.gridLayout.addWidget(self.label_13, 2, 2, 1, 1)
+        self.gridLayout.addWidget(self.label_12, 1, 2, 1, 1)
+
+        self.label_10 = QLabel(MuscularStep)
+        self.label_10.setObjectName(u"label_10")
+        sizePolicy2.setHeightForWidth(self.label_10.sizePolicy().hasHeightForWidth())
+        self.label_10.setSizePolicy(sizePolicy2)
+        self.label_10.setMaximumSize(QSize(210, 16777215))
+
+        self.gridLayout.addWidget(self.label_10, 0, 2, 1, 1)
+
+        self.label_6 = QLabel(MuscularStep)
+        self.label_6.setObjectName(u"label_6")
+        sizePolicy2.setHeightForWidth(self.label_6.sizePolicy().hasHeightForWidth())
+        self.label_6.setSizePolicy(sizePolicy2)
+        self.label_6.setFont(font)
+
+        self.gridLayout.addWidget(self.label_6, 2, 0, 1, 1)
+
+        self.horizontalSpacer = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+
+        self.gridLayout.addItem(self.horizontalSpacer, 0, 3, 1, 1)
 
 
         self.verticalLayout.addLayout(self.gridLayout)
@@ -306,7 +315,6 @@ class Ui_MuscularStep(object):
     def retranslateUi(self, MuscularStep):
         MuscularStep.setWindowTitle(QCoreApplication.translate("MuscularStep", u"Form", None))
         self.picture_label.setText("")
-        self.picture_label.setText("")
         self.label_9.setText(QCoreApplication.translate("MuscularStep", u"<html><head/><body><p><span style=\" font-weight:600;\">Muscular Artifact : Segments with burst of activity in the frequency band 20.25-32 Hz.</span></p></body></html>", None))
         self.description_textEdit.setHtml(QCoreApplication.translate("MuscularStep", u"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset=\"utf-8\" /><style type=\"text/css\">\n"
@@ -338,18 +346,21 @@ class Ui_MuscularStep(object):
         self.label_7.setText(QCoreApplication.translate("MuscularStep", u"Event Name - EMG use", None))
         self.label.setText(QCoreApplication.translate("MuscularStep", u"<html><head/><body><p><span style=\" font-weight:600;\">Threshold (x times the baseline median)</span></p></body></html>", None))
         self.label_8.setText(QCoreApplication.translate("MuscularStep", u"Artifact when A or (B and C)", None))
-        self.label_5.setText(QCoreApplication.translate("MuscularStep", u"<html><head/><body><p>(A) High applied on EEG</p></body></html>", None))
+        self.EMG_lineEdit.setText(QCoreApplication.translate("MuscularStep", u"4", None))
+        self.label_13.setText(QCoreApplication.translate("MuscularStep", u"*(optimal value from 4 to 6)", None))
+        self.label_2.setText(QCoreApplication.translate("MuscularStep", u"(B) Applied on EMG", None))
 #if QT_CONFIG(tooltip)
-        self.EEG_lineEdit.setToolTip(QCoreApplication.translate("MuscularStep", u"The threshold value to identify the artifact.  Its units is x times the baseline standard deviation.", None))
+        self.EEG_lineEdit.setToolTip("")
 #endif // QT_CONFIG(tooltip)
         self.EEG_lineEdit.setText(QCoreApplication.translate("MuscularStep", u"4.5", None))
-        self.label_10.setText(QCoreApplication.translate("MuscularStep", u"optimal value from 5 to 9", None))
-        self.label_2.setText(QCoreApplication.translate("MuscularStep", u"(B) Applied on EMG", None))
-        self.EMG_lineEdit.setText(QCoreApplication.translate("MuscularStep", u"4", None))
-        self.label_12.setText(QCoreApplication.translate("MuscularStep", u"optimal value from 4 to 6", None))
-        self.label_6.setText(QCoreApplication.translate("MuscularStep", u"(C) Low applied on EEG", None))
+#if QT_CONFIG(tooltip)
+        self.label_5.setToolTip(QCoreApplication.translate("MuscularStep", u"The threshold value to identify the artifact.  Its units is x times the baseline standard deviation.", None))
+#endif // QT_CONFIG(tooltip)
+        self.label_5.setText(QCoreApplication.translate("MuscularStep", u"<html><head/><body><p>(A) High applied on EEG</p></body></html>", None))
         self.both_lineEdit.setText(QCoreApplication.translate("MuscularStep", u"3.5", None))
-        self.label_13.setText(QCoreApplication.translate("MuscularStep", u"optimal value from 4 to 6", None))
+        self.label_12.setText(QCoreApplication.translate("MuscularStep", u"*(optimal value from 4 to 6)", None))
+        self.label_10.setText(QCoreApplication.translate("MuscularStep", u"*(optimal value from 5 to 9)", None))
+        self.label_6.setText(QCoreApplication.translate("MuscularStep", u"(C) Low applied on EEG", None))
         self.label_14.setText(QCoreApplication.translate("MuscularStep", u"To reduce the number of false positives, especially during\n"
 "spindles, alpha waves, or beta bursts\n"
 "please first increase the \"A\" threshold.", None))

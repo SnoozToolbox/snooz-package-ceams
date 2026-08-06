@@ -101,7 +101,7 @@
             <string>Rename your channel labels first. Adding the ROIs must be the final step.</string>
            </property>
            <property name="text">
-            <string>Add ROI</string>
+            <string>   Add ROI   </string>
            </property>
           </widget>
          </item>

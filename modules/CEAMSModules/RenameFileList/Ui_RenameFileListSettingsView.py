@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file ''
+## Form generated from reading UI file 'Ui_RenameFileListSettingsView.ui'
 ##
 ## Created by: Qt User Interface Compiler version 6.8.2
 ##
@@ -81,7 +81,7 @@ class Ui_RenameFileListSettingsView(object):
 
         self.ext_selection_lineedit = QLineEdit(RenameFileListSettingsView)
         self.ext_selection_lineedit.setObjectName(u"ext_selection_lineedit")
-        self.ext_selection_lineedit.setAlignment(Qt.AlignRight|Qt.AlignTrailing|Qt.AlignVCenter)
+        self.ext_selection_lineedit.setAlignment(Qt.AlignmentFlag.AlignRight|Qt.AlignmentFlag.AlignTrailing|Qt.AlignmentFlag.AlignVCenter)
 
         self.ext_selection_horizontalLayout.addWidget(self.ext_selection_lineedit)
 
@@ -225,30 +225,45 @@ class Ui_RenameFileListSettingsView(object):
         RenameFileListSettingsView.setWindowTitle(QCoreApplication.translate("RenameFileListSettingsView", u"Form", None))
         self.pushButton_choose.setText(QCoreApplication.translate("RenameFileListSettingsView", u"Choose", None))
         self.pushButton_clear.setText(QCoreApplication.translate("RenameFileListSettingsView", u"Clear", None))
+#if QT_CONFIG(tooltip)
+        self.ext_selection_label.setToolTip(QCoreApplication.translate("RenameFileListSettingsView", u"e.g. tsv, txt, csv, xml, edf", None))
+#endif // QT_CONFIG(tooltip)
         self.ext_selection_label.setText(QCoreApplication.translate("RenameFileListSettingsView", u"File extension of the file to rename (to filter the file list)", None))
 #if QT_CONFIG(tooltip)
-        self.ext_selection_lineedit.setToolTip(QCoreApplication.translate("RenameFileListSettingsView", u"e.g. tsv, txt, csv, xml, edf", None))
+        self.ext_selection_lineedit.setToolTip("")
 #endif // QT_CONFIG(tooltip)
         self.ext_selection_lineedit.setPlaceholderText(QCoreApplication.translate("RenameFileListSettingsView", u"tsv", None))
+#if QT_CONFIG(tooltip)
+        self.n_char_to_keep_label.setToolTip(QCoreApplication.translate("RenameFileListSettingsView", u"e.g. keeping 9 characters renames \"subject01 filtered.tsv\" to \"subject01.tsv\". Use -1 to keep all characters.", None))
+#endif // QT_CONFIG(tooltip)
         self.n_char_to_keep_label.setText(QCoreApplication.translate("RenameFileListSettingsView", u"Number of characters to keep from the original name", None))
 #if QT_CONFIG(tooltip)
         self.checkBox_keep_all_char.setToolTip(QCoreApplication.translate("RenameFileListSettingsView", u"Check to keep all the characters.", None))
 #endif // QT_CONFIG(tooltip)
         self.checkBox_keep_all_char.setText(QCoreApplication.translate("RenameFileListSettingsView", u"all", None))
 #if QT_CONFIG(tooltip)
-        self.spinBox_n_char_to_keep.setToolTip(QCoreApplication.translate("RenameFileListSettingsView", u"e.g. keeping 9 characters renames \"subject01 filtered.tsv\" to \"subject01.tsv\". Use -1 to keep all characters.", None))
+        self.spinBox_n_char_to_keep.setToolTip("")
+#endif // QT_CONFIG(tooltip)
+#if QT_CONFIG(tooltip)
+        self.pattern_to_rem_label.setToolTip(QCoreApplication.translate("RenameFileListSettingsView", u"e.g. remove \"_annotations\" to rename \"subject01_annotations.txt\" as \"subject01.txt\"", None))
 #endif // QT_CONFIG(tooltip)
         self.pattern_to_rem_label.setText(QCoreApplication.translate("RenameFileListSettingsView", u"Pattern to remove from the original name", None))
 #if QT_CONFIG(tooltip)
-        self.pattern_to_rem_lineedit.setToolTip(QCoreApplication.translate("RenameFileListSettingsView", u"e.g. remove \"_annotations\" to rename \"subject01_annotations.txt\" as \"subject01.txt\"", None))
+        self.pattern_to_rem_lineedit.setToolTip("")
+#endif // QT_CONFIG(tooltip)
+#if QT_CONFIG(tooltip)
+        self.prefix_label.setToolTip(QCoreApplication.translate("RenameFileListSettingsView", u"e.g. \"visit1_\" to rename \"subject01.tsv\" to \"visit1_subject01.tsv\"", None))
 #endif // QT_CONFIG(tooltip)
         self.prefix_label.setText(QCoreApplication.translate("RenameFileListSettingsView", u"Prefix to add to the original filename", None))
 #if QT_CONFIG(tooltip)
-        self.prefix_lineedit.setToolTip(QCoreApplication.translate("RenameFileListSettingsView", u"e.g. \"visit1_\" to rename \"subject01.tsv\" to \"visit1_subject01.tsv\"", None))
+        self.prefix_lineedit.setToolTip("")
+#endif // QT_CONFIG(tooltip)
+#if QT_CONFIG(tooltip)
+        self.suffix_label.setToolTip(QCoreApplication.translate("RenameFileListSettingsView", u"e.g. \"_visit1\" to rename \"subject01.tsv\" to \"subject01_visit1.tsv\"", None))
 #endif // QT_CONFIG(tooltip)
         self.suffix_label.setText(QCoreApplication.translate("RenameFileListSettingsView", u"Suffix to add to the original filename", None))
 #if QT_CONFIG(tooltip)
-        self.suffix_lineedit.setToolTip(QCoreApplication.translate("RenameFileListSettingsView", u"e.g. \"_visit1\" to rename \"subject01.tsv\" to \"subject01_visit1.tsv\"", None))
+        self.suffix_lineedit.setToolTip("")
 #endif // QT_CONFIG(tooltip)
 #if QT_CONFIG(tooltip)
         self.checkBox_keep_original.setToolTip("")

@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>725</width>
-    <height>353</height>
+    <width>751</width>
+    <height>497</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -25,18 +25,17 @@
            <property name="font">
             <font>
              <pointsize>12</pointsize>
-             <weight>75</weight>
              <bold>true</bold>
             </font>
            </property>
            <property name="layoutDirection">
-            <enum>Qt::LeftToRight</enum>
+            <enum>Qt::LayoutDirection::LeftToRight</enum>
            </property>
            <property name="text">
             <string>Filenames</string>
            </property>
            <property name="alignment">
-            <set>Qt::AlignCenter</set>
+            <set>Qt::AlignmentFlag::AlignCenter</set>
            </property>
           </widget>
          </item>
@@ -75,28 +74,27 @@
          <property name="font">
           <font>
            <pointsize>12</pointsize>
-           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
          <property name="layoutDirection">
-          <enum>Qt::LeftToRight</enum>
+          <enum>Qt::LayoutDirection::LeftToRight</enum>
          </property>
          <property name="text">
           <string>Csv Reader Master Settings</string>
          </property>
          <property name="alignment">
-          <set>Qt::AlignCenter</set>
+          <set>Qt::AlignmentFlag::AlignCenter</set>
          </property>
         </widget>
        </item>
        <item>
         <spacer name="verticalSpacer_3">
          <property name="orientation">
-          <enum>Qt::Vertical</enum>
+          <enum>Qt::Orientation::Vertical</enum>
          </property>
          <property name="sizeType">
-          <enum>QSizePolicy::Fixed</enum>
+          <enum>QSizePolicy::Policy::Fixed</enum>
          </property>
          <property name="sizeHint" stdset="0">
           <size>
@@ -117,7 +115,7 @@
             </sizepolicy>
            </property>
            <property name="toolTip">
-            <string>The index of the column for the event group. To disable the group mark 0.</string>
+            <string/>
            </property>
            <property name="value">
             <number>1</number>
@@ -130,37 +128,40 @@
             <string>Check if the event is identified by its center instead of its onset.</string>
            </property>
            <property name="text">
-            <string>Event identified by its center</string>
+            <string>Event identified by its center   </string>
            </property>
           </widget>
          </item>
          <item row="5" column="0">
           <widget class="QLabel" name="label_10">
+           <property name="toolTip">
+            <string>The index of the column for the event group. To disable the group mark 0.</string>
+           </property>
            <property name="text">
-            <string>Event group column</string>
+            <string>Event group column    </string>
            </property>
            <property name="alignment">
-            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+            <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
            </property>
           </widget>
          </item>
          <item row="3" column="1">
           <widget class="QLabel" name="label_6">
            <property name="layoutDirection">
-            <enum>Qt::LeftToRight</enum>
+            <enum>Qt::LayoutDirection::LeftToRight</enum>
            </property>
            <property name="text">
             <string>Sample rate</string>
            </property>
            <property name="alignment">
-            <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+            <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter</set>
            </property>
           </widget>
          </item>
          <item row="3" column="3">
           <spacer name="horizontalSpacer_3">
            <property name="orientation">
-            <enum>Qt::Horizontal</enum>
+            <enum>Qt::Orientation::Horizontal</enum>
            </property>
            <property name="sizeHint" stdset="0">
             <size>
@@ -176,17 +177,20 @@
             <string>Check to keep the read file header, otherwise the header will be replaced with the Snooz header.</string>
            </property>
            <property name="text">
-            <string>Personnalized header</string>
+            <string>Personnalized header   </string>
            </property>
           </widget>
          </item>
          <item row="10" column="0">
           <widget class="QLabel" name="label_8">
+           <property name="toolTip">
+            <string>Enter a fixed duration for all events.</string>
+           </property>
            <property name="text">
-            <string>Fixed duration</string>
+            <string>Fixed duration    </string>
            </property>
            <property name="alignment">
-            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+            <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
            </property>
           </widget>
          </item>
@@ -196,7 +200,7 @@
             <string>Input format</string>
            </property>
            <property name="alignment">
-            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+            <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
            </property>
           </widget>
          </item>
@@ -216,7 +220,7 @@
          <item row="9" column="3">
           <spacer name="horizontalSpacer_5">
            <property name="orientation">
-            <enum>Qt::Horizontal</enum>
+            <enum>Qt::Orientation::Horizontal</enum>
            </property>
            <property name="sizeHint" stdset="0">
             <size>
@@ -228,14 +232,17 @@
          </item>
          <item row="7" column="0">
           <widget class="QLabel" name="label_2">
+           <property name="toolTip">
+            <string>The index of the column for the event name. Can not be disabled.</string>
+           </property>
            <property name="layoutDirection">
-            <enum>Qt::LeftToRight</enum>
+            <enum>Qt::LayoutDirection::LeftToRight</enum>
            </property>
            <property name="text">
-            <string>Event name column</string>
+            <string>Event name column    </string>
            </property>
            <property name="alignment">
-            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+            <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
            </property>
           </widget>
          </item>
@@ -254,21 +261,24 @@
          </item>
          <item row="9" column="0">
           <widget class="QLabel" name="label_4">
+           <property name="toolTip">
+            <string>The index of the column for the event duration. To disable the duration mark 0.</string>
+           </property>
            <property name="layoutDirection">
-            <enum>Qt::LeftToRight</enum>
+            <enum>Qt::LayoutDirection::LeftToRight</enum>
            </property>
            <property name="text">
-            <string>Duration column</string>
+            <string>Duration column    </string>
            </property>
            <property name="alignment">
-            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+            <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
            </property>
           </widget>
          </item>
          <item row="8" column="3">
           <spacer name="horizontalSpacer">
            <property name="orientation">
-            <enum>Qt::Horizontal</enum>
+            <enum>Qt::Orientation::Horizontal</enum>
            </property>
            <property name="sizeHint" stdset="0">
             <size>
@@ -284,14 +294,14 @@
             <string>Channel column</string>
            </property>
            <property name="alignment">
-            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+            <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
            </property>
           </widget>
          </item>
          <item row="10" column="2">
           <spacer name="horizontalSpacer_7">
            <property name="orientation">
-            <enum>Qt::Horizontal</enum>
+            <enum>Qt::Orientation::Horizontal</enum>
            </property>
            <property name="sizeHint" stdset="0">
             <size>
@@ -310,7 +320,7 @@
             </sizepolicy>
            </property>
            <property name="toolTip">
-            <string>The index of the column for the event onset or center. Can not be disabled.</string>
+            <string/>
            </property>
            <property name="minimum">
             <number>1</number>
@@ -322,14 +332,17 @@
          </item>
          <item row="8" column="0">
           <widget class="QLabel" name="label_3">
+           <property name="toolTip">
+            <string>The index of the column for the event onset or center. Can not be disabled.</string>
+           </property>
            <property name="layoutDirection">
-            <enum>Qt::LeftToRight</enum>
+            <enum>Qt::LayoutDirection::LeftToRight</enum>
            </property>
            <property name="text">
-            <string>Onset/Center column</string>
+            <string>Onset/Center column    </string>
            </property>
            <property name="alignment">
-            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+            <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
            </property>
           </widget>
          </item>
@@ -362,7 +375,7 @@
          <item row="10" column="3">
           <spacer name="horizontalSpacer_6">
            <property name="orientation">
-            <enum>Qt::Horizontal</enum>
+            <enum>Qt::Orientation::Horizontal</enum>
            </property>
            <property name="sizeHint" stdset="0">
             <size>
@@ -378,7 +391,7 @@
             <bool>false</bool>
            </property>
            <property name="toolTip">
-            <string>Enter a fixed duration for all events.</string>
+            <string/>
            </property>
           </widget>
          </item>
@@ -391,7 +404,7 @@
             </sizepolicy>
            </property>
            <property name="toolTip">
-            <string>The index of the column for the event name. Can not be disabled.</string>
+            <string/>
            </property>
            <property name="minimum">
             <number>1</number>
@@ -404,7 +417,7 @@
          <item row="7" column="3">
           <spacer name="horizontalSpacer_4">
            <property name="orientation">
-            <enum>Qt::Horizontal</enum>
+            <enum>Qt::Orientation::Horizontal</enum>
            </property>
            <property name="sizeHint" stdset="0">
             <size>
@@ -423,7 +436,7 @@
             </sizepolicy>
            </property>
            <property name="toolTip">
-            <string>The index of the column for the event duration. To disable the duration mark 0.</string>
+            <string/>
            </property>
            <property name="minimum">
             <number>0</number>
@@ -436,7 +449,7 @@
          <item row="1" column="3">
           <spacer name="horizontalSpacer_2">
            <property name="orientation">
-            <enum>Qt::Horizontal</enum>
+            <enum>Qt::Orientation::Horizontal</enum>
            </property>
            <property name="sizeHint" stdset="0">
             <size>
@@ -452,7 +465,7 @@
             <string>File format separator</string>
            </property>
            <property name="alignment">
-            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+            <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
            </property>
           </widget>
          </item>
@@ -484,7 +497,7 @@
        <item>
         <spacer name="verticalSpacer_2">
          <property name="orientation">
-          <enum>Qt::Vertical</enum>
+          <enum>Qt::Orientation::Vertical</enum>
          </property>
          <property name="sizeHint" stdset="0">
           <size>
@@ -606,7 +619,7 @@
   <slot>clear_list_slot()</slot>
  </slots>
  <buttongroups>
-  <buttongroup name="buttonGroup_2"/>
   <buttongroup name="buttonGroup"/>
+  <buttongroup name="buttonGroup_2"/>
  </buttongroups>
 </ui>

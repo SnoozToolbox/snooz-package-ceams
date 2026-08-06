@@ -25,7 +25,7 @@ class Ui_OutputFiles(object):
     def setupUi(self, OutputFiles):
         if not OutputFiles.objectName():
             OutputFiles.setObjectName(u"OutputFiles")
-        OutputFiles.resize(1045, 923)
+        OutputFiles.resize(1273, 923)
         OutputFiles.setStyleSheet(u"font: 12pt \"Roboto\";")
         self.verticalLayout_6 = QVBoxLayout(OutputFiles)
         self.verticalLayout_6.setObjectName(u"verticalLayout_6")
@@ -86,6 +86,10 @@ class Ui_OutputFiles(object):
 
 
         self.horizontalLayout.addLayout(self.verticalLayout)
+
+        self.horizontalSpacer_4 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+
+        self.horizontalLayout.addItem(self.horizontalSpacer_4)
 
         self.verticalLayout_4 = QVBoxLayout()
         self.verticalLayout_4.setObjectName(u"verticalLayout_4")
@@ -152,35 +156,32 @@ class Ui_OutputFiles(object):
 
         self.gridLayout = QGridLayout()
         self.gridLayout.setObjectName(u"gridLayout")
-        self.label_cohort_pic_all = QLabel(OutputFiles)
-        self.label_cohort_pic_all.setObjectName(u"label_cohort_pic_all")
-        self.label_cohort_pic_all.setEnabled(True)
-        sizePolicy1 = QSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Preferred)
-        sizePolicy1.setHorizontalStretch(0)
-        sizePolicy1.setVerticalStretch(0)
-        sizePolicy1.setHeightForWidth(self.label_cohort_pic_all.sizePolicy().hasHeightForWidth())
-        self.label_cohort_pic_all.setSizePolicy(sizePolicy1)
-        self.label_cohort_pic_all.setMinimumSize(QSize(0, 0))
-        self.label_cohort_pic_all.setMaximumSize(QSize(16777215, 16777215))
-        self.label_cohort_pic_all.setFrameShape(QFrame.Shape.NoFrame)
-        self.label_cohort_pic_all.setScaledContents(False)
-        self.label_cohort_pic_all.setAlignment(Qt.AlignmentFlag.AlignLeading|Qt.AlignmentFlag.AlignLeft|Qt.AlignmentFlag.AlignVCenter)
-
-        self.gridLayout.addWidget(self.label_cohort_pic_all, 3, 1, 1, 1)
-
-        self.radioButton_all = QRadioButton(OutputFiles)
+        self.radioButton_mean = QRadioButton(OutputFiles)
         self.buttonGroup_mean = QButtonGroup(OutputFiles)
         self.buttonGroup_mean.setObjectName(u"buttonGroup_mean")
-        self.buttonGroup_mean.addButton(self.radioButton_all)
-        self.radioButton_all.setObjectName(u"radioButton_all")
-
-        self.gridLayout.addWidget(self.radioButton_all, 0, 1, 1, 1)
-
-        self.radioButton_mean = QRadioButton(OutputFiles)
         self.buttonGroup_mean.addButton(self.radioButton_mean)
         self.radioButton_mean.setObjectName(u"radioButton_mean")
 
         self.gridLayout.addWidget(self.radioButton_mean, 1, 0, 1, 1)
+
+        self.label_cohort_pic_shade = QLabel(OutputFiles)
+        self.label_cohort_pic_shade.setObjectName(u"label_cohort_pic_shade")
+        sizePolicy1 = QSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Preferred)
+        sizePolicy1.setHorizontalStretch(0)
+        sizePolicy1.setVerticalStretch(0)
+        sizePolicy1.setHeightForWidth(self.label_cohort_pic_shade.sizePolicy().hasHeightForWidth())
+        self.label_cohort_pic_shade.setSizePolicy(sizePolicy1)
+        self.label_cohort_pic_shade.setMinimumSize(QSize(0, 0))
+        self.label_cohort_pic_shade.setMaximumSize(QSize(16777215, 16777215))
+        self.label_cohort_pic_shade.setFrameShape(QFrame.Shape.NoFrame)
+        self.label_cohort_pic_shade.setScaledContents(False)
+
+        self.gridLayout.addWidget(self.label_cohort_pic_shade, 3, 0, 1, 1)
+
+        self.label_7 = QLabel(OutputFiles)
+        self.label_7.setObjectName(u"label_7")
+
+        self.gridLayout.addWidget(self.label_7, 2, 2, 1, 1)
 
         self.radioButton_meanstd = QRadioButton(OutputFiles)
         self.buttonGroup_mean.addButton(self.radioButton_meanstd)
@@ -192,26 +193,33 @@ class Ui_OutputFiles(object):
 
         self.gridLayout.addWidget(self.radioButton_meanstd, 0, 0, 1, 1)
 
-        self.label_cohort_pic_shade = QLabel(OutputFiles)
-        self.label_cohort_pic_shade.setObjectName(u"label_cohort_pic_shade")
-        sizePolicy1.setHeightForWidth(self.label_cohort_pic_shade.sizePolicy().hasHeightForWidth())
-        self.label_cohort_pic_shade.setSizePolicy(sizePolicy1)
-        self.label_cohort_pic_shade.setMinimumSize(QSize(0, 0))
-        self.label_cohort_pic_shade.setMaximumSize(QSize(16777215, 16777215))
-        self.label_cohort_pic_shade.setFrameShape(QFrame.Shape.NoFrame)
-        self.label_cohort_pic_shade.setScaledContents(False)
+        self.label_cohort_pic_all = QLabel(OutputFiles)
+        self.label_cohort_pic_all.setObjectName(u"label_cohort_pic_all")
+        self.label_cohort_pic_all.setEnabled(True)
+        sizePolicy1.setHeightForWidth(self.label_cohort_pic_all.sizePolicy().hasHeightForWidth())
+        self.label_cohort_pic_all.setSizePolicy(sizePolicy1)
+        self.label_cohort_pic_all.setMinimumSize(QSize(0, 0))
+        self.label_cohort_pic_all.setMaximumSize(QSize(16777215, 16777215))
+        self.label_cohort_pic_all.setFrameShape(QFrame.Shape.NoFrame)
+        self.label_cohort_pic_all.setScaledContents(False)
+        self.label_cohort_pic_all.setAlignment(Qt.AlignmentFlag.AlignLeading|Qt.AlignmentFlag.AlignLeft|Qt.AlignmentFlag.AlignVCenter)
 
-        self.gridLayout.addWidget(self.label_cohort_pic_shade, 3, 0, 1, 1)
+        self.gridLayout.addWidget(self.label_cohort_pic_all, 3, 2, 1, 1)
+
+        self.radioButton_all = QRadioButton(OutputFiles)
+        self.buttonGroup_mean.addButton(self.radioButton_all)
+        self.radioButton_all.setObjectName(u"radioButton_all")
+
+        self.gridLayout.addWidget(self.radioButton_all, 0, 2, 1, 1)
 
         self.label_6 = QLabel(OutputFiles)
         self.label_6.setObjectName(u"label_6")
 
         self.gridLayout.addWidget(self.label_6, 2, 0, 1, 1)
 
-        self.label_7 = QLabel(OutputFiles)
-        self.label_7.setObjectName(u"label_7")
+        self.horizontalSpacer_5 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
 
-        self.gridLayout.addWidget(self.label_7, 2, 1, 1, 1)
+        self.gridLayout.addItem(self.horizontalSpacer_5, 1, 1, 1, 1)
 
 
         self.verticalLayout_2.addLayout(self.gridLayout)
@@ -451,20 +459,20 @@ class Ui_OutputFiles(object):
 #endif // QT_CONFIG(tooltip)
         self.radioButton_subject_sel.setText(QCoreApplication.translate("OutputFiles", u"Useful for exploring the set of SW events to identify outliers or artifacts.\n"
 "All SW curves are displayed.", None))
-        self.label_18.setText(QCoreApplication.translate("OutputFiles", u"Example of a figure showing all SW detected for one channel.", None))
+        self.label_18.setText(QCoreApplication.translate("OutputFiles", u"Example of a figure showing all SW detected for one channel.                                                  ", None))
         self.label_subject_pic_all.setText("")
         self.label_2.setText(QCoreApplication.translate("OutputFiles", u"<html><head/><body><p>Cohort level : to generate pictures for the cohort, groups are all displayed on the same picture.</p></body></html>", None))
         self.label_3.setText(QCoreApplication.translate("OutputFiles", u"<html><head/><body><p><span style=\" font-weight:700;\">Display Options</span></p></body></html>", None))
-        self.label_cohort_pic_all.setText("")
-        self.radioButton_all.setText(QCoreApplication.translate("OutputFiles", u"Display all the SW signal curves on the picture.", None))
         self.radioButton_mean.setText(QCoreApplication.translate("OutputFiles", u"MEAN : Display only the mean SW curve", None))
-        self.radioButton_meanstd.setText(QCoreApplication.translate("OutputFiles", u"MEAN + STD : Display the mean SW curve in bold line\n"
-"and the SW curve standard deviation in gray shaded area.", None))
         self.label_cohort_pic_shade.setText("")
-        self.label_6.setText(QCoreApplication.translate("OutputFiles", u"Example of a figure showing the averaged SW for each group.\n"
-"Average and STD displayed are across the subjects of each group.", None))
         self.label_7.setText(QCoreApplication.translate("OutputFiles", u"Example of a figure showing the averaged SW of each recording.\n"
 "The averaged curve is computed across all channels.", None))
+        self.radioButton_meanstd.setText(QCoreApplication.translate("OutputFiles", u"MEAN + STD : Display the mean SW curve in bold line\n"
+"and the SW curve standard deviation in gray shaded area.", None))
+        self.label_cohort_pic_all.setText("")
+        self.radioButton_all.setText(QCoreApplication.translate("OutputFiles", u"Display all the SW signal curves on the picture.                                                                   ", None))
+        self.label_6.setText(QCoreApplication.translate("OutputFiles", u"Example of a figure showing the averaged SW for each group.\n"
+"Average and STD displayed are across the subjects of each group.", None))
         self.label_11.setText(QCoreApplication.translate("OutputFiles", u"<html><head/><body><p><span style=\" font-weight:600;\">One picture per cohort</span></p></body></html>", None))
         self.checkBox_cohort_avg.setText(QCoreApplication.translate("OutputFiles", u"SW averaged across channels per group of subjects. Each curve represents the signal averaged accross all the channels or ROIs.", None))
         self.label_12.setText(QCoreApplication.translate("OutputFiles", u"<html><head/><body><p><span style=\" font-weight:600;\">One picture per channel or ROI</span></p></body></html>", None))

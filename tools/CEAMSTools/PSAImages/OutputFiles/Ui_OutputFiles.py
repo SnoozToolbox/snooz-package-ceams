@@ -662,7 +662,7 @@ class Ui_OutputFiles(object):
 #if QT_CONFIG(tooltip)
         self.checkBox_force_axis.setToolTip(QCoreApplication.translate("OutputFiles", u"Enable this option for consistent axes across all pictures and define the axes limits. Otherwise, the axes are automatically determined based on the data.", None))
 #endif // QT_CONFIG(tooltip)
-        self.checkBox_force_axis.setText(QCoreApplication.translate("OutputFiles", u"Force axis limits", None))
+        self.checkBox_force_axis.setText(QCoreApplication.translate("OutputFiles", u"Force axis limits   ", None))
         self.label_25.setText(QCoreApplication.translate("OutputFiles", u"x-min:", None))
         self.label_26.setText(QCoreApplication.translate("OutputFiles", u"x-max:", None))
         self.label_27.setText(QCoreApplication.translate("OutputFiles", u"y-min:", None))
