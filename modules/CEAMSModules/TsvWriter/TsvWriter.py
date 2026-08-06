@@ -159,7 +159,7 @@ class TsvWriter(SciNode):
             else:
                 header = events.columns.values.tolist()
 
-                if time_elapsed:
+                if time_elapsed and (events_to_write.size > 0):
                     header.append('time elapsed(HH:MM:SS)')
             
             # Sort events based on the start_sec

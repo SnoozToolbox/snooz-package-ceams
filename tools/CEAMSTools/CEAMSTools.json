@@ -23,7 +23,7 @@
         {
             "item_name": "ConvertEDFbrowser",
             "item_type": "tool",
-            "item_version": "2.1.0",
+            "item_version": "2.2.0",
             "item_hooks": [
                 {
                     "endpoint_name": "menu_endpoint",
@@ -37,7 +37,7 @@
         {
             "item_name": "ConvertXMLCompumedics",
             "item_type": "tool",
-            "item_version": "2.3.0",
+            "item_version": "2.4.0",
             "item_hooks": [
                 {
                     "endpoint_name": "menu_endpoint",
@@ -107,7 +107,7 @@
         {
             "item_name": "ExtractAnnotation",
             "item_type": "tool",
-            "item_version": "2.3.0",
+            "item_version": "2.4.0",
             "item_hooks": [
                 {
                     "endpoint_name": "menu_endpoint",
@@ -317,7 +317,7 @@
         {
             "item_name": "SleepCycleExport",
             "item_type": "tool",
-            "item_version": "2.4.0",
+            "item_version": "2.5.0",
             "item_hooks": [
                 {
                     "endpoint_name": "menu_endpoint",
@@ -359,7 +359,7 @@
         {
             "item_name": "CompareEventsFromPSG",
             "item_type": "tool",
-            "item_version": "2.3.0",
+            "item_version": "2.4.0",
             "item_hooks": [
                 {
                     "endpoint_name": "menu_endpoint",
