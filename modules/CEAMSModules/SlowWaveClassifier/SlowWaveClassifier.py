@@ -637,15 +637,23 @@ class SlowWaveClassifier(SciNode):
             self.slow_wave_df and self.slow_wave_list are updated with the category of the slow wave
         """
 
+        # KMeans cluster labels are arbitrary, remap them so category 1 is the
+        # cluster with the slowest transition frequency, increasing with it
+        cluster_centers = km.cluster_centers_.flatten()
+        cluster_order = np.argsort(cluster_centers)
+        label_to_category = np.empty_like(cluster_order)
+        label_to_category[cluster_order] = np.arange(1, len(cluster_order) + 1)
+        categories = label_to_category[km.labels_]
+
         # Add the category to each event in the dataframe concatenated
-        self.slow_wave_df['category'] = km.labels_+1
+        self.slow_wave_df['category'] = categories
         self.slow_wave_df['category'].astype(int)
 
         # Add the category to each event in the list of dataframes
         i_sw = 0
         for i_recor, recor in enumerate(self.slow_wave_list):
             for i, event in recor.iterrows():
-                recor.loc[i,['category']] = km.labels_[i_sw]+1
+                recor.loc[i,['category']] = categories[i_sw]
                 i_sw += 1
             self.slow_wave_list[i_recor]['category'] = recor['category'].astype(int)
 
