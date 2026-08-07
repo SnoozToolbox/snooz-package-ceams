@@ -22,6 +22,7 @@ from commons.BaseSettingsView import BaseSettingsView
 from widgets.TableDialog import TableDialog
 from commons.Utils import deleteItemsOfLayout
 from widgets.WarningDialog import WarningDialog
+from widgets.WarningDialogWithButtons import WarningDialogWithButtons
 
 
 from CEAMSModules.PSGReader.PSGReaderManager import PSGReaderManager
@@ -921,6 +922,21 @@ class PSGReaderSettingsView( BaseSettingsView,  Ui_PSGReaderSettingsView, QtWidg
         if len(file_list)>0:
             stage_warnings = []
             if self._options['file_selection_only']['value'] == "0":
+
+                files_without_annotation = self._get_files_without_annotation()
+                if files_without_annotation:
+                    files_list_msg = "\n".join(f"- {filename}" for filename in files_without_annotation)
+                    msg = (
+                        "The following recording(s) are missing an annotation file:\n"
+                        f"{files_list_msg}\n\n"
+                        "If you wish to proceed without an annotation file, you may ignore this message. "
+                        "Otherwise, please provide an annotation file in Snooz TSV format containing sleep stages for each recording listed above.\n\n"
+                        "If your annotations are in another format (XML, EDF+, TXT, etc.), convert them first "
+                        "using a converter tool in the \"Preprocessing\" section of Snooz Toolbox.\n\n"
+                        "Do you wish to continue without annotation files?"
+                    )
+                    if not WarningDialogWithButtons.show_warning(msg):
+                        return False
 
                 for file in file_list:
                     montage_used = montages_info_df[(montages_info_df['Filename']==file) & (montages_info_df['Use']==True)]
@@ -1877,3 +1893,16 @@ class PSGReaderSettingsView( BaseSettingsView,  Ui_PSGReaderSettingsView, QtWidg
 
     def updateLabel_Channels(self, count):
         self.label_Channels.setText(f"Channels ({count})")
+    
+    def _get_files_without_annotation(self):
+        """
+        Return recording filenames whose sleep stages are only '9' (no annotation file).
+        """
+        files_without_annotation = []
+        files_model = self.files_model
+        file_list = self.get_files_list(files_model)
+
+        for file_path in file_list:
+            if not self.is_stages_scored(file_path, files_model):
+                files_without_annotation.append(os.path.basename(file_path))
+        return files_without_annotation
