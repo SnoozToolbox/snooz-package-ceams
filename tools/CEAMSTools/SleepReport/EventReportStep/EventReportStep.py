@@ -69,11 +69,57 @@ class EventReportStep( BaseStepView,  Ui_EventReportStep, QtWidgets.QWidget):
             self.events_list_checkBox.setChecked(message)
         if topic == self._event_report_dict_topic:
             model = self.file_tableview.model()
-            for filename, reports in message.items():
+            if model is None or not isinstance(message, dict):
+                return
+
+            for filename, file_data in message.items():
+                if not isinstance(file_data, dict):
+                    continue
+
+                reports = file_data.get("reports", []) or []
+                combined_groups = file_data.get("combined_groups", []) or []
+
+                # Restore combined groups first so reports can attach to them.
+                for combined_group in combined_groups:
+                    self._add_group(
+                        filename,
+                        copy.deepcopy(combined_group["group_data"]),
+                        copy.deepcopy(combined_group["events"]))
+
                 for report in reports:
                     self._add_report(filename, report, report['group_name'], report['event_name'])
+
             model.update_reports_count()
-            
+            # Refresh the tree if a subject is already selected.
+            if self.get_current_filename() is not None:
+                file_item = self._get_file_item_by_filename(self.get_current_filename())
+                if file_item is not None:
+                    self.reset_event_list()
+                    self.event_treewidget.addTopLevelItems(file_item.events_model.items)
+
+    def _collect_combined_groups(self, file_item):
+        """Return combined groups created via Combine Events for one file."""
+        combined_groups = []
+        for group_item in file_item.events_model.items:
+            events = []
+            for j in range(group_item.childCount()):
+                event_item = group_item.child(j)
+                if event_item.original_group_name is None:
+                    continue
+                events.append({
+                    "name": event_item.event_name,
+                    "count": event_item.event_count,
+                    "original_group_name": event_item.original_group_name
+                })
+            if events:
+                combined_groups.append({
+                    "group_data": {
+                        "name": group_item.group_name,
+                        "count": group_item.event_count
+                    },
+                    "events": events
+                })
+        return combined_groups
 
     def on_apply_settings(self):
         self._pub_sub_manager.publish(self, self._event_report_csv_report_topic, self.csv_report_checkbox.isChecked())
@@ -97,9 +143,11 @@ class EventReportStep( BaseStepView,  Ui_EventReportStep, QtWidgets.QWidget):
                     for report in event_item.reports_model.reports:
                         rep = copy.deepcopy(report)
                         reports.append(rep)
-                    
 
-            files[filename] = reports
+            files[filename] = {
+                "reports": reports,
+                "combined_groups": self._collect_combined_groups(file_item)
+            }
         self._pub_sub_manager.publish(self, self._event_report_dict_topic, files)
 
 
@@ -181,6 +229,8 @@ class EventReportStep( BaseStepView,  Ui_EventReportStep, QtWidgets.QWidget):
     def _add_group(self, filename, group_data, events):
         # Get the file_item based on the filename
         file_item  = self._get_file_item_by_filename(filename)
+        if file_item is None:
+            return False
 
         # Check if the group already exist
         group_item = file_item.events_model.find_group_by_name(group_data['name'])

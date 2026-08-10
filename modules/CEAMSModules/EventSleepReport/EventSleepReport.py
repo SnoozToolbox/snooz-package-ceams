@@ -66,10 +66,10 @@ class EventSleepReport(SciNode):
                 Dictionary of information about the current recording.
             "sleep_stages" : Pandas Dataframe
                 List of sleep stages and sleep cycles.
-            "events_report_criteria": list[dict]
-                List of event report to generate. Each element is a dictionary with
-                all event's selection criteria used in the report.
-                (one report per item that can be identified with its name)
+            "events_report_criteria": dict
+                Per-file payload with:
+                - "reports": list[dict] of event reports to generate
+                - "combined_groups": list[dict] used only by the UI (ignored here)
             "nominal_values": TODO TYPE
                 TODO DESCRIPTION
                 (ne pas faire pour l'instant)
@@ -107,6 +107,15 @@ class EventSleepReport(SciNode):
         if isinstance(report_constants,dict) == False:
             raise NodeInputException(self.identifier, "report_constants",\
                 "SleepReport report_constants expected type is dict and received type is " + str(type(report_constants)))   
+
+        # Per-file payload from EventReportStep: {"reports": [...], "combined_groups": [...]}
+        if not isinstance(events_report_criteria, dict):
+            raise NodeInputException(self.identifier, "events_report_criteria",\
+                "EventSleepReport events_report_criteria expected type is dict and received type is " + str(type(events_report_criteria)))
+        events_report_criteria = events_report_criteria.get("reports", []) or []
+        if not isinstance(events_report_criteria, list):
+            raise NodeInputException(self.identifier, "events_report_criteria",\
+                "EventSleepReport events_report_criteria['reports'] expected type is list and received type is " + str(type(events_report_criteria)))
 
         # Re-order to process "respiratory events first"
         events_report_criteria = self.reorder_reports_for_respiratory(events_report_criteria)
