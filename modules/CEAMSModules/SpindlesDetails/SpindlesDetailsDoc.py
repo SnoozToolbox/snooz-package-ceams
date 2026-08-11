@@ -149,7 +149,15 @@ def _get_doc(N_CYCLE, spindle_event_name, N_HOURS=0):
             'total_N2N3_amp_rms_uV' : 'Total - Average rms amplitude (µV) in N2 and N3 stage.',
             'total_NREM_amp_rms_uV' : 'Total - Average rms amplitude (µV) in NREM stage (N1, N2, N3).',
             'total_R_amp_rms_uV' : 'Total - Average rms amplitude (µV) in REM stage.',
-            'total_amp_rms_uV' : 'Total - Average rms (Root Mean Square) amplitude (µV)'}
+            'total_amp_rms_uV' : 'Total - Average rms (Root Mean Square) amplitude (µV)',
+
+            'total_N1_RSAI_uVsec' : 'Total - RMS Spindle Activity Index (sum of RMS amplitude × spindle duration) in N1 stage (µV·sec).',
+            'total_N2_RSAI_uVsec' : 'Total - RMS Spindle Activity Index (sum of RMS amplitude × spindle duration) in N2 stage (µV·sec).',
+            'total_N3_RSAI_uVsec' : 'Total - RMS Spindle Activity Index (sum of RMS amplitude × spindle duration) in N3 stage (µV·sec).',
+            'total_N2N3_RSAI_uVsec' : 'Total - RMS Spindle Activity Index (sum of RMS amplitude × spindle duration) in N2 and N3 stage (µV·sec).',
+            'total_NREM_RSAI_uVsec' : 'Total - RMS Spindle Activity Index (sum of RMS amplitude × spindle duration) in NREM stage (N1, N2, N3) (µV·sec).',
+            'total_R_RSAI_uVsec' : 'Total - RMS Spindle Activity Index (sum of RMS amplitude × spindle duration) in REM stage (µV·sec).',
+            'total_RSAI_uVsec' : 'Total - RMS Spindle Activity Index (sum of RMS amplitude × spindle duration) in all stages (µV·sec)'}
     cycle_dict = {}
     for i_cycle in range(N_CYCLE):
         current_cycle_dict = \
@@ -217,7 +225,15 @@ def _get_doc(N_CYCLE, spindle_event_name, N_HOURS=0):
             f'cyc{i_cycle+1}_N2N3_amp_rms_uV' : f'Cycle {i_cycle+1} - Average rms amplitude (µV) in N2 and N3 stage.',
             f'cyc{i_cycle+1}_NREM_amp_rms_uV' : f'Cycle {i_cycle+1} - Average rms amplitude (µV) in NREM stage (N1, N2, N3).',
             f'cyc{i_cycle+1}_R_amp_rms_uV' : f'Cycle {i_cycle+1} - Average rms amplitude (µV) in REM stage.',
-            f'cyc{i_cycle+1}_amp_rms_uV' : f'Cycle {i_cycle+1} - Average rms (Root Mean Square) amplitude (µV) in all stages'}
+            f'cyc{i_cycle+1}_amp_rms_uV' : f'Cycle {i_cycle+1} - Average rms (Root Mean Square) amplitude (µV) in all stages',
+
+            f'cyc{i_cycle+1}_N1_RSAI_uVsec' : f'Cycle {i_cycle+1} - RMS Spindle Activity Index (sum of RMS amplitude × spindle duration) in N1 stage (µV·sec).',
+            f'cyc{i_cycle+1}_N2_RSAI_uVsec' : f'Cycle {i_cycle+1} - RMS Spindle Activity Index (sum of RMS amplitude × spindle duration) in N2 stage (µV·sec).',
+            f'cyc{i_cycle+1}_N3_RSAI_uVsec' : f'Cycle {i_cycle+1} - RMS Spindle Activity Index (sum of RMS amplitude × spindle duration) in N3 stage (µV·sec).',
+            f'cyc{i_cycle+1}_N2N3_RSAI_uVsec' : f'Cycle {i_cycle+1} - RMS Spindle Activity Index (sum of RMS amplitude × spindle duration) in N2 and N3 stage (µV·sec).',
+            f'cyc{i_cycle+1}_NREM_RSAI_uVsec' : f'Cycle {i_cycle+1} - RMS Spindle Activity Index (sum of RMS amplitude × spindle duration) in NREM stage (N1, N2, N3) (µV·sec).',
+            f'cyc{i_cycle+1}_R_RSAI_uVsec' : f'Cycle {i_cycle+1} - RMS Spindle Activity Index (sum of RMS amplitude × spindle duration) in REM stage (µV·sec).',
+            f'cyc{i_cycle+1}_RSAI_uVsec' : f'Cycle {i_cycle+1} - RMS Spindle Activity Index (sum of RMS amplitude × spindle duration) in all stages (µV·sec)'}
         cycle_dict = cycle_dict | current_cycle_dict
     
     # Add clock hour documentation
@@ -288,7 +304,15 @@ def _get_doc(N_CYCLE, spindle_event_name, N_HOURS=0):
             f'clock_h{i_hour+1}_N2N3_amp_rms_uV' : f'Hour {i_hour+1} - Average rms amplitude (µV) in N2 and N3 stage.',
             f'clock_h{i_hour+1}_NREM_amp_rms_uV' : f'Hour {i_hour+1} - Average rms amplitude (µV) in NREM stage (N1, N2, N3).',
             f'clock_h{i_hour+1}_R_amp_rms_uV' : f'Hour {i_hour+1} - Average rms amplitude (µV) in REM stage.',
-            f'clock_h{i_hour+1}_amp_rms_uV' : f'Hour {i_hour+1} - Average rms (Root Mean Square) amplitude (µV) in all stages'}
+            f'clock_h{i_hour+1}_amp_rms_uV' : f'Hour {i_hour+1} - Average rms (Root Mean Square) amplitude (µV) in all stages',
+
+            f'clock_h{i_hour+1}_N1_RSAI_uVsec' : f'Hour {i_hour+1} - RMS Spindle Activity Index (sum of RMS amplitude × spindle duration) in N1 stage (µV·sec).',
+            f'clock_h{i_hour+1}_N2_RSAI_uVsec' : f'Hour {i_hour+1} - RMS Spindle Activity Index (sum of RMS amplitude × spindle duration) in N2 stage (µV·sec).',
+            f'clock_h{i_hour+1}_N3_RSAI_uVsec' : f'Hour {i_hour+1} - RMS Spindle Activity Index (sum of RMS amplitude × spindle duration) in N3 stage (µV·sec).',
+            f'clock_h{i_hour+1}_N2N3_RSAI_uVsec' : f'Hour {i_hour+1} - RMS Spindle Activity Index (sum of RMS amplitude × spindle duration) in N2 and N3 stage (µV·sec).',
+            f'clock_h{i_hour+1}_NREM_RSAI_uVsec' : f'Hour {i_hour+1} - RMS Spindle Activity Index (sum of RMS amplitude × spindle duration) in NREM stage (N1, N2, N3) (µV·sec).',
+            f'clock_h{i_hour+1}_R_RSAI_uVsec' : f'Hour {i_hour+1} - RMS Spindle Activity Index (sum of RMS amplitude × spindle duration) in REM stage (µV·sec).',
+            f'clock_h{i_hour+1}_RSAI_uVsec' : f'Hour {i_hour+1} - RMS Spindle Activity Index (sum of RMS amplitude × spindle duration) in all stages (µV·sec)'}
         clock_hour_dict = clock_hour_dict | current_hour_dict
     
     # Add stage hour documentation
@@ -357,7 +381,15 @@ def _get_doc(N_CYCLE, spindle_event_name, N_HOURS=0):
             f'stage_h{i_hour+1}_N2N3_amp_rms_uV' : f'Stage Hour {i_hour+1} - Average rms amplitude (µV) in N2 and N3 stage.',
             f'stage_h{i_hour+1}_NREM_amp_rms_uV' : f'Stage Hour {i_hour+1} - Average rms amplitude (µV) in NREM stage (N1, N2, N3).',
             f'stage_h{i_hour+1}_R_amp_rms_uV' : f'Stage Hour {i_hour+1} - Average rms amplitude (µV) in REM stage.',
-            f'stage_h{i_hour+1}_amp_rms_uV' : f'Stage Hour {i_hour+1} - Average rms (Root Mean Square) amplitude (µV) in all stages'}
+            f'stage_h{i_hour+1}_amp_rms_uV' : f'Stage Hour {i_hour+1} - Average rms (Root Mean Square) amplitude (µV) in all stages',
+
+            f'stage_h{i_hour+1}_N1_RSAI_uVsec' : f'Stage Hour {i_hour+1} - RMS Spindle Activity Index (sum of RMS amplitude × spindle duration) in N1 stage (µV·sec).',
+            f'stage_h{i_hour+1}_N2_RSAI_uVsec' : f'Stage Hour {i_hour+1} - RMS Spindle Activity Index (sum of RMS amplitude × spindle duration) in N2 stage (µV·sec).',
+            f'stage_h{i_hour+1}_N3_RSAI_uVsec' : f'Stage Hour {i_hour+1} - RMS Spindle Activity Index (sum of RMS amplitude × spindle duration) in N3 stage (µV·sec).',
+            f'stage_h{i_hour+1}_N2N3_RSAI_uVsec' : f'Stage Hour {i_hour+1} - RMS Spindle Activity Index (sum of RMS amplitude × spindle duration) in N2 and N3 stage (µV·sec).',
+            f'stage_h{i_hour+1}_NREM_RSAI_uVsec' : f'Stage Hour {i_hour+1} - RMS Spindle Activity Index (sum of RMS amplitude × spindle duration) in NREM stage (N1, N2, N3) (µV·sec).',
+            f'stage_h{i_hour+1}_R_RSAI_uVsec' : f'Stage Hour {i_hour+1} - RMS Spindle Activity Index (sum of RMS amplitude × spindle duration) in REM stage (µV·sec).',
+            f'stage_h{i_hour+1}_RSAI_uVsec' : f'Stage Hour {i_hour+1} - RMS Spindle Activity Index (sum of RMS amplitude × spindle duration) in all stages (µV·sec)'}
         stage_hour_dict = stage_hour_dict | current_stage_hour_dict
     
     complete_dict = general_dict | total_dict | cycle_dict | clock_hour_dict | stage_hour_dict
