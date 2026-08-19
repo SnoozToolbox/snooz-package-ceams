@@ -130,8 +130,8 @@ class YasaSleepStaging(SciNode):
         """
         # split the ext from the filename
         filename_no_path, file_ext = os.path.splitext(filename)
-        # Snooz can write the sleep staging only for the .edf format 
-        if file_ext.lower() == '.edf':
+        # Snooz can write the sleep staging only for .edf and ' .sts' format 
+        if file_ext.lower() == '.edf' or file_ext.lower() == '.sts':
             # Events to remove, provided to the PSGWriter, in order to replace the previous sleep stages.
             # It is important to remove previous stages with the exact same group label 
             # if they do not match the current unique list of sleep stages exactly.
@@ -283,8 +283,7 @@ class YasaSleepStaging(SciNode):
             raise NodeRuntimeException(self.identifier, "sleep_stages", \
                     f"The number of predicted sleep stages {len(y_pred_snooz)} does not match the number of expected epochs {len(sleep_stages)}.")
         
-        # Snooz can write the sleep staging only for the .edf format 
-        if file_ext.lower() != '.edf':
+        if file_ext.lower() != '.edf' and file_ext.lower() != '.sts': # If the file extension is not .edf or .sts, we cannot write the sleep stages, so we return an empty DataFrame for new_events
             sleep_stages = pd.DataFrame(data=None, columns=sleep_stages.columns)
 
         return {
