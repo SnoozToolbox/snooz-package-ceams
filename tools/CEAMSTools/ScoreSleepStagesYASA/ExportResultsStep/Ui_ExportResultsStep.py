@@ -246,7 +246,7 @@ class Ui_ExportResultsStep(object):
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">In this step, you can run automatic sleep staging or compare YASA results with expert-annotated sleep stage files. The YASA sleep staging will then be exported.</p>\n"
 "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-righ"
-                        "t:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-style:italic;\">Note:</span> Snooz cannot write sleep staging data to NATUS or Stellate formats, but the tool can still compare YASA scoring with existing staging in these formats.</p></body></html>", None))
+                        "t:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-style:italic;\">Note:</span> Snooz cannot write sleep staging data to NATUS format, but the tool can still compare YASA scoring with existing staging in this format.</p></body></html>", None))
         self.label_2.setText(QCoreApplication.translate("ExportResultsStep", u"<html><head/><body><p>Define a label for the predicted sleep stages group label in the accessory file.</p></body></html>", None))
         self.lineEdit_2.setText(QCoreApplication.translate("ExportResultsStep", u"stage", None))
         self.checkBox.setText(QCoreApplication.translate("ExportResultsStep", u"Automatic Scoring", None))
