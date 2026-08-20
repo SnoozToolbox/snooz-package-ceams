@@ -85,6 +85,7 @@ class EventsSplitter(SciNode):
                 'splitted_events': events
             }             
 
+        events_out = events
         if len(events)>0:
 
             # Round the duration of events (especially for stellate cases)

@@ -39,6 +39,7 @@ See the file LICENCE for full license details.
     ----------
     The events1 has to be connected as a pandas dataframe.
     The events1 or events2 may be empty (except for the append).
+    For union, channels from both lists are used so an empty events1 still keeps events2.
     If the events are filtered by channel, events1 can be filtered for only one channel
     and events2 can be filtered for only one channel.
 
@@ -189,7 +190,11 @@ class EventCombine(SciNode):
                 events2 = events2.copy() # otherwise followinf instance of events are also modified
                 # If the user wants to filter for a specific event name
                 if len(event2_name)>0:
-                    events2 = events2[events2.name==event2_name]                
+                    events2 = events2[events2.name==event2_name]
+            else:
+                # Missing events2 is an empty event list, not a disconnected input.
+                # Intersection then yields no events; union can still keep events1.
+                events2 = manage_events.create_event_dataframe(None)
 
             # Simply append both dataframes events
             if behavior == "append":
@@ -289,9 +294,13 @@ class EventCombine(SciNode):
             events2_chan = events2_chan[events2_chan['channels'].isin(channel2_filter)]
             events2_chan.reset_index(inplace=True, drop=True)
 
-        # Combine per channel from events1 only.
-        # events2 is independently filtered by event2_name/channel2_name, then matched on i_chan below.
-        channel_lst = pd.unique(events1_chan.channels)
+        # Combine per channel. Intersection uses events1 channels (both lists must match).
+        # Union also includes events2 channels so an empty events1 still keeps events2.
+        if 'union' in behavior and isinstance(events2, pd.DataFrame):
+            channel_lst = pd.unique(pd.concat(
+                [events1_chan['channels'], events2_chan['channels']], ignore_index=True))
+        else:
+            channel_lst = pd.unique(events1_chan.channels)
 
         # Loop accross all channels
         events_df = manage_events.create_event_dataframe(None)
