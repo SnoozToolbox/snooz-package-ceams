@@ -116,6 +116,7 @@ class SlowWavesDetails(SciNode):
         
         # Init module variables
         self.stage_stats_labels = ['N1', 'N2', 'N3', 'N2N3', 'NREM', 'R']
+        # With unscored, no stage labels
 
         # A master module allows the process to be reexcuted multiple time.
         self._is_master = False 
@@ -258,64 +259,81 @@ class SlowWavesDetails(SciNode):
         else:
             subject_info_params['id1'] = subject_info['id1']
         #-----------------------------------------------------------------------------------
-        # Define the sw parameters
+        # Define the sw parameters and detect unscored mode
         #-----------------------------------------------------------------------------------
         sw_det_param = slow_wave_det_param
+        stage_sel_list = [s.strip() for s in str(sw_det_param['stage_sel']).split(',')]
+        is_unscored = stage_sel_list == ['9']
 
         #-----------------------------------------------------------------------------------
         # Sleep stages and cyles extraction
         #-----------------------------------------------------------------------------------        
-        # Extract sleep cycle parameters
-        cycle_info_param = SleepReport.get_sleep_cycle_parameters(self, sleep_cycle_param)    
-        sleep_cycles_df = stages_cycles[stages_cycles['group']==commons.sleep_cycle_group].copy()
-        sleep_cycles_df.reset_index(inplace=True, drop=True)
-        sleep_cycle_count = {}
-        sleep_cycle_count['cyc_count']=len(sleep_cycles_df) # 'Number of sleep cycles.',
+        if is_unscored:
+            cycle_info_param = {}
+            sleep_cycle_count = {}
+            sleep_cycles_df = pd.DataFrame(columns=stages_cycles.columns)
+            sleep_stage_df = stages_cycles[stages_cycles['group']==commons.sleep_stages_group].copy()
+            sleep_stage_df.reset_index(inplace=True, drop=True)
+            sleep_stage_df['name'] = sleep_stage_df['name'].apply(int)
+            stage_in_cycle_df = sleep_stage_df
+            recording_lights_off = 0
+            recording_lights_on = 0
+        else:
+            # Extract sleep cycle parameters
+            cycle_info_param = SleepReport.get_sleep_cycle_parameters(self, sleep_cycle_param)    
+            sleep_cycles_df = stages_cycles[stages_cycles['group']==commons.sleep_cycle_group].copy()
+            sleep_cycles_df.reset_index(inplace=True, drop=True)
+            sleep_cycle_count = {}
+            sleep_cycle_count['cyc_count']=len(sleep_cycles_df) # 'Number of sleep cycles.',
 
-        # Extract sleep stage info
-        sleep_stage_df = stages_cycles[stages_cycles['group']==commons.sleep_stages_group].copy()
-        sleep_stage_df.reset_index(inplace=True, drop=True)      
-        # Keep stage from the first awake or sleep until the last awake or sleep
-        sleep_stage_df['name'] = sleep_stage_df['name'].apply(int)
-        index_valid = sleep_stage_df[sleep_stage_df['name']<8].index
-        stage_rec_df = sleep_stage_df.loc[index_valid[0]:index_valid[-1]]
-        stage_rec_df.reset_index(inplace=True, drop=True)
-        recording_lights_off = stage_rec_df['start_sec'].values[0]
-        recording_lights_on = stage_rec_df['start_sec'].values[-1]+stage_rec_df['duration_sec'].values[-1]
+            # Extract sleep stage info
+            sleep_stage_df = stages_cycles[stages_cycles['group']==commons.sleep_stages_group].copy()
+            sleep_stage_df.reset_index(inplace=True, drop=True)      
+            # Keep stage from the first awake or sleep until the last awake or sleep
+            sleep_stage_df['name'] = sleep_stage_df['name'].apply(int)
+            index_valid = sleep_stage_df[sleep_stage_df['name']<8].index
+            stage_rec_df = sleep_stage_df.loc[index_valid[0]:index_valid[-1]]
+            stage_rec_df.reset_index(inplace=True, drop=True)
+            recording_lights_off = stage_rec_df['start_sec'].values[0]
+            recording_lights_on = stage_rec_df['start_sec'].values[-1]+stage_rec_df['duration_sec'].values[-1]
 
-        # Edit the cycle number 
-        cycle_cnt = 1
-        for index, row in sleep_cycles_df.iterrows():
-            sleep_cycles_df.loc[index,'name']=cycle_cnt
-            cycle_cnt = cycle_cnt+1
+            # Edit the cycle number 
+            cycle_cnt = 1
+            for index, row in sleep_cycles_df.iterrows():
+                sleep_cycles_df.loc[index,'name']=cycle_cnt
+                cycle_cnt = cycle_cnt+1
 
-        # Exclude sleep stage before Sleep Onset
-        # Exclude sleep stage after the end of the last cycle
-        stage_in_cycle_df = EventsDetails.exlude_stages_before_SO_after_awake(EventsDetails, sleep_cycles_df, sleep_stage_df)
+            # Exclude sleep stage before Sleep Onset
+            # Exclude sleep stage after the end of the last cycle
+            stage_in_cycle_df = EventsDetails.exlude_stages_before_SO_after_awake(EventsDetails, sleep_cycles_df, sleep_stage_df)
 
-        # Cycle events
-        cycle_starts = sleep_cycles_df['start_sec'].values
-        cycle_durations = sleep_cycles_df['duration_sec'].values
+            # Cycle events
+            cycle_starts = sleep_cycles_df['start_sec'].values
+            cycle_durations = sleep_cycles_df['duration_sec'].values
 
-        # Compute duration (min)
-        sleep_onset_sec = cycle_starts[0]
-        end_sleep_sec = cycle_starts[-1]+cycle_durations[-1] #TODO make sure we dont have to recompute end_sleep_sec without REMP
+            # Compute duration (min)
+            sleep_onset_sec = cycle_starts[0]
+            end_sleep_sec = cycle_starts[-1]+cycle_durations[-1] #TODO make sure we dont have to recompute end_sleep_sec without REMP
+            
+            # Remove REMP if excluded? no! It matches with Gaetan if we let it like this
+            # 'Total period for detection - Duration (min) of the sleep period.'
+            sleep_cycle_count['sleep_period_min'] = (end_sleep_sec - sleep_onset_sec)/60
+            sleep_cycle_count['recording_min'] = (recording_lights_on - recording_lights_off)/60
+
+            # Exclude REMPs if exluded
+            if slow_wave_det_param['detect_excl_remp']==1:
+                stage_in_cycle_df, sleep_cycles_df = EventsDetails.exclude_remps(EventsDetails, stages_cycles, sleep_cycles_df, stage_in_cycle_df)
         
-        # Remove REMP if excluded? no! It matches with Gaetan if we let it like this
-        # 'Total period for detection - Duration (min) of the sleep period.'
-        sleep_cycle_count['sleep_period_min'] = (end_sleep_sec - sleep_onset_sec)/60
-        sleep_cycle_count['recording_min'] = (recording_lights_on - recording_lights_off)/60
+        # Compute recording duration for unscored (or add to cycle_count if already computed for scored)
+        if is_unscored and 'recording_min' not in sleep_cycle_count:
+            if len(stage_in_cycle_df) > 0:
+                sleep_cycle_count['recording_min'] = (stage_in_cycle_df['start_sec'].iloc[-1] + stage_in_cycle_df['duration_sec'].iloc[-1] - stage_in_cycle_df['start_sec'].iloc[0]) / 60
+            else:
+                sleep_cycle_count['recording_min'] = 0
 
-        # Exclude REMPs if exluded
-        if slow_wave_det_param['detect_excl_remp']==1:
-            stage_in_cycle_df, sleep_cycles_df = EventsDetails.exclude_remps(EventsDetails, stages_cycles, sleep_cycles_df, stage_in_cycle_df)
-
-        if export_slow_wave: 
+        if export_slow_wave and not is_unscored: 
             # Extract sleep stages selected by the user from stage_in_cycle_df
-            # Create a list from string separated by comma
-            sleep_stage_sel_list = slow_wave_det_param['stage_sel'].split(',')
-            # Convert the list to integer
-            sleep_stage_sel_list = [int(i) for i in sleep_stage_sel_list]
+            sleep_stage_sel_list = [int(i) for i in stage_sel_list]
             stage_detection_df = stage_in_cycle_df[stage_in_cycle_df['name'].isin(sleep_stage_sel_list)]  
             # In a folder at the cohort level
             if len(cohort_filename)>0:
@@ -330,9 +348,13 @@ class SlowWavesDetails(SciNode):
                 # Write the stage_detection_df dataframe into the sw_stage_filename file
                 stage_detection_df.to_csv(sw_stage_filename, sep='\t', index=False, header=True)
 
-        # For each spindle events add its sleep stage and cycle
-        # Need to have "start_sec" and "duration_sec" to use add_stage_cycle_to_spindle_df
-        sw_events_details = EventsDetails.add_stage_cycle_to_spindle_df(EventsDetails, sw_events_details, stage_in_cycle_df, sleep_cycles_df)
+        # For each slow wave event add its sleep stage and cycle (or 9/NaN for unscored)
+        if is_unscored:
+            sw_events_details = sw_events_details.copy()
+            sw_events_details['stage'] = 9
+            sw_events_details['cycle'] = np.nan
+        else:
+            sw_events_details = EventsDetails.add_stage_cycle_to_spindle_df(EventsDetails, sw_events_details, stage_in_cycle_df, sleep_cycles_df)
 
         #-----------------------------------------------------------------------------------
         # Extract artifact group and name to save the info parameters
@@ -361,8 +383,6 @@ class SlowWavesDetails(SciNode):
             channel_info_param = {}
             channel_info_param['chan_label']=channel
             channel_info_param['chan_fs']=fs_chan
-            # Organize data for the output (GENERAL)
-            cur_chan_general_dict = subject_info_params | cycle_info_param | sw_det_param | artifact_info_param | channel_info_param | sleep_cycle_count     
 
             # Select artifact for the current channel
             #   Artifact events have been cleanup to have a single channel as a string
@@ -380,38 +400,46 @@ class SlowWavesDetails(SciNode):
             # Order columns as expected in the doc
             sw_cur_chan_sort = sw_cur_chan_df[self.sw_columns]
 
-            # ---------------------------------------------------------------------------------------------------------
-            # Compute the stats for total
-            # ---------------------------------------------------------------------------------------------------------
-            label_stats = 'total'
-            tot_stats = self.compute_tot_stats_per_stage(sw_cur_chan_sort, artifact_cur_chan_df, stage_in_cycle_df, \
-                commons.sleep_stages_name, sw_det_param['stage_sel'], label_stats, self.stage_stats_labels)
+            # Organize data for the output (GENERAL)
+            if is_unscored:
+                cur_chan_general_dict = subject_info_params | sw_det_param | artifact_info_param | channel_info_param
+            else:
+                cur_chan_general_dict = subject_info_params | cycle_info_param | sw_det_param | artifact_info_param | channel_info_param | sleep_cycle_count
 
-            # ---------------------------------------------------------------------------------------------------------
-            # Compute the stats for cycle
-            # ---------------------------------------------------------------------------------------------------------
-            label_stats = 'cyc'
-            cyc_stats = self.compute_cyc_stats_per_stage(sw_cur_chan_sort, artifact_cur_chan_df, stage_in_cycle_df, sleep_cycles_df,\
-                commons.sleep_stages_name, sw_det_param['stage_sel'], label_stats, self.stage_stats_labels)
+            if is_unscored:
+                tot_stats = self.compute_tot_stats_unscored(sw_cur_chan_sort, artifact_cur_chan_df, stage_in_cycle_df)
+                clock_h_stats = self.compute_clock_h_stats_unscored(sw_cur_chan_sort, artifact_cur_chan_df, stage_in_cycle_df)
+                cur_chan_dict = cur_chan_general_dict | tot_stats | clock_h_stats
+            else:
+                # ---------------------------------------------------------------------------------------------------------
+                # Compute the stats for total
+                # ---------------------------------------------------------------------------------------------------------
+                label_stats = 'total'
+                tot_stats = self.compute_tot_stats_per_stage(sw_cur_chan_sort, artifact_cur_chan_df, stage_in_cycle_df, \
+                    commons.sleep_stages_name, sw_det_param['stage_sel'], label_stats, self.stage_stats_labels)
 
-            # ---------------------------------------------------------------------------------------------------------
-            # Compute the stats for clock_h
-            # ---------------------------------------------------------------------------------------------------------
-            label_stats = 'clock_h'
-            clock_h_stats = self.compute_clock_h_stats_per_stage(sw_cur_chan_sort, artifact_cur_chan_df, stage_in_cycle_df,\
-                commons.sleep_stages_name, sw_det_param['stage_sel'], label_stats, self.stage_stats_labels)
+                # ---------------------------------------------------------------------------------------------------------
+                # Compute the stats for cycle
+                # ---------------------------------------------------------------------------------------------------------
+                label_stats = 'cyc'
+                cyc_stats = self.compute_cyc_stats_per_stage(sw_cur_chan_sort, artifact_cur_chan_df, stage_in_cycle_df, sleep_cycles_df,\
+                    commons.sleep_stages_name, sw_det_param['stage_sel'], label_stats, self.stage_stats_labels)
 
-            # ---------------------------------------------------------------------------------------------------------
-            # Compute the stats for stage_h
-            # ---------------------------------------------------------------------------------------------------------
-            label_stats = 'stage_h'
-            stage_h_stats = self.compute_stage_h_stats_per_stage(sw_cur_chan_sort, artifact_cur_chan_df, stage_in_cycle_df,\
-                commons.sleep_stages_name, sw_det_param['stage_sel'], label_stats, self.stage_stats_labels)
+                # ---------------------------------------------------------------------------------------------------------
+                # Compute the stats for clock_h
+                # ---------------------------------------------------------------------------------------------------------
+                label_stats = 'clock_h'
+                clock_h_stats = self.compute_clock_h_stats_per_stage(sw_cur_chan_sort, artifact_cur_chan_df, stage_in_cycle_df,\
+                    commons.sleep_stages_name, sw_det_param['stage_sel'], label_stats, self.stage_stats_labels)
 
-            # Organize data to write the cohort spindle report
-            # Construction of the pandas dataframe that will be used to create the TSV file
-            # There is a new line for each channel and mini band
-            cur_chan_dict = cur_chan_general_dict | tot_stats | cyc_stats | clock_h_stats | stage_h_stats
+                # ---------------------------------------------------------------------------------------------------------
+                # Compute the stats for stage_h
+                # ---------------------------------------------------------------------------------------------------------
+                label_stats = 'stage_h'
+                stage_h_stats = self.compute_stage_h_stats_per_stage(sw_cur_chan_sort, artifact_cur_chan_df, stage_in_cycle_df,\
+                    commons.sleep_stages_name, sw_det_param['stage_sel'], label_stats, self.stage_stats_labels)
+
+                cur_chan_dict = cur_chan_general_dict | tot_stats | cyc_stats | clock_h_stats | stage_h_stats
             cur_chan_df = pd.DataFrame.from_records([cur_chan_dict])
 
             # --------------------------------------------------------------------------
@@ -473,7 +501,17 @@ class SlowWavesDetails(SciNode):
             # Write the current report for the current subject into the cohort tsv file
             write_header = not os.path.exists(cohort_filename)
             # Order columns as the doc file
-            out_columns = list(_get_doc(self.N_CYCLES, self.N_HOURS).keys())
+            out_columns = list(_get_doc(self.N_CYCLES, self.N_HOURS, is_unscored).keys())
+            
+            # Verify header consistency if file exists
+            if not write_header:
+                existing_header = pd.read_csv(cohort_filename, sep='\t', nrows=0, encoding='utf_8').columns.tolist()
+                if existing_header != out_columns:
+                    raise NodeRuntimeException(self.identifier, "SlowWavesDetails",
+                        f"Snooz can not add {subject_info['filename']} to {cohort_filename}: "
+                        f"the file's columns do not match the current report (scored/unscored mismatch "
+                        f"or different N_CYCLES/N_HOURS).")
+            
             cohort_characteristics_df = cohort_characteristics_df[out_columns]
             try : 
                 cohort_characteristics_df.to_csv(path_or_buf=cohort_filename, sep='\t', \
@@ -489,7 +527,7 @@ class SlowWavesDetails(SciNode):
                 file_name, file_extension = os.path.splitext(cohort_filename)
                 doc_filepath = file_name+"_info"+file_extension
                 if not os.path.exists(doc_filepath):
-                    write_doc_file(doc_filepath, self.N_CYCLES, self.N_HOURS)
+                    write_doc_file(doc_filepath, self.N_CYCLES, self.N_HOURS, is_unscored)
                     # Log message for the Logs tab
                     self._log_manager.log(self.identifier, f"The file {doc_filepath} has been created.")
 
@@ -499,6 +537,134 @@ class SlowWavesDetails(SciNode):
         return {
         }
 
+    def compute_tot_stats_unscored(self, sw_cur_chan_sort, artifact_cur_chan_df, stage_in_cycle_df, label_stats='total'):
+        # Extract stage times
+        stage_start_cur = stage_in_cycle_df['start_sec'].values
+        stage_dur_cur = stage_in_cycle_df['duration_sec'].values
+        stage_end_cur = stage_start_cur + stage_dur_cur
+        
+        # Extract artifact times
+        art_start_np = artifact_cur_chan_df['start_sec'].values if len(artifact_cur_chan_df) > 0 else np.array([])
+        art_dur_np = artifact_cur_chan_df['duration_sec'].values if len(artifact_cur_chan_df) > 0 else np.array([])
+        art_end_np = art_start_np + art_dur_np
+        
+        # Compute valid duration (min) without stage filtering
+        inv_dur_sec = EventsDetails._compute_artifact_duration_for_epochs(stage_start_cur, stage_end_cur, art_start_np, art_dur_np, art_end_np)
+        stage_dur_total = stage_dur_cur.sum()
+        valid_min = (stage_dur_total - inv_dur_sec) / 60
+
+        # Extract characteristics to average (global, no stage breakdown)
+        sw_cur_chan_tot = sw_cur_chan_sort[self.sw_characteristics]
+        sw_cur_chan_tot = sw_cur_chan_tot.astype(float)
+        mean_char_series = sw_cur_chan_tot.mean(axis=0, skipna=True, numeric_only=True)
+        mean_char_series = mean_char_series.round(decimals=2)
+        mean_char_tot = mean_char_series.to_dict()
+        
+        # Rename keys and compute count/density
+        sw_count_tot = {f'{label_stats}_sw_count': len(sw_cur_chan_tot)}
+        mean_tot = {}
+        for key, value in mean_char_tot.items():
+            if key == 'duration_sec':
+                mean_tot[f'{label_stats}_sw_sec'] = value
+            else:
+                mean_tot[f'{label_stats}_{key}'] = value
+        
+        # Compute density
+        sw_density_tot = {}
+        if valid_min > 0:
+            sw_density_tot[f'{label_stats}_sw_density'] = sw_count_tot[f'{label_stats}_sw_count'] / valid_min
+        else:
+            sw_density_tot[f'{label_stats}_sw_density'] = np.nan
+        
+        return {f'{label_stats}_valid_min': valid_min} | sw_count_tot | mean_tot | sw_density_tot
+
+    def compute_clock_h_stats_unscored(self, sw_cur_chan_sort, artifact_cur_chan_df, stage_in_cycle_df, label_stats='clock_h'):
+        # SW events
+        sw_start_times = sw_cur_chan_sort['start_sec'].to_numpy().astype(float)
+        sw_duration_times = sw_cur_chan_sort['duration_sec'].to_numpy().astype(float)
+        sw_end_times = sw_start_times + sw_duration_times
+        
+        # Stage events
+        stage_starts = stage_in_cycle_df['start_sec'].values
+        stage_durations = stage_in_cycle_df['duration_sec'].values
+        stage_ends = stage_starts + stage_durations
+        
+        # Get recording start time
+        recording_start_time = stage_in_cycle_df['start_sec'].iloc[0] if len(stage_in_cycle_df) > 0 else 0
+        
+        hour_stats = {}
+        
+        for i_hour in range(self.N_HOURS):
+            hour_label = label_stats + str(i_hour + 1)
+            start_hour = recording_start_time + i_hour * 3600
+            end_hour = start_hour + 3600
+            
+            # Select stages and sw in this hour
+            stages_bool = (stage_starts >= start_hour) & (stage_ends <= end_hour)
+            stages_i_sel = np.nonzero(stages_bool)[0]
+            stage_sel_df = stage_in_cycle_df.iloc[stages_i_sel] if len(stages_i_sel) > 0 else pd.DataFrame()
+            
+            sw_bool = (sw_start_times >= start_hour) & (sw_end_times <= end_hour)
+            sw_sel_i = np.nonzero(sw_bool)[0]
+            sw_sel_df = sw_cur_chan_sort.iloc[sw_sel_i]
+            
+            # Recording duration
+            hour_duration = min(3600, end_hour - start_hour) if end_hour > start_hour else 0
+            hour_stats[f'{hour_label}_min'] = hour_duration / 60
+            
+            # Valid duration and sw stats
+            if len(stage_sel_df) > 0:
+                # Extract stage times for this hour
+                stage_start_cur_h = stage_sel_df['start_sec'].values
+                stage_dur_cur_h = stage_sel_df['duration_sec'].values
+                stage_end_cur_h = stage_start_cur_h + stage_dur_cur_h
+                
+                # Extract artifact times
+                art_start_np = artifact_cur_chan_df['start_sec'].values if len(artifact_cur_chan_df) > 0 else np.array([])
+                art_dur_np = artifact_cur_chan_df['duration_sec'].values if len(artifact_cur_chan_df) > 0 else np.array([])
+                art_end_np = art_start_np + art_dur_np
+                
+                # Compute valid duration
+                inv_dur_sec = EventsDetails._compute_artifact_duration_for_epochs(stage_start_cur_h, stage_end_cur_h, art_start_np, art_dur_np, art_end_np)
+                stage_dur_total_h = stage_dur_cur_h.sum()
+                valid_min = (stage_dur_total_h - inv_dur_sec) / 60
+                hour_stats[f'{hour_label}_valid_min'] = valid_min
+                
+                # Count and characteristics
+                sw_count = len(sw_sel_df)
+                hour_stats[f'{hour_label}_sw_count'] = sw_count
+                
+                if sw_count > 0:
+                    sw_to_mean = sw_sel_df[self.sw_characteristics].astype(float)
+                    for key in self.sw_characteristics:
+                        avg_val = sw_to_mean[key].mean()
+                        if key == 'duration_sec':
+                            hour_stats[f'{hour_label}_sw_sec'] = round(avg_val, 2)
+                        else:
+                            hour_stats[f'{hour_label}_{key}'] = round(avg_val, 2)
+                else:
+                    for key in self.sw_characteristics:
+                        if key == 'duration_sec':
+                            hour_stats[f'{hour_label}_sw_sec'] = np.nan
+                        else:
+                            hour_stats[f'{hour_label}_{key}'] = np.nan
+                
+                # Density
+                if valid_min > 0:
+                    hour_stats[f'{hour_label}_sw_density'] = sw_count / valid_min
+                else:
+                    hour_stats[f'{hour_label}_sw_density'] = np.nan
+            else:
+                hour_stats[f'{hour_label}_valid_min'] = np.nan
+                hour_stats[f'{hour_label}_sw_count'] = np.nan
+                for key in self.sw_characteristics:
+                    if key == 'duration_sec':
+                        hour_stats[f'{hour_label}_sw_sec'] = np.nan
+                    else:
+                        hour_stats[f'{hour_label}_{key}'] = np.nan
+                hour_stats[f'{hour_label}_sw_density'] = np.nan
+        
+        return hour_stats
 
     def compute_tot_stats_per_stage(self, sw_cur_chan_sort, artifact_cur_chan_df, \
         stage_in_cycle_df, sleep_stages_name, stage_sel, label_stats, stage_stats_labels):

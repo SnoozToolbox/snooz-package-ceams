@@ -109,45 +109,6 @@ class Ui_SSWDCriterias(object):
 
         self.verticalLayout_8.addItem(self.verticalSpacer_2)
 
-        self.verticalLayout_6 = QVBoxLayout()
-        self.verticalLayout_6.setObjectName(u"verticalLayout_6")
-        self.label_17 = QLabel(SSWDCriterias)
-        self.label_17.setObjectName(u"label_17")
-        self.label_17.setFont(font)
-
-        self.verticalLayout_6.addWidget(self.label_17)
-
-        self.horizontalLayout_4 = QHBoxLayout()
-        self.horizontalLayout_4.setObjectName(u"horizontalLayout_4")
-        self.horizontalSpacer_6 = QSpacerItem(20, 20, QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Minimum)
-
-        self.horizontalLayout_4.addItem(self.horizontalSpacer_6)
-
-        self.verticalLayout = QVBoxLayout()
-        self.verticalLayout.setObjectName(u"verticalLayout")
-        self.radioButton_det = QRadioButton(SSWDCriterias)
-        self.buttonGroup = QButtonGroup(SSWDCriterias)
-        self.buttonGroup.setObjectName(u"buttonGroup")
-        self.buttonGroup.addButton(self.radioButton_det)
-        self.radioButton_det.setObjectName(u"radioButton_det")
-        self.radioButton_det.setEnabled(True)
-        self.radioButton_det.setChecked(True)
-
-        self.verticalLayout.addWidget(self.radioButton_det)
-
-
-        self.horizontalLayout_4.addLayout(self.verticalLayout)
-
-
-        self.verticalLayout_6.addLayout(self.horizontalLayout_4)
-
-
-        self.verticalLayout_8.addLayout(self.verticalLayout_6)
-
-        self.verticalSpacer_4 = QSpacerItem(20, 20, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Fixed)
-
-        self.verticalLayout_8.addItem(self.verticalSpacer_4)
-
         self.verticalLayout_4 = QVBoxLayout()
         self.verticalLayout_4.setObjectName(u"verticalLayout_4")
         self.label_19 = QLabel(SSWDCriterias)
@@ -158,42 +119,80 @@ class Ui_SSWDCriterias(object):
 
         self.horizontalLayout_2 = QHBoxLayout()
         self.horizontalLayout_2.setObjectName(u"horizontalLayout_2")
+        self.verticalLayout_stage_mode = QVBoxLayout()
+        self.verticalLayout_stage_mode.setObjectName(u"verticalLayout_stage_mode")
+        self.horizontalLayout_mode_selection = QHBoxLayout()
+        self.horizontalLayout_mode_selection.setObjectName(u"horizontalLayout_mode_selection")
+        self.radioButton_sleep_stages = QRadioButton(SSWDCriterias)
+        self.buttonGroup_stage_mode = QButtonGroup(SSWDCriterias)
+        self.buttonGroup_stage_mode.setObjectName(u"buttonGroup_stage_mode")
+        self.buttonGroup_stage_mode.addButton(self.radioButton_sleep_stages)
+        self.radioButton_sleep_stages.setObjectName(u"radioButton_sleep_stages")
+        self.radioButton_sleep_stages.setFont(font)
+        self.radioButton_sleep_stages.setChecked(True)
+
+        self.horizontalLayout_mode_selection.addWidget(self.radioButton_sleep_stages)
+
+        self.radioButton_unscored_mode = QRadioButton(SSWDCriterias)
+        self.buttonGroup_stage_mode.addButton(self.radioButton_unscored_mode)
+        self.radioButton_unscored_mode.setObjectName(u"radioButton_unscored_mode")
+
+        self.horizontalLayout_mode_selection.addWidget(self.radioButton_unscored_mode)
+
+        self.horizontalSpacer_mode_end = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+
+        self.horizontalLayout_mode_selection.addItem(self.horizontalSpacer_mode_end)
+
+
+        self.verticalLayout_stage_mode.addLayout(self.horizontalLayout_mode_selection)
+
+        self.horizontalLayout_stage_checkboxes = QHBoxLayout()
+        self.horizontalLayout_stage_checkboxes.setObjectName(u"horizontalLayout_stage_checkboxes")
         self.horizontalSpacer_5 = QSpacerItem(20, 20, QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Minimum)
 
-        self.horizontalLayout_2.addItem(self.horizontalSpacer_5)
+        self.horizontalLayout_stage_checkboxes.addItem(self.horizontalSpacer_5)
 
         self.checkBox_n1 = QCheckBox(SSWDCriterias)
         self.checkBox_n1.setObjectName(u"checkBox_n1")
 
-        self.horizontalLayout_2.addWidget(self.checkBox_n1)
+        self.horizontalLayout_stage_checkboxes.addWidget(self.checkBox_n1)
 
         self.checkBox_n2 = QCheckBox(SSWDCriterias)
         self.checkBox_n2.setObjectName(u"checkBox_n2")
         self.checkBox_n2.setChecked(True)
 
-        self.horizontalLayout_2.addWidget(self.checkBox_n2)
+        self.horizontalLayout_stage_checkboxes.addWidget(self.checkBox_n2)
 
         self.checkBox_n3 = QCheckBox(SSWDCriterias)
         self.checkBox_n3.setObjectName(u"checkBox_n3")
         self.checkBox_n3.setChecked(True)
 
-        self.horizontalLayout_2.addWidget(self.checkBox_n3)
+        self.horizontalLayout_stage_checkboxes.addWidget(self.checkBox_n3)
 
         self.checkBox_r = QCheckBox(SSWDCriterias)
         self.checkBox_r.setObjectName(u"checkBox_r")
 
-        self.horizontalLayout_2.addWidget(self.checkBox_r)
+        self.horizontalLayout_stage_checkboxes.addWidget(self.checkBox_r)
+
+        self.horizontalSpacer_stages_end = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+
+        self.horizontalLayout_stage_checkboxes.addItem(self.horizontalSpacer_stages_end)
+
+
+        self.verticalLayout_stage_mode.addLayout(self.horizontalLayout_stage_checkboxes)
+
+
+        self.horizontalLayout_2.addLayout(self.verticalLayout_stage_mode)
 
 
         self.verticalLayout_4.addLayout(self.horizontalLayout_2)
 
-        self.label_20 = QLabel(SSWDCriterias)
-        self.label_20.setObjectName(u"label_20")
-
-        self.verticalLayout_4.addWidget(self.label_20)
-
         self.horizontalLayout_12 = QHBoxLayout()
         self.horizontalLayout_12.setObjectName(u"horizontalLayout_12")
+        self.horizontalSpacer_6 = QSpacerItem(20, 20, QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Minimum)
+
+        self.horizontalLayout_12.addItem(self.horizontalSpacer_6)
+
         self.label_21 = QLabel(SSWDCriterias)
         self.label_21.setObjectName(u"label_21")
 
@@ -482,6 +481,7 @@ class Ui_SSWDCriterias(object):
 
 
         self.retranslateUi(SSWDCriterias)
+        self.buttonGroup_stage_mode.buttonClicked.connect(SSWDCriterias.on_stage_mode_changed)
         self.buttonGroup_2.buttonClicked.connect(SSWDCriterias.on_input_format_changed)
         self.checkBox_age.clicked.connect(SSWDCriterias.on_input_format_changed)
         self.checkBox_sex.clicked.connect(SSWDCriterias.on_input_format_changed)
@@ -498,15 +498,14 @@ class Ui_SSWDCriterias(object):
         self.label_18.setText(QCoreApplication.translate("SSWDCriterias", u"Event group and name to label the new detection or to select the annotations to analyze.", None))
         self.label.setText(QCoreApplication.translate("SSWDCriterias", u"Event name", None))
         self.label_3.setText(QCoreApplication.translate("SSWDCriterias", u"Event group", None))
-        self.label_17.setText(QCoreApplication.translate("SSWDCriterias", u"<html><head/><body><p><span style=\" font-weight:600;\">Detections and/or analyses</span></p></body></html>", None))
-        self.radioButton_det.setText(QCoreApplication.translate("SSWDCriterias", u"Detect slow waves", None))
-        self.label_19.setText(QCoreApplication.translate("SSWDCriterias", u"<html><head/><body><p><span style=\" font-weight:600;\">Sleep stages</span></p></body></html>", None))
+        self.label_19.setText(QCoreApplication.translate("SSWDCriterias", u"<html><head/><body><p><span style=\" font-weight:600;\">Recording Scope Selection</span></p></body></html>", None))
+        self.radioButton_sleep_stages.setText(QCoreApplication.translate("SSWDCriterias", u"Sleep Stages", None))
+        self.radioButton_unscored_mode.setText(QCoreApplication.translate("SSWDCriterias", u"Unscored", None))
         self.checkBox_n1.setText(QCoreApplication.translate("SSWDCriterias", u"N1", None))
         self.checkBox_n2.setText(QCoreApplication.translate("SSWDCriterias", u"N2", None))
         self.checkBox_n3.setText(QCoreApplication.translate("SSWDCriterias", u"N3", None))
         self.checkBox_r.setText(QCoreApplication.translate("SSWDCriterias", u"R", None))
-        self.label_20.setText(QCoreApplication.translate("SSWDCriterias", u"<html><head/><body><p><span style=\" font-weight:700;\">Periods selection</span></p></body></html>", None))
-        self.label_21.setText(QCoreApplication.translate("SSWDCriterias", u"Exclude REM Periods:             ", None))
+        self.label_21.setText(QCoreApplication.translate("SSWDCriterias", u"Exclude REM Periods:", None))
         self.radioButton_excl_remp.setText(QCoreApplication.translate("SSWDCriterias", u"Yes", None))
         self.radioButton_incl_remp.setText(QCoreApplication.translate("SSWDCriterias", u"No", None))
         self.label_5.setText(QCoreApplication.translate("SSWDCriterias", u"<html><head/><body><p><span style=\" font-weight:600;\">Slow Wave Detector Criteria</span></p></body></html>", None))

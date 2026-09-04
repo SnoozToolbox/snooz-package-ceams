@@ -15,7 +15,7 @@ class InputFilesSWStep( InputFilesStep):
     #   context_files_view      = "input_files_settings_view")
 
     psg_reader_identifier   = "f1a6056e-bb6e-44ca-9c15-33b3b9cc0502"
-    valid_stage_mandatory   = True  # To verify that all recordings have valid sleep stages
+    valid_stage_mandatory   = False # To verify that all recordings have valid sleep stages
     valid_selected_chan     = True  # To verify if at least one channel is selected
     valid_single_chan       = False # To verify if only one chan is selected for each file
     

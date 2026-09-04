@@ -3,12 +3,13 @@
 See the file LICENCE for full license details.
 """
 import csv
+import re
 
-def write_doc_file(filepath, N_CYCLE, N_HOURS=0):
+def write_doc_file(filepath, N_CYCLE, N_HOURS=0, unscored=False):
     with open(filepath, 'w', newline='', encoding='utf-8') as csvfile:
         docwriter = csv.writer(csvfile, delimiter='\t')
 
-        doc = _get_doc(N_CYCLE, N_HOURS)
+        doc = _get_doc(N_CYCLE, N_HOURS, unscored)
 
         for i, (k, v) in enumerate(doc.items()):
             row_name = excel_column_name(i+1)
@@ -24,13 +25,16 @@ def excel_column_name(number):
     return column_name
 
 
-def _get_doc(N_CYCLE, N_HOURS=0):
+def _get_doc(N_CYCLE, N_HOURS=0, unscored=False):
 
-    general_dict = \
+    identification_dict = \
     {
             'filename' : 'PSG filename',
-            'id1'      : 'subject identification',
+            'id1'      : 'subject identification'
+    }
 
+    def_cycle_dict = \
+    {
             'cyc_def_option':'Method used to split the sleep period in sleep cycles, it defines the criteria. I.e. : "Minimum criteria"  "Aeschbach 1993"  "Feinberg 1979"',
             'cyc_def_include_soremp':'Include a REM sleep periods (REMP) that occur within 15 minutes of sleep onset.',
             'cyc_def_include_last_incomplete':'Include the last sleep cycle even if the NREM period (NREMP) or REMP does not meet the minimum duration criteria.',
@@ -127,21 +131,21 @@ def _get_doc(N_CYCLE, N_HOURS=0):
             'total_R_neg_amp_uV' : 'Total - Average slow wave negative peak amplitude (uV) in REM stage.',
             'total_neg_amp_uV' : 'Total - Average slow wave negative peak amplitude (uV).',
 
-            'total_N1_neg_sec' : 'Total - Average slow wave negative duration (ms) in N1 stage.',
-            'total_N2_neg_sec' : 'Total - Average slow wave negative duration (ms) in N2 stage.',
-            'total_N3_neg_sec' : 'Total - Average slow wave negative duration (ms) in N3 stage.',
-            'total_N2N3_neg_sec' : 'Total - Average slow wave negative duration (ms) in N2 and N3 stage.',
-            'total_NREM_neg_sec' : 'Total - Average slow wave negative duration (ms) in NREM stage (N1, N2, N3).',
-            'total_R_neg_sec' : 'Total - Average slow wave negative duration (ms) in REM stage.',
-            'total_neg_sec' : 'Total - Average slow wave negative duration (ms)',
+            'total_N1_neg_sec' : 'Total - Average slow wave negative duration (s) in N1 stage.',
+            'total_N2_neg_sec' : 'Total - Average slow wave negative duration (s) in N2 stage.',
+            'total_N3_neg_sec' : 'Total - Average slow wave negative duration (s) in N3 stage.',
+            'total_N2N3_neg_sec' : 'Total - Average slow wave negative duration (s) in N2 and N3 stage.',
+            'total_NREM_neg_sec' : 'Total - Average slow wave negative duration (s) in NREM stage (N1, N2, N3).',
+            'total_R_neg_sec' : 'Total - Average slow wave negative duration (s) in REM stage.',
+            'total_neg_sec' : 'Total - Average slow wave negative duration (s)',
 
-            'total_N1_pos_sec' : 'Total - Average slow wave positive duration (ms) in N1 stage.',
-            'total_N2_pos_sec' : 'Total - Average slow wave positive duration (ms) in N2 stage.',
-            'total_N3_pos_sec' : 'Total - Average slow wave positive duration (ms) in N3 stage.',
-            'total_N2N3_pos_sec' : 'Total - Average slow wave positive duration (ms) in N2 and N3 stage.',
-            'total_NREM_pos_sec' : 'Total - Average slow wave positive duration (ms) in NREM stage (N1, N2, N3).',
-            'total_R_pos_sec' : 'Total - Average slow wave positive duration (ms) in REM stage.',
-            'total_pos_sec' : 'Total -  Average slow wave positive duration (ms)',
+            'total_N1_pos_sec' : 'Total - Average slow wave positive duration (s) in N1 stage.',
+            'total_N2_pos_sec' : 'Total - Average slow wave positive duration (s) in N2 stage.',
+            'total_N3_pos_sec' : 'Total - Average slow wave positive duration (s) in N3 stage.',
+            'total_N2N3_pos_sec' : 'Total - Average slow wave positive duration (s) in N2 and N3 stage.',
+            'total_NREM_pos_sec' : 'Total - Average slow wave positive duration (s) in NREM stage (N1, N2, N3).',
+            'total_R_pos_sec' : 'Total - Average slow wave positive duration (s) in REM stage.',
+            'total_pos_sec' : 'Total -  Average slow wave positive duration (s)',
 
             'total_N1_slope_0_min' : 'Total - Average slow wave slope (uV/s) from 0 crossing to the min of the negative component in N1 stage.',
             'total_N2_slope_0_min' : 'Total - Average slow wave slope (uV/s) from 0 crossing to the min of the negative component in N2 stage.',
@@ -238,21 +242,21 @@ def _get_doc(N_CYCLE, N_HOURS=0):
             f'cyc{i_cycle+1}_R_neg_amp_uV' : f'Cycle {i_cycle+1} - Average slow wave negative peak amplitude (uV) in REM stage.',
             f'cyc{i_cycle+1}_neg_amp_uV' : f'Cycle {i_cycle+1} - Average slow wave negative peak amplitude (uV).',
 
-            f'cyc{i_cycle+1}_N1_neg_sec' : f'Cycle {i_cycle+1} - Average slow wave negative duration (ms) in N1 stage.',
-            f'cyc{i_cycle+1}_N2_neg_sec' : f'Cycle {i_cycle+1} - Average slow wave negative duration (ms) in N2 stage.',
-            f'cyc{i_cycle+1}_N3_neg_sec' : f'Cycle {i_cycle+1} - Average slow wave negative duration (ms) in N3 stage.',
-            f'cyc{i_cycle+1}_N2N3_neg_sec' : f'Cycle {i_cycle+1} - Average slow wave negative duration (ms) in N2 and N3 stage.',
-            f'cyc{i_cycle+1}_NREM_neg_sec' : f'Cycle {i_cycle+1} - Average slow wave negative duration (ms) in NREM stage (N1, N2, N3).',
-            f'cyc{i_cycle+1}_R_neg_sec' : f'Cycle {i_cycle+1} - Average slow wave negative duration (ms) in REM stage.',
-            f'cyc{i_cycle+1}_neg_sec' : f'Cycle {i_cycle+1} - Average slow wave negative duration (ms)',
+            f'cyc{i_cycle+1}_N1_neg_sec' : f'Cycle {i_cycle+1} - Average slow wave negative duration (s) in N1 stage.',
+            f'cyc{i_cycle+1}_N2_neg_sec' : f'Cycle {i_cycle+1} - Average slow wave negative duration (s) in N2 stage.',
+            f'cyc{i_cycle+1}_N3_neg_sec' : f'Cycle {i_cycle+1} - Average slow wave negative duration (s) in N3 stage.',
+            f'cyc{i_cycle+1}_N2N3_neg_sec' : f'Cycle {i_cycle+1} - Average slow wave negative duration (s) in N2 and N3 stage.',
+            f'cyc{i_cycle+1}_NREM_neg_sec' : f'Cycle {i_cycle+1} - Average slow wave negative duration (s) in NREM stage (N1, N2, N3).',
+            f'cyc{i_cycle+1}_R_neg_sec' : f'Cycle {i_cycle+1} - Average slow wave negative duration (s) in REM stage.',
+            f'cyc{i_cycle+1}_neg_sec' : f'Cycle {i_cycle+1} - Average slow wave negative duration (s)',
 
-            f'cyc{i_cycle+1}_N1_pos_sec' : f'Cycle {i_cycle+1} - Average slow wave positive duration (ms) in N1 stage.',
-            f'cyc{i_cycle+1}_N2_pos_sec' : f'Cycle {i_cycle+1} - Average slow wave positive duration (ms) in N2 stage.',
-            f'cyc{i_cycle+1}_N3_pos_sec' : f'Cycle {i_cycle+1} - Average slow wave positive duration (ms) in N3 stage.',
-            f'cyc{i_cycle+1}_N2N3_pos_sec' : f'Cycle {i_cycle+1} - Average slow wave positive duration (ms) in N2 and N3 stage.',
-            f'cyc{i_cycle+1}_NREM_pos_sec' : f'Cycle {i_cycle+1} - Average slow wave positive duration (ms) in NREM stage (N1, N2, N3).',
-            f'cyc{i_cycle+1}_R_pos_sec' : f'Cycle {i_cycle+1} - Average slow wave positive duration (ms) in REM stage.',
-            f'cyc{i_cycle+1}_pos_sec' : f'Cycle {i_cycle+1} -  Average slow wave positive duration (ms)',
+            f'cyc{i_cycle+1}_N1_pos_sec' : f'Cycle {i_cycle+1} - Average slow wave positive duration (s) in N1 stage.',
+            f'cyc{i_cycle+1}_N2_pos_sec' : f'Cycle {i_cycle+1} - Average slow wave positive duration (s) in N2 stage.',
+            f'cyc{i_cycle+1}_N3_pos_sec' : f'Cycle {i_cycle+1} - Average slow wave positive duration (s) in N3 stage.',
+            f'cyc{i_cycle+1}_N2N3_pos_sec' : f'Cycle {i_cycle+1} - Average slow wave positive duration (s) in N2 and N3 stage.',
+            f'cyc{i_cycle+1}_NREM_pos_sec' : f'Cycle {i_cycle+1} - Average slow wave positive duration (s) in NREM stage (N1, N2, N3).',
+            f'cyc{i_cycle+1}_R_pos_sec' : f'Cycle {i_cycle+1} - Average slow wave positive duration (s) in REM stage.',
+            f'cyc{i_cycle+1}_pos_sec' : f'Cycle {i_cycle+1} -  Average slow wave positive duration (s)',
 
             f'cyc{i_cycle+1}_N1_slope_0_min' : f'Cycle {i_cycle+1} - Average slow wave slope (uV/s) from 0 crossing to the min of the negative component in N1 stage.',
             f'cyc{i_cycle+1}_N2_slope_0_min' : f'Cycle {i_cycle+1} - Average slow wave slope (uV/s) from 0 crossing to the min of the negative component in N2 stage.',
@@ -519,5 +523,16 @@ def _get_doc(N_CYCLE, N_HOURS=0):
             }
         stage_hour_dict = stage_hour_dict | current_stage_hour_dict
     
-    complete_dict = general_dict | detector_dict | channel_dict | sleep_car_dict | total_dict | cycle_dict | clock_hour_dict | stage_hour_dict
+    # Unscored data have no sleep stage/cycle: keep only the stage-agnostic stats
+    if unscored:
+        stage_pattern = re.compile(r'^total_(N1|N2|N3|N2N3|NREM|R)_')
+        total_generic_dict = {k: v for k, v in total_dict.items() if not stage_pattern.match(k)}
+
+        clock_stage_pattern = re.compile(r'^clock_h\d+_(N1|N2|N3|N2N3|NREM|R)_')
+        clock_h_generic_dict = {k: v for k, v in clock_hour_dict.items() if not clock_stage_pattern.match(k)}
+
+        complete_dict = identification_dict | detector_dict | channel_dict | total_generic_dict | clock_h_generic_dict
+        return complete_dict
+
+    complete_dict = identification_dict | def_cycle_dict | detector_dict | channel_dict | sleep_car_dict | total_dict | cycle_dict | clock_hour_dict | stage_hour_dict
     return complete_dict

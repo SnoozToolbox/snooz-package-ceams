@@ -89,6 +89,9 @@ class SSWDCriterias( BaseStepView,  Ui_SSWDCriterias, QtWidgets.QWidget):
         self._name2_topic = f'{self._node_id_discard_events2}.event_name'
         self._pub_sub_manager.subscribe(self, self._name2_topic)
 
+        # Connect checkBox_r signal to update radioButton_incl_remp
+        self.checkBox_r.toggled.connect(self.on_checkBox_r_toggled)
+
 
     def on_input_format_changed(self, int):
         if self.checkBox_age.isChecked():
@@ -135,6 +138,36 @@ class SSWDCriterias( BaseStepView,  Ui_SSWDCriterias, QtWidgets.QWidget):
             self.spinBox_min_pos.setEnabled(True)
             self.spinBox_max_pos.setEnabled(True)
 
+    def on_stage_mode_changed(self):
+        """Handle changes to the sleep stage mode (Sleep Stages vs Unscored)."""
+        if self.radioButton_sleep_stages.isChecked():
+            # Sleep Stages mode: enable stage checkboxes
+            self.checkBox_n1.setEnabled(True)
+            self.checkBox_n2.setEnabled(True)
+            self.checkBox_n3.setEnabled(True)
+            self.checkBox_r.setEnabled(True)
+            self.radioButton_excl_remp.setEnabled(True)
+            self.radioButton_incl_remp.setEnabled(True)
+            self.radioButton_excl_remp.setChecked(True)
+        else:
+            # Unscored mode: disable and uncheck stage checkboxes
+            self.checkBox_n1.setEnabled(False)
+            self.checkBox_n1.setChecked(False)
+            self.checkBox_n2.setEnabled(False)
+            self.checkBox_n2.setChecked(False)
+            self.checkBox_n3.setEnabled(False)
+            self.checkBox_n3.setChecked(False)
+            self.checkBox_r.setEnabled(False)
+            self.checkBox_r.setChecked(False)
+            self.radioButton_incl_remp.setEnabled(False)
+            self.radioButton_incl_remp.setChecked(True)
+            self.radioButton_excl_remp.setEnabled(False)
+            self.radioButton_excl_remp.setChecked(False)
+
+    def on_checkBox_r_toggled(self, checked):
+        """When checkBox_r (REM stage) is checked, automatically check radioButton_incl_remp."""
+        if checked:
+            self.radioButton_incl_remp.setChecked(True)
 
     def _load_embedded_image(self):
         """Load the embedded base64 image data into SW_picture."""
@@ -169,26 +202,32 @@ class SSWDCriterias( BaseStepView,  Ui_SSWDCriterias, QtWidgets.QWidget):
     def on_apply_settings(self):
         # Sleep stage selection to send to the "Sleep Stage Events" plugin
         stages_str = ''
-        if self.checkBox_n1.isChecked():
-            if len(stages_str)==0:
-                stages_str = '1'
-            else:
-                stages_str = stages_str+',1'
-        if self.checkBox_n2.isChecked():
-            if len(stages_str)==0:
-                stages_str = '2'
-            else:
-                stages_str = stages_str+',2'
-        if self.checkBox_n3.isChecked():
-            if len(stages_str)==0:
-                stages_str = '3'
-            else:
-                stages_str = stages_str+',3'   
-        if self.checkBox_r.isChecked():
-            if len(stages_str)==0:
-                stages_str = '5'
-            else:
-                stages_str = stages_str+',5'                
+        
+        # Check if Unscored mode is selected
+        if self.radioButton_unscored_mode.isChecked():
+            stages_str = '9'
+        else:
+            # Sleep Stages mode: collect selected stages
+            if self.checkBox_n1.isChecked():
+                if len(stages_str)==0:
+                    stages_str = '1'
+                else:
+                    stages_str = stages_str+',1'
+            if self.checkBox_n2.isChecked():
+                if len(stages_str)==0:
+                    stages_str = '2'
+                else:
+                    stages_str = stages_str+',2'
+            if self.checkBox_n3.isChecked():
+                if len(stages_str)==0:
+                    stages_str = '3'
+                else:
+                    stages_str = stages_str+',3'   
+            if self.checkBox_r.isChecked():
+                if len(stages_str)==0:
+                    stages_str = '5'
+                else:
+                    stages_str = stages_str+',5'
         self._pub_sub_manager.publish(self, self._stages_topic, str(stages_str))
         self._pub_sub_manager.publish(self, self._exclude_remp_topic, str(int(self.radioButton_excl_remp.isChecked())))
         # Send the settings to the publisher for inputs to SlowWaveDetector
@@ -255,10 +294,20 @@ class SSWDCriterias( BaseStepView,  Ui_SSWDCriterias, QtWidgets.QWidget):
     def on_topic_response(self, topic, message, sender):
         if topic == self._stages_topic:
             stages_lst = message.split(',')
-            self.checkBox_n1.setChecked('1' in stages_lst)
-            self.checkBox_n2.setChecked('2' in stages_lst)
-            self.checkBox_n3.setChecked('3' in stages_lst)
-            self.checkBox_r.setChecked('5' in stages_lst)
+            # Check if unscored mode
+            if '9' in stages_lst:
+                self.radioButton_unscored_mode.setChecked(True)
+                # Call the handler to update UI
+                self.on_stage_mode_changed()
+            else:
+                self.radioButton_sleep_stages.setChecked(True)
+                # Call the handler to update UI
+                self.on_stage_mode_changed()
+                # Check the corresponding stage checkboxes
+                self.checkBox_n1.setChecked('1' in stages_lst)
+                self.checkBox_n2.setChecked('2' in stages_lst)
+                self.checkBox_n3.setChecked('3' in stages_lst)
+                self.checkBox_r.setChecked('5' in stages_lst)
         if topic == self._exclude_remp_topic:
             self.radioButton_excl_remp.setChecked(int(message))
         if topic == self._group_topic:
