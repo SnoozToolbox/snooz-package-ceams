@@ -298,15 +298,9 @@ class PSACompilationFOOOF(SciNode):
             freq_bin_chan, psd_start_time, psd_stage, psd_data = \
                 PSA.get_PSD_attribute_chan_stage(self.identifier, PSD, channel, sleep_stages)
 
-            # To avoid too many decimal in the frequency bins
-            freq_bin_space = np.average(np.diff(freq_bin_chan))
-            # This works only for frequency bins < 1
-            if freq_bin_space<1:
-                precision_space = int(abs(np.log10(freq_bin_space)))+2
-                freq_bin_chan = np.round(freq_bin_chan,precision_space)
-            else:
-                precision_space = 1
-                freq_bin_chan = np.round(freq_bin_chan,precision_space)
+            # Keep the FFT-generated frequency bins unchanged. Rounding here
+            # can change the bin spacing and make valid mini-bands disappear.
+            freq_bin_chan = np.asarray(freq_bin_chan, dtype=float)
 
             miniband_indices = PSA.get_miniband_index(self.identifier, freq_bin_chan, mini_bandwidth, first_freq, last_freq, fs_chan)
             # The frequency band definded as [min, max[ (i.e. 0-3.8 Hz) are written in the report as 0-4 Hz
