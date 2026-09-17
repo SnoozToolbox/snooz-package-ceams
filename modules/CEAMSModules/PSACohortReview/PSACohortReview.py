@@ -196,12 +196,12 @@ class PSACohortReview(SciNode):
             mask_activity = self.PSA_df.columns.str.contains(activity_2_export,regex=True)
             if any(mask_activity):
                 activity_data_df = self.PSA_df.loc[:,mask_activity]
-            # Look for a PSAOnEvents
-            else:
-                activity_2_export = "act_"
-                # Extract all the columns of the spectral data
-                mask_activity = self.PSA_df.columns.str.contains(activity_2_export,regex=True)
-                activity_data_df = self.PSA_df.loc[:,mask_activity]
+            # # Look for a PSAOnEvents
+            # else:
+            #     activity_2_export = "act_"
+            #     # Extract all the columns of the spectral data
+            #     mask_activity = self.PSA_df.columns.str.contains(activity_2_export,regex=True)
+            #     activity_data_df = self.PSA_df.loc[:,mask_activity]
 
             # Dataframe to write in the transposed spectral file
             transposed_data_df = pd.DataFrame()

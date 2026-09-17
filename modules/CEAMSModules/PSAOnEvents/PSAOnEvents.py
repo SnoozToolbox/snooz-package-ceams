@@ -644,11 +644,11 @@ class PSAOnEvents(SciNode):
         """
         if label == 'total':
             if event_name is None:
-                return 'fft_win_count', 'fft_win_valid_count', 'act_total'
+                return 'total_fft_win_count', 'total_fft_win_valid_count', 'total_act'
             return (
-                f'fft_win_{event_name}_count',
-                f'fft_win_valid_{event_name}_count',
-                f'act_{event_name}'
+                f'total_{event_name}_fft_win_count',
+                f'total_{event_name}_fft_win_valid_count',
+                f'total_{event_name}_act'
             )
         if event_name is None:
             return (
