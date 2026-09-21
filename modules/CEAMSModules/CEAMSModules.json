@@ -653,7 +653,7 @@
         {
             "item_name": "PSACompilation",
             "item_type": "module",
-            "item_version": "2.2.0",
+            "item_version": "2.2.1",
             "item_hooks": [
                 {
                     "endpoint_name": "module_endpoint",
@@ -1199,7 +1199,7 @@
         {
             "item_name": "PSACompilationFOOOF",
             "item_type": "module",
-            "item_version": "0.0.0",
+            "item_version": "0.0.1",
             "item_hooks": [
                 {
                     "endpoint_name": "module_endpoint",
