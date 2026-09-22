@@ -75,7 +75,7 @@ class Ui_DetectorsStep(object):
         self.unique_group_lineEdit = QLineEdit(DetectorsStep)
         self.unique_group_lineEdit.setObjectName(u"unique_group_lineEdit")
         self.unique_group_lineEdit.setMinimumSize(QSize(150, 0))
-        self.unique_group_lineEdit.setMaximumSize(QSize(200, 16777215))
+        self.unique_group_lineEdit.setMaximumSize(QSize(250, 16777215))
         self.unique_group_lineEdit.setAlignment(Qt.AlignmentFlag.AlignLeading|Qt.AlignmentFlag.AlignLeft|Qt.AlignmentFlag.AlignVCenter)
 
         self.horizontalLayout_2.addWidget(self.unique_group_lineEdit)
@@ -93,7 +93,7 @@ class Ui_DetectorsStep(object):
         self.unique_name_lineEdit = QLineEdit(DetectorsStep)
         self.unique_name_lineEdit.setObjectName(u"unique_name_lineEdit")
         self.unique_name_lineEdit.setMinimumSize(QSize(150, 0))
-        self.unique_name_lineEdit.setMaximumSize(QSize(200, 16777215))
+        self.unique_name_lineEdit.setMaximumSize(QSize(250, 16777215))
 
         self.horizontalLayout_2.addWidget(self.unique_name_lineEdit)
 
@@ -314,16 +314,16 @@ class Ui_DetectorsStep(object):
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">        - Flatline detector : decrease the threshold</p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">        - All other detectors : increase the thresholds</p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">        - You could start by increasing the fixed thresholds based on the main gaussian distrbution.</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">          I.e. increase the thresholds from 4 X STD to 5 X STD.</p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">          I.e. increase the thresholds from 4 X SD to 5 X SD.</p>\n"
 "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
-"<p style=\" margin-top:0px; margin-"
-                        "bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">    To make a detector more sensitive : </p>\n"
+"<p style=\" margin-top:0px; margin-bo"
+                        "ttom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">    To make a detector more sensitive : </p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">        - Flatline detector : increase the threshold</p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">        - All other detectors : decrease the thresholds</p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">        - You could start by decreasing the fixed thresholds based on the main gaussian distrbution.</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">          I.e. decrease the thresholds from 4 X STD to 3 X STD, except for the baseline variation which the minimum value should be 3.5.</p>\n"
-"<p style=\"-qt-paragraph-ty"
-                        "pe:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">          I.e. decrease the thresholds from 4 X SD to 3 X SD, except for the baseline variation which the minimum value should be 3.5.</p>\n"
+"<p style=\"-qt-paragraph-type:e"
+                        "mpty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">For more information see the  &quot;Detectors Settings&quot; configuration page for each specific detector. </p></body></html>", None))
     # retranslateUi
 
