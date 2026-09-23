@@ -184,6 +184,12 @@ class PSAOnEvents(SciNode):
             
         """
         # Input Type verification
+
+        match_event_channels = self._parse_bool_flag(match_event_channels, "match_event_channels", default=True)
+        dist_total = self._parse_bool_flag(dist_total, "dist_total", default=True)
+        dist_hour = self._parse_bool_flag(dist_hour, "dist_hour", default=False)
+        dist_cycle = self._parse_bool_flag(dist_cycle, "dist_cycle", default=False)
+
         if isinstance(subject_info, str) and subject_info != '':
             subject_info = eval(subject_info)
         if (not isinstance(subject_info,dict)):
@@ -193,19 +199,7 @@ class PSAOnEvents(SciNode):
         if not isinstance(PSD,list):
             raise NodeInputException(self.identifier, "PSD", \
                 f"PSAOnEvents input of wrong type. Expected: <class 'list'> received: {type(PSD)}")   
-        if match_event_channels in ("", None):
-            match_event_channels = True
-        elif isinstance(match_event_channels, str):
-            if match_event_channels.lower() == "true":
-                match_event_channels = True
-            elif match_event_channels.lower() == "false":
-                match_event_channels = False
-        if type(match_event_channels) != bool:
-            raise NodeInputException(
-                self.identifier,
-                "match_event_channels",
-                "PSAOnEvents match_event_channels parameter must be a boolean"
-            )
+
         try:
             mini_bandwidth = float(mini_bandwidth)
         except ValueError:
@@ -221,10 +215,6 @@ class PSAOnEvents(SciNode):
         except ValueError:
             raise NodeInputException(self.identifier, "last_freq", \
                 f"PSAOnEvents input of wrong type or empty. Expected: str of float") 
-
-        dist_total = self._parse_bool_flag(dist_total, "dist_total", default=True)
-        dist_hour = self._parse_bool_flag(dist_hour, "dist_hour", default=False)
-        dist_cycle = self._parse_bool_flag(dist_cycle, "dist_cycle", default=False)
 
         if isinstance(parameters_cycle, str):
             if parameters_cycle == '':
@@ -291,6 +281,9 @@ class PSAOnEvents(SciNode):
                     raise NodeInputException(self.identifier, "PSA_event_name", \
                         f"PSAOnEvents input of wrong type. Expected: str of dict")                 
 
+
+
+
         # Extract subject info
         subject_info_params = {"filename": subject_info['filename']}
         if (subject_info['id1'] is not None) and len(subject_info['id1'].strip())>0:
@@ -323,6 +316,34 @@ class PSAOnEvents(SciNode):
         PSA_evt_info_param, PSA_evt_selected = \
             self.get_event_info(PSA_event_group_sel, PSA_event_name_sel, events.copy(), 'PSA_event')
 
+        if len(PSD) == 0:
+            if match_event_channels:
+                raise NodeRuntimeException(
+                    self.identifier,
+                    "match_event_channels",
+                    "PSAOnEvents - The selected annotation is not included in the channels selected "
+                    "for spectral analysis. Uncheck 'Analyze events only on their annotated channel' "
+                    "in step 5 of the tool to analyze these events on every selected channel."
+                )
+            raise NodeRuntimeException(
+                self.identifier,
+                "PSD",
+                "PSAOnEvents - No spectral power data is available. The current analysis was skipped."
+            )
+
+        channels_list = np.unique(PSA.get_attribute(PSD, 'chan_label'))
+        if match_event_channels and not any(
+            len(self.select_events_for_channel(PSA_evt_selected, channel, True)) > 0
+            for channel in channels_list
+        ):
+            raise NodeRuntimeException(
+                self.identifier,
+                "match_event_channels",
+                "PSAOnEvents - The selected annotation is not included in the channels selected "
+                "for spectral analysis. Uncheck 'Analyze events only on their annotated channel' "
+                "in step 5 of the tool to analyze these events on every selected channel."
+            )
+
         # Extract duration_sec
         event_dur_s = PSA_evt_selected['duration_sec'].values
         if any(event_dur_s < PSD[0]['win_len']):
@@ -337,9 +358,6 @@ class PSAOnEvents(SciNode):
                 self._log_manager.log(self.identifier, \
                     f"The file {subject_info['filename']} has PSA events shorter than the fft window length of {PSD[0]['win_len']}s.")
             
-
-        # Extract the unique channel list
-        channels_list = np.unique(PSA.get_attribute(PSD, 'chan_label'))
 
         # Create the list of events from all the files to create a valid file (the number of columns has to be known for the cohort)
         unique_event_name = []
