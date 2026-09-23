@@ -24,7 +24,7 @@ class Ui_PersistentNoiseStep(object):
     def setupUi(self, PersistentNoiseStep):
         if not PersistentNoiseStep.objectName():
             PersistentNoiseStep.setObjectName(u"PersistentNoiseStep")
-        PersistentNoiseStep.resize(1501, 637)
+        PersistentNoiseStep.resize(1109, 683)
         PersistentNoiseStep.setStyleSheet(u"font: 12pt \"Roboto\";")
         self.verticalLayout_2 = QVBoxLayout(PersistentNoiseStep)
         self.verticalLayout_2.setObjectName(u"verticalLayout_2")
@@ -46,8 +46,6 @@ class Ui_PersistentNoiseStep(object):
 
         self.verticalLayout_2.addWidget(self.imageWidget)
 
-        self.verticalLayout_3 = QVBoxLayout()
-        self.verticalLayout_3.setObjectName(u"verticalLayout_3")
         self.label_9 = QLabel(PersistentNoiseStep)
         self.label_9.setObjectName(u"label_9")
         self.label_9.setMinimumSize(QSize(0, 20))
@@ -61,44 +59,35 @@ class Ui_PersistentNoiseStep(object):
         self.label_9.setFrameShape(QFrame.Shape.NoFrame)
         self.label_9.setLineWidth(0)
 
-        self.verticalLayout_3.addWidget(self.label_9)
+        self.verticalLayout_2.addWidget(self.label_9)
 
+        self.horizontalLayout_2 = QHBoxLayout()
+        self.horizontalLayout_2.setObjectName(u"horizontalLayout_2")
+        self.verticalLayout = QVBoxLayout()
+        self.verticalLayout.setObjectName(u"verticalLayout")
         self.description_textEdit = QTextEdit(PersistentNoiseStep)
         self.description_textEdit.setObjectName(u"description_textEdit")
-        sizePolicy1 = QSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
+        sizePolicy1 = QSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
         sizePolicy1.setHorizontalStretch(0)
-        sizePolicy1.setVerticalStretch(5)
+        sizePolicy1.setVerticalStretch(0)
         sizePolicy1.setHeightForWidth(self.description_textEdit.sizePolicy().hasHeightForWidth())
         self.description_textEdit.setSizePolicy(sizePolicy1)
-        self.description_textEdit.setMinimumSize(QSize(0, 250))
+        self.description_textEdit.setMinimumSize(QSize(0, 0))
+        self.description_textEdit.setMaximumSize(QSize(16777215, 700))
         self.description_textEdit.setStyleSheet(u"")
         self.description_textEdit.setFrameShape(QFrame.Shape.NoFrame)
         self.description_textEdit.setFrameShadow(QFrame.Shadow.Plain)
         self.description_textEdit.setLineWidth(0)
+        self.description_textEdit.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
+        self.description_textEdit.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
         self.description_textEdit.setReadOnly(True)
 
-        self.verticalLayout_3.addWidget(self.description_textEdit)
+        self.verticalLayout.addWidget(self.description_textEdit)
 
-        self.verticalSpacer = QSpacerItem(20, 10, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Fixed)
+        self.verticalSpacer = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Preferred)
 
-        self.verticalLayout_3.addItem(self.verticalSpacer)
+        self.verticalLayout.addItem(self.verticalSpacer)
 
-
-        self.verticalLayout_2.addLayout(self.verticalLayout_3)
-
-        self.gridLayout_2 = QGridLayout()
-        self.gridLayout_2.setObjectName(u"gridLayout_2")
-        self.textEdit = QTextEdit(PersistentNoiseStep)
-        self.textEdit.setObjectName(u"textEdit")
-        self.textEdit.setMaximumSize(QSize(16777215, 130))
-        self.textEdit.setFrameShape(QFrame.Shape.HLine)
-        self.textEdit.setLineWidth(0)
-        self.textEdit.setReadOnly(True)
-
-        self.gridLayout_2.addWidget(self.textEdit, 1, 0, 1, 1)
-
-        self.verticalLayout = QVBoxLayout()
-        self.verticalLayout.setObjectName(u"verticalLayout")
         self.label_4 = QLabel(PersistentNoiseStep)
         self.label_4.setObjectName(u"label_4")
         sizePolicy2 = QSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Fixed)
@@ -113,16 +102,17 @@ class Ui_PersistentNoiseStep(object):
 
         self.gridLayout = QGridLayout()
         self.gridLayout.setObjectName(u"gridLayout")
-        self.label_6 = QLabel(PersistentNoiseStep)
-        self.label_6.setObjectName(u"label_6")
-        self.label_6.setMaximumSize(QSize(250, 16777215))
+        self.label_5 = QLabel(PersistentNoiseStep)
+        self.label_5.setObjectName(u"label_5")
+        sizePolicy3 = QSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Preferred)
+        sizePolicy3.setHorizontalStretch(0)
+        sizePolicy3.setVerticalStretch(0)
+        sizePolicy3.setHeightForWidth(self.label_5.sizePolicy().hasHeightForWidth())
+        self.label_5.setSizePolicy(sizePolicy3)
+        self.label_5.setMinimumSize(QSize(110, 0))
+        self.label_5.setMaximumSize(QSize(110, 16777215))
 
-        self.gridLayout.addWidget(self.label_6, 5, 2, 1, 1)
-
-        self.label_7 = QLabel(PersistentNoiseStep)
-        self.label_7.setObjectName(u"label_7")
-
-        self.gridLayout.addWidget(self.label_7, 4, 0, 1, 1)
+        self.gridLayout.addWidget(self.label_5, 0, 0, 1, 1)
 
         self.group_lineEdit = QLineEdit(PersistentNoiseStep)
         self.group_lineEdit.setObjectName(u"group_lineEdit")
@@ -132,23 +122,15 @@ class Ui_PersistentNoiseStep(object):
 
         self.gridLayout.addWidget(self.group_lineEdit, 0, 1, 1, 1)
 
-        self.label_5 = QLabel(PersistentNoiseStep)
-        self.label_5.setObjectName(u"label_5")
-        sizePolicy3 = QSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Preferred)
-        sizePolicy3.setHorizontalStretch(0)
-        sizePolicy3.setVerticalStretch(0)
-        sizePolicy3.setHeightForWidth(self.label_5.sizePolicy().hasHeightForWidth())
-        self.label_5.setSizePolicy(sizePolicy3)
-        self.label_5.setMaximumSize(QSize(110, 16777215))
+        self.horizontalSpacer_2 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
 
-        self.gridLayout.addWidget(self.label_5, 0, 0, 1, 1)
+        self.gridLayout.addItem(self.horizontalSpacer_2, 0, 2, 1, 1)
 
-        self.tresh_fixe_lineEdit = QLineEdit(PersistentNoiseStep)
-        self.tresh_fixe_lineEdit.setObjectName(u"tresh_fixe_lineEdit")
-        self.tresh_fixe_lineEdit.setMaximumSize(QSize(250, 16777215))
-        self.tresh_fixe_lineEdit.setFont(font)
+        self.label_3 = QLabel(PersistentNoiseStep)
+        self.label_3.setObjectName(u"label_3")
+        self.label_3.setMaximumSize(QSize(110, 16777215))
 
-        self.gridLayout.addWidget(self.tresh_fixe_lineEdit, 4, 1, 1, 1)
+        self.gridLayout.addWidget(self.label_3, 1, 0, 1, 1)
 
         self.name_fixe_lineEdit = QLineEdit(PersistentNoiseStep)
         self.name_fixe_lineEdit.setObjectName(u"name_fixe_lineEdit")
@@ -156,13 +138,52 @@ class Ui_PersistentNoiseStep(object):
         self.name_fixe_lineEdit.setMaximumSize(QSize(250, 16777215))
         self.name_fixe_lineEdit.setFont(font)
 
-        self.gridLayout.addWidget(self.name_fixe_lineEdit, 2, 1, 1, 1)
+        self.gridLayout.addWidget(self.name_fixe_lineEdit, 1, 1, 1, 1)
+
+        self.horizontalSpacer = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+
+        self.gridLayout.addItem(self.horizontalSpacer, 1, 2, 1, 1)
+
+
+        self.verticalLayout.addLayout(self.gridLayout)
+
+        self.label_8 = QLabel(PersistentNoiseStep)
+        self.label_8.setObjectName(u"label_8")
+        self.label_8.setFont(font)
+
+        self.verticalLayout.addWidget(self.label_8)
+
+        self.label_11 = QLabel(PersistentNoiseStep)
+        self.label_11.setObjectName(u"label_11")
+
+        self.verticalLayout.addWidget(self.label_11)
+
+        self.gridLayout_2 = QGridLayout()
+        self.gridLayout_2.setObjectName(u"gridLayout_2")
+        self.label_7 = QLabel(PersistentNoiseStep)
+        self.label_7.setObjectName(u"label_7")
+
+        self.gridLayout_2.addWidget(self.label_7, 0, 0, 1, 1)
+
+        self.tresh_fixe_lineEdit = QLineEdit(PersistentNoiseStep)
+        self.tresh_fixe_lineEdit.setObjectName(u"tresh_fixe_lineEdit")
+        self.tresh_fixe_lineEdit.setMaximumSize(QSize(250, 16777215))
+        self.tresh_fixe_lineEdit.setFont(font)
+
+        self.gridLayout_2.addWidget(self.tresh_fixe_lineEdit, 0, 1, 1, 1)
 
         self.label_2 = QLabel(PersistentNoiseStep)
         self.label_2.setObjectName(u"label_2")
         self.label_2.setMaximumSize(QSize(250, 16777215))
 
-        self.gridLayout.addWidget(self.label_2, 4, 2, 1, 1)
+        self.gridLayout_2.addWidget(self.label_2, 0, 2, 1, 1)
+
+        self.label = QLabel(PersistentNoiseStep)
+        self.label.setObjectName(u"label")
+        self.label.setMaximumSize(QSize(281, 16777215))
+        self.label.setFont(font)
+
+        self.gridLayout_2.addWidget(self.label, 1, 0, 1, 1)
 
         self.thres_ratio_lineEdit = QLineEdit(PersistentNoiseStep)
         self.thres_ratio_lineEdit.setObjectName(u"thres_ratio_lineEdit")
@@ -170,43 +191,47 @@ class Ui_PersistentNoiseStep(object):
         self.thres_ratio_lineEdit.setMaximumSize(QSize(250, 16777215))
         self.thres_ratio_lineEdit.setFont(font)
 
-        self.gridLayout.addWidget(self.thres_ratio_lineEdit, 5, 1, 1, 1)
+        self.gridLayout_2.addWidget(self.thres_ratio_lineEdit, 1, 1, 1, 1)
 
-        self.label = QLabel(PersistentNoiseStep)
-        self.label.setObjectName(u"label")
-        self.label.setMaximumSize(QSize(281, 16777215))
-        self.label.setFont(font)
+        self.label_6 = QLabel(PersistentNoiseStep)
+        self.label_6.setObjectName(u"label_6")
+        self.label_6.setMaximumSize(QSize(250, 16777215))
 
-        self.gridLayout.addWidget(self.label, 5, 0, 1, 1)
-
-        self.label_3 = QLabel(PersistentNoiseStep)
-        self.label_3.setObjectName(u"label_3")
-        self.label_3.setMaximumSize(QSize(110, 16777215))
-
-        self.gridLayout.addWidget(self.label_3, 2, 0, 1, 1)
+        self.gridLayout_2.addWidget(self.label_6, 1, 2, 1, 1)
 
 
-        self.verticalLayout.addLayout(self.gridLayout)
+        self.verticalLayout.addLayout(self.gridLayout_2)
 
 
-        self.gridLayout_2.addLayout(self.verticalLayout, 0, 0, 1, 1)
+        self.horizontalLayout_2.addLayout(self.verticalLayout)
 
         self.settings_textEdit = QTextEdit(PersistentNoiseStep)
         self.settings_textEdit.setObjectName(u"settings_textEdit")
+        sizePolicy4 = QSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
+        sizePolicy4.setHorizontalStretch(0)
+        sizePolicy4.setVerticalStretch(0)
+        sizePolicy4.setHeightForWidth(self.settings_textEdit.sizePolicy().hasHeightForWidth())
+        self.settings_textEdit.setSizePolicy(sizePolicy4)
         self.settings_textEdit.setMaximumSize(QSize(16777215, 16777215))
         self.settings_textEdit.setFocusPolicy(Qt.FocusPolicy.NoFocus)
         self.settings_textEdit.setContextMenuPolicy(Qt.ContextMenuPolicy.NoContextMenu)
         self.settings_textEdit.setAcceptDrops(False)
         self.settings_textEdit.setStyleSheet(u"")
-        self.settings_textEdit.setFrameShape(QFrame.Shape.NoFrame)
-        self.settings_textEdit.setFrameShadow(QFrame.Shadow.Plain)
+        self.settings_textEdit.setFrameShape(QFrame.Shape.StyledPanel)
+        self.settings_textEdit.setFrameShadow(QFrame.Shadow.Sunken)
         self.settings_textEdit.setLineWidth(0)
+        self.settings_textEdit.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
+        self.settings_textEdit.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
         self.settings_textEdit.setReadOnly(True)
 
-        self.gridLayout_2.addWidget(self.settings_textEdit, 0, 1, 2, 1)
+        self.horizontalLayout_2.addWidget(self.settings_textEdit)
 
 
-        self.verticalLayout_2.addLayout(self.gridLayout_2)
+        self.verticalLayout_2.addLayout(self.horizontalLayout_2)
+
+        self.verticalSpacer_2 = QSpacerItem(20, 10, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
+
+        self.verticalLayout_2.addItem(self.verticalSpacer_2)
 
 
         self.retranslateUi(PersistentNoiseStep)
@@ -225,59 +250,44 @@ class Ui_PersistentNoiseStep(object):
 "li.unchecked::marker { content: \"\\2610\"; }\n"
 "li.checked::marker { content: \"\\2612\"; }\n"
 "</style></head><body style=\" font-family:'Roboto'; font-size:12pt; font-weight:400; font-style:normal;\">\n"
-"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" color:#000000;\">Identification of segments with outlier power (&gt;25 Hz) via spectral power (STFT : Short Term Fourier Transform).</span></p>\n"
-"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" color:#000000;\">An increase of high frequency power may be caused by a bad connection of the electrod"
-                        "e.</span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" text-decoration: underline;\">Fixed threshold</span><span style=\" color:#000000;\"> (mean + x STD)</span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">The power is log10 transformed to make the data more normally distributed, however the distribution of the power of all selected channels is often skewed right du to artifacts.</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">The distribution is then modeled by a 3-components Gaussian Mixture Model (GMM).</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">The threshold is multiplied by the standard deviation (STD) and added to the mean of the main gaussian (over a mixture "
-                        "of 3).</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">An artifact is possibly identified when the log10(power) &gt; (mean + threshold*STD)</p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Identification of segments with outlier high-frequency power via spectral power analysis (Welch's method). </p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">High-frequency band power (&gt;25 Hz) is computed by integrating the power spectral density estimated using Welch's method, as recommended in [1].</p>\n"
+"<p style=\" m"
+                        "argin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Power is calculated using 6-s windows with a 3-s step size.</p>\n"
 "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" text-decoration: underline;\">Power ratio threshold</span> (relative power)</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">High frequency noise can be masked (thus non-disturbing) by a strong low frequency signal. An artifact is possibly identified when the relative power (25-64 Hz)/(1-64 Hz) &gt; threshold.</p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-rig"
-                        "ht:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">A segment whose power exceeds the 2 thresholds is considered an artifact.</p></body></html>", None))
-        self.textEdit.setHtml(QCoreApplication.translate("PersistentNoiseStep", u"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
-"<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset=\"utf-8\" /><style type=\"text/css\">\n"
-"p, li { white-space: pre-wrap; }\n"
-"hr { height: 1px; border-width: 0; }\n"
-"li.unchecked::marker { content: \"\\2610\"; }\n"
-"li.checked::marker { content: \"\\2612\"; }\n"
-"</style></head><body style=\" font-family:'Roboto'; font-size:12pt; font-weight:400; font-style:normal;\">\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">To reduce the number of false positives, especially during low amplitude R stage, please first increase the power ratio threshold value.</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">A greater proportion of the signal in the 25-64 Hz frequency band will be needed to mark the segment as an artifact.</p></body></html>", None))
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" text-decoration: underline;\">Reference</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"> [1] Cox, R. &amp; Fell, J. Analyzing human sleep EEG: A methodological primer with code implementation. Sleep Medicine Reviews, 54, 101353 (2020).</p></body></html>", None))
         self.label_4.setText(QCoreApplication.translate("PersistentNoiseStep", u"<html><head/><body><p><span style=\" font-weight:700;\">Event Settings</span></p></body></html>", None))
-        self.label_6.setText(QCoreApplication.translate("PersistentNoiseStep", u"optimal value from 0.1 to 0.4", None))
-#if QT_CONFIG(tooltip)
-        self.label_7.setToolTip(QCoreApplication.translate("PersistentNoiseStep", u"The threshold value to identify the artefact.  Its units is x times the baseline standard deviation.", None))
-#endif // QT_CONFIG(tooltip)
-        self.label_7.setText(QCoreApplication.translate("PersistentNoiseStep", u"(A) Fixed threshold (mean + x STD)     ", None))
-#if QT_CONFIG(tooltip)
-        self.group_lineEdit.setToolTip("")
-#endif // QT_CONFIG(tooltip)
-        self.group_lineEdit.setText(QCoreApplication.translate("PersistentNoiseStep", u"art_snooz", None))
 #if QT_CONFIG(tooltip)
         self.label_5.setToolTip(QCoreApplication.translate("PersistentNoiseStep", u"In which \"Event Group\" the detected artifact are added (label in the annotation file). Go to the general Detectors Settings to edit the group.", None))
 #endif // QT_CONFIG(tooltip)
         self.label_5.setText(QCoreApplication.translate("PersistentNoiseStep", u"Event Group", None))
 #if QT_CONFIG(tooltip)
-        self.tresh_fixe_lineEdit.setToolTip("")
+        self.group_lineEdit.setToolTip("")
 #endif // QT_CONFIG(tooltip)
-        self.tresh_fixe_lineEdit.setText(QCoreApplication.translate("PersistentNoiseStep", u"4", None))
-#if QT_CONFIG(tooltip)
-        self.name_fixe_lineEdit.setToolTip("")
-#endif // QT_CONFIG(tooltip)
-        self.name_fixe_lineEdit.setText(QCoreApplication.translate("PersistentNoiseStep", u"art_snooz", None))
-        self.label_2.setText(QCoreApplication.translate("PersistentNoiseStep", u"optimal value from 3 to 5", None))
-        self.thres_ratio_lineEdit.setText(QCoreApplication.translate("PersistentNoiseStep", u"0.25", None))
-        self.label.setText(QCoreApplication.translate("PersistentNoiseStep", u"(B) Power ratio (25-64 Hz/1-64 Hz)", None))
+        self.group_lineEdit.setText(QCoreApplication.translate("PersistentNoiseStep", u"art_snooz", None))
 #if QT_CONFIG(tooltip)
         self.label_3.setToolTip(QCoreApplication.translate("PersistentNoiseStep", u"The event name of the detected artifact (label in the annotation file). Go to the general Detectors Settings to edit the name.", None))
 #endif // QT_CONFIG(tooltip)
         self.label_3.setText(QCoreApplication.translate("PersistentNoiseStep", u"Event Name", None))
+#if QT_CONFIG(tooltip)
+        self.name_fixe_lineEdit.setToolTip("")
+#endif // QT_CONFIG(tooltip)
+        self.name_fixe_lineEdit.setText(QCoreApplication.translate("PersistentNoiseStep", u"art_snooz", None))
+        self.label_8.setText(QCoreApplication.translate("PersistentNoiseStep", u"<html><head/><body><p><span style=\" font-weight:700;\">Thresholds</span></p></body></html>", None))
+        self.label_11.setText(QCoreApplication.translate("PersistentNoiseStep", u"An artifact is identified when the spectral power exceeds two complementary thresholds:", None))
+#if QT_CONFIG(tooltip)
+        self.label_7.setToolTip(QCoreApplication.translate("PersistentNoiseStep", u"The threshold value to identify the artefact.  Its units is x times the baseline standard deviation.", None))
+#endif // QT_CONFIG(tooltip)
+        self.label_7.setText(QCoreApplication.translate("PersistentNoiseStep", u"(A) Fixed threshold (mean + x SD)     ", None))
+#if QT_CONFIG(tooltip)
+        self.tresh_fixe_lineEdit.setToolTip("")
+#endif // QT_CONFIG(tooltip)
+        self.tresh_fixe_lineEdit.setText(QCoreApplication.translate("PersistentNoiseStep", u"4", None))
+        self.label_2.setText(QCoreApplication.translate("PersistentNoiseStep", u"optimal value from 3 to 5", None))
+        self.label.setText(QCoreApplication.translate("PersistentNoiseStep", u"(B) Power ratio (25-64 Hz/1-64 Hz)", None))
+        self.thres_ratio_lineEdit.setText(QCoreApplication.translate("PersistentNoiseStep", u"0.25", None))
+        self.label_6.setText(QCoreApplication.translate("PersistentNoiseStep", u"optimal value from 0.1 to 0.4", None))
         self.settings_textEdit.setHtml(QCoreApplication.translate("PersistentNoiseStep", u"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset=\"utf-8\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
@@ -285,10 +295,22 @@ class Ui_PersistentNoiseStep(object):
 "li.unchecked::marker { content: \"\\2610\"; }\n"
 "li.checked::marker { content: \"\\2612\"; }\n"
 "</style></head><body style=\" font-family:'Roboto'; font-size:12pt; font-weight:400; font-style:normal;\">\n"
-"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" color:#000000;\">The power is computed on sliding windows through STFT.<br />Window length = 6 s<br />Window step = 3 s </span></p>\n"
-"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-style:italic; color:#000000;\">The STFT is applied to integrate (sum) the signal power within a frequency ran"
-                        "ge of the true spectrum (units\u00b2 ex. \u00b5V\u00b2) as suggested in [1].</span></p>\n"
-"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><a href=\"https://pubmed.ncbi.nlm.nih.gov/12723066/\"><span style=\" text-decoration: underline; color:#000000;\">Reference</span></a></p>\n"
-"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" color:#000000;\">[1] Cox, R. &amp; Fell, J. Analyzing human sleep EEG: A methodological primer with code implementation. Sleep Medicine Reviews54, 101353 (2020).</span></p></body></html>", None))
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" text-decoration: underline;\">A) Fixed threshold</span> (mean + X SD)</p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">The power is log10-transformed to reduce skewness and improve normality. </p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-in"
+                        "dent:0px;\">Because the power distribution is often right-skewed due to artifacts, it is modeled using a three-component Gaussian Mixture Model (GMM). The threshold is defined as the mean of the main Gaussian component plus a user-defined multiple of its standard deviation (SD).</p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">A segment is flagged when: log10(25-64 Hz power) &gt; mean + threshold x SD</p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" text-decoration: underline;\">B) Power ratio threshold </span>(relative po"
+                        "wer)</p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"> High-frequency noise can be masked by strong low-frequency activity and may therefore be non-disturbing. </p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">A segment is flagged when: (25-64 Hz power) / (1-64 Hz power) &gt; threshold</p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">A segment is classified as an artifact only when both thresholds are exceeded.</p>\n"
+"<p style=\"-qt-paragraph-type:empty; mar"
+                        "gin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">To reduce false positives, particularly during low-amplitude REM sleep, first increase the power ratio threshold. This requires a greater proportion of signal power in the 25-64 Hz frequency band before a segment is classified as an artifact.</p></body></html>", None))
     # retranslateUi
 
