@@ -6,6 +6,7 @@ See the file LICENCE for full license details.
     Class to generate pictures of PSA (Power Spectral Analysis) data from PSA report files.
 """
 import os
+import re
 import pandas as pd
 import numpy as np
 import matplotlib
@@ -169,6 +170,8 @@ class PSAPicsGenerator(SciNode):
         psa_data_per_chan = {} # the key is the channel label and the value is the PSA data
         # the key is the group label and the value is the PSA data
         psa_data_cohort = {}
+        report_category_mode = None
+        annotation_categories = set()
         # To display the pictures
         self.figsize = (pics_param.get("figure_width", 8), pics_param.get("figure_height", 6)) # in inches
         for file_name in filenames.keys():
@@ -199,6 +202,19 @@ class PSAPicsGenerator(SciNode):
             if not power_columns:
                 raise NodeRuntimeException(self.identifier, "filenames", \
                     f"PSAPicsGenerator no power columns found in {file_name}. Expected columns with '_act' suffix.")
+
+            current_mode, current_categories = self._activity_categories(power_columns)
+            if current_mode is not None:
+                if report_category_mode is not None and current_mode != report_category_mode:
+                    raise NodeRuntimeException(
+                        self.identifier,
+                        "filenames",
+                        "PSAPicsGenerator cannot combine sleep-stage and annotation spectral reports."
+                    )
+                report_category_mode = current_mode
+            if current_mode == "annotation":
+                annotation_categories.update(current_categories)
+                pics_param['sleep_stage_selection'] = sorted(annotation_categories)
 
             # Process each selected channel/ROI for this subject/file
             psa_data_all_chan = []
@@ -316,6 +332,38 @@ class PSAPicsGenerator(SciNode):
 
         return {
         }
+
+    @staticmethod
+    def _activity_categories(power_columns):
+        """Return the report category mode and categories encoded in activity columns."""
+        category_pattern = re.compile(
+            r"^(?:total|clock_h\d+|stage_h\d+|cyc\d+)_(.+)_act$"
+        )
+        sleep_stages = {"W", "N1", "N2", "N3", "R", "Unscored", "N2N3", "NREM"}
+        categories = {
+            match.group(1)
+            for column in power_columns
+            if (match := category_pattern.fullmatch(str(column)))
+        }
+        if not categories:
+            return None, []
+        if categories.issubset(sleep_stages):
+            return "sleep_stage", sorted(categories)
+        return "annotation", sorted(categories)
+
+    @staticmethod
+    def _activity_column(pics_param, category):
+        """Build the report column for an activity distribution and category."""
+        activity_var = pics_param['activity_var']
+        if activity_var == 'total':
+            prefix = 'total'
+        elif activity_var in ('clock_h', 'stage_h'):
+            prefix = f"{activity_var}{pics_param['hour']}"
+        elif activity_var == 'cyc':
+            prefix = f"cyc{pics_param['cycle']}"
+        else:
+            raise ValueError(f"Unsupported activity variable: {activity_var}")
+        return f"{prefix}_act" if category == 'All' else f"{prefix}_{category}_act"
 
     def _get_selected_channels_for_subject(self, chans_ROIs_sel, psa_data_subject):
         """
@@ -547,19 +595,7 @@ class PSAPicsGenerator(SciNode):
                                 
                                 freq_low = psa_data_for_file['freq_low_Hz'].values
                                 
-                                # Build stage column name
-                                if stage == 'All' and pics_param['activity_var'] == 'total':
-                                    stage_col = f"{pics_param['activity_var']}_act"
-                                elif stage == 'All' and (pics_param['activity_var'] == 'clock_h' or pics_param['activity_var'] == 'stage_h'):
-                                    stage_col = f"{pics_param['activity_var']}{pics_param['hour']}_act"
-                                elif stage == 'All' and pics_param['activity_var'] == 'cyc':
-                                    stage_col = f"{pics_param['activity_var']}{pics_param['cycle']}_act"
-                                elif stage != 'All' and pics_param['activity_var'] == 'total':
-                                    stage_col = f"{pics_param['activity_var']}_{stage}_act"
-                                elif stage != 'All' and (pics_param['activity_var'] == 'clock_h' or pics_param['activity_var'] == 'stage_h'):
-                                    stage_col = f"{pics_param['activity_var']}{pics_param['hour']}_{stage}_act"
-                                elif stage != 'All' and pics_param['activity_var'] == 'cyc':
-                                    stage_col = f"{pics_param['activity_var']}{pics_param['cycle']}_{stage}_act"
+                                stage_col = self._activity_column(pics_param, stage)
                                 
                                 if stage_col in psa_data_for_file.columns:
                                     power_data = psa_data_for_file[stage_col].values
@@ -627,18 +663,7 @@ class PSAPicsGenerator(SciNode):
                             # Store (column_name, stage) so legend labels can name each stage.
                             power_columns = []
                             for stage in sleep_stage_selection:
-                                if stage == 'All' and pics_param['activity_var'] == 'total':
-                                    stage_col = f"{pics_param['activity_var']}_act"
-                                elif stage == 'All' and (pics_param['activity_var'] == 'clock_h' or pics_param['activity_var'] == 'stage_h'):
-                                    stage_col = f"{pics_param['activity_var']}{pics_param['hour']}_act"
-                                elif stage == 'All' and pics_param['activity_var'] == 'cyc':
-                                    stage_col = f"{pics_param['activity_var']}{pics_param['cycle']}_act"
-                                elif stage != 'All' and pics_param['activity_var'] == 'total':
-                                    stage_col = f"{pics_param['activity_var']}_{stage}_act"
-                                elif stage != 'All' and (pics_param['activity_var'] == 'clock_h' or pics_param['activity_var'] == 'stage_h'):
-                                    stage_col = f"{pics_param['activity_var']}{pics_param['hour']}_{stage}_act"
-                                elif stage != 'All' and pics_param['activity_var'] == 'cyc':
-                                    stage_col = f"{pics_param['activity_var']}{pics_param['cycle']}_{stage}_act"
+                                stage_col = self._activity_column(pics_param, stage)
 
                                 if stage_col in psa_data_for_file.columns:
                                     power_columns.append((stage_col, stage))
@@ -681,18 +706,7 @@ class PSAPicsGenerator(SciNode):
                     # Get power columns (stage-specific activity) based on stage selection
                     power_columns = []
                     for stage in sleep_stage_selection:
-                        if stage == 'All' and pics_param['activity_var'] == 'total':
-                            stage_col = f"{pics_param['activity_var']}_act"
-                        elif stage == 'All' and (pics_param['activity_var'] == 'clock_h' or pics_param['activity_var'] == 'stage_h'):
-                            stage_col = f"{pics_param['activity_var']}{pics_param['hour']}_act"
-                        elif stage == 'All' and pics_param['activity_var'] == 'cyc':
-                            stage_col = f"{pics_param['activity_var']}{pics_param['cycle']}_act"
-                        elif stage != 'All' and pics_param['activity_var'] == 'total':
-                            stage_col = f"{pics_param['activity_var']}_{stage}_act"
-                        elif stage != 'All' and (pics_param['activity_var'] == 'clock_h' or pics_param['activity_var'] == 'stage_h'):
-                            stage_col = f"{pics_param['activity_var']}{pics_param['hour']}_{stage}_act"
-                        elif stage != 'All' and pics_param['activity_var'] == 'cyc':
-                            stage_col = f"{pics_param['activity_var']}{pics_param['cycle']}_{stage}_act"
+                        stage_col = self._activity_column(pics_param, stage)
 
                         if stage_col in psa_data_cur_chan.columns:
                             power_columns.append((stage_col, stage))
@@ -888,19 +902,7 @@ class PSAPicsGenerator(SciNode):
                                     if len(subject_df) > 0:
                                         freq_low = subject_df['freq_low_Hz'].values
                                         
-                                        # Build stage column name
-                                        if stage == 'All' and pics_param['activity_var'] == 'total':
-                                            stage_col = f"{pics_param['activity_var']}_act"
-                                        elif stage == 'All' and (pics_param['activity_var'] == 'clock_h' or pics_param['activity_var'] == 'stage_h'):
-                                            stage_col = f"{pics_param['activity_var']}{pics_param['hour']}_act"
-                                        elif stage == 'All' and pics_param['activity_var'] == 'cyc':
-                                            stage_col = f"{pics_param['activity_var']}{pics_param['cycle']}_act"
-                                        elif stage != 'All' and pics_param['activity_var'] == 'total':
-                                            stage_col = f"{pics_param['activity_var']}_{stage}_act"
-                                        elif stage != 'All' and (pics_param['activity_var'] == 'clock_h' or pics_param['activity_var'] == 'stage_h'):
-                                            stage_col = f"{pics_param['activity_var']}{pics_param['hour']}_{stage}_act"
-                                        elif stage != 'All' and pics_param['activity_var'] == 'cyc':
-                                            stage_col = f"{pics_param['activity_var']}{pics_param['cycle']}_{stage}_act"
+                                        stage_col = self._activity_column(pics_param, stage)
                                         
                                         if stage_col in subject_df.columns:
                                             power_data = subject_df[stage_col].values
@@ -985,18 +987,7 @@ class PSAPicsGenerator(SciNode):
                             
                             # Get power columns for each sleep stage
                             for stage_idx, stage in enumerate(sleep_stage_selection):
-                                if stage == 'All' and pics_param['activity_var'] == 'total':
-                                    stage_col = f"{pics_param['activity_var']}_act"
-                                elif stage == 'All' and (pics_param['activity_var'] == 'clock_h' or pics_param['activity_var'] == 'stage_h'):
-                                    stage_col = f"{pics_param['activity_var']}{pics_param['hour']}_act"
-                                elif stage == 'All' and pics_param['activity_var'] == 'cyc':
-                                    stage_col = f"{pics_param['activity_var']}{pics_param['cycle']}_act"
-                                elif stage != 'All' and pics_param['activity_var'] == 'total':
-                                    stage_col = f"{pics_param['activity_var']}_{stage}_act"
-                                elif stage != 'All' and (pics_param['activity_var'] == 'clock_h' or pics_param['activity_var'] == 'stage_h'):
-                                    stage_col = f"{pics_param['activity_var']}{pics_param['hour']}_{stage}_act"
-                                elif stage != 'All' and pics_param['activity_var'] == 'cyc':
-                                    stage_col = f"{pics_param['activity_var']}{pics_param['cycle']}_{stage}_act"
+                                stage_col = self._activity_column(pics_param, stage)
                                 
                                 if stage_col in psa_data_file.columns:
                                     power_data = psa_data_file[stage_col].values
