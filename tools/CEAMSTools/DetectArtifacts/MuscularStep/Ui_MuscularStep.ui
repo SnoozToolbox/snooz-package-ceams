@@ -424,7 +424,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
             </size>
            </property>
            <property name="text">
-            <string>*(optimal value from 4 to 6)</string>
+            <string>optimal value from 4 to 6</string>
            </property>
           </widget>
          </item>
@@ -569,7 +569,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
             </size>
            </property>
            <property name="text">
-            <string>*(optimal value from 4 to 6)</string>
+            <string>optimal value from 4 to 6</string>
            </property>
           </widget>
          </item>
@@ -588,7 +588,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
             </size>
            </property>
            <property name="text">
-            <string>*(optimal value from 5 to 9)</string>
+            <string>optimal value from 5 to 9</string>
            </property>
           </widget>
          </item>
@@ -637,9 +637,8 @@ li.checked::marker { content: &quot;\2612&quot;; }
           </sizepolicy>
          </property>
          <property name="text">
-          <string>To reduce the number of false positives, especially during
-spindles, alpha waves, or beta bursts
-please first increase the &quot;A&quot; threshold.</string>
+          <string>To reduce the number of false positives, especially during spindles,
+alpha waves, or beta bursts please first increase the &quot;A&quot; threshold.</string>
          </property>
         </widget>
        </item>

@@ -347,7 +347,7 @@ class Ui_MuscularStep(object):
         self.label.setText(QCoreApplication.translate("MuscularStep", u"<html><head/><body><p><span style=\" font-weight:600;\">Threshold (x times the baseline median)</span></p></body></html>", None))
         self.label_8.setText(QCoreApplication.translate("MuscularStep", u"Artifact when A or (B and C)", None))
         self.EMG_lineEdit.setText(QCoreApplication.translate("MuscularStep", u"4", None))
-        self.label_13.setText(QCoreApplication.translate("MuscularStep", u"*(optimal value from 4 to 6)", None))
+        self.label_13.setText(QCoreApplication.translate("MuscularStep", u"optimal value from 4 to 6", None))
         self.label_2.setText(QCoreApplication.translate("MuscularStep", u"(B) Applied on EMG", None))
 #if QT_CONFIG(tooltip)
         self.EEG_lineEdit.setToolTip("")
@@ -358,12 +358,11 @@ class Ui_MuscularStep(object):
 #endif // QT_CONFIG(tooltip)
         self.label_5.setText(QCoreApplication.translate("MuscularStep", u"<html><head/><body><p>(A) High applied on EEG</p></body></html>", None))
         self.both_lineEdit.setText(QCoreApplication.translate("MuscularStep", u"3.5", None))
-        self.label_12.setText(QCoreApplication.translate("MuscularStep", u"*(optimal value from 4 to 6)", None))
-        self.label_10.setText(QCoreApplication.translate("MuscularStep", u"*(optimal value from 5 to 9)", None))
+        self.label_12.setText(QCoreApplication.translate("MuscularStep", u"optimal value from 4 to 6", None))
+        self.label_10.setText(QCoreApplication.translate("MuscularStep", u"optimal value from 5 to 9", None))
         self.label_6.setText(QCoreApplication.translate("MuscularStep", u"(C) Low applied on EEG", None))
-        self.label_14.setText(QCoreApplication.translate("MuscularStep", u"To reduce the number of false positives, especially during\n"
-"spindles, alpha waves, or beta bursts\n"
-"please first increase the \"A\" threshold.", None))
+        self.label_14.setText(QCoreApplication.translate("MuscularStep", u"To reduce the number of false positives, especially during spindles,\n"
+"alpha waves, or beta bursts please first increase the \"A\" threshold.", None))
         self.label_15.setText(QCoreApplication.translate("MuscularStep", u"The \"B\" and \"C\" thresholds can also be inscreased,\n"
 "especially if the EMG channel is unstable or really sensitive.", None))
         self.settings_textEdit.setHtml(QCoreApplication.translate("MuscularStep", u"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
