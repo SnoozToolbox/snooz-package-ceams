@@ -162,6 +162,7 @@ class Ui_PersistentNoiseStep(object):
         self.gridLayout_2.setObjectName(u"gridLayout_2")
         self.label_7 = QLabel(PersistentNoiseStep)
         self.label_7.setObjectName(u"label_7")
+        self.label_7.setMaximumSize(QSize(270, 16777215))
 
         self.gridLayout_2.addWidget(self.label_7, 0, 0, 1, 1)
 
@@ -174,13 +175,15 @@ class Ui_PersistentNoiseStep(object):
 
         self.label_2 = QLabel(PersistentNoiseStep)
         self.label_2.setObjectName(u"label_2")
-        self.label_2.setMaximumSize(QSize(250, 16777215))
+        sizePolicy.setHeightForWidth(self.label_2.sizePolicy().hasHeightForWidth())
+        self.label_2.setSizePolicy(sizePolicy)
+        self.label_2.setMaximumSize(QSize(16777215, 16777215))
 
         self.gridLayout_2.addWidget(self.label_2, 0, 2, 1, 1)
 
         self.label = QLabel(PersistentNoiseStep)
         self.label.setObjectName(u"label")
-        self.label.setMaximumSize(QSize(281, 16777215))
+        self.label.setMaximumSize(QSize(270, 16777215))
         self.label.setFont(font)
 
         self.gridLayout_2.addWidget(self.label, 1, 0, 1, 1)
@@ -195,7 +198,9 @@ class Ui_PersistentNoiseStep(object):
 
         self.label_6 = QLabel(PersistentNoiseStep)
         self.label_6.setObjectName(u"label_6")
-        self.label_6.setMaximumSize(QSize(250, 16777215))
+        sizePolicy.setHeightForWidth(self.label_6.sizePolicy().hasHeightForWidth())
+        self.label_6.setSizePolicy(sizePolicy)
+        self.label_6.setMaximumSize(QSize(16777215, 16777215))
 
         self.gridLayout_2.addWidget(self.label_6, 1, 2, 1, 1)
 
@@ -284,7 +289,8 @@ class Ui_PersistentNoiseStep(object):
         self.tresh_fixe_lineEdit.setToolTip("")
 #endif // QT_CONFIG(tooltip)
         self.tresh_fixe_lineEdit.setText(QCoreApplication.translate("PersistentNoiseStep", u"4", None))
-        self.label_2.setText(QCoreApplication.translate("PersistentNoiseStep", u"optimal value from 3 to 5", None))
+        self.label_2.setText(QCoreApplication.translate("PersistentNoiseStep", u"optimal value from 3 to 5;\n"
+"computed from all selected derivations", None))
         self.label.setText(QCoreApplication.translate("PersistentNoiseStep", u"(B) Power ratio (25-64 Hz/1-64 Hz)", None))
         self.thres_ratio_lineEdit.setText(QCoreApplication.translate("PersistentNoiseStep", u"0.25", None))
         self.label_6.setText(QCoreApplication.translate("PersistentNoiseStep", u"optimal value from 0.1 to 0.4", None))
@@ -298,19 +304,19 @@ class Ui_PersistentNoiseStep(object):
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" text-decoration: underline;\">A) Fixed threshold</span> (mean + X SD)</p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">The power is log10-transformed to reduce skewness and improve normality. </p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-in"
-                        "dent:0px;\">Because the power distribution is often right-skewed due to artifacts, it is modeled using a three-component Gaussian Mixture Model (GMM). The threshold is defined as the mean of the main Gaussian component plus a user-defined multiple of its standard deviation (SD).</p>\n"
+                        "dent:0px;\">Because the power distribution is often right-skewed due to artifacts, it is modeled using a three-component Gaussian Mixture Model (GMM). The distribution is estimated from all selected derivations for the recording, so excluding a derivation with poor signal quality can change the threshold applied to the remaining derivations. The threshold is defined as the mean of the main Gaussian component plus a user-defined multiple of its standard deviation (SD).</p>\n"
 "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">A segment is flagged when: log10(25-64 Hz power) &gt; mean + threshold x SD</p>\n"
 "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" text-decoration: underline;\">B) Power ratio threshold </span>(relative po"
-                        "wer)</p>\n"
+"<p style=\" margi"
+                        "n-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" text-decoration: underline;\">B) Power ratio threshold </span>(relative power)</p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"> High-frequency noise can be masked by strong low-frequency activity and may therefore be non-disturbing. </p>\n"
 "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">A segment is flagged when: (25-64 Hz power) / (1-64 Hz power) &gt; threshold</p>\n"
 "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">A segment is classified as an artifact only when both thresholds are exceeded.</p>\n"
-"<p style=\"-qt-paragraph-type:empty; mar"
-                        "gin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-l"
+                        "eft:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">A segment is classified as an artifact only when both thresholds are exceeded.</p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">To reduce false positives, particularly during low-amplitude REM sleep, first increase the power ratio threshold. This requires a greater proportion of signal power in the 25-64 Hz frequency band before a segment is classified as an artifact.</p></body></html>", None))
     # retranslateUi
 

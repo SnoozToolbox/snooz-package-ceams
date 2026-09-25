@@ -24,7 +24,7 @@ class Ui_BslVarStep(object):
     def setupUi(self, BslVarStep):
         if not BslVarStep.objectName():
             BslVarStep.setObjectName(u"BslVarStep")
-        BslVarStep.resize(1069, 909)
+        BslVarStep.resize(1069, 822)
         BslVarStep.setStyleSheet(u"font: 12pt \"Roboto\";")
         self.verticalLayout_3 = QVBoxLayout(BslVarStep)
         self.verticalLayout_3.setObjectName(u"verticalLayout_3")
@@ -163,7 +163,8 @@ class Ui_BslVarStep(object):
         self.label_5.setObjectName(u"label_5")
         sizePolicy1.setHeightForWidth(self.label_5.sizePolicy().hasHeightForWidth())
         self.label_5.setSizePolicy(sizePolicy1)
-        self.label_5.setMinimumSize(QSize(170, 0))
+        self.label_5.setMinimumSize(QSize(0, 0))
+        self.label_5.setMaximumSize(QSize(200, 16777215))
         self.label_5.setMidLineWidth(0)
         self.label_5.setTextFormat(Qt.TextFormat.RichText)
 
@@ -179,14 +180,10 @@ class Ui_BslVarStep(object):
         self.label_2.setObjectName(u"label_2")
         sizePolicy1.setHeightForWidth(self.label_2.sizePolicy().hasHeightForWidth())
         self.label_2.setSizePolicy(sizePolicy1)
-        self.label_2.setMaximumSize(QSize(234, 16777215))
+        self.label_2.setMaximumSize(QSize(16777215, 16777215))
         self.label_2.setAlignment(Qt.AlignmentFlag.AlignLeading|Qt.AlignmentFlag.AlignLeft|Qt.AlignmentFlag.AlignVCenter)
 
         self.horizontalLayout_2.addWidget(self.label_2)
-
-        self.horizontalSpacer = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
-
-        self.horizontalLayout_2.addItem(self.horizontalSpacer)
 
 
         self.verticalLayout.addLayout(self.horizontalLayout_2)
@@ -263,14 +260,15 @@ class Ui_BslVarStep(object):
         self.name_lineEdit.setText(QCoreApplication.translate("BslVarStep", u"art_snooz", None))
         self.label.setText(QCoreApplication.translate("BslVarStep", u"<html><head/><body><p><span style=\" font-weight:700;\">Thresholds</span></p></body></html>", None))
 #if QT_CONFIG(tooltip)
-        self.label_5.setToolTip(QCoreApplication.translate("BslVarStep", u"The threshold value to identify the artifact.  Its units is x times the baseline standard deviation.", None))
+        self.label_5.setToolTip(QCoreApplication.translate("BslVarStep", u"The threshold value to identify the artifact. For mean + X SD, the power distribution is estimated from all selected derivations for the recording.", None))
 #endif // QT_CONFIG(tooltip)
         self.label_5.setText(QCoreApplication.translate("BslVarStep", u"<html><head/><body><p>Fixed (mean + X SD)</p></body></html>", None))
 #if QT_CONFIG(tooltip)
         self.threshold_lineEdit.setToolTip("")
 #endif // QT_CONFIG(tooltip)
         self.threshold_lineEdit.setText(QCoreApplication.translate("BslVarStep", u"4", None))
-        self.label_2.setText(QCoreApplication.translate("BslVarStep", u"optimal range: 3.5 - 5", None))
+        self.label_2.setText(QCoreApplication.translate("BslVarStep", u"optimal range: 3.5 - 5;\n"
+"computed from all selected derivations", None))
         self.textEdit.setHtml(QCoreApplication.translate("BslVarStep", u"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset=\"utf-8\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
@@ -281,11 +279,11 @@ class Ui_BslVarStep(object):
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" text-decoration: underline;\">Fixed threshold</span> (mean + X SD)</p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">The power is log10-transformed to reduce skewness and improve normality.</p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent"
-                        ":0px;\">Because the power distribution is often right-skewed due to artifacts, it is modeled using a three-component Gaussian Mixture Model (GMM). The threshold is defined as the mean of the main Gaussian component plus a user-defined multiple of its standard deviation (SD).</p>\n"
+                        ":0px;\">Because the power distribution is often right-skewed due to artifacts, it is modeled using a three-component Gaussian Mixture Model (GMM). The distribution is estimated from all selected derivations for the recording, so excluding a derivation with poor signal quality can change the threshold applied to the remaining derivations. The threshold is defined as the mean of the main Gaussian component plus a user-defined multiple of its standard deviation (SD).</p>\n"
 "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">A segment is flagged when: log10(low-frequency power) &gt; mean + threshold \u00d7 SD</p>\n"
 "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">To reduce false positives, particularly during large delta waves, increase the thre"
-                        "shold value. A value of 5 helps reduce false positives in such recordings.</p></body></html>", None))
+"<p style=\""
+                        " margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">To reduce false positives, particularly during large delta waves, increase the threshold value. A value of 5 helps reduce false positives in such recordings.</p></body></html>", None))
     # retranslateUi
 
