@@ -122,8 +122,8 @@ class SlowWavesDetails(SciNode):
         self._is_master = False 
 
         self.sw_columns = ['group','name','cycle','stage','start_sec','duration_sec','pkpk_amp_uV', 'freq_Hz',\
-            'neg_amp_uV', 'neg_sec', 'pos_sec','slope_0_min','slope_min_max','slope_max_0','trans_freq_Hz','channels']
-        self.sw_characteristics = ['duration_sec','pkpk_amp_uV', 'freq_Hz','neg_amp_uV', 'neg_sec', 'pos_sec',\
+            'neg_amp_uV', 'neg_sec', 'neg_peak_sec', 'pos_sec', 'pos_peak_sec','slope_0_min','slope_min_max','slope_max_0','trans_freq_Hz','channels']
+        self.sw_characteristics = ['duration_sec','pkpk_amp_uV', 'freq_Hz','neg_amp_uV', 'neg_sec', 'neg_peak_sec', 'pos_sec', 'pos_peak_sec',\
             'slope_0_min','slope_min_max','slope_max_0','trans_freq_Hz']
     
 
@@ -963,7 +963,9 @@ class SlowWavesDetails(SciNode):
                 hour_sw_stats[f'{hour_label}_freq_Hz'] = np.NaN
                 hour_sw_stats[f'{hour_label}_neg_amp_uV'] = np.NaN
                 hour_sw_stats[f'{hour_label}_neg_sec'] = np.NaN
+                hour_sw_stats[f'{hour_label}_neg_peak_sec'] = np.NaN
                 hour_sw_stats[f'{hour_label}_pos_sec'] = np.NaN
+                hour_sw_stats[f'{hour_label}_pos_peak_sec'] = np.NaN
                 hour_sw_stats[f'{hour_label}_slope_0_min'] = np.NaN
                 hour_sw_stats[f'{hour_label}_slope_min_max'] = np.NaN
                 hour_sw_stats[f'{hour_label}_slope_max_0'] = np.NaN
@@ -978,7 +980,9 @@ class SlowWavesDetails(SciNode):
                     hour_sw_stats[f'{hour_label}_{stage}_freq_Hz'] = np.NaN
                     hour_sw_stats[f'{hour_label}_{stage}_neg_amp_uV'] = np.NaN
                     hour_sw_stats[f'{hour_label}_{stage}_neg_sec'] = np.NaN
+                    hour_sw_stats[f'{hour_label}_{stage}_neg_peak_sec'] = np.NaN
                     hour_sw_stats[f'{hour_label}_{stage}_pos_sec'] = np.NaN
+                    hour_sw_stats[f'{hour_label}_{stage}_pos_peak_sec'] = np.NaN
                     hour_sw_stats[f'{hour_label}_{stage}_slope_0_min'] = np.NaN
                     hour_sw_stats[f'{hour_label}_{stage}_slope_min_max'] = np.NaN
                     hour_sw_stats[f'{hour_label}_{stage}_slope_max_0'] = np.NaN
@@ -1120,7 +1124,9 @@ class SlowWavesDetails(SciNode):
                         stage_hour_sw_stats[f'{hour_label}_{stage_label}_freq_Hz'] = np.NaN
                         stage_hour_sw_stats[f'{hour_label}_{stage_label}_neg_amp_uV'] = np.NaN
                         stage_hour_sw_stats[f'{hour_label}_{stage_label}_neg_sec'] = np.NaN
+                        stage_hour_sw_stats[f'{hour_label}_{stage_label}_neg_peak_sec'] = np.NaN
                         stage_hour_sw_stats[f'{hour_label}_{stage_label}_pos_sec'] = np.NaN
+                        stage_hour_sw_stats[f'{hour_label}_{stage_label}_pos_peak_sec'] = np.NaN
                         stage_hour_sw_stats[f'{hour_label}_{stage_label}_slope_0_min'] = np.NaN
                         stage_hour_sw_stats[f'{hour_label}_{stage_label}_slope_min_max'] = np.NaN
                         stage_hour_sw_stats[f'{hour_label}_{stage_label}_slope_max_0'] = np.NaN
@@ -1135,7 +1141,9 @@ class SlowWavesDetails(SciNode):
                     stage_hour_sw_stats[f'{hour_label}_{stage_label}_freq_Hz'] = np.NaN
                     stage_hour_sw_stats[f'{hour_label}_{stage_label}_neg_amp_uV'] = np.NaN
                     stage_hour_sw_stats[f'{hour_label}_{stage_label}_neg_sec'] = np.NaN
+                    stage_hour_sw_stats[f'{hour_label}_{stage_label}_neg_peak_sec'] = np.NaN
                     stage_hour_sw_stats[f'{hour_label}_{stage_label}_pos_sec'] = np.NaN
+                    stage_hour_sw_stats[f'{hour_label}_{stage_label}_pos_peak_sec'] = np.NaN
                     stage_hour_sw_stats[f'{hour_label}_{stage_label}_slope_0_min'] = np.NaN
                     stage_hour_sw_stats[f'{hour_label}_{stage_label}_slope_min_max'] = np.NaN
                     stage_hour_sw_stats[f'{hour_label}_{stage_label}_slope_max_0'] = np.NaN
@@ -1187,7 +1195,9 @@ class SlowWavesDetails(SciNode):
         freq_Hz = {}
         neg_amp_uV = {}
         neg_sec = {}
+        neg_peak_sec = {}
         pos_sec = {}
+        pos_peak_sec = {}
         slope_0_min = {}
         slope_min_max = {}
         slope_max_0 = {}
@@ -1199,7 +1209,9 @@ class SlowWavesDetails(SciNode):
         freq_Hz_all = []
         neg_amp_uV_all = []
         neg_sec_all = []
+        neg_peak_sec_all = []
         pos_sec_all = []
+        pos_peak_sec_all = []
         slope_0_min_all = []
         slope_min_max_all = []
         slope_max_0_all = []
@@ -1240,7 +1252,9 @@ class SlowWavesDetails(SciNode):
                     freq_Hz[f'{label_stats}_{stage}_freq_Hz'] = sw_cur_stage['freq_Hz'].sum()/sw_count_cur_stage
                     neg_amp_uV[f'{label_stats}_{stage}_neg_amp_uV'] = sw_cur_stage['neg_amp_uV'].sum()/sw_count_cur_stage
                     neg_sec[f'{label_stats}_{stage}_neg_sec'] = sw_cur_stage['neg_sec'].sum()/sw_count_cur_stage
+                    neg_peak_sec[f'{label_stats}_{stage}_neg_peak_sec'] = sw_cur_stage['neg_peak_sec'].sum()/sw_count_cur_stage
                     pos_sec[f'{label_stats}_{stage}_pos_sec'] = sw_cur_stage['pos_sec'].sum()/sw_count_cur_stage
+                    pos_peak_sec[f'{label_stats}_{stage}_pos_peak_sec'] = sw_cur_stage['pos_peak_sec'].sum()/sw_count_cur_stage
                     slope_0_min[f'{label_stats}_{stage}_slope_0_min'] = sw_cur_stage['slope_0_min'].sum()/sw_count_cur_stage
                     slope_min_max[f'{label_stats}_{stage}_slope_min_max'] = sw_cur_stage['slope_min_max'].sum()/sw_count_cur_stage
                     slope_max_0[f'{label_stats}_{stage}_slope_max_0'] = sw_cur_stage['slope_max_0'].sum()/sw_count_cur_stage
@@ -1251,7 +1265,9 @@ class SlowWavesDetails(SciNode):
                     freq_Hz[f'{label_stats}_{stage}_freq_Hz'] = np.NaN
                     neg_amp_uV[f'{label_stats}_{stage}_neg_amp_uV'] = np.NaN
                     neg_sec[f'{label_stats}_{stage}_neg_sec'] = np.NaN
+                    neg_peak_sec[f'{label_stats}_{stage}_neg_peak_sec'] = np.NaN
                     pos_sec[f'{label_stats}_{stage}_pos_sec'] = np.NaN
+                    pos_peak_sec[f'{label_stats}_{stage}_pos_peak_sec'] = np.NaN
                     slope_0_min[f'{label_stats}_{stage}_slope_0_min'] = np.NaN
                     slope_min_max[f'{label_stats}_{stage}_slope_min_max'] = np.NaN
                     slope_max_0[f'{label_stats}_{stage}_slope_max_0'] = np.NaN
@@ -1287,11 +1303,23 @@ class SlowWavesDetails(SciNode):
                     if len(local_sleep_stages_name[stage]) == 1: 
                         neg_sec_all = np.concatenate((neg_sec_all,sw_cur_stage['neg_sec'].values), axis=0)
 
+                if len(neg_peak_sec_all)==0:
+                    neg_peak_sec_all = sw_cur_stage['neg_peak_sec'].values
+                else:
+                    if len(local_sleep_stages_name[stage]) == 1:
+                        neg_peak_sec_all = np.concatenate((neg_peak_sec_all,sw_cur_stage['neg_peak_sec'].values), axis=0)
+
                 if len(pos_sec_all)==0:
                     pos_sec_all = sw_cur_stage['pos_sec'].values
                 else:
                     if len(local_sleep_stages_name[stage]) == 1: 
                         pos_sec_all = np.concatenate((pos_sec_all,sw_cur_stage['pos_sec'].values), axis=0)
+
+                if len(pos_peak_sec_all)==0:
+                    pos_peak_sec_all = sw_cur_stage['pos_peak_sec'].values
+                else:
+                    if len(local_sleep_stages_name[stage]) == 1:
+                        pos_peak_sec_all = np.concatenate((pos_peak_sec_all,sw_cur_stage['pos_peak_sec'].values), axis=0)
 
                 if len(slope_0_min_all)==0:
                     slope_0_min_all = sw_cur_stage['slope_0_min'].values
@@ -1323,7 +1351,9 @@ class SlowWavesDetails(SciNode):
                 freq_Hz[f'{label_stats}_{stage}_freq_Hz'] = np.NaN
                 neg_amp_uV[f'{label_stats}_{stage}_neg_amp_uV'] = np.NaN
                 neg_sec[f'{label_stats}_{stage}_neg_sec'] = np.NaN
+                neg_peak_sec[f'{label_stats}_{stage}_neg_peak_sec'] = np.NaN
                 pos_sec[f'{label_stats}_{stage}_pos_sec'] = np.NaN
+                pos_peak_sec[f'{label_stats}_{stage}_pos_peak_sec'] = np.NaN
                 slope_0_min[f'{label_stats}_{stage}_slope_0_min'] = np.NaN
                 slope_min_max[f'{label_stats}_{stage}_slope_min_max'] = np.NaN
                 slope_max_0[f'{label_stats}_{stage}_slope_max_0'] = np.NaN
@@ -1337,7 +1367,9 @@ class SlowWavesDetails(SciNode):
         freq_Hz[f'{label_stats}_freq_Hz'] = np.mean(freq_Hz_all)
         neg_amp_uV[f'{label_stats}_neg_amp_uV'] = np.mean(neg_amp_uV_all)
         neg_sec[f'{label_stats}_neg_sec'] = np.mean(neg_sec_all)
+        neg_peak_sec[f'{label_stats}_neg_peak_sec'] = np.mean(neg_peak_sec_all)
         pos_sec[f'{label_stats}_pos_sec'] = np.mean(pos_sec_all)
+        pos_peak_sec[f'{label_stats}_pos_peak_sec'] = np.mean(pos_peak_sec_all)
         slope_0_min[f'{label_stats}_slope_0_min'] = np.mean(slope_0_min_all)
         slope_min_max[f'{label_stats}_slope_min_max'] = np.mean(slope_min_max_all)
         slope_max_0[f'{label_stats}_slope_max_0'] = np.mean(slope_max_0_all)
@@ -1348,7 +1380,7 @@ class SlowWavesDetails(SciNode):
         else:
             sw_density[f'{label_stats}_sw_density'] = np.nan
 
-        sw_stats = sw_count | sw_sec | pkpk_amp_uV | freq_Hz | neg_amp_uV | neg_sec | pos_sec | slope_0_min | slope_min_max | slope_max_0 | trans_freq_Hz | sw_density
+        sw_stats = sw_count | sw_sec | pkpk_amp_uV | freq_Hz | neg_amp_uV | neg_sec | neg_peak_sec | pos_sec | pos_peak_sec | slope_0_min | slope_min_max | slope_max_0 | trans_freq_Hz | sw_density
         return sw_stats
 
     def compute_sw_stats_for_single_stage(self, valid_dur, sw_cur_chan_df, stage_label, label_stats):
@@ -1404,7 +1436,9 @@ class SlowWavesDetails(SciNode):
             result[f'{label_stats}_{stage_label}_freq_Hz'] = sw_cur_chan_df['freq_Hz'].sum() / sw_count
             result[f'{label_stats}_{stage_label}_neg_amp_uV'] = sw_cur_chan_df['neg_amp_uV'].sum() / sw_count
             result[f'{label_stats}_{stage_label}_neg_sec'] = sw_cur_chan_df['neg_sec'].sum() / sw_count
+            result[f'{label_stats}_{stage_label}_neg_peak_sec'] = sw_cur_chan_df['neg_peak_sec'].sum() / sw_count
             result[f'{label_stats}_{stage_label}_pos_sec'] = sw_cur_chan_df['pos_sec'].sum() / sw_count
+            result[f'{label_stats}_{stage_label}_pos_peak_sec'] = sw_cur_chan_df['pos_peak_sec'].sum() / sw_count
             result[f'{label_stats}_{stage_label}_slope_0_min'] = sw_cur_chan_df['slope_0_min'].sum() / sw_count
             result[f'{label_stats}_{stage_label}_slope_min_max'] = sw_cur_chan_df['slope_min_max'].sum() / sw_count
             result[f'{label_stats}_{stage_label}_slope_max_0'] = sw_cur_chan_df['slope_max_0'].sum() / sw_count
@@ -1415,7 +1449,9 @@ class SlowWavesDetails(SciNode):
             result[f'{label_stats}_{stage_label}_freq_Hz'] = np.nan
             result[f'{label_stats}_{stage_label}_neg_amp_uV'] = np.nan
             result[f'{label_stats}_{stage_label}_neg_sec'] = np.nan
+            result[f'{label_stats}_{stage_label}_neg_peak_sec'] = np.nan
             result[f'{label_stats}_{stage_label}_pos_sec'] = np.nan
+            result[f'{label_stats}_{stage_label}_pos_peak_sec'] = np.nan
             result[f'{label_stats}_{stage_label}_slope_0_min'] = np.nan
             result[f'{label_stats}_{stage_label}_slope_min_max'] = np.nan
             result[f'{label_stats}_{stage_label}_slope_max_0'] = np.nan
@@ -1446,7 +1482,9 @@ class SlowWavesDetails(SciNode):
         weighted_freq_Hz_sum = 0
         weighted_neg_amp_uV_sum = 0
         weighted_neg_sec_sum = 0
+        weighted_neg_peak_sec_sum = 0
         weighted_pos_sec_sum = 0
+        weighted_pos_peak_sec_sum = 0
         weighted_slope_0_min_sum = 0
         weighted_slope_min_max_sum = 0
         weighted_slope_max_0_sum = 0
@@ -1495,11 +1533,21 @@ class SlowWavesDetails(SciNode):
                     neg_sec_key = f'{hour_label}_{stage_label}_neg_sec'
                     if neg_sec_key in sw_stats and not np.isnan(sw_stats[neg_sec_key]):
                         weighted_neg_sec_sum += sw_stats[neg_sec_key] * stage_count
+
+                    # Duration from onset to negative peak
+                    neg_peak_sec_key = f'{hour_label}_{stage_label}_neg_peak_sec'
+                    if neg_peak_sec_key in sw_stats and not np.isnan(sw_stats[neg_peak_sec_key]):
+                        weighted_neg_peak_sec_sum += sw_stats[neg_peak_sec_key] * stage_count
                     
                     # Positive duration
                     pos_sec_key = f'{hour_label}_{stage_label}_pos_sec'
                     if pos_sec_key in sw_stats and not np.isnan(sw_stats[pos_sec_key]):
                         weighted_pos_sec_sum += sw_stats[pos_sec_key] * stage_count
+
+                    # Duration from onset to positive peak
+                    pos_peak_sec_key = f'{hour_label}_{stage_label}_pos_peak_sec'
+                    if pos_peak_sec_key in sw_stats and not np.isnan(sw_stats[pos_peak_sec_key]):
+                        weighted_pos_peak_sec_sum += sw_stats[pos_peak_sec_key] * stage_count
                     
                     # Slope 0 to min
                     slope_0_min_key = f'{hour_label}_{stage_label}_slope_0_min'
@@ -1545,7 +1593,9 @@ class SlowWavesDetails(SciNode):
             sw_stats[f'{hour_label}_freq_Hz'] = weighted_freq_Hz_sum / total_sw_count
             sw_stats[f'{hour_label}_neg_amp_uV'] = weighted_neg_amp_uV_sum / total_sw_count
             sw_stats[f'{hour_label}_neg_sec'] = weighted_neg_sec_sum / total_sw_count
+            sw_stats[f'{hour_label}_neg_peak_sec'] = weighted_neg_peak_sec_sum / total_sw_count
             sw_stats[f'{hour_label}_pos_sec'] = weighted_pos_sec_sum / total_sw_count
+            sw_stats[f'{hour_label}_pos_peak_sec'] = weighted_pos_peak_sec_sum / total_sw_count
             sw_stats[f'{hour_label}_slope_0_min'] = weighted_slope_0_min_sum / total_sw_count
             sw_stats[f'{hour_label}_slope_min_max'] = weighted_slope_min_max_sum / total_sw_count
             sw_stats[f'{hour_label}_slope_max_0'] = weighted_slope_max_0_sum / total_sw_count
@@ -1556,7 +1606,9 @@ class SlowWavesDetails(SciNode):
             sw_stats[f'{hour_label}_freq_Hz'] = np.nan
             sw_stats[f'{hour_label}_neg_amp_uV'] = np.nan
             sw_stats[f'{hour_label}_neg_sec'] = np.nan
+            sw_stats[f'{hour_label}_neg_peak_sec'] = np.nan
             sw_stats[f'{hour_label}_pos_sec'] = np.nan
+            sw_stats[f'{hour_label}_pos_peak_sec'] = np.nan
             sw_stats[f'{hour_label}_slope_0_min'] = np.nan
             sw_stats[f'{hour_label}_slope_min_max'] = np.nan
             sw_stats[f'{hour_label}_slope_max_0'] = np.nan
