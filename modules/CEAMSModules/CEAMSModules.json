@@ -1185,7 +1185,7 @@
         {
             "item_name": "IRASAYASA",
             "item_type": "module",
-            "item_version": "0.0.0",
+            "item_version": "0.0.1",
             "item_hooks": [
                 {
                     "endpoint_name": "module_endpoint",
