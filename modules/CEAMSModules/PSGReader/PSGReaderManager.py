@@ -25,6 +25,9 @@ class PSGReaderManager:
         self.current_filename = None
         self.extensions = {}
         self.extensionsFilters = {}
+        # The reader modules are loaded from file and are not registered in sys.modules,
+        # keep them to access the types they expose (ex. XltekReader::SLEEP_STAGE).
+        self.extensionsModules = {}
         self.sleep_stage_duplicates_removed_count = 0
 
     def _init_readers(self):
@@ -62,6 +65,7 @@ class PSGReaderManager:
                             else:
                                 self.extensions[e] = reader_class
                                 self.extensionsFilters[e] = ext_filters[i]
+                                self.extensionsModules[e] = module
                     else:
                         if config.is_dev : 
                             print(f"ERROR Can\'t load module:{module_name} path:{module_path}")
@@ -91,6 +95,14 @@ class PSGReaderManager:
         ext = ext.lower()
         if ext in self.extensions:
             return self.extensions[ext]
+        else:
+            return None
+
+
+    def get_reader_module_by_extension(self,ext):
+        ext = ext.lower()
+        if ext in self.extensionsModules:
+            return self.extensionsModules[ext]
         else:
             return None
 
@@ -350,6 +362,63 @@ class PSGReaderManager:
         success = self.current_reader.add_event(name, group, start_sec, duration_sec, channels, montage_index)
         if not success:
             if config.is_dev : 
+                error = self.current_reader.get_last_error()
+                print(error)
+        return success
+
+
+    def write_sleep_stages(self, group, stages):
+        """
+            Write a whole hypnogram at once on readers supporting it (XltekReader).
+            The reader replaces any previous scoring of that group, so the stages
+            don't have to be removed before. The group "Stade" (case and spaces
+            insensitive) is the Xltek gold standard written in the .epo file, any
+            other group is written as channel independent events in the .ent file.
+
+            Parameters:
+                group : String
+                    The event group to write the stages to.
+                stages : pandas DataFrame (columns=['name','start_sec','duration_sec'])
+                    The sleep stages to write, "name" is the Snooz sleep stage value.
+
+            Returns:
+                success : bool
+        """
+        if self.current_reader is None:
+            if config.is_dev :
+                print(f'ERROR PSGReaderManager.write_sleep_stages file not loaded')
+            return False
+        if not hasattr(self.current_reader, 'write_sleep_stages'):
+            if config.is_dev :
+                print(f'ERROR PSGReaderManager.write_sleep_stages not supported for the file:{self.current_filename}')
+            return False
+
+        # write_sleep_stages asks for a list of the SLEEP_STAGE type exposed by the reader module.
+        _, extension = os.path.splitext(self.current_filename)
+        reader_module = self.get_reader_module_by_extension(extension[1:])
+        reader_name = type(self.current_reader).__name__
+        stage_class = getattr(reader_module, f'{reader_name}::SLEEP_STAGE', None)
+        if stage_class is None:
+            if config.is_dev :
+                print(f'ERROR PSGReaderManager.write_sleep_stages could not find the type {reader_name}::SLEEP_STAGE')
+            return False
+
+        sleep_stages = []
+        for index, stage in stages.iterrows():
+            # The reader labels the stages itself, it expects the sleep stage value
+            if not str(stage['name']).isdigit():
+                if config.is_dev :
+                    print(f"ERROR PSGReaderManager.write_sleep_stages invalid sleep stage value:{stage['name']}")
+                return False
+            sleep_stage = stage_class()
+            sleep_stage.sleep_stage = int(stage['name'])
+            sleep_stage.start_time = float(stage['start_sec'])
+            sleep_stage.duration = float(stage['duration_sec'])
+            sleep_stages.append(sleep_stage)
+
+        success = self.current_reader.write_sleep_stages(group, sleep_stages)
+        if not success:
+            if config.is_dev :
                 error = self.current_reader.get_last_error()
                 print(error)
         return success

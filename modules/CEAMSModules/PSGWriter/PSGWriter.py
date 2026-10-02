@@ -29,14 +29,21 @@ See the file LICENCE for full license details.
     -----------  
         None
 """
+import os
 import pandas as pd
 
 from commons.NodeInputException import NodeInputException
 from commons.NodeRuntimeException import NodeRuntimeException
 from flowpipe import SciNode, InputPlug
 from CEAMSModules.PSGReader.PSGReaderManager import PSGReaderManager
+from CEAMSModules.PSGReader import commons
 
 DEBUG = False
+# The sleep stage group of the Xltek (.eeg) gold standard, written in the .epo file.
+# The XltekReader matches it without case and surrounding spaces.
+EEG_GOLD_STANDARD_GROUP = 'Stade'
+# Snooz (commons.sleep_stages_group) and Xltek labels of the gold standard sleep stages.
+EEG_GOLD_STANDARD_STAGE_GROUPS = [commons.sleep_stages_group, EEG_GOLD_STANDARD_GROUP]
 
 class PSGWriter(SciNode):
     """
@@ -170,6 +177,11 @@ class PSGWriter(SciNode):
         
         # If there is new events
         if isinstance(new_events, pd.DataFrame):
+            _, file_ext = os.path.splitext(output_filename)
+            is_eeg = file_ext.lower() == '.eeg'
+            # On .eeg, hypnogram groups use write_sleep_stages (French names, group replace).
+            # Any other events stay on add_event like the other formats.
+            hypnogram_groups = self.get_hypnogram_groups(new_events) if is_eeg else []
 
             # We need to overwrite old events.
             if overwrite_events:
@@ -178,6 +190,9 @@ class PSGWriter(SciNode):
                 for index, event in new_events.iterrows():
                     event_name = event['name']
                     group_name = event['group']
+                    # write_sleep_stages replaces the whole group
+                    if group_name in hypnogram_groups:
+                        continue
                     events_to_replace.add((group_name, event_name))
                 # Remove these combinaison from the file
                 for (group_name, event_name) in events_to_replace:
@@ -186,10 +201,28 @@ class PSGWriter(SciNode):
             # Remove events_to_remove
             if len(events_to_remove)>0:
                 for group_name, event_name in events_to_remove:
-                    self._psg_reader_manager.remove_events_by_name(event_name, group_name)            
+                    # write_sleep_stages replaces the whole group
+                    if group_name in hypnogram_groups:
+                        continue
+                    self._psg_reader_manager.remove_events_by_name(event_name, group_name)
+
+            for group_name in hypnogram_groups:
+                stages = new_events[new_events['group'] == group_name]
+                write_group = EEG_GOLD_STANDARD_GROUP if self.is_gold_standard_stage_group(group_name) \
+                    else group_name
+                success = self._psg_reader_manager.write_sleep_stages(write_group, stages)
+                if not success:
+                    error = self._psg_reader_manager.get_last_error()
+                    raise NodeRuntimeException(self.identifier, "files", \
+                        f"PSGWriter cannot write the sleep stages of the group {write_group} : {error}")
+
+            if len(hypnogram_groups) > 0:
+                other_events = new_events[~new_events['group'].isin(hypnogram_groups)]
+            else:
+                other_events = new_events
 
             # Add the new events
-            for index, event in new_events.iterrows():
+            for index, event in other_events.iterrows():
                 montage_index = self.get_montage_index(signals, event['channels'])
                 success = self._psg_reader_manager.add_event(
                         name=           event['name'],
@@ -227,6 +260,30 @@ class PSGWriter(SciNode):
             self._psg_reader_manager.close_file()
 
         return None
+
+
+    def get_hypnogram_groups(self, events):
+        """
+            Groups whose events are all sleep stages (Snooz codes 0-9).
+            Gold standard group labels are always included.
+        """
+        if not isinstance(events, pd.DataFrame) or len(events) == 0:
+            return []
+        stage_values = list(commons.sleep_stages_name.values())
+        hypnogram_groups = []
+        for group_name, group_events in events.groupby('group', sort=False):
+            if self.is_gold_standard_stage_group(group_name) or \
+                    group_events['name'].astype(str).isin(stage_values).all():
+                hypnogram_groups.append(group_name)
+        return hypnogram_groups
+
+
+    def is_gold_standard_stage_group(self, group):
+        # The XltekReader compares the group to "Stade" without case and surrounding spaces.
+        if not isinstance(group, str):
+            return False
+        group = group.strip().lower()
+        return group in [name.lower() for name in EEG_GOLD_STANDARD_STAGE_GROUPS]
 
 
     def get_montage_index(self, signals, channels):
