@@ -17,14 +17,14 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QPalette, QPixmap, QRadialGradient, QTransform)
 from PySide6.QtWidgets import (QApplication, QCheckBox, QFrame, QHBoxLayout,
     QLabel, QLineEdit, QPushButton, QSizePolicy,
-    QSpacerItem, QTextEdit, QVBoxLayout, QWidget)
+    QSpacerItem, QVBoxLayout, QWidget)
 import themes_rc
 
 class Ui_ExportResultsStep(object):
     def setupUi(self, ExportResultsStep):
         if not ExportResultsStep.objectName():
             ExportResultsStep.setObjectName(u"ExportResultsStep")
-        ExportResultsStep.resize(643, 773)
+        ExportResultsStep.resize(1018, 773)
         ExportResultsStep.setStyleSheet(u"font: 12pt \"Roboto\";")
         self.verticalLayout_2 = QVBoxLayout(ExportResultsStep)
         self.verticalLayout_2.setObjectName(u"verticalLayout_2")
@@ -56,22 +56,17 @@ class Ui_ExportResultsStep(object):
         self.frame_7.setLineWidth(0)
         self.verticalLayout_6 = QVBoxLayout(self.frame_7)
         self.verticalLayout_6.setObjectName(u"verticalLayout_6")
-        self.textEdit = QTextEdit(self.frame_7)
-        self.textEdit.setObjectName(u"textEdit")
-        self.textEdit.setMaximumSize(QSize(16777215, 100))
-        self.textEdit.setFrameShape(QFrame.Shape.NoFrame)
-        self.textEdit.setFrameShadow(QFrame.Shadow.Plain)
-        self.textEdit.setLineWidth(0)
-        self.textEdit.setReadOnly(True)
+        self.label_7 = QLabel(self.frame_7)
+        self.label_7.setObjectName(u"label_7")
 
-        self.verticalLayout_6.addWidget(self.textEdit)
-
-        self.verticalSpacer_4 = QSpacerItem(20, 20, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Fixed)
-
-        self.verticalLayout_6.addItem(self.verticalSpacer_4)
+        self.verticalLayout_6.addWidget(self.label_7)
 
 
         self.verticalLayout_4.addWidget(self.frame_7)
+
+        self.verticalSpacer_4 = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
+
+        self.verticalLayout_4.addItem(self.verticalSpacer_4)
 
         self.frame_4 = QFrame(self.frame)
         self.frame_4.setObjectName(u"frame_4")
@@ -236,17 +231,7 @@ class Ui_ExportResultsStep(object):
     def retranslateUi(self, ExportResultsStep):
         ExportResultsStep.setWindowTitle("")
         self.label.setText(QCoreApplication.translate("ExportResultsStep", u"<html><head/><body><p><span style=\" font-weight:700;\">Export Scoring</span></p></body></html>", None))
-        self.textEdit.setHtml(QCoreApplication.translate("ExportResultsStep", u"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
-"<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset=\"utf-8\" /><style type=\"text/css\">\n"
-"p, li { white-space: pre-wrap; }\n"
-"hr { height: 1px; border-width: 0; }\n"
-"li.unchecked::marker { content: \"\\2610\"; }\n"
-"li.checked::marker { content: \"\\2612\"; }\n"
-"</style></head><body style=\" font-family:'Roboto'; font-size:12pt; font-weight:400; font-style:normal;\">\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">In this step, you can run automatic sleep staging or compare YASA results with expert-annotated sleep stage files. The YASA sleep staging will then be exported.</p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-righ"
-                        "t:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-style:italic;\">Note:</span> Snooz cannot write sleep staging data to NATUS format, but the tool can still compare YASA scoring with existing staging in this format.</p></body></html>", None))
+        self.label_7.setText(QCoreApplication.translate("ExportResultsStep", u"<html><head/><body><p>In this step, you can run automatic sleep staging or compare YASA results with expert-annotated sleep stage files.<br/>The YASA sleep staging will then be exported.</p></body></html>", None))
         self.label_2.setText(QCoreApplication.translate("ExportResultsStep", u"<html><head/><body><p>Define a label for the predicted sleep stages group label in the accessory file.</p></body></html>", None))
         self.lineEdit_2.setText(QCoreApplication.translate("ExportResultsStep", u"stage", None))
         self.checkBox.setText(QCoreApplication.translate("ExportResultsStep", u"Automatic Scoring", None))
