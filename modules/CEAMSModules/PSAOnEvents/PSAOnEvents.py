@@ -19,6 +19,7 @@ from CEAMSModules.EventReader import manage_events
 from CEAMSModules.PSACompilation import commons as PSA
 from CEAMSModules.PSAOnEvents.PSAOnEventsDoc import write_doc_file, _get_doc
 from CEAMSModules.SleepReport import SleepReport
+from CEAMSModules.PSGReader.encoding_utils import ensure_utf8_string
 
 DEBUG = False
 
@@ -285,13 +286,13 @@ class PSAOnEvents(SciNode):
 
 
         # Extract subject info
-        subject_info_params = {"filename": subject_info['filename']}
+        subject_info_params = {"filename": ensure_utf8_string(subject_info['filename'])}
         if (subject_info['id1'] is not None) and len(subject_info['id1'].strip())>0:
-            subject_info_params['id1'] = subject_info['id1']
+            subject_info_params['id1'] = ensure_utf8_string(subject_info['id1'])
         elif (subject_info['id2'] is not None) and len(subject_info['id2'].strip())>0:
-            subject_info_params['id1'] = subject_info['id2']
+            subject_info_params['id1'] = ensure_utf8_string(subject_info['id2'])
         else:
-            subject_info_params['id1'] = subject_info['id1']
+            subject_info_params['id1'] = ensure_utf8_string(subject_info['id1'])
 
         cycle_info_param = {}
         if parameters_cycle and (dist_hour or dist_cycle):
@@ -466,24 +467,15 @@ class PSAOnEvents(SciNode):
             # Compute the freq bins indexes to average for each mini band
             # the upper limit is included as [min, max[
 
-            # To avoid too many decimal in the frequency bins
-            freq_bin_space = np.average(np.diff(freq_bin_chan))
-            # This works only for frequency bins < 1
-            if freq_bin_space<1:
-                precision_space = int(abs(np.log10(freq_bin_space)))+2
-                freq_bin_chan = np.round(freq_bin_chan,precision_space)
-            else:
-                precision_space = 1
-                freq_bin_chan = np.round(freq_bin_chan,precision_space)
-
-            # Compute the freq bins indexes for each mini band
-            miniband_indices = PSA.get_miniband_index(self.identifier, freq_bin_chan, mini_bandwidth, first_freq, last_freq, fs_chan)
+            # The FFT-generated frequency bins are kept unchanged (no rounding),
+            # get_miniband_index tolerates the drift caused by a non-integer fs.
+            miniband_indices, miniband_bounds = PSA.get_miniband_index(self.identifier, freq_bin_chan, mini_bandwidth, first_freq, last_freq, fs_chan)
             # For each mini band use the n_fft_win and n_fft_win_valid computed above (fixed accross all mini bands)
-            for miniband_index in miniband_indices:
+            for miniband_index, miniband_bound in zip(miniband_indices, miniband_bounds):
 
-                # The frequency band defined as [min, max[ (i.e. 0-3.8 Hz) are written in the report as 0-4 Hz
-                self.PSD_act_param['freq_low_Hz'] = freq_bin_chan[miniband_index[0]]
-                self.PSD_act_param['freq_high_Hz'] = freq_bin_chan[miniband_index[1]+1]
+                # The frequency band defined as [min, max[ is written in the report with the requested limits (i.e. 0-4 Hz)
+                self.PSD_act_param['freq_low_Hz'] = miniband_bound[0]
+                self.PSD_act_param['freq_high_Hz'] = miniband_bound[1]
 
                 for label in labels_computed:
                     # Gate on valid windows: all-artefacted windows yield nanmean=NaN,

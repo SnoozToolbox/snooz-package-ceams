@@ -310,22 +310,38 @@ def get_miniband_index(identifier, freq_bin_chan, mini_bandwidth, first_freq, la
     # ex 3 ) start=0.6 Hz, band=0.5Hz, max=30 Hz
     # 0.6-1;  1-1.5; 1.5-2; 2-2.5....29.5-30.     
     
+    # Returns
+    #   miniband_index : ndarray [n_bands x 2] first and last freq bin index of each band
+    #   miniband_bounds : ndarray [n_bands x 2] requested [low, high[ limits (Hz) of each band
+    #
+    # The frequency resolution is 1/T where T = N/fs is the real FFT window length.
+    # With a non-integer sampling rate (ex. 255.99998 Hz) the bins drift slightly
+    # (ppm) from the nominal grid. A bin that should be exactly on a band limit
+    # can then fall on either side of it, which is critical when the bandwidth
+    # equals the frequency resolution. A tolerance relative to the resolution
+    # makes the bin selection identical across recordings of a cohort.
+
     if not np.isfinite(mini_bandwidth) or mini_bandwidth <= 0:
         raise NodeRuntimeException(identifier, "mini_bandwidth", \
             "PSACompilation : mini_bandwidth must be a positive finite value")
+
+    freq_bin_chan = np.asarray(freq_bin_chan, dtype=float)
+    freq_res = (freq_bin_chan[-1] - freq_bin_chan[0]) / (len(freq_bin_chan) - 1)
+    eps = 1e-2 * freq_res
 
     # Min value between nyquist, last frequency bin of the fft and the last freq asked by the user.
     freq_max = min([freq_bin_chan[-1], last_freq, fs_chan/2])
     # Max between the first freq asked by the user and the min value of the freq bin of the fft.
     freq_min = max([freq_bin_chan[0],first_freq])
-    if freq_min >= freq_max:
+    if freq_min >= freq_max - eps:
         raise NodeRuntimeException(identifier, "freq_bins", \
             "PSACompilation : the requested frequency range is empty")
 
     cur_start = freq_min
     miniband_index = []
+    miniband_bounds = []
 
-    while cur_start < freq_max:
+    while cur_start < freq_max - eps:
         # Move to the next multiple of the selected bandwidth. This also
         # supports a first band that starts between two bandwidth multiples.
         boundary_number = np.ceil(cur_start / mini_bandwidth)
@@ -333,11 +349,11 @@ def get_miniband_index(identifier, freq_bin_chan, mini_bandwidth, first_freq, la
             boundary_number += 1
         cur_end = min(boundary_number * mini_bandwidth, freq_max)
 
-        # Find the indices of elements between the band boundaries.
-        cur_index_list = np.where((freq_bin_chan >= cur_start) & (freq_bin_chan < cur_end))[0] # [min, max[
+        # Find the indices of elements between the band boundaries [min, max[
+        cur_index_list = np.where((freq_bin_chan >= cur_start - eps) & (freq_bin_chan < cur_end - eps))[0]
         if len(cur_index_list): 
-            cur_idx_start_end = [cur_index_list[0], cur_index_list[-1]]
-            miniband_index.append(cur_idx_start_end)
+            miniband_index.append([cur_index_list[0], cur_index_list[-1]])
+            miniband_bounds.append([cur_start, cur_end])
         else:
             raise NodeRuntimeException(identifier, "mini_bandwidth", \
                 f"PSACompilation : no FFT frequency bin was found in the mini band "
@@ -345,4 +361,9 @@ def get_miniband_index(identifier, freq_bin_chan, mini_bandwidth, first_freq, la
 
         cur_start = cur_end
 
-    return np.asarray(miniband_index, dtype=int)
+    # Round the limits to remove the ppm drift (ex. nyquist at 127.99999 Hz) and
+    # the float noise (ex. 0.30000000000000004) so labels are equal across a cohort.
+    decimals = max(int(np.ceil(-np.log10(eps))), 0)
+    miniband_bounds = np.round(np.asarray(miniband_bounds, dtype=float), decimals)
+
+    return np.asarray(miniband_index, dtype=int), miniband_bounds

@@ -17,6 +17,7 @@ from commons.NodeInputException import NodeInputException
 from commons.NodeRuntimeException import NodeRuntimeException
 
 from CEAMSModules.PSGReader import commons
+from CEAMSModules.PSGReader.encoding_utils import ensure_utf8_string
 from CEAMSModules.SleepReport import SleepReport
 from CEAMSModules.PSACompilation.PSACompilationDoc import write_doc_file, _get_doc
 from CEAMSModules.PSACompilation import commons as PSA
@@ -256,13 +257,13 @@ class PSACompilation(SciNode):
         # Extract PSG information, Filename of the PSG recording and Sleep cycle parameters  
         
         # Extract subject info
-        subject_info_params = {"filename": subject_info['filename']}
+        subject_info_params = {"filename": ensure_utf8_string(subject_info['filename'])}
         if (subject_info['id1'] is not None) and len(subject_info['id1'].strip())>0:
-            subject_info_params['id1'] = subject_info['id1']
+            subject_info_params['id1'] = ensure_utf8_string(subject_info['id1'])
         elif (subject_info['id2'] is not None) and len(subject_info['id2'].strip())>0:
-            subject_info_params['id1'] = subject_info['id2']
+            subject_info_params['id1'] = ensure_utf8_string(subject_info['id2'])
         else:
-            subject_info_params['id1'] = subject_info['id1']
+            subject_info_params['id1'] = ensure_utf8_string(subject_info['id1'])
 
         cycle_info_param = SleepReport.get_sleep_cycle_parameters(self,parameters_cycle)    
 
@@ -294,15 +295,13 @@ class PSACompilation(SciNode):
             freq_bin_chan, psd_start_time, psd_stage, psd_data = \
                 PSA.get_PSD_attribute_chan_stage(self.identifier, PSD, channel, sleep_stages)
 
-            # Keep the FFT-generated frequency bins unchanged. Rounding here
-            # can change the bin spacing and make valid mini-bands disappear.
-            freq_bin_chan = np.asarray(freq_bin_chan, dtype=float)
-
-            miniband_indices = PSA.get_miniband_index(self.identifier, freq_bin_chan, mini_bandwidth, first_freq, last_freq, fs_chan)
-            # The frequency band definded as [min, max[ (i.e. 0-3.8 Hz) are written in the report as 0-4 Hz
+            # The FFT-generated frequency bins are kept unchanged (no rounding),
+            # get_miniband_index tolerates the drift caused by a non-integer fs.
+            miniband_indices, miniband_bounds = PSA.get_miniband_index(self.identifier, freq_bin_chan, mini_bandwidth, first_freq, last_freq, fs_chan)
+            # The frequency band defined as [min, max[ is written in the report with the requested limits (i.e. 0-4 Hz)
             PSD_freq_params = {}
-            PSD_freq_params['freq_low_Hz'] = [freq_bin_chan[miniband_index[0]] for miniband_index in miniband_indices]
-            PSD_freq_params['freq_high_Hz'] = [freq_bin_chan[miniband_index[1]+1] for miniband_index in miniband_indices] 
+            PSD_freq_params['freq_low_Hz'] = list(miniband_bounds[:, 0])
+            PSD_freq_params['freq_high_Hz'] = list(miniband_bounds[:, 1])
             
             win_len = np.unique(PSA.get_attribute(PSD, 'win_len'))[0]
             # --------------------------------------------------------------------------

@@ -290,6 +290,9 @@ class Stft(SciNode):
         cache = {}
         for i, signal_model in enumerate(signals):
             fs = signal_model.sample_rate
+            # Keep the requested lengths intact for each channel, the real lengths depend on fs
+            win_len_sec_chan = win_len_sec
+            win_step_sec_chan = win_step_sec
             nsample_win = win_len_sec*fs
             if not nsample_win.is_integer():
                 # Compute the real win_len used
@@ -298,7 +301,7 @@ class Stft(SciNode):
                         format(win_len_sec, int(round(nsample_win))/fs))
                 self._log_manager.log(self.identifier, "win_len {} is changed for {}".\
                     format(win_len_sec, int(round(nsample_win))/fs))
-                win_len_sec = int(round(nsample_win))/fs
+                win_len_sec_chan = int(round(nsample_win))/fs
 
             nsample_step = win_step_sec*fs
             if not nsample_step.is_integer():
@@ -307,25 +310,25 @@ class Stft(SciNode):
                     print("Stft.Warning : win_step {} is changed for {}".\
                         format(win_step_sec, int(round(nsample_step))/fs))
                 self._log_manager.log(self.identifier, "win_step {} is changed for {}".\
-                    format(win_len_sec, int(round(nsample_step))/fs))
-                win_step_sec = int(round(nsample_step))/fs   
+                    format(win_step_sec, int(round(nsample_step))/fs))
+                win_step_sec_chan = int(round(nsample_step))/fs
 
             if nsample_win > len(signal_model.samples):
                 self._log_manager.log(self.identifier, f"Stft - The signal {i} from {signal_model.channel} "\
-                    + f"is shorter than the fft window length of {win_len_sec}s.")
+                    + f"is shorter than the fft window length of {win_len_sec_chan}s.")
 
             data = {}
             data['psd'], data['freq_bins'] = self.fft_norm(
                                         signal_model.samples,
                                         fs,
-                                        win_len_sec,
-                                        win_step_sec,
+                                        win_len_sec_chan,
+                                        win_step_sec_chan,
                                         zeros_pad,
                                         window_name,
                                         rm_mean,
                                         norm)
-            data['win_len'] = win_len_sec
-            data['win_step'] = win_step_sec
+            data['win_len'] = win_len_sec_chan
+            data['win_step'] = win_step_sec_chan
             data['sample_rate'] = fs
             data['chan_label'] = signal_model.channel
             data['start_time'] = signal_model.start_time
@@ -345,8 +348,8 @@ class Stft(SciNode):
                     cache['freq_bins'] = data['freq_bins']
                     cache['channel'] = signal_model.channel
                     cache['sample_rate'] = signal_model.sample_rate
-                    cache['win_step_sec'] = win_step_sec
-                    cache['win_len'] = win_len_sec
+                    cache['win_step_sec'] = win_step_sec_chan
+                    cache['win_len'] = win_len_sec_chan
                     cache['filename'] = filename
                     self._cache_manager.write_mem_cache(self.identifier, cache)
                 else:
@@ -422,9 +425,10 @@ class Stft(SciNode):
         # General init
         
         # Number of sample to extract from the time series to perform the FFT
-        nsample_win = int(win_len_sec * fs)
+        # (round : win_len_sec * fs can be 1023.9999999 for a non-integer fs)
+        nsample_win = int(round(win_len_sec * fs))
         # Number of samples to step between each fft window
-        nsample_step = int(win_step_sec * fs)
+        nsample_step = int(round(win_step_sec * fs))
         # Number of samples that overlap between 2 windows
         nsample_ovlp = nsample_win - nsample_step  
         # Frequency range
