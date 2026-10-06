@@ -23,6 +23,57 @@ from CEAMSModules.SpindlesDetails.SpindlesDetails import SpindlesDetails as Even
 
 DEBUG = False
 
+
+def _ensure_utf8_string(value):
+    """
+    Convert string values to UTF-8, auto-detecting source encoding when needed.
+    
+    Handles multiple encodings:
+    - Latin-1 / ISO-8859-1 (French, German, Spanish, Portuguese, Dutch)
+    - Windows-1252 (Western European Windows systems)
+    - UTF-8 (already valid)
+    - Other single-byte encodings (fallback detection)
+    
+    For robustness, tries encoding detection only if string is suspect (contains 
+    high bytes that are invalid UTF-8). This avoids expensive charset detection 
+    for pure ASCII and valid UTF-8 strings.
+    
+    Args:
+        value: String or other value potentially in non-UTF-8 encoding
+        
+    Returns:
+        UTF-8 decoded string, or original value if not a string.
+        Invalid bytes are replaced with U+FFFD (replacement character).
+    """
+    if not isinstance(value, str):
+        return value
+    
+    try:
+        # Fast path: if string is already valid UTF-8, return it unchanged
+        value.encode('utf-8').decode('utf-8')
+        return value
+    except (UnicodeEncodeError, UnicodeDecodeError):
+        pass
+    
+    # The string contains non-UTF-8 characters. Try common encodings used in PSG files.
+    # Order: most common first to minimize re-encoding attempts.
+    for encoding in ['latin-1', 'windows-1252', 'iso-8859-15', 'cp1250', 'utf-16']:
+        try:
+            # Encode as Latin-1/Windows-1252 (source), decode as UTF-8 (target)
+            return value.encode(encoding).decode('utf-8')
+        except (UnicodeDecodeError, UnicodeEncodeError, LookupError):
+            continue
+    
+    # Final fallback: encode with error replacement to ensure no exception
+    # This converts undecodable bytes to U+FFFD (replacement character)
+    try:
+        return value.encode('utf-8', errors='replace').decode('utf-8', errors='replace')
+    except Exception:
+        # Should rarely reach here, but if so: strip non-decodable
+        return value.encode('ascii', errors='ignore').decode('ascii')
+
+
+
 class SlowWavesDetails(SciNode):
     """
     To average slow wave events characteristics such as duration, amplitude, frequency and so on per stage and sleep cycle.
@@ -251,13 +302,13 @@ class SlowWavesDetails(SciNode):
             slow_wave_det_param = eval(slow_wave_det_param)
 
         # Extract subject info
-        subject_info_params = {"filename": subject_info['filename']}
+        subject_info_params = {"filename": _ensure_utf8_string(subject_info['filename'])}
         if (subject_info['id1'] is not None) and len(subject_info['id1'].strip())>0:
-            subject_info_params['id1'] = subject_info['id1']
+            subject_info_params['id1'] = _ensure_utf8_string(subject_info['id1'])
         elif (subject_info['id2'] is not None) and len(subject_info['id2'].strip())>0:
-            subject_info_params['id1'] = subject_info['id2']
+            subject_info_params['id1'] = _ensure_utf8_string(subject_info['id2'])
         else:
-            subject_info_params['id1'] = subject_info['id1']
+            subject_info_params['id1'] = _ensure_utf8_string(subject_info['id1'])
         #-----------------------------------------------------------------------------------
         # Define the sw parameters and detect unscored mode
         #-----------------------------------------------------------------------------------
