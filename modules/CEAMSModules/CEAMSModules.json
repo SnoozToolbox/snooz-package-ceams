@@ -51,7 +51,7 @@
         {
             "item_name": "Stft",
             "item_type": "module",
-            "item_version": "2.1.0",
+            "item_version": "2.2.0",
             "item_hooks": [
                 {
                     "endpoint_name": "module_endpoint",
@@ -261,7 +261,7 @@
         {
             "item_name": "SleepReport",
             "item_type": "module",
-            "item_version": "2.1.0",
+            "item_version": "2.2.0",
             "item_hooks": [
                 {
                     "endpoint_name": "module_endpoint",
@@ -345,7 +345,7 @@
         {
             "item_name": "EventSleepReport",
             "item_type": "module",
-            "item_version": "2.0.1",
+            "item_version": "2.1.0",
             "item_hooks": [
                 {
                     "endpoint_name": "module_endpoint",
@@ -653,7 +653,7 @@
         {
             "item_name": "PSACompilation",
             "item_type": "module",
-            "item_version": "2.2.1",
+            "item_version": "2.3.0",
             "item_hooks": [
                 {
                     "endpoint_name": "module_endpoint",
@@ -681,7 +681,7 @@
         {
             "item_name": "PSAOnEvents",
             "item_type": "module",
-            "item_version": "3.1.0",
+            "item_version": "3.2.0",
             "item_hooks": [
                 {
                     "endpoint_name": "module_endpoint",
@@ -765,7 +765,7 @@
         {
             "item_name": "SpindlesDetails",
             "item_type": "module",
-            "item_version": "2.4.0",
+            "item_version": "2.5.0",
             "item_hooks": [
                 {
                     "endpoint_name": "module_endpoint",
@@ -793,7 +793,7 @@
         {
             "item_name": "SlowWavesDetails",
             "item_type": "module",
-            "item_version": "2.5.0",
+            "item_version": "2.6.0",
             "item_hooks": [
                 {
                     "endpoint_name": "module_endpoint",
@@ -821,7 +821,7 @@
         {
             "item_name": "OxygenDesatDetector",
             "item_type": "module",
-            "item_version": "2.5.0",
+            "item_version": "2.6.0",
             "item_hooks": [
                 {
                     "endpoint_name": "module_endpoint",
@@ -1171,7 +1171,7 @@
         {
             "item_name": "REMsDetails",
             "item_type": "module",
-            "item_version": "2.2.0",
+            "item_version": "2.3.0",
             "item_hooks": [
                 {
                     "endpoint_name": "module_endpoint",
@@ -1199,7 +1199,7 @@
         {
             "item_name": "PSACompilationFOOOF",
             "item_type": "module",
-            "item_version": "0.0.1",
+            "item_version": "0.1.0",
             "item_hooks": [
                 {
                     "endpoint_name": "module_endpoint",

@@ -20,6 +20,7 @@ from commons.NodeInputException import NodeInputException
 from commons.NodeRuntimeException import NodeRuntimeException
 from ..PSGReader import commons
 from CEAMSModules.EventCompare import performance as perf
+from CEAMSModules.PSGReader.encoding_utils import ensure_utf8_string
 
 DEBUG = False
 
@@ -624,9 +625,9 @@ class EventSleepReport(SciNode):
         
 
         subject_info_params = {
-            "filename":record_info["filename"],
+            "filename": ensure_utf8_string(record_info["filename"]),
             "group":None,
-            "sex":record_info['sex'],
+            "sex": ensure_utf8_string(record_info['sex']) if record_info['sex'] is not None else record_info['sex'],
             "birthdate":birthdate_text,
             "creation_date":creation_date_text,
             "age": record_info['age'] if record_info['age'] != None and record_info['age'] >= 0 else None,

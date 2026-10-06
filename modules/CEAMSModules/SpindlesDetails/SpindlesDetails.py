@@ -19,6 +19,7 @@ from commons.NodeRuntimeException import NodeRuntimeException
 
 from CEAMSModules.PSGReader.SignalModel import SignalModel
 from CEAMSModules.PSGReader import commons
+from CEAMSModules.PSGReader.encoding_utils import ensure_utf8_string
 from CEAMSModules.SleepReport import SleepReport
 from CEAMSModules.SpindlesDetails.SpindlesDetailsDoc import write_doc_file
 from CEAMSModules.SpindlesDetails.SpindlesDetailsDoc import _get_doc
@@ -284,13 +285,13 @@ class SpindlesDetails(SciNode):
             spindle_sel_param = eval(spindle_sel_param)
 
         # Extract subject info
-        subject_info_params = {"filename": subject_info['filename']}
+        subject_info_params = {"filename": ensure_utf8_string(subject_info['filename'])}
         if (subject_info['id1'] is not None) and len(subject_info['id1'].strip())>0:
-            subject_info_params['id1'] = subject_info['id1']
+            subject_info_params['id1'] = ensure_utf8_string(subject_info['id1'])
         elif (subject_info['id2'] is not None) and len(subject_info['id2'].strip())>0:
-            subject_info_params['id1'] = subject_info['id2']
+            subject_info_params['id1'] = ensure_utf8_string(subject_info['id2'])
         else:
-            subject_info_params['id1'] = subject_info['id1']
+            subject_info_params['id1'] = ensure_utf8_string(subject_info['id1'])
 
         #-----------------------------------------------------------------------------------
         # Define the general spindle parameters

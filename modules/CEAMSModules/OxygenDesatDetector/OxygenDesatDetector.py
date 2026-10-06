@@ -30,6 +30,7 @@ from CEAMSModules.SleepReport import SleepReport
 
 from CEAMSModules.OxygenDesatDetector.OxygenDesatDetector_doc import write_doc_file
 from CEAMSModules.OxygenDesatDetector.OxygenDesatDetector_doc import _get_doc
+from CEAMSModules.PSGReader.encoding_utils import ensure_utf8_string
 
 DEBUG = False
 
@@ -279,8 +280,8 @@ class OxygenDesatDetector(SciNode):
         #------------------------------------------------------------------------------
         subject_info_params = \
         {
-            "filename":subject_info['filename'],
-            "id1": subject_info['id1']
+            "filename": ensure_utf8_string(subject_info['filename']),
+            "id1": ensure_utf8_string(subject_info['id1'])
             }
         cycle_info_param = SleepReport.get_sleep_cycle_parameters(self,parameters_cycle)
 
