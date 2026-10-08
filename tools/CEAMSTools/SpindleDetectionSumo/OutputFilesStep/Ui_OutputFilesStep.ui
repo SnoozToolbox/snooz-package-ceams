@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-        <width>691</width>
-        <height>449</height>
+    <width>851</width>
+    <height>629</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -101,13 +101,13 @@
        <property name="minimumSize">
         <size>
          <width>0</width>
-                                 <height>0</height>
+         <height>0</height>
         </size>
        </property>
        <property name="maximumSize">
         <size>
          <width>16777215</width>
-                                 <height>16777215</height>
+         <height>16777215</height>
         </size>
        </property>
        <property name="frameShape">
@@ -135,6 +135,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;   - dominent frequency (Hz), &lt;span style=&quot; color:#000000;&quot;&gt;where spectral energy is maximum&lt;/span&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; color:#000000;&quot;&gt;   - average frequency (Hz) counting peaks&lt;/span&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; color:#000000;&quot;&gt;   - peak-to-peak amplitude (µV)&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; color:#000000;&quot;&gt;   - duration from onset to maximum peak-to-peak amplitude (s)&lt;/span&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; color:#000000;&quot;&gt;   - Root Mean Square (rms) amplitude (µV)&lt;/span&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; color:#000000;&quot;&gt;   - RMS-Duration product (µV·sec)&lt;/span&gt;&lt;/p&gt;
 &lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; color:#000000;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
@@ -148,7 +149,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;        - per clock hour - Start time is the sleep onset&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;        - per hour spent in each stage - Start time is when each specific stage first begins in the timeline.&lt;/p&gt;
 &lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; color:#000000;&quot;&gt;&lt;i&gt;Note: RSAI (RMS Spindle Activity Index) is the &lt;b&gt;sum&lt;/b&gt; of RMS-Duration products across all spindles. Other spindle characteristics are averaged values.&lt;/i&gt;&lt;/span&gt;&lt;/p&gt;</string>
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-style:italic; color:#000000;&quot;&gt;Note: RSAI (RMS Spindle Activity Index) is the &lt;/span&gt;&lt;span style=&quot; font-weight:700; font-style:italic; color:#000000;&quot;&gt;sum&lt;/span&gt;&lt;span style=&quot; font-style:italic; color:#000000;&quot;&gt; of RMS-Duration products across all spindles. Other spindle characteristics are averaged values.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
        </property>
       </widget>
      </item>
@@ -206,7 +207,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
        <item>
         <widget class="QPushButton" name="pushButton_cohort">
          <property name="text">
-          <string>Browse</string>
+          <string>Choose</string>
          </property>
         </widget>
        </item>

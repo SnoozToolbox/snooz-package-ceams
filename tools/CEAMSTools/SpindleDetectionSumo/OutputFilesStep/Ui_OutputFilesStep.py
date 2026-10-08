@@ -24,7 +24,7 @@ class Ui_OutputFilesStep(object):
     def setupUi(self, OutputFilesStep):
         if not OutputFilesStep.objectName():
             OutputFilesStep.setObjectName(u"OutputFilesStep")
-        OutputFilesStep.resize(691, 449)
+        OutputFilesStep.resize(851, 629)
         OutputFilesStep.setStyleSheet(u"font: 12pt \"Roboto\";")
         self.horizontalLayout_3 = QHBoxLayout(OutputFilesStep)
         self.horizontalLayout_3.setObjectName(u"horizontalLayout_3")
@@ -174,27 +174,28 @@ class Ui_OutputFilesStep(object):
                         ">where spectral energy is maximum</span></p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" color:#000000;\">   - average frequency (Hz) counting peaks</span></p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" color:#000000;\">   - peak-to-peak amplitude (\u00b5V)</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" color:#000000;\">   - duration from onset to maximum peak-to-peak amplitude (s)</span></p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" color:#000000;\">   - Root Mean Square (rms) amplitude (\u00b5V)</span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" color:#000000;\">   - RMS-Duration product (\u00b5V\u00b7sec)</span></p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; tex"
-                        "t-indent:0px; color:#000000;\"><br /></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-inden"
+                        "t:0px;\"><span style=\" color:#000000;\">   - RMS-Duration product (\u00b5V\u00b7sec)</span></p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; color:#000000;\"><br /></p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" text-decoration: underline;\">For the cohort</span></p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">    - spindle count</p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">    - spindle density (spinde count per minute)</p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">    - the average spindle characteristics listed above</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">        - total (all selected stages) - Start time is the sleep onset</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-rig"
-                        "ht:0px; -qt-block-indent:0; text-indent:0px;\">        - per sleep stage - Only the time spent in each individual sleep stage is considered.</p>\n"
+"<p style=\" margin-top:0px; margin-bottom:"
+                        "0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">        - total (all selected stages) - Start time is the sleep onset</p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">        - per sleep stage - Only the time spent in each individual sleep stage is considered.</p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">        - per sleep cycle - Start time is the sleep onset</p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">        - per clock hour - Start time is the sleep onset</p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">        - per hour spent in each stage - Start time is when each specific stage first begins in the timeline.</p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; t"
-                        "ext-indent:0px;\"><span style=\" color:#000000;\"><i>Note: RSAI (RMS Spindle Activity Index) is the <b>sum</b> of RMS-Duration products across all spindles. Other spindle characteristics are averaged values.</i></span></p>", None))
+"<p style=\"-qt-paragraph-type:emp"
+                        "ty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-style:italic; color:#000000;\">Note: RSAI (RMS Spindle Activity Index) is the </span><span style=\" font-weight:700; font-style:italic; color:#000000;\">sum</span><span style=\" font-style:italic; color:#000000;\"> of RMS-Duration products across all spindles. Other spindle characteristics are averaged values.</span></p></body></html>", None))
         self.checkBox_cohort_file.setText(QCoreApplication.translate("OutputFilesStep", u"To save the detailed events report for the cohort (cohort report)", None))
         self.label_8.setText(QCoreApplication.translate("OutputFilesStep", u"* The spindle details are appended at the end of the cohort report if it exists.", None))
         self.cohort_lineedit.setPlaceholderText(QCoreApplication.translate("OutputFilesStep", u"Select the file to save detailed cohort report...", None))
-        self.pushButton_cohort.setText(QCoreApplication.translate("OutputFilesStep", u"Browse", None))
+        self.pushButton_cohort.setText(QCoreApplication.translate("OutputFilesStep", u"Choose", None))
         self.checkBox_spindle_file.setText(QCoreApplication.translate("OutputFilesStep", u"To export characteristics of each spindle (one file per recording)", None))
         self.label_7.setText(QCoreApplication.translate("OutputFilesStep", u"    * Files are saved in a new folder named \"spindles_characteristics\" at the cohort report level.", None))
         self.label_6.setText(QCoreApplication.translate("OutputFilesStep", u"    * Without cohort report : the file is saved in the same folder as the PSG file.", None))

@@ -428,9 +428,10 @@ class SpindlesDetails(SciNode):
             avg_freq = self.compute_char_avg_freq(signals_spindle_cur_chan, fs_chan)
             spindle_cur_chan_df['avg_freq_Hz'] = avg_freq
 
-            # Compute the amplitude_pk-pk of the signal during the spindle
-            pk_amp = self.compute_char_amp_pk_pk(signals_spindle_cur_chan)
+            # Compute the amplitude_pk-pk of the signal during the spindle and time to max amplitude
+            pk_amp, peak_sec = self.compute_char_amp_pk_pk(signals_spindle_cur_chan, fs_chan)
             spindle_cur_chan_df['amp_pkpk_uV'] = pk_amp
+            spindle_cur_chan_df['peak_sec'] = peak_sec
 
             # Compute the amplitude rms of the signal during the spindle
             #   Compute RMS (Root Mean Squared) value of each spindle.
@@ -688,6 +689,7 @@ class SpindlesDetails(SciNode):
         avg_freq_Hz = {}
         amp_pkpk_uV = {}
         amp_rms_uV = {}
+        peak_sec = {}
         RSAI_uVsec = {}
         ss_count_total = 0
         duration_s_all = []
@@ -695,6 +697,7 @@ class SpindlesDetails(SciNode):
         avg_freq_Hz_all = []
         amp_pkpk_uV_all = []
         amp_rms_uV_all = []
+        peak_sec_all = []
         RSAI_uVsec_all = []
         for stage in self.stage_stats_labels:
             # If selected
@@ -725,6 +728,7 @@ class SpindlesDetails(SciNode):
                     avg_freq_Hz[f'{label_stats}_{stage}_avg_freq_Hz'] = spindle_cur_stage['avg_freq_Hz'].sum()/ss_count_cur_stage
                     amp_pkpk_uV[f'{label_stats}_{stage}_amp_pkpk_uV'] = spindle_cur_stage['amp_pkpk_uV'].sum()/ss_count_cur_stage
                     amp_rms_uV[f'{label_stats}_{stage}_amp_rms_uV'] = spindle_cur_stage['amp_rms_uV'].sum()/ss_count_cur_stage
+                    peak_sec[f'{label_stats}_{stage}_peak_sec'] = spindle_cur_stage['peak_sec'].sum()/ss_count_cur_stage
                     RSAI_uVsec[f'{label_stats}_{stage}_RSAI_uVsec'] = spindle_cur_stage['rms_dur_uVsec'].sum()
                 else:
                     duration_s[f'{label_stats}_{stage}_spindle_sec'] = np.NaN
@@ -732,6 +736,7 @@ class SpindlesDetails(SciNode):
                     avg_freq_Hz[f'{label_stats}_{stage}_avg_freq_Hz'] = np.NaN
                     avg_freq_Hz[f'{label_stats}_{stage}_amp_pkpk_uV'] = np.NaN
                     amp_rms_uV[f'{label_stats}_{stage}_amp_rms_uV'] = np.NaN
+                    peak_sec[f'{label_stats}_{stage}_peak_sec'] = np.NaN
                     RSAI_uVsec[f'{label_stats}_{stage}_RSAI_uVsec'] = np.NaN
 
                 if len(duration_s_all)==0:
@@ -764,6 +769,12 @@ class SpindlesDetails(SciNode):
                     if len(commons.sleep_stages_name[stage]) == 1: 
                         amp_rms_uV_all = np.concatenate((amp_rms_uV_all,spindle_cur_stage['amp_rms_uV'].values), axis=0)
 
+                if len(peak_sec_all)==0:
+                    peak_sec_all = spindle_cur_stage['peak_sec'].values
+                else:
+                    if len(commons.sleep_stages_name[stage]) == 1: 
+                        peak_sec_all = np.concatenate((peak_sec_all,spindle_cur_stage['peak_sec'].values), axis=0)
+
                 if len(RSAI_uVsec_all)==0:
                     RSAI_uVsec_all = spindle_cur_stage['rms_dur_uVsec'].values
                 else:
@@ -777,6 +788,7 @@ class SpindlesDetails(SciNode):
                 avg_freq_Hz[f'{label_stats}_{stage}_avg_freq_Hz'] = np.NaN
                 amp_pkpk_uV[f'{label_stats}_{stage}_amp_pkpk_uV'] = np.NaN
                 amp_rms_uV[f'{label_stats}_{stage}_amp_rms_uV'] = np.NaN
+                peak_sec[f'{label_stats}_{stage}_peak_sec'] = np.NaN
                 RSAI_uVsec[f'{label_stats}_{stage}_RSAI_uVsec'] = np.NaN
 
         # Total stats on the accumulated data
@@ -790,10 +802,11 @@ class SpindlesDetails(SciNode):
         avg_freq_Hz[f'{label_stats}_avg_freq_Hz'] = np.mean(avg_freq_Hz_all)
         amp_pkpk_uV[f'{label_stats}_amp_pkpk_uV'] = np.mean(amp_pkpk_uV_all)
         amp_rms_uV[f'{label_stats}_amp_rms_uV'] = np.mean(amp_rms_uV_all)
+        peak_sec[f'{label_stats}_peak_sec'] = np.mean(peak_sec_all)
         RSAI_uVsec[f'{label_stats}_RSAI_uVsec'] = np.sum(RSAI_uVsec_all)
 
 
-        spindle_stats = ss_count | density_min | duration_s | dom_freq_Hz | avg_freq_Hz | amp_pkpk_uV | amp_rms_uV | RSAI_uVsec
+        spindle_stats = ss_count | density_min | duration_s | dom_freq_Hz | avg_freq_Hz | amp_pkpk_uV | amp_rms_uV | peak_sec | RSAI_uVsec
         return spindle_stats
 
 
@@ -1062,23 +1075,30 @@ class SpindlesDetails(SciNode):
 
     
 
-    def compute_char_amp_pk_pk(self, signals_spindle_cur_chan):
+    def compute_char_amp_pk_pk(self, signals_spindle_cur_chan, fs_chan):
         """""
             Compute the amplitude peak-to-peak of the signal.
             Using scipy.signal.find_peaks, find positive peaks, find negative peaks, merge and sort (by position time)
             and compute max diff between consecutive peak.
+            Also compute the time from onset to the maximum peak-to-peak amplitude.
 
             Parameters
             -----------
                 signals_spindle_cur_chan : list of array
                     Each item is the samples of a spindle
+                fs_chan : float
+                    Sampling frequency (Hz).
             Returns
             -----------  
                 list_pk_amp : list       
                     Amplitude peak-to-peak for each spindle event.
+                list_peak_sec : list
+                    Time (s) from onset to the maximum peak-to-peak amplitude for each spindle.
         """""  
         # A loop on each event
         list_pk_amp = []
+        list_peak_sec = []
+        
         for ss_signal in signals_spindle_cur_chan:
             # Find positive peaks
             pos_peaks, _ = sci_signal.find_peaks(ss_signal)
@@ -1086,9 +1106,33 @@ class SpindlesDetails(SciNode):
             neg_peaks, _ = sci_signal.find_peaks(ss_signal*-1)
             # merge and sort (by position time)
             all_peaks = np.sort(np.concatenate([pos_peaks,neg_peaks]))
-            pk_amp = np.max(np.abs(np.diff(ss_signal[all_peaks])))
-            list_pk_amp.append(pk_amp)    
-        return list_pk_amp
+            
+            if len(all_peaks) > 1:
+                # Compute peak-to-peak amplitudes between consecutive extrema
+                pkpk_amplitudes = np.abs(np.diff(ss_signal[all_peaks]))
+                # Find the index of the maximum peak-to-peak amplitude
+                max_pair_index = np.argmax(pkpk_amplitudes)
+                pk_amp = pkpk_amplitudes[max_pair_index]
+                
+                # Find the time of the extremum with larger absolute value in this pair
+                extremum_1_idx = all_peaks[max_pair_index]
+                extremum_2_idx = all_peaks[max_pair_index + 1]
+                
+                if np.abs(ss_signal[extremum_1_idx]) >= np.abs(ss_signal[extremum_2_idx]):
+                    max_extremum_idx = extremum_1_idx
+                else:
+                    max_extremum_idx = extremum_2_idx
+                
+                peak_sec = max_extremum_idx / fs_chan
+                list_peak_sec.append(peak_sec)
+            else:
+                # Not enough peaks to compute peak-to-peak
+                pk_amp = np.nan
+                list_peak_sec.append(np.nan)
+            
+            list_pk_amp.append(pk_amp)
+        
+        return list_pk_amp, list_peak_sec
 
 
     def compute_char_amp_rms(self, signals_spindle_cur_chan):
@@ -1343,6 +1387,7 @@ class SpindlesDetails(SciNode):
                 cyc_ss_stats[f'{cycle_label}_avg_freq_Hz']=np.NaN
                 cyc_ss_stats[f'{cycle_label}_amp_pkpk_uV']=np.NaN
                 cyc_ss_stats[f'{cycle_label}_amp_rms_uV']=np.NaN
+                cyc_ss_stats[f'{cycle_label}_peak_sec']=np.NaN
                 cyc_ss_stats[f'{cycle_label}_RSAI_uVsec']=np.NaN
                 for stage in self.stage_stats_labels:
                     cyc_valid_dur_stats[f'{cycle_label}_{stage}_valid_min']=np.NaN
@@ -1353,7 +1398,8 @@ class SpindlesDetails(SciNode):
                     cyc_ss_stats[f'{cycle_label}_{stage}_avg_freq_Hz']=np.NaN
                     cyc_ss_stats[f'{cycle_label}_{stage}_amp_pkpk_uV']=np.NaN
                     cyc_ss_stats[f'{cycle_label}_{stage}_amp_rms_uV']=np.NaN
-                    cyc_ss_stats[f'{cycle_label}_{stage}_RSAI_uVsec']=np.NaN    
+                    cyc_ss_stats[f'{cycle_label}_{stage}_peak_sec']=np.NaN
+                    cyc_ss_stats[f'{cycle_label}_{stage}_RSAI_uVsec']=np.NaN
 
         # Organize data for the output
         return cyc_rec_dur_stats | cyc_valid_dur_stats | cyc_ss_stats
@@ -1441,6 +1487,7 @@ class SpindlesDetails(SciNode):
                 hour_ss_stats[f'{hour_label}_avg_freq_Hz'] = np.NaN
                 hour_ss_stats[f'{hour_label}_amp_pkpk_uV'] = np.NaN
                 hour_ss_stats[f'{hour_label}_amp_rms_uV'] = np.NaN
+                hour_ss_stats[f'{hour_label}_peak_sec'] = np.NaN
                 hour_ss_stats[f'{hour_label}_RSAI_uVsec'] = np.NaN
                 
                 for stage in self.stage_stats_labels:
@@ -1452,6 +1499,7 @@ class SpindlesDetails(SciNode):
                     hour_ss_stats[f'{hour_label}_{stage}_avg_freq_Hz'] = np.NaN
                     hour_ss_stats[f'{hour_label}_{stage}_amp_pkpk_uV'] = np.NaN
                     hour_ss_stats[f'{hour_label}_{stage}_amp_rms_uV'] = np.NaN
+                    hour_ss_stats[f'{hour_label}_{stage}_peak_sec'] = np.NaN
                     hour_ss_stats[f'{hour_label}_{stage}_RSAI_uVsec'] = np.NaN
 
         # Organize data for the output
@@ -1594,6 +1642,7 @@ class SpindlesDetails(SciNode):
                         stage_hour_ss_stats[f'{hour_label}_{stage_label}_avg_freq_Hz'] = np.NaN
                         stage_hour_ss_stats[f'{hour_label}_{stage_label}_amp_pkpk_uV'] = np.NaN
                         stage_hour_ss_stats[f'{hour_label}_{stage_label}_amp_rms_uV'] = np.NaN
+                        stage_hour_ss_stats[f'{hour_label}_{stage_label}_peak_sec'] = np.NaN
                         stage_hour_ss_stats[f'{hour_label}_{stage_label}_RSAI_uVsec'] = np.NaN
                 else:
                     # No stages in this hour - set all values to NaN
@@ -1605,6 +1654,7 @@ class SpindlesDetails(SciNode):
                     stage_hour_ss_stats[f'{hour_label}_{stage_label}_avg_freq_Hz'] = np.NaN
                     stage_hour_ss_stats[f'{hour_label}_{stage_label}_amp_pkpk_uV'] = np.NaN
                     stage_hour_ss_stats[f'{hour_label}_{stage_label}_amp_rms_uV'] = np.NaN
+                    stage_hour_ss_stats[f'{hour_label}_{stage_label}_peak_sec'] = np.NaN
                     stage_hour_ss_stats[f'{hour_label}_{stage_label}_RSAI_uVsec'] = np.NaN
             
             # Compute total statistics for this hour
@@ -1678,6 +1728,7 @@ class SpindlesDetails(SciNode):
             result[f'{label_stats}_{stage_label}_avg_freq_Hz'] = spindle_cur_chan_df['avg_freq_Hz'].sum() / spindle_count
             result[f'{label_stats}_{stage_label}_amp_pkpk_uV'] = spindle_cur_chan_df['amp_pkpk_uV'].sum() / spindle_count
             result[f'{label_stats}_{stage_label}_amp_rms_uV'] = spindle_cur_chan_df['amp_rms_uV'].sum() / spindle_count
+            result[f'{label_stats}_{stage_label}_peak_sec'] = spindle_cur_chan_df['peak_sec'].sum() / spindle_count
             result[f'{label_stats}_{stage_label}_RSAI_uVsec'] = spindle_cur_chan_df['rms_dur_uVsec'].sum()
         else:
             result[f'{label_stats}_{stage_label}_spindle_sec'] = np.nan
@@ -1685,6 +1736,7 @@ class SpindlesDetails(SciNode):
             result[f'{label_stats}_{stage_label}_avg_freq_Hz'] = np.nan
             result[f'{label_stats}_{stage_label}_amp_pkpk_uV'] = np.nan
             result[f'{label_stats}_{stage_label}_amp_rms_uV'] = np.nan
+            result[f'{label_stats}_{stage_label}_peak_sec'] = np.nan
             result[f'{label_stats}_{stage_label}_RSAI_uVsec'] = np.nan
             
         return result
@@ -1772,10 +1824,10 @@ class SpindlesDetails(SciNode):
             hour_label : str
                 The hour label (e.g., "stage_h1")
             valid_dur_stats : dict
-                Dictionary containing valid duration statistics (will be modified)
+                Dictionary containing valid duration statistics for each stage
             ss_stats : dict
                 Dictionary containing spindle statistics (will be modified)
-        """""
+        """"" 
         # Initialize totals
         total_spindle_count = 0
         
@@ -1785,6 +1837,7 @@ class SpindlesDetails(SciNode):
         weighted_avg_freq_sum = 0
         weighted_amp_pkpk_sum = 0
         weighted_amp_rms_sum = 0
+        weighted_peak_sec_sum = 0
         total_RSAI_sum = 0
         
         # Create local sleep_stages_name to check stage length (same as original function)
@@ -1831,6 +1884,11 @@ class SpindlesDetails(SciNode):
                     if amp_rms_key in ss_stats and not np.isnan(ss_stats[amp_rms_key]):
                         weighted_amp_rms_sum += ss_stats[amp_rms_key] * stage_count
                     
+                    # Peak time to max amplitude
+                    peak_sec_key = f'{hour_label}_{stage_label}_peak_sec'
+                    if peak_sec_key in ss_stats and not np.isnan(ss_stats[peak_sec_key]):
+                        weighted_peak_sec_sum += ss_stats[peak_sec_key] * stage_count
+                    
                     # RSAI (sum, not average)
                     rsai_key = f'{hour_label}_{stage_label}_RSAI_uVsec'
                     if rsai_key in ss_stats and not np.isnan(ss_stats[rsai_key]):
@@ -1846,6 +1904,7 @@ class SpindlesDetails(SciNode):
             ss_stats[f'{hour_label}_avg_freq_Hz'] = weighted_avg_freq_sum / total_spindle_count
             ss_stats[f'{hour_label}_amp_pkpk_uV'] = weighted_amp_pkpk_sum / total_spindle_count
             ss_stats[f'{hour_label}_amp_rms_uV'] = weighted_amp_rms_sum / total_spindle_count
+            ss_stats[f'{hour_label}_peak_sec'] = weighted_peak_sec_sum / total_spindle_count
             ss_stats[f'{hour_label}_RSAI_uVsec'] = total_RSAI_sum
         else:
             ss_stats[f'{hour_label}_spindle_sec'] = np.nan
@@ -1853,7 +1912,15 @@ class SpindlesDetails(SciNode):
             ss_stats[f'{hour_label}_avg_freq_Hz'] = np.nan
             ss_stats[f'{hour_label}_amp_pkpk_uV'] = np.nan
             ss_stats[f'{hour_label}_amp_rms_uV'] = np.nan
+            ss_stats[f'{hour_label}_peak_sec'] = np.nan
             ss_stats[f'{hour_label}_RSAI_uVsec'] = np.nan
+        
+        # Compute total density
+        valid_min_key = f'{hour_label}_valid_min'
+        if valid_min_key in valid_dur_stats and valid_dur_stats[valid_min_key] > 0:
+            ss_stats[f'{hour_label}_density'] = total_spindle_count / valid_dur_stats[valid_min_key]
+        else:
+            ss_stats[f'{hour_label}_density'] = np.nan
 
     @staticmethod
     def _compute_artifact_duration_for_epochs(stage_start_cur, stage_end_cur, art_start_np, art_dur_np, art_end_np):
