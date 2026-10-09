@@ -245,6 +245,11 @@ class REMsDetectionYasa(SciNode):
         except Exception as e:
             raise NodeRuntimeException(self.identifier, "REMs detection", f"Error during REM detection: {str(e)}")
 
+        # Write the cache
+        cache = {}
+        cache['events'] = rems_detection_df
+        self._cache_manager.write_mem_cache(self.identifier, cache)
+
         self._log_manager.log(self.identifier, "This module detects Rapid Eye Movements.")
 
         return {'events_details': rems_detection_df, 'events': snooz_rem}

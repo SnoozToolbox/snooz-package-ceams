@@ -15,6 +15,21 @@ def write_doc_file(filepath, N_CYCLE, N_HOURS=0):
             docwriter.writerow([row_name,k,v])
 
 
+def write_rems_characteristics_info_file(filepath):
+    """
+    Write info file for REMs characteristics TSV file.
+    Describes each column in the REMs characteristics export.
+    """
+    with open(filepath, 'w', newline='', encoding='utf-8') as csvfile:
+        docwriter = csv.writer(csvfile, delimiter='\t')
+
+        doc = _get_rems_characteristics_doc()
+
+        for i, (k, v) in enumerate(doc.items()):
+            row_name = excel_column_name(i+1)
+            docwriter.writerow([row_name, k, v])
+
+
 def excel_column_name(number):
     column_name = ""
     while number > 0:
@@ -22,6 +37,24 @@ def excel_column_name(number):
         column_name = chr(65 + remainder) + column_name  # 65 is the ASCII code for 'A'
         number = (number - 1) // 26
     return column_name
+
+
+def _get_rems_characteristics_doc():
+    """
+    Get documentation dictionary for individual REMs characteristics.
+    Keys follow the column order of the REMs characteristics TSV file.
+    """
+    rems_char_dict = {
+        'group': 'Event group (REMs)',
+        'name': 'REMs event name (specific to the detection algorithm)',
+        'cycle': 'Sleep cycle number (1-based) during which the REM occurred',
+        'stage': 'Sleep stage during which the REM occurred (1=N1, 2=N2, 3=N3, 5=REM)',
+        'start_sec': 'REM start time (s)',
+        'duration_sec': 'REM total duration (s)',
+        'amplitude_uV': 'REM peak-to-peak amplitude (uV) of the difference between the left and right EOG channels',
+        'channels': 'Channel labels used to detect the REM',
+    }
+    return rems_char_dict
 
 
 def _get_doc(N_CYCLE, N_HOURS=0):
@@ -128,7 +161,7 @@ def _get_doc(N_CYCLE, N_HOURS=0):
 
             f'clock_h{i_hour+1}_R_rems_sec' : f'Hour {i_hour+1} - Average REMs duration (s) in REM stage.',
 
-            f'clock_h{i_hour+1}_R_amplitude_uV' : f'Hour {i_hour+1} - Average REMs amplitude (µV) in REM stage.',
+            f'clock_h{i_hour+1}_R_amplitude_uV' : f'Hour {i_hour+1} - Average REMs amplitude (uV) in REM stage.',
 
             f'clock_h{i_hour+1}_R_rems_density' : f'Hour {i_hour+1} - REMs density (count/epoch) in REM stage. Epoch duration is 30 seconds.',
 
@@ -153,11 +186,11 @@ def _get_doc(N_CYCLE, N_HOURS=0):
             f'stage_h{i_hour+1}_R_valid_min' : f'Stage Hour {i_hour+1} - Valid (no artifact) duration (min) in REM stage available for detection.',
             f'stage_h{i_hour+1}_min' : f'Stage Hour {i_hour+1} duration (min).',
 
-            f'stage_h{i_hour+1}_R_rems_count' : f'Stage Hour {i_hour+1} - REMs count in REM stage.',
+            f'stage_h{i_hour+1}_R_rems_count' : f'Stage Hour {i_hour+1} - REMs count in REM stage. Events starting outside R are assigned using the onset of the first overlapping retained R epoch, without changing event timing or duration. Events without a retained R overlap are excluded. Hour boundaries include the start and exclude the end.',
 
             f'stage_h{i_hour+1}_R_rems_sec' : f'Stage Hour {i_hour+1} - Average REMs duration (s) in REM stage.',
 
-            f'stage_h{i_hour+1}_R_amplitude_uV' : f'Stage Hour {i_hour+1} - Average REMs amplitude (µV) in REM stage.',
+            f'stage_h{i_hour+1}_R_amplitude_uV' : f'Stage Hour {i_hour+1} - Average REMs amplitude (uV) in REM stage.',
 
             f'stage_h{i_hour+1}_R_rems_density' : f'Stage Hour {i_hour+1} - REMs density (count/epoch) in REM stage. Epoch duration is 30 seconds.',
 
@@ -176,4 +209,3 @@ def _get_doc(N_CYCLE, N_HOURS=0):
     
     complete_dict = general_dict | detector_dict | channel_dict | sleep_car_dict | total_dict | cycle_dict | clock_hour_dict | stage_hour_dict
     return complete_dict
-

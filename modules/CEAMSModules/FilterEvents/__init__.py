@@ -9,10 +9,8 @@ from .FilterEventsSettingsView import FilterEventsSettingsView
 import config
 if not config.HEADLESS_MODE:
     from .FilterEventsResultsView import FilterEventsResultsView
-    from .Ui_FilterEventsResultsView import Ui_FilterEventsResultsView
     from .Ui_FilterEventsSettingsView import Ui_FilterEventsSettingsView
 else:
     # Create stub classes for headless mode
     FilterEventsResultsView = None
-    Ui_FilterEventsResultsView = None
     Ui_FilterEventsSettingsView = None

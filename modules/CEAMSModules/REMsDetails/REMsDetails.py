@@ -19,6 +19,7 @@ from CEAMSModules.PSGReader.SignalModel import SignalModel
 from CEAMSModules.PSGReader.encoding_utils import ensure_utf8_string
 from CEAMSModules.SleepReport import SleepReport
 from CEAMSModules.REMsDetails.REMsDetailsDoc import write_doc_file
+from CEAMSModules.REMsDetails.REMsDetailsDoc import write_rems_characteristics_info_file
 from CEAMSModules.REMsDetails.REMsDetailsDoc import _get_doc
 from CEAMSModules.SpindlesDetails.SpindlesDetails import SpindlesDetails as EventsDetails
 
@@ -97,7 +98,7 @@ class REMsDetails(SciNode):
         # A master module allows the process to be reexcuted multiple time.
         self._is_master = False 
 
-        self.rems_columns = ['group','name','cycle','Stage','start_sec','duration_sec','amplitude_uV','channels']
+        self.rems_columns = ['group','name','cycle','stage','start_sec','duration_sec','amplitude_uV','channels']
         self.rems_characteristics = ['duration_sec','amplitude_uV']
     
 
@@ -279,6 +280,11 @@ class REMsDetails(SciNode):
         # Need to have "start_sec" and "duration_sec" to use add_stage_cycle_to_spindle_df
         rems_events_details = EventsDetails.add_stage_cycle_to_spindle_df(EventsDetails, rems_events_details, stage_in_cycle_df, sleep_cycles_df)
 
+        # Preserve the detector's sleep-stage assignment for each event.
+        #  keep events where 1/3 duration falls in sleep stage 5 - so it may starts in a different stage but still considered part of stage 5
+        rems_events_details['stage'] = rems_events_details['Stage']
+        rems_events_details = rems_events_details.drop(columns=['Stage'])
+
         # Add amplitude to REMs events if not present
         rems_events_details = self.add_amplitude_to_rems(rems_events_details, signals)
 
@@ -379,17 +385,32 @@ class REMsDetails(SciNode):
                         os.makedirs(folder_rems_char)
                     rems_char_filename = os.path.join(folder_rems_char,subject_id)
                     rems_char_filename = rems_char_filename+'_'+rems_det_param_dict["rems_event_name"]+'.tsv'
+                    write_info_for_cohort_level = True
                 # In the subject folder
                 else:
                     # Extract folder of the file
                     folder_subject = os.path.dirname(recording_path)
                     rems_char_filename = os.path.join(folder_subject,subject_id)
                     rems_char_filename = rems_char_filename+'_'+rems_det_param_dict["rems_event_name"]+'.tsv'
+                    write_info_for_cohort_level = False
                 # Sort from start_time (events are ordered per channel) and remove index for the output text file
                 rems_characteristics_df = rems_characteristics_df.sort_values(by=['start_sec'])
                 rems_characteristics_df = rems_characteristics_df.reset_index(drop=True) # do not add an index column
                 try : 
                     rems_characteristics_df.to_csv(path_or_buf=rems_char_filename, sep='\t', index=False, index_label='False', mode='w', header=True, encoding="utf_8")
+
+                    # Generate info file to describe the variable names
+                    # At cohort level: generate info file only on first PSG (when file doesn't exist)
+                    # At subject level: always generate info file for that PSG
+                    file_name, file_extension = os.path.splitext(rems_char_filename)
+                    if write_info_for_cohort_level:
+                        cohort_info_filepath = os.path.join(folder_rems_char, 
+                            rems_det_param_dict["rems_event_name"] + "_info" + file_extension)
+                        if not os.path.exists(cohort_info_filepath):
+                            write_rems_characteristics_info_file(cohort_info_filepath)
+                    else:
+                        write_rems_characteristics_info_file(file_name + "_info" + file_extension)
+
                     # Log message for the Logs tab
                     self._log_manager.log(self.identifier, f"REMs characteristics from {subject_info['filename']} has been generated.")
                 except :
@@ -503,7 +524,7 @@ class REMsDetails(SciNode):
         rems_density_stage = {}
         stage = 'R'  # REMs only occur in REM sleep
         # Extract rems for the R stage
-        rems_cur_chan_stage = rems_cur_chan_sort[rems_cur_chan_sort['Stage']==int(sleep_stages_name[stage])]
+        rems_cur_chan_stage = rems_cur_chan_sort[rems_cur_chan_sort['stage']==int(sleep_stages_name[stage])]
         rems_cur_chan_stage = rems_cur_chan_stage[self.rems_characteristics]
         # Format the rems_cur_chan_stage dataframe values into float
         rems_cur_chan_stage = rems_cur_chan_stage.applymap(float)
@@ -622,7 +643,7 @@ class REMsDetails(SciNode):
             # Average characteristique per stage (REMs only occur in R stage)
             stage = 'R'  # REMs only occur in REM sleep
             # Extract rems for the R stage
-            rems_cur_chan_stage = rems_sel_df[rems_sel_df['Stage']==int(sleep_stages_name[stage])]
+            rems_cur_chan_stage = rems_sel_df[rems_sel_df['stage']==int(sleep_stages_name[stage])]
             rems_cur_to_mean = rems_cur_chan_stage[self.rems_characteristics]
             # Format the rems_cur_chan_stage dataframe values into float
             rems_cur_to_mean = rems_cur_to_mean.applymap(float)
@@ -802,6 +823,11 @@ class REMsDetails(SciNode):
         """""
         Compute statistics for each stage hour (window-based segmentation)
 
+        REMs starting outside R are selected using the onset of the first
+        overlapping retained R epoch, without changing their original timing
+        or characteristics. REMs without such an overlap are logged and excluded.
+        Hourly selection intervals include their start but exclude their end.
+
         Parameters
         -----------
             rems_cur_chan_sort : pandas DataFrame
@@ -824,15 +850,6 @@ class REMsDetails(SciNode):
             stats   : dict
                 List of statistics for each stage hour.
         """""
-        # REMs events
-        rems_start_times = rems_cur_chan_sort['start_sec'].to_numpy().astype(float)   # numpy array
-        rems_duration_times = rems_cur_chan_sort['duration_sec'].to_numpy().astype(float)  # numpy array
-        rems_end_times = rems_start_times+rems_duration_times        
-
-        # Stage events
-        stage_starts = stage_in_cycle_df['start_sec'].values
-        stage_durations = stage_in_cycle_df['duration_sec'].values
-        stage_ends = stage_starts+stage_durations    
 
         # For each stage hour (window-based segmentation)
         stage_hour_valid_dur_stats = {}
@@ -841,6 +858,7 @@ class REMsDetails(SciNode):
         
         # Calculate expected windows per hour (assuming 30-second epochs)
         # Extract the first value of the unique list of duration_sec in stage_in_cycle_df
+        stage_durations = stage_in_cycle_df['duration_sec'].values
         epoch_duration = round(np.unique(stage_durations)[0])
         expected_windows_per_hour = 3600.0 / epoch_duration  # 120 windows per hour
         
@@ -856,12 +874,33 @@ class REMsDetails(SciNode):
         # Sort stages by start time
         stage_data.sort(key=lambda x: x['start_sec'])
         # Collect rems in R stage
-        rems_mask = rems_cur_chan_sort['Stage'] == int(sleep_stages_name[stage_label])
+        rems_mask = rems_cur_chan_sort['stage'] == int(sleep_stages_name[stage_label])
         if rems_mask.any():
             rems_data.extend(rems_cur_chan_sort[rems_mask].to_dict('records'))
         # Sort rems by start time
         rems_data.sort(key=lambda x: x['start_sec'])
-        
+
+        r_starts = np.array([epoch['start_sec'] for epoch in stage_data])
+        r_ends = np.array([epoch['start_sec'] + epoch['duration_sec'] for epoch in stage_data])
+        rems_selection_data = []
+        for rem in rems_data:
+            # REMs can start outside R; adjust only their hourly selection time, not their original timing.
+            selection_start_sec = rem['start_sec']
+            starts_in_r = (r_starts <= selection_start_sec) & (r_ends > selection_start_sec)
+            if not starts_in_r.any():
+                rem_end_sec = rem['start_sec'] + rem['duration_sec']
+                overlapping_epochs = np.flatnonzero(
+                    (r_starts < rem_end_sec) & (r_ends > rem['start_sec'])
+                )
+                if overlapping_epochs.size == 0:
+                    self._log_manager.log(self.identifier,
+                        f"REM at {rem['start_sec']} s does not overlap any retained R epoch "
+                        "and is excluded from cumulative R-hour statistics.")
+                    continue
+                # Adjust selection only: a detector-labelled REM can start in N2 before R.
+                selection_start_sec = r_starts[overlapping_epochs[0]]
+            rems_selection_data.append((selection_start_sec, rem))
+
         # Process each hour
         for i_hour in range(self.N_HOURS):
             hour_label = label_stats+str(i_hour+1)
@@ -879,7 +918,10 @@ class REMsDetails(SciNode):
                 # Filter rems_cur_hour to only include REMs within the stage time range
                 stage_start_time = stages_cur_hour[0]['start_sec']
                 stage_end_time = stages_cur_hour[-1]['start_sec'] + stages_cur_hour[-1]['duration_sec']
-                rems_cur_hour = [rem for rem in rems_data if stage_start_time <= rem['start_sec'] <= stage_end_time]
+                rems_cur_hour = [
+                    rem for selection_start_sec, rem in rems_selection_data
+                    if stage_start_time <= selection_start_sec < stage_end_time
+                ]
 
             # Convert back to DataFrames for processing
             if stages_cur_hour:
@@ -987,7 +1029,7 @@ class REMsDetails(SciNode):
         # REMs only occur in R stage
         stage = 'R'
         # Count the number of REMs for R stage
-        rems_cur_stage = rems_cur_chan_df[rems_cur_chan_df['Stage']==int(commons.sleep_stages_name[stage])]
+        rems_cur_stage = rems_cur_chan_df[rems_cur_chan_df['stage']==int(commons.sleep_stages_name[stage])]
         rems_count_cur_stage = len(rems_cur_stage)
 
         if valid_dur[f'{label_stats}_{stage}_valid_min']>0:
@@ -1101,8 +1143,8 @@ class REMsDetails(SciNode):
         activity_key = f'{label_stats}_{stage}_pkpk_rems_activity_index'
         rem_stage_num = int(sleep_stages_name[stage])
 
-        if len(rems_df) > 0 and 'Stage' in rems_df.columns:
-            rems_in_stage = rems_df[rems_df['Stage'] == rem_stage_num]
+        if len(rems_df) > 0 and 'stage' in rems_df.columns:
+            rems_in_stage = rems_df[rems_df['stage'] == rem_stage_num]
         else:
             rems_in_stage = rems_df
 
@@ -1154,8 +1196,8 @@ class REMsDetails(SciNode):
         else:
             rem_stage_dur_sec = 0
 
-        if len(rems_df) > 0 and 'Stage' in rems_df.columns:
-            rems_in_stage = rems_df[rems_df['Stage'] == rem_stage_num]
+        if len(rems_df) > 0 and 'stage' in rems_df.columns:
+            rems_in_stage = rems_df[rems_df['stage'] == rem_stage_num]
         else:
             rems_in_stage = rems_df
         rems_dur_sec = rems_in_stage['duration_sec'].astype(float).sum() if len(rems_in_stage) > 0 else 0
@@ -1164,4 +1206,3 @@ class REMsDetails(SciNode):
             phasic_pct = round(rems_dur_sec / rem_stage_dur_sec * 100, 2)
             return {phasic_key: phasic_pct, tonic_key: round(100 - phasic_pct, 2)}
         return {phasic_key: np.nan, tonic_key: np.nan}
-

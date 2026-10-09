@@ -9,10 +9,8 @@ from .REMsDetectionYasaSettingsView import REMsDetectionYasaSettingsView
 import config
 if not config.HEADLESS_MODE:
     from .REMsDetectionYasaResultsView import REMsDetectionYasaResultsView
-    from .Ui_REMsDetectionYasaResultsView import Ui_REMsDetectionYasaResultsView
     from .Ui_REMsDetectionYasaSettingsView import Ui_REMsDetectionYasaSettingsView
 else:
     # Create stub classes for headless mode
     REMsDetectionYasaResultsView = None
-    Ui_REMsDetectionYasaResultsView = None
     Ui_REMsDetectionYasaSettingsView = None
