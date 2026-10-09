@@ -24,7 +24,7 @@ class Ui_SSWDSaveFiles(object):
     def setupUi(self, SSWDSaveFiles):
         if not SSWDSaveFiles.objectName():
             SSWDSaveFiles.setObjectName(u"SSWDSaveFiles")
-        SSWDSaveFiles.resize(999, 750)
+        SSWDSaveFiles.resize(999, 951)
         SSWDSaveFiles.setMinimumSize(QSize(0, 0))
         SSWDSaveFiles.setStyleSheet(u"font: 12pt \"Roboto\";")
         self.verticalLayout_4 = QVBoxLayout(SSWDSaveFiles)
@@ -224,7 +224,7 @@ class Ui_SSWDSaveFiles(object):
         SSWDSaveFiles.setWindowTitle("")
         self.label_title.setText(QCoreApplication.translate("SSWDSaveFiles", u"<html><head/><body><p><span style=\" font-weight:600;\">Slow wave events</span></p></body></html>", None))
         self.label_3.setText(QCoreApplication.translate("SSWDSaveFiles", u"Slow wave events are added in the accessory file (.tsv, .sts or .ent) of each PSG recording.", None))
-        self.label_title_2.setText(QCoreApplication.translate("SSWDSaveFiles", u"<html><head/><body><p><span style=\" font-weight:600;\">Slow wave characteristics</span></p></body></html>", None))
+        self.label_title_2.setText(QCoreApplication.translate("SSWDSaveFiles", u"<html><head/><body><p><span style=\" font-weight:600;\">Slow wave characteristics per-event level</span></p></body></html>", None))
         self.textEdit.setHtml(QCoreApplication.translate("SSWDSaveFiles", u"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset=\"utf-8\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
@@ -232,28 +232,29 @@ class Ui_SSWDSaveFiles(object):
 "li.unchecked::marker { content: \"\\2610\"; }\n"
 "li.checked::marker { content: \"\\2612\"; }\n"
 "</style></head><body style=\" font-family:'Roboto'; font-size:12pt; font-weight:400; font-style:normal;\">\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" text-decoration: underline;\">Slow wave details by event level </span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">   - <span style=\" color:#000000;\">peak-to-peak amplitude (\u00b5V) corresponds to H to D on the image (A)</span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; ma"
-                        "rgin-right:0px; -qt-block-indent:0; text-indent:0px;\">   - duration (s) corresponds to T <span style=\" color:#000000;\">on the image (A)</span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">   - frequency (Hz) corresponds to 1/T <span style=\" color:#000000;\">on the image (A)</span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">   - <span style=\" font-family:'Arial','sans-serif'; color:#000000; background-color:transparent;\">negative peak amplitude </span><span style=\" color:#000000;\">(\u00b5V) correspond to H on the image (A)</span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" color:#000000;\">   - </span><a name=\"docs-internal-guid-7597fb9e-7fff-dd5c-4478-b33f09691339\"></a><span style=\" font-family:'Arial','sans-serif'; color:#000000; bac"
-                        "kground-color:transparent;\">n</span><span style=\" font-family:'Arial','sans-serif'; color:#000000; background-color:transparent;\">egative duration (s) </span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Arial','sans-serif'; color:#000000; background-color:transparent;\">   - </span><a name=\"docs-internal-guid-f6ea236d-7fff-1fb4-6202-3e00854b0b90\"></a><span style=\" font-family:'Arial','sans-serif'; color:#000000; background-color:transparent;\">p</span><span style=\" font-family:'Arial','sans-serif'; color:#000000; background-color:transparent;\">ositive duration (s)</span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" color:#000000;\">   - transition frequency (Hz) corresponds to 1/(2 tau) on the image (A)</span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:"
-                        "0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" color:#000000;\">   - slope (\u00b5V/s)</span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" color:#000000;\">        - from the 0 crossing to the min of the negative component</span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" color:#000000;\">        - from the min of the negative component to the max of the positive component</span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" color:#000000;\">        - from the max of the positive to the 0 crossing</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">   -Total wave duration (s): corresponds to T on image (A)</p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">   - Frequency (Hz): inverse of total duration (1/T on image A)</p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">   - Peak-to-peak amplit"
+                        "ude (\u00b5V): corresponds to H to D on image (A)</p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">   - Negative peak amplitude (\u00b5V): corresponds to H on image (A)</p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">   - Positive peak amplitude (\u00b5V): corresponds to D on image (A)</p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">   - Negative half-wave duration (s): duration of negative portion</p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">   - Negative peak occurrence (s): time from wave onset to negative peak</p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">   - Positive half-wave duration (s): duration of "
+                        "positive portion</p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">   - Positive peak occurrence (s): time from wave onset to positive peak</p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">   - Slope to negative peak (\u00b5V/s): from zero-crossing to negative peak</p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">   - Slope from positive peak (\u00b5V/s): from positive peak to zero-crossing</p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">   - Transition slope (\u00b5V/s): from negative peak to positive peak</p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">   - Transition frequency (Hz): inverse of twice the peak-to-pe"
+                        "ak interval </p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">     [1/(2*(pos_peak_sec-neg_peak_sec)) on image A]</p>\n"
 "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; color:#000000;\"><br /></p>\n"
-"<p style=\" margin-to"
-                        "p:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" color:#000000;\">*Files are saved in a new folder named &quot;slow_waves_characteristics&quot; at the cohort report level.</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" color:#000000;\">*Files are saved in a new folder named &quot;slow_waves_characteristics&quot; at the cohort report level.</span></p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" color:#000000;\">*Without the cohort report : each file is saved in the same folder as the PSG file.</span></p></body></html>", None))
         self.checkBox_export_sw.setText(QCoreApplication.translate("SSWDSaveFiles", u"To export characteristics of each slow wave (one file per recording)", None))
         self.image.setText("")
-        self.label.setText(QCoreApplication.translate("SSWDSaveFiles", u"<html><head/><body><p><span style=\" font-weight:600;\">Slow wave cohort report</span></p></body></html>", None))
+        self.label.setText(QCoreApplication.translate("SSWDSaveFiles", u"<html><head/><body><p><span style=\" font-weight:600;\">Slow wave cohort report per-</span><span style=\" font-weight:700;\">subject level</span></p></body></html>", None))
         self.textEdit_2.setHtml(QCoreApplication.translate("SSWDSaveFiles", u"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset=\"utf-8\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
@@ -261,19 +262,17 @@ class Ui_SSWDSaveFiles(object):
 "li.unchecked::marker { content: \"\\2610\"; }\n"
 "li.checked::marker { content: \"\\2612\"; }\n"
 "</style></head><body style=\" font-family:'Roboto'; font-size:12pt; font-weight:400; font-style:normal;\">\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" text-decoration: underline;\">Slow wave details by subject level</span></p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">    - slow wave count</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">    - the average slow wave characteri"
-                        "stics listed above</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">        - total (all selected stages) - Start time is the sleep onset</p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">    - the average slow wave characteristics listed above</p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">        - total (all selected stages) - Start time is the sleep onse"
+                        "t</p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">        - per sleep stage - Only the time spent in each individual sleep stage is considered.</p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">        - per sleep cycle - Start time is the sleep onset</p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">        - per clock hour - Start time is the sleep onset</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">        - per hour spent in each stage - Start time is when each specific stage fi"
-                        "rst begins in the timeline.</p></body></html>", None))
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">        - per hour spent in each stage - Start time is when each specific stage first begins in the timeline.</p></body></html>", None))
         self.checkBox_save_cohort.setText(QCoreApplication.translate("SSWDSaveFiles", u"To save the detailed events report for the cohort (cohort report)", None))
         self.lineEdit_cohort_report.setPlaceholderText(QCoreApplication.translate("SSWDSaveFiles", u"Select the file to save the detailed cohort report...", None))
-        self.pushButto_browse.setText(QCoreApplication.translate("SSWDSaveFiles", u"Browse", None))
+        self.pushButto_browse.setText(QCoreApplication.translate("SSWDSaveFiles", u"Choose", None))
         self.label_2.setText(QCoreApplication.translate("SSWDSaveFiles", u"* The slow wave details are appended at the end of the cohort report if it exists.", None))
         self.label_6.setText(QCoreApplication.translate("SSWDSaveFiles", u"<html><head/><body><p><span style=\" font-weight:600;\">Sleep stages</span></p></body></html>", None))
         self.textEdit_3.setHtml(QCoreApplication.translate("SSWDSaveFiles", u"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"

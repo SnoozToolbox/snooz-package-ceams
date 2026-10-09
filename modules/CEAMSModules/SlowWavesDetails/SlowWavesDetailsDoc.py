@@ -5,6 +5,21 @@ See the file LICENCE for full license details.
 import csv
 import re
 
+def write_slow_wave_characteristics_info_file(filepath):
+    """
+    Write info file for slow wave characteristics TSV file.
+    Describes each column in the slow wave characteristics export.
+    """
+    with open(filepath, 'w', newline='', encoding='utf-8') as csvfile:
+        docwriter = csv.writer(csvfile, delimiter='\t')
+
+        doc = _get_slow_wave_characteristics_doc()
+
+        for i, (k, v) in enumerate(doc.items()):
+            row_name = excel_column_name(i+1)
+            docwriter.writerow([row_name, k, v])
+
+
 def write_doc_file(filepath, N_CYCLE, N_HOURS=0, unscored=False):
     with open(filepath, 'w', newline='', encoding='utf-8') as csvfile:
         docwriter = csv.writer(csvfile, delimiter='\t')
@@ -23,6 +38,33 @@ def excel_column_name(number):
         column_name = chr(65 + remainder) + column_name  # 65 is the ASCII code for 'A'
         number = (number - 1) // 26
     return column_name
+
+
+def _get_slow_wave_characteristics_doc():
+    """
+    Get documentation dictionary for individual slow wave characteristics.
+    """
+    slow_wave_char_dict = {
+        'group': 'Event group (slow wave)',
+        'name': 'Slow wave event name (specific to the detection algorithm)',
+        'cycle': 'Sleep cycle number (1-based) during which the slow wave occurred (NaN for unscored)',
+        'stage': 'Sleep stage during which the slow wave occurred (1=N1, 2=N2, 3=N3, 5=REM, 9=Unscored)',
+        'start_sec': 'Slow wave start time (s)',
+        'duration_sec': 'Slow wave total duration (s)',
+        'channels': 'Channel label(s) where the slow wave was detected',
+        'pkpk_amp_uV': 'Slow wave peak-to-peak amplitude (uV)',
+        'freq_Hz': 'Slow wave frequency (Hz), inverse of the duration',
+        'neg_amp_uV': 'Slow wave negative amplitude (uV)',
+        'neg_sec': 'Slow wave negative half-wave duration (s)',
+        'neg_peak_sec': 'Duration (s) from slow wave onset to the negative peak',
+        'pos_sec': 'Slow wave positive half-wave duration (s)',
+        'pos_peak_sec': 'Duration (s) from slow wave onset to the positive peak',
+        'slope_0_min': 'Slope from slow wave onset to the negative peak (uV/s)',
+        'slope_min_max': 'Slope from the negative peak to the positive peak (uV/s)',
+        'slope_max_0': 'Slope from the positive peak to the end of the slow wave (uV/s)',
+        'trans_freq_Hz': 'Transition frequency (Hz), calculated as the inverse of twice the duration between the negative and positive peaks. Formula: 1/(2*(pos_peak_sec-neg_peak_sec))',
+    }
+    return slow_wave_char_dict
 
 
 def _get_doc(N_CYCLE, N_HOURS=0, unscored=False):

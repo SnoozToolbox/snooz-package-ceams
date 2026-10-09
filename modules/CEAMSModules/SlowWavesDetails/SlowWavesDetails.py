@@ -19,6 +19,7 @@ from CEAMSModules.PSGReader.SignalModel import SignalModel
 from CEAMSModules.PSGReader.encoding_utils import ensure_utf8_string
 from CEAMSModules.SleepReport import SleepReport
 from CEAMSModules.SlowWavesDetails.SlowWavesDetailsDoc import write_doc_file
+from CEAMSModules.SlowWavesDetails.SlowWavesDetailsDoc import write_slow_wave_characteristics_info_file
 from CEAMSModules.SlowWavesDetails.SlowWavesDetailsDoc import _get_doc
 from CEAMSModules.SpindlesDetails.SpindlesDetails import SpindlesDetails as EventsDetails
 
@@ -465,27 +466,48 @@ class SlowWavesDetails(SciNode):
             if len(sw_characteristics_df)>0:
                 # We need to link the sw characteristics file with the PSG recording
                 subject_id = subject_info['filename'] 
+                write_info_for_cohort_level = False
                 # In a folder at the cohort level
                 if len(cohort_filename)>0:
                     # Extract folder of the file
                     folder_cohort = os.path.dirname(cohort_filename)
-                    # Make directory specific for spindles characteristics
+                    # Make directory specific for slow wave characteristics
                     folder_sw_char = os.path.join(folder_cohort, 'slow_wave_characteristics')
                     if not os.path.isdir(folder_sw_char):
                         os.makedirs(folder_sw_char)
                     sw_char_filename = os.path.join(folder_sw_char,subject_id)
                     sw_char_filename = sw_char_filename+'_'+slow_wave_det_param["sw_event_name"]+'.tsv'
+                    write_info_for_cohort_level = True
                 # In the subject folder
                 else:
                     # Extract folder of the file
                     folder_subject = os.path.dirname(recording_path)
                     sw_char_filename = os.path.join(folder_subject,subject_id)
                     sw_char_filename = sw_char_filename+'_'+slow_wave_det_param["sw_event_name"]+'.tsv'
+                    write_info_for_cohort_level = False
                 # Sort from start_time (events are ordered per channel) and remove index for the output text file
                 sw_characteristics_df = sw_characteristics_df.sort_values(by=['start_sec'])
                 sw_characteristics_df = sw_characteristics_df.reset_index(drop=True) # do not add an index column
                 try : 
                     sw_characteristics_df.to_csv(path_or_buf=sw_char_filename, sep='\t', index=False, index_label='False', mode='w', header=True, encoding="utf_8")
+                    
+                    # Generate info file to describe the variable names
+                    # At cohort level: generate info file only on first PSG (when file doesn't exist)
+                    # At subject level: always generate info file for that PSG
+                    file_name, file_extension = os.path.splitext(sw_char_filename)
+                    info_filepath = file_name + "_info" + file_extension
+                    
+                    if write_info_for_cohort_level:
+                        # Cohort level: generate a single info file in the slow_wave_characteristics folder
+                        cohort_info_filepath = os.path.join(folder_sw_char, 
+                            slow_wave_det_param["sw_event_name"] + "_info" + file_extension)
+                        # Write info file only if it doesn't already exist
+                        if not os.path.exists(cohort_info_filepath):
+                            write_slow_wave_characteristics_info_file(cohort_info_filepath)
+                    else:
+                        # Subject level: generate info file for each PSG
+                        write_slow_wave_characteristics_info_file(info_filepath)
+                    
                     # Log message for the Logs tab
                     self._log_manager.log(self.identifier, f"Slow wave characteristics from {subject_info['filename']} has been generated.")
                 except :

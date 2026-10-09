@@ -63,6 +63,8 @@ class SSWDSaveFiles( BaseStepView,  Ui_SSWDSaveFiles, QtWidgets.QWidget):
 
     # Called when the user check/uncheck the checkbox to export the cohort report
     def check_save_cohort_slot(self):
+        if not self.checkBox_save_cohort.isChecked():
+            self.lineEdit_cohort_report.setText("")
         self.lineEdit_cohort_report.setEnabled(self.checkBox_save_cohort.isChecked())
         self.pushButto_browse.setEnabled(self.checkBox_save_cohort.isChecked())
 

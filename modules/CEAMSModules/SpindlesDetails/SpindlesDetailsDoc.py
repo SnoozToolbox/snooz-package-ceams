@@ -15,6 +15,21 @@ def write_doc_file(filepath, N_CYCLE, spindle_event_name, N_HOURS=0):
             docwriter.writerow([row_name,k,v])
 
 
+def write_spindle_characteristics_info_file(filepath):
+    """
+    Write info file for spindle characteristics TSV file.
+    Describes each column in the spindle characteristics export.
+    """
+    with open(filepath, 'w', newline='', encoding='utf-8') as csvfile:
+        docwriter = csv.writer(csvfile, delimiter='\t')
+
+        doc = _get_spindle_characteristics_doc()
+
+        for i, (k, v) in enumerate(doc.items()):
+            row_name = excel_column_name(i+1)
+            docwriter.writerow([row_name, k, v])
+
+
 def excel_column_name(number):
     column_name = ""
     while number > 0:
@@ -22,6 +37,28 @@ def excel_column_name(number):
         column_name = chr(65 + remainder) + column_name  # 65 is the ASCII code for 'A'
         number = (number - 1) // 26
     return column_name
+
+
+def _get_spindle_characteristics_doc():
+    """
+    Get documentation dictionary for individual spindle characteristics.
+    """
+    spindle_char_dict = {
+        'group': 'Event group (spindle)',
+        'name': 'Spindle event name (specific to the detection algorithm)',
+        'start_sec': 'Spindle start time (s)',
+        'duration_sec': 'Spindle total duration (s)',
+        'channels': 'Channel label(s) where the spindle was detected',
+        'stage': 'Sleep stage during which the spindle occurred (1=N1, 2=N2, 3=N3, 5=REM)',
+        'cycle': 'Sleep cycle number (1-based) during which the spindle occurred',
+        'dom_freq_Hz': 'Spindle dominant frequency (Hz), where spectral energy is maximum',
+        'avg_freq_Hz': 'Spindle average frequency (Hz), counting peaks',
+        'amp_pkpk_uV': 'Spindle peak-to-peak amplitude (uV)',
+        'peak_sec': 'Duration (s) from spindle onset to the maximum peak-to-peak amplitude',
+        'amp_rms_uV': 'Spindle Root Mean Square (RMS) amplitude (uV)',
+        'rms_dur_uVsec': 'RMS Spindle Activity Index component: RMS amplitude x spindle duration (uV sec)',
+    }
+    return spindle_char_dict
 
 
 def _get_doc(N_CYCLE, spindle_event_name, N_HOURS=0):

@@ -22,6 +22,7 @@ from CEAMSModules.PSGReader import commons
 from CEAMSModules.PSGReader.encoding_utils import ensure_utf8_string
 from CEAMSModules.SleepReport import SleepReport
 from CEAMSModules.SpindlesDetails.SpindlesDetailsDoc import write_doc_file
+from CEAMSModules.SpindlesDetails.SpindlesDetailsDoc import write_spindle_characteristics_info_file
 from CEAMSModules.SpindlesDetails.SpindlesDetailsDoc import _get_doc
 from CEAMSModules.SignalsFromEvents.SignalsFromEvents import SignalsFromEvents
 
@@ -570,23 +571,43 @@ class SpindlesDetails(SciNode):
                         os.makedirs(folder_ss_char)
                     ss_char_filename = os.path.join(folder_ss_char,subject_id)
                     ss_char_filename = ss_char_filename+'_'+spindle_sel_param['spindle_name']+'.tsv'
+                    write_info_for_cohort_level = True
                 # In the subject folder
                 else:
                     # Extract folder of the file
                     folder_subject = os.path.dirname(recording_path)
                     ss_char_filename = os.path.join(folder_subject,subject_id)
                     ss_char_filename = ss_char_filename+'_'+spindle_sel_param['spindle_name']+'.tsv'
+                    write_info_for_cohort_level = False
                 # Sort from start_time (events are ordered per channel) and remove index for the output text file
                 spindle_characteristics_df = spindle_characteristics_df.sort_values(by=['start_sec'])
                 spindle_characteristics_df = spindle_characteristics_df.reset_index(drop=True) # do not add an index column
                 try : 
                     spindle_characteristics_df.to_csv(path_or_buf=ss_char_filename, sep='\t', index=False, index_label='False', mode='w', header=True, encoding="utf_8")
+                    
+                    # Generate info file to describe the variable names
+                    # At cohort level: generate info file only on first PSG (when file doesn't exist)
+                    # At subject level: always generate info file for that PSG
+                    file_name, file_extension = os.path.splitext(ss_char_filename)
+                    info_filepath = file_name + "_info" + file_extension
+                    
+                    if write_info_for_cohort_level:
+                        # Cohort level: generate a single info file in the spindles_characteristics folder
+                        cohort_info_filepath = os.path.join(folder_ss_char, 
+                            spindle_sel_param['spindle_name'] + "_info" + file_extension)
+                        # Write info file only if it doesn't already exist
+                        if not os.path.exists(cohort_info_filepath):
+                            write_spindle_characteristics_info_file(cohort_info_filepath)
+                    else:
+                        # Subject level: generate info file for each PSG
+                        write_spindle_characteristics_info_file(info_filepath)
+                    
                     # Log message for the Logs tab
                     self._log_manager.log(self.identifier, f"Spindles characteristics from {subject_info['filename']} has been generated.")
                 except :
                     error_message = f"Snooz can not write in the file {ss_char_filename}."+\
                         f" Check if the drive is accessible and ensure the file is not already open."
-                    raise NodeRuntimeException(self.identifier, "SpindlesDetails", error_message)  
+                    raise NodeRuntimeException(self.identifier, "SpindlesDetails", error_message)
             else:
                 # Log message for the Logs tab
                 self._log_manager.log(self.identifier, f"No spindles for {subject_info['filename']}.")
