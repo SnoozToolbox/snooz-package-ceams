@@ -577,13 +577,13 @@ class PSGReaderSettingsView( BaseSettingsView,  Ui_PSGReaderSettingsView, QtWidg
                 group_item.appendRow([name_item, count_item])
             file_item.appendRow([group_item,group_count_item])
 
-            # Set the scoring status
-            if len(stages)==0:
-                file_item.setData('unscored', Qt.UserRole + 2)
-            elif any(stages['name']!='9'):
-                file_item.setData('scored', Qt.UserRole + 2)
-            else:
-                file_item.setData('unscored', Qt.UserRole + 2)
+        # Set the scoring status (must run even when the file has no event groups)
+        if len(stages)==0:
+            file_item.setData('unscored', Qt.UserRole + 2)
+        elif any(stages['name']!='9'):
+            file_item.setData('scored', Qt.UserRole + 2)
+        else:
+            file_item.setData('unscored', Qt.UserRole + 2)
 
         # Second step, form a tree of standardItem for the group of events and their events
         # from this dictionary.
