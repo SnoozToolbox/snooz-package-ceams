@@ -64,7 +64,7 @@ class DetectorStep(BaseStepView, Ui_DetectorStep, QtWidgets.QWidget):
         #self._context_manager["context_OutputFiles"] = {"the_data_I_want_to_share":"some_data"}
 
         # description.json file to know the ID of the node
-        node_id_REMsDetectionYASA = "559de2e5-dc78-4449-8582-cc9f3fdd9697"
+        node_id_REMsDetectionYASA = "5b36c10e-696e-40d2-be30-12548a806e0c"
         self._relative_prominence_topic = f'{node_id_REMsDetectionYASA}.relative_prominence'
         self._pub_sub_manager.subscribe(self, self._relative_prominence_topic)
 

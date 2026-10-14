@@ -87,6 +87,12 @@
                 "value": "",
                 "connections": {},
                 "sub_plugs": {}
+            },
+            "save_directory": {
+                "name": "save_directory",
+                "value": "",
+                "connections": {},
+                "sub_plugs": {}
             }
         },
         "outputs": {

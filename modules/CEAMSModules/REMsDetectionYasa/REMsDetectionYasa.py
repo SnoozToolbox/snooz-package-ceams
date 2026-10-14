@@ -60,6 +60,8 @@ class REMsDetectionYasa(SciNode):
             Group name for REM events.
         include: int or list
             Sleep stage(s) to include in REM detection.
+        save_directory: str
+            Directory to save the REM detection results.
     
     Returns
     -------
@@ -91,6 +93,7 @@ class REMsDetectionYasa(SciNode):
         InputPlug('rems_event_name', self)
         InputPlug('rems_event_group', self)
         InputPlug('include', self)
+        InputPlug('save_directory', self)
         
         # Output plugs
         OutputPlug('events', self)
@@ -100,7 +103,7 @@ class REMsDetectionYasa(SciNode):
         self._is_master = False 
     
     def compute(self, filename, signals, events, sleepstages, amplitude, duration, freq_rem, 
-                relative_prominence, remove_outliers, rems_event_name, rems_event_group, include):     
+                relative_prominence, remove_outliers, rems_event_name, rems_event_group, include, save_directory):     
         """
         Perform REM detection using YASA.
 
@@ -124,6 +127,15 @@ class REMsDetectionYasa(SciNode):
             raise NodeInputException(self.identifier, "Invalid 'signals' input. Must be a list containing at least two elements.")
         if not isinstance(sleepstages, pd.DataFrame):
             raise NodeInputException(self.identifier, "Invalid 'sleepstages' input. Must be a DataFrame.")
+        if not isinstance(save_directory, str) or save_directory == "":
+            raise NodeInputException(self.identifier, "Invalid 'save_directory' input. Must be a string.")
+        # save_directory is a file path (name + format); ensure its parent directory exists
+        save_dir = os.path.dirname(save_directory)
+        if not save_dir:
+            raise NodeInputException(self.identifier, "Invalid 'save_directory' input. Must include a valid directory path.")
+        rems_char_dir = os.path.join(save_dir, 'rems_characteristics')
+        if not os.path.exists(rems_char_dir):
+            os.makedirs(rems_char_dir)
         
         use_progress_bar = sys.stdout is not None and sys.stdout.isatty() ### added to check
         sections_start_times = np.unique([signal.start_time for signal in signals])  # Get unique start times of signals
@@ -218,14 +230,8 @@ class REMsDetectionYasa(SciNode):
 
             if len(filename)>0:
                 subject_id = os.path.basename(filename)
-                # Extract folder of the file
-                folder_cohort = os.path.dirname(filename)
-                # Make directory specific for rems characteristics
-                folder_rems_char = os.path.join(folder_cohort, 'rems_characteristics')
-                if not os.path.isdir(folder_rems_char):
-                    os.makedirs(folder_rems_char)
-                rems_char_filename = os.path.join(folder_rems_char,subject_id)
-                rems_detection_df.to_csv(f"{rems_char_filename}_YASA_REMs_summary.tsv", sep='\t')
+                rems_char_filename = os.path.join(rems_char_dir, f"{subject_id}_YASA_REMs_summary.tsv")
+                rems_detection_df.to_csv(rems_char_filename, sep='\t')
 
             # Convert results to Snooz format
             snooz_rem = pd.DataFrame({
