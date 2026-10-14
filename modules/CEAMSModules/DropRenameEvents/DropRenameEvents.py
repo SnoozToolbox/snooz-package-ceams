@@ -170,9 +170,16 @@ class DropRenameEvents(SciNode):
         # they must be added on the new_events. I.E. renaming the stage 4 to stage 3 will remove the original (valid) stage 3.
         # The module has to be used with the PSGWriter (not the tsvwriter)
         if len(events_to_rename)>0:
+            preserved_targets = set()
             # Find if the renamed events are also in the original events - Are there any stage 3 in the original events?
-            for group_ori, name_ori, group_new, name_new in events_to_rename: 
-                index_to_keep = events[(events['group']==group_new) & (events['name']==name_new)].index.to_list()
+            for group_ori, name_ori, group_new, name_new in events_to_rename:
+                target = (group_new, name_new)
+                if target in preserved_targets:
+                    continue
+                preserved_targets.add(target)
+                # Preserve each target once, excluding originals already renamed.
+                index_to_keep = events[(events['group']==group_new) & (events['name']==name_new) \
+                    & ~events.index.isin(index_to_ren_all_flat)].index.to_list()
                 # Add those events to the new_events
                 if len(index_to_keep)>0:
                     new_events_to_keep = events.loc[index_to_keep].copy()
