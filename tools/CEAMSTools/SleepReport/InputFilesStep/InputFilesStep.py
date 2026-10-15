@@ -171,7 +171,6 @@ class InputFilesStep( BaseStepView,  Ui_InputFilesStep, QtWidgets.QWidget):
         self._identification_mapper.addMapping(self.id2_lineedit, 2)
         self._identification_mapper.addMapping(self.first_name_lineedit, 3)
         self._identification_mapper.addMapping(self.last_name_lineedit, 4)
-        self._identification_mapper.addMapping(self.sex_combobox, 5)
         self._identification_mapper.addMapping(self.birthdate_timeedit, 6)
         self._identification_mapper.addMapping(self.record_date_timeedit, 7)
         self._identification_mapper.addMapping(self.age_spinbox, 8)
@@ -187,7 +186,6 @@ class InputFilesStep( BaseStepView,  Ui_InputFilesStep, QtWidgets.QWidget):
         self.id2_lineedit.textChanged.connect(self._identification_mapper.submit)
         self.first_name_lineedit.textChanged.connect(self._identification_mapper.submit)
         self.last_name_lineedit.textChanged.connect(self._identification_mapper.submit)
-        self.sex_combobox.currentTextChanged.connect(self._identification_mapper.submit)
         self.birthdate_timeedit.dateChanged.connect(self._identification_mapper.submit)
         self.record_date_timeedit.dateChanged.connect(self._identification_mapper.submit)
         self.age_spinbox.textChanged.connect(self._identification_mapper.submit)
@@ -201,6 +199,9 @@ class InputFilesStep( BaseStepView,  Ui_InputFilesStep, QtWidgets.QWidget):
         
         self._current_id_row = row
         self._identification_mapper.toFirst()
+        sex = id_model.id_data.get('sex') or Sex.unknown
+        sex_index = {Sex.female: 0, Sex.male: 1, Sex.unknown: 2}.get(sex, 2)
+        self.sex_combobox.setCurrentIndex(sex_index)
 
 
     def _sync_current_identification_widgets_to_model(self):
@@ -245,6 +246,8 @@ class InputFilesStep( BaseStepView,  Ui_InputFilesStep, QtWidgets.QWidget):
                     WarningDialog(f"Could not open file:{filename}")
                     return
             id_data = self._psg_reader_manager.get_subject_info()
+            if id_data.get('sex') is None:
+                id_data['sex'] = Sex.unknown
             events_data = self._psg_reader_manager.get_events()
             sleep_stages = self._psg_reader_manager.get_sleep_stages()
 
