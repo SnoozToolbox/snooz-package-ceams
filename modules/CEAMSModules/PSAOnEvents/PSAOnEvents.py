@@ -5,6 +5,8 @@ See the file LICENCE for full license details.
 """
     PSAOnEvents
     Compile the PSA run on selected events.  The compilation is for a cohort.
+    PSDs are indexed once by channel, sampling rate and start sample for reuse
+    across total/hour/cycle compilation; matching does not resample the signal.
 """
 
 import numpy as np
@@ -371,6 +373,7 @@ class PSAOnEvents(SciNode):
         unique_event_name = sorted(set(unique_event_name))
 
         # The channels are grouped in the PSA cohort file
+        psd_index = self._index_psd_by_start_sample(PSD)
         report_df = []
         for channel in channels_list:
             # Reset accumulation for the current channel
@@ -408,7 +411,7 @@ class PSAOnEvents(SciNode):
             # Total / hour / cycle compilation
             # --------------------------------------------------------------------------
             if dist_total:
-                self.compute_fft_win_event(unique_event_name, PSD, PSA_evt_channel, channel, 'total')
+                self.compute_fft_win_event(unique_event_name, psd_index, PSA_evt_channel, channel, 'total')
                 labels_computed.append('total')
 
             if dist_hour:
@@ -423,7 +426,7 @@ class PSAOnEvents(SciNode):
                     else:
                         evt_div = PSA_evt_channel.iloc[0:0].copy()
                     self.compute_fft_win_event(
-                        unique_event_name, PSD, evt_div, channel, label
+                        unique_event_name, psd_index, evt_div, channel, label
                     )
                     labels_computed.append(label)
 
@@ -456,7 +459,7 @@ class PSAOnEvents(SciNode):
                         self.PSD_act_param[f'{label}_length_min'] = np.NaN
                         evt_div = PSA_evt_channel.iloc[0:0].copy()
                     self.compute_fft_win_event(
-                        unique_event_name, PSD, evt_div, channel, label
+                        unique_event_name, psd_index, evt_div, channel, label
                     )
                     labels_computed.append(label)
                 
@@ -588,7 +591,7 @@ class PSAOnEvents(SciNode):
         else:
             raise NodeInputException(self.identifier, print_label, \
                 f"PSACompilation input of wrong size. If both group and name are defined they need to be the same length, group length:\
-                     {len(art_group_lst)} and name length: {len(art_name_lst)}") 
+                    {len(art_group_lst)} and name length: {len(art_name_lst)}") 
         artefact_info_param = {}
         artefact_info_param[print_label+'_group_name_list']=''
         for i_art, group in enumerate(art_group_lst):
@@ -706,6 +709,18 @@ class PSAOnEvents(SciNode):
         return n_arts
 
 
+    @staticmethod
+    def _index_psd_by_start_sample(PSD):
+        """Index PSD references once per run, retaining duplicate starts and input order."""
+        psd_index = {}
+        for position, item in enumerate(PSD):
+            fs = item['sample_rate']
+            start_sample = int(np.round(item['start_time'] * fs))
+            starts = psd_index.setdefault(item['chan_label'], {}).setdefault(fs, {})
+            starts.setdefault(start_sample, []).append((position, item['psd']))
+        return psd_index
+
+
     # --------------------------------------------------------------------------
     # Compute the total and the valid number of fft windows and
     # average the activity across windows through the recording
@@ -714,8 +729,8 @@ class PSAOnEvents(SciNode):
     # Parameters :
     #   event_name_unique : list of string
     #       List pf event label to compute the PSA on
-    #   PSD : list of dict for the current channel
-    #       psds of signals
+    #   psd_index : dict
+    #       PSDs indexed by channel, sampling rate and start sample
     #   PSA_evt_selected : pandas DataFrame
     #       events to run the PSA on
     #   label_stat_div : str
@@ -731,8 +746,9 @@ class PSAOnEvents(SciNode):
         #     act : narray [1 x n_freq_bins]
         #     for each event
         #         i.e. act_MEVE, total_act_MOR ...
-    def compute_fft_win_event(self, event_name_unique, PSD, PSA_evt_selected, channel, label_stat_div='total'):
-        psd_data_tot = np.empty([0,0])
+    def compute_fft_win_event(self, event_name_unique, psd_index, PSA_evt_selected, channel, label_stat_div='total'):
+        total_blocks = []
+        channel_index = psd_index.get(channel, {})
         tot_fft_key, tot_valid_key, tot_act_key = self._stat_keys(label_stat_div)
 
         # Loop for each different event name (i.e. M-EVE, MOR, clean_bsl, ...)
@@ -751,7 +767,7 @@ class PSAOnEvents(SciNode):
             evt_fft_key, evt_valid_key, evt_act_key = self._stat_keys(label_stat_div, cur_event_name)
 
             # Compute the number of fft win total and valid
-            psd_data_cur_event = np.empty([0,0])
+            event_blocks = []
             # Channel filtering is already applied by the caller via
             # select_events_for_channel(match_event_channels=...).
             # Keep only the current event name here.
@@ -762,17 +778,16 @@ class PSAOnEvents(SciNode):
             # For each event of the group
             for psd_start_cur in psd_starts_cur:
                 # Extract the psd data for the current channel and start_time
-                matched = [item_list.get('psd') for item_list in PSD \
-                    if (item_list.get('chan_label')==channel) and (item_list.get('start_time')==psd_start_cur)]
-                if len(matched) == 0:
-                    continue
-                psd_data_cur_start = np.vstack(matched)
-                # Accumulate the psd data for all the start of the current event name
-                if psd_data_cur_event.size>0:
-                    psd_data_cur_event = np.vstack((psd_data_cur_event,psd_data_cur_start))
-                else:
-                    psd_data_cur_event = psd_data_cur_start
+                matched = []
+                for fs, starts in channel_index.items():
+                    event_start_sample = int(np.round(psd_start_cur * fs))
+                    matched.extend(starts.get(event_start_sample, []))
+                # A channel may contain multiple sampling rates; retain the original PSD order.
+                if len(channel_index) > 1:
+                    matched.sort(key=lambda entry: entry[0])
+                event_blocks.extend(data for _, data in matched)
 
+            psd_data_cur_event = np.vstack(event_blocks) if event_blocks else np.empty([0, 0])
             if len(psd_data_cur_event)>0:
                 # Compute the number of valid fft windows (find out if there is a nan for each window) for each event group
                 n_nan_fft_win = np.sum(np.isnan(np.sum(psd_data_cur_event, axis=1)))
@@ -784,14 +799,12 @@ class PSAOnEvents(SciNode):
                 self.PSD_avg_per_event[evt_act_key]= np.nanmean(psd_data_cur_event,axis=0)
 
                 # Accumulate act and n fft for the total
-                if psd_data_tot.size:
-                    psd_data_tot = np.vstack((psd_data_tot,psd_data_cur_event))
-                else:
-                    psd_data_tot = psd_data_cur_event
+                total_blocks.append(psd_data_cur_event)
             else:
                 self.PSD_act_param[evt_fft_key] = 0
                 self.PSD_act_param[evt_valid_key] = 0
                 self.PSD_avg_per_event[evt_act_key]= np.NaN
+        psd_data_tot = np.vstack(total_blocks) if total_blocks else np.empty([0, 0])
         if psd_data_tot.size>0:
             # Compute the total number of valid fft windows (find out if there is a nan for each window)
             n_nan_fft_win = np.sum(np.isnan(np.sum(psd_data_tot, axis=1)))
@@ -805,4 +818,3 @@ class PSAOnEvents(SciNode):
             self.PSD_act_param[tot_fft_key] = 0
             self.PSD_act_param[tot_valid_key] = 0
             self.PSD_avg_per_event[tot_act_key]= np.NaN
-

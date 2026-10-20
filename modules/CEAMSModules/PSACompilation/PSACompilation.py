@@ -7,6 +7,8 @@ See the file LICENCE for full license details.
     Class to analyse and report the PSD output. 
     Average the PSD per channel, stage, cycle, hour...
     Append all subjects in the same output file.
+    Time divisions use shared NumPy masks; stage accumulation preserves window
+    order and concatenates total-stage blocks only once.
 """
 import numpy as np
 import os
@@ -294,6 +296,7 @@ class PSACompilation(SciNode):
             #   psd_data is an [n_fft_wins x n_freq_bins] (the PSD data for each fft window)
             freq_bin_chan, psd_start_time, psd_stage, psd_data = \
                 PSA.get_PSD_attribute_chan_stage(self.identifier, PSD, channel, sleep_stages)
+            psd_start_time = np.asarray(psd_start_time).reshape(-1)
 
             # The FFT-generated frequency bins are kept unchanged (no rounding),
             # get_miniband_index tolerates the drift caused by a non-integer fs.
@@ -351,9 +354,9 @@ class PSACompilation(SciNode):
                         # Extract the psd_stage and psd_start_time for the current hour
                         start_hour = cycle_labelled.iloc[0]['start_sec']+cur_div*3600
                         end_hour = start_hour+3600
-                        #psd_start_div = psd_start_time[(psd_start_time<end_hour) & (psd_start_time>=start_hour)]
-                        psd_stage_div = [psd_stage[i] for i in np.where((psd_start_time<end_hour) & (psd_start_time>=start_hour))[0]]   
-                        psd_data_div = [data for (start_time, data) in zip(psd_start_time, psd_data) if ((start_time<end_hour) & (start_time>=start_hour))]
+                        time_mask = (psd_start_time < end_hour) & (psd_start_time >= start_hour)
+                        psd_stage_div = psd_stage[time_mask]
+                        psd_data_div = psd_data[time_mask]
                     else:
                         psd_data_div = []
                         psd_stage_div = []
@@ -411,9 +414,9 @@ class PSACompilation(SciNode):
                             end_cycle = cycle_labelled.iloc[cur_div*2+1]['start_sec']+cycle_labelled.iloc[cur_div*2+1]['duration_sec']
                         else:
                             end_cycle = cycle_labelled.iloc[-1]['start_sec']+cycle_labelled.iloc[-1]['duration_sec']
-                        #psd_start_div = psd_start_time[(psd_start_time<end_cycle) & (psd_start_time>=start_cycle)]
-                        psd_stage_div = [psd_stage[i] for i in np.where( (psd_start_time<end_cycle) & (psd_start_time>=start_cycle))[0]]
-                        psd_data_div = [data for (start_time, data) in zip(psd_start_time, psd_data) if ((start_time<end_cycle) & (start_time>=start_cycle))]
+                        time_mask = (psd_start_time < end_cycle) & (psd_start_time >= start_cycle)
+                        psd_stage_div = psd_stage[time_mask]
+                        psd_data_div = psd_data[time_mask]
                     else:
                         psd_start_div = []
                         psd_stage_div = []                        
@@ -592,24 +595,23 @@ class PSACompilation(SciNode):
         # Compute the number of valid fft windows for each sleep stage
         
 
+        psd_data = np.asarray(psd_data)
+        psd_stage = np.asarray(psd_stage).reshape(-1)
+        valid_windows = ~np.isnan(np.sum(psd_data, axis=1)) if len(psd_data) else np.empty(0, dtype=bool)
         PSD_avg_per_stage = []
-        psd_data_tot = np.empty([0,0])
+        total_blocks = []
         for i_list, cur_stage_list in enumerate(self.sleep_stage_to_stats):
-            # Extract current data (FAST)
-            psd_data_cur_stage = [data for (stage, data) in zip(psd_stage, psd_data) if stage in cur_stage_list]
+            stage_mask = np.isin(psd_stage, cur_stage_list)
+            psd_data_cur_stage = psd_data[stage_mask]
 
             # Compute the number of valid fft windows and average datat (FAST)
             if len(psd_data_cur_stage):
                 # Accumulate act and n fft for the total
                 if len(cur_stage_list)==1: # grouped stages are not accumulated to avoid the count the same stage twice
-                    if len(psd_data_tot)>0:
-                        psd_data_tot = np.vstack((psd_data_tot,psd_data_cur_stage))
-                    else:
-                        psd_data_tot = psd_data_cur_stage
+                    total_blocks.append(psd_data_cur_stage)
                 # Compute the total number of valid fft windows (find out if there is a nan for each window)
-                n_nan_fft_win = np.sum(np.isnan(np.sum(psd_data_cur_stage, axis=1)))
                 div_n_fft_win = len(psd_data_cur_stage)
-                div_n_fft_win_valid = div_n_fft_win-n_nan_fft_win
+                div_n_fft_win_valid = np.count_nonzero(valid_windows[stage_mask])
             else:
                 # Compute the total number of valid fft windows
                 div_n_fft_win = 0
@@ -622,9 +624,10 @@ class PSACompilation(SciNode):
             self.PSD_act_param[n_fft_valid_label] = div_n_fft_win_valid
             # Average the activity through the recording
             #self.PSD_avg_per_stage[f"{label_stat_div}_{self.stage_stats_labels[i_list]}_act"] = np.nanmean(psd_data_cur_stage,axis=0)
-            PSD_avg_per_stage.append(np.nanmean(psd_data_cur_stage,axis=0))
+            PSD_avg_per_stage.append(np.nanmean(psd_data_cur_stage,axis=0) if len(psd_data_cur_stage) else np.NaN)
 
         # Compute the total number of valid fft windows (find out if there is a nan for each window)
+        psd_data_tot = np.vstack(total_blocks) if total_blocks else np.empty([0, 0])
         n_nan_fft_win = np.sum(np.isnan(np.sum(psd_data_tot, axis=1)))
         tot_n_fft_win = len(psd_data_tot)
         tot_n_fft_win_valid = tot_n_fft_win-n_nan_fft_win
@@ -632,8 +635,8 @@ class PSACompilation(SciNode):
         self.PSD_act_param[f'{label_stat_div}_fft_win_count'] = tot_n_fft_win
         self.PSD_act_param[f'{label_stat_div}_fft_win_valid_count'] = tot_n_fft_win_valid
         # Average the activity through the recording
-        self.PSD_avg_per_stage[f'{label_stat_div}_act']= np.nanmean(psd_data_tot,axis=0)
         PSD_avg_total = np.nanmean(psd_data_tot,axis=0)
+        self.PSD_avg_per_stage[f'{label_stat_div}_act'] = PSD_avg_total
 
         return PSD_avg_total, PSD_avg_per_stage
 

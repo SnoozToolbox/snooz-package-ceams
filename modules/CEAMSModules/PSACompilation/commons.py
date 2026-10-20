@@ -123,6 +123,7 @@ def get_PSD_attribute_chan_stage(identifier, PSD, channel, sleep_stages):
           The sleep stage of each fft window.
         psd_data is an [n_fft_wins x n_freq_bins] 
           The PSD data of each fft window.
+        Continuous-signal blocks are concatenated once, preserving stage/bout order.
     """
     # Extract psd for the current channel
     #
@@ -203,6 +204,9 @@ def get_PSD_attribute_chan_stage(identifier, PSD, channel, sleep_stages):
         psd_stage = np.empty(0)
         psd_values_chan = np.empty(0)
         psd_start = np.empty(0)
+        value_blocks = []
+        start_blocks = []
+        stage_blocks = []
         # The user usually select specific sleep stages, so the psd data will be truncated
         for stage, stage_start, stage_dur in zip(stage_name_all, stage_start_all, stage_duration_all):
             # For each continuous bout
@@ -218,10 +222,14 @@ def get_PSD_attribute_chan_stage(identifier, PSD, channel, sleep_stages):
                     # Repeat the stage for each fft window
                     psd_stage_current = np.repeat(stage, psd_values_current.shape[0])
                     psd_stage_current = np.reshape(psd_stage_current, (psd_stage_current.shape[0], 1))
-                    # Vertical concatenation of the psd values
-                    psd_values_chan = np.vstack((psd_values_chan, psd_values_current)) if len(psd_values_chan)>0 else psd_values_current
-                    psd_start = np.vstack((psd_start, psd_start_current)) if len(psd_start)>0 else psd_start_current
-                    psd_stage = np.vstack((psd_stage, psd_stage_current)) if len(psd_stage)>0 else psd_stage_current
+                    value_blocks.append(psd_values_current)
+                    start_blocks.append(psd_start_current)
+                    stage_blocks.append(psd_stage_current)
+
+        if value_blocks:
+            psd_values_chan = np.vstack(value_blocks)
+            psd_start = np.vstack(start_blocks)
+            psd_stage = np.vstack(stage_blocks)
 
     return freq_bin_unique, psd_start, psd_stage, psd_values_chan
 

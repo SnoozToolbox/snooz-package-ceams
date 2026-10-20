@@ -62,6 +62,7 @@ class REMsDetectionYasa(SciNode):
             Sleep stage(s) to include in REM detection.
         save_directory: str
             Directory to save the REM detection results.
+            (directory path is extracted if a path + filename is provided).
     
     Returns
     -------

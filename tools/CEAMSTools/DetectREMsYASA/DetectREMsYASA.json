@@ -160,7 +160,7 @@
                     },
                     "relative_prominence": {
                         "name": "relative_prominence",
-                        "value": "0.8",
+                        "value": 0.8,
                         "sub_plugs": {},
                         "connections": {}
                     },
