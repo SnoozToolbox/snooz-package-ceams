@@ -7,6 +7,8 @@ See the file LICENCE for full license details.
     Compile the PSA run on selected events.  The compilation is for a cohort.
     PSDs are indexed once by channel, sampling rate and start sample for reuse
     across total/hour/cycle compilation; matching does not resample the signal.
+    Event and FFT durations are compared as rounded sample counts, matching
+    SignalsFromEvents and Stft when sampling rates are non-integer.
 """
 
 import numpy as np
@@ -347,19 +349,40 @@ class PSAOnEvents(SciNode):
                 "in step 5 of the tool to analyze these events on every selected channel."
             )
 
-        # Extract duration_sec
-        event_dur_s = PSA_evt_selected['duration_sec'].values
-        if any(event_dur_s < PSD[0]['win_len']):
+        event_dur_s = PSA_evt_selected['duration_sec'].to_numpy(dtype=float)
+        event_channels = PSA_evt_selected['channels'].to_numpy()
+        events_checked = np.zeros(len(event_dur_s), dtype=bool)
+        events_fit = np.zeros(len(event_dur_s), dtype=bool)
+        # Check each unique channel/fs/window combination, not every PSD block.
+        fft_windows = {
+            (item['chan_label'], item['sample_rate'], item['win_len'])
+            for item in PSD
+        }
+        for channel, fs, win_len in fft_windows:
+            # Match annotated channels (empty means all channels), or include every
+            # event when channel matching is disabled.
+            relevant = (
+                (event_channels == channel) | (event_channels == "")
+                if match_event_channels else np.ones(len(event_dur_s), dtype=bool)
+            )
+            # Use the same sample quantization as signal extraction and FFT computation.
+            events_checked |= relevant
+            events_fit |= relevant & (np.round(event_dur_s * fs) >= round(win_len * fs))
+        events_too_short = events_checked & ~events_fit
+        window_lengths = ", ".join(str(length) for length in sorted({
+            win_len for _, _, win_len in fft_windows
+        }))
+        if any(events_too_short):
             # Log message for the Logs tab
-            if all(event_dur_s < PSD[0]['win_len']):
+            if all(events_too_short[events_checked]):
                 self._log_manager.log(self.identifier, \
-                    f"All the PSA events in the file {subject_info['filename']} are shorter than the fft window length of {PSD[0]['win_len']}s.")        
+                    f"All the PSA events in the file {subject_info['filename']} are shorter than their FFT windows ({window_lengths}s).")
                 raise NodeRuntimeException(self.identifier, PSA_event_group, \
                     f"PSAOnEvents - All the PSA events in the group {PSA_event_group_sel} and name {PSA_event_name_sel} "\
-                        +f"are shoter than the fft window length of {PSD[0]['win_len']}s.")   
+                        +f"are shorter than their FFT windows ({window_lengths}s).")
             else:
                 self._log_manager.log(self.identifier, \
-                    f"The file {subject_info['filename']} has PSA events shorter than the fft window length of {PSD[0]['win_len']}s.")
+                    f"The file {subject_info['filename']} has PSA events shorter than their FFT windows ({window_lengths}s).")
             
 
         # Create the list of events from all the files to create a valid file (the number of columns has to be known for the cohort)

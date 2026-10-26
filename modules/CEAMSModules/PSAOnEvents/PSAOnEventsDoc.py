@@ -38,7 +38,7 @@ def _get_doc(N_HOURS=0, N_CYCLES=0, event_names=None, include_total=True):
             'channel_label' : 'The label of the channel.',
             'channel_fs' : 'The sampling rate (Hz) of the channel.',
             'channel_artefact_count' : 'The number of artefacts marked on the channel (i.e. number of events).',
-            'fft_win_sec': 'The window length in sec used to perform the FFT.',
+            'fft_win_sec': 'The actual FFT window length in seconds after rounding to whole samples. Annotation durations are compared using the same sample rounding at each channel sampling rate.',
             'fft_step_sec': 'The step in sec between each start point of the window used for the FFT.',
             'freq_low_Hz' : 'The low frequency (Hz) of the mini band.',
             'freq_high_Hz' : 'The high frequency (Hz) of the mini band.',
