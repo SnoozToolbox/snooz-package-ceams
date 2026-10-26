@@ -275,7 +275,7 @@
         {
             "item_name": "SpindleDetectionSumo",
             "item_type": "tool",
-            "item_version": "2.12.0",
+            "item_version": "2.13.0",
             "item_hooks": [
                 {
                     "endpoint_name": "menu_endpoint",
