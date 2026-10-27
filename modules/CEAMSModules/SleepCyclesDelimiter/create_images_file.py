@@ -3,9 +3,9 @@ import os
 
 # List of image files to convert
 image_files = [
-    'UI_v5_minimal.png',
-    'UI_v5_Aeschbach.png', 
-    'UI_v5_Feinberg_floyd.png'
+    'UI_minimal.png',
+    'UI_Aeschbach.png', 
+    'UI_Feinberg_floyd.png'
 ]
 
 # Variable names for each image
