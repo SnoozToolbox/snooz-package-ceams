@@ -35,14 +35,14 @@
    <item>
     <widget class="QStackedWidget" name="StackedWidget">
      <property name="currentIndex">
-      <number>0</number>
+      <number>3</number>
      </property>
      <widget class="QWidget" name="Page1">
       <layout class="QVBoxLayout" name="verticalLayout">
        <item>
         <widget class="QLabel" name="label">
          <property name="text">
-          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;EEGInspector App&lt;/span&gt;&lt;/p&gt;&lt;p&gt;Easily review and clean EEG data with EEGInspector. &lt;/p&gt;&lt;p&gt;This tool allows you to quickly identify and select bad channels and epochs based on visual inspection of EEG signals, &lt;br/&gt;making preprocessing faster and more reliable.&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-style:italic;&quot;&gt;Note: EEGInspector is not optimized for long recordings with many channels. performance may be slower, so please be patient!&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Inspect EEG channels&lt;/span&gt;&lt;/p&gt;&lt;p&gt;Visually inspect EEG signals to quickly identify and select bad channels and epochs for exclusion.&lt;/p&gt;&lt;p&gt;Performance may be slower for long recordings with many channels.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
          </property>
         </widget>
        </item>
@@ -108,13 +108,6 @@ Then, mark the non-brain channels for exclusion, confirm your selection, and cli
           </widget>
          </item>
         </layout>
-       </item>
-       <item>
-        <widget class="Line" name="line_1">
-         <property name="orientation">
-          <enum>Qt::Orientation::Horizontal</enum>
-         </property>
-        </widget>
        </item>
        <item>
         <spacer name="verticalSpacer_7">
@@ -303,13 +296,6 @@ li.checked::marker { content: &quot;\2612&quot;; }
           </widget>
          </item>
         </layout>
-       </item>
-       <item>
-        <widget class="Line" name="line_2">
-         <property name="orientation">
-          <enum>Qt::Orientation::Horizontal</enum>
-         </property>
-        </widget>
        </item>
        <item>
         <spacer name="verticalSpacer_2">

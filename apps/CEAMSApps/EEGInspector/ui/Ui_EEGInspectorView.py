@@ -78,13 +78,6 @@ class Ui_EEGInspectorView(object):
 
         self.verticalLayout.addLayout(self.horizontalLayout_11)
 
-        self.line_1 = QFrame(self.Page1)
-        self.line_1.setObjectName(u"line_1")
-        self.line_1.setFrameShape(QFrame.Shape.HLine)
-        self.line_1.setFrameShadow(QFrame.Shadow.Sunken)
-
-        self.verticalLayout.addWidget(self.line_1)
-
         self.verticalSpacer_7 = QSpacerItem(20, 10, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Fixed)
 
         self.verticalLayout.addItem(self.verticalSpacer_7)
@@ -165,13 +158,6 @@ class Ui_EEGInspectorView(object):
 
 
         self.verticalLayout_5.addLayout(self.horizontalLayout)
-
-        self.line_2 = QFrame(self.Page2)
-        self.line_2.setObjectName(u"line_2")
-        self.line_2.setFrameShape(QFrame.Shape.HLine)
-        self.line_2.setFrameShadow(QFrame.Shadow.Sunken)
-
-        self.verticalLayout_5.addWidget(self.line_2)
 
         self.verticalSpacer_2 = QSpacerItem(20, 50, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Preferred)
 
@@ -385,7 +371,7 @@ class Ui_EEGInspectorView(object):
 
         self.retranslateUi(EEGInspectorView)
 
-        self.StackedWidget.setCurrentIndex(0)
+        self.StackedWidget.setCurrentIndex(3)
 
 
         QMetaObject.connectSlotsByName(EEGInspectorView)
@@ -394,7 +380,7 @@ class Ui_EEGInspectorView(object):
     def retranslateUi(self, EEGInspectorView):
         EEGInspectorView.setWindowTitle(QCoreApplication.translate("EEGInspectorView", u"Form", None))
         self.file_name_label1.setText("")
-        self.label.setText(QCoreApplication.translate("EEGInspectorView", u"<html><head/><body><p><span style=\" font-weight:700;\">EEGInspector App</span></p><p>Easily review and clean EEG data with EEGInspector. </p><p>This tool allows you to quickly identify and select bad channels and epochs based on visual inspection of EEG signals, <br/>making preprocessing faster and more reliable.</p><p><span style=\" font-style:italic;\">Note: EEGInspector is not optimized for long recordings with many channels. performance may be slower, so please be patient!</span></p></body></html>", None))
+        self.label.setText(QCoreApplication.translate("EEGInspectorView", u"<html><head/><body><p><span style=\" font-weight:700;\">Inspect EEG channels</span></p><p>Visually inspect EEG signals to quickly identify and select bad channels and epochs for exclusion.</p><p>Performance may be slower for long recordings with many channels.</p></body></html>", None))
         self.desc_label11.setText(QCoreApplication.translate("EEGInspectorView", u"Browse to your EEG file, select the montage, and wait for the data to load.\n"
 "Then, mark the non-brain channels for exclusion, confirm your selection, and click Next to proceed with further analysis.", None))
         self.edf_pushButton.setText(QCoreApplication.translate("EEGInspectorView", u"Choose", None))
