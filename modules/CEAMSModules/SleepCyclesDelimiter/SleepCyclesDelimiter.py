@@ -295,7 +295,9 @@ class SleepCyclesDelimiter(SciNode):
         events_out = events_in.copy()
 
         cycle_labelled = pd.DataFrame(columns=['group','name','start_sec','duration_sec','channels'])
-        cycle_labelled.loc[0,'group']=label
+        # Extract the filename from the label for logging purposes
+        base_filename = os.path.basename(label)
+        cycle_labelled.loc[0,'group']=base_filename
 
         # Extract all sleep stages from the events list
         sleep_stage_events = events_out[events_out['group']==commons.sleep_stages_group]
@@ -496,10 +498,10 @@ class SleepCyclesDelimiter(SciNode):
 
         # Concatenate the group and name
         if len(nrem_cycle_event)>0: # To avoid to loose the group
-            nrem_cycle_event_label = [[label, j[1], j[2], j[3], j[4]] for j in nrem_cycle_event]
+            nrem_cycle_event_label = [[base_filename, j[1], j[2], j[3], j[4]] for j in nrem_cycle_event]
             cycle_labelled = pd.DataFrame(data=nrem_cycle_event_label,columns=['group','name','start_sec','duration_sec','channels'])
         if len(rem_cycle_event)>0: # To avoid to loose the group
-            rem_cycle_event_label = [[label, j[1], j[2], j[3], j[4]] for j in rem_cycle_event]
+            rem_cycle_event_label = [[base_filename, j[1], j[2], j[3], j[4]] for j in rem_cycle_event]
             cycle_labelled = pd.concat([cycle_labelled,pd.DataFrame(\
                 data=rem_cycle_event_label, columns=['group','name','start_sec','duration_sec','channels'])])
         cycle_labelled.sort_values(by=['start_sec'],inplace=True)
