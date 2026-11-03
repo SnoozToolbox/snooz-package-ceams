@@ -35,13 +35,15 @@ class Ui_PSGReaderSettingsView(object):
         self.splitter.setObjectName(u"splitter")
         self.splitter.setOrientation(Qt.Orientation.Horizontal)
         self.splitter.setChildrenCollapsible(True)
-        self.layoutWidget = QWidget(self.splitter)
-        self.layoutWidget.setObjectName(u"layoutWidget")
-        self.verticalLayout = QVBoxLayout(self.layoutWidget)
+        self.frame_files = QFrame(self.splitter)
+        self.frame_files.setObjectName(u"frame_files")
+        self.frame_files.setFrameShape(QFrame.Shape.StyledPanel)
+        self.frame_files.setFrameShadow(QFrame.Shadow.Raised)
+        self.verticalLayout = QVBoxLayout(self.frame_files)
         self.verticalLayout.setSpacing(9)
         self.verticalLayout.setObjectName(u"verticalLayout")
         self.verticalLayout.setContentsMargins(0, 0, 0, 0)
-        self.label_PSG = QLabel(self.layoutWidget)
+        self.label_PSG = QLabel(self.frame_files)
         self.label_PSG.setObjectName(u"label_PSG")
         font = QFont()
         font.setFamilies([u"Roboto"])
@@ -52,7 +54,7 @@ class Ui_PSGReaderSettingsView(object):
 
         self.verticalLayout.addWidget(self.label_PSG)
 
-        self.files_listview = QListView(self.layoutWidget)
+        self.files_listview = QListView(self.frame_files)
         self.files_listview.setObjectName(u"files_listview")
         self.files_listview.setEditTriggers(QAbstractItemView.EditTrigger.NoEditTriggers)
         self.files_listview.setSelectionMode(QAbstractItemView.SelectionMode.ExtendedSelection)
@@ -66,17 +68,17 @@ class Ui_PSGReaderSettingsView(object):
 
         self.horizontalLayout_3.addItem(self.horizontalSpacer_2)
 
-        self.remove_entries_pushbutton = QPushButton(self.layoutWidget)
+        self.remove_entries_pushbutton = QPushButton(self.frame_files)
         self.remove_entries_pushbutton.setObjectName(u"remove_entries_pushbutton")
 
         self.horizontalLayout_3.addWidget(self.remove_entries_pushbutton)
 
-        self.add_folders_pushbutton = QPushButton(self.layoutWidget)
+        self.add_folders_pushbutton = QPushButton(self.frame_files)
         self.add_folders_pushbutton.setObjectName(u"add_folders_pushbutton")
 
         self.horizontalLayout_3.addWidget(self.add_folders_pushbutton)
 
-        self.add_files_pushbutton = QPushButton(self.layoutWidget)
+        self.add_files_pushbutton = QPushButton(self.frame_files)
         self.add_files_pushbutton.setObjectName(u"add_files_pushbutton")
 
         self.horizontalLayout_3.addWidget(self.add_files_pushbutton)
@@ -84,27 +86,29 @@ class Ui_PSGReaderSettingsView(object):
 
         self.verticalLayout.addLayout(self.horizontalLayout_3)
 
-        self.line_2 = QFrame(self.layoutWidget)
+        self.line_2 = QFrame(self.frame_files)
         self.line_2.setObjectName(u"line_2")
         self.line_2.setFrameShape(QFrame.Shape.HLine)
         self.line_2.setFrameShadow(QFrame.Shadow.Sunken)
 
         self.verticalLayout.addWidget(self.line_2)
 
-        self.label_4 = QLabel(self.layoutWidget)
+        self.label_4 = QLabel(self.frame_files)
         self.label_4.setObjectName(u"label_4")
         self.label_4.setFont(font)
 
         self.verticalLayout.addWidget(self.label_4)
 
-        self.scrollArea = QScrollArea(self.layoutWidget)
+        self.scrollArea = QScrollArea(self.frame_files)
         self.scrollArea.setObjectName(u"scrollArea")
+        self.scrollArea.setFrameShape(QFrame.Shape.NoFrame)
         self.scrollArea.setWidgetResizable(True)
         self.scrollAreaWidgetContents = QWidget()
         self.scrollAreaWidgetContents.setObjectName(u"scrollAreaWidgetContents")
         self.scrollAreaWidgetContents.setGeometry(QRect(0, 0, 244, 74))
         self.verticalLayout_5 = QVBoxLayout(self.scrollAreaWidgetContents)
         self.verticalLayout_5.setObjectName(u"verticalLayout_5")
+        self.verticalLayout_5.setContentsMargins(0, 0, 0, 0)
         self.events_treeView = QTreeView(self.scrollAreaWidgetContents)
         self.events_treeView.setObjectName(u"events_treeView")
 
@@ -114,7 +118,7 @@ class Ui_PSGReaderSettingsView(object):
 
         self.verticalLayout.addWidget(self.scrollArea)
 
-        self.splitter.addWidget(self.layoutWidget)
+        self.splitter.addWidget(self.frame_files)
         self.frame_montages = QFrame(self.splitter)
         self.frame_montages.setObjectName(u"frame_montages")
         self.frame_montages.setEnabled(True)
