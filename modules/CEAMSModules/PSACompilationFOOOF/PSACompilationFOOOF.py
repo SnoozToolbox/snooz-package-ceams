@@ -9,9 +9,13 @@ See the file LICENCE for full license details.
     Append all subjects in the same output file, using FOOOF algorithm
 """
 import csv
+import platform
+import tempfile
+import fooof
 import numpy as np
 import os
 import pandas as pd
+import scipy
 from fooof import FOOOF
 from fooof.sim.gen import gen_aperiodic
 
@@ -280,6 +284,9 @@ class PSACompilationFOOOF(SciNode):
         # The channels are grouped in the PSA cohort file
         report_df_rhythmic = []
         report_df_arhythmic = []
+        self._fooof_export_parent = os.path.dirname(os.path.abspath(filename))
+        self._fooof_export_dir = None
+        self._fooof_export_index = 0
         for channel in channels_list:
             self._fooof_filename = subject_info_params['filename']
             self._fooof_channel = channel
@@ -1027,6 +1034,58 @@ class PSACompilationFOOOF(SciNode):
         
         return PSD_rhythmic_avg_total, PSD_arhythmic_avg_total, PSD_rhythmic_avg_per_stage, PSD_arhythmic_avg_per_stage
 
+    def export_fooof_input(self, fm, psd_data, first_freq, last_freq, freq_bins, fit_label):
+        """Temporarily capture exact fit inputs for cross-machine replay.
+
+        Each compute call creates a unique fooof_inputs_* directory beside the
+        report. Archives are numbered in fit order and contain no object arrays;
+        load them with np.load(path, allow_pickle=False). The setting_* entries
+        contain FOOOF constructor settings. Export errors stop the analysis.
+        """
+        try:
+            if self._fooof_export_dir is None:
+                self._fooof_export_dir = tempfile.mkdtemp(
+                    prefix="fooof_inputs_", dir=self._fooof_export_parent
+                )
+            self._fooof_export_index += 1
+            export_path = os.path.join(
+                self._fooof_export_dir, f"{self._fooof_export_index:06d}.npz"
+            )
+            settings = {
+                f"setting_{key}": np.asarray(value)
+                for key, value in fm.get_settings()._asdict().items()
+            }
+            with open(export_path, "xb") as stream:
+                np.savez(
+                    stream,
+                    freq_bins=freq_bins,
+                    psd_data=psd_data,
+                    first_freq=first_freq,
+                    last_freq=last_freq,
+                    filename=self._fooof_filename,
+                    channel=self._fooof_channel,
+                    fit_label=fit_label,
+                    python_version=platform.python_version(),
+                    platform=platform.platform(),
+                    machine=platform.machine(),
+                    numpy_version=np.__version__,
+                    scipy_version=scipy.__version__,
+                    fooof_version=fooof.__version__,
+                    **settings,
+                )
+        except (OSError, ValueError, TypeError) as error:
+            raise NodeRuntimeException(
+                self.identifier, "PSA",
+                f"Cannot export FOOOF inputs for filename={self._fooof_filename}, "
+                f"channel={self._fooof_channel}, period_stage={fit_label}: {error}"
+            ) from error
+        self._log_manager.log(
+            self.identifier,
+            f"FOOOF inputs exported: {export_path}; filename={self._fooof_filename}, "
+            f"channel={self._fooof_channel}, period_stage={fit_label}"
+        )
+
+
     def FOOOF(self, psd_data, first_freq, last_freq, freq_bins, fit_label):
         """
         Apply FOOOF to the average PSD data across the recording for each period and stage. 
@@ -1049,6 +1108,8 @@ class PSACompilationFOOOF(SciNode):
         -----
         The full-model log10-space MAE and squared correlation are recorded in
         both component reports and logged for inspection, without quality rejection.
+        On this diagnostic branch, every fit exports its exact inputs and settings
+        to a numbered NPZ archive beside the report before calling fm.fit().
             
         Returns:
         --------
@@ -1062,6 +1123,7 @@ class PSACompilationFOOOF(SciNode):
         if psd_data.size > 0 and not np.all(np.isnan(psd_data)):
             # Initialize FOOOF model with default parameters (can be modified as needed)
             fm = FOOOF(peak_width_limits=[0.5, 12], max_n_peaks=np.inf, min_peak_height=0, peak_threshold=2.0, aperiodic_mode='fixed')     
+            self.export_fooof_input(fm, psd_data, first_freq, last_freq, freq_bins, fit_label)
             # Fit the model to the average PSD data for this stage
             fm.fit(freq_bins, psd_data, [first_freq, last_freq])
             self.fooof_fit_quality[f'{fit_label}_fit_err'] = fm.error_
