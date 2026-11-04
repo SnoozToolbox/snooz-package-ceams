@@ -8,6 +8,7 @@ See the file LICENCE for full license details.
     Average the PSD per channel, stage, cycle, hour...
     Append all subjects in the same output file, using FOOOF algorithm
 """
+import csv
 import numpy as np
 import os
 import pandas as pd
@@ -280,6 +281,12 @@ class PSACompilationFOOOF(SciNode):
         report_df_rhythmic = []
         report_df_arhythmic = []
         for channel in channels_list:
+            self._fooof_filename = subject_info_params['filename']
+            self._fooof_channel = channel
+            self.fooof_fit_quality = {
+                name: np.nan for name in _get_doc(self.N_HOURS, self.N_CYCLES)
+                if name.endswith(('_fit_err', '_fit_r2'))
+            }
 
             # Extract the sampling rate of the current channel
             channel_info_param, fs_chan = PSA.get_channel_info(PSD, channel)
@@ -520,7 +527,7 @@ class PSACompilationFOOOF(SciNode):
             mini_band_hdr_df = pd.DataFrame([header_df.values[0]] * len(miniband_indices), columns=header_df.columns)
             
             # Rhythmic report
-            mini_band_dict_rhythmic = PSD_freq_params | self.PSD_rhythmic_act_param
+            mini_band_dict_rhythmic = PSD_freq_params | self.PSD_rhythmic_act_param | self.fooof_fit_quality
             mini_band_df_rhythmic = pd.DataFrame.from_dict(mini_band_dict_rhythmic)
             cur_chan_report_df_rhythmic = pd.concat([mini_band_hdr_df, mini_band_df_rhythmic], axis=1)
 
@@ -530,7 +537,7 @@ class PSACompilationFOOOF(SciNode):
                 report_df_rhythmic = cur_chan_report_df_rhythmic
             
             # Arhythmic report
-            mini_band_dict_arhythmic = PSD_freq_params | self.PSD_arhythmic_act_param
+            mini_band_dict_arhythmic = PSD_freq_params | self.PSD_arhythmic_act_param | self.fooof_fit_quality
             mini_band_df_arhythmic = pd.DataFrame.from_dict(mini_band_dict_arhythmic)
             cur_chan_report_df_arhythmic = pd.concat([mini_band_hdr_df, mini_band_df_arhythmic], axis=1)
 
@@ -558,6 +565,8 @@ class PSACompilationFOOOF(SciNode):
         file_name, file_extension = os.path.splitext(filename)
         filename_rhythmic = file_name + "_periodic" + file_extension
         filename_arhythmic = file_name + "_aperiodic" + file_extension
+        for report_filename in (filename_rhythmic, filename_arhythmic):
+            self.validate_report_header(report_filename, out_columns)
         
         # Write rhythmic report
         write_header_rhythmic = not os.path.exists(filename_rhythmic)
@@ -599,6 +608,24 @@ class PSACompilationFOOOF(SciNode):
                     raise NodeRuntimeException(self.identifier, "PSA", f"ERROR : Snooz can not write in the file {doc_filepath_arhythmic}. Check if the drive is accessible and ensure the file is not already open.")    
         return {
         }
+
+
+    def validate_report_header(self, filename, columns):
+        if not os.path.exists(filename):
+            return
+        try:
+            with open(filename, encoding='utf-8-sig', newline='') as report:
+                header = next(csv.reader(report, delimiter='\t'), None)
+        except (OSError, UnicodeError, csv.Error) as error:
+            raise NodeRuntimeException(
+                self.identifier, "PSA", f"Cannot read report header in {filename}: {error}"
+            ) from error
+        if header != columns:
+            raise NodeRuntimeException(
+                self.identifier, "PSA",
+                f"Report columns in {filename} do not match the current FOOOF report. "
+                "Choose a new output filename to avoid appending incompatible rows."
+            )
 
 
     # To select the artefact events according to artefact groups and names.
@@ -729,7 +756,9 @@ class PSACompilationFOOOF(SciNode):
             
             # Apply FOOOF to get rhythmic and arhythmic signals
             if len(psd_data_cur_stage) > 0 and not np.all(np.isnan(psd_data_cur_stage)):
-                rhythmic_signal, arhythmic_signal = self.FOOOF(np.nanmean(psd_data_cur_stage,axis=0), first_freq, last_freq, freq_bins)
+                rhythmic_signal, arhythmic_signal = self.FOOOF(
+                    np.nanmean(psd_data_cur_stage,axis=0), first_freq, last_freq, freq_bins,
+                    f'{label_stat_div}_{self.stage_stats_labels[i_list]}')
             else:
                 rhythmic_signal = np.nanmean(psd_data_cur_stage,axis=0)
                 arhythmic_signal = np.nanmean(psd_data_cur_stage,axis=0)
@@ -750,7 +779,8 @@ class PSACompilationFOOOF(SciNode):
         # Average the activity through the recording
         self.PSD_avg_per_stage[f'{label_stat_div}_act']= np.nanmean(psd_data_tot,axis=0)
         if len(psd_data_tot) > 0 and not np.all(np.isnan(psd_data_tot)):
-            PSD_rhythmic_avg_total, PSD_arhythmic_avg_total = self.FOOOF(np.nanmean(psd_data_tot,axis=0), first_freq, last_freq, freq_bins)
+            PSD_rhythmic_avg_total, PSD_arhythmic_avg_total = self.FOOOF(
+                np.nanmean(psd_data_tot,axis=0), first_freq, last_freq, freq_bins, label_stat_div)
         else:
             PSD_rhythmic_avg_total = np.nanmean(psd_data_tot,axis=0)
             PSD_arhythmic_avg_total = np.nanmean(psd_data_tot,axis=0)
@@ -946,7 +976,9 @@ class PSACompilationFOOOF(SciNode):
             
             # Calculate average PSD for this stage and hour, then apply FOOOF
             if len(psd_data_cur_stage_cur_hour) > 0 and not np.all(np.isnan(psd_data_cur_stage_cur_hour)):
-                rhythmic_signal, arhythmic_signal = self.FOOOF(np.nanmean(psd_data_cur_stage_cur_hour, axis=0), first_freq, last_freq, freq_bins)
+                rhythmic_signal, arhythmic_signal = self.FOOOF(
+                    np.nanmean(psd_data_cur_stage_cur_hour, axis=0), first_freq, last_freq, freq_bins,
+                    f'stage_h{hour_label+1}_{stage_label}')
                 PSD_rhythmic_avg_per_stage.append(rhythmic_signal)
                 PSD_arhythmic_avg_per_stage.append(arhythmic_signal)
             else:
@@ -986,14 +1018,16 @@ class PSACompilationFOOOF(SciNode):
 
         # Calculate total average PSD for this hour and apply FOOOF
         if len(psd_data_tot) > 0 and not np.all(np.isnan(psd_data_tot)):
-            PSD_rhythmic_avg_total, PSD_arhythmic_avg_total = self.FOOOF(np.nanmean(psd_data_tot, axis=0), first_freq, last_freq, freq_bins)
+            PSD_rhythmic_avg_total, PSD_arhythmic_avg_total = self.FOOOF(
+                np.nanmean(psd_data_tot, axis=0), first_freq, last_freq, freq_bins,
+                f'stage_h{hour_label+1}')
         else:
             PSD_rhythmic_avg_total = np.array([np.NaN] * len(psd_data[0]) if len(psd_data) > 0 else [])
             PSD_arhythmic_avg_total = np.array([np.NaN] * len(psd_data[0]) if len(psd_data) > 0 else [])
         
         return PSD_rhythmic_avg_total, PSD_arhythmic_avg_total, PSD_rhythmic_avg_per_stage, PSD_arhythmic_avg_per_stage
 
-    def FOOOF(self, psd_data, first_freq, last_freq, freq_bins):
+    def FOOOF(self, psd_data, first_freq, last_freq, freq_bins, fit_label):
         """
         Apply FOOOF to the average PSD data across the recording for each period and stage. 
         The FOOOF parameters are set to default values that can be modified in the future if needed.
@@ -1008,6 +1042,13 @@ class PSACompilationFOOOF(SciNode):
             The upper bound of the frequency range to fit with FOOOF
         freq_bins : array
             The frequency bins corresponding to the PSD data
+        fit_label : str
+            Period and optional sleep stage identifying the fit, e.g. clock_h7_W.
+
+        Notes
+        -----
+        The full-model log10-space MAE and squared correlation are recorded in
+        both component reports and logged for inspection, without quality rejection.
             
         Returns:
         --------
@@ -1023,9 +1064,20 @@ class PSACompilationFOOOF(SciNode):
             fm = FOOOF(peak_width_limits=[0.5, 12], max_n_peaks=np.inf, min_peak_height=0, peak_threshold=2.0, aperiodic_mode='fixed')     
             # Fit the model to the average PSD data for this stage
             fm.fit(freq_bins, psd_data, [first_freq, last_freq])
-            # Store results in the dictionary, we do not return this dictionary for now but it can be useful in the future if we want to add more FOOOF outputs in the report
-            fooof_results = {
-                'aperiodic_params': fm._ap_fit,
-                'periodic_fit': fm._peak_fit}
+            self.fooof_fit_quality[f'{fit_label}_fit_err'] = fm.error_
+            self.fooof_fit_quality[f'{fit_label}_fit_r2'] = fm.r_squared_
+            self._log_manager.log(
+                self.identifier,
+                f"FOOOF fit: filename={self._fooof_filename}, channel={self._fooof_channel}, "
+                f"period_stage={fit_label}, has_model={fm.has_model}, "
+                f"error_={fm.error_:.12g}, r_squared_={fm.r_squared_:.12g}"
+            )
+            if not fm.has_model or not np.isfinite(fm.error_) or not np.isfinite(fm.r_squared_):
+                self._log_manager.log(
+                    self.identifier,
+                    f"WARNING: FOOOF model missing or quality metrics non-finite for "
+                    f"filename={self._fooof_filename}, channel={self._fooof_channel}, "
+                    f"period_stage={fit_label}. No quality rejection applied."
+                )
             # FOOOF outputs the periodic and aperiodic fit in log10 space, so we convert it back to linear space for both aperiodic and periodic components
         return 10**fm._peak_fit, 10**fm._ap_fit
