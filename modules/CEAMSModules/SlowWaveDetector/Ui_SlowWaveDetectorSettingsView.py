@@ -112,7 +112,6 @@ class Ui_SlowWaveDetectorSettingsView(object):
 
         self.label_6 = QLabel(SlowWaveDetectorSettingsView)
         self.label_6.setObjectName(u"label_6")
-        self.label_6.setMinimumSize(QSize(130, 0))
         self.label_6.setAlignment(Qt.AlignRight|Qt.AlignTrailing|Qt.AlignVCenter)
 
         self.gridLayout.addWidget(self.label_6, 7, 1, 1, 1)

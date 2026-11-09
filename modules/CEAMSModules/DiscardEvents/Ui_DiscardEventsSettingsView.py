@@ -52,8 +52,8 @@ class Ui_DiscardEventsSettingsView(object):
 
         self.min_len_sec_label = QLabel(DiscardEventsSettingsView)
         self.min_len_sec_label.setObjectName(u"min_len_sec_label")
-        self.min_len_sec_label.setMinimumSize(QSize(180, 0))
-        self.min_len_sec_label.setMaximumSize(QSize(180, 16777215))
+        self.min_len_sec_label.setMinimumSize(QSize(240, 0))
+        self.min_len_sec_label.setMaximumSize(QSize(240, 16777215))
 
         self.formLayout.setWidget(2, QFormLayout.LabelRole, self.min_len_sec_label)
 
@@ -64,8 +64,8 @@ class Ui_DiscardEventsSettingsView(object):
 
         self.max_len_sec_label = QLabel(DiscardEventsSettingsView)
         self.max_len_sec_label.setObjectName(u"max_len_sec_label")
-        self.max_len_sec_label.setMinimumSize(QSize(180, 0))
-        self.max_len_sec_label.setMaximumSize(QSize(180, 16777215))
+        self.max_len_sec_label.setMinimumSize(QSize(240, 0))
+        self.max_len_sec_label.setMaximumSize(QSize(240, 16777215))
 
         self.formLayout.setWidget(3, QFormLayout.LabelRole, self.max_len_sec_label)
 
@@ -76,15 +76,15 @@ class Ui_DiscardEventsSettingsView(object):
 
         self.artefact_free_checkBox = QCheckBox(DiscardEventsSettingsView)
         self.artefact_free_checkBox.setObjectName(u"artefact_free_checkBox")
-        self.artefact_free_checkBox.setMinimumSize(QSize(180, 0))
-        self.artefact_free_checkBox.setMaximumSize(QSize(180, 16777215))
+        self.artefact_free_checkBox.setMinimumSize(QSize(240, 0))
+        self.artefact_free_checkBox.setMaximumSize(QSize(240, 16777215))
 
         self.formLayout.setWidget(4, QFormLayout.LabelRole, self.artefact_free_checkBox)
 
         self.artefact_group_label = QLabel(DiscardEventsSettingsView)
         self.artefact_group_label.setObjectName(u"artefact_group_label")
-        self.artefact_group_label.setMinimumSize(QSize(180, 0))
-        self.artefact_group_label.setMaximumSize(QSize(180, 16777215))
+        self.artefact_group_label.setMinimumSize(QSize(240, 0))
+        self.artefact_group_label.setMaximumSize(QSize(240, 16777215))
 
         self.formLayout.setWidget(5, QFormLayout.LabelRole, self.artefact_group_label)
 
@@ -96,8 +96,8 @@ class Ui_DiscardEventsSettingsView(object):
 
         self.artefact_name_label = QLabel(DiscardEventsSettingsView)
         self.artefact_name_label.setObjectName(u"artefact_name_label")
-        self.artefact_name_label.setMinimumSize(QSize(180, 0))
-        self.artefact_name_label.setMaximumSize(QSize(180, 16777215))
+        self.artefact_name_label.setMinimumSize(QSize(240, 0))
+        self.artefact_name_label.setMaximumSize(QSize(240, 16777215))
 
         self.formLayout.setWidget(6, QFormLayout.LabelRole, self.artefact_name_label)
 

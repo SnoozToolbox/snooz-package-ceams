@@ -60,8 +60,8 @@ class Ui_DetectorsStep(object):
         self.buttonGroup.setObjectName(u"buttonGroup")
         self.buttonGroup.addButton(self.common_radioButton)
         self.common_radioButton.setObjectName(u"common_radioButton")
-        self.common_radioButton.setMinimumSize(QSize(230, 0))
-        self.common_radioButton.setMaximumSize(QSize(230, 16777215))
+        self.common_radioButton.setMinimumSize(QSize(250, 0))
+        self.common_radioButton.setMaximumSize(QSize(250, 16777215))
         self.common_radioButton.setChecked(True)
 
         self.horizontalLayout_2.addWidget(self.common_radioButton)
@@ -109,8 +109,8 @@ class Ui_DetectorsStep(object):
         self.specific_radioButton = QRadioButton(DetectorsStep)
         self.buttonGroup.addButton(self.specific_radioButton)
         self.specific_radioButton.setObjectName(u"specific_radioButton")
-        self.specific_radioButton.setMinimumSize(QSize(230, 0))
-        self.specific_radioButton.setMaximumSize(QSize(230, 16777215))
+        self.specific_radioButton.setMinimumSize(QSize(250, 0))
+        self.specific_radioButton.setMaximumSize(QSize(250, 16777215))
 
         self.horizontalLayout_3.addWidget(self.specific_radioButton)
 

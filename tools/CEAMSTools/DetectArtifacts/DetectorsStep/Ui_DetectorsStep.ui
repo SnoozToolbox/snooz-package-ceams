@@ -57,13 +57,13 @@
         <widget class="QRadioButton" name="common_radioButton">
          <property name="minimumSize">
           <size>
-           <width>230</width>
+           <width>250</width>
            <height>0</height>
           </size>
          </property>
          <property name="maximumSize">
           <size>
-           <width>230</width>
+           <width>250</width>
            <height>16777215</height>
           </size>
          </property>
@@ -185,13 +185,13 @@
         <widget class="QRadioButton" name="specific_radioButton">
          <property name="minimumSize">
           <size>
-           <width>230</width>
+           <width>250</width>
            <height>0</height>
           </size>
          </property>
          <property name="maximumSize">
           <size>
-           <width>230</width>
+           <width>250</width>
            <height>16777215</height>
           </size>
          </property>

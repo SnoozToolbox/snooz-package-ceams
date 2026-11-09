@@ -241,7 +241,7 @@ class Ui_SleepStagesImporterSettingsView(object):
 
         self.label_43 = QLabel(self.layoutWidget1)
         self.label_43.setObjectName(u"label_43")
-        self.label_43.setMaximumSize(QSize(100, 16777215))
+        self.label_43.setMaximumSize(QSize(110, 16777215))
         self.label_43.setFont(font)
 
         self.gridLayout_2.addWidget(self.label_43, 0, 1, 1, 1)

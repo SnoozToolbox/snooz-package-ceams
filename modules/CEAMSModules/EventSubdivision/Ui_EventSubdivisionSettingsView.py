@@ -25,7 +25,7 @@ class Ui_EventSubdivisionSettingsView(object):
         EventSubdivisionSettingsView.resize(446, 328)
         self.label_8 = QLabel(EventSubdivisionSettingsView)
         self.label_8.setObjectName(u"label_8")
-        self.label_8.setGeometry(QRect(90, 10, 171, 16))
+        self.label_8.setGeometry(QRect(60, 8, 231, 20))
         font = QFont()
         font.setBold(True)
         self.label_8.setFont(font)

@@ -94,7 +94,7 @@
             </property>
             <property name="sizeHint" stdset="0">
              <size>
-              <width>30</width>
+              <width>2</width>
               <height>20</height>
              </size>
             </property>
@@ -107,13 +107,13 @@
             </property>
             <property name="minimumSize">
              <size>
-              <width>210</width>
+              <width>238</width>
               <height>0</height>
              </size>
             </property>
             <property name="maximumSize">
              <size>
-              <width>210</width>
+              <width>238</width>
               <height>16777215</height>
              </size>
             </property>
@@ -190,7 +190,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
             </property>
             <property name="sizeHint" stdset="0">
              <size>
-              <width>40</width>
+              <width>12</width>
               <height>20</height>
              </size>
             </property>
@@ -200,13 +200,13 @@ li.checked::marker { content: &quot;\2612&quot;; }
            <widget class="QCheckBox" name="hour_checkBox">
             <property name="minimumSize">
              <size>
-              <width>210</width>
+              <width>238</width>
               <height>0</height>
              </size>
             </property>
             <property name="maximumSize">
              <size>
-              <width>210</width>
+              <width>238</width>
               <height>16777215</height>
              </size>
             </property>
@@ -292,7 +292,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
             </property>
             <property name="sizeHint" stdset="0">
              <size>
-              <width>30</width>
+              <width>2</width>
               <height>20</height>
              </size>
             </property>
@@ -302,13 +302,13 @@ li.checked::marker { content: &quot;\2612&quot;; }
            <widget class="QCheckBox" name="cycle_checkBox">
             <property name="minimumSize">
              <size>
-              <width>210</width>
+              <width>238</width>
               <height>0</height>
              </size>
             </property>
             <property name="maximumSize">
              <size>
-              <width>210</width>
+              <width>238</width>
               <height>16777215</height>
              </size>
             </property>

@@ -61,15 +61,15 @@ class Ui_Outputfiles(object):
         self.frame.setFrameShadow(QFrame.Shadow.Raised)
         self.horizontalLayout = QHBoxLayout(self.frame)
         self.horizontalLayout.setObjectName(u"horizontalLayout")
-        self.horizontalSpacer_3 = QSpacerItem(30, 20, QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Minimum)
+        self.horizontalSpacer_3 = QSpacerItem(2, 20, QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Minimum)
 
         self.horizontalLayout.addItem(self.horizontalSpacer_3)
 
         self.total_checkBox = QCheckBox(self.frame)
         self.total_checkBox.setObjectName(u"total_checkBox")
         self.total_checkBox.setEnabled(False)
-        self.total_checkBox.setMinimumSize(QSize(210, 0))
-        self.total_checkBox.setMaximumSize(QSize(210, 16777215))
+        self.total_checkBox.setMinimumSize(QSize(238, 0))
+        self.total_checkBox.setMaximumSize(QSize(238, 16777215))
         self.total_checkBox.setChecked(True)
 
         self.horizontalLayout.addWidget(self.total_checkBox)
@@ -98,14 +98,14 @@ class Ui_Outputfiles(object):
         self.frame_2.setFrameShadow(QFrame.Shadow.Raised)
         self.horizontalLayout_3 = QHBoxLayout(self.frame_2)
         self.horizontalLayout_3.setObjectName(u"horizontalLayout_3")
-        self.horizontalSpacer = QSpacerItem(40, 20, QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Minimum)
+        self.horizontalSpacer = QSpacerItem(12, 20, QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Minimum)
 
         self.horizontalLayout_3.addItem(self.horizontalSpacer)
 
         self.hour_checkBox = QCheckBox(self.frame_2)
         self.hour_checkBox.setObjectName(u"hour_checkBox")
-        self.hour_checkBox.setMinimumSize(QSize(210, 0))
-        self.hour_checkBox.setMaximumSize(QSize(210, 16777215))
+        self.hour_checkBox.setMinimumSize(QSize(238, 0))
+        self.hour_checkBox.setMaximumSize(QSize(238, 16777215))
         self.hour_checkBox.setChecked(True)
 
         self.horizontalLayout_3.addWidget(self.hour_checkBox)
@@ -135,14 +135,14 @@ class Ui_Outputfiles(object):
         self.frame_3.setFrameShadow(QFrame.Shadow.Raised)
         self.horizontalLayout_4 = QHBoxLayout(self.frame_3)
         self.horizontalLayout_4.setObjectName(u"horizontalLayout_4")
-        self.horizontalSpacer_4 = QSpacerItem(30, 20, QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Minimum)
+        self.horizontalSpacer_4 = QSpacerItem(2, 20, QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Minimum)
 
         self.horizontalLayout_4.addItem(self.horizontalSpacer_4)
 
         self.cycle_checkBox = QCheckBox(self.frame_3)
         self.cycle_checkBox.setObjectName(u"cycle_checkBox")
-        self.cycle_checkBox.setMinimumSize(QSize(210, 0))
-        self.cycle_checkBox.setMaximumSize(QSize(210, 16777215))
+        self.cycle_checkBox.setMinimumSize(QSize(238, 0))
+        self.cycle_checkBox.setMaximumSize(QSize(238, 16777215))
         self.cycle_checkBox.setChecked(True)
 
         self.horizontalLayout_4.addWidget(self.cycle_checkBox)

@@ -389,13 +389,13 @@ li.checked::marker { content: &quot;\2612&quot;; }
        </property>
        <property name="minimumSize">
         <size>
-         <width>450</width>
+         <width>470</width>
          <height>0</height>
         </size>
        </property>
        <property name="maximumSize">
         <size>
-         <width>450</width>
+         <width>470</width>
          <height>16777215</height>
         </size>
        </property>

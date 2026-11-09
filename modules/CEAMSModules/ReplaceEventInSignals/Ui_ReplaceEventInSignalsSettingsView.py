@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file ''
+## Form generated from reading UI file 'Ui_ReplaceEventInSignalsSettingsView.ui'
 ##
 ## Created by: Qt User Interface Compiler version 6.8.2
 ##
@@ -25,7 +25,7 @@ class Ui_ReplaceEventInSignalsSettingsView(object):
         ReplaceEventInSignalsSettingsView.resize(415, 224)
         self.layoutWidget = QWidget(ReplaceEventInSignalsSettingsView)
         self.layoutWidget.setObjectName(u"layoutWidget")
-        self.layoutWidget.setGeometry(QRect(10, 10, 248, 46))
+        self.layoutWidget.setGeometry(QRect(10, 10, 280, 46))
         self.gridLayout_2 = QGridLayout(self.layoutWidget)
         self.gridLayout_2.setObjectName(u"gridLayout_2")
         self.gridLayout_2.setContentsMargins(0, 0, 0, 0)
@@ -45,6 +45,6 @@ class Ui_ReplaceEventInSignalsSettingsView(object):
 
     def retranslateUi(self, ReplaceEventInSignalsSettingsView):
         ReplaceEventInSignalsSettingsView.setWindowTitle(QCoreApplication.translate("ReplaceEventInSignalsSettingsView", u"Form", None))
-        self.label_8.setText(QCoreApplication.translate("ReplaceEventInSignalsSettingsView", u"ReplaceEventInSignalsl settings", None))
+        self.label_8.setText(QCoreApplication.translate("ReplaceEventInSignalsSettingsView", u"Replace event in signals settings", None))
     # retranslateUi
 

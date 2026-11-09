@@ -18,7 +18,7 @@
     <rect>
      <x>10</x>
      <y>10</y>
-     <width>248</width>
+     <width>280</width>
      <height>46</height>
     </rect>
    </property>
@@ -27,12 +27,11 @@
      <widget class="QLabel" name="label_8">
       <property name="font">
        <font>
-        <weight>75</weight>
         <bold>true</bold>
        </font>
       </property>
       <property name="text">
-       <string>ReplaceEventInSignalsl settings</string>
+       <string>Replace event in signals settings</string>
       </property>
      </widget>
     </item>

@@ -2,9 +2,6 @@
 <ui version="4.0">
  <class>{{ module_class }}SettingsView</class>
  <widget class="QWidget" name="{{ module_class }}SettingsView">
-  <property name="styleSheet">
-   <string notr="true">font: 12pt &quot;Roboto&quot;;</string>
-  </property>
   <property name="geometry">
    <rect>
     <x>0</x>

@@ -187,8 +187,8 @@ class Ui_SpectralSettings(object):
         self.label_8.setObjectName(u"label_8")
         sizePolicy1.setHeightForWidth(self.label_8.sizePolicy().hasHeightForWidth())
         self.label_8.setSizePolicy(sizePolicy1)
-        self.label_8.setMinimumSize(QSize(450, 0))
-        self.label_8.setMaximumSize(QSize(450, 16777215))
+        self.label_8.setMinimumSize(QSize(470, 0))
+        self.label_8.setMaximumSize(QSize(470, 16777215))
 
         self.gridLayout_2.addWidget(self.label_8, 0, 0, 1, 1)
 

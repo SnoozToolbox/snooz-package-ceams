@@ -23,7 +23,7 @@
         {
             "item_name": "PSGReader",
             "item_type": "module",
-            "item_version": "2.5.1",
+            "item_version": "2.5.2",
             "item_hooks": [
                 {
                     "endpoint_name": "module_endpoint",
@@ -107,7 +107,7 @@
         {
             "item_name": "DiscardEvents",
             "item_type": "module",
-            "item_version": "2.1.0",
+            "item_version": "2.1.1",
             "item_hooks": [
                 {
                     "endpoint_name": "module_endpoint",
@@ -205,7 +205,7 @@
         {
             "item_name": "SlowWaveDetector",
             "item_type": "module",
-            "item_version": "2.4.0",
+            "item_version": "2.4.1",
             "item_hooks": [
                 {
                     "endpoint_name": "module_endpoint",
@@ -317,7 +317,7 @@
         {
             "item_name": "ReplaceEventInSignals",
             "item_type": "module",
-            "item_version": "2.1.0",
+            "item_version": "2.1.1",
             "item_hooks": [
                 {
                     "endpoint_name": "module_endpoint",
@@ -359,7 +359,7 @@
         {
             "item_name": "ThresholdComputation",
             "item_type": "module",
-            "item_version": "2.1.0",
+            "item_version": "2.1.1",
             "item_hooks": [
                 {
                     "endpoint_name": "module_endpoint",
@@ -849,7 +849,7 @@
         {
             "item_name": "SleepStagesImporter",
             "item_type": "module",
-            "item_version": "2.1.0",
+            "item_version": "2.1.1",
             "item_hooks": [
                 {
                     "endpoint_name": "module_endpoint",
@@ -1255,7 +1255,7 @@
         {
             "item_name": "EventSubdivision",
             "item_type": "module",
-            "item_version": "1.0.0",
+            "item_version": "1.0.1",
             "item_hooks": [
                 {
                     "endpoint_name": "module_endpoint",
