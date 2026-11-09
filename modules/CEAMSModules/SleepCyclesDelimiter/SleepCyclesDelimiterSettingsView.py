@@ -11,12 +11,25 @@ from qtpy import QtWidgets
 from qtpy.QtGui import QPixmap, QImage
 from qtpy.QtCore import QFile, QTimer, Slot
 import base64
+import re
 
 #from . import SleepCycleDelimiter_rs
 
 from CEAMSModules.SleepCyclesDelimiter.Ui_SleepCyclesDelimiterSettingsView import Ui_SleepCyclesDelimiterSettingsView
 from commons.BaseSettingsView import BaseSettingsView
 import config
+
+# The links of the details take the link color of the theme. Settings saved before
+# color them cyan, and the saved details keep the color the link had when saved.
+_OLD_LINK_COLOR = re.compile(r"\s*(?<![-\w])color\s*:\s*#00ccff\s*;?", re.IGNORECASE)
+_COLOR = re.compile(r"\s*(?<![-\w])color\s*:\s*#[0-9a-fA-F]{3,8}\s*;?", re.IGNORECASE)
+_LINK = re.compile(r"(<a\b[^>]*>)(.*?)(</a>)", re.IGNORECASE | re.DOTALL)
+
+
+def _details_with_theme_links(html):
+    """ The details without the colors of their links, so the links take the color of the theme. """
+    html = _OLD_LINK_COLOR.sub("", html)
+    return _LINK.sub(lambda link: _COLOR.sub("", link.group(1)) + _COLOR.sub("", link.group(2)) + link.group(3), html)
 
 
 class SleepCyclesDelimiterSettingsView( BaseSettingsView,  Ui_SleepCyclesDelimiterSettingsView, QtWidgets.QWidget):
@@ -193,7 +206,7 @@ class SleepCyclesDelimiterSettingsView( BaseSettingsView,  Ui_SleepCyclesDelimit
 
             # Details
             self.textBrowser.setReadOnly(False)
-            self.textBrowser.setHtml(self.parameters['details'])
+            self.textBrowser.setHtml(_details_with_theme_links(self.parameters['details']))
             self.textBrowser.setReadOnly(True)
 
             # Set if the incomplete cycles should be kept
@@ -258,7 +271,7 @@ class SleepCyclesDelimiterSettingsView( BaseSettingsView,  Ui_SleepCyclesDelimit
             # Details
             self.textBrowser.setReadOnly(False)
             self.textBrowser.setHtml('<div>Adjust options based on [1].</div><div>&nbsp;</div><div>NREM-REMS cycles were defined [...] by the succession of a NREMS episode of at least 15 min duration and a REMS episode of at least 5 min duration. No minimal duration of the REMS episode was required for the completion of the first and last cycle. NREMS episodes were defined as the time interval between the first occurrence of stage 2 and the first occurrence of REMS within a cycle. Consequently REMS episodes were defined as the time intervals between two consecutive NREMS episodes or the time interval between the last NREMS episode and the final awakening. Thus occasional stage 1 epochs between REMS and stage 2 were included in the REMS episode. The reasons for selecting this criterion were the similarity of the EEG in REMS and stage 1, the better delimitation of cycle onset by using stage 2 instead of stage 1, and the fact that the initiation of cycle 1 with stage 2 corresponds to a frequently used criterion of sleep onset.</div><div>&nbsp;</div>'\
-                + '<div>[1] Aeschbach D, Borbely AA. All-night dynamics of the human sleep EEG. J Sleep Res. 1993 Jun; 2(2):70-81.<span style="color: #00ccff; "> <a style="color: #00ccff; " href="https://doi.org/10.1111/j.1365-2869.1993.tb00065.x" aria-label="Digital Object Identifier">https://doi.org/10.1111/j.1365-2869.1993.tb00065.x</a></div>')
+                + '<div>[1] Aeschbach D, Borbely AA. All-night dynamics of the human sleep EEG. J Sleep Res. 1993 Jun; 2(2):70-81. <a href="https://doi.org/10.1111/j.1365-2869.1993.tb00065.x" aria-label="Digital Object Identifier">https://doi.org/10.1111/j.1365-2869.1993.tb00065.x</a></div>')
             self.textBrowser.setReadOnly(True)
 
         elif self.radioButton_Floyd.isChecked():
@@ -285,7 +298,7 @@ class SleepCyclesDelimiterSettingsView( BaseSettingsView,  Ui_SleepCyclesDelimit
             # Details
             self.textBrowser.setReadOnly(False)
             self.textBrowser.setHtml('<div>Adjust options based on [1].</div><div>&nbsp;</div><div>[] 15-min minimum for NREMPs in order to avoid considering brief stage 2 epochs in REM as separate NREMPs. Since we controlled time in bed, i.e., awoke subjects in the moming, additional criteria were needed. We defined as complete the last NREMP of the night if it was followed by 5 min or more of REM sleep before awakening, which sometimes was experimenter-induced rather than spontaneous. Similarly, the last REMP was considered complete if it was followed by 5 min or longer of NREM sleep. Thus, no sleep period was considered complete if it was interrupted by the final awakening of the night.</div>'\
-                + '<div>&nbsp;</div><div>[1] Feinberg I, Floyd TC. Systematic trends across the night in human sleep cycles. Psychophysiology. 1979 May; 16(3):283-91.<span style="color: #00ccff; "> <a style="color: #00ccff; " href="https://doi.org/10.1111/j.1469-8986.1979.tb02991.x" aria-label="Digital Object Identifier">https://doi.org/10.1111/j.1469-8986.1979.tb02991.x</a></div><div>&nbsp;</div><div>&nbsp;</div>')
+                + '<div>&nbsp;</div><div>[1] Feinberg I, Floyd TC. Systematic trends across the night in human sleep cycles. Psychophysiology. 1979 May; 16(3):283-91. <a href="https://doi.org/10.1111/j.1469-8986.1979.tb02991.x" aria-label="Digital Object Identifier">https://doi.org/10.1111/j.1469-8986.1979.tb02991.x</a></div><div>&nbsp;</div><div>&nbsp;</div>')
             self.textBrowser.setReadOnly(True)
      
 
