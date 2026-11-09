@@ -207,4 +207,20 @@ def _get_doc(N_HOURS, N_CYCLES):
         }
         cyc_act_dict = cyc_act_dict | current_cycle_act_dict
 
-    return general_dict | total_len_dict | total_act_dict | clock_hour_len_dict | clock_h_act_dict | cyc_len_dict | cyc_act_dict | stage_hour_len_dict | stage_h_act_dict
+    doc = general_dict | total_len_dict | total_act_dict | clock_hour_len_dict | clock_h_act_dict | cyc_len_dict | cyc_act_dict | stage_hour_len_dict | stage_h_act_dict
+    quality_doc = {}
+    for column in doc:
+        if column.endswith('_act'):
+            fit_label = column[:-4]
+            quality_doc[f'{fit_label}_fit_err'] = (
+                f'{fit_label} - FOOOF full-model mean absolute error in log10 power space '
+                '(not a component-specific error). Repeated across frequency bands. '
+                'Missing when no fit was performed; no quality rejection threshold is applied.'
+            )
+            quality_doc[f'{fit_label}_fit_r2'] = (
+                f'{fit_label} - FOOOF squared Pearson correlation between the input log10 '
+                'spectrum and the full fitted model (not a component-specific score). '
+                'Repeated across frequency bands. Missing when no fit was performed or '
+                'the metric is undefined; no quality rejection threshold is applied.'
+            )
+    return doc | quality_doc

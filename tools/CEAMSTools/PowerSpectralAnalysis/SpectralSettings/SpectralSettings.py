@@ -70,7 +70,6 @@ class SpectralSettings(BaseStepView, Ui_SpectralSettings, QtWidgets.QWidget):
     def load_settings(self):
         # Ask for the settings to the publisher to display on the SettingsView
 
-        self._pub_sub_manager.publish(self, self._node_id_stft_std+".get_activation_state", None)
         self._pub_sub_manager.publish(self, self._node_id_IRASA+".get_activation_state", None)
         self._pub_sub_manager.publish(self, self._node_id_PSA_FOOOF+".get_activation_state", None)
         self._pub_sub_manager.publish(self, self._node_id_PSA_std+".get_activation_state", None)
@@ -83,9 +82,6 @@ class SpectralSettings(BaseStepView, Ui_SpectralSettings, QtWidgets.QWidget):
         self._pub_sub_manager.publish(self, self._constant_mini_band_topic, 'ping')
         self._pub_sub_manager.publish(self, self._constant_win_len_topic, 'ping')
         self._pub_sub_manager.publish(self, self._constant_win_step_topic, 'ping')
-
-        # Update activation states based on current radio button selection
-        self.update_activation_states()
 
     # Called when the user clic on RUN or save
     # Message are sent to the publisher   
@@ -227,6 +223,7 @@ class SpectralSettings(BaseStepView, Ui_SpectralSettings, QtWidgets.QWidget):
             self.label_5.setEnabled(True)
             self.label_11.setEnabled(True)
             self.label_12.setEnabled(True)
+    
     # Called by a node in response to a ping request. 
     # Ping request are sent whenever we need to know the value of a parameter of a node.
     def on_topic_response(self, topic, message, sender):
@@ -247,20 +244,20 @@ class SpectralSettings(BaseStepView, Ui_SpectralSettings, QtWidgets.QWidget):
             self._PSA_std_activated = (message == ActivationState.ACTIVATED)
             if self._PSA_std_activated:
                 self.std_radioButton.setChecked(True)
-                self.RA_radioButton.setChecked(False)
-                self.FoooF_radioButton.setChecked(False)
+                # self.RA_radioButton.setChecked(False)
+                # self.FoooF_radioButton.setChecked(False)
         if topic == self._node_id_IRASA+".get_activation_state":
             self._IRASA_activated = (message == ActivationState.ACTIVATED)
             if self._IRASA_activated:
                 self.RA_radioButton.setChecked(True)
-                self.std_radioButton.setChecked(False)
-                self.FoooF_radioButton.setChecked(False)
+                # self.std_radioButton.setChecked(False)
+                # self.FoooF_radioButton.setChecked(False)
         if topic == self._node_id_PSA_FOOOF+".get_activation_state":
             self._FOOOF_activated = (message == ActivationState.ACTIVATED)
             if self._FOOOF_activated:
                 self.FoooF_radioButton.setChecked(True)
-                self.std_radioButton.setChecked(False)
-                self.RA_radioButton.setChecked(False)
+                # self.std_radioButton.setChecked(False)
+                # self.RA_radioButton.setChecked(False)
 
     def on_topic_update(self, topic, message, sender):
         """ Called by the publisher to init settings in the SettingsView 

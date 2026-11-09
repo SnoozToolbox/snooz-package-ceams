@@ -74,11 +74,10 @@ class SelectionStep( BaseStepView,  Ui_SelectionStep, QtWidgets.QWidget):
         self._pub_sub_manager.publish(self, self._in_cycle_topic, 'ping')
         self._pub_sub_manager.publish(self, self._node_id_PSA_Annot+".get_activation_state", None)
 
-        # To activate the PSA on sleep stage or annotations branch
+        # Restore the selection UI without changing the saved module activation states.
         self.NREM_stages_and_periods_slot()
         self.REM_stages_and_periods_slot()
         self.update_section_selection_slot()
-        self.Activate_sleep_annotation_modules()
     # Called when the user clic on RUN
     # Message are sent to the publisher
     def on_apply_settings(self):
