@@ -27,7 +27,6 @@ class Ui_OutputFiles(object):
         if not OutputFiles.objectName():
             OutputFiles.setObjectName(u"OutputFiles")
         OutputFiles.resize(895, 1161)
-        OutputFiles.setStyleSheet(u"font: 12pt \"Roboto\";")
         self.verticalLayout_5 = QVBoxLayout(OutputFiles)
         self.verticalLayout_5.setObjectName(u"verticalLayout_5")
         self.verticalLayout_8 = QVBoxLayout()
@@ -40,8 +39,6 @@ class Ui_OutputFiles(object):
         self.buttonGroup_level.addButton(self.radioButton_report_level)
         self.radioButton_report_level.setObjectName(u"radioButton_report_level")
         font = QFont()
-        font.setFamilies([u"Roboto"])
-        font.setPointSize(12)
         font.setBold(False)
         font.setItalic(False)
         self.radioButton_report_level.setFont(font)
@@ -641,7 +638,7 @@ class Ui_OutputFiles(object):
 "hr { height: 1px; border-width: 0; }\n"
 "li.unchecked::marker { content: \"\\2610\"; }\n"
 "li.checked::marker { content: \"\\2612\"; }\n"
-"</style></head><body style=\" font-family:'Roboto'; font-size:12pt; font-weight:400; font-style:normal;\">\n"
+"</style></head><body style=\" font-size:12pt; font-weight:400; font-style:normal;\">\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Note: When N2 and N3 stages are selected together, the generated figure displays only the EEG spectral power data corresponding to the &quot;N2N3&quot; column of the report. Similarly, when N1, N2, and N3 stages are all selected, the figure presents only the data from the &quot;NREM&quot; column.</p></body></html>", None))
         self.checkBox_Wake.setText(QCoreApplication.translate("OutputFiles", u"Wake", None))
         self.checkBox_N1.setText(QCoreApplication.translate("OutputFiles", u"N1", None))

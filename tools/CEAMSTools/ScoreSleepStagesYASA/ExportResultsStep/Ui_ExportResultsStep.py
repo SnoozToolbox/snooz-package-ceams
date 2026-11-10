@@ -25,7 +25,6 @@ class Ui_ExportResultsStep(object):
         if not ExportResultsStep.objectName():
             ExportResultsStep.setObjectName(u"ExportResultsStep")
         ExportResultsStep.resize(1018, 773)
-        ExportResultsStep.setStyleSheet(u"font: 12pt \"Roboto\";")
         self.verticalLayout_2 = QVBoxLayout(ExportResultsStep)
         self.verticalLayout_2.setObjectName(u"verticalLayout_2")
         self.verticalLayout = QVBoxLayout()
@@ -102,8 +101,6 @@ class Ui_ExportResultsStep(object):
         self.checkBox = QCheckBox(self.frame)
         self.checkBox.setObjectName(u"checkBox")
         font = QFont()
-        font.setFamilies([u"Roboto"])
-        font.setPointSize(12)
         font.setBold(False)
         font.setItalic(False)
         self.checkBox.setFont(font)

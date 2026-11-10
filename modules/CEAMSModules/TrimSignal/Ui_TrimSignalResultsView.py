@@ -22,7 +22,6 @@ class Ui_TrimSignalResultsView(object):
     def setupUi(self, TrimSignalResultsView):
         if not TrimSignalResultsView.objectName():
             TrimSignalResultsView.setObjectName(u"TrimSignalResultsView")
-        TrimSignalResultsView.setStyleSheet(u"font: 12pt \"Roboto\";")
         TrimSignalResultsView.resize(483, 360)
         self.verticalLayout = QVBoxLayout(TrimSignalResultsView)
         self.verticalLayout.setObjectName(u"verticalLayout")

@@ -23,7 +23,6 @@ class Ui_REMsDetailsSettingsView(object):
     def setupUi(self, REMsDetailsSettingsView):
         if not REMsDetailsSettingsView.objectName():
             REMsDetailsSettingsView.setObjectName(u"REMsDetailsSettingsView")
-        REMsDetailsSettingsView.setStyleSheet(u"font: 12pt \"Roboto\";")
         REMsDetailsSettingsView.resize(711, 333)
         self.verticalLayout = QVBoxLayout(REMsDetailsSettingsView)
         self.verticalLayout.setObjectName(u"verticalLayout")

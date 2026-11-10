@@ -25,7 +25,6 @@ class Ui_SlowWaveCharacteristics(object):
         if not SlowWaveCharacteristics.objectName():
             SlowWaveCharacteristics.setObjectName(u"SlowWaveCharacteristics")
         SlowWaveCharacteristics.resize(918, 440)
-        SlowWaveCharacteristics.setStyleSheet(u"font: 12pt \"Roboto\";")
         self.verticalLayout = QVBoxLayout(SlowWaveCharacteristics)
         self.verticalLayout.setObjectName(u"verticalLayout")
         self.label = QLabel(SlowWaveCharacteristics)

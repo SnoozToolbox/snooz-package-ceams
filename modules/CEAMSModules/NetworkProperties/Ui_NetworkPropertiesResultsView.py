@@ -22,7 +22,6 @@ class Ui_NetworkPropertiesResultsView(object):
     def setupUi(self, NetworkPropertiesResultsView):
         if not NetworkPropertiesResultsView.objectName():
             NetworkPropertiesResultsView.setObjectName(u"NetworkPropertiesResultsView")
-        NetworkPropertiesResultsView.setStyleSheet(u"font: 12pt \"Roboto\";")
         NetworkPropertiesResultsView.resize(483, 360)
         self.verticalLayout = QVBoxLayout(NetworkPropertiesResultsView)
         self.verticalLayout.setObjectName(u"verticalLayout")

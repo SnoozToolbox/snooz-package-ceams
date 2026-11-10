@@ -13,9 +13,6 @@
   <property name="windowTitle">
    <string>Form</string>
   </property>
-  <property name="styleSheet">
-   <string notr="true">font: 12pt &quot;Roboto&quot;;</string>
-  </property>
   <layout class="QVBoxLayout" name="verticalLayout_5">
    <item>
     <layout class="QVBoxLayout" name="verticalLayout">
@@ -83,7 +80,7 @@ p, li { white-space: pre-wrap; }
 hr { height: 1px; border-width: 0; }
 li.unchecked::marker { content: &quot;\2610&quot;; }
 li.checked::marker { content: &quot;\2612&quot;; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Roboto'; font-size:12pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-size:12pt; font-weight:400; font-style:normal;&quot;&gt;
 &lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;This tool &lt;span style=&quot; font-weight:700;&quot;&gt;classifies sleep stages&lt;/span&gt; from PSG recordings using 30-second epochs.&lt;/p&gt;
 &lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Sleep stages can be classified based on a single EEG electrode, preferably central ones (C3, C4).&lt;br /&gt;Including one EOG and one EMG channel can improve classification accuracy.&lt;br /&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;In Snooz, you can select up to four high-priority EEG channels&lt;/span&gt;, &lt;br /&gt;allowing the tool to determine the most confident classification for each. &lt;/p&gt;
 &lt;p align=&quot;justify&quot; style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;NOTE: Based on the internal analysis of Snooz, configurations combining central channels &lt;br /&gt;with one frontal and one occipital channel typically demonstrate marginally better performance.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
@@ -169,7 +166,7 @@ p, li { white-space: pre-wrap; }
 hr { height: 1px; border-width: 0; }
 li.unchecked::marker { content: &quot;\2610&quot;; }
 li.checked::marker { content: &quot;\2612&quot;; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Roboto'; font-size:12pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-size:12pt; font-weight:400; font-style:normal;&quot;&gt;
 &lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;The sleep staging algorithm, YASA, is an open-source tool that has been trained,&lt;br /&gt;using over 30,000 hours of polysomnographic (PSG) sleep data across diverse populations. &lt;/p&gt;
 &lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-style:italic;&quot;&gt;-Data processing:&lt;/span&gt;&lt;br /&gt;The algorithm uses a central EEG channel, along with EOG, and EMG channels.&lt;br /&gt;These signals are downsampled to 100 Hz and bandpassed-filtered between 0.4 Hz and 30 Hz. &lt;/p&gt;
 &lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-style:italic;&quot;&gt;-Feature Extraction:&lt;/span&gt;&lt;br /&gt;The algorithm extracts a set of time and frequency domain features from the EEG signal, and optionaly from the EOG and EMG signals. &lt;br /&gt;These features are calculated for each 30-second epoch of raw data. &lt;/p&gt;
@@ -235,7 +232,7 @@ p, li { white-space: pre-wrap; }
 hr { height: 1px; border-width: 0; }
 li.unchecked::marker { content: &quot;\2610&quot;; }
 li.checked::marker { content: &quot;\2612&quot;; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Roboto'; font-size:12pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-size:12pt; font-weight:400; font-style:normal;&quot;&gt;
 &lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;The YASA sleep scoring tool is compatible with different input files including, EDF, NATUS, and STS.&lt;br /&gt;NOTE: For proper functionality with discontinuous files, the tool requires at least one EEG channel along with one EOG or EMG channel.&lt;br /&gt;The output of the automatic scoring algorithm is an accessory file that saves the predicted sleep stages.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
           </property>
          </widget>

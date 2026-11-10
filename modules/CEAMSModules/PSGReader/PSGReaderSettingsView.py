@@ -382,9 +382,6 @@ class PSGReaderSettingsView( BaseSettingsView,  Ui_PSGReaderSettingsView, QtWidg
         self._alias_layout.setSizeConstraint(QtWidgets.QLayout.SetNoConstraint)
         
         alias_title = QtWidgets.QLabel(text="Alias")
-        title_font = QtGui.QFont()
-        title_font.setBold(True)
-        alias_title.setFont(title_font)
         self._alias_layout.addWidget(alias_title)
 
         for a in alias.split(";"):

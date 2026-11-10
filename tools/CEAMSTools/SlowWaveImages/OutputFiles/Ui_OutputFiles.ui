@@ -13,9 +13,6 @@
   <property name="windowTitle">
    <string/>
   </property>
-  <property name="styleSheet">
-   <string notr="true">font: 12pt &quot;Roboto&quot;;</string>
-  </property>
   <layout class="QVBoxLayout" name="verticalLayout_6">
    <item>
     <layout class="QVBoxLayout" name="verticalLayout_5">
@@ -29,8 +26,6 @@
        </property>
        <property name="font">
         <font>
-         <family>Roboto</family>
-         <pointsize>12</pointsize>
          <italic>false</italic>
          <bold>false</bold>
         </font>

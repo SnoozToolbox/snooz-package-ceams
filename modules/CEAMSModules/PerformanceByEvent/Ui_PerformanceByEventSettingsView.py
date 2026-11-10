@@ -31,7 +31,6 @@ class Ui_PerformanceByEventSettingsView(object):
         self.label_5 = QLabel(PerformanceByEventSettingsView)
         self.label_5.setObjectName(u"label_5")
         font = QFont()
-        font.setPointSize(12)
         font.setBold(True)
         self.label_5.setFont(font)
 

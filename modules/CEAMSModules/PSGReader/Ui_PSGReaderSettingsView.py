@@ -27,7 +27,6 @@ class Ui_PSGReaderSettingsView(object):
         if not PSGReaderSettingsView.objectName():
             PSGReaderSettingsView.setObjectName(u"PSGReaderSettingsView")
         PSGReaderSettingsView.resize(844, 252)
-        PSGReaderSettingsView.setStyleSheet(u"font: 12pt \"Roboto\";")
         self.verticalLayout_4 = QVBoxLayout(PSGReaderSettingsView)
         self.verticalLayout_4.setObjectName(u"verticalLayout_4")
         self.verticalLayout_4.setSizeConstraint(QLayout.SizeConstraint.SetNoConstraint)
@@ -46,8 +45,6 @@ class Ui_PSGReaderSettingsView(object):
         self.label_PSG = QLabel(self.frame_files)
         self.label_PSG.setObjectName(u"label_PSG")
         font = QFont()
-        font.setFamilies([u"Roboto"])
-        font.setPointSize(12)
         font.setBold(False)
         font.setItalic(False)
         self.label_PSG.setFont(font)

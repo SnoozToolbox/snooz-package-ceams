@@ -2,9 +2,6 @@
 <ui version="4.0">
  <class>NetworkPropertiesResultsView</class>
  <widget class="QWidget" name="NetworkPropertiesResultsView">
-  <property name="styleSheet">
-   <string notr="true">font: 12pt &quot;Roboto&quot;;</string>
-  </property>
   <property name="geometry">
    <rect>
     <x>0</x>

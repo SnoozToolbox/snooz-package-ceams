@@ -25,7 +25,6 @@ class Ui_InputoutputFilesStep(object):
         if not InputoutputFilesStep.objectName():
             InputoutputFilesStep.setObjectName(u"InputoutputFilesStep")
         InputoutputFilesStep.resize(1005, 689)
-        InputoutputFilesStep.setStyleSheet(u"font: 12pt \"Roboto\";")
         self.verticalLayout = QVBoxLayout(InputoutputFilesStep)
         self.verticalLayout.setSpacing(25)
         self.verticalLayout.setObjectName(u"verticalLayout")

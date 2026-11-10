@@ -34,8 +34,6 @@ class Ui_FrequencyBand(object):
         self.label_5 = QLabel(FrequencyBand)
         self.label_5.setObjectName(u"label_5")
         font = QFont()
-        font.setFamilies([u"Roboto"])
-        font.setPointSize(12)
         font.setBold(False)
         font.setItalic(False)
         self.label_5.setFont(font)
@@ -127,7 +125,6 @@ class Ui_FrequencyBand(object):
 
     def retranslateUi(self, FrequencyBand):
         FrequencyBand.setWindowTitle("")
-        FrequencyBand.setStyleSheet(QCoreApplication.translate("FrequencyBand", u"font: 12pt \"Roboto\";", None))
 #if QT_CONFIG(tooltip)
         self.label_5.setToolTip(QCoreApplication.translate("FrequencyBand", u"The frequency band is defined as the low bin is included and the high bin is excluded in order to avoid twice averaging the energy from the same frequency bin. ", None))
 #endif // QT_CONFIG(tooltip)

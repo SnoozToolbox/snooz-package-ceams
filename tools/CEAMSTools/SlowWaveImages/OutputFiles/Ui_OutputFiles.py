@@ -26,7 +26,6 @@ class Ui_OutputFiles(object):
         if not OutputFiles.objectName():
             OutputFiles.setObjectName(u"OutputFiles")
         OutputFiles.resize(1273, 923)
-        OutputFiles.setStyleSheet(u"font: 12pt \"Roboto\";")
         self.verticalLayout_6 = QVBoxLayout(OutputFiles)
         self.verticalLayout_6.setObjectName(u"verticalLayout_6")
         self.verticalLayout_5 = QVBoxLayout()
@@ -39,8 +38,6 @@ class Ui_OutputFiles(object):
         sizePolicy.setHeightForWidth(self.checkBox_enable_subject.sizePolicy().hasHeightForWidth())
         self.checkBox_enable_subject.setSizePolicy(sizePolicy)
         font = QFont()
-        font.setFamilies([u"Roboto"])
-        font.setPointSize(12)
         font.setBold(False)
         font.setItalic(False)
         self.checkBox_enable_subject.setFont(font)

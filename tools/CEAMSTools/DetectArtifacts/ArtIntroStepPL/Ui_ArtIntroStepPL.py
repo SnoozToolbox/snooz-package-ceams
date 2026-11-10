@@ -25,7 +25,6 @@ class Ui_ArtIntroStepPL(object):
         if not ArtIntroStepPL.objectName():
             ArtIntroStepPL.setObjectName(u"ArtIntroStepPL")
         ArtIntroStepPL.resize(900, 854)
-        ArtIntroStepPL.setStyleSheet(u"font: 12pt \"Roboto\";")
         self.horizontalLayout = QHBoxLayout(ArtIntroStepPL)
         self.horizontalLayout.setObjectName(u"horizontalLayout")
         self.widget = QWidget(ArtIntroStepPL)
@@ -48,8 +47,6 @@ class Ui_ArtIntroStepPL(object):
         self.label_2.setMinimumSize(QSize(0, 0))
         self.label_2.setMaximumSize(QSize(16777215, 200))
         font = QFont()
-        font.setFamilies([u"Roboto"])
-        font.setPointSize(12)
         font.setBold(False)
         font.setItalic(False)
         self.label_2.setFont(font)
@@ -180,20 +177,20 @@ class Ui_ArtIntroStepPL(object):
 "hr { height: 1px; border-width: 0; }\n"
 "li.unchecked::marker { content: \"\\2610\"; }\n"
 "li.checked::marker { content: \"\\2612\"; }\n"
-"</style></head><body style=\" font-family:'Roboto'; font-size:12pt; font-weight:400; font-style:normal;\">\n"
+"</style></head><body style=\" font-size:12pt; font-weight:400; font-style:normal;\">\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">     Flatline : Segments of low power, flatlined signal.</p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">     High Frequency burst : Segments with a burst of high frequency power (&gt;25 Hz).</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">   "
-                        "  Persistent Noise : Segments with high frequency noise (&gt;25 Hz).</p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">     Persistent Noise : S"
+                        "egments with high frequency noise (&gt;25 Hz).</p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">     Power Line Contamination : Segments corrupted by 50 or 60 Hz power.</p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">     Baseline Variation (Breathing, Sweat) : Segments with high power in the low frequency band (&lt;0.4 Hz).</p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">     Muscle artifact : Segments with burst of activity in the frequency band 20.25-32 Hz.</p>\n"
 "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Artifa"
-                        "ct detection performs better when similar sleep stages are selected, as the power distribution can be modeled more accurately. Some detectors use a 3-component Gaussian Mixture Model (GMM) to estimate the standard deviation of non-corrupted data, which is then used to define the threshold value.</p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Artifact detection performs "
+                        "better when similar sleep stages are selected, as the power distribution can be modeled more accurately. Some detectors use a 3-component Gaussian Mixture Model (GMM) to estimate the standard deviation of non-corrupted data, which is then used to define the threshold value.</p>\n"
 "<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">We recommend running artifact detection separately for <span style=\" font-weight:700;\">NREM</span>, <span style=\" font-weight:700;\">REM</span>, and <span style=\" font-weight:700;\">Awake</span> stages.<br />Threshold values for the different algorithms can be edited; however, two sets of default values are also available.</p>\n"
-"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Make sure to use different annotation groups or names to avoid confusion when running artifact detection twice. The default labels reflec"
-                        "t the selected sleep stages and the chosen set of default values.</p>\n"
+"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Make sure to use different annotation groups or names to avoid confusion when running artifact detection twice. The default labels reflect the selected sleep s"
+                        "tages and the chosen set of default values.</p>\n"
 "<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">While sleep stages are mandatory for sleep recordings, artifact detection can also be run on any EEG recording if <span style=\" font-weight:700;\">&quot;Unscored&quot;</span> is selected for the sleep stages.</p></body></html>", None))
         self.label_4.setText(QCoreApplication.translate("ArtIntroStepPL", u"<html><head/><body><p><span style=\" font-weight:600;\">Output</span></p></body></html>", None))
         self.textEdit_2.setHtml(QCoreApplication.translate("ArtIntroStepPL", u"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
@@ -202,17 +199,17 @@ class Ui_ArtIntroStepPL(object):
 "hr { height: 1px; border-width: 0; }\n"
 "li.unchecked::marker { content: \"\\2610\"; }\n"
 "li.checked::marker { content: \"\\2612\"; }\n"
-"</style></head><body style=\" font-family:'Roboto'; font-size:12pt; font-weight:400; font-style:normal;\">\n"
+"</style></head><body style=\" font-size:12pt; font-weight:400; font-style:normal;\">\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">The detected artifacts are added in the input file as new events <br />(i.e. .tsv for edf, .sts for Stellate and .ent for NATUS).</p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">If the input file already contains the group and name of the new events to be added, they will first be deleted. </p>\n"
-"<p style=\" margin-top:0"
-                        "px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">If you detect artifact on an EDF file without accessory file, the accessory (.tsv) file will be automatically generated.</p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px;"
+                        " margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">If you detect artifact on an EDF file without accessory file, the accessory (.tsv) file will be automatically generated.</p>\n"
 "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">The output is a TSV (Tab Separated Values) file. A new row is added for every artifact detection.</p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">The channel label is concatened to the artifact name with a @@ (EDFbrowser compatible).</p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">The columns of the file are as follows:</p>\n"
-"<p style=\" margin-top:0p"
-                        "x; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">     1. group : The group of the event is artifact.</p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; "
+                        "margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">     1. group : The group of the event is artifact.</p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">     2. name : The name of the event. Ex. flatline.</p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">     3. start_sec : The onset of the event in second. </p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">     4. duration_sec : The duration of the event in second.</p>\n"

@@ -26,7 +26,6 @@ class Ui_MuscularStep(object):
         if not MuscularStep.objectName():
             MuscularStep.setObjectName(u"MuscularStep")
         MuscularStep.resize(1317, 748)
-        MuscularStep.setStyleSheet(u"font: 12pt \"Roboto\";")
         self.verticalLayout_2 = QVBoxLayout(MuscularStep)
         self.verticalLayout_2.setObjectName(u"verticalLayout_2")
         self.imageWidget = QWidget(MuscularStep)
@@ -65,8 +64,6 @@ class Ui_MuscularStep(object):
         sizePolicy2.setHeightForWidth(self.label_9.sizePolicy().hasHeightForWidth())
         self.label_9.setSizePolicy(sizePolicy2)
         font = QFont()
-        font.setFamilies([u"Roboto"])
-        font.setPointSize(12)
         font.setBold(False)
         font.setItalic(False)
         self.label_9.setFont(font)
@@ -322,10 +319,10 @@ class Ui_MuscularStep(object):
 "hr { height: 1px; border-width: 0; }\n"
 "li.unchecked::marker { content: \"\\2610\"; }\n"
 "li.checked::marker { content: \"\\2612\"; }\n"
-"</style></head><body style=\" font-family:'Roboto'; font-size:12pt; font-weight:400; font-style:normal;\">\n"
+"</style></head><body style=\" font-size:12pt; font-weight:400; font-style:normal;\">\n"
 "<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" color:#000000;\">Identification of bursts of myogenic activity (20.25\u201332.0 Hz) via Welch's method spectral power analysis.</span></p>\n"
-"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" color:#000000;\">The algorithm compares high frequency activity (20.25\u201332.0 Hz) in each mini 4-s epoch"
-                        " with the activity level in a local 3-min baseline window. </span></p>\n"
+"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" color:#000000;\">The algorithm compares high frequency activity (20.25\u201332.0 Hz) in each mini 4-s epoch with the activity lev"
+                        "el in a local 3-min baseline window. </span></p>\n"
 "<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" color:#000000;\">A muscular artifact is identified when the high frequency activity of the 4-s epoch exceeded the local baseline activity by a certain factor (ex. 4 x median value of the baseline).</span></p>\n"
 "<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" color:#000000;\">*** To enhance the detection Snooz also uses the EMG signal. ***<br />A muscle artifact is identified when an increase in myogenic activity on the EEG signal is greater than a certain high threshold.<br />A slightly lower increase can also be identified as a muscle artifact if it is also measured on the EMG signal. <br />New, not included in the original publication.[1]</span></p></body></html>", None))
         self.label_4.setText(QCoreApplication.translate("MuscularStep", u"<html><head/><body><p><span style=\" font-weight:600;\">Event Settings</span></p></body></html>", None))
@@ -371,15 +368,15 @@ class Ui_MuscularStep(object):
 "hr { height: 1px; border-width: 0; }\n"
 "li.unchecked::marker { content: \"\\2610\"; }\n"
 "li.checked::marker { content: \"\\2612\"; }\n"
-"</style></head><body style=\" font-family:'Roboto'; font-size:12pt; font-weight:400; font-style:normal;\">\n"
+"</style></head><body style=\" font-size:12pt; font-weight:400; font-style:normal;\">\n"
 "<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" color:#000000;\">EEG signals are filtered 0.3-30 Hz and downsampled to 64 Hz.[1]</span></p>\n"
-"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" color:#000000;\">The filter is a 6 th order butterworth IIR filter in Second-Order Sections (SOS) format applied with filtfilt to correct the non-linear p"
-                        "hase delay.</span></p>\n"
+"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" color:#000000;\">The filter is a 6 th order butterworth IIR filter in Second-Order Sections (SOS) format applied with filtfilt to correct the non-linear phase delay.</span></p>"
+                        "\n"
 "<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" color:#000000;\">Myogenic activity</span> is computed by integrating the power spectral density estimated using Welch's method, as recommended in [2]. </p>\n"
 "<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Power is calculated using 4-s windows with a 2-s step size, <span style=\" color:#000000;\">a finer time resolution compared to the original implementation in [1].</span></p>\n"
 "<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><a href=\"https://pubmed.ncbi.nlm.nih.gov/12723066/\"><span style=\" text-decoration: underline; color:#000000;\">References</span></a></p>\n"
-"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span st"
-                        "yle=\" color:#000000;\">[1] D. Brunner, R. Vasko, C. Detka, J. Monahan, C. Reynolds Iii, and D. Kupfer, \u201cMuscle artifacts in the sleep EEG: Automated detection and effect on all-night EEG power spectra,\u201d Journal of Sleep Research, vol. 5, no. 3, pp. 155\u2013164, Sep. 1996, doi: </span><a href=\"https://doi.org/10.1046/j.1365-2869.1996.00009.x\"><span style=\" text-decoration: underline; color:#000000;\">10.1046/j.1365-2869.1996.00009.x</span></a><span style=\" color:#000000;\">.</span></p>\n"
+"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" color:#000000;\""
+                        ">[1] D. Brunner, R. Vasko, C. Detka, J. Monahan, C. Reynolds Iii, and D. Kupfer, \u201cMuscle artifacts in the sleep EEG: Automated detection and effect on all-night EEG power spectra,\u201d Journal of Sleep Research, vol. 5, no. 3, pp. 155\u2013164, Sep. 1996, doi: </span><a href=\"https://doi.org/10.1046/j.1365-2869.1996.00009.x\"><span style=\" text-decoration: underline; color:#000000;\">10.1046/j.1365-2869.1996.00009.x</span></a><span style=\" color:#000000;\">.</span></p>\n"
 "<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" color:#000000;\">[2]\u00a0Cox, R. &amp; Fell, J. Analyzing human sleep EEG: A methodological primer with code implementation. Sleep Medicine Reviews 54, 101353 (2020).</span></p>\n"
 "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; color:#000000;\"><br /></p></body></html>", None))
     # retranslateUi

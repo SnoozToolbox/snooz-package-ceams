@@ -25,7 +25,6 @@ class Ui_IntroStepYASA(object):
         if not IntroStepYASA.objectName():
             IntroStepYASA.setObjectName(u"IntroStepYASA")
         IntroStepYASA.resize(925, 646)
-        IntroStepYASA.setStyleSheet(u"font: 12pt \"Roboto\";")
         self.verticalLayout_4 = QVBoxLayout(IntroStepYASA)
         self.verticalLayout_4.setObjectName(u"verticalLayout_4")
         self.label_2 = QLabel(IntroStepYASA)
@@ -33,8 +32,6 @@ class Ui_IntroStepYASA(object):
         self.label_2.setMinimumSize(QSize(0, 0))
         self.label_2.setMaximumSize(QSize(16777215, 140))
         font = QFont()
-        font.setFamilies([u"Roboto"])
-        font.setPointSize(12)
         font.setBold(False)
         font.setItalic(False)
         self.label_2.setFont(font)
@@ -155,21 +152,21 @@ class Ui_IntroStepYASA(object):
 "hr { height: 1px; border-width: 0; }\n"
 "li.unchecked::marker { content: \"\\2610\"; }\n"
 "li.checked::marker { content: \"\\2612\"; }\n"
-"</style></head><body style=\" font-family:'Roboto'; font-size:12pt; font-weight:400; font-style:normal;\">\n"
+"</style></head><body style=\" font-size:12pt; font-weight:400; font-style:normal;\">\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">PSG files including the header and event annotations, are required:</p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">   - European Data Format (EDF) : The .edf and .tsv files must have the exact same filename and be stored in the same directory.</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
-                        "right:0px; -qt-block-indent:0; text-indent:0px;\">   - Stellate : The .sig and .sts files must have the exact same filename and be stored in the same directory.</p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-i"
+                        "ndent:0; text-indent:0px;\">   - Stellate : The .sig and .sts files must have the exact same filename and be stored in the same directory.</p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">   - NATUS (<span style=\" font-style:italic;\">for CEAMS users</span>) :  The entire NATUS subject folder is required.</p>\n"
 "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-weight:700;\">NOTE:</span> Annotation files are not required for the functionality of this tool. However, if provided, they must include sleep staging. The REMs report is only generated when an annotation file is supplied. Without one, the tool performs REMs detection solely based on the algorithm's dete"
-                        "ction criteria, and detections may occur in any sleep stage.</p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-weight:700;\">NOTE:</span> Annotation files are not required for the functionality of this tool. However, if provided, they must include sleep staging. The REMs report is only generated when an annotation file is supplied. Without one, the tool performs REMs detection solely based on the algorithm's detection criteria, and de"
+                        "tections may occur in any sleep stage.</p>\n"
 "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-weight:700;\">Suggestion:</span> If you do not have annotation files, we highly recommend using the &quot;<span style=\" font-weight:700;\">Score Sleep Stages with YASA</span>&quot; tool first to generate an annotation file, and then running this tool for more reliable REMs detection.</p>\n"
 "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Channels:</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0"
-                        "px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">This tool requires the selection of <span style=\" font-weight:600;\">2</span> <span style=\" font-weight:600;\">EOG</span> <span style=\" font-weight:600;\">channels</span> per recording for REMs detection.</p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; "
+                        "-qt-block-indent:0; text-indent:0px;\">This tool requires the selection of <span style=\" font-weight:600;\">2</span> <span style=\" font-weight:600;\">EOG</span> <span style=\" font-weight:600;\">channels</span> per recording for REMs detection.</p>\n"
 "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p></body></html>", None))
         self.label_4.setText(QCoreApplication.translate("IntroStepYASA", u"<html><head/><body><p><span style=\" font-size:12pt; font-weight:600;\">Output</span></p></body></html>", None))
         self.textEdit_2.setHtml(QCoreApplication.translate("IntroStepYASA", u"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
@@ -178,15 +175,15 @@ class Ui_IntroStepYASA(object):
 "hr { height: 1px; border-width: 0; }\n"
 "li.unchecked::marker { content: \"\\2610\"; }\n"
 "li.checked::marker { content: \"\\2612\"; }\n"
-"</style></head><body style=\" font-family:'Roboto'; font-size:12pt; font-weight:400; font-style:normal;\">\n"
+"</style></head><body style=\" font-size:12pt; font-weight:400; font-style:normal;\">\n"
 "<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-weight:700;\">REMs Events<br /></span>Detected REM events are added to the annotations files (.tsv, .sts or .ent) depending on the format used. If the annotations file already includes the event group to be added, the existing entries will be removed before the new ones are inserted.</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-bloc"
-                        "k-indent:0; text-indent:0px;\">Each events is defined by :<br />   1. group : The group where the events are added (i.e. REM).<br />   2. name : The name of the event (i.e. YASA_REM)<br />   3. start_sec : The onset of the event in second. <br />   4. duration_sec : The duration of the event in second.<br />   5. channels : The list of channels on which the event occurs.<br /></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-inden"
+                        "t:0px;\">Each events is defined by :<br />   1. group : The group where the events are added (i.e. REM).<br />   2. name : The name of the event (i.e. YASA_REM)<br />   3. start_sec : The onset of the event in second. <br />   4. duration_sec : The duration of the event in second.<br />   5. channels : The list of channels on which the event occurs.<br /></p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-weight:700;\">REMs characteristics</span></p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Characteristics for each REM event have been saved in a separate folder for further analysis.</p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /><span style=\" font-weight:700;\">REMs Cohort Report</span></p>\n"
-"<p style=\" margin-top:0px; "
-                        "margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Averaged REM characteristics and REM density are reported per sleep cycle and per hour in a cohort report.</p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; mar"
+                        "gin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Averaged REM characteristics and REM density are reported per sleep cycle and per hour in a cohort report.</p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-weight:700; color:#ff0000;\">NOTE:</span><span style=\" color:#ff0000;\"> Please define the </span><span style=\" font-weight:700; color:#ff0000;\">sleep cycle</span><span style=\" color:#ff0000;\"> configuration you wish to use for the analysis using the blue panel on the left.</span></p></body></html>", None))
         self.label_3.setText(QCoreApplication.translate("IntroStepYASA", u"<html><head/><body><p><span style=\" font-size:12pt; font-weight:600;\">References</span></p></body></html>", None))
         self.textEdit_3.setHtml(QCoreApplication.translate("IntroStepYASA", u"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
@@ -195,9 +192,9 @@ class Ui_IntroStepYASA(object):
 "hr { height: 1px; border-width: 0; }\n"
 "li.unchecked::marker { content: \"\\2610\"; }\n"
 "li.checked::marker { content: \"\\2612\"; }\n"
-"</style></head><body style=\" font-family:'Roboto'; font-size:12pt; font-weight:400; font-style:normal;\">\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Roboto','sans-serif';\">[1] Yetton, B. D., et al. (2016). Automatic detection of rapid eye movements (REMs): A machine learning approach.     </span><span style=\" font-family:'Roboto','sans-serif'; font-style:italic;\">Journal of neuroscience methods</span><span style=\" font-family:'Roboto','sans-serif';\">,     </span><span style=\" font-family:'Roboto','sans-serif'; font"
-                        "-style:italic;\">259</span><span style=\" font-family:'Roboto','sans-serif';\">, 72\u201382.</span><span style=\" font-size:10pt;\">  </span></p>\n"
-"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Roboto','sans-serif';\">[2] Agarwal, R., et al. (2005). Detection of rapid-eye movements in sleep studies.     </span><span style=\" font-family:'Roboto','sans-serif'; font-style:italic;\">IEEE Transactions on biomedical engineering</span><span style=\" font-family:'Roboto','sans-serif';\">,     </span><span style=\" font-family:'Roboto','sans-serif'; font-style:italic;\">52</span><span style=\" font-family:'Roboto','sans-serif';\">(8), 1390\u20131396.</span></p></body></html>", None))
+"</style></head><body style=\" font-size:12pt; font-weight:400; font-style:normal;\">\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\"\">[1] Yetton, B. D., et al. (2016). Automatic detection of rapid eye movements (REMs): A machine learning approach.     </span><span style=\" font-style:italic;\">Journal of neuroscience methods</span><span style=\"\">,     </span><span style=\" font-style:italic;\">259</span><span style=\"\">, 72\u201382.</span><span style=\" font-size:10pt;\">  </span></p>\n"
+"<p style=\" margin-top:12px; margin-bottom:12px"
+                        "; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\"\">[2] Agarwal, R., et al. (2005). Detection of rapid-eye movements in sleep studies.     </span><span style=\" font-style:italic;\">IEEE Transactions on biomedical engineering</span><span style=\"\">,     </span><span style=\" font-style:italic;\">52</span><span style=\"\">(8), 1390\u20131396.</span></p></body></html>", None))
     # retranslateUi
 

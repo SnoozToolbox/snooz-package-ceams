@@ -16,9 +16,6 @@
   <property name="windowTitle">
    <string>Form</string>
   </property>
-  <property name="styleSheet">
-   <string notr="true">font: 12pt &quot;Roboto&quot;;</string>
-  </property>
   <layout class="QHBoxLayout" name="horizontalLayout_3">
    <item>
     <layout class="QVBoxLayout" name="verticalLayout">
@@ -26,8 +23,6 @@
       <widget class="QLabel" name="label_9">
        <property name="font">
         <font>
-         <family>Roboto</family>
-         <pointsize>12</pointsize>
          <weight>50</weight>
          <italic>false</italic>
          <bold>false</bold>
@@ -73,8 +68,6 @@
         <widget class="QRadioButton" name="radioButton_fastICA">
          <property name="font">
           <font>
-           <family>Roboto</family>
-           <pointsize>12</pointsize>
            <weight>50</weight>
            <italic>false</italic>
            <bold>false</bold>
@@ -137,8 +130,6 @@
           <widget class="QLabel" name="label_4">
            <property name="font">
             <font>
-             <family>Roboto</family>
-             <pointsize>12</pointsize>
              <weight>50</weight>
              <italic>false</italic>
              <bold>false</bold>
@@ -156,8 +147,6 @@
            </property>
            <property name="font">
             <font>
-             <family>Roboto</family>
-             <pointsize>12</pointsize>
              <weight>50</weight>
              <italic>false</italic>
              <bold>false</bold>
@@ -182,8 +171,6 @@
           <widget class="QLabel" name="label_3">
            <property name="font">
             <font>
-             <family>Roboto</family>
-             <pointsize>12</pointsize>
              <weight>50</weight>
              <italic>false</italic>
              <bold>false</bold>
@@ -201,8 +188,6 @@
            </property>
            <property name="font">
             <font>
-             <family>Roboto</family>
-             <pointsize>12</pointsize>
              <weight>50</weight>
              <italic>false</italic>
              <bold>false</bold>
@@ -229,8 +214,6 @@
            </property>
            <property name="font">
             <font>
-             <family>Roboto</family>
-             <pointsize>12</pointsize>
              <weight>50</weight>
              <italic>false</italic>
              <bold>false</bold>
@@ -245,8 +228,6 @@
           <widget class="QCheckBox" name="random_state_checkBox">
            <property name="font">
             <font>
-             <family>Roboto</family>
-             <pointsize>12</pointsize>
              <weight>50</weight>
              <italic>false</italic>
              <bold>false</bold>
@@ -273,8 +254,6 @@
            </property>
            <property name="font">
             <font>
-             <family>Roboto</family>
-             <pointsize>12</pointsize>
              <weight>50</weight>
              <italic>false</italic>
              <bold>false</bold>
@@ -304,8 +283,6 @@
           <widget class="QLabel" name="label_10">
            <property name="font">
             <font>
-             <family>Roboto</family>
-             <pointsize>12</pointsize>
              <weight>50</weight>
              <italic>false</italic>
              <bold>false</bold>
@@ -322,8 +299,6 @@ If None, values are from a normal distribution.</string>
           <widget class="QLabel" name="label_2">
            <property name="font">
             <font>
-             <family>Roboto</family>
-             <pointsize>12</pointsize>
              <weight>50</weight>
              <italic>false</italic>
              <bold>false</bold>
@@ -341,8 +316,6 @@ If None, values are from a normal distribution.</string>
            </property>
            <property name="font">
             <font>
-             <family>Roboto</family>
-             <pointsize>12</pointsize>
              <weight>50</weight>
              <italic>false</italic>
              <bold>false</bold>
@@ -376,8 +349,6 @@ If None, values are from a normal distribution.</string>
            </property>
            <property name="font">
             <font>
-             <family>Roboto</family>
-             <pointsize>12</pointsize>
              <weight>50</weight>
              <italic>false</italic>
              <bold>false</bold>
@@ -407,8 +378,6 @@ If None, values are from a normal distribution.</string>
           <widget class="QLabel" name="label_7">
            <property name="font">
             <font>
-             <family>Roboto</family>
-             <pointsize>12</pointsize>
              <weight>50</weight>
              <italic>false</italic>
              <bold>false</bold>
@@ -423,8 +392,6 @@ If None, values are from a normal distribution.</string>
           <widget class="QLabel" name="label_6">
            <property name="font">
             <font>
-             <family>Roboto</family>
-             <pointsize>12</pointsize>
              <weight>50</weight>
              <italic>false</italic>
              <bold>false</bold>

@@ -25,7 +25,6 @@ class Ui_PSGWriterSettingsView(object):
         if not PSGWriterSettingsView.objectName():
             PSGWriterSettingsView.setObjectName(u"PSGWriterSettingsView")
         PSGWriterSettingsView.resize(432, 160)
-        PSGWriterSettingsView.setStyleSheet(u"font: 12pt \"Roboto\";")
         self.horizontalLayout = QHBoxLayout(PSGWriterSettingsView)
         self.horizontalLayout.setObjectName(u"horizontalLayout")
         self.verticalLayout = QVBoxLayout()

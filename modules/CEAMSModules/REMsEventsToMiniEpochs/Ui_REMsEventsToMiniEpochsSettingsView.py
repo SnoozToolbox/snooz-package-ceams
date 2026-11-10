@@ -24,7 +24,6 @@ class Ui_REMsEventsToMiniEpochsSettingsView(object):
         if not REMsEventsToMiniEpochsSettingsView.objectName():
             REMsEventsToMiniEpochsSettingsView.setObjectName(u"REMsEventsToMiniEpochsSettingsView")
         REMsEventsToMiniEpochsSettingsView.resize(838, 425)
-        REMsEventsToMiniEpochsSettingsView.setStyleSheet(u"font: 12pt \"Roboto\";")
         self.verticalLayout = QVBoxLayout(REMsEventsToMiniEpochsSettingsView)
         self.verticalLayout.setObjectName(u"verticalLayout")
         self.label_4 = QLabel(REMsEventsToMiniEpochsSettingsView)

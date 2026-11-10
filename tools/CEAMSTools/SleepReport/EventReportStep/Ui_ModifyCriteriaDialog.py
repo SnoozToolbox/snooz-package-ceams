@@ -190,7 +190,6 @@ class Ui_ModifyCriteriaDialog(object):
 
     def retranslateUi(self, ModifyCriteriaDialog):
         ModifyCriteriaDialog.setWindowTitle(QCoreApplication.translate("ModifyCriteriaDialog", u"Dialog", None))
-        ModifyCriteriaDialog.setStyleSheet(QCoreApplication.translate("ModifyCriteriaDialog", u"font: 12pt \"Roboto\";", None))
         self.label_2.setText(QCoreApplication.translate("ModifyCriteriaDialog", u"Duration to:", None))
         self.label_9.setText(QCoreApplication.translate("ModifyCriteriaDialog", u"Events in:", None))
         self.label_7.setText(QCoreApplication.translate("ModifyCriteriaDialog", u"Sleep event association from:", None))

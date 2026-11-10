@@ -32,8 +32,6 @@ class Ui_OutputFilesStep(object):
         self.label_5 = QLabel(OutputFilesStep)
         self.label_5.setObjectName(u"label_5")
         font = QFont()
-        font.setFamilies([u"Roboto"])
-        font.setPointSize(12)
         font.setBold(False)
         font.setItalic(False)
         self.label_5.setFont(font)
@@ -204,7 +202,6 @@ class Ui_OutputFilesStep(object):
 
     def retranslateUi(self, OutputFilesStep):
         OutputFilesStep.setWindowTitle("")
-        OutputFilesStep.setStyleSheet(QCoreApplication.translate("OutputFilesStep", u"font: 12pt \"Roboto\";", None))
         self.label_5.setText(QCoreApplication.translate("OutputFilesStep", u"<html><head/><body><p><span style=\" font-weight:600;\">Sleep stage selection</span></p></body></html>", None))
         self.checkBox_W.setText(QCoreApplication.translate("OutputFilesStep", u"Wake", None))
         self.checkBox_1.setText(QCoreApplication.translate("OutputFilesStep", u"N1", None))
@@ -220,12 +217,12 @@ class Ui_OutputFilesStep(object):
 "hr { height: 1px; border-width: 0; }\n"
 "li.unchecked::marker { content: \"\\2610\"; }\n"
 "li.checked::marker { content: \"\\2612\"; }\n"
-"</style></head><body style=\" font-family:'Roboto'; font-size:12pt; font-weight:400; font-style:normal;\">\n"
+"</style></head><body style=\" font-size:12pt; font-weight:400; font-style:normal;\">\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Note:</p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">    e represents the event from the expert</p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">    d represents the detection</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:"
-                        "0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">    Jaccord index : (intersection between e and d) / (union of e and d)</p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px;"
+                        " -qt-block-indent:0; text-indent:0px;\">    Jaccord index : (intersection between e and d) / (union of e and d)</p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">    To considere a &quot;d&quot; as a True Positive, the jaccord index must exceed a certain threshold.</p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">    Only one &quot;d&quot; can match a &quot;e&quot;, the one with the highest Jaccord index.</p></body></html>", None))
         self.label_3.setText(QCoreApplication.translate("OutputFilesStep", u"<html><head/><body><p><span style=\" font-weight:600;\">Output file</span></p></body></html>", None))
@@ -235,11 +232,11 @@ class Ui_OutputFilesStep(object):
 "hr { height: 1px; border-width: 0; }\n"
 "li.unchecked::marker { content: \"\\2610\"; }\n"
 "li.checked::marker { content: \"\\2612\"; }\n"
-"</style></head><body style=\" font-family:'Roboto'; font-size:12pt; font-weight:400; font-style:normal;\">\n"
+"</style></head><body style=\" font-size:12pt; font-weight:400; font-style:normal;\">\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">The output performance file is written in the same directory as the PSG file.</p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">The performance at by-sample and by-event level are included.</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">The out"
-                        "put file is named as the PSG file with an additional suffix and the extension .tsv.</p></body></html>", None))
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">The output file is named as t"
+                        "he PSG file with an additional suffix and the extension .tsv.</p></body></html>", None))
         self.label_4.setText(QCoreApplication.translate("OutputFilesStep", u"Suffix for the performance file", None))
         self.lineEdit_suffix.setPlaceholderText(QCoreApplication.translate("OutputFilesStep", u"_perf", None))
         self.label_title.setText(QCoreApplication.translate("OutputFilesStep", u"<html><head/><body><p><span style=\" font-weight:600;\">Additional output file</span></p></body></html>", None))

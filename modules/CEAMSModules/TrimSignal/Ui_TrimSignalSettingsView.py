@@ -25,7 +25,6 @@ class Ui_TrimSignalSettingsView(object):
         if not TrimSignalSettingsView.objectName():
             TrimSignalSettingsView.setObjectName(u"TrimSignalSettingsView")
         TrimSignalSettingsView.resize(711, 333)
-        TrimSignalSettingsView.setStyleSheet(u"font: 12pt \"Roboto\";")
         self.verticalLayout = QVBoxLayout(TrimSignalSettingsView)
         self.verticalLayout.setObjectName(u"verticalLayout")
         self.start_sec_horizontalLayout = QHBoxLayout()

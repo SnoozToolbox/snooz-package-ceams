@@ -22,7 +22,6 @@ class Ui_SleepStagesImporterResultsView(object):
     def setupUi(self, SleepStagesImporterResultsView):
         if not SleepStagesImporterResultsView.objectName():
             SleepStagesImporterResultsView.setObjectName(u"SleepStagesImporterResultsView")
-        SleepStagesImporterResultsView.setStyleSheet(u"font: 12pt \"Roboto\";")
         SleepStagesImporterResultsView.resize(483, 360)
         self.verticalLayout = QVBoxLayout(SleepStagesImporterResultsView)
         self.verticalLayout.setObjectName(u"verticalLayout")

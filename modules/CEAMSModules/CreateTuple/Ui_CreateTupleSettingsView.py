@@ -23,7 +23,6 @@ class Ui_CreateTupleSettingsView(object):
     def setupUi(self, CreateTupleSettingsView):
         if not CreateTupleSettingsView.objectName():
             CreateTupleSettingsView.setObjectName(u"CreateTupleSettingsView")
-        CreateTupleSettingsView.setStyleSheet(u"font: 12pt \"Roboto\";")
         CreateTupleSettingsView.resize(711, 333)
         self.verticalLayout = QVBoxLayout(CreateTupleSettingsView)
         self.verticalLayout.setObjectName(u"verticalLayout")

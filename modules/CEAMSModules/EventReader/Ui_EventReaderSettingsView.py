@@ -27,7 +27,6 @@ class Ui_EventReaderSettingsView(object):
         if not EventReaderSettingsView.objectName():
             EventReaderSettingsView.setObjectName(u"EventReaderSettingsView")
         EventReaderSettingsView.resize(716, 857)
-        EventReaderSettingsView.setStyleSheet(u"font: 12pt \"Roboto\";")
         EventReaderSettingsView.setInputMethodHints(Qt.InputMethodHint.ImhNone)
         self.horizontalLayout_3 = QHBoxLayout(EventReaderSettingsView)
         self.horizontalLayout_3.setObjectName(u"horizontalLayout_3")
@@ -37,8 +36,6 @@ class Ui_EventReaderSettingsView(object):
         self.label_10 = QLabel(EventReaderSettingsView)
         self.label_10.setObjectName(u"label_10")
         font = QFont()
-        font.setFamilies([u"Roboto"])
-        font.setPointSize(12)
         font.setBold(False)
         font.setItalic(False)
         self.label_10.setFont(font)
@@ -469,19 +466,19 @@ class Ui_EventReaderSettingsView(object):
 "hr { height: 1px; border-width: 0; }\n"
 "li.unchecked::marker { content: \"\\2610\"; }\n"
 "li.checked::marker { content: \"\\2612\"; }\n"
-"</style></head><body style=\" font-family:'Roboto'; font-size:12pt; font-weight:400; font-style:normal;\">\n"
+"</style></head><body style=\" font-size:12pt; font-weight:400; font-style:normal;\">\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">For the complete definition see : https://strftime.org/</p>\n"
 "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Examples of string format code for time : </p>\n"
-"<p style"
-                        "=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
+"<p style=\"-qt-paragraph-type:"
+                        "empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">%H:%M:%S for 14:30:45</p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">%H.%M.%S for 14.30.45</p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">%H:%M:%S.%f for 14:30:45.123456</p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">%I:%M:%S %p for 02:30:45 PM</p>\n"
 "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block"
-                        "-indent:0; text-indent:0px;\">Leave the time format empty if it is provided as seconds elapsed.</p></body></html>", None))
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent"
+                        ":0px;\">Leave the time format empty if it is provided as seconds elapsed.</p></body></html>", None))
         self.sample_rate_lineedit.setText(QCoreApplication.translate("EventReaderSettingsView", u"256", None))
         self.label_15.setText(QCoreApplication.translate("EventReaderSettingsView", u"Duration time format if not seconds", None))
         self.time_radiobutton.setText(QCoreApplication.translate("EventReaderSettingsView", u"Time", None))

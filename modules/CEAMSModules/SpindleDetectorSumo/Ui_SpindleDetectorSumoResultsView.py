@@ -22,7 +22,6 @@ class Ui_SpindleDetectorSumoResultsView(object):
     def setupUi(self, SpindleDetectorSumoResultsView):
         if not SpindleDetectorSumoResultsView.objectName():
             SpindleDetectorSumoResultsView.setObjectName(u"SpindleDetectorSumoResultsView")
-        SpindleDetectorSumoResultsView.setStyleSheet(u"font: 12pt \"Roboto\";")
         SpindleDetectorSumoResultsView.resize(483, 360)
         self.verticalLayout = QVBoxLayout(SpindleDetectorSumoResultsView)
         self.verticalLayout.setObjectName(u"verticalLayout")

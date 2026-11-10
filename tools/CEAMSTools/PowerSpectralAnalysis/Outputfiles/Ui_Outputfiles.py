@@ -30,8 +30,6 @@ class Ui_Outputfiles(object):
         self.label = QLabel(Outputfiles)
         self.label.setObjectName(u"label")
         font = QFont()
-        font.setFamilies([u"Roboto"])
-        font.setPointSize(12)
         font.setBold(False)
         font.setItalic(False)
         self.label.setFont(font)
@@ -235,7 +233,6 @@ class Ui_Outputfiles(object):
 
     def retranslateUi(self, Outputfiles):
         Outputfiles.setWindowTitle("")
-        Outputfiles.setStyleSheet(QCoreApplication.translate("Outputfiles", u"font: 12pt \"Roboto\";", None))
         self.label.setText(QCoreApplication.translate("Outputfiles", u"<html><head/><body><p><span style=\" font-weight:600;\">Spectral power distribution to export</span></p></body></html>", None))
         self.label_2.setText(QCoreApplication.translate("Outputfiles", u"<html><head/><body><p>Spectral power is computed based on the selected section type in <span style=\" font-weight:700;\">step 4</span>:</p><p><span style=\" font-weight:700;\">Sleep Stages:</span> Power is computed per sleep stage and per hour and/or sleep cycle, according to the selected <br/>options below.</p><p><span style=\" font-weight:700;\">Specific Annotations:</span> Power is computed on selected events, per hour and/or sleep cycle, according to the <br/>selected options below.</p></body></html>", None))
 #if QT_CONFIG(tooltip)
@@ -248,11 +245,11 @@ class Ui_Outputfiles(object):
 "hr { height: 1px; border-width: 0; }\n"
 "li.unchecked::marker { content: \"\\2610\"; }\n"
 "li.checked::marker { content: \"\\2612\"; }\n"
-"</style></head><body style=\" font-family:'Roboto'; font-size:12pt; font-weight:400; font-style:normal;\">\n"
+"</style></head><body style=\" font-size:12pt; font-weight:400; font-style:normal;\">\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Check &quot;<span style=\" font-weight:600;\">Total</span>&quot; to output the avearge spectral power for the whole recording. <br />The average power includes only valid FFT windows (clean windows of selected stages or periods).</p>\n"
 "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
-"<p sty"
-                        "le=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-style:italic;\">If &quot;Analyse power in sleep cycle only&quot; in the step &quot;4-Section Selection&quot; is checked, <br />the starting point is the sleep onset and gabs between cycles are not analysed.<br />Otherwise all the recording is analysed, even before the sleep onset and after the last asleep epoch.</span></p></body></html>", None))
+"<p style=\" margin-top:0px; "
+                        "margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-style:italic;\">If &quot;Analyse power in sleep cycle only&quot; in the step &quot;4-Section Selection&quot; is checked, <br />the starting point is the sleep onset and gabs between cycles are not analysed.<br />Otherwise all the recording is analysed, even before the sleep onset and after the last asleep epoch.</span></p></body></html>", None))
 #if QT_CONFIG(tooltip)
         self.hour_checkBox.setToolTip("")
 #endif // QT_CONFIG(tooltip)
@@ -263,15 +260,15 @@ class Ui_Outputfiles(object):
 "hr { height: 1px; border-width: 0; }\n"
 "li.unchecked::marker { content: \"\\2610\"; }\n"
 "li.checked::marker { content: \"\\2612\"; }\n"
-"</style></head><body style=\" font-family:'Roboto'; font-size:12pt; font-weight:400; font-style:normal;\">\n"
+"</style></head><body style=\" font-size:12pt; font-weight:400; font-style:normal;\">\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Check &quot;<span style=\" font-weight:600;\">Distribution per hour</span>&quot; to output the average spectral power for each real clock hour and stage hour, starting from hour 1. <br />The average power includes only valid FFT windows (clean windows of selected stages or periods).</p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-bl"
-                        "ock-indent:0; text-indent:0px;\"><br /></p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-ind"
+                        "ent:0px;\"><br /></p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">The spectral power value will be empty if no data is available for a given hour <br />(e.g., if only N2 is selected and there are no N2 stages in the first hour, the reported power will be empty).</p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">The maximum clock hour included in the report is defined in the optional settings under &quot;<span style=\" font-weight:600;\">Hours and Cycles</span>&quot;.</p>\n"
 "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-style:italic;\">If &quot;Analyse power in sleep cycle only&qu"
-                        "ot; in the step &quot;4-Section Selection&quot; is checked, <br />the starting point is the sleep onset and gabs between cycles are not analysed.<br />Otherwise all the recording is analysed, even before the sleep onset and after the last asleep epoch.</span></p></body></html>", None))
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-style:italic;\">If &quot;Analyse power in sleep cycle only&quot; in the step &quot;"
+                        "4-Section Selection&quot; is checked, <br />the starting point is the sleep onset and gabs between cycles are not analysed.<br />Otherwise all the recording is analysed, even before the sleep onset and after the last asleep epoch.</span></p></body></html>", None))
 #if QT_CONFIG(tooltip)
         self.cycle_checkBox.setToolTip("")
 #endif // QT_CONFIG(tooltip)
@@ -282,11 +279,11 @@ class Ui_Outputfiles(object):
 "hr { height: 1px; border-width: 0; }\n"
 "li.unchecked::marker { content: \"\\2610\"; }\n"
 "li.checked::marker { content: \"\\2612\"; }\n"
-"</style></head><body style=\" font-family:'Roboto'; font-size:12pt; font-weight:400; font-style:normal;\">\n"
+"</style></head><body style=\" font-size:12pt; font-weight:400; font-style:normal;\">\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Check &quot;<span style=\" font-weight:600;\">Distribution per sleep cycle</span>&quot; to output the average spectral power for each sleep cycle, starting from cycle 1. </p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">The average power includes only valid FFT windows (clean windows of selected stages or periods).</p>\n"
-""
-                        "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
+"<p style=\"-qt-paragra"
+                        "ph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">The spectral power value will be empty if the cycle does not exist.</p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">The maximum number of cycles included in the report is defined in the optional settings under &quot;<span style=\" font-weight:600;\">Hours and Cycles</span>&quot;.</p></body></html>", None))
         self.label_4.setText(QCoreApplication.translate("Outputfiles", u"<html><head/><body><p><span style=\" font-weight:600;\">Output</span></p></body></html>", None))
@@ -296,7 +293,7 @@ class Ui_Outputfiles(object):
 "hr { height: 1px; border-width: 0; }\n"
 "li.unchecked::marker { content: \"\\2610\"; }\n"
 "li.checked::marker { content: \"\\2612\"; }\n"
-"</style></head><body style=\" font-family:'Roboto'; font-size:12pt; font-weight:400; font-style:normal;\">\n"
+"</style></head><body style=\" font-size:12pt; font-weight:400; font-style:normal;\">\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">The output file is a .tsv (tab separated values) file. Each line corresponds to a subject, a channel, and a frequency band. Warning : Spectral data are appended to the output file, so the file will be modified each time the tool is run.</p></body></html>", None))
         self.label_3.setText(QCoreApplication.translate("Outputfiles", u"Filename", None))
         self.filename_lineEdit.setInputMask("")

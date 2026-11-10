@@ -26,7 +26,6 @@ class Ui_RenameFileListSettingsView(object):
         if not RenameFileListSettingsView.objectName():
             RenameFileListSettingsView.setObjectName(u"RenameFileListSettingsView")
         RenameFileListSettingsView.resize(943, 741)
-        RenameFileListSettingsView.setStyleSheet(u"font: 12pt \"Roboto\";")
         self.horizontalLayout_2 = QHBoxLayout(RenameFileListSettingsView)
         self.horizontalLayout_2.setObjectName(u"horizontalLayout_2")
         self.verticalLayout_4 = QVBoxLayout()

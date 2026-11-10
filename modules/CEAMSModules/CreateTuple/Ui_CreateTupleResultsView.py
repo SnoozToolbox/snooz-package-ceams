@@ -22,7 +22,6 @@ class Ui_CreateTupleResultsView(object):
     def setupUi(self, CreateTupleResultsView):
         if not CreateTupleResultsView.objectName():
             CreateTupleResultsView.setObjectName(u"CreateTupleResultsView")
-        CreateTupleResultsView.setStyleSheet(u"font: 12pt \"Roboto\";")
         CreateTupleResultsView.resize(483, 360)
         self.verticalLayout = QVBoxLayout(CreateTupleResultsView)
         self.verticalLayout.setObjectName(u"verticalLayout")

@@ -9,7 +9,7 @@
         {
             "item_name": "FilterSignal",
             "item_type": "module",
-            "item_version": "2.1.0",
+            "item_version": "2.1.1",
             "item_hooks": [
                 {
                     "endpoint_name": "module_endpoint",
@@ -23,7 +23,7 @@
         {
             "item_name": "PSGReader",
             "item_type": "module",
-            "item_version": "2.5.2",
+            "item_version": "2.5.3",
             "item_hooks": [
                 {
                     "endpoint_name": "module_endpoint",
@@ -121,7 +121,7 @@
         {
             "item_name": "CsvReaderMaster",
             "item_type": "module",
-            "item_version": "2.1.0",
+            "item_version": "2.1.1",
             "item_hooks": [
                 {
                     "endpoint_name": "module_endpoint",
@@ -205,7 +205,7 @@
         {
             "item_name": "SlowWaveDetector",
             "item_type": "module",
-            "item_version": "2.4.1",
+            "item_version": "2.4.2",
             "item_hooks": [
                 {
                     "endpoint_name": "module_endpoint",
@@ -289,7 +289,7 @@
         {
             "item_name": "SleepBouts",
             "item_type": "module",
-            "item_version": "2.0.0",
+            "item_version": "2.0.1",
             "item_hooks": [
                 {
                     "endpoint_name": "module_endpoint",
@@ -303,7 +303,7 @@
         {
             "item_name": "PSGWriter",
             "item_type": "module",
-            "item_version": "2.3.0",
+            "item_version": "2.3.1",
             "item_hooks": [
                 {
                     "endpoint_name": "module_endpoint",
@@ -331,7 +331,7 @@
         {
             "item_name": "IcaComponents",
             "item_type": "module",
-            "item_version": "2.0.0",
+            "item_version": "2.0.1",
             "item_hooks": [
                 {
                     "endpoint_name": "module_endpoint",
@@ -443,7 +443,7 @@
         {
             "item_name": "EventCompare",
             "item_type": "module",
-            "item_version": "2.0.0",
+            "item_version": "2.0.1",
             "item_hooks": [
                 {
                     "endpoint_name": "module_endpoint",
@@ -485,7 +485,7 @@
         {
             "item_name": "PerformanceByEvent",
             "item_type": "module",
-            "item_version": "2.0.0",
+            "item_version": "2.0.1",
             "item_hooks": [
                 {
                     "endpoint_name": "module_endpoint",
@@ -527,7 +527,7 @@
         {
             "item_name": "SleepCyclesDelimiter",
             "item_type": "module",
-            "item_version": "2.6.1",
+            "item_version": "2.6.2",
             "item_hooks": [
                 {
                     "endpoint_name": "module_endpoint",
@@ -541,7 +541,7 @@
         {
             "item_name": "EventReader",
             "item_type": "module",
-            "item_version": "3.0.0",
+            "item_version": "3.0.1",
             "item_hooks": [
                 {
                     "endpoint_name": "module_endpoint",
@@ -597,7 +597,7 @@
         {
             "item_name": "SleepStageRename",
             "item_type": "module",
-            "item_version": "2.0.0",
+            "item_version": "2.0.1",
             "item_hooks": [
                 {
                     "endpoint_name": "module_endpoint",
@@ -611,7 +611,7 @@
         {
             "item_name": "SlowWaveClassifier",
             "item_type": "module",
-            "item_version": "2.2.1",
+            "item_version": "2.2.2",
             "item_hooks": [
                 {
                     "endpoint_name": "module_endpoint",
@@ -667,7 +667,7 @@
         {
             "item_name": "PSACohortReview",
             "item_type": "module",
-            "item_version": "2.6.0",
+            "item_version": "2.6.1",
             "item_hooks": [
                 {
                     "endpoint_name": "module_endpoint",
@@ -695,7 +695,7 @@
         {
             "item_name": "DominoConverter",
             "item_type": "module",
-            "item_version": "2.1.0",
+            "item_version": "2.1.1",
             "item_hooks": [
                 {
                     "endpoint_name": "module_endpoint",
@@ -751,7 +751,7 @@
         {
             "item_name": "SpindleDetectorA7",
             "item_type": "module",
-            "item_version": "3.0.0",
+            "item_version": "3.0.1",
             "item_hooks": [
                 {
                     "endpoint_name": "module_endpoint",
@@ -807,7 +807,7 @@
         {
             "item_name": "DetectionsCohortReview",
             "item_type": "module",
-            "item_version": "2.1.0",
+            "item_version": "2.1.1",
             "item_hooks": [
                 {
                     "endpoint_name": "module_endpoint",
@@ -835,7 +835,7 @@
         {
             "item_name": "SlowWavePicsGenerator",
             "item_type": "module",
-            "item_version": "3.1.0",
+            "item_version": "3.1.1",
             "item_hooks": [
                 {
                     "endpoint_name": "module_endpoint",
@@ -849,7 +849,7 @@
         {
             "item_name": "SleepStagesImporter",
             "item_type": "module",
-            "item_version": "2.1.1",
+            "item_version": "2.1.2",
             "item_hooks": [
                 {
                     "endpoint_name": "module_endpoint",
@@ -863,7 +863,7 @@
         {
             "item_name": "EDFAnnotationsReader",
             "item_type": "module",
-            "item_version": "2.0.0",
+            "item_version": "2.0.1",
             "item_hooks": [
                 {
                     "endpoint_name": "module_endpoint",
@@ -877,7 +877,7 @@
         {
             "item_name": "RenameFileList",
             "item_type": "module",
-            "item_version": "2.1.0",
+            "item_version": "2.1.1",
             "item_hooks": [
                 {
                     "endpoint_name": "module_endpoint",
@@ -905,7 +905,7 @@
         {
             "item_name": "InvertSignals",
             "item_type": "module",
-            "item_version": "2.0.0",
+            "item_version": "2.0.1",
             "item_hooks": [
                 {
                     "endpoint_name": "module_endpoint",
@@ -919,7 +919,7 @@
         {
             "item_name": "SignalStats",
             "item_type": "module",
-            "item_version": "2.0.0",
+            "item_version": "2.0.1",
             "item_hooks": [
                 {
                     "endpoint_name": "module_endpoint",
@@ -933,7 +933,7 @@
         {
             "item_name": "SpindleDetectorSumo",
             "item_type": "module",
-            "item_version": "3.1.0",
+            "item_version": "3.1.1",
             "item_hooks": [
                 {
                     "endpoint_name": "module_endpoint",
@@ -947,7 +947,7 @@
         {
             "item_name": "YasaSleepStaging",
             "item_type": "module",
-            "item_version": "2.2.0",
+            "item_version": "2.2.1",
             "item_hooks": [
                 {
                     "endpoint_name": "module_endpoint",
@@ -961,7 +961,7 @@
         {
             "item_name": "SleepStagingExportResults",
             "item_type": "module",
-            "item_version": "2.0.0",
+            "item_version": "2.0.1",
             "item_hooks": [
                 {
                     "endpoint_name": "module_endpoint",
@@ -975,7 +975,7 @@
         {
             "item_name": "CreateDict",
             "item_type": "module",
-            "item_version": "2.0.0",
+            "item_version": "2.0.1",
             "item_hooks": [
                 {
                     "endpoint_name": "module_endpoint",
@@ -989,7 +989,7 @@
         {
             "item_name": "CreateListofGroupName",
             "item_type": "module",
-            "item_version": "2.0.0",
+            "item_version": "2.0.1",
             "item_hooks": [
                 {
                     "endpoint_name": "module_endpoint",
@@ -1003,7 +1003,7 @@
         {
             "item_name": "TSVValidatorMaster",
             "item_type": "module",
-            "item_version": "2.0.0",
+            "item_version": "2.0.1",
             "item_hooks": [
                 {
                     "endpoint_name": "module_endpoint",
@@ -1017,7 +1017,7 @@
         {
             "item_name": "REMsDetectionYasa",
             "item_type": "module",
-            "item_version": "4.0.0",
+            "item_version": "4.0.1",
             "item_hooks": [
                 {
                     "endpoint_name": "module_endpoint",
@@ -1031,7 +1031,7 @@
         {
             "item_name": "CreateTuple",
             "item_type": "module",
-            "item_version": "2.0.0",
+            "item_version": "2.0.1",
             "item_hooks": [
                 {
                     "endpoint_name": "module_endpoint",
@@ -1045,7 +1045,7 @@
         {
             "item_name": "JsonPathEditorMaster",
             "item_type": "module",
-            "item_version": "2.0.0",
+            "item_version": "2.0.1",
             "item_hooks": [
                 {
                     "endpoint_name": "module_endpoint",
@@ -1059,7 +1059,7 @@
         {
             "item_name": "ExtendEvents",
             "item_type": "module",
-            "item_version": "2.0.0",
+            "item_version": "2.0.1",
             "item_hooks": [
                 {
                     "endpoint_name": "module_endpoint",
@@ -1073,7 +1073,7 @@
         {
             "item_name": "PSAPicsGenerator",
             "item_type": "module",
-            "item_version": "2.1.0",
+            "item_version": "2.1.1",
             "item_hooks": [
                 {
                     "endpoint_name": "module_endpoint",
@@ -1087,7 +1087,7 @@
         {
             "item_name": "WpliConnectivity",
             "item_type": "module",
-            "item_version": "2.1.0",
+            "item_version": "2.1.1",
             "item_hooks": [
                 {
                     "endpoint_name": "module_endpoint",
@@ -1101,7 +1101,7 @@
         {
             "item_name": "DpliConnectivity",
             "item_type": "module",
-            "item_version": "2.1.0",
+            "item_version": "2.1.1",
             "item_hooks": [
                 {
                     "endpoint_name": "module_endpoint",
@@ -1115,7 +1115,7 @@
         {
             "item_name": "EpochSignal",
             "item_type": "module",
-            "item_version": "2.0.0",
+            "item_version": "2.0.1",
             "item_hooks": [
                 {
                     "endpoint_name": "module_endpoint",
@@ -1129,7 +1129,7 @@
         {
             "item_name": "RemoveChannelArtefact",
             "item_type": "module",
-            "item_version": "2.0.0",
+            "item_version": "2.0.1",
             "item_hooks": [
                 {
                     "endpoint_name": "module_endpoint",
@@ -1143,7 +1143,7 @@
         {
             "item_name": "ConnectivityDetails",
             "item_type": "module",
-            "item_version": "2.0.0",
+            "item_version": "2.0.1",
             "item_hooks": [
                 {
                     "endpoint_name": "module_endpoint",
@@ -1157,7 +1157,7 @@
         {
             "item_name": "TrimSignal",
             "item_type": "module",
-            "item_version": "2.0.0",
+            "item_version": "2.0.1",
             "item_hooks": [
                 {
                     "endpoint_name": "module_endpoint",
@@ -1171,7 +1171,7 @@
         {
             "item_name": "REMsDetails",
             "item_type": "module",
-            "item_version": "2.3.0",
+            "item_version": "2.3.1",
             "item_hooks": [
                 {
                     "endpoint_name": "module_endpoint",
@@ -1185,7 +1185,7 @@
         {
             "item_name": "IRASAYASA",
             "item_type": "module",
-            "item_version": "0.0.1",
+            "item_version": "0.0.2",
             "item_hooks": [
                 {
                     "endpoint_name": "module_endpoint",
@@ -1199,7 +1199,7 @@
         {
             "item_name": "PSACompilationFOOOF",
             "item_type": "module",
-            "item_version": "0.2.0",
+            "item_version": "0.2.1",
             "item_hooks": [
                 {
                     "endpoint_name": "module_endpoint",
@@ -1213,7 +1213,7 @@
         {
             "item_name": "NetworkProperties",
             "item_type": "module",
-            "item_version": "0.0.0",
+            "item_version": "0.0.1",
             "item_hooks": [
                 {
                     "endpoint_name": "module_endpoint",
@@ -1227,7 +1227,7 @@
         {
             "item_name": "AECConnectivity",
             "item_type": "module",
-            "item_version": "0.0.0",
+            "item_version": "0.0.1",
             "item_hooks": [
                 {
                     "endpoint_name": "module_endpoint",
@@ -1241,7 +1241,7 @@
         {
             "item_name": "REMsEventsToMiniEpochs",
             "item_type": "module",
-            "item_version": "0.0.0",
+            "item_version": "0.0.1",
             "item_hooks": [
                 {
                     "endpoint_name": "module_endpoint",

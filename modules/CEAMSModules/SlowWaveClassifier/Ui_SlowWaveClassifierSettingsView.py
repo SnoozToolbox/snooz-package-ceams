@@ -26,7 +26,6 @@ class Ui_SlowWaveClassifierSettingsView(object):
         if not SlowWaveClassifierSettingsView.objectName():
             SlowWaveClassifierSettingsView.setObjectName(u"SlowWaveClassifierSettingsView")
         SlowWaveClassifierSettingsView.resize(985, 325)
-        SlowWaveClassifierSettingsView.setStyleSheet(u"font: 12pt \"Roboto\";")
         self.verticalLayout = QVBoxLayout(SlowWaveClassifierSettingsView)
         self.verticalLayout.setObjectName(u"verticalLayout")
         self.formLayout = QFormLayout()
@@ -112,7 +111,7 @@ class Ui_SlowWaveClassifierSettingsView(object):
 "hr { height: 1px; border-width: 0; }\n"
 "li.unchecked::marker { content: \"\\2610\"; }\n"
 "li.checked::marker { content: \"\\2612\"; }\n"
-"</style></head><body style=\" font-family:'Roboto'; font-size:12pt; font-weight:400; font-style:normal;\">\n"
+"</style></head><body style=\" font-size:12pt; font-weight:400; font-style:normal;\">\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">For an automatic classification, you can keep the parameters as they are. If you want to specify the number of categories, please uncheck the automatic classification option and change the number in the box for the number of categories desired.</p></body></html>", None))
         self.radioButton_categories.setText(QCoreApplication.translate("SlowWaveClassifierSettingsView", u"Specify the number of categories                          ", None))
         self.categories_label.setText(QCoreApplication.translate("SlowWaveClassifierSettingsView", u"Number of sleep slow waves categories               ", None))

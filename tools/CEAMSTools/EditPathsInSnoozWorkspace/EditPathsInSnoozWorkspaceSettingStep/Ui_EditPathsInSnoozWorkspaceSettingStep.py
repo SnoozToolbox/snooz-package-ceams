@@ -23,7 +23,6 @@ class Ui_EditPathsInSnoozWorkspaceSettingStep(object):
         if not EditPathsInSnoozWorkspaceSettingStep.objectName():
             EditPathsInSnoozWorkspaceSettingStep.setObjectName(u"EditPathsInSnoozWorkspaceSettingStep")
         EditPathsInSnoozWorkspaceSettingStep.resize(1005, 689)
-        EditPathsInSnoozWorkspaceSettingStep.setStyleSheet(u"font: 12pt \"Roboto\";")
         self.verticalLayout = QVBoxLayout(EditPathsInSnoozWorkspaceSettingStep)
         self.verticalLayout.setSpacing(25)
         self.verticalLayout.setObjectName(u"verticalLayout")

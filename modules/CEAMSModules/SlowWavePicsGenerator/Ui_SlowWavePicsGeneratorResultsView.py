@@ -22,7 +22,6 @@ class Ui_SlowWavePicsGeneratorResultsView(object):
     def setupUi(self, SlowWavePicsGeneratorResultsView):
         if not SlowWavePicsGeneratorResultsView.objectName():
             SlowWavePicsGeneratorResultsView.setObjectName(u"SlowWavePicsGeneratorResultsView")
-        SlowWavePicsGeneratorResultsView.setStyleSheet(u"font: 12pt \"Roboto\";")
         SlowWavePicsGeneratorResultsView.resize(483, 360)
         self.verticalLayout = QVBoxLayout(SlowWavePicsGeneratorResultsView)
         self.verticalLayout.setObjectName(u"verticalLayout")

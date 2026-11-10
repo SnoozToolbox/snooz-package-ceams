@@ -24,7 +24,6 @@ class Ui_SpindleDetectorA7SettingsView(object):
         if not SpindleDetectorA7SettingsView.objectName():
             SpindleDetectorA7SettingsView.setObjectName(u"SpindleDetectorA7SettingsView")
         SpindleDetectorA7SettingsView.resize(711, 333)
-        SpindleDetectorA7SettingsView.setStyleSheet(u"font: 12pt \"Roboto\";")
         self.verticalLayout = QVBoxLayout(SpindleDetectorA7SettingsView)
         self.verticalLayout.setObjectName(u"verticalLayout")
         self.verticalSpacer = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)

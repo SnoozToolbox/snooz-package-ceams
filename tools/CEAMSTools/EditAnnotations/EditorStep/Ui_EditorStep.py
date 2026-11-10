@@ -25,7 +25,6 @@ class Ui_EditorStep(object):
         if not EditorStep.objectName():
             EditorStep.setObjectName(u"EditorStep")
         EditorStep.resize(831, 576)
-        EditorStep.setStyleSheet(u"font: 12pt \"Roboto\";")
         self.verticalLayout_4 = QVBoxLayout(EditorStep)
         self.verticalLayout_4.setObjectName(u"verticalLayout_4")
         self.splitter_2 = QSplitter(EditorStep)
@@ -39,8 +38,6 @@ class Ui_EditorStep(object):
         self.label = QLabel(self.layoutWidget)
         self.label.setObjectName(u"label")
         font = QFont()
-        font.setFamilies([u"Roboto"])
-        font.setPointSize(12)
         font.setBold(False)
         font.setItalic(False)
         self.label.setFont(font)

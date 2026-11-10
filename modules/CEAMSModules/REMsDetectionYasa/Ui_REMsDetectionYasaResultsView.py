@@ -22,7 +22,6 @@ class Ui_REMsDetectionYasaResultsView(object):
     def setupUi(self, REMsDetectionYasaResultsView):
         if not REMsDetectionYasaResultsView.objectName():
             REMsDetectionYasaResultsView.setObjectName(u"REMsDetectionYasaResultsView")
-        REMsDetectionYasaResultsView.setStyleSheet(u"font: 12pt \"Roboto\";")
         REMsDetectionYasaResultsView.resize(483, 360)
         self.verticalLayout = QVBoxLayout(REMsDetectionYasaResultsView)
         self.verticalLayout.setObjectName(u"verticalLayout")

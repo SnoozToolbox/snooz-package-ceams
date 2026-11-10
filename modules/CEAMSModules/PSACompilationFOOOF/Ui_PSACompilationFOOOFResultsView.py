@@ -22,7 +22,6 @@ class Ui_PSACompilationFOOOFResultsView(object):
     def setupUi(self, PSACompilationFOOOFResultsView):
         if not PSACompilationFOOOFResultsView.objectName():
             PSACompilationFOOOFResultsView.setObjectName(u"PSACompilationFOOOFResultsView")
-        PSACompilationFOOOFResultsView.setStyleSheet(u"font: 12pt \"Roboto\";")
         PSACompilationFOOOFResultsView.resize(483, 360)
         self.verticalLayout = QVBoxLayout(PSACompilationFOOOFResultsView)
         self.verticalLayout.setObjectName(u"verticalLayout")

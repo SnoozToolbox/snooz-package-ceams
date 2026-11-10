@@ -13,9 +13,6 @@
   <property name="windowTitle">
    <string/>
   </property>
-  <property name="styleSheet">
-   <string notr="true">font: 12pt &quot;Roboto&quot;;</string>
-  </property>
   <layout class="QVBoxLayout" name="verticalLayout_2">
    <item>
     <layout class="QVBoxLayout" name="verticalLayout">
@@ -162,8 +159,6 @@
          <widget class="QCheckBox" name="checkBox">
           <property name="font">
            <font>
-            <family>Roboto</family>
-            <pointsize>12</pointsize>
             <italic>false</italic>
             <bold>false</bold>
            </font>
@@ -242,8 +237,6 @@
          <widget class="QCheckBox" name="checkBox_2">
           <property name="font">
            <font>
-            <family>Roboto</family>
-            <pointsize>12</pointsize>
             <italic>false</italic>
             <bold>false</bold>
            </font>

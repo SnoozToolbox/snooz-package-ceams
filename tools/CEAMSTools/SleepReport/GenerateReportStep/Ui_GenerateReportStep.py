@@ -109,7 +109,6 @@ class Ui_GenerateReportStep(object):
 
     def retranslateUi(self, GenerateReportStep):
         GenerateReportStep.setWindowTitle("")
-        GenerateReportStep.setStyleSheet(QCoreApplication.translate("GenerateReportStep", u"font: 12pt \"Roboto\";", None))
         self.label_5.setText(QCoreApplication.translate("GenerateReportStep", u"<html><head/><body><p><span style=\" font-weight:600;\">Sleep Report</span></p></body></html>", None))
         self.csv_report_checkbox.setText(QCoreApplication.translate("GenerateReportStep", u"Generate the TSV report : distribution of sleep stages and transitions between different sleep stages.", None))
 #if QT_CONFIG(tooltip)

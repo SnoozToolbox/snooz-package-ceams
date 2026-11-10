@@ -13,9 +13,6 @@
   <property name="windowTitle">
    <string>Form</string>
   </property>
-  <property name="styleSheet">
-   <string notr="true">font: 12pt &quot;Roboto&quot;;</string>
-  </property>
   <layout class="QVBoxLayout" name="verticalLayout_2">
    <item>
     <widget class="QWidget" name="widget" native="true">
@@ -49,8 +46,6 @@
      </property>
      <property name="font">
       <font>
-       <family>Roboto</family>
-       <pointsize>12</pointsize>
        <italic>false</italic>
        <bold>false</bold>
       </font>
@@ -91,7 +86,7 @@ p, li { white-space: pre-wrap; }
 hr { height: 1px; border-width: 0; }
 li.unchecked::marker { content: &quot;\2610&quot;; }
 li.checked::marker { content: &quot;\2612&quot;; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Roboto'; font-size:12pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-size:12pt; font-weight:400; font-style:normal;&quot;&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Identification of high-frequency bursts via spectral power analysis (Welch’s method).&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;High-frequency band power (&amp;gt;25 Hz) is computed by integrating the power spectral density&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;estimated using Welch’s method, as recommended in [1].&lt;/p&gt;
@@ -141,8 +136,6 @@ li.checked::marker { content: &quot;\2612&quot;; }
          </property>
          <property name="font">
           <font>
-           <family>Roboto</family>
-           <pointsize>12</pointsize>
            <italic>false</italic>
            <bold>false</bold>
           </font>
@@ -191,8 +184,6 @@ li.checked::marker { content: &quot;\2612&quot;; }
              </property>
              <property name="font">
               <font>
-               <family>Roboto</family>
-               <pointsize>12</pointsize>
                <italic>false</italic>
                <bold>false</bold>
               </font>
@@ -227,8 +218,6 @@ li.checked::marker { content: &quot;\2612&quot;; }
              </property>
              <property name="font">
               <font>
-               <family>Roboto</family>
-               <pointsize>12</pointsize>
                <italic>false</italic>
                <bold>false</bold>
               </font>
@@ -345,8 +334,6 @@ li.checked::marker { content: &quot;\2612&quot;; }
          </property>
          <property name="font">
           <font>
-           <family>Roboto</family>
-           <pointsize>12</pointsize>
            <italic>false</italic>
            <bold>false</bold>
           </font>
@@ -366,8 +353,6 @@ li.checked::marker { content: &quot;\2612&quot;; }
          </property>
          <property name="font">
           <font>
-           <family>Roboto</family>
-           <pointsize>12</pointsize>
            <italic>false</italic>
            <bold>false</bold>
           </font>
@@ -470,8 +455,6 @@ li.checked::marker { content: &quot;\2612&quot;; }
            </property>
            <property name="font">
             <font>
-             <family>Roboto</family>
-             <pointsize>12</pointsize>
              <italic>false</italic>
              <bold>false</bold>
             </font>
@@ -561,8 +544,6 @@ computed from all selected derivations</string>
            </property>
            <property name="font">
             <font>
-             <family>Roboto</family>
-             <pointsize>12</pointsize>
              <italic>false</italic>
              <bold>false</bold>
             </font>
@@ -602,8 +583,6 @@ computed from all selected derivations</string>
       <widget class="QTextEdit" name="textEdit">
        <property name="font">
         <font>
-         <family>Roboto</family>
-         <pointsize>12</pointsize>
          <italic>false</italic>
          <bold>false</bold>
         </font>
@@ -636,7 +615,7 @@ p, li { white-space: pre-wrap; }
 hr { height: 1px; border-width: 0; }
 li.unchecked::marker { content: &quot;\2610&quot;; }
 li.checked::marker { content: &quot;\2612&quot;; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Roboto'; font-size:12pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-size:12pt; font-weight:400; font-style:normal;&quot;&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; text-decoration: underline;&quot;&gt;A) Fixed threshold&lt;/span&gt;&lt;span style=&quot; color:#000000;&quot;&gt; (mean + x SD)&lt;/span&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;The power is log10-transformed to reduce skewness and improve normality. Because the power distribution is often right-skewed due to artifacts, it is modeled using a three-component Gaussian Mixture Model (GMM). The distribution is estimated from all selected derivations for the recording, so excluding a derivation with poor signal quality can change the threshold applied to the remaining derivations. The threshold is defined as the mean of the main Gaussian component plus a user-defined multiple of its standard deviation (SD).&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;A segment is flagged when: log10(25-64 Hz power) &amp;gt; mean + threshold × SD&lt;/p&gt;

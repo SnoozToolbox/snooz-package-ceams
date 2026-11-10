@@ -22,7 +22,6 @@ class Ui_EpochSignalResultsView(object):
     def setupUi(self, EpochSignalResultsView):
         if not EpochSignalResultsView.objectName():
             EpochSignalResultsView.setObjectName(u"EpochSignalResultsView")
-        EpochSignalResultsView.setStyleSheet(u"font: 12pt \"Roboto\";")
         EpochSignalResultsView.resize(483, 360)
         self.verticalLayout = QVBoxLayout(EpochSignalResultsView)
         self.verticalLayout.setObjectName(u"verticalLayout")

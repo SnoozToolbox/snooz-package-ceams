@@ -13,9 +13,6 @@
   <property name="windowTitle">
    <string/>
   </property>
-  <property name="styleSheet">
-   <string notr="true">font: 12pt &quot;Roboto&quot;;</string>
-  </property>
   <layout class="QGridLayout" name="gridLayout_2">
    <item row="0" column="0">
     <layout class="QGridLayout" name="gridLayout">
@@ -39,8 +36,6 @@
        </property>
        <property name="font">
         <font>
-         <family>Roboto</family>
-         <pointsize>12</pointsize>
          <italic>false</italic>
          <bold>false</bold>
         </font>
@@ -229,9 +224,6 @@
           </item>
           <item>
            <widget class="QCheckBox" name="checkBox">
-            <property name="styleSheet">
-             <string notr="true">font: 12pt &quot;Roboto&quot;;</string>
-            </property>
             <property name="text">
              <string>Yes</string>
             </property>
@@ -296,8 +288,6 @@
             </property>
             <property name="font">
              <font>
-              <family>Roboto</family>
-              <pointsize>12</pointsize>
               <italic>false</italic>
               <bold>false</bold>
              </font>
@@ -327,8 +317,6 @@
            <widget class="QLabel" name="label_11">
             <property name="font">
              <font>
-              <family>Roboto</family>
-              <pointsize>12</pointsize>
               <italic>false</italic>
               <bold>false</bold>
              </font>
@@ -431,8 +419,6 @@
             </property>
             <property name="font">
              <font>
-              <family>Roboto</family>
-              <pointsize>12</pointsize>
               <italic>false</italic>
               <bold>false</bold>
              </font>
@@ -554,8 +540,6 @@
          </property>
          <property name="font">
           <font>
-           <family>Roboto</family>
-           <pointsize>12</pointsize>
            <italic>false</italic>
            <bold>false</bold>
           </font>
@@ -645,8 +629,6 @@
         <widget class="QLabel" name="label_8">
          <property name="font">
           <font>
-           <family>Roboto</family>
-           <pointsize>12</pointsize>
            <italic>false</italic>
            <bold>false</bold>
           </font>

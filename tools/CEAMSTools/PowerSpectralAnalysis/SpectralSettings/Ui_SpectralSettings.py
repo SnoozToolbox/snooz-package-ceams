@@ -37,8 +37,6 @@ class Ui_SpectralSettings(object):
         self.label_3.setObjectName(u"label_3")
         self.label_3.setMaximumSize(QSize(16777215, 30))
         font = QFont()
-        font.setFamilies([u"Roboto"])
-        font.setPointSize(12)
         font.setBold(False)
         font.setItalic(False)
         self.label_3.setFont(font)
@@ -252,15 +250,12 @@ class Ui_SpectralSettings(object):
         self.std_radioButton.setMinimumSize(QSize(225, 0))
         self.std_radioButton.setMaximumSize(QSize(500, 16777215))
         font1 = QFont()
-        font1.setFamilies([u"Roboto"])
-        font1.setPointSize(12)
         font1.setBold(True)
         font1.setItalic(False)
         font1.setUnderline(False)
         font1.setStrikeOut(False)
         font1.setKerning(True)
         self.std_radioButton.setFont(font1)
-        self.std_radioButton.setStyleSheet(u"font: 700 12pt \"Roboto\";")
         self.std_radioButton.setChecked(True)
 
         self.verticalLayout_7.addWidget(self.std_radioButton)
@@ -288,12 +283,9 @@ class Ui_SpectralSettings(object):
         self.RA_radioButton.setEnabled(True)
         self.RA_radioButton.setMinimumSize(QSize(225, 0))
         font2 = QFont()
-        font2.setFamilies([u"Roboto"])
-        font2.setPointSize(12)
         font2.setBold(True)
         font2.setItalic(False)
         self.RA_radioButton.setFont(font2)
-        self.RA_radioButton.setStyleSheet(u"font: 700 12pt \"Roboto\";")
 
         self.verticalLayout_9.addWidget(self.RA_radioButton)
 
@@ -307,7 +299,6 @@ class Ui_SpectralSettings(object):
         self.FoooF_radioButton = QRadioButton(SpectralSettings)
         self.FoooF_radioButton.setObjectName(u"FoooF_radioButton")
         self.FoooF_radioButton.setFont(font2)
-        self.FoooF_radioButton.setStyleSheet(u"font: 700 12pt \"Roboto\";")
 
         self.verticalLayout_10.addWidget(self.FoooF_radioButton)
 
@@ -363,7 +354,6 @@ class Ui_SpectralSettings(object):
 
     def retranslateUi(self, SpectralSettings):
         SpectralSettings.setWindowTitle("")
-        SpectralSettings.setStyleSheet(QCoreApplication.translate("SpectralSettings", u"font: 12pt \"Roboto\";", None))
         self.label_3.setText(QCoreApplication.translate("SpectralSettings", u"<html><head/><body><p><span style=\" font-weight:700;\">Windowed FFT Settings</span></p></body></html>", None))
         self.textEdit_2.setHtml(QCoreApplication.translate("SpectralSettings", u"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset=\"utf-8\" /><style type=\"text/css\">\n"
@@ -371,7 +361,7 @@ class Ui_SpectralSettings(object):
 "hr { height: 1px; border-width: 0; }\n"
 "li.unchecked::marker { content: \"\\2610\"; }\n"
 "li.checked::marker { content: \"\\2612\"; }\n"
-"</style></head><body style=\" font-family:'Roboto'; font-size:12pt; font-weight:400; font-style:normal;\">\n"
+"</style></head><body style=\" font-size:12pt; font-weight:400; font-style:normal;\">\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">The analysis is performed by dividing the signal into multiple short windows to estimate spectral power.</p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">This procedure is based on Welch\u2019s method, which applies a Fast Fourier Transform (FFT) to each window and averages the resulting periodograms.</p></body></html>", None))
         self.label.setText(QCoreApplication.translate("SpectralSettings", u"<html><head/><body><p><span style=\" font-weight:700;\">Window length (s)</span></p></body></html>", None))
@@ -397,17 +387,17 @@ class Ui_SpectralSettings(object):
 "hr { height: 1px; border-width: 0; }\n"
 "li.unchecked::marker { content: \"\\2610\"; }\n"
 "li.checked::marker { content: \"\\2612\"; }\n"
-"</style></head><body style=\" font-family:'Roboto'; font-size:12pt; font-weight:400; font-style:normal;\">\n"
+"</style></head><body style=\" font-size:12pt; font-weight:400; font-style:normal;\">\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">It is common to average the power from a few frequency bins in order to estimate the spectral power in a frequency band.</p>\n"
 "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0"
-                        "px;\">The width of the mini bands has to be equal or larger than the FFT frequency bin resolution (Hz) which is :</p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">The width of the"
+                        " mini bands has to be equal or larger than the FFT frequency bin resolution (Hz) which is :</p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">   1 / [fft windows length (s)]</p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">   i.e. 1 / 5 s = 0.2 Hz or 1 / 4 s = 0.25 Hz</p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">The mini bandwidth must be a multiple of the frequency bin resolution.</p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">-&gt; bandwidth of 0.2 Hz or 1 Hz with a fft windows length of 5 s.</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">-&gt; bandwidth of 0.25 Hz, 0.5 Hz or 1 Hz with a"
-                        " fft windows length of 4 s. </p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">-&gt; bandwidth of 0.25 Hz, 0.5 Hz or 1 Hz with a fft windows length of"
+                        " 4 s. </p>\n"
 "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">The last frequency analyzed is limited to FS/2.</p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">   FS : Sampling rate of the channel (Hz)</p>\n"

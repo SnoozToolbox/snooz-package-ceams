@@ -97,9 +97,6 @@
        </item>
        <item row="0" column="2">
         <widget class="QGroupBox" name="groupBox_5">
-         <property name="styleSheet">
-          <string notr="true">font: 12pt &quot;Roboto&quot;;</string>
-         </property>
          <property name="title">
           <string>Sex</string>
          </property>

@@ -25,7 +25,6 @@ class Ui_ROIStep(object):
         if not ROIStep.objectName():
             ROIStep.setObjectName(u"ROIStep")
         ROIStep.resize(500, 528)
-        ROIStep.setStyleSheet(u"font: 12pt \"Roboto\";")
         self.horizontalLayout_2 = QHBoxLayout(ROIStep)
         self.horizontalLayout_2.setObjectName(u"horizontalLayout_2")
         self.verticalLayout = QVBoxLayout()

@@ -26,7 +26,6 @@ class Ui_SleepStageSelStep(object):
         if not SleepStageSelStep.objectName():
             SleepStageSelStep.setObjectName(u"SleepStageSelStep")
         SleepStageSelStep.resize(812, 840)
-        SleepStageSelStep.setStyleSheet(u"font: 12pt \"Roboto\";")
         self.verticalLayout = QVBoxLayout(SleepStageSelStep)
         self.verticalLayout.setObjectName(u"verticalLayout")
         self.label_7 = QLabel(SleepStageSelStep)
@@ -114,8 +113,6 @@ class Ui_SleepStageSelStep(object):
         sizePolicy.setHeightForWidth(self.label.sizePolicy().hasHeightForWidth())
         self.label.setSizePolicy(sizePolicy)
         font = QFont()
-        font.setFamilies([u"Roboto"])
-        font.setPointSize(12)
         font.setBold(False)
         font.setItalic(False)
         self.label.setFont(font)
@@ -207,17 +204,17 @@ class Ui_SleepStageSelStep(object):
 "hr { height: 1px; border-width: 0; }\n"
 "li.unchecked::marker { content: \"\\2610\"; }\n"
 "li.checked::marker { content: \"\\2612\"; }\n"
-"</style></head><body style=\" font-family:'Roboto'; font-size:12pt; font-weight:400; font-style:normal;\">\n"
+"</style></head><body style=\" font-size:12pt; font-weight:400; font-style:normal;\">\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Select the sleep stages in which you want to detect artifacts.</p>\n"
 "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Artifact detection performs better when similar slee"
-                        "p stages are selected, as the power distribution can be modeled more accurately. </p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Artifact detection performs better when similar sleep stages are selected,"
+                        " as the power distribution can be modeled more accurately. </p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Some detectors use a 3-component Gaussian Mixture Model (GMM) to estimate the standard deviation of non-corrupted data, </p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">which is then used to define the threshold value.</p>\n"
 "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">* We recommend running artifact detection separately for NREM, REM, and Awake stages.</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">* Make su"
-                        "r to have different annotation group or name to avoid confusion.</p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">* Make sur to have different an"
+                        "notation group or name to avoid confusion.</p>\n"
 "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Please select &quot;Unscored&quot; if your data does not include sleep stages.</p></body></html>", None))
         self.checkBox_1.setText(QCoreApplication.translate("SleepStageSelStep", u"N1", None))
@@ -237,15 +234,15 @@ class Ui_SleepStageSelStep(object):
 "hr { height: 1px; border-width: 0; }\n"
 "li.unchecked::marker { content: \"\\2610\"; }\n"
 "li.checked::marker { content: \"\\2612\"; }\n"
-"</style></head><body style=\" font-family:'Roboto'; font-size:12pt; font-weight:400; font-style:normal;\">\n"
+"</style></head><body style=\" font-size:12pt; font-weight:400; font-style:normal;\">\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Default values for detection in NREM (Set 1)</p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">    <span style=\" font-weight:700;\">Flatline</span> : 		A=<span style=\" font-weight:700;\">0.25</span> \u00b5V<span style=\" vertical-align:super;\">2</span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px"
-                        "; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">    <span style=\" font-weight:700;\">High Frequency Burst </span>: 	A=<span style=\" font-weight:700;\">4</span> SD; 		B=<span style=\" font-weight:700;\">8</span> BSL MED, 	C=<span style=\" font-weight:700;\">0.1</span> Ratio</p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -q"
+                        "t-block-indent:0; text-indent:0px;\">    <span style=\" font-weight:700;\">High Frequency Burst </span>: 	A=<span style=\" font-weight:700;\">4</span> SD; 		B=<span style=\" font-weight:700;\">8</span> BSL MED, 	C=<span style=\" font-weight:700;\">0.1</span> Ratio</p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">    <span style=\" font-weight:700;\">Persistent Noise</span> : 		A=<span style=\" font-weight:700;\">4</span> SD; 		B=<span style=\" font-weight:700;\">0.1</span> Ratio</p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">    <span style=\" font-weight:700;\">Power Line Contamination</span> : 	A=<span style=\" font-weight:700;\">0</span> SD; 		B=<span style=\" font-weight:700;\">0.1</span> Ratio</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">    "
-                        "<span style=\" font-weight:700;\">Baseline Variation</span> : 	A=<span style=\" font-weight:700;\">4</span> STD</p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">    <span style=\" font-we"
+                        "ight:700;\">Baseline Variation</span> : 	A=<span style=\" font-weight:700;\">4</span> STD</p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">    <span style=\" font-weight:700;\">Muscular</span> : 		A=<span style=\" font-weight:700;\">8</span> BSL MED, 	B=<span style=\" font-weight:700;\">5 </span>BSL MED, 	C=<span style=\" font-weight:700;\">5</span> BSL MED</p></body></html>", None))
         self.radioButton_set2.setText(QCoreApplication.translate("SleepStageSelStep", u"Set 2 : is more sensitive and intended for REM sleep stages.", None))
         self.textEdit_2.setHtml(QCoreApplication.translate("SleepStageSelStep", u"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
@@ -254,16 +251,16 @@ class Ui_SleepStageSelStep(object):
 "hr { height: 1px; border-width: 0; }\n"
 "li.unchecked::marker { content: \"\\2610\"; }\n"
 "li.checked::marker { content: \"\\2612\"; }\n"
-"</style></head><body style=\" font-family:'Roboto'; font-size:12pt; font-weight:400; font-style:normal;\">\n"
+"</style></head><body style=\" font-size:12pt; font-weight:400; font-style:normal;\">\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">The default values for detection in REM (Set 2)</p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">    <span style=\" font-weight:700;\">Flatline</span> : 		A=0.25 \u00b5V<span style=\" vertical-align:super;\">2</span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0"
-                        "; text-indent:0px;\">    <span style=\" font-weight:700;\">High Frequency Burst</span> : 	A=<span style=\" font-weight:700; color:#ff0000;\">3</span> SD; 		B=<span style=\" font-weight:700; color:#ff0000;\">6</span> BSL MED, 	C=0.1 Ratio</p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"> "
+                        "   <span style=\" font-weight:700;\">High Frequency Burst</span> : 	A=<span style=\" font-weight:700; color:#ff0000;\">3</span> SD; 		B=<span style=\" font-weight:700; color:#ff0000;\">6</span> BSL MED, 	C=0.1 Ratio</p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">    <span style=\" font-weight:700;\">Persistent Noise</span> : 		A=<span style=\" font-weight:700; color:#ff0000;\">2</span> SD; 		B=0.1 Ratio</p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">    <span style=\" font-weight:700;\">Power Line Contamination</span> : 	A=0 SD; 		B=0.1 Ratio</p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">    <span style=\" font-weight:700;\">Baseline Variation</span> : 	A=<span style=\" font-weight:700; color:#ff0000;\">2.5</span> STD</p>\n"
-"<p style=\" margin-t"
-                        "op:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">    <span style=\" font-weight:700;\">Muscular</span> : 		A=<span style=\" font-weight:700; color:#ff0000;\">4</span> BSL MED, 	B=<span style=\" font-weight:700; color:#ff0000;\">3</span> BSL MED, 	C=<span style=\" font-weight:700; color:#ff0000;\">3</span> BSL MED</p></body></html>", None))
+"<p style=\" margin-top:0px; margin-bottom:"
+                        "0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">    <span style=\" font-weight:700;\">Muscular</span> : 		A=<span style=\" font-weight:700; color:#ff0000;\">4</span> BSL MED, 	B=<span style=\" font-weight:700; color:#ff0000;\">3</span> BSL MED, 	C=<span style=\" font-weight:700; color:#ff0000;\">3</span> BSL MED</p></body></html>", None))
         self.label_2.setText("")
     # retranslateUi
 

@@ -26,14 +26,11 @@ class Ui_EEGInspectorView(object):
         if not EEGInspectorView.objectName():
             EEGInspectorView.setObjectName(u"EEGInspectorView")
         EEGInspectorView.resize(999, 726)
-        EEGInspectorView.setStyleSheet(u"font: 12pt \"Roboto\";")
         self.verticalLayout_3 = QVBoxLayout(EEGInspectorView)
         self.verticalLayout_3.setObjectName(u"verticalLayout_3")
         self.file_name_label1 = QLabel(EEGInspectorView)
         self.file_name_label1.setObjectName(u"file_name_label1")
         font = QFont()
-        font.setFamilies([u"Roboto"])
-        font.setPointSize(12)
         font.setBold(False)
         font.setItalic(False)
         self.file_name_label1.setFont(font)
@@ -393,7 +390,7 @@ class Ui_EEGInspectorView(object):
 "hr { height: 1px; border-width: 0; }\n"
 "li.unchecked::marker { content: \"\\2610\"; }\n"
 "li.checked::marker { content: \"\\2612\"; }\n"
-"</style></head><body style=\" font-family:'Roboto'; font-size:12pt; font-weight:400; font-style:normal;\">\n"
+"</style></head><body style=\" font-size:12pt; font-weight:400; font-style:normal;\">\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Select noisy channels to exclude them from further analysis.<br />Select channels that appear different from the others.<br />Click on the signal view, then use <span style=\" font-weight:700;\">+</span> / <span style=\" font-weight:700;\">\u2013</span> to adjust display sensitivity.</p></body></html>", None))
         self.textEdit_3.setHtml(QCoreApplication.translate("EEGInspectorView", u"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset=\"utf-8\" /><style type=\"text/css\">\n"
@@ -401,7 +398,7 @@ class Ui_EEGInspectorView(object):
 "hr { height: 1px; border-width: 0; }\n"
 "li.unchecked::marker { content: \"\\2610\"; }\n"
 "li.checked::marker { content: \"\\2612\"; }\n"
-"</style></head><body style=\" font-family:'Roboto'; font-size:12pt; font-weight:400; font-style:normal;\">\n"
+"</style></head><body style=\" font-size:12pt; font-weight:400; font-style:normal;\">\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-weight:700;\">Warning:</span> EEG inspector events previously saved in the PSG file are not displayed.</p></body></html>", None))
         self.BackButton2.setText(QCoreApplication.translate("EEGInspectorView", u"Back", None))
         self.desc_label22.setText(QCoreApplication.translate("EEGInspectorView", u"Click on \"Next\" once your selection is finished.", None))
@@ -412,18 +409,18 @@ class Ui_EEGInspectorView(object):
 "hr { height: 1px; border-width: 0; }\n"
 "li.unchecked::marker { content: \"\\2610\"; }\n"
 "li.checked::marker { content: \"\\2612\"; }\n"
-"</style></head><body style=\" font-family:'Roboto'; font-size:12pt; font-weight:400; font-style:normal;\">\n"
+"</style></head><body style=\" font-size:12pt; font-weight:400; font-style:normal;\">\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Select bad epochs to exclude them from further analysis.</p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Click on the signal view, then use <span style=\" font-weight:700;\">+ / \u2013</span> to adjust display sensitivity.</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-i"
-                        "ndent:0; text-indent:0px;\">When viewing the entire recording (long recordings only), right-click on the signal view to display 30-second windows.</p></body></html>", None))
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0"
+                        "px;\">When viewing the entire recording (long recordings only), right-click on the signal view to display 30-second windows.</p></body></html>", None))
         self.textEdit_4.setHtml(QCoreApplication.translate("EEGInspectorView", u"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset=\"utf-8\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
 "hr { height: 1px; border-width: 0; }\n"
 "li.unchecked::marker { content: \"\\2610\"; }\n"
 "li.checked::marker { content: \"\\2612\"; }\n"
-"</style></head><body style=\" font-family:'Roboto'; font-size:12pt; font-weight:400; font-style:normal;\">\n"
+"</style></head><body style=\" font-size:12pt; font-weight:400; font-style:normal;\">\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-weight:700;\">Warning:</span> EEG inspector events previously saved in the PSG file are not displayed.</p></body></html>", None))
         self.desc_label32.setText(QCoreApplication.translate("EEGInspectorView", u"Size of sliding windows:", None))
         self.Epoch_len_comboBox.setItemText(0, QCoreApplication.translate("EEGInspectorView", u"10 seconds", None))

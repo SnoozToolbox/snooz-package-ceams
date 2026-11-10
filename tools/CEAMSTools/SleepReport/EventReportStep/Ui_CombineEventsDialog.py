@@ -89,7 +89,6 @@ class Ui_CombineEventsDialog(object):
 
     def retranslateUi(self, CombineEventsDialog):
         CombineEventsDialog.setWindowTitle(QCoreApplication.translate("CombineEventsDialog", u"Dialog", None))
-        CombineEventsDialog.setStyleSheet(QCoreApplication.translate("CombineEventsDialog", u"font: 12pt \"Roboto\";", None))
         self.label.setText(QCoreApplication.translate("CombineEventsDialog", u"Select events to combine", None))
         self.label_2.setText(QCoreApplication.translate("CombineEventsDialog", u"New group name:", None))
         self.cancel_pushbutton.setText(QCoreApplication.translate("CombineEventsDialog", u"Cancel", None))

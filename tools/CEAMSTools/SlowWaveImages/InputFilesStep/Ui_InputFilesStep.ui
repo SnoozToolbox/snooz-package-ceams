@@ -13,9 +13,6 @@
   <property name="windowTitle">
    <string>Form</string>
   </property>
-  <property name="styleSheet">
-   <string notr="true">font: 12pt &quot;Roboto&quot;;</string>
-  </property>
   <layout class="QVBoxLayout" name="verticalLayout_4">
    <item>
     <widget class="QSplitter" name="splitter">
@@ -34,8 +31,6 @@
         <widget class="QLabel" name="label_PSG">
          <property name="font">
           <font>
-           <family>Roboto</family>
-           <pointsize>12</pointsize>
            <weight>50</weight>
            <italic>false</italic>
            <bold>false</bold>
@@ -108,8 +103,6 @@
         <widget class="QLabel" name="label_4">
          <property name="font">
           <font>
-           <family>Roboto</family>
-           <pointsize>12</pointsize>
            <weight>50</weight>
            <italic>false</italic>
            <bold>false</bold>
@@ -176,8 +169,6 @@
           <widget class="QLabel" name="label_Montages">
            <property name="font">
             <font>
-             <family>Roboto</family>
-             <pointsize>12</pointsize>
              <weight>50</weight>
              <italic>false</italic>
              <bold>false</bold>
@@ -262,8 +253,6 @@
           <widget class="QLabel" name="label_Channels">
            <property name="font">
             <font>
-             <family>Roboto</family>
-             <pointsize>12</pointsize>
              <weight>50</weight>
              <italic>false</italic>
              <bold>false</bold>

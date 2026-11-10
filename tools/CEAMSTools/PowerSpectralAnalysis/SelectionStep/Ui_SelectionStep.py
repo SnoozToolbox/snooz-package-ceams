@@ -30,8 +30,6 @@ class Ui_SelectionStep(object):
         self.label = QLabel(SelectionStep)
         self.label.setObjectName(u"label")
         font = QFont()
-        font.setFamilies([u"Roboto"])
-        font.setPointSize(12)
         font.setBold(False)
         font.setItalic(False)
         self.label.setFont(font)
@@ -246,7 +244,6 @@ class Ui_SelectionStep(object):
 #if QT_CONFIG(tooltip)
         SelectionStep.setToolTip("")
 #endif // QT_CONFIG(tooltip)
-        SelectionStep.setStyleSheet(QCoreApplication.translate("SelectionStep", u"font: 12pt \"Roboto\";", None))
         self.label.setText(QCoreApplication.translate("SelectionStep", u"<html><head/><body><p><span style=\" font-weight:600;\">Section selection to perform the EEG spectal power. </span></p></body></html>", None))
         self.radioButton_annotations.setText(QCoreApplication.translate("SelectionStep", u"Analyse spectral power for specific annotations (in the next step)", None))
         self.radioButton_sleep.setText(QCoreApplication.translate("SelectionStep", u"Analyse spectral power for sleep stages and/or cycles (below)", None))
@@ -301,21 +298,21 @@ class Ui_SelectionStep(object):
 "hr { height: 1px; border-width: 0; }\n"
 "li.unchecked::marker { content: \"\\2610\"; }\n"
 "li.checked::marker { content: \"\\2612\"; }\n"
-"</style></head><body style=\" font-family:'Roboto'; font-size:12pt; font-weight:400; font-style:normal;\">\n"
+"</style></head><body style=\" font-size:12pt; font-weight:400; font-style:normal;\">\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">To analyse only the signal included in the sleep cycles.</p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">I.e. from sleep onset to the last asleep stage.</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Useful to analyse complete sleep cycles on"
-                        "ly (ensure incomplete cycles are excluded in the Common Settings for Sleep Cycles in the tool\u2019s introduction step).</p></body></html>", None))
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Useful to analyse complete sleep cycles only (ensure incomplete "
+                        "cycles are excluded in the Common Settings for Sleep Cycles in the tool\u2019s introduction step).</p></body></html>", None))
         self.textEdit_2.setHtml(QCoreApplication.translate("SelectionStep", u"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset=\"utf-8\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
 "hr { height: 1px; border-width: 0; }\n"
 "li.unchecked::marker { content: \"\\2610\"; }\n"
 "li.checked::marker { content: \"\\2612\"; }\n"
-"</style></head><body style=\" font-family:'Roboto'; font-size:12pt; font-weight:400; font-style:normal;\">\n"
+"</style></head><body style=\" font-size:12pt; font-weight:400; font-style:normal;\">\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">To exclude sleep periods from the spectral analysis.</p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Useful to analyse NREM stages included in NREM periods only (not in REM periods). In this case, please check \u201cExclude REM periods\u201d.</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-ri"
-                        "ght:0px; -qt-block-indent:0; text-indent:0px;\">The same approach can be applied to NREM periods.</p></body></html>", None))
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-ind"
+                        "ent:0; text-indent:0px;\">The same approach can be applied to NREM periods.</p></body></html>", None))
     # retranslateUi
 

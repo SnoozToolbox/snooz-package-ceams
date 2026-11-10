@@ -22,7 +22,6 @@ class Ui_IRASAYASAResultsView(object):
     def setupUi(self, IRASAYASAResultsView):
         if not IRASAYASAResultsView.objectName():
             IRASAYASAResultsView.setObjectName(u"IRASAYASAResultsView")
-        IRASAYASAResultsView.setStyleSheet(u"font: 12pt \"Roboto\";")
         IRASAYASAResultsView.resize(483, 360)
         self.verticalLayout = QVBoxLayout(IRASAYASAResultsView)
         self.verticalLayout.setObjectName(u"verticalLayout")

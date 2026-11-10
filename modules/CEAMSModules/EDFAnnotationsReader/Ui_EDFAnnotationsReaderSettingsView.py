@@ -144,7 +144,6 @@ class Ui_EDFAnnotationsReaderSettingsView(object):
 
     def retranslateUi(self, EDFAnnotationsReaderSettingsView):
         EDFAnnotationsReaderSettingsView.setWindowTitle("")
-        EDFAnnotationsReaderSettingsView.setStyleSheet(QCoreApplication.translate("EDFAnnotationsReaderSettingsView", u"font: 12pt \"Roboto\";", None))
         self.pushButton_choose.setText(QCoreApplication.translate("EDFAnnotationsReaderSettingsView", u"Choose Annotations files", None))
         self.pushButton_choose_psg.setText(QCoreApplication.translate("EDFAnnotationsReaderSettingsView", u"Choose PSG files", None))
         self.pushButton_clear.setText(QCoreApplication.translate("EDFAnnotationsReaderSettingsView", u"Clear All", None))

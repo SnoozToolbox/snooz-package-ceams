@@ -280,7 +280,7 @@ class OximeterDrawArea(QWidget):
         # Draw the y text for the saturation levels
         painter.setPen(self._text_pen)
         font = painter.font()
-        font.setPointSize(8)
+        font.setPixelSize(11)  # 8pt on Windows and Linux, in pixels to keep this size on macOS
         painter.setFont(font)
 
         y_offset = self._calculate_y_offset(len(labels)-1)
@@ -308,7 +308,7 @@ class OximeterDrawArea(QWidget):
         painter.setPen(self._text_pen)
         painter.setBrush(Qt.NoBrush)
         font = painter.font()
-        font.setPointSize(8)
+        font.setPixelSize(11)  # 8pt on Windows and Linux, in pixels to keep this size on macOS
         painter.setFont(font)
 
         # Draw the half-hours markers

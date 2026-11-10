@@ -24,10 +24,15 @@ import config
 _OLD_LINK_COLOR = re.compile(r"\s*(?<![-\w])color\s*:\s*#00ccff\s*;?", re.IGNORECASE)
 _COLOR = re.compile(r"\s*(?<![-\w])color\s*:\s*#[0-9a-fA-F]{3,8}\s*;?", re.IGNORECASE)
 _LINK = re.compile(r"(<a\b[^>]*>)(.*?)(</a>)", re.IGNORECASE | re.DOTALL)
+# The details take the font of their text box. The saved details keep the font the text
+# box had when saved (the old font of Snooz, in points: smaller on macOS).
+_STYLE = re.compile(r"(\bstyle\s*=\s*\")([^\"]*)(\")", re.IGNORECASE)
+_FONT = re.compile(r"\s*(?<![-\w])font-(?:family|size)\s*:\s*(?:'[^']*'|[^;\"'<>])*;?", re.IGNORECASE)
 
 
-def _details_with_theme_links(html):
-    """ The details without the colors of their links, so the links take the color of the theme. """
+def _details_in_snooz_style(html):
+    """ The details in the font of their text box, their links in the link color of the theme. """
+    html = _STYLE.sub(lambda style: style.group(1) + _FONT.sub("", style.group(2)) + style.group(3), html)
     html = _OLD_LINK_COLOR.sub("", html)
     return _LINK.sub(lambda link: _COLOR.sub("", link.group(1)) + _COLOR.sub("", link.group(2)) + link.group(3), html)
 
@@ -206,7 +211,7 @@ class SleepCyclesDelimiterSettingsView( BaseSettingsView,  Ui_SleepCyclesDelimit
 
             # Details
             self.textBrowser.setReadOnly(False)
-            self.textBrowser.setHtml(_details_with_theme_links(self.parameters['details']))
+            self.textBrowser.setHtml(_details_in_snooz_style(self.parameters['details']))
             self.textBrowser.setReadOnly(True)
 
             # Set if the incomplete cycles should be kept

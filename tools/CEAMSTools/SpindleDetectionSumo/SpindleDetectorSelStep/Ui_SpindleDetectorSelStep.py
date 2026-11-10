@@ -25,7 +25,6 @@ class Ui_SpindleDetectorSelStep(object):
         if not SpindleDetectorSelStep.objectName():
             SpindleDetectorSelStep.setObjectName(u"SpindleDetectorSelStep")
         SpindleDetectorSelStep.resize(875, 763)
-        SpindleDetectorSelStep.setStyleSheet(u"font: 12pt \"Roboto\";")
         self.horizontalLayout_5 = QHBoxLayout(SpindleDetectorSelStep)
         self.horizontalLayout_5.setObjectName(u"horizontalLayout_5")
         self.verticalLayout_3 = QVBoxLayout()
@@ -104,8 +103,6 @@ class Ui_SpindleDetectorSelStep(object):
         self.label_5 = QLabel(SpindleDetectorSelStep)
         self.label_5.setObjectName(u"label_5")
         font = QFont()
-        font.setFamilies([u"Roboto"])
-        font.setPointSize(12)
         font.setBold(False)
         font.setItalic(False)
         self.label_5.setFont(font)

@@ -73,10 +73,6 @@ class Ui_OximeterView(object):
 
         self.label_2 = QLabel(OximeterView)
         self.label_2.setObjectName(u"label_2")
-        font = QFont()
-        font.setPointSize(8)
-        font.setItalic(True)
-        self.label_2.setFont(font)
         self.label_2.setTextFormat(Qt.TextFormat.RichText)
 
         self.verticalLayout.addWidget(self.label_2)

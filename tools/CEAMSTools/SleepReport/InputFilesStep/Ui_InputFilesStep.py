@@ -87,7 +87,6 @@ class Ui_InputFilesStep(object):
 
         self.groupBox_5 = QGroupBox(self.layoutWidget1)
         self.groupBox_5.setObjectName(u"groupBox_5")
-        self.groupBox_5.setStyleSheet(u"font: 12pt \"Roboto\";")
         self.verticalLayout_3 = QVBoxLayout(self.groupBox_5)
         self.verticalLayout_3.setObjectName(u"verticalLayout_3")
         self.sex_combobox = QComboBox(self.groupBox_5)

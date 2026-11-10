@@ -30,7 +30,6 @@ class Ui_MiniEpochDefinition(object):
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(MiniEpochDefinition.sizePolicy().hasHeightForWidth())
         MiniEpochDefinition.setSizePolicy(sizePolicy)
-        MiniEpochDefinition.setStyleSheet(u"font: 12pt \"Roboto\";")
         self.verticalLayout = QVBoxLayout(MiniEpochDefinition)
         self.verticalLayout.setObjectName(u"verticalLayout")
         self.label_4 = QLabel(MiniEpochDefinition)
@@ -160,7 +159,7 @@ class Ui_MiniEpochDefinition(object):
     def retranslateUi(self, MiniEpochDefinition):
         MiniEpochDefinition.setWindowTitle("")
         self.label_4.setText(QCoreApplication.translate("MiniEpochDefinition", u"<html><head/><body><p><span style=\" font-weight:700;\">Define the labels and length of the mini-epochs for phasic and tonic REMs.</span></p></body></html>", None))
-        self.label_9.setText(QCoreApplication.translate("MiniEpochDefinition", u"<html><head/><body><p><span style=\" font-family:'Roboto-Regular'; font-weight:700;\">General definition</span></p><p><span style=\" font-family:'Roboto-Regular'; text-decoration: underline;\">Tonic REM</span><span style=\" font-family:'Roboto-Regular';\"> corresponds to more stable REM activity with minimal eye movements and lower physiological variability.</span></p><p><span style=\" font-family:'Roboto-Regular'; text-decoration: underline;\">Phasic REM</span><span style=\" font-family:'Roboto-Regular';\"> is characterized by bursts of rapid eye movements, transient muscle activity, and increased neural and autonomic<br/>activation. This separation enables more detailed investigation of REM sleep dynamics and related biomarkers.</span></p><p><br/></p></body></html>", None))
+        self.label_9.setText(QCoreApplication.translate("MiniEpochDefinition", u"<html><head/><body><p><span style=\" font-weight:700;\">General definition</span></p><p><span style=\" text-decoration: underline;\">Tonic REM</span><span style=\"\"> corresponds to more stable REM activity with minimal eye movements and lower physiological variability.</span></p><p><span style=\" text-decoration: underline;\">Phasic REM</span><span style=\"\"> is characterized by bursts of rapid eye movements, transient muscle activity, and increased neural and autonomic<br/>activation. This separation enables more detailed investigation of REM sleep dynamics and related biomarkers.</span></p><p><br/></p></body></html>", None))
         self.label_5.setText(QCoreApplication.translate("MiniEpochDefinition", u"<html><head/><body><p><span style=\" font-weight:700;\">Mini-epochs group and name definition</span></p></body></html>", None))
         self.label_6.setText(QCoreApplication.translate("MiniEpochDefinition", u"<html><head/><body><p>Each event belongs to a group and is labeled by a name.</p></body></html>", None))
         self.label.setText(QCoreApplication.translate("MiniEpochDefinition", u"Group for the mini-epoch", None))

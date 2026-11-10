@@ -13,16 +13,11 @@
   <property name="windowTitle">
    <string>Dialog</string>
   </property>
-  <property name="styleSheet">
-   <string notr="true">font: 12pt &quot;Roboto&quot;;</string>
-  </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
     <widget class="QLabel" name="label_2">
      <property name="font">
       <font>
-       <family>Roboto</family>
-       <pointsize>12</pointsize>
        <weight>50</weight>
        <italic>false</italic>
        <bold>false</bold>
@@ -64,8 +59,6 @@
        </property>
        <property name="font">
         <font>
-         <family>Roboto</family>
-         <pointsize>12</pointsize>
          <weight>50</weight>
          <italic>false</italic>
          <bold>false</bold>
@@ -93,8 +86,6 @@
       <widget class="QCheckBox" name="blank_checkBox">
        <property name="font">
         <font>
-         <family>Roboto</family>
-         <pointsize>12</pointsize>
          <weight>50</weight>
          <italic>false</italic>
          <bold>false</bold>
@@ -163,8 +154,6 @@
        </property>
        <property name="font">
         <font>
-         <family>Roboto</family>
-         <pointsize>12</pointsize>
          <weight>50</weight>
          <italic>false</italic>
          <bold>false</bold>
@@ -204,8 +193,6 @@
        </property>
        <property name="font">
         <font>
-         <family>Roboto</family>
-         <pointsize>12</pointsize>
          <weight>50</weight>
          <italic>false</italic>
          <bold>false</bold>

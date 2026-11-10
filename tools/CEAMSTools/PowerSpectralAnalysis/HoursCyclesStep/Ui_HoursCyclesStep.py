@@ -24,7 +24,6 @@ class Ui_HoursCyclesStep(object):
         if not HoursCyclesStep.objectName():
             HoursCyclesStep.setObjectName(u"HoursCyclesStep")
         HoursCyclesStep.resize(616, 229)
-        HoursCyclesStep.setStyleSheet(u"font: 12pt \"Roboto\";")
         self.verticalLayout = QVBoxLayout(HoursCyclesStep)
         self.verticalLayout.setObjectName(u"verticalLayout")
         self.label = QLabel(HoursCyclesStep)

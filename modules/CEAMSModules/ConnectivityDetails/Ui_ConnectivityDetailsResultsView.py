@@ -22,7 +22,6 @@ class Ui_ConnectivityDetailsResultsView(object):
     def setupUi(self, ConnectivityDetailsResultsView):
         if not ConnectivityDetailsResultsView.objectName():
             ConnectivityDetailsResultsView.setObjectName(u"ConnectivityDetailsResultsView")
-        ConnectivityDetailsResultsView.setStyleSheet(u"font: 12pt \"Roboto\";")
         ConnectivityDetailsResultsView.resize(483, 360)
         self.verticalLayout = QVBoxLayout(ConnectivityDetailsResultsView)
         self.verticalLayout.setObjectName(u"verticalLayout")

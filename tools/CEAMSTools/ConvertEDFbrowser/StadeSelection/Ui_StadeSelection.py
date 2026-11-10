@@ -31,9 +31,6 @@ class Ui_StadeSelection(object):
         self.verticalLayout.setObjectName(u"verticalLayout")
         self.label = QLabel(StadeSelection)
         self.label.setObjectName(u"label")
-        font = QFont()
-        font.setBold(True)
-        self.label.setFont(font)
 
         self.verticalLayout.addWidget(self.label)
 
@@ -49,7 +46,6 @@ class Ui_StadeSelection(object):
         self.verticalLayout_2.setObjectName(u"verticalLayout_2")
         self.label_2 = QLabel(StadeSelection)
         self.label_2.setObjectName(u"label_2")
-        self.label_2.setFont(font)
 
         self.verticalLayout_2.addWidget(self.label_2)
 
@@ -102,7 +98,6 @@ class Ui_StadeSelection(object):
 
     def retranslateUi(self, StadeSelection):
         StadeSelection.setWindowTitle(QCoreApplication.translate("StadeSelection", u"Form", None))
-        StadeSelection.setStyleSheet(QCoreApplication.translate("StadeSelection", u"font: 12pt \"Roboto\";", None))
         self.label.setText(QCoreApplication.translate("StadeSelection", u"PSG Files", None))
         self.label_2.setText(QCoreApplication.translate("StadeSelection", u"Events", None))
         self.select_all_checkBox.setText(QCoreApplication.translate("StadeSelection", u"Select All", None))

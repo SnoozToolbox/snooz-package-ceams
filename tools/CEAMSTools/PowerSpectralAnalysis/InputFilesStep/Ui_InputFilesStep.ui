@@ -17,7 +17,7 @@
     <number>25</number>
    </property>
   </layout>
- <property name="styleSheet"><string>font: 12pt "Roboto";</string></property></widget>
+ </widget>
  <resources><include location="../../../../../snooz-toolbox/src/main/python/ui/themes/themes.qrc" /></resources>
  <connections />
 </ui>

@@ -23,7 +23,6 @@ class Ui_InputFiles(object):
         if not InputFiles.objectName():
             InputFiles.setObjectName(u"InputFiles")
         InputFiles.resize(730, 590)
-        InputFiles.setStyleSheet(u"font: 12pt \"Roboto\";")
         self.verticalLayout = QVBoxLayout(InputFiles)
         self.verticalLayout.setSpacing(25)
         self.verticalLayout.setObjectName(u"verticalLayout")

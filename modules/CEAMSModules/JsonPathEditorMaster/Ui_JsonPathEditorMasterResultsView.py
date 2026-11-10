@@ -22,7 +22,6 @@ class Ui_JsonPathEditorMasterResultsView(object):
     def setupUi(self, JsonPathEditorMasterResultsView):
         if not JsonPathEditorMasterResultsView.objectName():
             JsonPathEditorMasterResultsView.setObjectName(u"JsonPathEditorMasterResultsView")
-        JsonPathEditorMasterResultsView.setStyleSheet(u"font: 12pt \"Roboto\";")
         JsonPathEditorMasterResultsView.resize(483, 360)
         self.verticalLayout = QVBoxLayout(JsonPathEditorMasterResultsView)
         self.verticalLayout.setObjectName(u"verticalLayout")

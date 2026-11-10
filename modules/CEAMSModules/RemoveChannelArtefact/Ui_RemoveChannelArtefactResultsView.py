@@ -22,7 +22,6 @@ class Ui_RemoveChannelArtefactResultsView(object):
     def setupUi(self, RemoveChannelArtefactResultsView):
         if not RemoveChannelArtefactResultsView.objectName():
             RemoveChannelArtefactResultsView.setObjectName(u"RemoveChannelArtefactResultsView")
-        RemoveChannelArtefactResultsView.setStyleSheet(u"font: 12pt \"Roboto\";")
         RemoveChannelArtefactResultsView.resize(483, 360)
         self.verticalLayout = QVBoxLayout(RemoveChannelArtefactResultsView)
         self.verticalLayout.setObjectName(u"verticalLayout")

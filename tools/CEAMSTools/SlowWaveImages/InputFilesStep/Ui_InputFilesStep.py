@@ -27,7 +27,6 @@ class Ui_InputFilesStep(object):
         if not InputFilesStep.objectName():
             InputFilesStep.setObjectName(u"InputFilesStep")
         InputFilesStep.resize(1208, 778)
-        InputFilesStep.setStyleSheet(u"font: 12pt \"Roboto\";")
         self.verticalLayout_4 = QVBoxLayout(InputFilesStep)
         self.verticalLayout_4.setObjectName(u"verticalLayout_4")
         self.splitter = QSplitter(InputFilesStep)
@@ -43,8 +42,6 @@ class Ui_InputFilesStep(object):
         self.label_PSG = QLabel(self.layoutWidget)
         self.label_PSG.setObjectName(u"label_PSG")
         font = QFont()
-        font.setFamilies([u"Roboto"])
-        font.setPointSize(12)
         font.setBold(False)
         font.setItalic(False)
         self.label_PSG.setFont(font)
