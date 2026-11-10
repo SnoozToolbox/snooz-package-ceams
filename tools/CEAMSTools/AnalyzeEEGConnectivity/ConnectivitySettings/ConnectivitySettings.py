@@ -12,7 +12,7 @@ See the file LICENCE for full license details.
     routes the epoch / connectivity / network-properties parameters to it.
 """
 
-from qtpy import QtWidgets
+from qtpy import QtCore, QtWidgets
 
 from CEAMSTools.AnalyzeEEGConnectivity.ConnectivitySettings.Ui_ConnectivitySettings import Ui_ConnectivitySettings
 from CEAMSTools.AnalyzeEEGConnectivity.FilterStep.FilterStep import FilterStep
@@ -28,6 +28,8 @@ class ConnectivitySettings(BaseStepView, Ui_ConnectivitySettings, QtWidgets.QWid
       (annotation vs sleep stages) and sends parameters to the correct nodes.
     """
     def __init__(self, **kwargs):
+        self._settings_loaded = False
+        self._connectivity_states = {}
         super().__init__(**kwargs)
         self.setupUi(self)
 
@@ -67,13 +69,14 @@ class ConnectivitySettings(BaseStepView, Ui_ConnectivitySettings, QtWidgets.QWid
         }
 
         # --- Connect radio buttons to method change handler ---
-        self.dpli_radioButton.toggled.connect(self.on_method_changed)
-        self.wpli_radioButton.toggled.connect(self.on_method_changed)
-        self.aec_radioButton.toggled.connect(self.on_method_changed)
-        self.custom_threshold_radioButton.toggled.connect(self.on_threshold_mode_changed)
-        self.mst_radioButton.toggled.connect(self.on_threshold_mode_changed)
+        self.dpli_radioButton.toggled.connect(self.method_changed_slot)
+        self.wpli_radioButton.toggled.connect(self.method_changed_slot)
+        self.aec_radioButton.toggled.connect(self.method_changed_slot)
+        self.custom_threshold_radioButton.toggled.connect(self.threshold_mode_changed_slot)
+        self.mst_radioButton.toggled.connect(self.threshold_mode_changed_slot)
 
-        self.on_method_changed()  # Initialize method selection and module activation
+        self._update_method_widgets() # Update UI widgets based on the currently selected method
+        self.threshold_mode_changed_slot() # Update threshold UI based on the current mode
 
 
     # ------------------------------------------------------------------ #
@@ -109,6 +112,8 @@ class ConnectivitySettings(BaseStepView, Ui_ConnectivitySettings, QtWidgets.QWid
 
     def _sync_activation(self):
         """Deactivate every chain, then activate only the active scope+method chain."""
+        if not self._settings_loaded:
+            return
         for chain in self._all_chains():
             for node_id in chain.values():
                 self.deactivate_node(node_id)
@@ -119,7 +124,8 @@ class ConnectivitySettings(BaseStepView, Ui_ConnectivitySettings, QtWidgets.QWid
     # ------------------------------------------------------------------ #
     #  UI widget state
     # ------------------------------------------------------------------ #
-    def on_threshold_mode_changed(self):
+    def threshold_mode_changed_slot(self):
+        """Enable the threshold value only when wPLI uses a custom threshold."""
         is_wpli = (self._active_method() == "wpli")
         if is_wpli and self.custom_threshold_radioButton.isChecked():
             self.threshold_val_doubleSpinBox.setEnabled(True)
@@ -129,6 +135,7 @@ class ConnectivitySettings(BaseStepView, Ui_ConnectivitySettings, QtWidgets.QWid
             self.threshold_val_label.setEnabled(False)
 
     def _update_method_widgets(self):
+        """Enable parameter sections for the method; threshold mode is handled separately."""
         method = self._active_method()
         is_wpli = (method == "wpli")
         is_stats = method in ("wpli", "dpli")  # surrogate-based statistics
@@ -149,14 +156,14 @@ class ConnectivitySettings(BaseStepView, Ui_ConnectivitySettings, QtWidgets.QWid
         self.threshold_val_doubleSpinBox.setEnabled(is_wpli)
         self.threshold_val_label.setEnabled(is_wpli)
 
-    def on_method_changed(self):
+    def method_changed_slot(self):
         """
         When the user switches method, activate the correct chain for the current
         scope and update which parameter widgets are enabled.
         """
         self._sync_activation()
         self._update_method_widgets()
-        self.on_threshold_mode_changed()
+        self.threshold_mode_changed_slot()
 
 
     # ------------------------------------------------------------------ #
@@ -212,17 +219,47 @@ class ConnectivitySettings(BaseStepView, Ui_ConnectivitySettings, QtWidgets.QWid
                 self._pub_sub_manager.publish(self, f"{chain['network']}.threshold_mode", 'minimally_spanning_tree')
 
     def load_settings(self):
-        # Re-sync activation with the scope selected in FilterStep (the scope may
-        # have changed before this step was opened).
-        self._sync_activation()
+        """Restore the method from saved node states without changing the process."""
+        self._settings_loaded = False
+        methods_by_topic = {
+            f"{getattr(self, f'{scope}_{method}')['conn']}.get_activation_state": method
+            for scope in ("annotation", "sleep")
+            for method in ("wpli", "dpli", "aec")
+        }
+        self._connectivity_states = dict.fromkeys(methods_by_topic)
+        # NodeGraphicsItem replies synchronously through on_topic_response.
+        for topic in methods_by_topic:
+            self._pub_sub_manager.publish(self, topic, None)
+
+        active_methods = [
+            methods_by_topic[topic]
+            for topic, state in self._connectivity_states.items()
+            if state == ActivationState.ACTIVATED
+        ]
+        if None in self._connectivity_states.values() or len(active_methods) != 1:
+            self._pub_sub_manager.publish(
+                self, "show_error_message",
+                "Could not restore connectivity settings: expected exactly one "
+                "active connectivity module and a response from all six modules."
+            )
+            return
+
+        with QtCore.QSignalBlocker(self.wpli_radioButton), \
+                QtCore.QSignalBlocker(self.dpli_radioButton), \
+                QtCore.QSignalBlocker(self.aec_radioButton):
+            getattr(self, f"{active_methods[0]}_radioButton").setChecked(True)
         self._update_method_widgets()
-        self.on_threshold_mode_changed()
+        self.threshold_mode_changed_slot()
+        self._settings_loaded = True
 
     def on_validate_settings(self):
-        """
-        Optional: Check if all fields are filled before allowing to apply settings.
-        """
-        return True
+        if not self._settings_loaded:
+            self._pub_sub_manager.publish(
+                self, "show_error_message",
+                "Connectivity settings could not be restored. "
+                "Please check the connectivity modules in the process."
+            )
+        return self._settings_loaded
 
     def on_topic_update(self, topic, message, sender):
         # React to a scope change from FilterStep by re-routing the active chain.
@@ -231,5 +268,5 @@ class ConnectivitySettings(BaseStepView, Ui_ConnectivitySettings, QtWidgets.QWid
                 self._sync_activation()
 
     def on_topic_response(self, topic, message, sender):
-        # Not used, but could be for advanced sync
-        pass
+        if topic in self._connectivity_states:
+            self._connectivity_states[topic] = message
