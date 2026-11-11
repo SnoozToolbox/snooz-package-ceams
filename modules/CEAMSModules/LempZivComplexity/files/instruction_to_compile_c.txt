@@ -1,0 +1,23 @@
+## The libraries are built automatically by the GitHub workflow of the
+## lzc_complexity repository (.github/workflows/build.yml). Download the four
+## artifacts and copy them into this files/ folder, next to calculate_complexity.c.
+## FJZC_utils._load_lib() selects the one matching the running Python:
+##
+##   Windows x86_64        calculate_complexity_64.dll
+##   Linux x86_64          calculate_complexity_64.so
+##   macOS Intel x86_64    calculate_complexity_x86_64.dylib
+##   macOS Apple Silicon   calculate_complexity_arm64.dylib
+
+## Manual build, from this files/ folder (same commands as the workflow):
+## Windows (MinGW-w64 on PATH)
+gcc -O2 -shared -o calculate_complexity_64.dll calculate_complexity.c
+## Linux
+gcc -O2 -fPIC -shared -o calculate_complexity_64.so calculate_complexity.c
+## macOS Intel
+clang -O2 -dynamiclib -o calculate_complexity_x86_64.dylib calculate_complexity.c
+## macOS Apple Silicon
+clang -O2 -dynamiclib -o calculate_complexity_arm64.dylib calculate_complexity.c
+
+## Exports used by Python (ctypes):
+##   complexity(...)        - 1D / concat path
+##   complexity_joint(...)  - joint path with automatic groups of <= 50 channels

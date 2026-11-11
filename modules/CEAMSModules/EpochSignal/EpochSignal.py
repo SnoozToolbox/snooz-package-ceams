@@ -50,8 +50,13 @@ class EpochSignal(SciNode):
             raise NodeInputException(self.identifier, "signals",
                 f"Expected list of SignalModel, got {type(signals)}")
         if not signals:
-            raise NodeInputException(self.identifier, "signals",
-                "Input signal list is empty.")
+            # A recording without any selected event or sleep stage is a problem of
+            # this recording only. NodeRuntimeException lets the tool skip it and
+            # continue with the next recording of the cohort, a NodeInputException
+            # would stop the whole analysis.
+            raise NodeRuntimeException(self.identifier, "signals",
+                "Input signal list is empty. No signal was found for the selected "
+                "events or sleep stages in this recording.")
         if not isinstance(events, pd.DataFrame):
             raise NodeInputException(self.identifier, "events",
                 f"Expected pandas.DataFrame, got {type(events)}")

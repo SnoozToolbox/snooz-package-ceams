@@ -1,0 +1,72 @@
+{   
+    "item_name": "LempZivComplexity",
+    "item_type": "module",
+    "item_api_version": "3.0.0",
+    "dependencies": [
+    ],
+    "module_params":{
+        "cls":"LempZivComplexity",
+        "name":"LempZivComplexity",
+        "metadata":{},
+        "file_location":null,
+        "module":"CEAMSModules.LempZivComplexity",
+        "module_label": "LempZiv Complexity",
+        "module_category":"Complexity Analysis",
+        "module_author":"",
+        "module_url":"",
+        "module_description":"Fourier-surrogate normalized Lempel-Ziv complexity (joint / concat / univariate).",
+        "module_options":{},
+        "inputs": {
+            "recording_path": {
+                "name": "recording_path",
+                "value": "",
+                "connections": {},
+                "sub_plugs": {}
+            },
+            "subject_info": {
+                "name": "subject_info",
+                "value": "",
+                "connections": {},
+                "sub_plugs": {}
+            },
+            "epochs": {
+                "name": "epochs",
+                "value": "",
+                "connections": {},
+                "sub_plugs": {}
+            },
+            "events": {
+                "name": "events",
+                "value": "",
+                "connections": {},
+                "sub_plugs": {}
+            },
+            "mode": {
+                "name": "mode",
+                "value": "joint",
+                "connections": {},
+                "sub_plugs": {}
+            },
+            "cohort_filename": {
+                "name": "cohort_filename",
+                "value": "",
+                "connections": {},
+                "sub_plugs": {}
+            },
+            "export_details": {
+                "name": "export_details",
+                "value": "True",
+                "connections": {},
+                "sub_plugs": {}
+            }
+        },
+        "outputs": {
+            "lzc_results": {
+                "name": "lzc_results",
+                "value": "",
+                "connections": {},
+                "sub_plugs": {}
+            }
+        }
+    }
+}

@@ -101,6 +101,12 @@ class TrimSignal(SciNode):
         if not isinstance(signals, list):
             raise NodeInputException(self.identifier, "signals",
                 f"Expected list of SignalModel, got {type(signals)}")
+
+        # UI / process JSON store checkbox values as strings ("True"/"False")
+        if isinstance(reset_time, str):
+            reset_time = reset_time.strip().lower() in ('true', '1', 'yes')
+        elif reset_time is None:
+            reset_time = True
         if not isinstance(reset_time, bool):
             raise NodeInputException(self.identifier, "reset_time",
                 f"Expected boolean, got {type(reset_time)}")

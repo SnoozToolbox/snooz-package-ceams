@@ -1265,6 +1265,20 @@
                     }
                 }
             ]
+        },
+        {
+            "item_name": "LempZivComplexity",
+            "item_type": "module",
+            "item_version": "0.0.0",
+            "item_hooks": [
+                {
+                    "endpoint_name": "module_endpoint",
+                    "parameters": {
+                        "module_category": "Complexity Analysis",
+                        "module_label": "LempZiv Complexity"
+                    }
+                }
+            ]
         }
     ]
 }

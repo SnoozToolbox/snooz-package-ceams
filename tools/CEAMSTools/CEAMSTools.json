@@ -425,6 +425,20 @@
                     }
                 }
             ]
+        },
+        {
+            "item_name": "AnalyzeEEGComplexity",
+            "item_type": "tool",
+            "item_version": "0.0.0",
+            "item_hooks": [
+                {
+                    "endpoint_name": "menu_endpoint",
+                    "parameters": {
+                        "menu_category": "2-Processing",
+                        "menu_label": "Analyze EEG Complexity"
+                    }
+                }
+            ]
         }
     ]
 }
