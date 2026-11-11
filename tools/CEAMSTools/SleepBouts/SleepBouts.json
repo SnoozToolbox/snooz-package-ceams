@@ -6,10 +6,10 @@
     "item_author": "",
     "item_description": "",
     "tool_params": {
-        "tool_version": "2.2.1",
+        "tool_version": "2.2.2",
         "tool_label": "Report Sleep Bouts",
         "tool_category": "2-Processing",
-        "asset_directory": "assets",
+        "asset_directory": "",
         "package_name": "CEAMSTools",
         "steps": [
             {
