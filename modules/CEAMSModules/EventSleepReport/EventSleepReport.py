@@ -100,6 +100,9 @@ class EventSleepReport(SciNode):
             raise NodeInputException(self.identifier, "events", \
                 f"EventSleepReport input of wrong type. Expected: <class 'pd.DataFrame'> received: {type(events)}")         
 
+        csv_report = self._parse_bool_flag(csv_report, "csv_report")
+        save_events_report = self._parse_bool_flag(save_events_report, "save_events_report")
+
         if isinstance(report_constants,str) and report_constants == '':
             raise NodeInputException(self.identifier, "report_constants", \
                 "SleepReport report_constants parameter must be set.")
@@ -271,16 +274,6 @@ class EventSleepReport(SciNode):
                 int(report_constants['N_CYCLES']), filtered_events, sleep_stages, report)
             info = info + stats_info_cycle
 
-            if isinstance(save_events_report, str):
-                try : 
-                    save_events_report = eval(save_events_report)
-                except : 
-                    raise NodeInputException(self.identifier, "save_events_report", \
-                        "EventSleepReport save_events_report parameter must be set.")                
-            if type(save_events_report) != bool:
-                raise NodeInputException(self.identifier, "save_events_report", \
-                    "EventSleepReport save_events_report parameter must be set.")
-
             if save_events_report:
                 HH_series = (np.floor(filtered_events.start_sec/3600)).astype(int)
                 MM_series = ( np.floor( (filtered_events.start_sec-HH_series*3600) / 60 )).astype(int)
@@ -292,16 +285,6 @@ class EventSleepReport(SciNode):
                     /np.round(sleep_stages_nocycle.duration_sec.values[0]))
 
             report_events[report_label] = filtered_events
-
-            if isinstance(csv_report, str):
-                try : 
-                    csv_report = eval(csv_report)
-                except : 
-                    raise NodeInputException(self.identifier, "csv_report", \
-                        "EventSleepReport csv_report parameter must be set.")                
-            if type(csv_report) != bool:
-                raise NodeInputException(self.identifier, "csv_report", \
-                    "EventSleepReport csv_report parameter must be set.")
 
             if csv_report:
                 # Each line is an additional subject
@@ -345,6 +328,24 @@ class EventSleepReport(SciNode):
         return {
             'report_events': report_events
         }
+
+
+    def _parse_bool_flag(self, value, plug_name):
+        if isinstance(value, bool):
+            return value
+        if isinstance(value, int) and value in (0, 1):
+            return bool(value)
+        if isinstance(value, str):
+            normalized = value.strip().lower()
+            if normalized in ("1", "true"):
+                return True
+            if normalized in ("0", "false"):
+                return False
+        raise NodeInputException(
+            self.identifier,
+            plug_name,
+            f"EventSleepReport {plug_name} parameter must be a boolean"
+        )
 
 
     def strip_accents(self, str_input):
@@ -626,6 +627,8 @@ class EventSleepReport(SciNode):
 
         subject_info_params = {
             "filename": ensure_utf8_string(record_info["filename"]),
+            "id1": ensure_utf8_string(record_info['id1']) if record_info['id1'] is not None else record_info['id1'],
+            "id2": ensure_utf8_string(record_info['id2']) if record_info['id2'] is not None else record_info['id2'],
             "group":None,
             "sex": ensure_utf8_string(record_info['sex']) if record_info['sex'] is not None else record_info['sex'],
             "birthdate":birthdate_text,
@@ -637,6 +640,8 @@ class EventSleepReport(SciNode):
             "waistline":record_info['waistline'] if record_info['waistline'] != None and record_info['waistline'] > 0 else None
         }
         info.append(["filename", "PSG filename"])
+        info.append(["id1", "First ID"])
+        info.append(["id2", "Second ID"])
         info.append(["group", "Subject Group"])
         info.append(["sex", "Subject Sex"])
         info.append(["birthdate", "The birthdate of the subject, yyyy-mm-dd"])
