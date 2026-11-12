@@ -13,6 +13,7 @@ from math import nan
 import numpy as np
 import os
 import pandas as pd
+import re
 import unicodedata
 
 from flowpipe import SciNode, InputPlug, OutputPlug
@@ -84,7 +85,9 @@ class EventSleepReport(SciNode):
             "csv_report": bool
                 Generate the CSV report if True.
             save_events_report : bool
-                Save events report if true.
+                Save filtered events if true and csv_report is enabled.
+                Each filename includes the report name, group and event name
+                (when specified) to distinguish separate selections.
             "output_prefix": str
                 The prefix of the report filename
             "output_directory": str
@@ -316,7 +319,13 @@ class EventSleepReport(SciNode):
                         raise NodeRuntimeException(self.identifier, "EventSleepReport", error_message)
                 if save_events_report:
                     # Output the events list for each report
-                    events_report_filename = os.path.join(output_directory, f"{record_info['filename']}_{output_prefix}_EVENTS_{report_name}.tsv")
+                    selection_parts = [
+                        re.sub(r'[<>:"/\\|?*\x00-\x1f]', '_', report[key]).replace(" ", "_")
+                        for key in ('name', 'group_name', 'event_name')
+                        if report[key]
+                    ]
+                    selection_name = '_'.join(selection_parts)
+                    events_report_filename = os.path.join(output_directory, f"{record_info['filename']}_{output_prefix}_EVENTS_{selection_name}.tsv")
                     try : 
                         report_events[report_label].to_csv(path_or_buf=events_report_filename, \
                             sep='\t', index=True, mode='w', header=True, encoding="utf_8")
@@ -1395,4 +1404,3 @@ class EventSleepReport(SciNode):
                 label_cycle_long+" : number of events per hour"])
 
         return stats_cycles, stats_info
-
