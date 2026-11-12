@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file ''
+## Form generated from reading UI file 'Ui_SubtractSignalsResultsView.ui'
 ##
 ## Created by: Qt User Interface Compiler version 6.8.2
 ##
@@ -18,8 +18,6 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
 from PySide6.QtWidgets import (QApplication, QGridLayout, QHBoxLayout, QLabel,
     QLineEdit, QPushButton, QSizePolicy, QSpacerItem,
     QVBoxLayout, QWidget)
-
-from widgets.QLineEditLive import QLineEditLive
 
 class Ui_SubtractSignalsResultsView(object):
     def setupUi(self, SubtractSignalsResultsView):
@@ -97,7 +95,7 @@ class Ui_SubtractSignalsResultsView(object):
 
         self.horizontalLayout_3.addWidget(self.time_label)
 
-        self.time_lineedit = QLineEditLive(SubtractSignalsResultsView)
+        self.time_lineedit = QLineEdit(SubtractSignalsResultsView)
         self.time_lineedit.setObjectName(u"time_lineedit")
         self.time_lineedit.setEnabled(False)
         self.time_lineedit.setText(u"00:00:00")
