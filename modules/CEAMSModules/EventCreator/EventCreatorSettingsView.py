@@ -24,20 +24,32 @@ class EventCreatorSettingsView( BaseSettingsView,  Ui_EventCreatorSettingsView, 
 
         # init UI
         self.setupUi(self)
-        self.event_name_lineedit.init(self._parent_node.identifier, 'event_name', 
-                                        self._pub_sub_manager)
-        self.start_time_lineedit.init(self._parent_node.identifier, 'start_time',
-                                        self._pub_sub_manager)
-        self.duration_lineedit.init(self._parent_node.identifier, 'duration',
-                                        self._pub_sub_manager)
-        self.group_name_lineedit.init(self._parent_node.identifier, 'group_name',
-                                        self._pub_sub_manager)
-        self.channels_lineedit.init(self._parent_node.identifier, 'channels',
-                                        self._pub_sub_manager)
+        self._settings = {
+            f'{parent_node.identifier}.event_name': self.event_name_lineedit,
+            f'{parent_node.identifier}.start_time': self.start_time_lineedit,
+            f'{parent_node.identifier}.duration': self.duration_lineedit,
+            f'{parent_node.identifier}.group_name': self.group_name_lineedit,
+            f'{parent_node.identifier}.channels': self.channels_lineedit,
+        }
+        for topic in self._settings:
+            self._pub_sub_manager.subscribe(self, topic)
 
 
     def load_settings(self):
-        pass
+        for topic in self._settings:
+            self._pub_sub_manager.publish(self, topic, 'ping')
 
     def on_apply_settings(self):
+        for topic, widget in self._settings.items():
+            self._pub_sub_manager.publish(self, topic, widget.text())
+
+    def on_topic_update(self, topic, message, sender):
         pass
+
+    def on_topic_response(self, topic, message, sender):
+        self._settings[topic].setText(str(message))
+
+    def __del__(self):
+        if self._pub_sub_manager is not None:
+            for topic in self._settings:
+                self._pub_sub_manager.unsubscribe(self, topic)

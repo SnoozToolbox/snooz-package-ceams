@@ -44,7 +44,7 @@
      </widget>
     </item>
     <item row="1" column="1">
-     <widget class="QLineEditLive" name="event_name_lineedit"/>
+     <widget class="QLineEdit" name="event_name_lineedit"/>
     </item>
     <item row="2" column="0">
      <widget class="QLabel" name="label_10">
@@ -54,7 +54,7 @@
      </widget>
     </item>
     <item row="2" column="1">
-     <widget class="QLineEditLive" name="start_time_lineedit"/>
+     <widget class="QLineEdit" name="start_time_lineedit"/>
     </item>
     <item row="3" column="0">
      <widget class="QLabel" name="label_11">
@@ -64,7 +64,7 @@
      </widget>
     </item>
     <item row="3" column="1">
-     <widget class="QLineEditLive" name="duration_lineedit"/>
+     <widget class="QLineEdit" name="duration_lineedit"/>
     </item>
     <item row="4" column="0">
      <widget class="QLabel" name="label_12">
@@ -74,7 +74,7 @@
      </widget>
     </item>
     <item row="4" column="1">
-     <widget class="QLineEditLive" name="group_name_lineedit"/>
+     <widget class="QLineEdit" name="group_name_lineedit"/>
     </item>
     <item row="5" column="0">
      <widget class="QLabel" name="label_13">
@@ -84,7 +84,7 @@
      </widget>
     </item>
     <item row="5" column="1">
-     <widget class="QLineEditLive" name="channels_lineedit">
+     <widget class="QLineEdit" name="channels_lineedit">
       <property name="toolTip">
        <string>Space separated list of channels</string>
       </property>
@@ -93,13 +93,6 @@
    </layout>
   </widget>
  </widget>
- <customwidgets>
-  <customwidget>
-   <class>QLineEditLive</class>
-   <extends>QLineEdit</extends>
-   <header>widgets.QLineEditLive</header>
-  </customwidget>
- </customwidgets>
  <resources/>
  <connections/>
  <slots>

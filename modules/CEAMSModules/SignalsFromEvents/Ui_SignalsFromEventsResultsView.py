@@ -19,8 +19,6 @@ from PySide6.QtWidgets import (QApplication, QCheckBox, QGridLayout, QHBoxLayout
     QLabel, QLayout, QLineEdit, QPushButton,
     QSizePolicy, QSpacerItem, QVBoxLayout, QWidget)
 
-from widgets.QLineEditLive import QLineEditLive
-
 class Ui_SignalsFromEventsResultsView(object):
     def setupUi(self, SignalsFromEventsResultsView):
         if not SignalsFromEventsResultsView.objectName():
@@ -82,7 +80,7 @@ class Ui_SignalsFromEventsResultsView(object):
 
         self.horizontalLayout.addWidget(self.time_label)
 
-        self.time_lineedit = QLineEditLive(SignalsFromEventsResultsView)
+        self.time_lineedit = QLineEdit(SignalsFromEventsResultsView)
         self.time_lineedit.setObjectName(u"time_lineedit")
         self.time_lineedit.setEnabled(False)
         self.time_lineedit.setMaximumSize(QSize(100, 16777215))

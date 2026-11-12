@@ -44,18 +44,11 @@
      </widget>
     </item>
     <item row="1" column="1">
-     <widget class="QLineEditLive" name="alias_lineedit"/>
+     <widget class="QLineEdit" name="alias_lineedit"/>
     </item>
    </layout>
   </widget>
  </widget>
- <customwidgets>
-  <customwidget>
-   <class>QLineEditLive</class>
-   <extends>QLineEdit</extends>
-   <header>widgets.QLineEditLive</header>
-  </customwidget>
- </customwidgets>
  <resources/>
  <connections/>
  <slots>

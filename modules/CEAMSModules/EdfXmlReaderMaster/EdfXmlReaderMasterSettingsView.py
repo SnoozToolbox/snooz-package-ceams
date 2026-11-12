@@ -54,10 +54,9 @@ class EdfXmlReaderMasterSettingsView(BaseSettingsView, Ui_EdfXmlReaderMasterSett
         """ Called by the publisher to init settings in the SettingsView 
         """
         if topic == self._filename_topic:
-            if not message=='':
-                self.filename_lineedit.setText(message)
+            self.filename_lineedit.setText(str(message))
         if topic == self._event_name_topic:
-            self.event_name_lineEdit.setText(message)
+            self.event_name_lineEdit.setText(str(message))
         
 
     def on_choose(self):
