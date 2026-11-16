@@ -7,7 +7,7 @@ See the file LICENCE for full license details.
     Step to define the filter settings: exclusive selection among standard bands.
 """
 
-from qtpy import QtWidgets
+from qtpy import QtCore, QtWidgets
 
 from CEAMSTools.AnalyzeEEGConnectivity.FilterStep.Ui_FilterStep import Ui_FilterStep
 from commons.BaseStepView import BaseStepView
@@ -29,6 +29,9 @@ class FilterStep(BaseStepView, Ui_FilterStep, QtWidgets.QWidget):
     context_Con_scope = "connectivity_scope"
 
     def __init__(self, **kwargs):
+        self._settings_loaded = False
+        self._activation_states = {}
+        self._sleep_stages_received = False
         super().__init__(**kwargs)
 
         # init UI
@@ -58,10 +61,7 @@ class FilterStep(BaseStepView, Ui_FilterStep, QtWidgets.QWidget):
         self._node_id_SignalsFromEvents_sleep = "57a3efc2-afb7-45ac-9384-b5ab46d77cab"  # sleep branch
         self._node_id_sleep_stage_events = "3b6e3aba-4c49-4fd9-b41d-0a6a22004957"       # SleepStageEvents
         self._node_id_trim_signal = "d6266576-d0da-4a9a-adb4-2cc7e01308ef"  
-
-        # self._events_names_topic = f"{self._node_id_SignalsFromEvents}.events_names"   
-
-        self.bypass_node(self._node_id_trim_signal)
+ 
 
         # Input node topic
         self._low_high_cutoff_topic = f'{self._node_id_bandpass_filter}.cutoff'
@@ -72,19 +72,20 @@ class FilterStep(BaseStepView, Ui_FilterStep, QtWidgets.QWidget):
         self._sleep_stages_topic = f'{self._node_id_sleep_stage_events}.stages'
         self._pub_sub_manager.subscribe(self, self._trim_start_time_topic)
         self._pub_sub_manager.subscribe(self, self._trim_duration_time_topic)
+        self._pub_sub_manager.subscribe(self, self._sleep_stages_topic)
         
         self.sleep_stages_names = ''
-        self.update_section_selection_slot()
 
         # Connect the radio button to a method that enables/disables the spinboxes
-        self.custom_radioButton.toggled.connect(self.on_custom_radio_toggled)
-        self.trim_checkBox.toggled.connect(self.on_trim_checkbox_toggled)
-        self.unscored_radioButton.toggled.connect(self.on_unscored_toggled)
-        self.sleep_stages_radioButton.toggled.connect(self.on_sleep_stages_toggled)
-        self.specific_annotations_radioButton.toggled.connect(self.on_specific_annotations_toggled)
+        self.custom_radioButton.toggled.connect(self.custom_radio_toggled_slot)
+        self.trim_checkBox.toggled.connect(self.trim_checkbox_toggled_slot)
+        self.unscored_radioButton.toggled.connect(self.scope_changed_slot)
+        self.sleep_stages_radioButton.toggled.connect(self.scope_changed_slot)
+        self.specific_annotations_radioButton.toggled.connect(self.scope_changed_slot)
+        for checkbox in (self.n1_checkBox, self.n2_checkBox, self.n3_checkBox, self.rem_checkBox):
+            checkbox.toggled.connect(self.sleep_stages_changed_slot)
 
-        # Align the backend nodes with the default selected scope.
-        self._set_scope_nodes(self._current_scope())
+        self._update_scope_widgets()
 
 
     def _current_scope(self):
@@ -96,6 +97,8 @@ class FilterStep(BaseStepView, Ui_FilterStep, QtWidgets.QWidget):
         return "sleep_stages"
 
     def update_section_selection_slot(self):
+        if not self._settings_loaded:
+            return
         scope = self._current_scope()
         self._context_manager[FilterStep.context_Con_scope] = scope
         self._context_manager[FilterStep.context_Con_annot_selection] = 1 if scope == "specific_annotations" else 0
@@ -108,6 +111,8 @@ class FilterStep(BaseStepView, Ui_FilterStep, QtWidgets.QWidget):
         The connectivity chains (epoch/connectivity/details) are handled by the
         ConnectivitySettings step.
         """
+        if not self._settings_loaded:
+            return
         if scope == "sleep_stages":
             self.activate_node(self._node_id_sleep_stage_events)
             self.activate_node(self._node_id_SignalsFromEvents_sleep)
@@ -123,36 +128,44 @@ class FilterStep(BaseStepView, Ui_FilterStep, QtWidgets.QWidget):
             self.bypass_node(self._node_id_SignalsFromEvents)
 
 
-    def on_unscored_toggled(self, checked: bool):
-        if checked:
-            self.trim_checkBox.setEnabled(True)
-            self._set_scope_nodes("unscored")
-            self.update_section_selection_slot()
-        else:
-            self.trim_checkBox.setEnabled(False)
+    def _update_scope_widgets(self):
+        """Enable scope-specific controls without changing the saved selections or nodes."""
+        is_sleep = self._current_scope() == "sleep_stages"
+        is_unscored = self._current_scope() == "unscored"
+        for checkbox in (self.n1_checkBox, self.n2_checkBox, self.n3_checkBox, self.rem_checkBox):
+            checkbox.setEnabled(is_sleep)
+        self.trim_checkBox.setEnabled(is_unscored)
+        enable_trim = is_unscored and self.trim_checkBox.isChecked()
+        self.start_time_doubleSpinBox.setEnabled(enable_trim)
+        self.duration_time_doubleSpinBox.setEnabled(enable_trim)
+        self.start_time_label.setEnabled(enable_trim)
+        self.duration_time_label.setEnabled(enable_trim)
+
+    def scope_changed_slot(self, checked: bool):
+        """Route user scope changes; restoration only updates the UI."""
+        if not checked or not self._settings_loaded:
+            return
+        if self._current_scope() != "unscored":
             self.trim_checkBox.setChecked(False)
+        self._update_scope_widgets()
+        self._set_scope_nodes(self._current_scope())
+        self.update_section_selection_slot()
 
-    def on_sleep_stages_toggled(self, checked: bool):
-        if checked:
-            self.n1_checkBox.setEnabled(True)
-            self.n2_checkBox.setEnabled(True)
-            self.n3_checkBox.setEnabled(True)
-            self.rem_checkBox.setEnabled(True)
-            self._set_scope_nodes("sleep_stages")
-            self.update_section_selection_slot()
-        else:
-            self.n1_checkBox.setEnabled(False)
-            self.n2_checkBox.setEnabled(False)
-            self.n3_checkBox.setEnabled(False)
-            self.rem_checkBox.setEnabled(False)
+    def _selected_sleep_stages(self):
+        return ','.join(
+            stage for stage, checkbox in (
+                ("1", self.n1_checkBox), ("2", self.n2_checkBox),
+                ("3", self.n3_checkBox), ("5", self.rem_checkBox)
+            ) if checkbox.isChecked()
+        )
 
+    def sleep_stages_changed_slot(self):
+        if not self._settings_loaded:
+            return
+        self.sleep_stages_names = self._selected_sleep_stages()
+        self.update_section_selection_slot()
 
-    def on_specific_annotations_toggled(self, checked: bool):
-        if checked:
-            self._set_scope_nodes("specific_annotations")
-            self.update_section_selection_slot()
-
-    def on_custom_radio_toggled(self, checked):
+    def custom_radio_toggled_slot(self, checked):
         # Enable spinboxes only when Custom radio is selected
         self.lowcutoff_doubleSpinBox.setEnabled(checked)
         self.highcutoff_doubleSpinBox.setEnabled(checked)
@@ -184,36 +197,66 @@ class FilterStep(BaseStepView, Ui_FilterStep, QtWidgets.QWidget):
             self, f"{node_id}.activation_state_change", ActivationState.DEACTIVATED
         )
 
-    def on_trim_checkbox_toggled(self, checked):
+    def trim_checkbox_toggled_slot(self, checked):
+        """Update trim controls and route activation only after settings have loaded."""
+        self._update_scope_widgets()
+        if not self._settings_loaded:
+            return
         if checked:
             self.activate_node(self._node_id_trim_signal)
-            self.start_time_doubleSpinBox.setEnabled(True)
-            self.duration_time_doubleSpinBox.setEnabled(True)
-            self.start_time_label.setEnabled(True)
-            self.duration_time_label.setEnabled(True)
         else:
             self.bypass_node(self._node_id_trim_signal)
-            self.start_time_doubleSpinBox.setEnabled(False)
-            self.duration_time_doubleSpinBox.setEnabled(False)
-            self.start_time_label.setEnabled(False)
-            self.duration_time_label.setEnabled(False)
 
 
     def load_settings(self):
-        # Load settings is called after the constructor of all steps has been executed.
-        # From this point on, you can assume that all context has been set correctly.
-        self._pub_sub_manager.publish(self, self._low_high_cutoff_topic, 'ping')
-        # Activation state
-        self._pub_sub_manager.publish(self, self._node_id_bandpass_filter+".get_activation_state", None)
+        """Restore scope, stages and trim from the process without changing its nodes."""
+        self._settings_loaded = False
+        self._sleep_stages_received = False
+        self._activation_states = dict.fromkeys((
+            f"{self._node_id_sleep_stage_events}.get_activation_state",
+            f"{self._node_id_SignalsFromEvents_sleep}.get_activation_state",
+            f"{self._node_id_SignalsFromEvents}.get_activation_state",
+            f"{self._node_id_trim_signal}.get_activation_state",
+        ))
+        for topic in self._activation_states:
+            self._pub_sub_manager.publish(self, topic, None)
 
+        sleep_state, sleep_signal_state, annotation_state, trim_state = self._activation_states.values()
+        scopes_by_states = {
+            (ActivationState.ACTIVATED, ActivationState.ACTIVATED, ActivationState.DEACTIVATED):
+                self.sleep_stages_radioButton,
+            (ActivationState.DEACTIVATED, ActivationState.DEACTIVATED, ActivationState.ACTIVATED):
+                self.specific_annotations_radioButton,
+            (ActivationState.DEACTIVATED, ActivationState.DEACTIVATED, ActivationState.BYPASS):
+                self.unscored_radioButton,
+        }
+        scope_button = scopes_by_states.get((sleep_state, sleep_signal_state, annotation_state))
+        if scope_button is None or trim_state not in (ActivationState.ACTIVATED, ActivationState.BYPASS):
+            self._pub_sub_manager.publish(
+                self, "show_error_message",
+                "Could not restore filter settings: inconsistent or missing scope/trim module states."
+            )
+            return
+
+        with QtCore.QSignalBlocker(self.sleep_stages_radioButton), \
+                QtCore.QSignalBlocker(self.unscored_radioButton), \
+                QtCore.QSignalBlocker(self.specific_annotations_radioButton), \
+                QtCore.QSignalBlocker(self.trim_checkBox):
+            scope_button.setChecked(True)
+            self.trim_checkBox.setChecked(trim_state == ActivationState.ACTIVATED)
+
+        self._pub_sub_manager.publish(self, self._low_high_cutoff_topic, 'ping')
         self._pub_sub_manager.publish(self, self._trim_duration_time_topic, 'ping')
         self._pub_sub_manager.publish(self, self._trim_start_time_topic, 'ping')
-        # Activation state
-        self._pub_sub_manager.publish(self, self._node_id_bandpass_filter+".get_activation_state", None)
-        self._pub_sub_manager.publish(self, self._node_id_trim_signal+".get_activation_state", None)
-
-        # Make sure the branch nodes match the current scope selection.
-        self._set_scope_nodes(self._current_scope())
+        self._pub_sub_manager.publish(self, self._sleep_stages_topic, 'ping')
+        if not self._sleep_stages_received:
+            self._pub_sub_manager.publish(
+                self, "show_error_message",
+                "Could not restore filter settings: expected a comma-separated sleep stage list."
+            )
+            return
+        self._update_scope_widgets()
+        self._settings_loaded = True
         self.update_section_selection_slot()
 
 
@@ -242,7 +285,21 @@ class FilterStep(BaseStepView, Ui_FilterStep, QtWidgets.QWidget):
         Handle replies to our ping for activation state.
         We check the box if the node reports ACTIVATED.
         """
-        if topic == self._low_high_cutoff_topic:
+        if topic in self._activation_states:
+            self._activation_states[topic] = message
+        elif topic == self._sleep_stages_topic:
+            if not isinstance(message, str):
+                return
+            self._sleep_stages_received = True
+            self.sleep_stages_names = message
+            stages = {stage.strip() for stage in message.split(',')}
+            for stage, checkbox in (
+                ("1", self.n1_checkBox), ("2", self.n2_checkBox),
+                ("3", self.n3_checkBox), ("5", self.rem_checkBox)
+            ):
+                with QtCore.QSignalBlocker(checkbox):
+                    checkbox.setChecked(stage in stages)
+        elif topic == self._low_high_cutoff_topic:
             cutoff = message
         #     if cutoff == "0.16 4":
         #         self.delta_radioButton.setChecked(True)
@@ -276,8 +333,7 @@ class FilterStep(BaseStepView, Ui_FilterStep, QtWidgets.QWidget):
                 print("Failed to parse custom cutoff:", e)
         
         elif topic == self._trim_start_time_topic:
-            if message:
-                self.trim_checkBox.setChecked(True)
+            if message not in (None, ''):
                 start_sec = message
                 try:
                     self.start_time_doubleSpinBox.setValue(float(start_sec))
@@ -285,8 +341,7 @@ class FilterStep(BaseStepView, Ui_FilterStep, QtWidgets.QWidget):
                     print("Failed to set start time:", e)
 
         elif topic == self._trim_duration_time_topic:
-            if message:
-                self.trim_checkBox.setChecked(True)
+            if message not in (None, ''):
                 duration_sec = message
                 try:
                     self.duration_time_doubleSpinBox.setValue(float(duration_sec))
@@ -295,6 +350,12 @@ class FilterStep(BaseStepView, Ui_FilterStep, QtWidgets.QWidget):
 
 
     def on_validate_settings(self):
+        if not self._settings_loaded:
+            self._pub_sub_manager.publish(
+                self, "show_error_message",
+                "Filter settings could not be restored. Please check the scope/trim modules in the process."
+            )
+            return False
         if self.sleep_stages_radioButton.isChecked():
             if not (self.n1_checkBox.isChecked() or self.n2_checkBox.isChecked()
                 or self.n3_checkBox.isChecked() or self.rem_checkBox.isChecked()):
@@ -346,17 +407,7 @@ class FilterStep(BaseStepView, Ui_FilterStep, QtWidgets.QWidget):
         self._set_scope_nodes(scope)
 
         if scope == "sleep_stages":
-            self.sleep_stages_names = []
-            if self.n1_checkBox.isChecked():
-                self.sleep_stages_names.append("1")
-            if self.n2_checkBox.isChecked():
-                self.sleep_stages_names.append("2")
-            if self.n3_checkBox.isChecked():
-                self.sleep_stages_names.append("3")
-            if self.rem_checkBox.isChecked():
-                self.sleep_stages_names.append("5")
-
-            self.sleep_stages_names = ','.join(self.sleep_stages_names)
+            self.sleep_stages_names = self._selected_sleep_stages()
             # Push the selected sleep stages to the SleepStageEvents node so that
             # only those stages are turned into events for the sleep branch.
             self._pub_sub_manager.publish(

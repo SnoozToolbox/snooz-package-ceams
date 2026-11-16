@@ -359,20 +359,25 @@ class IRASAYASA(SciNode):
             residu_rows.append(residu_i)
             target_cols = max(target_cols, periodic_i.shape[0], aperiodic_i.shape[0], freqs_i.shape[0])
 
+        # Reference frequency grid, same as yasa.irasa (welch freqs kept within the band, edges included).
+        # Used when every epoch is NaN, so all the signals of a channel share the same freq_bins.
+        ref_freqs = sp_fft.rfftfreq(fixed_nfft, 1./fs)
+        ref_freqs = ref_freqs[(ref_freqs >= first_freq) & (ref_freqs <= last_freq)]
+
         # Second pass: allocate fixed 2D arrays and fill available values.
         if target_cols == 0: # Add this exception in case all the segments of a signal were Nan values
-            target_cols = int(last_freq * window_sec)
+            target_cols = len(ref_freqs)
         periodic_array = np.zeros((n_epochs, target_cols))
         aperiodic_array = np.zeros((n_epochs, target_cols))
-        freqs = np.zeros(target_cols)
         residu_array = np.zeros((n_epochs, target_cols))
 
-        for row_freqs in freqs_rows:
-            if row_freqs is not None and row_freqs.shape[0] > 0:
-                freqs[:row_freqs.shape[0]] = row_freqs
-                break
-            else:
-                freqs = np.linspace(0, last_freq, num = target_cols+1)
+        # Take the freqs of the first valid epoch (NaN epochs have no freqs)
+        valid_freqs = [row_freqs for row_freqs in freqs_rows if row_freqs is not None and row_freqs.shape[0] > 0]
+        if len(valid_freqs) > 0:
+            freqs = np.zeros(target_cols)
+            freqs[:valid_freqs[0].shape[0]] = valid_freqs[0]
+        else:
+            freqs = ref_freqs
 
         for i in range(n_epochs):
             p_i = periodic_rows[i]

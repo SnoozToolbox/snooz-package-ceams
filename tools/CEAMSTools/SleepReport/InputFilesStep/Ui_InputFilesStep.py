@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file ''
+## Form generated from reading UI file 'Ui_InputFilesStep.ui'
 ##
 ## Created by: Qt User Interface Compiler version 6.8.2
 ##
@@ -363,6 +363,9 @@ class Ui_InputFilesStep(object):
         self.add_from_folder_pushbutton.clicked.connect(InputFilesStep.on_add_from_folder)
         self.deidentify_checkbox.clicked.connect(InputFilesStep.on_deidentify_change)
 
+        self.sex_combobox.setCurrentIndex(0)
+
+
         QMetaObject.connectSlotsByName(InputFilesStep)
     # setupUi
 
@@ -373,9 +376,9 @@ class Ui_InputFilesStep(object):
         self.add_from_folder_pushbutton.setText(QCoreApplication.translate("InputFilesStep", u"Add from folder", None))
         self.add_pushbutton.setText(QCoreApplication.translate("InputFilesStep", u"Add", None))
         self.groupBox_5.setTitle(QCoreApplication.translate("InputFilesStep", u"Sex", None))
-        self.sex_combobox.setItemText(0, QCoreApplication.translate("InputFilesStep", u"Male", None))
-        self.sex_combobox.setItemText(1, QCoreApplication.translate("InputFilesStep", u"Female", None))
-        self.sex_combobox.setItemText(2, QCoreApplication.translate("InputFilesStep", u"Unknown", None))
+        self.sex_combobox.setItemText(0, QCoreApplication.translate("InputFilesStep", u"F", None))
+        self.sex_combobox.setItemText(1, QCoreApplication.translate("InputFilesStep", u"M", None))
+        self.sex_combobox.setItemText(2, QCoreApplication.translate("InputFilesStep", u"X", None))
 
         self.groupBox.setTitle(QCoreApplication.translate("InputFilesStep", u"Dates", None))
         self.label_5.setText(QCoreApplication.translate("InputFilesStep", u"Birthdate", None))

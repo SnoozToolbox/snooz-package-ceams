@@ -123,6 +123,7 @@ def get_PSD_attribute_chan_stage(identifier, PSD, channel, sleep_stages):
           The sleep stage of each fft window.
         psd_data is an [n_fft_wins x n_freq_bins] 
           The PSD data of each fft window.
+        Continuous-signal blocks are concatenated once, preserving stage/bout order.
     """
     # Extract psd for the current channel
     #
@@ -203,6 +204,9 @@ def get_PSD_attribute_chan_stage(identifier, PSD, channel, sleep_stages):
         psd_stage = np.empty(0)
         psd_values_chan = np.empty(0)
         psd_start = np.empty(0)
+        value_blocks = []
+        start_blocks = []
+        stage_blocks = []
         # The user usually select specific sleep stages, so the psd data will be truncated
         for stage, stage_start, stage_dur in zip(stage_name_all, stage_start_all, stage_duration_all):
             # For each continuous bout
@@ -218,10 +222,14 @@ def get_PSD_attribute_chan_stage(identifier, PSD, channel, sleep_stages):
                     # Repeat the stage for each fft window
                     psd_stage_current = np.repeat(stage, psd_values_current.shape[0])
                     psd_stage_current = np.reshape(psd_stage_current, (psd_stage_current.shape[0], 1))
-                    # Vertical concatenation of the psd values
-                    psd_values_chan = np.vstack((psd_values_chan, psd_values_current)) if len(psd_values_chan)>0 else psd_values_current
-                    psd_start = np.vstack((psd_start, psd_start_current)) if len(psd_start)>0 else psd_start_current
-                    psd_stage = np.vstack((psd_stage, psd_stage_current)) if len(psd_stage)>0 else psd_stage_current
+                    value_blocks.append(psd_values_current)
+                    start_blocks.append(psd_start_current)
+                    stage_blocks.append(psd_stage_current)
+
+        if value_blocks:
+            psd_values_chan = np.vstack(value_blocks)
+            psd_start = np.vstack(start_blocks)
+            psd_stage = np.vstack(stage_blocks)
 
     return freq_bin_unique, psd_start, psd_stage, psd_values_chan
 
@@ -310,40 +318,60 @@ def get_miniband_index(identifier, freq_bin_chan, mini_bandwidth, first_freq, la
     # ex 3 ) start=0.6 Hz, band=0.5Hz, max=30 Hz
     # 0.6-1;  1-1.5; 1.5-2; 2-2.5....29.5-30.     
     
+    # Returns
+    #   miniband_index : ndarray [n_bands x 2] first and last freq bin index of each band
+    #   miniband_bounds : ndarray [n_bands x 2] requested [low, high[ limits (Hz) of each band
+    #
+    # The frequency resolution is 1/T where T = N/fs is the real FFT window length.
+    # With a non-integer sampling rate (ex. 255.99998 Hz) the bins drift slightly
+    # (ppm) from the nominal grid. A bin that should be exactly on a band limit
+    # can then fall on either side of it, which is critical when the bandwidth
+    # equals the frequency resolution. A tolerance relative to the resolution
+    # makes the bin selection identical across recordings of a cohort.
+
+    if not np.isfinite(mini_bandwidth) or mini_bandwidth <= 0:
+        raise NodeRuntimeException(identifier, "mini_bandwidth", \
+            "PSACompilation : mini_bandwidth must be a positive finite value")
+
+    freq_bin_chan = np.asarray(freq_bin_chan, dtype=float)
+    freq_res = (freq_bin_chan[-1] - freq_bin_chan[0]) / (len(freq_bin_chan) - 1)
+    eps = 1e-2 * freq_res
+
     # Min value between nyquist, last frequency bin of the fft and the last freq asked by the user.
     freq_max = min([freq_bin_chan[-1], last_freq, fs_chan/2])
     # Max between the first freq asked by the user and the min value of the freq bin of the fft.
     freq_min = max([freq_bin_chan[0],first_freq])
-    cur_end = freq_min
-    miniband_index = np.empty((0,0))
+    if freq_min >= freq_max - eps:
+        raise NodeRuntimeException(identifier, "freq_bins", \
+            "PSACompilation : the requested frequency range is empty")
 
-    # To make sure the floating point does not give to much precision 
-    #   (it causes problem when finding the right freq bins)
-    mini_bandwidth_precision = int(np.log10(mini_bandwidth))+1
+    cur_start = freq_min
+    miniband_index = []
+    miniband_bounds = []
 
-    while cur_end < freq_max:
-        start_bin = cur_end
-        if (start_bin/mini_bandwidth).is_integer():
-            if (start_bin + mini_bandwidth)<freq_max:
-                cur_end = round(start_bin + mini_bandwidth, mini_bandwidth_precision)
-            else:
-                cur_end = freq_max
-        else:
-            if start_bin<mini_bandwidth:
-                cur_end = round(start_bin + (mini_bandwidth-start_bin), mini_bandwidth_precision)
-            else:
-                cur_end = round(start_bin + ((2*mini_bandwidth)-start_bin), mini_bandwidth_precision)
+    while cur_start < freq_max - eps:
+        # Move to the next multiple of the selected bandwidth. This also
+        # supports a first band that starts between two bandwidth multiples.
+        boundary_number = np.ceil(cur_start / mini_bandwidth)
+        if np.isclose(cur_start / mini_bandwidth, boundary_number, rtol=0, atol=1e-10):
+            boundary_number += 1
+        cur_end = min(boundary_number * mini_bandwidth, freq_max)
 
-        # Find the indices of elements between start_bin and end_bin
-        cur_index_list = np.where((freq_bin_chan >= start_bin) & (freq_bin_chan < cur_end))[0] # [min, max[
+        # Find the indices of elements between the band boundaries [min, max[
+        cur_index_list = np.where((freq_bin_chan >= cur_start - eps) & (freq_bin_chan < cur_end - eps))[0]
         if len(cur_index_list): 
-            cur_idx_start_end = [cur_index_list[0], cur_index_list[-1]]
-            if len(miniband_index): # Concatenate all the freq bins to creat the list of mini bands
-                miniband_index = np.vstack((miniband_index, cur_idx_start_end))
-            else:
-                miniband_index = cur_idx_start_end
+            miniband_index.append([cur_index_list[0], cur_index_list[-1]])
+            miniband_bounds.append([cur_start, cur_end])
         else:
-            if len(miniband_index)==0:
-                raise NodeRuntimeException(identifier, "freq_bins", \
-                    f"PSACompilation : the mini bands from {freq_min} to {last_freq} is not found in the frequency bins")
-    return miniband_index
+            raise NodeRuntimeException(identifier, "mini_bandwidth", \
+                f"PSACompilation : no FFT frequency bin was found in the mini band "
+                f"[{cur_start}, {cur_end}[. Select another mini_bandwidth.")
+
+        cur_start = cur_end
+
+    # Round the limits to remove the ppm drift (ex. nyquist at 127.99999 Hz) and
+    # the float noise (ex. 0.30000000000000004) so labels are equal across a cohort.
+    decimals = max(int(np.ceil(-np.log10(eps))), 0)
+    miniband_bounds = np.round(np.asarray(miniband_bounds, dtype=float), decimals)
+
+    return np.asarray(miniband_index, dtype=int), miniband_bounds

@@ -38,7 +38,7 @@ def _get_doc(N_HOURS=0, N_CYCLES=0, event_names=None, include_total=True):
             'channel_label' : 'The label of the channel.',
             'channel_fs' : 'The sampling rate (Hz) of the channel.',
             'channel_artefact_count' : 'The number of artefacts marked on the channel (i.e. number of events).',
-            'fft_win_sec': 'The window length in sec used to perform the FFT.',
+            'fft_win_sec': 'The actual FFT window length in seconds after rounding to whole samples. Annotation durations are compared using the same sample rounding at each channel sampling rate.',
             'fft_step_sec': 'The step in sec between each start point of the window used for the FFT.',
             'freq_low_Hz' : 'The low frequency (Hz) of the mini band.',
             'freq_high_Hz' : 'The high frequency (Hz) of the mini band.',
@@ -46,16 +46,16 @@ def _get_doc(N_HOURS=0, N_CYCLES=0, event_names=None, include_total=True):
 
     total_dict = {}
     if include_total:
-        total_dict['fft_win_count'] = 'The number of fft windows in selected annotations.'
-        total_dict['fft_win_valid_count'] = 'The number of valid fft windows in selected annotations.'
+        total_dict['total_fft_win_count'] = 'The number of fft windows in selected annotations.'
+        total_dict['total_fft_win_valid_count'] = 'The number of valid fft windows in selected annotations.'
         for event_name in event_names:
-            total_dict[f'fft_win_{event_name}_count'] = \
+            total_dict[f'total_{event_name}_fft_win_count'] = \
                 f'The number of fft windows in selected annotation {event_name}.'
-            total_dict[f'fft_win_valid_{event_name}_count'] = \
+            total_dict[f'total_{event_name}_fft_win_valid_count'] = \
                 f'The number of valid fft windows in selected annotation {event_name}.'
-        total_dict['act_total'] = 'The total spectral power (uV^2)'
+        total_dict['total_act'] = 'The total spectral power (uV^2)'
         for event_name in event_names:
-            total_dict[f'act_{event_name}'] = \
+            total_dict[f'total_{event_name}_act'] = \
                 f'The spectral power (uV^2) in selected annotation {event_name}.'
 
     clock_hour_dict = {}

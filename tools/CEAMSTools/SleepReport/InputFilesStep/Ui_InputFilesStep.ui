@@ -106,19 +106,22 @@
          <layout class="QVBoxLayout" name="verticalLayout_3">
           <item>
            <widget class="QComboBox" name="sex_combobox">
+            <property name="currentIndex">
+             <number>0</number>
+            </property>
             <item>
              <property name="text">
-              <string>Male</string>
+              <string>F</string>
              </property>
             </item>
             <item>
              <property name="text">
-              <string>Female</string>
+              <string>M</string>
              </property>
             </item>
             <item>
              <property name="text">
-              <string>Unknown</string>
+              <string>X</string>
              </property>
             </item>
            </widget>

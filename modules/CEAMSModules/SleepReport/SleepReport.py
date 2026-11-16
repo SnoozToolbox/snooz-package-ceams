@@ -53,6 +53,7 @@ from ..PSGReader import commons
 from commons.NodeInputException import NodeInputException
 from commons.NodeRuntimeException import NodeRuntimeException
 from CEAMSModules.SleepReport.SleepReportDoc import _get_doc, write_doc_file
+from CEAMSModules.PSGReader.encoding_utils import ensure_utf8_string
 
 DEBUG = False
 
@@ -400,6 +401,13 @@ class SleepReport(SciNode):
         """
         # We do not want the changes to impact the original dict
         record_info = record_info.copy()
+        
+        # Apply encoding conversion to string fields that may come from PSG headers
+        string_fields = ['filename', 'id1', 'id2', 'sex', 'first_name', 'last_name']
+        for field in string_fields:
+            if field in record_info and record_info[field] is not None:
+                record_info[field] = ensure_utf8_string(record_info[field])
+        
         if record_info["birthdate"] is not None:
             birthdate_datetime = datetime(1970, 1, 1) + timedelta(seconds=record_info["birthdate"])
             record_info["birthdate"] = birthdate_datetime.strftime("%Y-%m-%d")

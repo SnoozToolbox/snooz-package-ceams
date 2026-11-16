@@ -27,7 +27,7 @@
                 "connections": {},
                 "sub_plugs": {}
             },
-            "stages_files": {
+            "sw_stages_files": {
                 "name": "sw_stages_files",
                 "value": "[]",
                 "connections": {},

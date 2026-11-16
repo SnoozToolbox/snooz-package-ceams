@@ -25,7 +25,13 @@ class PSGReaderManager:
         self.current_filename = None
         self.extensions = {}
         self.extensionsFilters = {}
+        # The reader modules are loaded from file and are not registered in sys.modules,
+        # keep them to access the types they expose (ex. XltekReader::SLEEP_STAGE).
+        self.extensionsModules = {}
         self.sleep_stage_duplicates_removed_count = 0
+        # Unscored stages generated in-memory (EDF-like) for the currently opened file.
+        # Kept so get_events() can expose the same "stage" group in the Settings view.
+        self._generated_unscored_stages = None
 
     def _init_readers(self):
         ''' Static function called once to init all readers '''
@@ -62,6 +68,7 @@ class PSGReaderManager:
                             else:
                                 self.extensions[e] = reader_class
                                 self.extensionsFilters[e] = ext_filters[i]
+                                self.extensionsModules[e] = module
                     else:
                         if config.is_dev : 
                             print(f"ERROR Can\'t load module:{module_name} path:{module_path}")
@@ -95,6 +102,14 @@ class PSGReaderManager:
             return None
 
 
+    def get_reader_module_by_extension(self,ext):
+        ext = ext.lower()
+        if ext in self.extensionsModules:
+            return self.extensionsModules[ext]
+        else:
+            return None
+
+
     ### Member functions
     def open_file(self, filename):
         error = None
@@ -106,6 +121,7 @@ class PSGReaderManager:
             return False, error
         
         self.current_reader = reader_class()
+        self._generated_unscored_stages = None
         output = self.current_reader.open_file(filename)
         if isinstance(output, tuple) and len(output) == 2:
             success, error = output
@@ -208,9 +224,12 @@ class PSGReaderManager:
             return
 
         eventsObj = self.current_reader.get_events()
+        event_columns = ['group', 'name', 'start_sec', 'duration_sec', 'channels']
 
         if isinstance(eventsObj, pd.DataFrame):
             events_df = eventsObj
+            if events_df.empty:
+                events_df = pd.DataFrame(columns=event_columns)
         else:
             events =    []
             for event in eventsObj:
@@ -221,11 +240,28 @@ class PSGReaderManager:
                     'duration_sec': event.duration, 
                     'channels': event.channels})
             # Convert the list of dicts into a DataFrame
-            events_df = pd.DataFrame(events)
-        # Clean up lists of channels for a single channel (string) per event
-        events_df = self.convert_event_df_to_single_channel(events_df)
-        # In NATUS/Stellate the annotations can be duplicated
-        events_df.drop_duplicates(inplace=True, ignore_index=True)
+            events_df = pd.DataFrame(events, columns=event_columns)
+
+        if not events_df.empty:
+            # Clean up lists of channels for a single channel (string) per event
+            events_df = self.convert_event_df_to_single_channel(events_df)
+            # In NATUS/Stellate the annotations can be duplicated
+            events_df.drop_duplicates(inplace=True, ignore_index=True)
+
+        # Match EdfReader: generated undefined stages are part of the annotations,
+        # so expose them through get_events() for the Settings view events tree.
+        if self._generated_unscored_stages is not None and len(self._generated_unscored_stages) > 0:
+            has_stage_group = (
+                'group' in events_df.columns
+                and len(events_df) > 0
+                and (events_df['group'] == commons.sleep_stages_group).any()
+            )
+            if not has_stage_group:
+                events_df = pd.concat(
+                    [events_df, self._generated_unscored_stages],
+                    ignore_index=True
+                )
+
         return events_df
 
 
@@ -237,6 +273,7 @@ class PSGReaderManager:
         self.current_reader.close_file()
         self.current_reader = None
         self.current_filename = None
+        self._generated_unscored_stages = None
 
 
     def save_file(self):
@@ -302,12 +339,21 @@ class PSGReaderManager:
                 print(f'ERROR PSGReaderManager.get_sleep_stages file not loaded')
             return None
 
+        stage_columns = ['group', 'name', 'start_sec', 'duration_sec', 'channels']
         df_label =  ['start_sec', 'duration_sec', 'channels']
         stages =    self.current_reader.get_sleep_stages()
         events =    []
 
         if isinstance(stages, pd.DataFrame):
             stages = stages.copy()
+            # Same behaviour as EdfReader: fill the recording with undefined (9) epochs
+            # when no sleep stages are registered.
+            if stages.empty or stages.size == 0:
+                generated = self._generate_unscored_sleep_stages()
+                if generated is not None:
+                    return generated
+                return pd.DataFrame(columns=stage_columns)
+
             before_count = len(stages)
             if {'start_sec', 'duration_sec'}.issubset(stages.columns):
                 stages = stages.drop_duplicates(subset=['start_sec', 'duration_sec'], keep='last').reset_index(drop=True)
@@ -329,13 +375,110 @@ class PSGReaderManager:
                 df_label[1]: duration, 
                 df_label[2]: channels})
 
-        stages = pd.DataFrame(events)
+        stages = pd.DataFrame(events, columns=stage_columns)
+        # Same behaviour as EdfReader for readers that return an empty stage list
+        # (e.g. Harmonie/Stellate with no registered sleep stages).
+        if stages.empty:
+            generated = self._generate_unscored_sleep_stages()
+            if generated is not None:
+                return generated
+            return stages
+
         before_count = len(stages)
-        if not stages.empty and {'start_sec', 'duration_sec'}.issubset(stages.columns):
+        if {'start_sec', 'duration_sec'}.issubset(stages.columns):
             stages = stages.drop_duplicates(subset=['start_sec', 'duration_sec'], keep='last').reset_index(drop=True)
             self.sleep_stage_duplicates_removed_count = before_count - len(stages)
 
         return stages
+
+
+    def _generate_unscored_sleep_stages(self):
+        """
+            Generate a list of undefined sleep stages (name '9') of 30 seconds each
+            covering the recording. Matches EdfReader.get_sleep_stages when the
+            hypnogram is empty.
+
+            The epochs are generated per signal section and only full epochs are kept:
+            Harmonie/Stellate resets the hypnogram epoch length on a truncated epoch
+            (last epoch of a section, or an epoch over a discontinuity) and fills the
+            whole group with thousands of undefined epochs when it is written back.
+        """
+        sections = self._get_recording_sections_sec()
+        if not sections:
+            return None
+
+        epoch_size = 30
+        events = []
+        for section_start, section_end in sections:
+            start = section_start
+            while start + epoch_size <= section_end + 1e-6:
+                events.append({
+                    'group': commons.sleep_stages_group,
+                    'name': '9',
+                    'start_sec': start,
+                    'duration_sec': epoch_size,
+                    'channels': ""
+                })
+                start = start + epoch_size
+
+        if len(events) == 0:
+            return None
+
+        stages_df = pd.DataFrame(
+            events,
+            columns=['group', 'name', 'start_sec', 'duration_sec', 'channels']
+        )
+        # Keep a copy so get_events() can show the same group in the UI
+        # (EdfReader stores these in its annotation table via add_events).
+        self._generated_unscored_stages = stages_df.copy()
+        return stages_df
+
+
+    def _get_recording_sections_sec(self):
+        """
+            Return the list of (start_sec, end_sec) of the signal sections of the
+            currently opened file, without duplicates. Prefers an EDF-style header
+            Duration when available (single section); otherwise derives them from the
+            first channel's signal sections.
+        """
+        header = getattr(self.current_reader, '_header', None)
+        if isinstance(header, dict) and header.get('Duration') is not None:
+            try:
+                duration = float(header['Duration'])
+                return [(0.0, duration)] if duration > 0 else []
+            except (TypeError, ValueError):
+                pass
+
+        try:
+            montages = self.current_reader.get_montages()
+            if not montages:
+                return []
+
+            montage_index = montages[0].index
+            channels = self.current_reader.get_channels(montage_index)
+            if not channels:
+                return []
+
+            channel_names = [channels[0].name]
+            section_count = self.current_reader.get_signal_section_count()
+            sections = set()
+            for i in range(section_count):
+                signals = self.current_reader.get_signal_section(montage_index, channel_names, i)
+                if not signals:
+                    continue
+                for signal in signals:
+                    start_time = float(signal.start_time)
+                    end_time = getattr(signal, 'end_time', None)
+                    if end_time is None:
+                        end_time = start_time + float(signal.duration)
+                    if float(end_time) > start_time:
+                        sections.add((round(start_time, 3), round(float(end_time), 3)))
+
+            return sorted(sections)
+        except Exception:
+            if config.is_dev:
+                traceback.print_exc()
+            return []
 
 
     def add_event(self, name, group, start_sec, duration_sec, channels, montage_index):
@@ -350,6 +493,63 @@ class PSGReaderManager:
         success = self.current_reader.add_event(name, group, start_sec, duration_sec, channels, montage_index)
         if not success:
             if config.is_dev : 
+                error = self.current_reader.get_last_error()
+                print(error)
+        return success
+
+
+    def write_sleep_stages(self, group, stages):
+        """
+            Write a whole hypnogram at once on readers supporting it (XltekReader).
+            The reader replaces any previous scoring of that group, so the stages
+            don't have to be removed before. The group "Stade" (case and spaces
+            insensitive) is the Xltek gold standard written in the .epo file, any
+            other group is written as channel independent events in the .ent file.
+
+            Parameters:
+                group : String
+                    The event group to write the stages to.
+                stages : pandas DataFrame (columns=['name','start_sec','duration_sec'])
+                    The sleep stages to write, "name" is the Snooz sleep stage value.
+
+            Returns:
+                success : bool
+        """
+        if self.current_reader is None:
+            if config.is_dev :
+                print(f'ERROR PSGReaderManager.write_sleep_stages file not loaded')
+            return False
+        if not hasattr(self.current_reader, 'write_sleep_stages'):
+            if config.is_dev :
+                print(f'ERROR PSGReaderManager.write_sleep_stages not supported for the file:{self.current_filename}')
+            return False
+
+        # write_sleep_stages asks for a list of the SLEEP_STAGE type exposed by the reader module.
+        _, extension = os.path.splitext(self.current_filename)
+        reader_module = self.get_reader_module_by_extension(extension[1:])
+        reader_name = type(self.current_reader).__name__
+        stage_class = getattr(reader_module, f'{reader_name}::SLEEP_STAGE', None)
+        if stage_class is None:
+            if config.is_dev :
+                print(f'ERROR PSGReaderManager.write_sleep_stages could not find the type {reader_name}::SLEEP_STAGE')
+            return False
+
+        sleep_stages = []
+        for index, stage in stages.iterrows():
+            # The reader labels the stages itself, it expects the sleep stage value
+            if not str(stage['name']).isdigit():
+                if config.is_dev :
+                    print(f"ERROR PSGReaderManager.write_sleep_stages invalid sleep stage value:{stage['name']}")
+                return False
+            sleep_stage = stage_class()
+            sleep_stage.sleep_stage = int(stage['name'])
+            sleep_stage.start_time = float(stage['start_sec'])
+            sleep_stage.duration = float(stage['duration_sec'])
+            sleep_stages.append(sleep_stage)
+
+        success = self.current_reader.write_sleep_stages(group, sleep_stages)
+        if not success:
+            if config.is_dev :
                 error = self.current_reader.get_last_error()
                 print(error)
         return success

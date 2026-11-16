@@ -61,13 +61,17 @@ class FilterStep(BaseStepView, Ui_FilterStep, QtWidgets.QWidget):
             # The message will be the KEY of the value that's been updated inside the context.
             # If it's the one you are looking for, we can then take the updated value and use it.
             if message == InputFilesStep.context_files_view:
-                self.reader_settings_view = self._context_manager[InputFilesStep.context_files_view]
-                channels_info_df = self.reader_settings_view.channels_table_model.get_data()
-                chans_used = channels_info_df[channels_info_df['Use']==True]
-                if len(chans_used)>0:
-                    self.min_fs = float(min(chans_used['Sample rate'].to_list()) )
-                else:
-                    self.min_fs = 256 # Default value when no channels are selected
+                self._update_min_fs()
+
+
+    def _update_min_fs(self):
+        self.reader_settings_view = self._context_manager[InputFilesStep.context_files_view]
+        channels_info_df = self.reader_settings_view.channels_table_model.get_data()
+        chans_used = channels_info_df[channels_info_df['Use']==True]
+        if len(chans_used)>0:
+            self.min_fs = float(min(chans_used['Sample rate'].to_list()) )
+        else:
+            self.min_fs = 256 # Default value when no channels are selected
 
 
     # Called by a node in response to a ping request. 
@@ -107,13 +111,16 @@ class FilterStep(BaseStepView, Ui_FilterStep, QtWidgets.QWidget):
         # If not, display an error message to the user and return False.
         # This is called just before the apply settings function.
         # Returning False will prevent the process from executing.
-        if float(self.high_cutoff_lineEdit.text())>(self.min_fs/2):
-            message = f'The high frequency cutoff ({self.high_cutoff_lineEdit.text()}Hz) '\
-                + f'of the band pass filter is higher than the Nyquist frequency ({self.min_fs/2}Hz)'\
-                    + f'\n\nIn step 3- Filter Settings : lower the high frequency cutoff of the band '\
-                        + f'pass below the Nyquist frequency of {self.min_fs/2}Hz.'
-            WarningDialog(message) 
-            return False
+        if self.high_cutoff_lineEdit.isEnabled(): # otherwise skip since there is no filter applied
+            # Evaluate the min sampling frequency of all selected channels
+            self._update_min_fs()
+            if float(self.high_cutoff_lineEdit.text())>(self.min_fs/2):
+                message = f'The high frequency cutoff ({self.high_cutoff_lineEdit.text()}Hz) '\
+                    + f'of the band pass filter is higher than the Nyquist frequency ({self.min_fs/2}Hz)'\
+                        + f'\n\nIn step 3- Filter Settings : lower the high frequency cutoff of the band '\
+                            + f'pass below the Nyquist frequency of {self.min_fs/2}Hz.'
+                WarningDialog(message)
+                return False
         return True
 
 

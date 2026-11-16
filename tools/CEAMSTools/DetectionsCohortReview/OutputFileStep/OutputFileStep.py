@@ -148,5 +148,7 @@ class OutputFileStep(BaseStepView, Ui_OutputFileStep, QtWidgets.QWidget):
     def read_header_filename(self, filenames):
         for filename in filenames:
             # Read the csv file and convert the content into a Data Frame
-            det_df = pd.read_csv(filename, delimiter='\t', header=0, encoding='utf-8', nrows=1)
+            # Use error handling to tolerate encoding issues from PSG headers in different languages
+            det_df = pd.read_csv(filename, delimiter='\t', header=0, encoding='utf-8', 
+                                nrows=1, on_bad_lines='skip', engine='python')
             self.det_df = pd.concat([self.det_df, det_df])

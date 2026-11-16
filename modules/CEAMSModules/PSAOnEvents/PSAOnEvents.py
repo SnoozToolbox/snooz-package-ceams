@@ -5,6 +5,10 @@ See the file LICENCE for full license details.
 """
     PSAOnEvents
     Compile the PSA run on selected events.  The compilation is for a cohort.
+    PSDs are indexed once by channel, sampling rate and start sample for reuse
+    across total/hour/cycle compilation; matching does not resample the signal.
+    Event and FFT durations are compared as rounded sample counts, matching
+    SignalsFromEvents and Stft when sampling rates are non-integer.
 """
 
 import numpy as np
@@ -19,6 +23,7 @@ from CEAMSModules.EventReader import manage_events
 from CEAMSModules.PSACompilation import commons as PSA
 from CEAMSModules.PSAOnEvents.PSAOnEventsDoc import write_doc_file, _get_doc
 from CEAMSModules.SleepReport import SleepReport
+from CEAMSModules.PSGReader.encoding_utils import ensure_utf8_string
 
 DEBUG = False
 
@@ -184,6 +189,12 @@ class PSAOnEvents(SciNode):
             
         """
         # Input Type verification
+
+        match_event_channels = self._parse_bool_flag(match_event_channels, "match_event_channels", default=True)
+        dist_total = self._parse_bool_flag(dist_total, "dist_total", default=True)
+        dist_hour = self._parse_bool_flag(dist_hour, "dist_hour", default=False)
+        dist_cycle = self._parse_bool_flag(dist_cycle, "dist_cycle", default=False)
+
         if isinstance(subject_info, str) and subject_info != '':
             subject_info = eval(subject_info)
         if (not isinstance(subject_info,dict)):
@@ -193,19 +204,7 @@ class PSAOnEvents(SciNode):
         if not isinstance(PSD,list):
             raise NodeInputException(self.identifier, "PSD", \
                 f"PSAOnEvents input of wrong type. Expected: <class 'list'> received: {type(PSD)}")   
-        if match_event_channels in ("", None):
-            match_event_channels = True
-        elif isinstance(match_event_channels, str):
-            if match_event_channels.lower() == "true":
-                match_event_channels = True
-            elif match_event_channels.lower() == "false":
-                match_event_channels = False
-        if type(match_event_channels) != bool:
-            raise NodeInputException(
-                self.identifier,
-                "match_event_channels",
-                "PSAOnEvents match_event_channels parameter must be a boolean"
-            )
+
         try:
             mini_bandwidth = float(mini_bandwidth)
         except ValueError:
@@ -221,10 +220,6 @@ class PSAOnEvents(SciNode):
         except ValueError:
             raise NodeInputException(self.identifier, "last_freq", \
                 f"PSAOnEvents input of wrong type or empty. Expected: str of float") 
-
-        dist_total = self._parse_bool_flag(dist_total, "dist_total", default=True)
-        dist_hour = self._parse_bool_flag(dist_hour, "dist_hour", default=False)
-        dist_cycle = self._parse_bool_flag(dist_cycle, "dist_cycle", default=False)
 
         if isinstance(parameters_cycle, str):
             if parameters_cycle == '':
@@ -291,14 +286,17 @@ class PSAOnEvents(SciNode):
                     raise NodeInputException(self.identifier, "PSA_event_name", \
                         f"PSAOnEvents input of wrong type. Expected: str of dict")                 
 
+
+
+
         # Extract subject info
-        subject_info_params = {"filename": subject_info['filename']}
+        subject_info_params = {"filename": ensure_utf8_string(subject_info['filename'])}
         if (subject_info['id1'] is not None) and len(subject_info['id1'].strip())>0:
-            subject_info_params['id1'] = subject_info['id1']
+            subject_info_params['id1'] = ensure_utf8_string(subject_info['id1'])
         elif (subject_info['id2'] is not None) and len(subject_info['id2'].strip())>0:
-            subject_info_params['id1'] = subject_info['id2']
+            subject_info_params['id1'] = ensure_utf8_string(subject_info['id2'])
         else:
-            subject_info_params['id1'] = subject_info['id1']
+            subject_info_params['id1'] = ensure_utf8_string(subject_info['id1'])
 
         cycle_info_param = {}
         if parameters_cycle and (dist_hour or dist_cycle):
@@ -323,23 +321,69 @@ class PSAOnEvents(SciNode):
         PSA_evt_info_param, PSA_evt_selected = \
             self.get_event_info(PSA_event_group_sel, PSA_event_name_sel, events.copy(), 'PSA_event')
 
-        # Extract duration_sec
-        event_dur_s = PSA_evt_selected['duration_sec'].values
-        if any(event_dur_s < PSD[0]['win_len']):
+        if len(PSD) == 0:
+            if match_event_channels:
+                raise NodeRuntimeException(
+                    self.identifier,
+                    "match_event_channels",
+                    "PSAOnEvents - The selected annotation is not included in the channels selected "
+                    "for spectral analysis. Uncheck 'Analyze events only on their annotated channel' "
+                    "in step 5 of the tool to analyze these events on every selected channel."
+                )
+            raise NodeRuntimeException(
+                self.identifier,
+                "PSD",
+                "PSAOnEvents - No spectral power data is available. The current analysis was skipped."
+            )
+
+        channels_list = np.unique(PSA.get_attribute(PSD, 'chan_label'))
+        if match_event_channels and not any(
+            len(self.select_events_for_channel(PSA_evt_selected, channel, True)) > 0
+            for channel in channels_list
+        ):
+            raise NodeRuntimeException(
+                self.identifier,
+                "match_event_channels",
+                "PSAOnEvents - The selected annotation is not included in the channels selected "
+                "for spectral analysis. Uncheck 'Analyze events only on their annotated channel' "
+                "in step 5 of the tool to analyze these events on every selected channel."
+            )
+
+        event_dur_s = PSA_evt_selected['duration_sec'].to_numpy(dtype=float)
+        event_channels = PSA_evt_selected['channels'].to_numpy()
+        events_checked = np.zeros(len(event_dur_s), dtype=bool)
+        events_fit = np.zeros(len(event_dur_s), dtype=bool)
+        # Check each unique channel/fs/window combination, not every PSD block.
+        fft_windows = {
+            (item['chan_label'], item['sample_rate'], item['win_len'])
+            for item in PSD
+        }
+        for channel, fs, win_len in fft_windows:
+            # Match annotated channels (empty means all channels), or include every
+            # event when channel matching is disabled.
+            relevant = (
+                (event_channels == channel) | (event_channels == "")
+                if match_event_channels else np.ones(len(event_dur_s), dtype=bool)
+            )
+            # Use the same sample quantization as signal extraction and FFT computation.
+            events_checked |= relevant
+            events_fit |= relevant & (np.round(event_dur_s * fs) >= round(win_len * fs))
+        events_too_short = events_checked & ~events_fit
+        window_lengths = ", ".join(str(length) for length in sorted({
+            win_len for _, _, win_len in fft_windows
+        }))
+        if any(events_too_short):
             # Log message for the Logs tab
-            if all(event_dur_s < PSD[0]['win_len']):
+            if all(events_too_short[events_checked]):
                 self._log_manager.log(self.identifier, \
-                    f"All the PSA events in the file {subject_info['filename']} are shorter than the fft window length of {PSD[0]['win_len']}s.")        
+                    f"All the PSA events in the file {subject_info['filename']} are shorter than their FFT windows ({window_lengths}s).")
                 raise NodeRuntimeException(self.identifier, PSA_event_group, \
                     f"PSAOnEvents - All the PSA events in the group {PSA_event_group_sel} and name {PSA_event_name_sel} "\
-                        +f"are shoter than the fft window length of {PSD[0]['win_len']}s.")   
+                        +f"are shorter than their FFT windows ({window_lengths}s).")
             else:
                 self._log_manager.log(self.identifier, \
-                    f"The file {subject_info['filename']} has PSA events shorter than the fft window length of {PSD[0]['win_len']}s.")
+                    f"The file {subject_info['filename']} has PSA events shorter than their FFT windows ({window_lengths}s).")
             
-
-        # Extract the unique channel list
-        channels_list = np.unique(PSA.get_attribute(PSD, 'chan_label'))
 
         # Create the list of events from all the files to create a valid file (the number of columns has to be known for the cohort)
         unique_event_name = []
@@ -352,6 +396,7 @@ class PSAOnEvents(SciNode):
         unique_event_name = sorted(set(unique_event_name))
 
         # The channels are grouped in the PSA cohort file
+        psd_index = self._index_psd_by_start_sample(PSD)
         report_df = []
         for channel in channels_list:
             # Reset accumulation for the current channel
@@ -373,12 +418,8 @@ class PSAOnEvents(SciNode):
             # Extract the fft length and step
             PSD_info_params = PSA.get_PSD_info(self.identifier, PSD, channel)
 
-            # Extract the PSD property for the current channel
-            #   freq_bin_chan is an [1 x n_freq_bins] (because it is unique across the recording)
-            #   psd_start_time is an [1 x sleep_stages] (a start time for each epoch processed)
-            #   psd_end_time is an [1 x sleep_stages] (a start time for each epoch processed)
-            freq_bin_chan, psd_start_time, psd_end_time = PSA.get_PSD_attribute_chan(self.identifier, PSD, channel)
-            psd_start_time = np.asarray(psd_start_time, dtype=float)
+            # Extract the frequency bins for the current channel.
+            freq_bin_chan, _, _ = PSA.get_PSD_attribute_chan(self.identifier, PSD, channel)
 
             # Extract PSA Events for the current channel if any
             PSA_evt_channel = self.select_events_for_channel(
@@ -393,9 +434,7 @@ class PSAOnEvents(SciNode):
             # Total / hour / cycle compilation
             # --------------------------------------------------------------------------
             if dist_total:
-                self.compute_fft_win_event(
-                    unique_event_name, PSD, PSA_evt_channel, psd_start_time, channel, 'total'
-                )
+                self.compute_fft_win_event(unique_event_name, psd_index, PSA_evt_channel, channel, 'total')
                 labels_computed.append('total')
 
             if dist_hour:
@@ -404,14 +443,13 @@ class PSAOnEvents(SciNode):
                     if len(cycle_labelled) > 0 and isinstance(cycle_labelled.iloc[0]['start_sec'], float):
                         start_hour = cycle_labelled.iloc[0]['start_sec'] + cur_div * 3600
                         end_hour = start_hour + 3600
-                        evt_div, psd_starts_div = self._filter_events_by_time(
-                            PSA_evt_channel, psd_start_time, start_hour, end_hour
+                        evt_div = self._filter_events_by_time(
+                            PSA_evt_channel, start_hour, end_hour
                         )
                     else:
                         evt_div = PSA_evt_channel.iloc[0:0].copy()
-                        psd_starts_div = np.array([])
                     self.compute_fft_win_event(
-                        unique_event_name, PSD, evt_div, psd_starts_div, channel, label
+                        unique_event_name, psd_index, evt_div, channel, label
                     )
                     labels_computed.append(label)
 
@@ -437,15 +475,14 @@ class PSAOnEvents(SciNode):
                                 + cycle_labelled.iloc[-1]['duration_sec']
                             )
                         self.PSD_act_param[f'{label}_length_min'] = (end_cycle - start_cycle) / 60
-                        evt_div, psd_starts_div = self._filter_events_by_time(
-                            PSA_evt_channel, psd_start_time, start_cycle, end_cycle
+                        evt_div = self._filter_events_by_time(
+                            PSA_evt_channel, start_cycle, end_cycle
                         )
                     else:
                         self.PSD_act_param[f'{label}_length_min'] = np.NaN
                         evt_div = PSA_evt_channel.iloc[0:0].copy()
-                        psd_starts_div = np.array([])
                     self.compute_fft_win_event(
-                        unique_event_name, PSD, evt_div, psd_starts_div, channel, label
+                        unique_event_name, psd_index, evt_div, channel, label
                     )
                     labels_computed.append(label)
                 
@@ -456,24 +493,15 @@ class PSAOnEvents(SciNode):
             # Compute the freq bins indexes to average for each mini band
             # the upper limit is included as [min, max[
 
-            # To avoid too many decimal in the frequency bins
-            freq_bin_space = np.average(np.diff(freq_bin_chan))
-            # This works only for frequency bins < 1
-            if freq_bin_space<1:
-                precision_space = int(abs(np.log10(freq_bin_space)))+2
-                freq_bin_chan = np.round(freq_bin_chan,precision_space)
-            else:
-                precision_space = 1
-                freq_bin_chan = np.round(freq_bin_chan,precision_space)
-
-            # Compute the freq bins indexes for each mini band
-            miniband_indices = PSA.get_miniband_index(self.identifier, freq_bin_chan, mini_bandwidth, first_freq, last_freq, fs_chan)
+            # The FFT-generated frequency bins are kept unchanged (no rounding),
+            # get_miniband_index tolerates the drift caused by a non-integer fs.
+            miniband_indices, miniband_bounds = PSA.get_miniband_index(self.identifier, freq_bin_chan, mini_bandwidth, first_freq, last_freq, fs_chan)
             # For each mini band use the n_fft_win and n_fft_win_valid computed above (fixed accross all mini bands)
-            for miniband_index in miniband_indices:
+            for miniband_index, miniband_bound in zip(miniband_indices, miniband_bounds):
 
-                # The frequency band defined as [min, max[ (i.e. 0-3.8 Hz) are written in the report as 0-4 Hz
-                self.PSD_act_param['freq_low_Hz'] = freq_bin_chan[miniband_index[0]]
-                self.PSD_act_param['freq_high_Hz'] = freq_bin_chan[miniband_index[1]+1]
+                # The frequency band defined as [min, max[ is written in the report with the requested limits (i.e. 0-4 Hz)
+                self.PSD_act_param['freq_low_Hz'] = miniband_bound[0]
+                self.PSD_act_param['freq_high_Hz'] = miniband_bound[1]
 
                 for label in labels_computed:
                     # Gate on valid windows: all-artefacted windows yield nanmean=NaN,
@@ -586,7 +614,7 @@ class PSAOnEvents(SciNode):
         else:
             raise NodeInputException(self.identifier, print_label, \
                 f"PSACompilation input of wrong size. If both group and name are defined they need to be the same length, group length:\
-                     {len(art_group_lst)} and name length: {len(art_name_lst)}") 
+                    {len(art_group_lst)} and name length: {len(art_name_lst)}") 
         artefact_info_param = {}
         artefact_info_param[print_label+'_group_name_list']=''
         for i_art, group in enumerate(art_group_lst):
@@ -644,11 +672,11 @@ class PSAOnEvents(SciNode):
         """
         if label == 'total':
             if event_name is None:
-                return 'fft_win_count', 'fft_win_valid_count', 'act_total'
+                return 'total_fft_win_count', 'total_fft_win_valid_count', 'total_act'
             return (
-                f'fft_win_{event_name}_count',
-                f'fft_win_valid_{event_name}_count',
-                f'act_{event_name}'
+                f'total_{event_name}_fft_win_count',
+                f'total_{event_name}_fft_win_valid_count',
+                f'total_{event_name}_act'
             )
         if event_name is None:
             return (
@@ -663,28 +691,18 @@ class PSAOnEvents(SciNode):
         )
 
 
-    def _filter_events_by_time(self, events, psd_start_time, start_sec, end_sec):
+    def _filter_events_by_time(self, events, start_sec, end_sec):
         """
         Keep events whose start falls in [start_sec, end_sec).
-
-        When events and psd_start_time are 1:1 aligned, filter both with the
-        same mask so FFT matching stays consistent.
         """
         if events is None or len(events) == 0:
             empty = events.iloc[0:0].copy() if isinstance(events, pd.DataFrame) else \
                 pd.DataFrame(columns=['group', 'name', 'start_sec', 'duration_sec', 'channels'])
-            return empty, np.array([])
+            return empty
 
         evt_starts = events['start_sec'].to_numpy(dtype=float)
         time_mask = (evt_starts >= start_sec) & (evt_starts < end_sec)
-        evt_div = events.loc[time_mask].reset_index(drop=True)
-
-        psd_start_time = np.asarray(psd_start_time, dtype=float)
-        if len(psd_start_time) == len(events):
-            psd_starts_div = psd_start_time[time_mask]
-        else:
-            psd_starts_div = evt_div['start_sec'].to_numpy(dtype=float)
-        return evt_div, psd_starts_div
+        return events.loc[time_mask].reset_index(drop=True)
 
 
     def get_n_artefact_sel(self, art_selected, channel, PSA_evt_selected, match_event_channels):
@@ -714,6 +732,18 @@ class PSAOnEvents(SciNode):
         return n_arts
 
 
+    @staticmethod
+    def _index_psd_by_start_sample(PSD):
+        """Index PSD references once per run, retaining duplicate starts and input order."""
+        psd_index = {}
+        for position, item in enumerate(PSD):
+            fs = item['sample_rate']
+            start_sample = int(np.round(item['start_time'] * fs))
+            starts = psd_index.setdefault(item['chan_label'], {}).setdefault(fs, {})
+            starts.setdefault(start_sample, []).append((position, item['psd']))
+        return psd_index
+
+
     # --------------------------------------------------------------------------
     # Compute the total and the valid number of fft windows and
     # average the activity across windows through the recording
@@ -722,12 +752,10 @@ class PSAOnEvents(SciNode):
     # Parameters :
     #   event_name_unique : list of string
     #       List pf event label to compute the PSA on
-    #   PSD : list of dict for the current channel
-    #       psds of signals
+    #   psd_index : dict
+    #       PSDs indexed by channel, sampling rate and start sample
     #   PSA_evt_selected : pandas DataFrame
     #       events to run the PSA on
-    #   psd_start_time : array
-    #       Start time value in seconds of the PSD
     #   label_stat_div : str
     #       Prefix for the stats (total, clock_h1, cyc1, ...)
     # Compute :
@@ -741,9 +769,9 @@ class PSAOnEvents(SciNode):
         #     act : narray [1 x n_freq_bins]
         #     for each event
         #         i.e. act_MEVE, total_act_MOR ...
-    def compute_fft_win_event(self, event_name_unique, PSD, PSA_evt_selected, psd_start_time, channel, label_stat_div='total'):
-        psd_data_tot = np.empty([0,0])
-        psd_start_time = np.asarray(psd_start_time, dtype=float)
+    def compute_fft_win_event(self, event_name_unique, psd_index, PSA_evt_selected, channel, label_stat_div='total'):
+        total_blocks = []
+        channel_index = psd_index.get(channel, {})
         tot_fft_key, tot_valid_key, tot_act_key = self._stat_keys(label_stat_div)
 
         # Loop for each different event name (i.e. M-EVE, MOR, clean_bsl, ...)
@@ -762,32 +790,27 @@ class PSAOnEvents(SciNode):
             evt_fft_key, evt_valid_key, evt_act_key = self._stat_keys(label_stat_div, cur_event_name)
 
             # Compute the number of fft win total and valid
-            psd_data_cur_event = np.empty([0,0])
+            event_blocks = []
             # Channel filtering is already applied by the caller via
             # select_events_for_channel(match_event_channels=...).
             # Keep only the current event name here.
-            name_mask = (PSA_evt_selected['name'] == cur_event_name).to_numpy()
-            if len(name_mask) == len(psd_start_time):
-                psd_starts_cur = psd_start_time[name_mask]
-            else:
-                psd_starts_cur = PSA_evt_selected.loc[
-                    PSA_evt_selected['name'] == cur_event_name, 'start_sec'
-                ].to_numpy(dtype=float)
+            psd_starts_cur = PSA_evt_selected.loc[
+                PSA_evt_selected['name'] == cur_event_name, 'start_sec'
+            ].to_numpy(dtype=float)
 
             # For each event of the group
             for psd_start_cur in psd_starts_cur:
                 # Extract the psd data for the current channel and start_time
-                matched = [item_list.get('psd') for item_list in PSD \
-                    if (item_list.get('chan_label')==channel) and (item_list.get('start_time')==psd_start_cur)]
-                if len(matched) == 0:
-                    continue
-                psd_data_cur_start = np.vstack(matched)
-                # Accumulate the psd data for all the start of the current event name
-                if psd_data_cur_event.size>0:
-                    psd_data_cur_event = np.vstack((psd_data_cur_event,psd_data_cur_start))
-                else:
-                    psd_data_cur_event = psd_data_cur_start
+                matched = []
+                for fs, starts in channel_index.items():
+                    event_start_sample = int(np.round(psd_start_cur * fs))
+                    matched.extend(starts.get(event_start_sample, []))
+                # A channel may contain multiple sampling rates; retain the original PSD order.
+                if len(channel_index) > 1:
+                    matched.sort(key=lambda entry: entry[0])
+                event_blocks.extend(data for _, data in matched)
 
+            psd_data_cur_event = np.vstack(event_blocks) if event_blocks else np.empty([0, 0])
             if len(psd_data_cur_event)>0:
                 # Compute the number of valid fft windows (find out if there is a nan for each window) for each event group
                 n_nan_fft_win = np.sum(np.isnan(np.sum(psd_data_cur_event, axis=1)))
@@ -799,14 +822,12 @@ class PSAOnEvents(SciNode):
                 self.PSD_avg_per_event[evt_act_key]= np.nanmean(psd_data_cur_event,axis=0)
 
                 # Accumulate act and n fft for the total
-                if psd_data_tot.size:
-                    psd_data_tot = np.vstack((psd_data_tot,psd_data_cur_event))
-                else:
-                    psd_data_tot = psd_data_cur_event
+                total_blocks.append(psd_data_cur_event)
             else:
                 self.PSD_act_param[evt_fft_key] = 0
                 self.PSD_act_param[evt_valid_key] = 0
                 self.PSD_avg_per_event[evt_act_key]= np.NaN
+        psd_data_tot = np.vstack(total_blocks) if total_blocks else np.empty([0, 0])
         if psd_data_tot.size>0:
             # Compute the total number of valid fft windows (find out if there is a nan for each window)
             n_nan_fft_win = np.sum(np.isnan(np.sum(psd_data_tot, axis=1)))
@@ -820,4 +841,3 @@ class PSAOnEvents(SciNode):
             self.PSD_act_param[tot_fft_key] = 0
             self.PSD_act_param[tot_valid_key] = 0
             self.PSD_avg_per_event[tot_act_key]= np.NaN
-

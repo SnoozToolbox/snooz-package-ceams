@@ -310,40 +310,39 @@ def get_miniband_index(identifier, freq_bin_chan, mini_bandwidth, first_freq, la
     # ex 3 ) start=0.6 Hz, band=0.5Hz, max=30 Hz
     # 0.6-1;  1-1.5; 1.5-2; 2-2.5....29.5-30.     
     
+    if not np.isfinite(mini_bandwidth) or mini_bandwidth <= 0:
+        raise NodeRuntimeException(identifier, "mini_bandwidth", \
+            "PSACompilation : mini_bandwidth must be a positive finite value")
+
     # Min value between nyquist, last frequency bin of the fft and the last freq asked by the user.
     freq_max = min([freq_bin_chan[-1], last_freq, fs_chan/2])
     # Max between the first freq asked by the user and the min value of the freq bin of the fft.
     freq_min = max([freq_bin_chan[0],first_freq])
-    cur_end = freq_min
-    miniband_index = np.empty((0,0))
+    if freq_min >= freq_max:
+        raise NodeRuntimeException(identifier, "freq_bins", \
+            "PSACompilation : the requested frequency range is empty")
 
-    # To make sure the floating point does not give to much precision 
-    #   (it causes problem when finding the right freq bins)
-    mini_bandwidth_precision = int(np.log10(mini_bandwidth))+1
+    cur_start = freq_min
+    miniband_index = []
 
-    while cur_end < freq_max:
-        start_bin = cur_end
-        if (start_bin/mini_bandwidth).is_integer():
-            if (start_bin + mini_bandwidth)<freq_max:
-                cur_end = round(start_bin + mini_bandwidth, mini_bandwidth_precision)
-            else:
-                cur_end = freq_max
-        else:
-            if start_bin<mini_bandwidth:
-                cur_end = round(start_bin + (mini_bandwidth-start_bin), mini_bandwidth_precision)
-            else:
-                cur_end = round(start_bin + ((2*mini_bandwidth)-start_bin), mini_bandwidth_precision)
+    while cur_start < freq_max:
+        # Move to the next multiple of the selected bandwidth. This also
+        # supports a first band that starts between two bandwidth multiples.
+        boundary_number = np.ceil(cur_start / mini_bandwidth)
+        if np.isclose(cur_start / mini_bandwidth, boundary_number, rtol=0, atol=1e-10):
+            boundary_number += 1
+        cur_end = min(boundary_number * mini_bandwidth, freq_max)
 
-        # Find the indices of elements between start_bin and end_bin
-        cur_index_list = np.where((freq_bin_chan >= start_bin) & (freq_bin_chan < cur_end))[0] # [min, max[
+        # Find the indices of elements between the band boundaries.
+        cur_index_list = np.where((freq_bin_chan >= cur_start) & (freq_bin_chan < cur_end))[0] # [min, max[
         if len(cur_index_list): 
             cur_idx_start_end = [cur_index_list[0], cur_index_list[-1]]
-            if len(miniband_index): # Concatenate all the freq bins to creat the list of mini bands
-                miniband_index = np.vstack((miniband_index, cur_idx_start_end))
-            else:
-                miniband_index = cur_idx_start_end
+            miniband_index.append(cur_idx_start_end)
         else:
-            if len(miniband_index)==0:
-                raise NodeRuntimeException(identifier, "freq_bins", \
-                    f"PSACompilation : the mini bands from {freq_min} to {last_freq} is not found in the frequency bins")
-    return miniband_index
+            raise NodeRuntimeException(identifier, "mini_bandwidth", \
+                f"PSACompilation : no FFT frequency bin was found in the mini band "
+                f"[{cur_start}, {cur_end}[. Select another mini_bandwidth.")
+
+        cur_start = cur_end
+
+    return np.asarray(miniband_index, dtype=int)

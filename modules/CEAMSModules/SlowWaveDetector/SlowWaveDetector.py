@@ -273,7 +273,7 @@ class SlowWaveDetector(SciNode):
         # Create Dataframes
         self.dataframe = manage_events.create_event_dataframe(self.dataframe)
         self.sww_data = pd.DataFrame(self.sww_data, \
-            columns=['group', 'name','start_sec', 'duration_sec', 'pkpk_amp_uV','neg_amp_uV', 'neg_sec', 'pos_sec', 'Pap_raw', 'Neg_raw', 'mfr', 'trans_freq_Hz', 'slope_0_min', 'slope_min_max', 'slope_max_0', 'channels'])
+            columns=['group', 'name','start_sec', 'duration_sec', 'pkpk_amp_uV','neg_amp_uV', 'neg_sec', 'pos_sec', 'neg_peak_sec', 'pos_peak_sec', 'Pap_raw', 'Neg_raw', 'mfr', 'trans_freq_Hz', 'slope_0_min', 'slope_min_max', 'slope_max_0', 'channels'])
 
         # Reset index
         self.dataframe.reset_index(inplace=True, drop=True)
@@ -386,6 +386,8 @@ class SlowWaveDetector(SciNode):
                     # Compute transition frequency
                     index_u = np.argmin(segment)
                     index_v = np.argmax(segment)
+                    neg_peak_sec = (index_u + 1) / fs
+                    pos_peak_sec = (index_v + 1) / fs
                     if (index_v - index_u) == 0:
                         trans_freq_Hz = 0
                         slope_min_max = 0
@@ -411,7 +413,7 @@ class SlowWaveDetector(SciNode):
                         start_sec = float(n_t[0] / fs + signal_model.start_time)
                         duration_sec = float((n_t[1] - n_t[0]) / fs)
                         self.dataframe.append([event_group, event_name, start_sec, duration_sec, signal_model.channel])
-                        data = [event_group, event_name, start_sec, duration_sec, pkpk_amp_uV, -neg_amp_uV, neg_sec, pos_sec, PaP_brut, Neg_brut, mfr, trans_freq_Hz, \
+                        data = [event_group, event_name, start_sec, duration_sec, pkpk_amp_uV, -neg_amp_uV, neg_sec, pos_sec, neg_peak_sec, pos_peak_sec, PaP_brut, Neg_brut, mfr, trans_freq_Hz, \
                             slope_0_min, slope_min_max, slope_max_0, signal_model.channel]
                         self.sww_data.append(data)
 

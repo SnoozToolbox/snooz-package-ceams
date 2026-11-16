@@ -34,6 +34,10 @@ class OutputFileStep(BaseStepView, Ui_OutputFileStep, QtWidgets.QWidget):
         self._node_id_REMsDetails = "d1489e58-7c3d-490e-9c36-f830c8dc596e"
         self._cohort_file_topic = f'{self._node_id_REMsDetails}.cohort_filename'
         self._pub_sub_manager.subscribe(self, self._cohort_file_topic)
+
+        self._node_id_REMsDetection = "5b36c10e-696e-40d2-be30-12548a806e0c"
+        self._save_directory_topic = f'{self._node_id_REMsDetection}.save_directory'
+        self._pub_sub_manager.subscribe(self, self._save_directory_topic)
         
     def load_settings(self):
         # Load settings is called after the constructor of all steps has been executed.
@@ -47,6 +51,7 @@ class OutputFileStep(BaseStepView, Ui_OutputFileStep, QtWidgets.QWidget):
         #self._somevalue_topic = identifier + ".some_input" # Change some_input for the name of the input your are looking for.
         #self._pub_sub_manager.publish(self, self._somevalue_topic, 'ping')
         self._pub_sub_manager.publish(self, self._cohort_file_topic, 'ping')
+        self._pub_sub_manager.publish(self, self._save_directory_topic, 'ping')
 
     def on_topic_update(self, topic, message, sender):
         # Whenever a value is updated within the context, all steps receives a 
@@ -65,9 +70,12 @@ class OutputFileStep(BaseStepView, Ui_OutputFileStep, QtWidgets.QWidget):
         #    self._somevalue = message
         if topic == self._cohort_file_topic:
             self.lineEdit_CohortFilename.setText(message)
+        if topic == self._save_directory_topic:
+            self.lineEdit_CohortFilename.setText(message)
 
     def on_apply_settings(self):
         self._pub_sub_manager.publish(self, self._cohort_file_topic, self.lineEdit_CohortFilename.text())
+        self._pub_sub_manager.publish(self, self._save_directory_topic, self.lineEdit_CohortFilename.text())
 
     def on_validate_settings(self):
         # Validate that all input were set correctly by the user.

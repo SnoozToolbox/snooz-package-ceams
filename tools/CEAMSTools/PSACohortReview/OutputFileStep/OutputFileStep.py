@@ -95,11 +95,11 @@ class OutputFileStep(BaseStepView, Ui_OutputFileStep, QtWidgets.QWidget):
                     if any(self.PSA_df.columns.str.contains(activity_2_export,regex=True)):
                         self.activity_comboBox.addItem(self.activity_label[3])
 
-                # Look for a PSAOnEvents
-                else:
-                    activity_2_export = "act_"
-                    if any(self.PSA_df.columns.str.contains(activity_2_export,regex=True)):
-                        self.activity_comboBox.addItem(self.activity_label[4])           
+                # # Look for a PSAOnEvents
+                # else:
+                #     activity_2_export = "act_"
+                #     if any(self.PSA_df.columns.str.contains(activity_2_export,regex=True)):
+                #         self.activity_comboBox.addItem(self.activity_label[4])           
 
 
     def on_validate_settings(self):

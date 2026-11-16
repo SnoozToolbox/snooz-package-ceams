@@ -6,7 +6,7 @@
     "item_author": "",
     "item_description": "",
     "tool_params": {
-        "tool_version": "2.4.0",
+        "tool_version": "2.4.1",
         "tool_label": "Classify Slow Waves",
         "tool_category": "3-Postprocessing",
         "asset_directory": "",
@@ -80,7 +80,7 @@
                         "connections": {},
                         "sub_plugs": {}
                     },
-                    "stages_files": {
+                    "sw_stages_files": {
                         "name": "sw_stages_files",
                         "value": "[]",
                         "connections": {},

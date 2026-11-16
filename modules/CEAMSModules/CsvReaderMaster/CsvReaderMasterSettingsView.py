@@ -7,6 +7,8 @@ See the file LICENCE for full license details.
     Settings viewer of the CsvReaderMaster plugin
 """
 
+from typing import Callable, Optional
+
 from qtpy import QtWidgets, QtCore, QtGui
 
 from CEAMSModules.CsvReaderMaster.Ui_CsvReaderMasterSettingsView import Ui_CsvReaderMasterSettingsView
@@ -41,6 +43,8 @@ class CsvReaderMasterSettingsView( BaseSettingsView,  Ui_CsvReaderMasterSettings
         # init UI
         self.setupUi(self)
         self.filenames = []
+        # Tools may reject invalid files before they reach the annotation models.
+        self.file_filter: Optional[Callable[[list[str]], list[str]]] = None
         # Subscribe to the proper topics to send/get data from the node
         self._files_topic = f'{self._parent_node.identifier}.files'
         self._pub_sub_manager.subscribe(self, self._files_topic)
@@ -73,6 +77,8 @@ class CsvReaderMasterSettingsView( BaseSettingsView,  Ui_CsvReaderMasterSettings
 
 
     def load_files_from_data(self, data):
+        if self.file_filter is not None:
+            data = self.file_filter(data)
         self.fileListWidget.clear()
         self.files_model = QtGui.QStandardItemModel(0,1) 
         for filename in data:
@@ -155,6 +161,8 @@ class CsvReaderMasterSettingsView( BaseSettingsView,  Ui_CsvReaderMasterSettings
             None, 
             'CSV TSV (*.csv *.tsv *.txt)')
         if filenames_add != '':
+            if self.file_filter is not None:
+                filenames_add = self.file_filter(filenames_add)
             # Fill the QListWidget
             for filename in filenames_add:
                 self.fileListWidget.addItem(filename)

@@ -49,6 +49,9 @@ class Outputfiles(BaseStepView, Ui_Outputfiles, QtWidgets.QWidget):
         self._filename_fooof_topic = f'{self._node_id_PSA_FOOOF}.filename'
         self._pub_sub_manager.subscribe(self, self._filename_fooof_topic)
 
+        self._selected_filename_topic = None
+        self._output_activation_states = {}
+
         self._dist_total_constant_topic = f'{self._node_id_constant_total}.constant'
         self._pub_sub_manager.subscribe(self, self._dist_total_constant_topic)
         self._dist_hour_constant_topic = f'{self._node_id_constant_hour}.constant'
@@ -60,11 +63,33 @@ class Outputfiles(BaseStepView, Ui_Outputfiles, QtWidgets.QWidget):
     def load_settings(self):
         # Ask for the settings to the publisher to display on the SettingsView
 
-        self._pub_sub_manager.publish(self, self._filename_topic, 'ping')
-        self._pub_sub_manager.publish(self, self._filename_rhythmic_topic, 'ping')
-        self._pub_sub_manager.publish(self, self._node_id_PSA_Annot+".get_activation_state", None)
-        self._pub_sub_manager.publish(self, self._filename_arhythmic_topic, 'ping')
-        self._pub_sub_manager.publish(self, self._filename_fooof_topic, 'ping')
+        self._selected_filename_topic = None
+        output_topics = {
+            f'{self._node_id_PSA_std}.get_activation_state': self._filename_topic,
+            f'{self._node_id_PSA_Annot}.get_activation_state': self._filename_annot_topic,
+            f'{self._node_id_rhythmic_IRASA}.get_activation_state': self._filename_rhythmic_topic,
+            f'{self._node_id_PSA_FOOOF}.get_activation_state': self._filename_fooof_topic,
+        }
+        self._output_activation_states = dict.fromkeys(output_topics)
+        # Activation-state responses are synchronous.
+        for topic in output_topics:
+            self._pub_sub_manager.publish(self, topic, None)
+
+        active_topics = [
+            output_topics[topic]
+            for topic, state in self._output_activation_states.items()
+            if state == ActivationState.ACTIVATED
+        ]
+        if None in self._output_activation_states.values() or len(active_topics) != 1:
+            self.filename_lineEdit.clear()
+            WarningDialog(
+                "Unable to load the output filename. Exactly one output analysis "
+                "(Welch, annotations, IRASA or FOOOF) must be active, "
+                "and all output module states must be available."
+            )
+        else:
+            self._selected_filename_topic = active_topics[0]
+            self._pub_sub_manager.publish(self, self._selected_filename_topic, 'ping')
         self._pub_sub_manager.publish(self, self._dist_total_constant_topic, 'ping')
         self._pub_sub_manager.publish(self, self._dist_hour_constant_topic, 'ping')
         self._pub_sub_manager.publish(self, self._dist_cycle_constant_topic, 'ping')
@@ -100,20 +125,19 @@ class Outputfiles(BaseStepView, Ui_Outputfiles, QtWidgets.QWidget):
     # To update the Settings Views
     def on_topic_response(self, topic, message, sender):
         
-        if topic == self._filename_topic:
-            self.filename_lineEdit.setText(message)          
-        if topic == self._filename_rhythmic_topic:
-            if message == "_periodic.tsv":
-                self.filename_lineEdit.setText(message[:-13])
-            else:
-                self.filename_lineEdit.setText(message[:-13] + ".tsv")
-        if topic == self._filename_arhythmic_topic:
-            if message == "_aperiodic.tsv":
-                self.filename_lineEdit.setText(message[:-14])
-            else:
-                self.filename_lineEdit.setText(message[:-14] + ".tsv")
-        if topic == self._filename_fooof_topic:
-            self.filename_lineEdit.setText(message)
+        if topic in self._output_activation_states:
+            self._output_activation_states[topic] = message
+            return
+
+        if topic == self._selected_filename_topic:
+            filename = message
+            if topic == self._filename_rhythmic_topic:
+                suffix = "_periodic.tsv"
+                if filename == suffix:
+                    filename = ""
+                elif filename.endswith(suffix):
+                    filename = filename[:-len(suffix)] + ".tsv"
+            self.filename_lineEdit.setText(filename)
         if topic == self._dist_total_constant_topic:
             self.total_checkBox.setChecked(int(message))
         if topic == self._dist_hour_constant_topic:
@@ -154,4 +178,3 @@ class Outputfiles(BaseStepView, Ui_Outputfiles, QtWidgets.QWidget):
             self._pub_sub_manager.unsubscribe(self, self._dist_total_constant_topic)
             self._pub_sub_manager.unsubscribe(self, self._dist_hour_constant_topic)
             self._pub_sub_manager.unsubscribe(self, self._dist_cycle_constant_topic)
-

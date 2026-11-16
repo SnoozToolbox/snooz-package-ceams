@@ -1,19 +1,17 @@
 #! /usr/bin/env python3
 """
     InputFilesStep
-    TODO CLASS DESCRIPTION
+    Step to open files .txt (csv) annotation files from EDFbrowser.
 """
 
-from qtpy import QtWidgets, QtCore
+from qtpy import QtWidgets, QtCore, QtGui
 
 from CEAMSTools.ConvertEDFbrowser.Commons import ContextConstants
 from CEAMSTools.ConvertEDFbrowser.InputFilesStep.Ui_InputFilesStep import Ui_InputFilesStep
 from commons.BaseStepView import BaseStepView
 from widgets.WarningDialog import WarningDialog
-from widgets.WarningDialogWithButtons import WarningDialogWithButtons
+from widgets.TableDialog import TableDialog
 import pandas as pd
-import re
-import os
 
 class InputFilesStep(BaseStepView, Ui_InputFilesStep, QtWidgets.QWidget):
     """
@@ -37,6 +35,7 @@ class InputFilesStep(BaseStepView, Ui_InputFilesStep, QtWidgets.QWidget):
         else:
             # To extract the SettingsView and add it to our Layout in the preset
             self.my_CsvReaderSettingsView = module.create_settings_view()
+            self.my_CsvReaderSettingsView.file_filter = self.filter_input_files
             self.verticalLayout.addWidget(self.my_CsvReaderSettingsView)
             # _context_manager is inherited from the BaseStepView
             # it allows to share information between steps in the step-by-step interface
@@ -71,65 +70,76 @@ class InputFilesStep(BaseStepView, Ui_InputFilesStep, QtWidgets.QWidget):
         if self.my_CsvReaderSettingsView.fileListWidget.count()==0:
             WarningDialog(f"Add a file to convert in the step '1-Input Files'")
             return False
-        # Validate the files in the file list to follow the EDFbrowser format
         filelists = [self.my_CsvReaderSettingsView.fileListWidget.item(i).text() for i in range(self.my_CsvReaderSettingsView.fileListWidget.count())]
+        results = self.validate_input_files(filelists)
+        if results:
+            self.show_file_errors(
+                results,
+                "The analysis cannot run because some input files are invalid. "
+                "Please correct or remove the files listed below.",
+            )
+            return False
+        return True
+
+
+    def filter_input_files(self, filenames):
+        """Reject invalid files before the reader publishes its updated models."""
+        results = self.validate_input_files(filenames)
+        if results:
+            self.show_file_errors(
+                results,
+                "The files listed below were rejected and were not added. "
+                "Please correct their format before adding them again.",
+            )
+        rejected_files = {result['file'] for result in results}
+        return [filename for filename in filenames if filename not in rejected_files]
+
+
+    def validate_input_files(self, filenames):
+        """Check the EDFbrowser columns and values used by the annotation models and conversion."""
         results = []
-        time_pattern = re.compile(r'^\d{2}:\d{2}:\d{2}$')
-        if len(filelists) != 0:
-            for file in filelists:
-                file_result = {'file': os.path.basename(file), 'errors': []}
-                try:
-                    df = pd.read_csv(file, sep = '\t', usecols = ['Onset', 'Duration', 'Annotation'])
-                    # Check if all required columns are present
-                    required_columns = {'Onset', 'Duration', 'Annotation'}
-                    if not all(col in df.columns for col in required_columns):
-                        missing_cols = required_columns - set(df.columns)
-                        file_result['errors'].append(f"Missing columns: {missing_cols}")
-                        results.append(file_result)
-                        continue
-                # Validate data types and content for each row
-                    for idx, row in df.iterrows():
-                        # Check Onset
-                        if pd.isna(row['Onset']):
-                            file_result['errors'].append(f"Row {idx}: Onset is NaN")
-                        elif not isinstance(row['Onset'], (int, float)):
-                            file_result['errors'].append(f"Row {idx}: Onset is not numeric (value: {row['Onset']})")
-                        elif isinstance(row['Onset'], str) and time_pattern.match(str(row['Onset'])):
-                            file_result['errors'].append(f"Row {idx}: Onset matches HH:MM:SS pattern ({row['Onset']})")
-                        
-                        # Check Duration
-                        if pd.isna(row['Duration']):
-                            file_result['errors'].append(f"Row {idx}: Duration is NaN")
-                        elif not isinstance(row['Duration'], (int, float)):
-                            file_result['errors'].append(f"Row {idx}: Duration is not numeric (value: {row['Duration']})")
-                        elif isinstance(row['Duration'], str) and time_pattern.match(str(row['Duration'])):
-                            file_result['errors'].append(f"Row {idx}: Duration matches HH:MM:SS pattern ({row['Duration']})")
-                        
-                        # Check Annotation
-                        if pd.isna(row['Annotation']):
-                            file_result['errors'].append(f"Row {idx}: Annotation is NaN")
-                        elif not isinstance(row['Annotation'], str):
-                            file_result['errors'].append(f"Row {idx}: Annotation is not a string (value: {row['Annotation']})")
+        for filename in filenames:
+            file_result = {'file': filename, 'errors': []}
+            try:
+                df = pd.read_csv(filename, sep='\t', usecols=['Onset', 'Duration', 'Annotation'])
+                for idx, row in df.iterrows():
+                    for column in ('Onset', 'Duration'):
+                        if pd.isna(row[column]):
+                            file_result['errors'].append(f"Row {idx}: {column} is NaN")
+                        elif not isinstance(row[column], (int, float)):
+                            file_result['errors'].append(
+                                f"Row {idx}: {column} is not numeric (value: {row[column]})"
+                            )
+                    if pd.isna(row['Annotation']):
+                        file_result['errors'].append(f"Row {idx}: Annotation is NaN")
+                    elif not isinstance(row['Annotation'], str):
+                        file_result['errors'].append(
+                            f"Row {idx}: Annotation is not a string (value: {row['Annotation']})"
+                        )
+            except (OSError, UnicodeError, pd.errors.ParserError, ValueError) as error:
+                file_result['errors'].append(f"Cannot read EDFbrowser annotations: {error}")
+            if not file_result['errors']:
+                item = self.my_CsvReaderSettingsView.create_file_item_name_group_list(filename, 'EDFbrowser')
+                if not isinstance(item, QtGui.QStandardItem):
+                    file_result['errors'].append(
+                        "Cannot build the annotation model with the current reader settings."
+                    )
+            if file_result['errors']:
+                results.append(file_result)
+        return results
 
-                except FileNotFoundError:
-                    file_result['errors'].append("File not found")
-                except pd.errors.ParserError:
-                    file_result['errors'].append("Failed to parse CSV (check file format or delimiter)")
-                except ValueError as e:
-                    file_result['errors'].append(f"Error reading columns: Usecols do not match columns, columns format expected but not found: ['Onset', 'Duration', 'Annotation']")
-                except Exception as e:
-                    file_result['errors'].append(f"Unexpected error: {str(e)}")
-                
-                if len(file_result['errors']) != 0:
-                    results.append(file_result)
 
-        if len(results) > 0:
-            if WarningDialogWithButtons.show_warning(f"Some files do not follow the EDFbrowser format. Please verify.\nDetails:\n{results}"):
-                return True
-            else:
-                return False
-
-        return True      
+    def show_file_errors(self, results, message):
+        details_df = pd.DataFrame(
+            [(result['file'], "\n".join(result['errors'])) for result in results],
+            columns=["File", "Errors"],
+        )
+        dialog = TableDialog(
+            df=details_df,
+            title="Invalid EDFbrowser files",
+            message=message,
+        )
+        dialog.exec_()
 
 
     # Called when a value listened is changed
@@ -146,4 +156,3 @@ class InputFilesStep(BaseStepView, Ui_InputFilesStep, QtWidgets.QWidget):
     # Called when the user delete an instance of the plugin
     def __del__(self):
         pass
-

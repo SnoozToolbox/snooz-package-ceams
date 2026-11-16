@@ -302,8 +302,9 @@ class EditorStep(BaseStepView, Ui_EditorStep, QtWidgets.QWidget):
         if item.hasChildren(): # it is a group
             new_group_label = item.text()
             # Return the original information from the modified item (column 1)
-            filename, previous_group_label, ori_name_lst = self.reader_settings_view.get_info_from_edit_group_item(\
+            filename, original_group, ori_name_lst = self.reader_settings_view.get_info_from_edit_group_item(\
                 item, self.files_editable_cohort_model)
+            previous_group_label = item.data(QtCore.Qt.UserRole)
             
             # If the item is really modified
             if (not new_group_label==previous_group_label) or (not item.checkState()==QtCore.Qt.CheckState.PartiallyChecked):
@@ -311,24 +312,22 @@ class EditorStep(BaseStepView, Ui_EditorStep, QtWidgets.QWidget):
                 for file in self.reader_settings_view.get_files_list(self.files_editable_subject_model):
                     file_index = self.reader_settings_view.get_file_index(file, self.files_editable_subject_model)
 
-                    # If the state is modified (not a child modification propagated to the parent)
-                    if not item.checkState()==QtCore.Qt.CheckState.PartiallyChecked:
-                        # Apply state modification to the subject tree model
-                        self.files_editable_subject_model = self.reader_settings_view.set_check_state_group(\
-                            self.files_editable_subject_model, file_index, previous_group_label, item.checkState())
-                    # If the group label is edited
-                    if not new_group_label==previous_group_label:
-                        # Apply edit modification to the subject tree model
-                        # Return the editable model updated and ori_info.
-                        #   ori_info : tuple (filename, group_ori_value, ori_name_lst) of the events found in the subject tree model                   
-                        self.files_editable_subject_model, ori_info = self.reader_settings_view.rename_group_item(\
-                            self.files_editable_subject_model, file_index, previous_group_label, new_group_label)
-                        # Update dict_rename
-                        if not ori_info==None:
-                            self.update_dict_rename_for_group_edit(ori_info[0], ori_info[1], ori_info[2], new_group_label)
-                        # This will be called only when the last modification is applied (since names are modified before the group)
-                        # no !!! this is called at the beginning when the group name is modified.
-                        # self.update_editable_cohort_model()
+                    file_item = self.files_editable_subject_model.itemFromIndex(file_index)
+                    for group_row in range(file_item.rowCount()):
+                        subject_group_item = file_item.child(group_row, 0) # read group item from the subject model
+                        if file_item.child(group_row, 1).text() != original_group \
+                                or subject_group_item.text() != previous_group_label:
+                            continue
+                        if item.checkState() != QtCore.Qt.CheckState.PartiallyChecked:
+                            subject_group_item.setCheckState(item.checkState())
+                            self.reader_settings_view.apply_state_to_child_item(
+                                subject_group_item, self.files_editable_subject_model)
+                        if new_group_label != previous_group_label:
+                            filename, group_ori, names_ori = self.reader_settings_view.get_info_from_edit_group_item(
+                                subject_group_item, self.files_editable_subject_model)
+                            subject_group_item.setText(new_group_label)
+                            self.update_dict_rename_for_group_edit(filename, group_ori, names_ori, new_group_label)
+            item.setData(new_group_label, QtCore.Qt.UserRole)
                             
         else: # it is a name or empty
 
@@ -339,36 +338,31 @@ class EditorStep(BaseStepView, Ui_EditorStep, QtWidgets.QWidget):
                 new_name_label = item.text()
 
                 # Find the original name label form the column 1 of the item.
-                filename, previous_group, previous_name = self.reader_settings_view.get_info_from_edit_name_item(\
+                filename, original_group, original_name = self.reader_settings_view.get_info_from_edit_name_item(\
                     item, self.files_editable_cohort_model)
+                previous_group = group_item.text()
+                previous_name = item.data(QtCore.Qt.UserRole)
                 # Apply on every file
                 for file in self.reader_settings_view.get_files_list(self.files_editable_subject_model):
                     file_index = self.reader_settings_view.get_file_index(file, self.files_editable_subject_model)
-                    # if really edited
-                    if not new_name_label==previous_name:                      
-                        
-                        # Rename group/name
-                        group_name_tup = [(previous_group, previous_name, previous_group, new_name_label)]          
-                        # Apply edit modification to the subject tree model        
-                        self.files_editable_subject_model, file_group_name_tup = self.reader_settings_view.rename_group_name(\
-                            self.files_editable_subject_model, file_index, group_name_tup)
-                        
-                        # Update dict_rename - could have many names within a group 
-                        #   if groups are duplicated (possible in the renaming process) 
-                        #       CompSpecXXX_f4 -> CompSpec
-                        #           art._f4 -> art
-                        #       CompSpecXXX_f3 -> CompSpec
-                        #           art._f3 -> art
-                        #       CompSpecXXX_c4 -> CompSpec
-                        #           art._c4 -> art
-                        # Here CompSpec will appear a few times since the original value is kept on the right column
-                        for group_ori, name_ori, group_mod, name_mod in file_group_name_tup:
-                            self.update_dict_rename_for_name_edit(group_ori, name_ori, group_mod, name_mod)
-
-                    # Check or uncheck
-                    # Apply state modification to the subject tree model
-                    self.files_editable_subject_model, evt_found = self.reader_settings_view.set_check_state_list(\
-                        self.files_editable_subject_model, file_index, [previous_group], [new_name_label], item.checkState())
+                    file_item = self.files_editable_subject_model.itemFromIndex(file_index)
+                    for group_row in range(file_item.rowCount()):
+                        subject_group_item = file_item.child(group_row, 0) # read group item from the subject model
+                        if file_item.child(group_row, 1).text() != original_group \
+                                or subject_group_item.text() != previous_group:
+                            continue
+                        for name_row in range(subject_group_item.rowCount()):
+                            subject_name_item = subject_group_item.child(name_row, 0)
+                            if subject_group_item.child(name_row, 1).text() != original_name \
+                                    or subject_name_item.text() != previous_name:
+                                continue
+                            if new_name_label != previous_name:
+                                subject_name_item.setText(new_name_label)
+                                self.update_dict_rename_for_name_edit(file, original_group, original_name, new_name_label)
+                            subject_name_item.setCheckState(item.checkState())
+                            self.reader_settings_view.apply_state_to_parent_item(
+                                subject_name_item, self.files_editable_subject_model)
+                item.setData(new_name_label, QtCore.Qt.UserRole)
 
         # Propagate states (unchecked, checked...) in the cohort tree model
         if item.hasChildren():
@@ -541,44 +535,65 @@ class EditorStep(BaseStepView, Ui_EditorStep, QtWidgets.QWidget):
         except: pass
         # Create checkable and editable item based on self.files_editable_subject_model
         #   Show all the cohort, do not keep track of the subject just plot all groups with all names in.
-        #   Pass through the files_editable_subject_model 
-        #       deal with dict where the key is the group and the value a list of names
+        #   Read current and original labels from the subject model.
         self.files_editable_cohort_model = self.reader_settings_view.create_empty_edit_files_model()
 
-        # get_group_name_from_cohort returns group_name_dict          
-            # group_name_dict : dict
-            #     keys are the event group
-            #     values are a list of strings (the event names)
-            # tristate_dict : dict of dict
-            #     keys are the event group
-            #     value is a dict where the key is the name and the value is the state
-        group_name_dict, tristate_dict  = self.reader_settings_view.get_group_name_from_cohort(\
-            self.files_editable_subject_model)
+        # Keep distinct origins even when they have the same edited label.
+        # cohort_groups = {
+        #     (current_group, original_group): {
+        #         (current_name1, original_name1): QtCore.Qt.CheckState,
+        #         (current_name2, original_name2): QtCore.Qt.CheckState
+        #     }
+        # }
+        # Matching label pairs are combined across subjects; differing check
+        # states become PartiallyChecked. All labels are strings.
+        cohort_groups = {}
+        for file_row in range(self.files_editable_subject_model.rowCount()): # pass through each file in the subject model
+            file_item = self.files_editable_subject_model.item(file_row)
+            for group_row in range(file_item.rowCount()):
+                subject_group_item = file_item.child(group_row, 0)     # read group item from the subject model
+                original_group = file_item.child(group_row, 1).text()  # read original group label from the subject model
+                group_key = (subject_group_item.text(), original_group)# Create the key for the cohort_groups dictionary
+                names_states = cohort_groups.setdefault(group_key, {})
+                for name_row in range(subject_group_item.rowCount()):
+                    subject_name_item = subject_group_item.child(name_row, 0)  # read name item from the subject model
+                    original_name = subject_group_item.child(name_row, 1).text()# read original name label from the subject model
+                    name_key = (subject_name_item.text(), original_name)
+                    state = subject_name_item.checkState()
+                    # Different states for the same label pair across subjects
+                    # produce a mixed state, which remains mixed for later subjects.
+                    if name_key in names_states and names_states[name_key] != state:
+                        names_states[name_key] = QtCore.Qt.CheckState.PartiallyChecked
+                    else:
+                        # Store the first state or preserve the shared state.
+                        names_states[name_key] = state
 
         # Fill the tree view model
-        for group, name_list in group_name_dict.items():
+        for (group, original_group), names_states in cohort_groups.items():
             group_item = QtGui.QStandardItem(group)
+            group_item.setData(group, QtCore.Qt.UserRole)
             group_item.setCheckable(True)
             group_item.setEditable(True)
             group_item.setAutoTristate(True)
-            ori_group_item = QtGui.QStandardItem(group)
+            ori_group_item = QtGui.QStandardItem(original_group)
             ori_group_item.setCheckable(False)
             ori_group_item.setEditable(False)
             tristate = []
-            for name in name_list:
+            for (name, original_name), state in names_states.items():
                 name_item = QtGui.QStandardItem(name)
+                name_item.setData(name, QtCore.Qt.UserRole)
                 name_item.setCheckable(True)
                 name_item.setEditable(True)
                 name_item.setAutoTristate(False)
-                name_item.setCheckState(tristate_dict[group][name])
-                ori_name_item = QtGui.QStandardItem(name)
+                name_item.setCheckState(state)
+                ori_name_item = QtGui.QStandardItem(original_name)
                 ori_name_item.setCheckable(False)
                 ori_name_item.setEditable(False)
                 group_item.appendRow([name_item, ori_name_item])
-                tristate.append(tristate_dict[group][name])
+                tristate.append(state)
 
             # The parent (group) takes the state of the children (if all the same)
-            if tristate.count(tristate[0]) == len(tristate):
+            if tristate and tristate.count(tristate[0]) == len(tristate):
                 group_item.setCheckState(tristate[0])
             else:
                 group_item.setCheckState(QtCore.Qt.CheckState.PartiallyChecked)     

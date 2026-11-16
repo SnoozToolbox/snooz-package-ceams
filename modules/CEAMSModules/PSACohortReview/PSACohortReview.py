@@ -185,22 +185,16 @@ class PSACohortReview(SciNode):
             
             # Find out the regular expression to extract the right PSA activity based on the activity_label
             if activity_label.lower()=="distribution per clock hour":
-                activity_2_export = "clock_h\d(?:_[A-Za-z0-9+]+)?_act"
+                activity_2_export = r"^clock_h\d+(?:_[A-Za-z0-9+]+)*_act$"
             elif activity_label.lower()=="distribution per hour spent in each sleep stage":
-                activity_2_export = "stage_h\d(?:_[A-Za-z0-9+]+)?_act"
+                activity_2_export = r"^stage_h\d+(?:_[A-Za-z0-9+]+)*_act$"
             elif activity_label.lower()=="distribution per sleep cycle":
-                activity_2_export = "cyc\d(?:_[A-Za-z0-9+]+)?_act"
+                activity_2_export = r"^cyc\d+(?:_[A-Za-z0-9+]+)*_act$"
             else:
-                activity_2_export = "total(?:_[A-Za-z0-9+]+)?_act"
+                activity_2_export = r"^total(?:_[A-Za-z0-9+]+)*_act$"
             # Extract all the columns of the spectral data
             mask_activity = self.PSA_df.columns.str.contains(activity_2_export,regex=True)
             if any(mask_activity):
-                activity_data_df = self.PSA_df.loc[:,mask_activity]
-            # Look for a PSAOnEvents
-            else:
-                activity_2_export = "act_"
-                # Extract all the columns of the spectral data
-                mask_activity = self.PSA_df.columns.str.contains(activity_2_export,regex=True)
                 activity_data_df = self.PSA_df.loc[:,mask_activity]
 
             # Dataframe to write in the transposed spectral file

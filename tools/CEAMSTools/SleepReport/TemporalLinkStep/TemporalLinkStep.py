@@ -37,6 +37,10 @@ class TemporalLinkStep( BaseStepView,  Ui_TemporalLinkStep, QtWidgets.QWidget):
 
         self._update_model_topic = "TemporalLinkStep.update_model"
         self._pub_sub_manager.subscribe(self, self._update_model_topic)
+        # This non-node topic is not removed by the tool's temporary-topic cleanup.
+        self.destroyed.connect(
+            lambda: self._pub_sub_manager.unsubscribe(self, self._update_model_topic)
+        )
 
         # Init context variables
         self._report_names = {}

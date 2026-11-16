@@ -569,7 +569,7 @@ class SlowWaveClassifier(SciNode):
 
         self._log_manager.log(self.identifier,"\nAIC values:")
         for i in range(self.MIN_DISTRIBUTIONS, self.MAX_DISTRIBUTIONS + 1):
-            gm = GaussianMixture(n_components=i, max_iter=self.MAX_ITERATIONS, tol=1e-6, init_params='k-means++').fit(tfr_data)
+            gm = GaussianMixture(n_components=i, max_iter=self.MAX_ITERATIONS, tol=1e-6, init_params='k-means++', random_state=0).fit(tfr_data)
             dists.append(gm)
             aic = gm.aic(tfr_data)
             aic_results.append(aic)

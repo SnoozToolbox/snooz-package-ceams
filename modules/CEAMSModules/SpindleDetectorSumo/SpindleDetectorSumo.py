@@ -180,7 +180,14 @@ class SpindleDetectorSumo(SciNode):
 
         # Safe check for terminal support - turn it off to avoid threading issues
         use_progress_bar = False#sys.stdout is not None and sys.stdout.isatty()
-        trainer = pl.Trainer(num_sanity_val_steps=0, logger=False, enable_progress_bar=use_progress_bar)
+        # Force CPU execution to improve result reproducibility across platforms.
+        trainer = pl.Trainer(
+            accelerator="cpu",
+            devices=1,
+            num_sanity_val_steps=0,
+            logger=False,
+            enable_progress_bar=use_progress_bar
+        )
  
         # Predict the spindles
         predictions = trainer.predict(model, dataloader)  # 0/1 label for each data point of each segment (takes ~50 sec)
@@ -211,4 +218,3 @@ class SpindleDetectorSumo(SciNode):
         return {
             'events': events_df
         }
-

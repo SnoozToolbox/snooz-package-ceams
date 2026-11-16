@@ -21,6 +21,20 @@ from CEAMSTools.SleepReport.EventReportStep.CombineEventsDialog import CombineEv
 from CEAMSTools.SleepReport.EventReportStep.ModifyCriteriaDialog import ModifyCriteriaDialog
 
 
+def _parse_bool_setting(value):
+    if isinstance(value, bool):
+        return value
+    if isinstance(value, int) and value in (0, 1):
+        return bool(value)
+    if isinstance(value, str):
+        normalized = value.strip().lower()
+        if normalized in ("1", "true"):
+            return True
+        if normalized in ("0", "false"):
+            return False
+    raise ValueError(f"Expected a boolean setting, received {value!r}")
+
+
 
 class EventReportStep( BaseStepView,  Ui_EventReportStep, QtWidgets.QWidget):
     """
@@ -47,7 +61,7 @@ class EventReportStep( BaseStepView,  Ui_EventReportStep, QtWidgets.QWidget):
         self._event_report_dict_identifier = '8bf274d1-06bf-440d-893a-03816d737ebb'
         self._event_report_dict_topic = f"{self._event_report_dict_identifier}.dictionary"
 
-        self._event_report_identifier = 'a164115e-d659-43eb-8890-350819ff66a0'
+        self._event_report_identifier = '281c6b9e-cde3-442a-896f-a1c5bdd89b87'
         self._event_report_csv_report_topic = f"{self._event_report_identifier}.csv_report"
         self._save_events_list_topic = f"{self._event_report_identifier}.save_events_report"
 
@@ -64,9 +78,9 @@ class EventReportStep( BaseStepView,  Ui_EventReportStep, QtWidgets.QWidget):
 
     def on_topic_response(self, topic, message, sender):
         if topic == self._event_report_csv_report_topic:
-            self.csv_report_checkbox.setChecked(message)
+            self.csv_report_checkbox.setChecked(_parse_bool_setting(message))
         if topic == self._save_events_list_topic:
-            self.events_list_checkBox.setChecked(message)
+            self.events_list_checkBox.setChecked(_parse_bool_setting(message))
         if topic == self._event_report_dict_topic:
             model = self.file_tableview.model()
             if model is None or not isinstance(message, dict):
@@ -122,8 +136,8 @@ class EventReportStep( BaseStepView,  Ui_EventReportStep, QtWidgets.QWidget):
         return combined_groups
 
     def on_apply_settings(self):
-        self._pub_sub_manager.publish(self, self._event_report_csv_report_topic, self.csv_report_checkbox.isChecked())
-        self._pub_sub_manager.publish(self, self._save_events_list_topic, self.events_list_checkBox.isChecked())
+        self._pub_sub_manager.publish(self, self._event_report_csv_report_topic, str(int(self.csv_report_checkbox.isChecked())))
+        self._pub_sub_manager.publish(self, self._save_events_list_topic, str(int(self.events_list_checkBox.isChecked())))
 
         # Fill input files data
         files = {}

@@ -64,7 +64,7 @@ class DetectorStep(BaseStepView, Ui_DetectorStep, QtWidgets.QWidget):
         #self._context_manager["context_OutputFiles"] = {"the_data_I_want_to_share":"some_data"}
 
         # description.json file to know the ID of the node
-        node_id_REMsDetectionYASA = "559de2e5-dc78-4449-8582-cc9f3fdd9697"
+        node_id_REMsDetectionYASA = "5b36c10e-696e-40d2-be30-12548a806e0c"
         self._relative_prominence_topic = f'{node_id_REMsDetectionYASA}.relative_prominence'
         self._pub_sub_manager.subscribe(self, self._relative_prominence_topic)
 
@@ -149,7 +149,7 @@ class DetectorStep(BaseStepView, Ui_DetectorStep, QtWidgets.QWidget):
     def on_topic_response(self, topic, message, sender):
         # This will be called as a response to ping request.
         if topic == self._relative_prominence_topic:
-           self.doubleSpinBox_2.setValue(message)
+           self.doubleSpinBox_2.setValue(float(message))
         if topic == self._remove_outliers_topic:
            self.checkBox.setChecked(message)
         if topic == self._rems_event_name_topic:
@@ -157,17 +157,17 @@ class DetectorStep(BaseStepView, Ui_DetectorStep, QtWidgets.QWidget):
         if topic == self._rems_event_group_topic:
             self.lineEdit.setText(message)
         if topic == self._AmpIdx0_topic:
-            self.spinBox_2.setValue(message)
+            self.spinBox_2.setValue(int(message))
         if topic == self._AmpIdx1_topic:
-            self.spinBox.setValue(message)
+            self.spinBox.setValue(int(message))
         if topic == self._DurIdx0_topic:
-            self.doubleSpinBox_6.setValue(message)
+            self.doubleSpinBox_6.setValue(float(message))
         if topic == self._DurIdx1_topic:
-            self.doubleSpinBox_5.setValue(message)
+            self.doubleSpinBox_5.setValue(float(message))
         if topic == self._FreqIdx0:
-            self.doubleSpinBox.setValue(message)
+            self.doubleSpinBox.setValue(float(message))
         if topic == self._FreqIdx1:
-            self.doubleSpinBox_3.setValue(message)
+            self.doubleSpinBox_3.setValue(float(message))
         if topic == self._include_topic:
             stages_lst = message.split(',')
             self.checkBox_N1.setChecked('1' in stages_lst)

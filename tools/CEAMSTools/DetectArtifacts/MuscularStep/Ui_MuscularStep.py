@@ -323,11 +323,11 @@ class Ui_MuscularStep(object):
 "li.unchecked::marker { content: \"\\2610\"; }\n"
 "li.checked::marker { content: \"\\2612\"; }\n"
 "</style></head><body style=\" font-family:'Roboto'; font-size:12pt; font-weight:400; font-style:normal;\">\n"
-"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" color:#000000;\">Identification of bursts of myogenic activity (26.25\u201332.0 Hz) via spectral power (STFT :  Short Term Fourier Transform).</span></p>\n"
-"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" color:#000000;\">The algorithm compares high frequency activity (26.25\u201332.0 Hz) in each"
-                        " mini 4-s epoch with the activity level in a local 3-min baseline window.\u00a0</span></p>\n"
+"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" color:#000000;\">Identification of bursts of myogenic activity (20.25\u201332.0 Hz) via Welch's method spectral power analysis.</span></p>\n"
+"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" color:#000000;\">The algorithm compares high frequency activity (20.25\u201332.0 Hz) in each mini 4-s epoch"
+                        " with the activity level in a local 3-min baseline window. </span></p>\n"
 "<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" color:#000000;\">A muscular artifact is identified when the high frequency activity of the 4-s epoch exceeded the local baseline activity by a certain factor (ex. 4 x median value of the baseline).</span></p>\n"
-"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" color:#000000;\">*** To enhance the detection we also use the EMG signal. ***<br />A muscle artifact is identified when an increase in myogenic activity on the EEG signal is greater than a certain high threshold.<br />A slightly lower increase can also be identified as a muscle artifact if it is also measured on the EMG signal. <br />New, not included in [1]</span></p></body></html>", None))
+"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" color:#000000;\">*** To enhance the detection Snooz also uses the EMG signal. ***<br />A muscle artifact is identified when an increase in myogenic activity on the EEG signal is greater than a certain high threshold.<br />A slightly lower increase can also be identified as a muscle artifact if it is also measured on the EMG signal. <br />New, not included in the original publication.[1]</span></p></body></html>", None))
         self.label_4.setText(QCoreApplication.translate("MuscularStep", u"<html><head/><body><p><span style=\" font-weight:600;\">Event Settings</span></p></body></html>", None))
         self.label_3.setText(QCoreApplication.translate("MuscularStep", u"Event Group", None))
 #if QT_CONFIG(tooltip)
@@ -347,7 +347,7 @@ class Ui_MuscularStep(object):
         self.label.setText(QCoreApplication.translate("MuscularStep", u"<html><head/><body><p><span style=\" font-weight:600;\">Threshold (x times the baseline median)</span></p></body></html>", None))
         self.label_8.setText(QCoreApplication.translate("MuscularStep", u"Artifact when A or (B and C)", None))
         self.EMG_lineEdit.setText(QCoreApplication.translate("MuscularStep", u"4", None))
-        self.label_13.setText(QCoreApplication.translate("MuscularStep", u"*(optimal value from 4 to 6)", None))
+        self.label_13.setText(QCoreApplication.translate("MuscularStep", u"optimal value from 4 to 6", None))
         self.label_2.setText(QCoreApplication.translate("MuscularStep", u"(B) Applied on EMG", None))
 #if QT_CONFIG(tooltip)
         self.EEG_lineEdit.setToolTip("")
@@ -358,12 +358,11 @@ class Ui_MuscularStep(object):
 #endif // QT_CONFIG(tooltip)
         self.label_5.setText(QCoreApplication.translate("MuscularStep", u"<html><head/><body><p>(A) High applied on EEG</p></body></html>", None))
         self.both_lineEdit.setText(QCoreApplication.translate("MuscularStep", u"3.5", None))
-        self.label_12.setText(QCoreApplication.translate("MuscularStep", u"*(optimal value from 4 to 6)", None))
-        self.label_10.setText(QCoreApplication.translate("MuscularStep", u"*(optimal value from 5 to 9)", None))
+        self.label_12.setText(QCoreApplication.translate("MuscularStep", u"optimal value from 4 to 6", None))
+        self.label_10.setText(QCoreApplication.translate("MuscularStep", u"optimal value from 5 to 9", None))
         self.label_6.setText(QCoreApplication.translate("MuscularStep", u"(C) Low applied on EEG", None))
-        self.label_14.setText(QCoreApplication.translate("MuscularStep", u"To reduce the number of false positives, especially during\n"
-"spindles, alpha waves, or beta bursts\n"
-"please first increase the \"A\" threshold.", None))
+        self.label_14.setText(QCoreApplication.translate("MuscularStep", u"To reduce the number of false positives, especially during spindles,\n"
+"alpha waves, or beta bursts please first increase the \"A\" threshold.", None))
         self.label_15.setText(QCoreApplication.translate("MuscularStep", u"The \"B\" and \"C\" thresholds can also be inscreased,\n"
 "especially if the EMG channel is unstable or really sensitive.", None))
         self.settings_textEdit.setHtml(QCoreApplication.translate("MuscularStep", u"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
@@ -373,18 +372,15 @@ class Ui_MuscularStep(object):
 "li.unchecked::marker { content: \"\\2610\"; }\n"
 "li.checked::marker { content: \"\\2612\"; }\n"
 "</style></head><body style=\" font-family:'Roboto'; font-size:12pt; font-weight:400; font-style:normal;\">\n"
-"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" color:#000000;\">EEG signals are filtered from 0.3-30 Hz.<br />EEG signals are downsampled to 64 Hz.</span></p>\n"
-"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-style:italic; color:#000000;\">These preprocessing steps are taken from [1]</span></p>\n"
-"<p style=\" margin-top:12px; margin-bo"
-                        "ttom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-style:italic; color:#000000;\">Filter is a 6 th order butterworth IIR filter in Second-Order Sections (SOS) format applied with filtfilt to correct the non-linear phase delay.</span></p>\n"
-"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" color:#000000;\">STFT Settings</span></p>\n"
-"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" color:#000000;\">Window length = 4 s<br />Window step = 2 s</span></p>\n"
-"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-style:italic; color:#000000;\">[1] suggested a window step of 4 s, but we wanted a finer time resolution</span></p>\n"
-"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; mar"
-                        "gin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-style:italic; color:#000000;\">The STFT is applied to integrate (sum) the signal power within a frequency range of the true spectrum (units\u00b2 ex. \u00b5V\u00b2) as suggested in [2].</span></p>\n"
-"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><a href=\"https://pubmed.ncbi.nlm.nih.gov/12723066/\"><span style=\" text-decoration: underline; color:#000000;\">Reference</span></a></p>\n"
-"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" color:#000000;\">[1] D. Brunner, R. Vasko, C. Detka, J. Monahan, C. Reynolds Iii, and D. Kupfer, \u201cMuscle artifacts in the sleep EEG: Automated detection and effect on all-night EEG power spectra,\u201d Journal of Sleep Research, vol. 5, no. 3, pp. 155\u2013164, Sep. 1996, doi: </span><a href=\"https://doi.org/10.1046/j.1365-2869.1996.00009"
-                        ".x\"><span style=\" text-decoration: underline; color:#000000;\">10.1046/j.1365-2869.1996.00009.x</span></a><span style=\" color:#000000;\">.</span></p>\n"
-"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" color:#000000;\">[2]\u00a0Cox, R. &amp; Fell, J. Analyzing human sleep EEG: A methodological primer with code implementation. Sleep Medicine Reviews 54, 101353 (2020).</span></p></body></html>", None))
+"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" color:#000000;\">EEG signals are filtered 0.3-30 Hz and downsampled to 64 Hz.[1]</span></p>\n"
+"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" color:#000000;\">The filter is a 6 th order butterworth IIR filter in Second-Order Sections (SOS) format applied with filtfilt to correct the non-linear p"
+                        "hase delay.</span></p>\n"
+"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" color:#000000;\">Myogenic activity</span> is computed by integrating the power spectral density estimated using Welch's method, as recommended in [2]. </p>\n"
+"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Power is calculated using 4-s windows with a 2-s step size, <span style=\" color:#000000;\">a finer time resolution compared to the original implementation in [1].</span></p>\n"
+"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><a href=\"https://pubmed.ncbi.nlm.nih.gov/12723066/\"><span style=\" text-decoration: underline; color:#000000;\">References</span></a></p>\n"
+"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span st"
+                        "yle=\" color:#000000;\">[1] D. Brunner, R. Vasko, C. Detka, J. Monahan, C. Reynolds Iii, and D. Kupfer, \u201cMuscle artifacts in the sleep EEG: Automated detection and effect on all-night EEG power spectra,\u201d Journal of Sleep Research, vol. 5, no. 3, pp. 155\u2013164, Sep. 1996, doi: </span><a href=\"https://doi.org/10.1046/j.1365-2869.1996.00009.x\"><span style=\" text-decoration: underline; color:#000000;\">10.1046/j.1365-2869.1996.00009.x</span></a><span style=\" color:#000000;\">.</span></p>\n"
+"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" color:#000000;\">[2]\u00a0Cox, R. &amp; Fell, J. Analyzing human sleep EEG: A methodological primer with code implementation. Sleep Medicine Reviews 54, 101353 (2020).</span></p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; color:#000000;\"><br /></p></body></html>", None))
     # retranslateUi
 

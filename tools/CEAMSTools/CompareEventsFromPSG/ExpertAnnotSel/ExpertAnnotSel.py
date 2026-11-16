@@ -6,14 +6,18 @@ See the file LICENCE for full license details.
     ExpertAnnotSel
     Step in the CompareEventsFromPSG tool to select annotations for the gold standard.
     This step is really similar to NonValidEventStep in the PowerSpectralAnalysis tool
-    but we need to validate that at least one annotation is selected.
+    but we warn when a file has no annotation selected and allow the user to continue.
     So, we inherit from NonValidEventStep and add the function validate the annotation selection.
         Doc to open and read to understand : 
         Model and item : QAbstractItemModel -> QStandardItemModel -> QStandardItem
         View : QAbstractItemView -> QTreeView
 """
 
+from pandas import DataFrame
+from qtpy.QtWidgets import QDialog
+
 from widgets.WarningDialog import WarningDialog
+from widgets.TableDialog import TableDialog
 from CEAMSTools.PowerSpectralAnalysis.NonValidEventStep.NonValidEventStep import NonValidEventStep
 
 class ExpertAnnotSel( NonValidEventStep ):
@@ -30,19 +34,30 @@ class ExpertAnnotSel( NonValidEventStep ):
     def on_validate_settings(self):
         # Validate that all input were set correctly by the user.
         # If everything is correct, return True.
-        # If not, display an error message to the user and return False.
+        # Missing files block execution; missing annotations require confirmation.
         # This is called just before the apply settings function.
         # Returning False will prevent the process from executing.
         if len(self.group_dict)==0 or len(self.name_dict)==0:
             WarningDialog("Add files in step '1-PSG Input Files'")
-            return False              
-        else:
-            for file, group_lst in self.group_dict.items():
-                if group_lst=='None':
-                    WarningDialog(f"File {file} has no {self.annotation_type} annotation selected'")
-                    return False                  
-            for file, name_lst in self.name_dict.items():
-                if name_lst=='None':
-                    WarningDialog(f"File {file} has no {self.annotation_type} annotation selected'")
-                    return False     
+            return False
+
+        files_without_annotations = dict.fromkeys(
+            file
+            for annotation_dict in (self.group_dict, self.name_dict)
+            for file, annotations in annotation_dict.items()
+            if annotations == 'None'
+        )
+        if files_without_annotations:
+            dialog = TableDialog(
+                df=DataFrame(list(files_without_annotations), columns=["PSG file"]),
+                title="Missing annotations",
+                message=(
+                    f"{len(files_without_annotations)} file(s) have no "
+                    f"{self.annotation_type} annotation selected.\n"
+                    "Do you want to continue the analysis anyway?\n"
+                    "Click OK to continue or Cancel to review the selection."
+                ),
+                showConfirmationButtons=True,
+            )
+            return dialog.exec_() == QDialog.Accepted
         return True
