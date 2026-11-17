@@ -26,7 +26,6 @@ class Ui_GroupDefinition(object):
         if not GroupDefinition.objectName():
             GroupDefinition.setObjectName(u"GroupDefinition")
         GroupDefinition.resize(783, 574)
-        GroupDefinition.setStyleSheet(u"font: 12pt \"Roboto\";")
         self.horizontalLayout = QHBoxLayout(GroupDefinition)
         self.horizontalLayout.setObjectName(u"horizontalLayout")
         self.verticalLayout = QVBoxLayout()

@@ -20,7 +20,6 @@ class Ui_DpliConnectivityResultsView(object):
     def setupUi(self, DpliConnectivityResultsView):
         if not DpliConnectivityResultsView.objectName():
             DpliConnectivityResultsView.setObjectName(u"DpliConnectivityResultsView")
-        DpliConnectivityResultsView.setStyleSheet(u"font: 10pt \"Roboto-Regular\";")
         DpliConnectivityResultsView.resize(483, 360)
         self.verticalLayout = QVBoxLayout(DpliConnectivityResultsView)
         self.verticalLayout.setObjectName(u"verticalLayout")

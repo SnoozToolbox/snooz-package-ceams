@@ -22,7 +22,6 @@ class Ui_EDFAnnotationsReaderResultsView(object):
     def setupUi(self, EDFAnnotationsReaderResultsView):
         if not EDFAnnotationsReaderResultsView.objectName():
             EDFAnnotationsReaderResultsView.setObjectName(u"EDFAnnotationsReaderResultsView")
-        EDFAnnotationsReaderResultsView.setStyleSheet(u"font: 12pt \"Roboto\";")
         EDFAnnotationsReaderResultsView.resize(483, 360)
         self.verticalLayout = QVBoxLayout(EDFAnnotationsReaderResultsView)
         self.verticalLayout.setObjectName(u"verticalLayout")

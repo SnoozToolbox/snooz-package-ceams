@@ -1,6 +1,6 @@
 import datetime
 from PySide6.QtWidgets import QWidget
-from PySide6.QtGui import QPainter, QBrush, QColor, QPen, QPainterPath
+from PySide6.QtGui import QPainter, QBrush, QColor, QPalette, QPen, QPainterPath
 from PySide6.QtCore import Qt, QTimer
 
 DEBUG = False
@@ -34,16 +34,23 @@ class OximeterDrawArea(QWidget):
         self._top_padding = 15
         self._bottom_padding = 30
 
-        # init pens and brushes
-        self._grid_pen = QPen(Qt.lightGray)
-        self._text_pen = QPen(Qt.black)
-        self._signal_pen = QPen(Qt.blue)
-        self._disc_pen = QPen(QColor(0,0,0,150))
-        self._disc_brush = QBrush(QColor(0,0,0,150))
+        # init pens and brushes: the drawing is white on the light theme of Snooz and
+        # dark on its dark theme (the window color of the application tells which)
+        palette = self.palette()
+        dark = palette.color(QPalette.Window).lightness() < 128
+        text_color = palette.color(QPalette.Text) if dark else QColor(Qt.black)
+        self._background_brush = QBrush(palette.color(QPalette.Base) if dark else QColor(255, 255, 255))
+        self._grid_pen = QPen(QColor(70, 82, 104) if dark else Qt.lightGray)
+        self._text_pen = QPen(text_color)
+        self._signal_pen = QPen(QColor(110, 168, 255) if dark else Qt.blue)
+        discontinuity_color = QColor(255, 255, 255, 70) if dark else QColor(0, 0, 0, 150)
+        self._disc_pen = QPen(discontinuity_color)
+        self._disc_brush = QBrush(discontinuity_color)
         self._selection_pen = QPen(QColor(255,0,0,150))
         self._selection_brush = QBrush(QColor(255,0,0,150))
-        self._min_saturation_line_pen = QPen(Qt.black)
+        self._min_saturation_line_pen = QPen(text_color)
         self._min_saturation_line_pen.setWidth(2)
+        self._min_saturation_marker_brush = QBrush(text_color)
 
     # PROPERTIES
     @property
@@ -76,8 +83,7 @@ class OximeterDrawArea(QWidget):
         painter = QPainter(self)
         painter.setRenderHint(QPainter.Antialiasing)
 
-        brush = QBrush(QColor(255, 255, 255))
-        painter.setBrush(brush)
+        painter.setBrush(self._background_brush)
         painter.setPen(Qt.NoPen)
         painter.drawRect(0, 0, self.width(), self.height())
 
@@ -271,7 +277,7 @@ class OximeterDrawArea(QWidget):
         # Draw a marker at the minimum position
         x_marker = self._seconds_to_pixel(x_position)
         marker_size = 8
-        painter.setBrush(QBrush(Qt.black))
+        painter.setBrush(self._min_saturation_marker_brush)
         painter.drawEllipse(int(x_marker - marker_size/2), int(y - marker_size/2), marker_size, marker_size)
 
     def _paint_y_axis_labels(self, painter, labels):
@@ -280,7 +286,7 @@ class OximeterDrawArea(QWidget):
         # Draw the y text for the saturation levels
         painter.setPen(self._text_pen)
         font = painter.font()
-        font.setPointSize(8)
+        font.setPixelSize(11)  # 8pt on Windows and Linux, in pixels to keep this size on macOS
         painter.setFont(font)
 
         y_offset = self._calculate_y_offset(len(labels)-1)
@@ -299,16 +305,16 @@ class OximeterDrawArea(QWidget):
         if len(labels) == 0:
             return
 
-        # Draw white background to cover any signal drawing.
+        # Draw the background to cover any signal drawing.
         painter.setPen(Qt.NoPen)
-        painter.setBrush(QBrush(Qt.white))
+        painter.setBrush(self._background_brush)
         painter.drawRect(self._left_padding-1, self.height() - self._bottom_padding + 1, self.width()-self._left_padding, self._bottom_padding)
 
         # Set the pen and brush
         painter.setPen(self._text_pen)
         painter.setBrush(Qt.NoBrush)
         font = painter.font()
-        font.setPointSize(8)
+        font.setPixelSize(11)  # 8pt on Windows and Linux, in pixels to keep this size on macOS
         painter.setFont(font)
 
         # Draw the half-hours markers

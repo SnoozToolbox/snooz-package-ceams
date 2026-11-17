@@ -25,7 +25,6 @@ class Ui_SleepBoutsSettingsView(object):
         if not SleepBoutsSettingsView.objectName():
             SleepBoutsSettingsView.setObjectName(u"SleepBoutsSettingsView")
         SleepBoutsSettingsView.resize(415, 224)
-        SleepBoutsSettingsView.setStyleSheet(u"font: 12pt \"Roboto\";")
         self.verticalLayout = QVBoxLayout(SleepBoutsSettingsView)
         self.verticalLayout.setObjectName(u"verticalLayout")
         self.horizontalLayout = QHBoxLayout()

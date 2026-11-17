@@ -146,7 +146,6 @@ class Ui_TemporalLinkStep(object):
 
     def retranslateUi(self, TemporalLinkStep):
         TemporalLinkStep.setWindowTitle("")
-        TemporalLinkStep.setStyleSheet(QCoreApplication.translate("TemporalLinkStep", u"font: 12pt \"Roboto\";", None))
         self.clear_all_reports_pushbutton.setText(QCoreApplication.translate("TemporalLinkStep", u"Clear all reports", None))
         self.label.setText(QCoreApplication.translate("TemporalLinkStep", u"Analysis window size:", None))
         self.label_2.setText(QCoreApplication.translate("TemporalLinkStep", u"seconds", None))

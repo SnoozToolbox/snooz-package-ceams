@@ -26,7 +26,6 @@ class Ui_DetectorStep(object):
         if not DetectorStep.objectName():
             DetectorStep.setObjectName(u"DetectorStep")
         DetectorStep.resize(951, 774)
-        DetectorStep.setStyleSheet(u"font: 12pt \"Roboto\";")
         self.gridLayout_2 = QGridLayout(DetectorStep)
         self.gridLayout_2.setObjectName(u"gridLayout_2")
         self.gridLayout = QGridLayout()
@@ -41,8 +40,6 @@ class Ui_DetectorStep(object):
         self.label.setObjectName(u"label")
         self.label.setMaximumSize(QSize(16777215, 16777215))
         font = QFont()
-        font.setFamilies([u"Roboto"])
-        font.setPointSize(12)
         font.setBold(False)
         font.setItalic(False)
         self.label.setFont(font)
@@ -151,7 +148,6 @@ class Ui_DetectorStep(object):
 
         self.checkBox = QCheckBox(self.frame_5)
         self.checkBox.setObjectName(u"checkBox")
-        self.checkBox.setStyleSheet(u"font: 12pt \"Roboto\";")
 
         self.horizontalLayout_5.addWidget(self.checkBox)
 

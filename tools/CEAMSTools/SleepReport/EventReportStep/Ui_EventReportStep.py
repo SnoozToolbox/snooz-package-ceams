@@ -395,7 +395,6 @@ class Ui_EventReportStep(object):
 
     def retranslateUi(self, EventReportStep):
         EventReportStep.setWindowTitle("")
-        EventReportStep.setStyleSheet(QCoreApplication.translate("EventReportStep", u"font: 12pt \"Roboto\";", None))
         self.clear_all_reports_pushbutton.setText(QCoreApplication.translate("EventReportStep", u"Clear all reports", None))
         ___qtreewidgetitem = self.event_treewidget.headerItem()
         ___qtreewidgetitem.setText(2, QCoreApplication.translate("EventReportStep", u"Report count", None));

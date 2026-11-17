@@ -13,21 +13,29 @@
   <property name="windowTitle">
    <string>Form</string>
   </property>
-  <property name="styleSheet">
-   <string notr="true">font: 10pt &quot;Roboto-Regular&quot;;</string>
-  </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
     <layout class="QHBoxLayout" name="signals_horizontalLayout">
      <item>
       <widget class="QLabel" name="epochs_label">
+       <property name="font">
+        <font>
+         <pointsize>10</pointsize>
+        </font>
+       </property>
        <property name="text">
         <string>epochs</string>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QLineEdit" name="epochs_lineedit"/>
+      <widget class="QLineEdit" name="epochs_lineedit">
+       <property name="font">
+        <font>
+         <pointsize>10</pointsize>
+        </font>
+       </property>
+      </widget>
      </item>
     </layout>
    </item>
@@ -35,13 +43,24 @@
     <layout class="QHBoxLayout" name="events_horizontalLayout">
      <item>
       <widget class="QLabel" name="events_label">
+       <property name="font">
+        <font>
+         <pointsize>10</pointsize>
+        </font>
+       </property>
        <property name="text">
         <string>events</string>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QLineEdit" name="events_lineedit"/>
+      <widget class="QLineEdit" name="events_lineedit">
+       <property name="font">
+        <font>
+         <pointsize>10</pointsize>
+        </font>
+       </property>
+      </widget>
      </item>
     </layout>
    </item>
@@ -49,13 +68,24 @@
     <layout class="QHBoxLayout" name="num_surr_horizontalLayout">
      <item>
       <widget class="QLabel" name="num_surr_label">
+       <property name="font">
+        <font>
+         <pointsize>10</pointsize>
+        </font>
+       </property>
        <property name="text">
         <string>num_surr</string>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QLineEdit" name="num_surr_lineedit"/>
+      <widget class="QLineEdit" name="num_surr_lineedit">
+       <property name="font">
+        <font>
+         <pointsize>10</pointsize>
+        </font>
+       </property>
+      </widget>
      </item>
     </layout>
    </item>
@@ -63,13 +93,24 @@
     <layout class="QHBoxLayout" name="p_value_horizontalLayout">
      <item>
       <widget class="QLabel" name="p_value_label">
+       <property name="font">
+        <font>
+         <pointsize>10</pointsize>
+        </font>
+       </property>
        <property name="text">
         <string>p_value</string>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QLineEdit" name="p_value_lineedit"/>
+      <widget class="QLineEdit" name="p_value_lineedit">
+       <property name="font">
+        <font>
+         <pointsize>10</pointsize>
+        </font>
+       </property>
+      </widget>
      </item>
     </layout>
    </item>

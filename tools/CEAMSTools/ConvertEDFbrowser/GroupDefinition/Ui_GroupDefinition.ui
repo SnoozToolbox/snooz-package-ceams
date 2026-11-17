@@ -17,12 +17,6 @@
     <layout class="QVBoxLayout" name="verticalLayout">
      <item>
       <widget class="QLabel" name="label">
-       <property name="font">
-        <font>
-         <weight>75</weight>
-         <bold>true</bold>
-        </font>
-       </property>
        <property name="text">
         <string>PSG Files</string>
        </property>
@@ -37,12 +31,6 @@
     <layout class="QVBoxLayout" name="verticalLayout_2">
      <item>
       <widget class="QLabel" name="label_2">
-       <property name="font">
-        <font>
-         <weight>75</weight>
-         <bold>true</bold>
-        </font>
-       </property>
        <property name="text">
         <string>Events</string>
        </property>
@@ -82,7 +70,7 @@
     </layout>
    </item>
   </layout>
- <property name="styleSheet"><string>font: 12pt "Roboto";</string></property></widget>
+ </widget>
  <resources><include location="../../../../../snooz-toolbox/src/main/python/ui/themes/themes.qrc" /></resources>
  <connections>
   <connection>

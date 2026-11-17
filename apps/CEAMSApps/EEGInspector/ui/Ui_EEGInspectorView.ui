@@ -13,16 +13,11 @@
   <property name="windowTitle">
    <string>Form</string>
   </property>
-  <property name="styleSheet">
-   <string notr="true">font: 12pt &quot;Roboto&quot;;</string>
-  </property>
   <layout class="QVBoxLayout" name="verticalLayout_3">
    <item>
     <widget class="QLabel" name="file_name_label1">
      <property name="font">
       <font>
-       <family>Roboto</family>
-       <pointsize>12</pointsize>
        <italic>false</italic>
        <bold>false</bold>
       </font>
@@ -66,8 +61,6 @@
         <widget class="QLabel" name="desc_label11">
          <property name="font">
           <font>
-           <family>Roboto</family>
-           <pointsize>12</pointsize>
            <italic>false</italic>
            <bold>false</bold>
           </font>
@@ -84,8 +77,6 @@ Then, mark the non-brain channels for exclusion, confirm your selection, and cli
           <widget class="QLineEdit" name="edf_lineEdit">
            <property name="font">
             <font>
-             <family>Roboto</family>
-             <pointsize>12</pointsize>
              <italic>false</italic>
              <bold>false</bold>
             </font>
@@ -96,8 +87,6 @@ Then, mark the non-brain channels for exclusion, confirm your selection, and cli
           <widget class="QPushButton" name="edf_pushButton">
            <property name="font">
             <font>
-             <family>Roboto</family>
-             <pointsize>12</pointsize>
              <italic>false</italic>
              <bold>false</bold>
             </font>
@@ -176,8 +165,6 @@ Then, mark the non-brain channels for exclusion, confirm your selection, and cli
           <widget class="QLabel" name="desc_label13">
            <property name="font">
             <font>
-             <family>Roboto</family>
-             <pointsize>12</pointsize>
              <italic>false</italic>
              <bold>false</bold>
             </font>
@@ -194,8 +181,6 @@ Then, mark the non-brain channels for exclusion, confirm your selection, and cli
            </property>
            <property name="font">
             <font>
-             <family>Roboto</family>
-             <pointsize>12</pointsize>
              <italic>false</italic>
              <bold>false</bold>
             </font>
@@ -212,8 +197,6 @@ Then, mark the non-brain channels for exclusion, confirm your selection, and cli
            </property>
            <property name="font">
             <font>
-             <family>Roboto</family>
-             <pointsize>12</pointsize>
              <italic>false</italic>
              <bold>false</bold>
             </font>
@@ -258,7 +241,7 @@ p, li { white-space: pre-wrap; }
 hr { height: 1px; border-width: 0; }
 li.unchecked::marker { content: &quot;\2610&quot;; }
 li.checked::marker { content: &quot;\2612&quot;; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Roboto'; font-size:12pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-size:12pt; font-weight:400; font-style:normal;&quot;&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Select noisy channels to exclude them from further analysis.&lt;br /&gt;Select channels that appear different from the others.&lt;br /&gt;Click on the signal view, then use &lt;span style=&quot; font-weight:700;&quot;&gt;+&lt;/span&gt; / &lt;span style=&quot; font-weight:700;&quot;&gt;–&lt;/span&gt; to adjust display sensitivity.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
            </property>
           </widget>
@@ -290,7 +273,7 @@ p, li { white-space: pre-wrap; }
 hr { height: 1px; border-width: 0; }
 li.unchecked::marker { content: &quot;\2610&quot;; }
 li.checked::marker { content: &quot;\2612&quot;; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Roboto'; font-size:12pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-size:12pt; font-weight:400; font-style:normal;&quot;&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Warning:&lt;/span&gt; EEG inspector events previously saved in the PSG file are not displayed.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
            </property>
           </widget>
@@ -335,8 +318,6 @@ li.checked::marker { content: &quot;\2612&quot;; }
           <widget class="QPushButton" name="BackButton2">
            <property name="font">
             <font>
-             <family>Roboto</family>
-             <pointsize>12</pointsize>
              <italic>false</italic>
              <bold>false</bold>
             </font>
@@ -363,8 +344,6 @@ li.checked::marker { content: &quot;\2612&quot;; }
           <widget class="QLabel" name="desc_label22">
            <property name="font">
             <font>
-             <family>Roboto</family>
-             <pointsize>12</pointsize>
              <italic>false</italic>
              <bold>false</bold>
             </font>
@@ -381,8 +360,6 @@ li.checked::marker { content: &quot;\2612&quot;; }
            </property>
            <property name="font">
             <font>
-             <family>Roboto</family>
-             <pointsize>12</pointsize>
              <italic>false</italic>
              <bold>false</bold>
             </font>
@@ -430,7 +407,7 @@ p, li { white-space: pre-wrap; }
 hr { height: 1px; border-width: 0; }
 li.unchecked::marker { content: &quot;\2610&quot;; }
 li.checked::marker { content: &quot;\2612&quot;; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Roboto'; font-size:12pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-size:12pt; font-weight:400; font-style:normal;&quot;&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Select bad epochs to exclude them from further analysis.&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Click on the signal view, then use &lt;span style=&quot; font-weight:700;&quot;&gt;+ / –&lt;/span&gt; to adjust display sensitivity.&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;When viewing the entire recording (long recordings only), right-click on the signal view to display 30-second windows.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
@@ -464,7 +441,7 @@ p, li { white-space: pre-wrap; }
 hr { height: 1px; border-width: 0; }
 li.unchecked::marker { content: &quot;\2610&quot;; }
 li.checked::marker { content: &quot;\2612&quot;; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Roboto'; font-size:12pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-size:12pt; font-weight:400; font-style:normal;&quot;&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Warning:&lt;/span&gt; EEG inspector events previously saved in the PSG file are not displayed.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
            </property>
           </widget>
@@ -484,8 +461,6 @@ li.checked::marker { content: &quot;\2612&quot;; }
           <widget class="QLabel" name="desc_label32">
            <property name="font">
             <font>
-             <family>Roboto</family>
-             <pointsize>12</pointsize>
              <italic>false</italic>
              <bold>false</bold>
             </font>
@@ -499,8 +474,6 @@ li.checked::marker { content: &quot;\2612&quot;; }
           <widget class="QComboBox" name="Epoch_len_comboBox">
            <property name="font">
             <font>
-             <family>Roboto</family>
-             <pointsize>12</pointsize>
              <italic>false</italic>
              <bold>false</bold>
             </font>
@@ -521,8 +494,6 @@ li.checked::marker { content: &quot;\2612&quot;; }
           <widget class="QPushButton" name="ApplyButton">
            <property name="font">
             <font>
-             <family>Roboto</family>
-             <pointsize>12</pointsize>
              <italic>false</italic>
              <bold>false</bold>
             </font>
@@ -585,8 +556,6 @@ li.checked::marker { content: &quot;\2612&quot;; }
           <widget class="QPushButton" name="BackButton3">
            <property name="font">
             <font>
-             <family>Roboto</family>
-             <pointsize>12</pointsize>
              <italic>false</italic>
              <bold>false</bold>
             </font>
@@ -613,8 +582,6 @@ li.checked::marker { content: &quot;\2612&quot;; }
           <widget class="QLabel" name="desc_label_33">
            <property name="font">
             <font>
-             <family>Roboto</family>
-             <pointsize>12</pointsize>
              <italic>false</italic>
              <bold>false</bold>
             </font>
@@ -631,8 +598,6 @@ li.checked::marker { content: &quot;\2612&quot;; }
            </property>
            <property name="font">
             <font>
-             <family>Roboto</family>
-             <pointsize>12</pointsize>
              <italic>false</italic>
              <bold>false</bold>
             </font>
@@ -652,8 +617,6 @@ li.checked::marker { content: &quot;\2612&quot;; }
         <widget class="QLabel" name="desc_label41">
          <property name="font">
           <font>
-           <family>Roboto</family>
-           <pointsize>12</pointsize>
            <italic>false</italic>
            <bold>false</bold>
           </font>
@@ -717,8 +680,6 @@ Any previous EEG Inspector annotations will be replaced with the new ones.</stri
           <widget class="QPushButton" name="BackButton4">
            <property name="font">
             <font>
-             <family>Roboto</family>
-             <pointsize>12</pointsize>
              <italic>false</italic>
              <bold>false</bold>
             </font>
@@ -748,8 +709,6 @@ Any previous EEG Inspector annotations will be replaced with the new ones.</stri
            </property>
            <property name="font">
             <font>
-             <family>Roboto</family>
-             <pointsize>12</pointsize>
              <italic>false</italic>
              <bold>false</bold>
             </font>

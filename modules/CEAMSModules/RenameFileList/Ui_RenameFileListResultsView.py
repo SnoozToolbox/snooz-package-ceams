@@ -22,7 +22,6 @@ class Ui_RenameFileListResultsView(object):
     def setupUi(self, RenameFileListResultsView):
         if not RenameFileListResultsView.objectName():
             RenameFileListResultsView.setObjectName(u"RenameFileListResultsView")
-        RenameFileListResultsView.setStyleSheet(u"font: 12pt \"Roboto\";")
         RenameFileListResultsView.resize(483, 360)
         self.verticalLayout = QVBoxLayout(RenameFileListResultsView)
         self.verticalLayout.setObjectName(u"verticalLayout")

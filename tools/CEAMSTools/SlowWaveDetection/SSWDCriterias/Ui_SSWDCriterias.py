@@ -26,7 +26,6 @@ class Ui_SSWDCriterias(object):
         if not SSWDCriterias.objectName():
             SSWDCriterias.setObjectName(u"SSWDCriterias")
         SSWDCriterias.resize(883, 798)
-        SSWDCriterias.setStyleSheet(u"font: 12pt \"Roboto\";")
         self.verticalLayout_9 = QVBoxLayout(SSWDCriterias)
         self.verticalLayout_9.setObjectName(u"verticalLayout_9")
         self.horizontalLayout_6 = QHBoxLayout()
@@ -38,8 +37,6 @@ class Ui_SSWDCriterias(object):
         self.label_16 = QLabel(SSWDCriterias)
         self.label_16.setObjectName(u"label_16")
         font = QFont()
-        font.setFamilies([u"Roboto"])
-        font.setPointSize(12)
         font.setBold(False)
         font.setItalic(False)
         self.label_16.setFont(font)

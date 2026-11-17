@@ -24,13 +24,15 @@ class Ui_ParametersDescription(object):
         if not ParametersDescription.objectName():
             ParametersDescription.setObjectName(u"ParametersDescription")
         ParametersDescription.resize(995, 640)
-        ParametersDescription.setStyleSheet(u"font: 10pt \"Roboto-Regular\"; QLabel {background-color: rgb(255, 255, 255);}")
         self.verticalLayout_4 = QVBoxLayout(ParametersDescription)
         self.verticalLayout_4.setObjectName(u"verticalLayout_4")
         self.gridLayout = QGridLayout()
         self.gridLayout.setObjectName(u"gridLayout")
         self.textEdit = QTextEdit(ParametersDescription)
         self.textEdit.setObjectName(u"textEdit")
+        font = QFont()
+        font.setPointSize(10)
+        self.textEdit.setFont(font)
         self.textEdit.setFrameShape(QFrame.Shape.NoFrame)
         self.textEdit.setFrameShadow(QFrame.Shadow.Plain)
         self.textEdit.setLineWidth(0)
@@ -59,24 +61,24 @@ class Ui_ParametersDescription(object):
 "hr { height: 1px; border-width: 0; }\n"
 "li.unchecked::marker { content: \"\\2610\"; }\n"
 "li.checked::marker { content: \"\\2612\"; }\n"
-"</style></head><body style=\" font-family:'Roboto-Regular'; font-size:10pt; font-weight:400; font-style:normal;\">\n"
+"</style></head><body style=\" font-size:10pt; font-weight:400; font-style:normal;\">\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:12pt; font-weight:700;\">REMs Detector Parameters' Definition</span></p>\n"
 "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:12pt; font-weight:700;\"><br /></p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right"
-                        ":0px; -qt-block-indent:0; text-indent:0px; font-size:12pt; font-weight:700;\"><br /></p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text"
+                        "-indent:0px; font-size:12pt; font-weight:700;\"><br /></p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:12pt; font-weight:700;\">Amplitude (uV): </span><span style=\" font-size:12pt;\">Minimum and maximum amplitude of the peak of the REMs.</span></p>\n"
 "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:12pt; font-weight:700;\"><br /></p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:12pt; font-weight:700;\">Duration (s): </span><span style=\" font-size:12pt;\">Minimum and maximum duration of the REMs.</span></p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:12pt;"
-                        " font-weight:700;\"><br /></p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:12pt; font-weight:700;\"><br /></p>"
+                        "\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:12pt; font-weight:700;\">REM Frequency (Hz): </span><span style=\" font-size:12pt;\">Frequency range of REMs</span></p>\n"
 "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:12pt; font-weight:700;\"><br /></p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:12pt; font-weight:700;\">Relative Prominence: </span><span style=\" font-size:12pt;\">scales the minimum prominence threshold as a fraction of minimum amplitude.<br />(e.g., relative prominence = 0.5 means peaks must stand out by at least 50% of the minimum amplitude.)</span></p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin"
-                        "-right:0px; -qt-block-indent:0; text-indent:0px; font-size:12pt; font-weight:700;\"><br /></p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0"
+                        "; text-indent:0px; font-size:12pt; font-weight:700;\"><br /></p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:12pt; font-weight:700;\">Select Sleep Stages to Detect REMs:</span><span style=\" font-size:12pt;\"> Select &quot;Scored&quot; if you have an annotation file with scored sleep stages (detection will then be applied only to REM epochs). Select &quot;Unscored&quot; if you do not have an annotation file available.</span></p>\n"
 "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:12pt; font-weight:700;\">Remove Outliers: </span><span style=\" font-size:12pt;\">If &quot;Yes&quot;, YASA will automatically detect and remove R"
-                        "EMs outliers using its algorithm.<br /></span><span style=\" font-size:12pt; font-weight:600;\">Note</span><span style=\" font-size:12pt;\"> that this step will only be applied if there are more than 50 detected REMs in the first place.</span></p></body></html>", None))
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:12pt; font-weight:700;\">Remove Outliers: </span><span style=\" font-size:12pt;\">If &quot;Yes&quot;, YASA will automatically detect and remove REMs outliers using its algorit"
+                        "hm.<br /></span><span style=\" font-size:12pt; font-weight:600;\">Note</span><span style=\" font-size:12pt;\"> that this step will only be applied if there are more than 50 detected REMs in the first place.</span></p></body></html>", None))
     # retranslateUi
 

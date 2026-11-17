@@ -73,7 +73,6 @@ class Ui_InputFiles(object):
 
     def retranslateUi(self, InputFiles):
         InputFiles.setWindowTitle("")
-        InputFiles.setStyleSheet(QCoreApplication.translate("InputFiles", u"font: 12pt \"Roboto\";", None))
         self.pushButton_choose.setText(QCoreApplication.translate("InputFiles", u"Choose", None))
         self.pushButton_clear.setText(QCoreApplication.translate("InputFiles", u"Clear", None))
     # retranslateUi

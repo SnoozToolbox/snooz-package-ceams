@@ -24,7 +24,6 @@ class Ui_IntroStep(object):
         if not IntroStep.objectName():
             IntroStep.setObjectName(u"IntroStep")
         IntroStep.resize(968, 590)
-        IntroStep.setStyleSheet(u"font: 12pt \"Roboto\";")
         self.verticalLayout = QVBoxLayout(IntroStep)
         self.verticalLayout.setSpacing(25)
         self.verticalLayout.setObjectName(u"verticalLayout")
@@ -50,19 +49,19 @@ class Ui_IntroStep(object):
 "hr { height: 1px; border-width: 0; }\n"
 "li.unchecked::marker { content: \"\\2610\"; }\n"
 "li.checked::marker { content: \"\\2612\"; }\n"
-"</style></head><body style=\" font-family:'Roboto'; font-size:12pt; font-weight:400; font-style:normal;\">\n"
+"</style></head><body style=\" font-size:12pt; font-weight:400; font-style:normal;\">\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-weight:600;\">EDF+ Annotations Importer</span></p>\n"
 "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">This tool allows you to import annotations from "
-                        "an EDF+ file (specifically from the EDF Annotations signal) and into the Snooz accessory .tsv file.</p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">This tool allows you to import annotations from an EDF+ file (specific"
+                        "ally from the EDF Annotations signal) and into the Snooz accessory .tsv file.</p>\n"
 "<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">The PSG signals file is required to determine the recording's start time, which may differ from the start time of the annotations file. Snooz adjusts the annotations\u2019 start time to align with the PSG signals file. Only one PSG file and its corresponding Snooz accessory .tsv file can be used at a time. However, users can import annotations from multiple EDF+ files for the same PSG signals file by using this tool iteratively. The newly imported annotations will be appended to the Snooz accessory .tsv file, with any original annotations that share the same group, name, and channel being removed first.</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" text-decoration: underline;\">1 - Input"
-                        " Files Step </span>: </p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" text-decoration: underline;\">1 - Input Files Step </span>: <"
+                        "/p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">	Add your EDF+ files to import annotations and the corresponding PSG signals file (EDF or EDF+). </p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">	Even if the EDF+ annotations files and the PSG signals file are exactly the same, you must still add both. </p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">	The order of the EDF+ annotations files and the PSG signals file must match.</p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">	</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" color:#ff0000;\">WARNING : Sleep stage 4 will be convert"
-                        "ed to N3 (value 3 in Snooz).</span></p></body></html>", None))
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" color:#ff0000;\">WARNING : Sleep stage 4 will be converted to N3 (value 3 in S"
+                        "nooz).</span></p></body></html>", None))
     # retranslateUi
 

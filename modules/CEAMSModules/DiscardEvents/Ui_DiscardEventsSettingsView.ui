@@ -56,13 +56,13 @@ The name works as a pattern matching.  </string>
         <widget class="QLabel" name="min_len_sec_label">
          <property name="minimumSize">
           <size>
-           <width>180</width>
+           <width>240</width>
            <height>0</height>
           </size>
          </property>
          <property name="maximumSize">
           <size>
-           <width>180</width>
+           <width>240</width>
            <height>16777215</height>
           </size>
          </property>
@@ -78,13 +78,13 @@ The name works as a pattern matching.  </string>
         <widget class="QLabel" name="max_len_sec_label">
          <property name="minimumSize">
           <size>
-           <width>180</width>
+           <width>240</width>
            <height>0</height>
           </size>
          </property>
          <property name="maximumSize">
           <size>
-           <width>180</width>
+           <width>240</width>
            <height>16777215</height>
           </size>
          </property>
@@ -100,13 +100,13 @@ The name works as a pattern matching.  </string>
         <widget class="QCheckBox" name="artefact_free_checkBox">
          <property name="minimumSize">
           <size>
-           <width>180</width>
+           <width>240</width>
            <height>0</height>
           </size>
          </property>
          <property name="maximumSize">
           <size>
-           <width>180</width>
+           <width>240</width>
            <height>16777215</height>
           </size>
          </property>
@@ -122,13 +122,13 @@ The name works as a pattern matching.  </string>
         <widget class="QLabel" name="artefact_group_label">
          <property name="minimumSize">
           <size>
-           <width>180</width>
+           <width>240</width>
            <height>0</height>
           </size>
          </property>
          <property name="maximumSize">
           <size>
-           <width>180</width>
+           <width>240</width>
            <height>16777215</height>
           </size>
          </property>
@@ -154,13 +154,13 @@ The group works as a pattern matching.  </string>
         <widget class="QLabel" name="artefact_name_label">
          <property name="minimumSize">
           <size>
-           <width>180</width>
+           <width>240</width>
            <height>0</height>
           </size>
          </property>
          <property name="maximumSize">
           <size>
-           <width>180</width>
+           <width>240</width>
            <height>16777215</height>
           </size>
          </property>

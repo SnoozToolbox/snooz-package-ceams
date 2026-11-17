@@ -24,7 +24,6 @@ class Ui_WpliConnectivitySettingsView(object):
         if not WpliConnectivitySettingsView.objectName():
             WpliConnectivitySettingsView.setObjectName(u"WpliConnectivitySettingsView")
         WpliConnectivitySettingsView.resize(650, 333)
-        WpliConnectivitySettingsView.setStyleSheet(u"font: 10pt \"Roboto-Regular\";")
         self.verticalLayout_3 = QVBoxLayout(WpliConnectivitySettingsView)
         self.verticalLayout_3.setObjectName(u"verticalLayout_3")
         self.frame = QFrame(WpliConnectivitySettingsView)
@@ -35,11 +34,15 @@ class Ui_WpliConnectivitySettingsView(object):
         self.verticalLayout_4.setObjectName(u"verticalLayout_4")
         self.label_3 = QLabel(self.frame)
         self.label_3.setObjectName(u"label_3")
+        font = QFont()
+        font.setPointSize(10)
+        self.label_3.setFont(font)
 
         self.verticalLayout_4.addWidget(self.label_3)
 
         self.label = QLabel(self.frame)
         self.label.setObjectName(u"label")
+        self.label.setFont(font)
 
         self.verticalLayout_4.addWidget(self.label)
 
@@ -51,12 +54,14 @@ class Ui_WpliConnectivitySettingsView(object):
         self.horizontalLayout_5.setObjectName(u"horizontalLayout_5")
         self.num_surr_label = QLabel(self.frame)
         self.num_surr_label.setObjectName(u"num_surr_label")
+        self.num_surr_label.setFont(font)
 
         self.horizontalLayout_5.addWidget(self.num_surr_label)
 
         self.num_surr_lineedit = QLineEdit(self.frame)
         self.num_surr_lineedit.setObjectName(u"num_surr_lineedit")
         self.num_surr_lineedit.setMaximumSize(QSize(100, 16777215))
+        self.num_surr_lineedit.setFont(font)
 
         self.horizontalLayout_5.addWidget(self.num_surr_lineedit)
 
@@ -71,12 +76,14 @@ class Ui_WpliConnectivitySettingsView(object):
         self.horizontalLayout_4.setObjectName(u"horizontalLayout_4")
         self.epoch_length_label = QLabel(self.frame)
         self.epoch_length_label.setObjectName(u"epoch_length_label")
+        self.epoch_length_label.setFont(font)
 
         self.horizontalLayout_4.addWidget(self.epoch_length_label)
 
         self.epoch_length_lineEdit = QLineEdit(self.frame)
         self.epoch_length_lineEdit.setObjectName(u"epoch_length_lineEdit")
         self.epoch_length_lineEdit.setMaximumSize(QSize(100, 16777215))
+        self.epoch_length_lineEdit.setFont(font)
 
         self.horizontalLayout_4.addWidget(self.epoch_length_lineEdit)
 
@@ -100,12 +107,14 @@ class Ui_WpliConnectivitySettingsView(object):
         self.horizontalLayout.setObjectName(u"horizontalLayout")
         self.p_value_label = QLabel(self.frame)
         self.p_value_label.setObjectName(u"p_value_label")
+        self.p_value_label.setFont(font)
 
         self.horizontalLayout.addWidget(self.p_value_label)
 
         self.p_value_lineedit = QLineEdit(self.frame)
         self.p_value_lineedit.setObjectName(u"p_value_lineedit")
         self.p_value_lineedit.setMaximumSize(QSize(100, 16777215))
+        self.p_value_lineedit.setFont(font)
 
         self.horizontalLayout.addWidget(self.p_value_lineedit)
 
@@ -120,12 +129,14 @@ class Ui_WpliConnectivitySettingsView(object):
         self.horizontalLayout_3.setObjectName(u"horizontalLayout_3")
         self.epoch_overlap_label = QLabel(self.frame)
         self.epoch_overlap_label.setObjectName(u"epoch_overlap_label")
+        self.epoch_overlap_label.setFont(font)
 
         self.horizontalLayout_3.addWidget(self.epoch_overlap_label)
 
         self.epoch_overlap_lineEdit = QLineEdit(self.frame)
         self.epoch_overlap_lineEdit.setObjectName(u"epoch_overlap_lineEdit")
         self.epoch_overlap_lineEdit.setMaximumSize(QSize(100, 16777215))
+        self.epoch_overlap_lineEdit.setFont(font)
 
         self.horizontalLayout_3.addWidget(self.epoch_overlap_lineEdit)
 
@@ -151,6 +162,7 @@ class Ui_WpliConnectivitySettingsView(object):
 
         self.label_2 = QLabel(WpliConnectivitySettingsView)
         self.label_2.setObjectName(u"label_2")
+        self.label_2.setFont(font)
 
         self.verticalLayout_3.addWidget(self.label_2)
 
@@ -158,11 +170,13 @@ class Ui_WpliConnectivitySettingsView(object):
         self.horizontalLayout_2.setObjectName(u"horizontalLayout_2")
         self.lineEdit = QLineEdit(WpliConnectivitySettingsView)
         self.lineEdit.setObjectName(u"lineEdit")
+        self.lineEdit.setFont(font)
 
         self.horizontalLayout_2.addWidget(self.lineEdit)
 
         self.Output_pat_pushButton = QPushButton(WpliConnectivitySettingsView)
         self.Output_pat_pushButton.setObjectName(u"Output_pat_pushButton")
+        self.Output_pat_pushButton.setFont(font)
 
         self.horizontalLayout_2.addWidget(self.Output_pat_pushButton)
 

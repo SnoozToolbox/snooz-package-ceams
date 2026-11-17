@@ -30,8 +30,6 @@ class Ui_MartinSettings(object):
         self.label_6 = QLabel(MartinSettings)
         self.label_6.setObjectName(u"label_6")
         font = QFont()
-        font.setFamilies([u"Roboto"])
-        font.setPointSize(12)
         font.setBold(False)
         font.setItalic(False)
         self.label_6.setFont(font)
@@ -191,7 +189,6 @@ class Ui_MartinSettings(object):
 
     def retranslateUi(self, MartinSettings):
         MartinSettings.setWindowTitle("")
-        MartinSettings.setStyleSheet(QCoreApplication.translate("MartinSettings", u"font: 12pt \"Roboto\";", None))
         self.label_6.setText(QCoreApplication.translate("MartinSettings", u"<html><head/><body><p><span style=\" font-weight:600;\">Spindle detector based on RMS values in the sigma band.</span></p></body></html>", None))
         self.textEdit.setHtml(QCoreApplication.translate("MartinSettings", u"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset=\"utf-8\" /><style type=\"text/css\">\n"
@@ -199,11 +196,11 @@ class Ui_MartinSettings(object):
 "hr { height: 1px; border-width: 0; }\n"
 "li.unchecked::marker { content: \"\\2610\"; }\n"
 "li.checked::marker { content: \"\\2612\"; }\n"
-"</style></head><body style=\" font-family:'Roboto'; font-size:12pt; font-weight:400; font-style:normal;\">\n"
+"</style></head><body style=\" font-size:12pt; font-weight:400; font-style:normal;\">\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; line-height:135%;\">Band-pass filters (11\u201315 Hz) the EEG signal to compute the RMS on sliding windows (0.25 s length with a step of 0.25 s), and then applies a threshold (95th percentile).</p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; line-height:135%;\"><span style=\" text-decoration: underline;\">Reference</span></p>\n"
-""
-                        "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; line-height:135%;\">[1] N. Martin <span style=\" font-style:italic;\">et al.</span>, \u201cTopography of age-related changes in sleep spindles,\u201d <span style=\" font-style:italic;\">Neurobiol. Aging</span>, vol. 34, no. 2, pp. 468\u2013476, Feb. 2013, doi: <a href=\"https://doi.org/10.1016/j.neurobiolaging.2012.05.020\"><span style=\" text-decoration: underline; color:#0000ff;\">10.1016/j.neurobiolaging.2012.05.020</span></a>. </p></body></html>", None))
+"<p style=\" margin"
+                        "-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; line-height:135%;\">[1] N. Martin <span style=\" font-style:italic;\">et al.</span>, \u201cTopography of age-related changes in sleep spindles,\u201d <span style=\" font-style:italic;\">Neurobiol. Aging</span>, vol. 34, no. 2, pp. 468\u2013476, Feb. 2013, doi: <a href=\"https://doi.org/10.1016/j.neurobiolaging.2012.05.020\"><span style=\" text-decoration: underline; color:#0000ff;\">10.1016/j.neurobiolaging.2012.05.020</span></a>. </p></body></html>", None))
         self.label.setText(QCoreApplication.translate("MartinSettings", u"<html><head/><body><p><span style=\" font-weight:600;\">Events Settings</span></p></body></html>", None))
         self.label_2.setText(QCoreApplication.translate("MartinSettings", u"Group", None))
 #if QT_CONFIG(tooltip)

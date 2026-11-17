@@ -23,7 +23,6 @@ class Ui_InvertSignalsSettingsView(object):
     def setupUi(self, InvertSignalsSettingsView):
         if not InvertSignalsSettingsView.objectName():
             InvertSignalsSettingsView.setObjectName(u"InvertSignalsSettingsView")
-        InvertSignalsSettingsView.setStyleSheet(u"font: 12pt \"Roboto\";")
         InvertSignalsSettingsView.resize(711, 333)
         self.verticalLayout = QVBoxLayout(InvertSignalsSettingsView)
         self.verticalLayout.setObjectName(u"verticalLayout")

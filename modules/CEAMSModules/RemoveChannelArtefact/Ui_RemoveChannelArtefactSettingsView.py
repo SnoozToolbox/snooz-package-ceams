@@ -24,7 +24,6 @@ class Ui_RemoveChannelArtefactSettingsView(object):
         if not RemoveChannelArtefactSettingsView.objectName():
             RemoveChannelArtefactSettingsView.setObjectName(u"RemoveChannelArtefactSettingsView")
         RemoveChannelArtefactSettingsView.resize(711, 333)
-        RemoveChannelArtefactSettingsView.setStyleSheet(u"font: 12pt \"Roboto\";")
         self.verticalLayout = QVBoxLayout(RemoveChannelArtefactSettingsView)
         self.verticalLayout.setObjectName(u"verticalLayout")
         self.artefact_group_horizontalLayout = QHBoxLayout()

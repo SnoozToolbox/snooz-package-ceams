@@ -163,7 +163,6 @@ class Ui_OutputFileStep(object):
 
     def retranslateUi(self, OutputFileStep):
         OutputFileStep.setWindowTitle("")
-        OutputFileStep.setStyleSheet(QCoreApplication.translate("OutputFileStep", u"font: 12pt \"Roboto\";", None))
         self.label_3.setText(QCoreApplication.translate("OutputFileStep", u"This tool can be used to clean the detailed events cohort report.", None))
 #if QT_CONFIG(tooltip)
         self.export_raw_checkBox.setToolTip(QCoreApplication.translate("OutputFileStep", u"Check to export PSA activity of selected channels only (same format as the input PSA file).", None))

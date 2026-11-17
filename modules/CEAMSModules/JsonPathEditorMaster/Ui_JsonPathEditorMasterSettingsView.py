@@ -26,7 +26,6 @@ class Ui_JsonPathEditorMasterSettingsView(object):
         if not JsonPathEditorMasterSettingsView.objectName():
             JsonPathEditorMasterSettingsView.setObjectName(u"JsonPathEditorMasterSettingsView")
         JsonPathEditorMasterSettingsView.resize(941, 669)
-        JsonPathEditorMasterSettingsView.setStyleSheet(u"font: 12pt \"Roboto\";")
         self.horizontalLayout_8 = QHBoxLayout(JsonPathEditorMasterSettingsView)
         self.horizontalLayout_8.setObjectName(u"horizontalLayout_8")
         self.verticalLayout = QVBoxLayout()

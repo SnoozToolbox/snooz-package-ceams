@@ -324,12 +324,12 @@ class Ui_FilterSignalSettingsView(object):
         self.textEdit.setHtml(QCoreApplication.translate("FilterSignalSettingsView", u"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
-"</style></head><body style=\" font-family:'Roboto'; font-size:12pt; font-weight:400; font-style:normal;\">\n"
+"</style></head><body style=\" font-size:12pt; font-weight:400; font-style:normal;\">\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">The IIR filter is applied forward and backward to cancel the phase delay.</p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">The order is divided by 2 when applied since is it applied twice.</p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">ex) An ordre of 6 is sufficient for a bandpass filter </p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-in"
-                        "dent:0px;\">      0.3-100 Hz with a sample rate=256 Hz</p></body></html>", None))
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">      0.3-"
+                        "100 Hz with a sample rate=256 Hz</p></body></html>", None))
         self.label_8.setText(QCoreApplication.translate("FilterSignalSettingsView", u"FIR Filter Settings", None))
         self.label.setText(QCoreApplication.translate("FilterSignalSettingsView", u"Order", None))
         self.window_combobox.setItemText(0, QCoreApplication.translate("FilterSignalSettingsView", u"boxcar", None))

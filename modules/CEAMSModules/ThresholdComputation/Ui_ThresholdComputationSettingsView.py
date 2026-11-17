@@ -46,8 +46,8 @@ class Ui_ThresholdComputationSettingsView(object):
 
         self.threshold_metric_label = QLabel(ThresholdComputationSettingsView)
         self.threshold_metric_label.setObjectName(u"threshold_metric_label")
-        self.threshold_metric_label.setMinimumSize(QSize(150, 0))
-        self.threshold_metric_label.setMaximumSize(QSize(150, 16777215))
+        self.threshold_metric_label.setMinimumSize(QSize(180, 0))
+        self.threshold_metric_label.setMaximumSize(QSize(180, 16777215))
 
         self.formLayout.setWidget(2, QFormLayout.LabelRole, self.threshold_metric_label)
 

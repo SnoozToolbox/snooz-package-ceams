@@ -22,7 +22,6 @@ class Ui_TSVValidatorMasterResultsView(object):
     def setupUi(self, TSVValidatorMasterResultsView):
         if not TSVValidatorMasterResultsView.objectName():
             TSVValidatorMasterResultsView.setObjectName(u"TSVValidatorMasterResultsView")
-        TSVValidatorMasterResultsView.setStyleSheet(u"font: 12pt \"Roboto\";")
         TSVValidatorMasterResultsView.resize(483, 360)
         self.verticalLayout = QVBoxLayout(TSVValidatorMasterResultsView)
         self.verticalLayout.setObjectName(u"verticalLayout")

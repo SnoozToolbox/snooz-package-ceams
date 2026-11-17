@@ -50,13 +50,13 @@
           <widget class="QLabel" name="threshold_metric_label">
            <property name="minimumSize">
             <size>
-             <width>150</width>
+             <width>180</width>
              <height>0</height>
             </size>
            </property>
            <property name="maximumSize">
             <size>
-             <width>150</width>
+             <width>180</width>
              <height>16777215</height>
             </size>
            </property>

@@ -31,9 +31,6 @@ class Ui_GroupDefinition(object):
         self.verticalLayout.setObjectName(u"verticalLayout")
         self.label = QLabel(GroupDefinition)
         self.label.setObjectName(u"label")
-        font = QFont()
-        font.setBold(True)
-        self.label.setFont(font)
 
         self.verticalLayout.addWidget(self.label)
 
@@ -49,7 +46,6 @@ class Ui_GroupDefinition(object):
         self.verticalLayout_2.setObjectName(u"verticalLayout_2")
         self.label_2 = QLabel(GroupDefinition)
         self.label_2.setObjectName(u"label_2")
-        self.label_2.setFont(font)
 
         self.verticalLayout_2.addWidget(self.label_2)
 
@@ -90,7 +86,6 @@ class Ui_GroupDefinition(object):
 
     def retranslateUi(self, GroupDefinition):
         GroupDefinition.setWindowTitle(QCoreApplication.translate("GroupDefinition", u"Form", None))
-        GroupDefinition.setStyleSheet(QCoreApplication.translate("GroupDefinition", u"font: 12pt \"Roboto\";", None))
         self.label.setText(QCoreApplication.translate("GroupDefinition", u"PSG Files", None))
         self.label_2.setText(QCoreApplication.translate("GroupDefinition", u"Events", None))
         self.apply_all_pushButton.setText(QCoreApplication.translate("GroupDefinition", u"Apply to all files", None))

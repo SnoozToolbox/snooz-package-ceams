@@ -25,7 +25,6 @@ class Ui_OutputFiles(object):
         if not OutputFiles.objectName():
             OutputFiles.setObjectName(u"OutputFiles")
         OutputFiles.resize(1016, 585)
-        OutputFiles.setStyleSheet(u"font: 12pt \"Roboto\";")
         self.horizontalLayout = QHBoxLayout(OutputFiles)
         self.horizontalLayout.setObjectName(u"horizontalLayout")
         self.verticalLayout = QVBoxLayout()
@@ -33,8 +32,6 @@ class Ui_OutputFiles(object):
         self.label = QLabel(OutputFiles)
         self.label.setObjectName(u"label")
         font = QFont()
-        font.setFamilies([u"Roboto"])
-        font.setPointSize(12)
         font.setBold(False)
         font.setItalic(False)
         self.label.setFont(font)
@@ -135,11 +132,11 @@ class Ui_OutputFiles(object):
 "hr { height: 1px; border-width: 0; }\n"
 "li.unchecked::marker { content: \"\\2610\"; }\n"
 "li.checked::marker { content: \"\\2612\"; }\n"
-"</style></head><body style=\" font-family:'Roboto'; font-size:12pt; font-weight:400; font-style:normal;\">\n"
+"</style></head><body style=\" font-size:12pt; font-weight:400; font-style:normal;\">\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">The columns of the annotations file are as follows:</p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">   1. group : The category of the annotation (annotations with different names can be grouped into the same category), e.g. <span style=\" font-style:italic;\">artifact</span></p>\n"
-"<p style=\" margin-top:0px; margin-botto"
-                        "m:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">   2. name: The text label of the annotation, e.g., <span style=\" font-style:italic;\">art_snooz</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px"
+                        "; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">   2. name: The text label of the annotation, e.g., <span style=\" font-style:italic;\">art_snooz</span></p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">   3. start_sec: The onset of the annotation in seconds, e.g., <span style=\" font-style:italic;\">300</span></p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">   4. duration_sec : The duration of the annotation in second, e.g., <span style=\" font-style:italic;\">30</span></p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">   5. channels : The list of channels on which the annotation occurs, e.g., <span style=\" font-style:italic;\">['LOC', 'ROC']</span></p></body></html>", None))
