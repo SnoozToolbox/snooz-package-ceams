@@ -34,6 +34,9 @@ class ComplexitySettings(BaseStepView, Ui_ComplexitySettings, QtWidgets.QWidget)
     """
 
     def __init__(self, **kwargs):
+        # The process is modified only once the saved settings are restored.
+        self._settings_loaded = False
+        self._mode_restored = False
         super().__init__(**kwargs)
 
         # init UI
@@ -89,6 +92,7 @@ class ComplexitySettings(BaseStepView, Ui_ComplexitySettings, QtWidgets.QWidget)
         mode = str(mode).strip().lower() if mode is not None else ""
         if mode in self._mode_radio_buttons:
             self._mode_radio_buttons[mode].setChecked(True)
+            self._mode_restored = True
 
     # -------------------------------------------------------------------------
     # Output files
@@ -113,12 +117,25 @@ class ComplexitySettings(BaseStepView, Ui_ComplexitySettings, QtWidgets.QWidget)
     # BaseStepView interface
     # -------------------------------------------------------------------------
     def load_settings(self):
-        """ Ask the pipeline for the settings already stored in the modules. """
+        """ Ask the pipeline for the settings already stored in the modules.
+            The answers (on_topic_response) only update the interface.
+        """
+        self._settings_loaded = False
+        self._mode_restored = False
         self._pub_sub_manager.publish(self, self._mode_topic, 'ping')
         self._pub_sub_manager.publish(self, self._cohort_file_topic, 'ping')
         self._pub_sub_manager.publish(self, self._export_details_topic, 'ping')
         self._pub_sub_manager.publish(self, self._epoch_length_topic, 'ping')
         self._pub_sub_manager.publish(self, self._overlap_topic, 'ping')
+        # An unknown saved mode is reported instead of being silently replaced
+        # by the default mode of the interface.
+        if not self._mode_restored:
+            self._pub_sub_manager.publish(
+                self, "show_error_message",
+                "Could not restore the complexity settings : the complexity mode "
+                "saved in the process must be univariate, joint or concat.")
+            return
+        self._settings_loaded = True
 
     def on_topic_update(self, topic, message, sender):
         pass
@@ -141,6 +158,12 @@ class ComplexitySettings(BaseStepView, Ui_ComplexitySettings, QtWidgets.QWidget)
 
     def on_validate_settings(self):
         """ Validate the settings selected by the user. """
+        if not self._settings_loaded:
+            self._pub_sub_manager.publish(
+                self, "show_error_message",
+                "The complexity settings could not be restored. "
+                "Please check the LempZiv Complexity modules in the process.")
+            return False
         if self.get_current_mode() == "":
             WarningDialog("Select the complexity mode to compute.")
             return False
@@ -171,6 +194,10 @@ class ComplexitySettings(BaseStepView, Ui_ComplexitySettings, QtWidgets.QWidget)
 
     def on_apply_settings(self):
         """ Send the settings to the modules of both chains. """
+        # The settings are also applied when the workspace is saved (without
+        # validation) : keep the saved process untouched if it was not restored.
+        if not self._settings_loaded:
+            return
         mode = self.get_current_mode()
         epoch_length = str(self.epoch_length_doubleSpinBox.value())
         overlap = str(self.overlap_length_doubleSpinBox.value())
