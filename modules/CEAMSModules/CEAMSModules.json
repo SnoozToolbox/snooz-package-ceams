@@ -9,7 +9,7 @@
         {
             "item_name": "FilterSignal",
             "item_type": "module",
-            "item_version": "2.1.0",
+            "item_version": "2.2.0",
             "item_hooks": [
                 {
                     "endpoint_name": "module_endpoint",
@@ -37,7 +37,7 @@
         {
             "item_name": "SignalsFromEvents",
             "item_type": "module",
-            "item_version": "4.0.0",
+            "item_version": "4.1.0",
             "item_hooks": [
                 {
                     "endpoint_name": "module_endpoint",
@@ -51,7 +51,7 @@
         {
             "item_name": "Stft",
             "item_type": "module",
-            "item_version": "2.2.0",
+            "item_version": "2.3.0",
             "item_hooks": [
                 {
                     "endpoint_name": "module_endpoint",
@@ -163,7 +163,7 @@
         {
             "item_name": "RescaleSignal",
             "item_type": "module",
-            "item_version": "2.1.0",
+            "item_version": "2.2.0",
             "item_hooks": [
                 {
                     "endpoint_name": "module_endpoint",
@@ -191,7 +191,7 @@
         {
             "item_name": "Constant",
             "item_type": "module",
-            "item_version": "2.0.0",
+            "item_version": "2.1.0",
             "item_hooks": [
                 {
                     "endpoint_name": "module_endpoint",
@@ -205,7 +205,7 @@
         {
             "item_name": "SlowWaveDetector",
             "item_type": "module",
-            "item_version": "2.4.0",
+            "item_version": "2.5.0",
             "item_hooks": [
                 {
                     "endpoint_name": "module_endpoint",
@@ -247,7 +247,7 @@
         {
             "item_name": "EdfXmlReader",
             "item_type": "module",
-            "item_version": "2.0.0",
+            "item_version": "2.1.0",
             "item_hooks": [
                 {
                     "endpoint_name": "module_endpoint",
@@ -317,7 +317,7 @@
         {
             "item_name": "ReplaceEventInSignals",
             "item_type": "module",
-            "item_version": "2.1.0",
+            "item_version": "2.2.0",
             "item_hooks": [
                 {
                     "endpoint_name": "module_endpoint",
@@ -331,7 +331,7 @@
         {
             "item_name": "IcaComponents",
             "item_type": "module",
-            "item_version": "2.0.0",
+            "item_version": "2.1.0",
             "item_hooks": [
                 {
                     "endpoint_name": "module_endpoint",
@@ -387,7 +387,7 @@
         {
             "item_name": "AliasSignals",
             "item_type": "module",
-            "item_version": "2.0.0",
+            "item_version": "2.1.0",
             "item_hooks": [
                 {
                     "endpoint_name": "module_endpoint",
@@ -401,7 +401,7 @@
         {
             "item_name": "EventCombine",
             "item_type": "module",
-            "item_version": "2.1.0",
+            "item_version": "2.2.0",
             "item_hooks": [
                 {
                     "endpoint_name": "module_endpoint",
@@ -429,7 +429,7 @@
         {
             "item_name": "Resample",
             "item_type": "module",
-            "item_version": "2.0.0",
+            "item_version": "2.1.0",
             "item_hooks": [
                 {
                     "endpoint_name": "module_endpoint",
@@ -499,7 +499,7 @@
         {
             "item_name": "IcaRestore",
             "item_type": "module",
-            "item_version": "2.0.0",
+            "item_version": "2.1.0",
             "item_hooks": [
                 {
                     "endpoint_name": "module_endpoint",
@@ -555,7 +555,7 @@
         {
             "item_name": "DetectionView",
             "item_type": "module",
-            "item_version": "2.0.0",
+            "item_version": "2.1.0",
             "item_hooks": [
                 {
                     "endpoint_name": "module_endpoint",
@@ -569,7 +569,7 @@
         {
             "item_name": "MutualInfo",
             "item_type": "module",
-            "item_version": "2.0.0",
+            "item_version": "2.1.0",
             "item_hooks": [
                 {
                     "endpoint_name": "module_endpoint",
@@ -583,7 +583,7 @@
         {
             "item_name": "EventCreator",
             "item_type": "module",
-            "item_version": "2.0.0",
+            "item_version": "2.1.0",
             "item_hooks": [
                 {
                     "endpoint_name": "module_endpoint",
@@ -723,7 +723,7 @@
         {
             "item_name": "EdfXmlReaderMaster",
             "item_type": "module",
-            "item_version": "2.0.0",
+            "item_version": "2.1.0",
             "item_hooks": [
                 {
                     "endpoint_name": "module_endpoint",
@@ -751,7 +751,7 @@
         {
             "item_name": "SpindleDetectorA7",
             "item_type": "module",
-            "item_version": "3.0.0",
+            "item_version": "3.1.0",
             "item_hooks": [
                 {
                     "endpoint_name": "module_endpoint",
@@ -821,7 +821,7 @@
         {
             "item_name": "OxygenDesatDetector",
             "item_type": "module",
-            "item_version": "2.6.0",
+            "item_version": "2.7.0",
             "item_hooks": [
                 {
                     "endpoint_name": "module_endpoint",
@@ -891,7 +891,7 @@
         {
             "item_name": "SubtractSignals",
             "item_type": "module",
-            "item_version": "2.0.0",
+            "item_version": "2.1.0",
             "item_hooks": [
                 {
                     "endpoint_name": "module_endpoint",
@@ -905,7 +905,7 @@
         {
             "item_name": "InvertSignals",
             "item_type": "module",
-            "item_version": "2.0.0",
+            "item_version": "2.1.0",
             "item_hooks": [
                 {
                     "endpoint_name": "module_endpoint",

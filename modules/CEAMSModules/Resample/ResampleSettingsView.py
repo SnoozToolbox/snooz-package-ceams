@@ -24,12 +24,22 @@ class ResampleSettingsView( BaseSettingsView,  Ui_ResampleSettingsView, QtWidget
 
         # init UI
         self.setupUi(self)
-        self.target_sample_rate_lineedit.init(self._parent_node.identifier, 
-                                                'sample_rate', 
-                                                self._pub_sub_manager)
+        self._sample_rate_topic = f'{self._parent_node.identifier}.sample_rate'
+        self._pub_sub_manager.subscribe(self, self._sample_rate_topic)
 
     def load_settings(self):
-        pass
+        self._pub_sub_manager.publish(self, self._sample_rate_topic, 'ping')
 
     def on_apply_settings(self):
+        self._pub_sub_manager.publish(self, self._sample_rate_topic, self.target_sample_rate_lineedit.text())
+
+    def on_topic_update(self, topic, message, sender):
         pass
+
+    def on_topic_response(self, topic, message, sender):
+        if topic == self._sample_rate_topic:
+            self.target_sample_rate_lineedit.setText(str(message))
+
+    def __del__(self):
+        if self._pub_sub_manager is not None:
+            self._pub_sub_manager.unsubscribe(self, self._sample_rate_topic)

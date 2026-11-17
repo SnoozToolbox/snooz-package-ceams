@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file ''
+## Form generated from reading UI file 'Ui_ResampleSettingsView.ui'
 ##
 ## Created by: Qt User Interface Compiler version 6.8.2
 ##
@@ -15,10 +15,8 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QFont, QFontDatabase, QGradient, QIcon,
     QImage, QKeySequence, QLinearGradient, QPainter,
     QPalette, QPixmap, QRadialGradient, QTransform)
-from PySide6.QtWidgets import (QApplication, QGridLayout, QLabel, QSizePolicy,
-    QWidget)
-
-from widgets.QLineEditLive import QLineEditLive
+from PySide6.QtWidgets import (QApplication, QGridLayout, QLabel, QLineEdit,
+    QSizePolicy, QWidget)
 
 class Ui_ResampleSettingsView(object):
     def setupUi(self, ResampleSettingsView):
@@ -44,7 +42,7 @@ class Ui_ResampleSettingsView(object):
 
         self.gridLayout_2.addWidget(self.label_9, 1, 0, 1, 1)
 
-        self.target_sample_rate_lineedit = QLineEditLive(self.layoutWidget)
+        self.target_sample_rate_lineedit = QLineEdit(self.layoutWidget)
         self.target_sample_rate_lineedit.setObjectName(u"target_sample_rate_lineedit")
 
         self.gridLayout_2.addWidget(self.target_sample_rate_lineedit, 1, 1, 1, 1)

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file ''
+## Form generated from reading UI file 'Ui_StftSettingsView.ui'
 ##
 ## Created by: Qt User Interface Compiler version 6.8.2
 ##
@@ -15,12 +15,9 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QFont, QFontDatabase, QGradient, QIcon,
     QImage, QKeySequence, QLinearGradient, QPainter,
     QPalette, QPixmap, QRadialGradient, QTransform)
-from PySide6.QtWidgets import (QApplication, QGridLayout, QLabel, QPushButton,
-    QSizePolicy, QSpacerItem, QVBoxLayout, QWidget)
-
-from widgets.QCheckBoxLive import QCheckBoxLive
-from widgets.QComboBoxLive import QComboBoxLive
-from widgets.QLineEditLive import QLineEditLive
+from PySide6.QtWidgets import (QApplication, QCheckBox, QComboBox, QGridLayout,
+    QLabel, QLineEdit, QPushButton, QSizePolicy,
+    QSpacerItem, QVBoxLayout, QWidget)
 
 class Ui_StftSettingsView(object):
     def setupUi(self, StftSettingsView):
@@ -50,7 +47,7 @@ class Ui_StftSettingsView(object):
 
         self.gridLayout.addWidget(self.label, 1, 0, 1, 1)
 
-        self.window_len_lineedit = QLineEditLive(StftSettingsView)
+        self.window_len_lineedit = QLineEdit(StftSettingsView)
         self.window_len_lineedit.setObjectName(u"window_len_lineedit")
 
         self.gridLayout.addWidget(self.window_len_lineedit, 1, 1, 1, 2)
@@ -62,7 +59,7 @@ class Ui_StftSettingsView(object):
 
         self.gridLayout.addWidget(self.label_6, 2, 0, 1, 1)
 
-        self.window_step_lineedit = QLineEditLive(StftSettingsView)
+        self.window_step_lineedit = QLineEdit(StftSettingsView)
         self.window_step_lineedit.setObjectName(u"window_step_lineedit")
 
         self.gridLayout.addWidget(self.window_step_lineedit, 2, 1, 1, 2)
@@ -74,7 +71,7 @@ class Ui_StftSettingsView(object):
 
         self.gridLayout.addWidget(self.label_4, 3, 0, 1, 1)
 
-        self.zero_padding_checkbox = QCheckBoxLive(StftSettingsView)
+        self.zero_padding_checkbox = QCheckBox(StftSettingsView)
         self.zero_padding_checkbox.setObjectName(u"zero_padding_checkbox")
         self.zero_padding_checkbox.setEnabled(False)
 
@@ -87,7 +84,7 @@ class Ui_StftSettingsView(object):
 
         self.gridLayout.addWidget(self.label_3, 4, 0, 1, 1)
 
-        self.window_combobox = QComboBoxLive(StftSettingsView)
+        self.window_combobox = QComboBox(StftSettingsView)
         self.window_combobox.addItem("")
         self.window_combobox.addItem("")
         self.window_combobox.addItem("")
@@ -127,7 +124,7 @@ class Ui_StftSettingsView(object):
 
         self.gridLayout.addWidget(self.label_7, 6, 0, 1, 1)
 
-        self.remove_means_checkbox = QCheckBoxLive(StftSettingsView)
+        self.remove_means_checkbox = QCheckBox(StftSettingsView)
         self.remove_means_checkbox.setObjectName(u"remove_means_checkbox")
         self.remove_means_checkbox.setChecked(True)
 
@@ -140,7 +137,7 @@ class Ui_StftSettingsView(object):
 
         self.gridLayout.addWidget(self.label_8, 7, 0, 1, 1)
 
-        self.norm_combobox = QComboBoxLive(StftSettingsView)
+        self.norm_combobox = QComboBox(StftSettingsView)
         self.norm_combobox.addItem("")
         self.norm_combobox.addItem("")
         self.norm_combobox.addItem("")
@@ -161,7 +158,7 @@ class Ui_StftSettingsView(object):
 
         self.gridLayout.addWidget(self.label_10, 9, 0, 1, 1)
 
-        self.filename_lineEdit = QLineEditLive(StftSettingsView)
+        self.filename_lineEdit = QLineEdit(StftSettingsView)
         self.filename_lineEdit.setObjectName(u"filename_lineEdit")
 
         self.gridLayout.addWidget(self.filename_lineEdit, 9, 1, 1, 1)

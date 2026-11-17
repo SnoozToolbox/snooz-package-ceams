@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file ''
+## Form generated from reading UI file 'Ui_EdfXmlReaderMasterSettingsView.ui'
 ##
 ## Created by: Qt User Interface Compiler version 6.8.2
 ##
@@ -15,10 +15,9 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QFont, QFontDatabase, QGradient, QIcon,
     QImage, QKeySequence, QLinearGradient, QPainter,
     QPalette, QPixmap, QRadialGradient, QTransform)
-from PySide6.QtWidgets import (QApplication, QGridLayout, QLabel, QPushButton,
-    QSizePolicy, QSpacerItem, QVBoxLayout, QWidget)
-
-from widgets.QLineEditLive import QLineEditLive
+from PySide6.QtWidgets import (QApplication, QGridLayout, QLabel, QLineEdit,
+    QPushButton, QSizePolicy, QSpacerItem, QVBoxLayout,
+    QWidget)
 
 class Ui_EdfXmlReaderMasterSettingsView(object):
     def setupUi(self, EdfXmlReaderMasterSettingsView):
@@ -29,7 +28,7 @@ class Ui_EdfXmlReaderMasterSettingsView(object):
         self.verticalLayout.setObjectName(u"verticalLayout")
         self.gridLayout = QGridLayout()
         self.gridLayout.setObjectName(u"gridLayout")
-        self.filename_lineedit = QLineEditLive(EdfXmlReaderMasterSettingsView)
+        self.filename_lineedit = QLineEdit(EdfXmlReaderMasterSettingsView)
         self.filename_lineedit.setObjectName(u"filename_lineedit")
         self.filename_lineedit.setAlignment(Qt.AlignRight|Qt.AlignTrailing|Qt.AlignVCenter)
 
@@ -52,7 +51,7 @@ class Ui_EdfXmlReaderMasterSettingsView(object):
 
         self.gridLayout.addWidget(self.event_label, 1, 0, 1, 1)
 
-        self.event_name_lineEdit = QLineEditLive(EdfXmlReaderMasterSettingsView)
+        self.event_name_lineEdit = QLineEdit(EdfXmlReaderMasterSettingsView)
         self.event_name_lineEdit.setObjectName(u"event_name_lineEdit")
 
         self.gridLayout.addWidget(self.event_name_lineEdit, 1, 1, 1, 1)
