@@ -331,7 +331,7 @@
         {
             "item_name": "IcaComponents",
             "item_type": "module",
-            "item_version": "2.1.0",
+            "item_version": "2.1.1",
             "item_hooks": [
                 {
                     "endpoint_name": "module_endpoint",
