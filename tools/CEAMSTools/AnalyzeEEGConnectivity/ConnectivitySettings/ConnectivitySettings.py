@@ -30,6 +30,7 @@ class ConnectivitySettings(BaseStepView, Ui_ConnectivitySettings, QtWidgets.QWid
     def __init__(self, **kwargs):
         self._settings_loaded = False
         self._connectivity_states = {}
+        self._saved_parameters = {}
         super().__init__(**kwargs)
         self.setupUi(self)
 
@@ -110,9 +111,16 @@ class ConnectivitySettings(BaseStepView, Ui_ConnectivitySettings, QtWidgets.QWid
     def _active_chain(self):
         return getattr(self, f"{self._active_scope_branch()}_{self._active_method()}")
 
+    def _can_update_process(self):
+        """
+        True once this step and FilterStep restored the saved settings
+        (FilterStep shares the scope through the context only after restoring it).
+        """
+        return self._settings_loaded and FilterStep.context_Con_scope in self._context_manager
+
     def _sync_activation(self):
         """Deactivate every chain, then activate only the active scope+method chain."""
-        if not self._settings_loaded:
+        if not self._can_update_process():
             return
         for chain in self._all_chains():
             for node_id in chain.values():
@@ -190,6 +198,10 @@ class ConnectivitySettings(BaseStepView, Ui_ConnectivitySettings, QtWidgets.QWid
         Push the lineEdit values to the active chain, depending on the selected
         scope (annotation/sleep) and method (wPLI/dPLI/AEC).
         """
+        # Also called when the workspace is saved (without validation): keep the
+        # saved process untouched if it could not be restored.
+        if not self._can_update_process():
+            return
         epoch_length = self.epoch_length_lineEdit.text().strip()
         epoch_overlap = self.epoch_overlap_lineEdit.text().strip()
         num_surr = self.num_surr_lineedit.text().strip()
@@ -219,38 +231,103 @@ class ConnectivitySettings(BaseStepView, Ui_ConnectivitySettings, QtWidgets.QWid
                 self._pub_sub_manager.publish(self, f"{chain['network']}.threshold_mode", 'minimally_spanning_tree')
 
     def load_settings(self):
-        """Restore the method from saved node states without changing the process."""
+        """Restore the method and its parameters from the process without changing it."""
         self._settings_loaded = False
-        methods_by_topic = {
-            f"{getattr(self, f'{scope}_{method}')['conn']}.get_activation_state": method
+        chains_by_topic = {
+            f"{getattr(self, f'{scope}_{method}')['conn']}.get_activation_state": (scope, method)
             for scope in ("annotation", "sleep")
             for method in ("wpli", "dpli", "aec")
         }
-        self._connectivity_states = dict.fromkeys(methods_by_topic)
+        self._connectivity_states = dict.fromkeys(chains_by_topic)
         # NodeGraphicsItem replies synchronously through on_topic_response.
-        for topic in methods_by_topic:
+        for topic in chains_by_topic:
             self._pub_sub_manager.publish(self, topic, None)
 
-        active_methods = [
-            methods_by_topic[topic]
+        active_chains = [
+            chains_by_topic[topic]
             for topic, state in self._connectivity_states.items()
             if state == ActivationState.ACTIVATED
         ]
-        if None in self._connectivity_states.values() or len(active_methods) != 1:
+        if None in self._connectivity_states.values() or len(active_chains) != 1:
             self._pub_sub_manager.publish(
                 self, "show_error_message",
                 "Could not restore connectivity settings: expected exactly one "
                 "active connectivity module and a response from all six modules."
             )
             return
+        scope, method = active_chains[0]
 
         with QtCore.QSignalBlocker(self.wpli_radioButton), \
                 QtCore.QSignalBlocker(self.dpli_radioButton), \
                 QtCore.QSignalBlocker(self.aec_radioButton):
-            getattr(self, f"{active_methods[0]}_radioButton").setChecked(True)
+            getattr(self, f"{method}_radioButton").setChecked(True)
+        if not self._load_parameters(getattr(self, f"{scope}_{method}"), method):
+            return
         self._update_method_widgets()
         self.threshold_mode_changed_slot()
         self._settings_loaded = True
+
+    def _load_parameters(self, chain, method):
+        """
+        Read the parameters of the saved active chain and show them in the UI
+        (same parameters as on_apply_settings). An empty value was never set:
+        the UI default is kept. Return False if a saved value is invalid.
+        """
+        topics = {
+            "epoch_length_sec": f"{chain['epoch']}.epoch_length_sec",
+            "overlap_sec": f"{chain['epoch']}.overlap_sec",
+        }
+        if method in ("wpli", "dpli"):
+            topics["num_surr"] = f"{chain['conn']}.num_surr"
+            topics["p_value"] = f"{chain['conn']}.p_value"
+        if "network" in chain:
+            topics["threshold_mode"] = f"{chain['network']}.threshold_mode"
+            topics["threshold_value"] = f"{chain['network']}.threshold_value"
+
+        # NodePortGraphicsItem replies synchronously through on_topic_response.
+        self._saved_parameters = dict.fromkeys(topics.values())
+        for topic in topics.values():
+            self._pub_sub_manager.publish(self, topic, 'ping')
+        saved = {
+            name: str(self._saved_parameters[topic]).strip()
+            for name, topic in topics.items()
+            if self._saved_parameters[topic] not in (None, '')
+        }
+
+        threshold_mode = saved.get("threshold_mode")
+        if threshold_mode not in (None, 'custom_threshold', 'minimally_spanning_tree'):
+            self._pub_sub_manager.publish(
+                self, "show_error_message",
+                f"Could not restore connectivity settings: unknown threshold mode '{threshold_mode}'."
+            )
+            return False
+        try:
+            threshold_value = float(saved["threshold_value"]) if "threshold_value" in saved else None
+        except ValueError:
+            self._pub_sub_manager.publish(
+                self, "show_error_message",
+                f"Could not restore connectivity settings: invalid threshold value "
+                f"'{saved['threshold_value']}'."
+            )
+            return False
+
+        line_edits = {
+            "epoch_length_sec": self.epoch_length_lineEdit,
+            "overlap_sec": self.epoch_overlap_lineEdit,
+            "num_surr": self.num_surr_lineedit,
+            "p_value": self.p_value_lineedit,
+        }
+        for name, line_edit in line_edits.items():
+            if name in saved:
+                line_edit.setText(saved[name])
+        if threshold_mode is not None:
+            with QtCore.QSignalBlocker(self.custom_threshold_radioButton), \
+                    QtCore.QSignalBlocker(self.mst_radioButton):
+                self.custom_threshold_radioButton.setChecked(threshold_mode == 'custom_threshold')
+                self.mst_radioButton.setChecked(threshold_mode == 'minimally_spanning_tree')
+        if threshold_value is not None:
+            self.threshold_val_doubleSpinBox.setValue(threshold_value)
+        return True
 
     def on_validate_settings(self):
         if not self._settings_loaded:
@@ -270,3 +347,5 @@ class ConnectivitySettings(BaseStepView, Ui_ConnectivitySettings, QtWidgets.QWid
     def on_topic_response(self, topic, message, sender):
         if topic in self._connectivity_states:
             self._connectivity_states[topic] = message
+        elif topic in self._saved_parameters:
+            self._saved_parameters[topic] = message
