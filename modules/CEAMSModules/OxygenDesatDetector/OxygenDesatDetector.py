@@ -44,6 +44,7 @@ class OxygenDesatDetector(SciNode):
             The group label of the invalid section annotation for the oxy chan analysis.
         "artifact_name": String
             The name label of the invalid section annotation for the oxy chan analysis.
+            Annotations must match the analyzed signal channel or have no explicit channel (all channels).
         "arousal_group": String
             The group label of the arousal annotations for temporal link analysis.
             (Obsolete, the feature was removed 2024-01-30, not robust)
@@ -316,6 +317,9 @@ class OxygenDesatDetector(SciNode):
         # Define the channel info
         #----------------------------------------------------------------------
         channel = channels_list[0]
+        invalid_events = invalid_events.loc[
+            (invalid_events['channels'] == channel) | (invalid_events['channels'] == "")
+        ].copy()
         fs_chan = SignalModel.get_attribute(signals, 'sample_rate', 'channel', channel)[0][0] 
         channel_info_param = {}
         channel_info_param['chan_label']=channel
@@ -333,7 +337,7 @@ class OxygenDesatDetector(SciNode):
         #   data_clean is the raw signal with short artifacts interpolated and long artifact forced to NaN
         artifact_events = []
         data_clean, artifact_det_lst, data_gradient = self.detect_artifact_SpO2(data_stats, data_starts, fs_chan)
-        artifact_events += [('SpO2', 'art_SpO2', start_sec, duration_sec, '') # Add back channel
+        artifact_events += [('SpO2', 'art_SpO2', start_sec, duration_sec, channel)
                          for start_sec, duration_sec in artifact_det_lst]
         # Convert artifact_events to dataframe
         artifact_events_df = manage_events.create_event_dataframe(data=artifact_events)
@@ -500,11 +504,30 @@ class OxygenDesatDetector(SciNode):
 
 
     def _plot_oxygen_saturation(self, data_to_plot, fs_chan, fig_name, data_starts, invalid_events):
+        """Save the graph, or export a warning to the recording's log file if no samples are finite."""
+        finite_samples = data_to_plot[np.isfinite(data_to_plot)]
+        if finite_samples.size == 0:
+            warning_message = (
+                f"WARNING: Oxygen saturation graph skipped for {fig_name}: "
+                f"no valid samples in the section starting at {data_starts} s."
+            )
+            self._log_manager.log(self.identifier, warning_message)
+            log_filename = os.path.splitext(fig_name)[0].rsplit("_graph", 1)[0] + "_log.txt"
+            try:
+                with open(log_filename, 'a', encoding='utf-8') as log_file:
+                    log_file.write(warning_message + "\n")
+            except OSError as error:
+                raise NodeRuntimeException(
+                    self.identifier, "OxygenDesatDetector",
+                    f"ERROR: Snooz can not write the warning log {log_filename}. "
+                    f"Check if the drive is accessible and the file is writable. {error}"
+                ) from error
+            return
 
         figure, ax = plt.subplots()
         figure.set_size_inches(25, 5)
         ax.clear()
-        ymin = np.nanmin(data_to_plot)
+        ymin = np.min(finite_samples)
         new_fs = fs_chan
         data_2_plot_end = len(data_to_plot)/new_fs+data_starts
         time = np.arange(data_starts, data_2_plot_end, 1/new_fs)
@@ -1386,9 +1409,7 @@ class OxygenDesatDetector(SciNode):
             desat_areas.append(area)
 
         # Create output dataframe
-        # desat_events = [('SpO2', 'desat_SpO2', start_sec, duration_sec, channel) 
-        #                 for start_sec, duration_sec in all_desat_events]
-        desat_events = [('SpO2', 'desat_SpO2', start_sec, duration_sec, '', slope, depth)
+        desat_events = [('SpO2', 'desat_SpO2', start_sec, duration_sec, channel, slope, depth)
                         for start_sec, duration_sec, slope, depth in all_desat_events]
 
         # plateau_events = [('SpO2', 'plateau_SpO2', start_sec, duration_sec, channel) 

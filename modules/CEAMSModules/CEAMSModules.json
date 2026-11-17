@@ -289,7 +289,7 @@
         {
             "item_name": "SleepBouts",
             "item_type": "module",
-            "item_version": "2.0.0",
+            "item_version": "2.1.0",
             "item_hooks": [
                 {
                     "endpoint_name": "module_endpoint",
@@ -821,7 +821,7 @@
         {
             "item_name": "OxygenDesatDetector",
             "item_type": "module",
-            "item_version": "2.7.0",
+            "item_version": "2.8.0",
             "item_hooks": [
                 {
                     "endpoint_name": "module_endpoint",
