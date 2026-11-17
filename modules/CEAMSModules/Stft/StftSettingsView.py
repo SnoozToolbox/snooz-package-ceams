@@ -24,13 +24,17 @@ class StftSettingsView( BaseSettingsView,  Ui_StftSettingsView, QtWidgets.QWidge
 
         # init UI
         self.setupUi(self)
-        self.window_len_lineedit.init(self._parent_node.identifier, 'win_len_sec', self._pub_sub_manager)
-        self.window_step_lineedit.init(self._parent_node.identifier, 'win_step_sec', self._pub_sub_manager)
-        self.zero_padding_checkbox.init(self._parent_node.identifier, 'zeros_pad', self._pub_sub_manager)
-        self.window_combobox.init(self._parent_node.identifier, 'window_name', self._pub_sub_manager)
-        self.remove_means_checkbox.init(self._parent_node.identifier, 'rm_mean', self._pub_sub_manager)
-        self.norm_combobox.init(self._parent_node.identifier, 'norm', self._pub_sub_manager)
-        self.filename_lineEdit.init(self._parent_node.identifier, 'filename', self._pub_sub_manager)
+        self._settings = {
+            f'{parent_node.identifier}.win_len_sec': self.window_len_lineedit,
+            f'{parent_node.identifier}.win_step_sec': self.window_step_lineedit,
+            f'{parent_node.identifier}.zeros_pad': self.zero_padding_checkbox,
+            f'{parent_node.identifier}.window_name': self.window_combobox,
+            f'{parent_node.identifier}.rm_mean': self.remove_means_checkbox,
+            f'{parent_node.identifier}.norm': self.norm_combobox,
+            f'{parent_node.identifier}.filename': self.filename_lineEdit,
+        }
+        for topic in self._settings:
+            self._pub_sub_manager.subscribe(self, topic)
         
     def on_choose(self):
         filename, _ = QtWidgets.QFileDialog.getSaveFileName(
@@ -42,8 +46,36 @@ class StftSettingsView( BaseSettingsView,  Ui_StftSettingsView, QtWidgets.QWidge
             self.filename_lineEdit.setText(filename)
 
     def load_settings(self):
-        pass
+        for topic in self._settings:
+            self._pub_sub_manager.publish(self, topic, 'ping')
 
     def on_apply_settings(self):
+        for topic, widget in self._settings.items():
+            if isinstance(widget, QtWidgets.QCheckBox):
+                value = widget.isChecked()
+            elif isinstance(widget, QtWidgets.QComboBox):
+                value = widget.currentText()
+            else:
+                value = widget.text()
+            self._pub_sub_manager.publish(self, topic, value)
+
+    def on_topic_update(self, topic, message, sender):
         pass
 
+    def on_topic_response(self, topic, message, sender):
+        widget = self._settings[topic]
+        if isinstance(widget, QtWidgets.QCheckBox):
+            if isinstance(message, str):
+                value = message.strip().lower()
+                if value not in ('true', 'false', '1', '0'):
+                    raise ValueError(f'Invalid boolean value for {topic}: {message!r}')
+                message = value in ('true', '1')
+            elif isinstance(message, (bool, int)) and message in (0, 1):
+                message = bool(message)
+            else:
+                raise ValueError(f'Invalid boolean value for {topic}: {message!r}')
+            widget.setChecked(message)
+        elif isinstance(widget, QtWidgets.QComboBox):
+            widget.setCurrentText(str(message))
+        else:
+            widget.setText(str(message))

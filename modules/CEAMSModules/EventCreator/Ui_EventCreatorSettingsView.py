@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file ''
+## Form generated from reading UI file 'Ui_EventCreatorSettingsView.ui'
 ##
 ## Created by: Qt User Interface Compiler version 6.8.2
 ##
@@ -15,10 +15,8 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QFont, QFontDatabase, QGradient, QIcon,
     QImage, QKeySequence, QLinearGradient, QPainter,
     QPalette, QPixmap, QRadialGradient, QTransform)
-from PySide6.QtWidgets import (QApplication, QGridLayout, QLabel, QSizePolicy,
-    QWidget)
-
-from widgets.QLineEditLive import QLineEditLive
+from PySide6.QtWidgets import (QApplication, QGridLayout, QLabel, QLineEdit,
+    QSizePolicy, QWidget)
 
 class Ui_EventCreatorSettingsView(object):
     def setupUi(self, EventCreatorSettingsView):
@@ -44,7 +42,7 @@ class Ui_EventCreatorSettingsView(object):
 
         self.gridLayout.addWidget(self.label_9, 1, 0, 1, 1)
 
-        self.event_name_lineedit = QLineEditLive(self.widget)
+        self.event_name_lineedit = QLineEdit(self.widget)
         self.event_name_lineedit.setObjectName(u"event_name_lineedit")
 
         self.gridLayout.addWidget(self.event_name_lineedit, 1, 1, 1, 1)
@@ -54,7 +52,7 @@ class Ui_EventCreatorSettingsView(object):
 
         self.gridLayout.addWidget(self.label_10, 2, 0, 1, 1)
 
-        self.start_time_lineedit = QLineEditLive(self.widget)
+        self.start_time_lineedit = QLineEdit(self.widget)
         self.start_time_lineedit.setObjectName(u"start_time_lineedit")
 
         self.gridLayout.addWidget(self.start_time_lineedit, 2, 1, 1, 1)
@@ -64,7 +62,7 @@ class Ui_EventCreatorSettingsView(object):
 
         self.gridLayout.addWidget(self.label_11, 3, 0, 1, 1)
 
-        self.duration_lineedit = QLineEditLive(self.widget)
+        self.duration_lineedit = QLineEdit(self.widget)
         self.duration_lineedit.setObjectName(u"duration_lineedit")
 
         self.gridLayout.addWidget(self.duration_lineedit, 3, 1, 1, 1)
@@ -74,7 +72,7 @@ class Ui_EventCreatorSettingsView(object):
 
         self.gridLayout.addWidget(self.label_12, 4, 0, 1, 1)
 
-        self.group_name_lineedit = QLineEditLive(self.widget)
+        self.group_name_lineedit = QLineEdit(self.widget)
         self.group_name_lineedit.setObjectName(u"group_name_lineedit")
 
         self.gridLayout.addWidget(self.group_name_lineedit, 4, 1, 1, 1)
@@ -84,7 +82,7 @@ class Ui_EventCreatorSettingsView(object):
 
         self.gridLayout.addWidget(self.label_13, 5, 0, 1, 1)
 
-        self.channels_lineedit = QLineEditLive(self.widget)
+        self.channels_lineedit = QLineEdit(self.widget)
         self.channels_lineedit.setObjectName(u"channels_lineedit")
 
         self.gridLayout.addWidget(self.channels_lineedit, 5, 1, 1, 1)

@@ -381,6 +381,10 @@ class FilterStep(BaseStepView, Ui_FilterStep, QtWidgets.QWidget):
         """
         Publish for filter node:
         """
+        # Also called when the workspace is saved (without validation): keep the
+        # saved process untouched if it could not be restored.
+        if not self._settings_loaded:
+            return
         if self.delta_radioButton.isChecked():
             cutoff = "0.16 4"
         elif self.theta_radioButton.isChecked():

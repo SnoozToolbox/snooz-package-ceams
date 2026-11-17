@@ -86,7 +86,7 @@
         </widget>
        </item>
        <item>
-        <widget class="QLineEditLive" name="time_lineedit">
+        <widget class="QLineEdit" name="time_lineedit">
          <property name="toolTip">
           <string>Time elapsed since the beginning of the recording (ex. 01:10:5.5)
 Press enter to display the detection window.</string>
@@ -149,13 +149,6 @@ Press enter to display the detection window.</string>
    </item>
   </layout>
  </widget>
- <customwidgets>
-  <customwidget>
-   <class>QLineEditLive</class>
-   <extends>QLineEdit</extends>
-   <header>widgets.QLineEditLive</header>
-  </customwidget>
- </customwidgets>
  <resources/>
  <connections>
   <connection>

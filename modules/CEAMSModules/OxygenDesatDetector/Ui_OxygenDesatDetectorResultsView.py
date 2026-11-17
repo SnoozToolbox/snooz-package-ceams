@@ -19,8 +19,6 @@ from PySide6.QtWidgets import (QApplication, QCheckBox, QComboBox, QGridLayout,
     QHBoxLayout, QLabel, QLayout, QLineEdit,
     QSizePolicy, QSpacerItem, QVBoxLayout, QWidget)
 
-from widgets.QLineEditLive import QLineEditLive
-
 class Ui_OxygenDesatDetectorResultsView(object):
     def setupUi(self, OxygenDesatDetectorResultsView):
         if not OxygenDesatDetectorResultsView.objectName():
@@ -61,7 +59,7 @@ class Ui_OxygenDesatDetectorResultsView(object):
 
         self.horizontalLayout_3.addWidget(self.time_label)
 
-        self.time_lineedit = QLineEditLive(OxygenDesatDetectorResultsView)
+        self.time_lineedit = QLineEdit(OxygenDesatDetectorResultsView)
         self.time_lineedit.setObjectName(u"time_lineedit")
         self.time_lineedit.setEnabled(True)
         self.time_lineedit.setMaximumSize(QSize(100, 16777215))

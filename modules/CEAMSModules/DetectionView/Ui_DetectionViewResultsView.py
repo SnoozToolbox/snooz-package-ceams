@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file ''
+## Form generated from reading UI file 'Ui_DetectionViewResultsView.ui'
 ##
 ## Created by: Qt User Interface Compiler version 6.8.2
 ##
@@ -18,8 +18,6 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
 from PySide6.QtWidgets import (QApplication, QGridLayout, QHBoxLayout, QLabel,
     QLineEdit, QPushButton, QSizePolicy, QSpacerItem,
     QVBoxLayout, QWidget)
-
-from widgets.QLineEditLive import QLineEditLive
 
 class Ui_DetectionViewResultsView(object):
     def setupUi(self, DetectionViewResultsView):
@@ -71,7 +69,7 @@ class Ui_DetectionViewResultsView(object):
 
         self.horizontalLayout.addWidget(self.time_label)
 
-        self.time_lineedit = QLineEditLive(DetectionViewResultsView)
+        self.time_lineedit = QLineEdit(DetectionViewResultsView)
         self.time_lineedit.setObjectName(u"time_lineedit")
         self.time_lineedit.setText(u"00:00:0.0")
 

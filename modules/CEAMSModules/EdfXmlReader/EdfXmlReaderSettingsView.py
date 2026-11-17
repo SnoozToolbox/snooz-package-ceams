@@ -54,9 +54,9 @@ class EdfXmlReaderSettingsView( BaseSettingsView,  Ui_EdfXmlReaderSettingsView, 
         """ Called by the publisher to init settings in the SettingsView 
         """
         if topic == self._filename_topic:
-            self.filename_lineedit.setText(message)
+            self.filename_lineedit.setText(str(message))
         if topic == self._event_name_topic:
-            self.event_name_lineEdit.setText(message)
+            self.event_name_lineEdit.setText(str(message))
 
 
     def on_apply_settings(self):
@@ -65,3 +65,8 @@ class EdfXmlReaderSettingsView( BaseSettingsView,  Ui_EdfXmlReaderSettingsView, 
         # Send the settings to the publisher for inputs to EdfXmlReaderMaster
         self._pub_sub_manager.publish(self, self._filename_topic, str(self.filename_lineedit.text()))
         self._pub_sub_manager.publish(self, self._event_name_topic, str(self.event_name_lineEdit.text()))
+
+    def __del__(self):
+        if self._pub_sub_manager is not None:
+            self._pub_sub_manager.unsubscribe(self, self._filename_topic)
+            self._pub_sub_manager.unsubscribe(self, self._event_name_topic)
