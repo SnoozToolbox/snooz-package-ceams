@@ -231,6 +231,20 @@
             ]
         },
         {
+            "item_name": "EEGSpectralAnalysis",
+            "item_type": "tool",
+            "item_version": "1.0.0",
+            "item_hooks": [
+                {
+                    "endpoint_name": "menu_endpoint",
+                    "parameters": {
+                        "menu_category": "2-Processing",
+                        "menu_label": "EEG Spectral Power Analysis"
+                    }
+                }
+            ]
+        },
+        {
             "item_name": "SlowWaveDetection",
             "item_type": "tool",
             "item_version": "2.11.1",

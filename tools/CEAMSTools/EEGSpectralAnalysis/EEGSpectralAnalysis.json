@@ -1,0 +1,442 @@
+{
+    "item_name": "EEGSpectralAnalysis",
+    "item_type": "tool",
+    "item_api_version": "3.0.0",
+    "item_url": "https://snooz-toolbox-documentation.readthedocs.io/latest/user_guide/tools/Processing/Power_Spectral_Analysis.html#power-spectral-analysis-psa",
+    "item_author": "Karine Lacourse",
+    "item_description": "Estimate EEG spectral power with Welch and export a whole-recording report by sleep stage.",
+    "tool_params": {
+        "tool_version": "1.0.0",
+        "tool_label": "EEG Spectral Power Analysis",
+        "tool_category": "2-Processing",
+        "asset_directory": "",
+        "package_name": "CEAMSTools",
+        "steps": [
+            {
+                "name": "EEG Spectral Power",
+                "description": "Estimate EEG spectral power with the Welch method.",
+                "custom_step_name": "IntroStep",
+                "show_index": false
+            },
+            {
+                "name": "Input Files",
+                "description": "<div>Add the PSG files you want to perform the analysis on.<br><br>The PSG file and the accessory file must share the same filename and folder.<br><br>Open your files:<br> <strong>.edf</strong> : .tsv file is optional.<br> <strong>.sts</strong> : .sig file is mandatory.<br> <strong>.eeg</strong> for CEAMS user : NATUS subject folder is mandatory<br> <br><br>Select the montage and channels</div><br>Use scored PSG recordings and EEG channels sampled above 124 Hz (e.g., 125 Hz).",
+                "custom_step_name": "InputFilesStep",
+                "show_index": true
+            },
+            {
+                "name": "Spectral Settings",
+                "description": "Set the frequency range and the analysis windows.",
+                "custom_step_name": "SpectralSettings",
+                "show_index": true
+            },
+            {
+                "name": "Output File",
+                "description": "Choose the TSV report for all selected recordings.",
+                "custom_step_name": "Outputfiles",
+                "show_index": true
+            }
+        ]
+    },
+    "dependencies": [
+        {
+            "package_name": "CEAMSTools",
+            "package_version": "7.5.0",
+            "deleteable": false
+        },
+        {
+            "package_name": "CEAMSModules",
+            "package_version": "7.5.0"
+        }
+    ],
+    "process_params": {
+        "subgraph_params": {},
+        "nodes": [
+            {
+                "cls": "PSACompilation",
+                "name": "PSACompilation",
+                "metadata": {},
+                "file_location": "",
+                "module_label": "PSA Compilation",
+                "module_category": "Statistics",
+                "module_options": {},
+                "inputs": {
+                    "subject_info": {
+                        "name": "subject_info",
+                        "value": "",
+                        "sub_plugs": {},
+                        "connections": {
+                            "377e68c9-e26d-4b06-972e-d88e12ecb208": "subject_info"
+                        }
+                    },
+                    "PSD": {
+                        "name": "PSD",
+                        "value": "",
+                        "sub_plugs": {},
+                        "connections": {
+                            "159bfdad-5000-474b-ae38-8e95ff4142b2": "psd"
+                        }
+                    },
+                    "events": {
+                        "name": "events",
+                        "value": "",
+                        "sub_plugs": {},
+                        "connections": {
+                            "377e68c9-e26d-4b06-972e-d88e12ecb208": "events"
+                        }
+                    },
+                    "sleep_stages": {
+                        "name": "sleep_stages",
+                        "value": "",
+                        "sub_plugs": {},
+                        "connections": {
+                            "377e68c9-e26d-4b06-972e-d88e12ecb208": "sleep_stages"
+                        }
+                    },
+                    "mini_bandwidth": {
+                        "name": "mini_bandwidth",
+                        "value": "1",
+                        "sub_plugs": {},
+                        "connections": {}
+                    },
+                    "first_freq": {
+                        "name": "first_freq",
+                        "value": "0",
+                        "sub_plugs": {},
+                        "connections": {}
+                    },
+                    "last_freq": {
+                        "name": "last_freq",
+                        "value": "30",
+                        "sub_plugs": {},
+                        "connections": {}
+                    },
+                    "dist_total": {
+                        "name": "dist_total",
+                        "value": 1,
+                        "sub_plugs": {},
+                        "connections": {}
+                    },
+                    "dist_hour": {
+                        "name": "dist_hour",
+                        "value": 0,
+                        "sub_plugs": {},
+                        "connections": {}
+                    },
+                    "dist_cycle": {
+                        "name": "dist_cycle",
+                        "value": 0,
+                        "sub_plugs": {},
+                        "connections": {}
+                    },
+                    "parameters_cycle": {
+                        "name": "parameters_cycle",
+                        "value": {
+                            "defined_option": "Aeschbach 1993",
+                            "Include_SOREMP": "1",
+                            "Include_last_incompl": "1",
+                            "Include_all_incompl": "1",
+                            "dur_ends_REMP": "15",
+                            "NREM_min_len_first": "15.0",
+                            "NREM_min_len_mid_last": "15.0",
+                            "NREM_min_len_val_last": "5.0",
+                            "REM_min_len_first": "0.5",
+                            "REM_min_len_mid": "5",
+                            "REM_min_len_last": "0.5",
+                            "mv_end_REMP": "1",
+                            "sleep_stages": "N2, N3, N4, R"
+                        },
+                        "sub_plugs": {},
+                        "connections": {}
+                    },
+                    "artefact_group": {
+                        "name": "artefact_group",
+                        "value": "",
+                        "sub_plugs": {},
+                        "connections": {}
+                    },
+                    "artefact_name": {
+                        "name": "artefact_name",
+                        "value": "",
+                        "sub_plugs": {},
+                        "connections": {}
+                    },
+                    "cycle_labelled": {
+                        "name": "cycle_labelled",
+                        "value": null,
+                        "sub_plugs": {},
+                        "connections": {}
+                    },
+                    "report_constants": {
+                        "name": "report_constants",
+                        "value": {
+                            "N_HOURS": 9,
+                            "N_CYCLES": 6
+                        },
+                        "sub_plugs": {},
+                        "connections": {}
+                    },
+                    "filename": {
+                        "name": "filename",
+                        "value": "EEG_spectral_report.tsv",
+                        "sub_plugs": {},
+                        "connections": {}
+                    }
+                },
+                "outputs": {},
+                "module": "CEAMSModules.PSACompilation",
+                "identifier": "4bb8c9ac-64e8-4cec-9c2c-5a00c80b4eae",
+                "pos_x": 571.606896551724,
+                "pos_y": 131.36453201970443,
+                "activation_state": "activated",
+                "package": {
+                    "package_name": "CEAMSModules"
+                }
+            },
+            {
+                "cls": "Stft",
+                "name": "Stft",
+                "metadata": {},
+                "file_location": "",
+                "module_label": "Stft",
+                "module_category": "Signal Processing",
+                "module_options": {},
+                "inputs": {
+                    "signals": {
+                        "name": "signals",
+                        "value": "",
+                        "sub_plugs": {},
+                        "connections": {
+                            "b36768be-9cab-41f9-850f-22edf97b1c13": "signals"
+                        }
+                    },
+                    "win_len_sec": {
+                        "name": "win_len_sec",
+                        "value": "5",
+                        "sub_plugs": {},
+                        "connections": {}
+                    },
+                    "win_step_sec": {
+                        "name": "win_step_sec",
+                        "value": "5",
+                        "sub_plugs": {},
+                        "connections": {}
+                    },
+                    "zeros_pad": {
+                        "name": "zeros_pad",
+                        "value": "False",
+                        "sub_plugs": {},
+                        "connections": {}
+                    },
+                    "window_name": {
+                        "name": "window_name",
+                        "value": "hann",
+                        "sub_plugs": {},
+                        "connections": {}
+                    },
+                    "rm_mean": {
+                        "name": "rm_mean",
+                        "value": "True",
+                        "sub_plugs": {},
+                        "connections": {}
+                    },
+                    "norm": {
+                        "name": "norm",
+                        "value": "rms",
+                        "sub_plugs": {},
+                        "connections": {}
+                    },
+                    "filename": {
+                        "name": "filename",
+                        "value": "",
+                        "sub_plugs": {},
+                        "connections": {}
+                    }
+                },
+                "outputs": {
+                    "psd": {
+                        "name": "psd",
+                        "value": "",
+                        "sub_plugs": {},
+                        "connections": {
+                            "4bb8c9ac-64e8-4cec-9c2c-5a00c80b4eae": [
+                                "PSD"
+                            ]
+                        }
+                    }
+                },
+                "module": "CEAMSModules.Stft",
+                "identifier": "159bfdad-5000-474b-ae38-8e95ff4142b2",
+                "pos_x": 391.3408866995075,
+                "pos_y": 5.374384236453224,
+                "activation_state": "activated",
+                "package": {
+                    "package_name": "CEAMSModules"
+                }
+            },
+            {
+                "cls": "FilterSignal",
+                "name": "FilterSignal",
+                "metadata": {},
+                "file_location": "",
+                "module_label": "Filter Signal",
+                "module_category": "Signal Processing",
+                "module_options": {},
+                "inputs": {
+                    "signals": {
+                        "name": "signals",
+                        "value": "",
+                        "sub_plugs": {},
+                        "connections": {
+                            "377e68c9-e26d-4b06-972e-d88e12ecb208": "signals"
+                        }
+                    },
+                    "type": {
+                        "name": "type",
+                        "value": "bandpass",
+                        "sub_plugs": {},
+                        "connections": {}
+                    },
+                    "IR_family": {
+                        "name": "IR_family",
+                        "value": "IIR",
+                        "sub_plugs": {},
+                        "connections": {}
+                    },
+                    "use_std_order": {
+                        "name": "use_std_order",
+                        "value": "False",
+                        "sub_plugs": {},
+                        "connections": {}
+                    },
+                    "order": {
+                        "name": "order",
+                        "value": "6",
+                        "sub_plugs": {},
+                        "connections": {}
+                    },
+                    "cutoff": {
+                        "name": "cutoff",
+                        "value": "0.3 62",
+                        "sub_plugs": {},
+                        "connections": {}
+                    },
+                    "window": {
+                        "name": "window",
+                        "value": "hamming",
+                        "sub_plugs": {},
+                        "connections": {}
+                    }
+                },
+                "outputs": {
+                    "signals": {
+                        "name": "signals",
+                        "value": "",
+                        "sub_plugs": {},
+                        "connections": {
+                            "159bfdad-5000-474b-ae38-8e95ff4142b2": [
+                                "signals"
+                            ]
+                        }
+                    }
+                },
+                "module": "CEAMSModules.FilterSignal",
+                "identifier": "b36768be-9cab-41f9-850f-22edf97b1c13",
+                "pos_x": 207.33103448275864,
+                "pos_y": 11.823645320197045,
+                "activation_state": "activated",
+                "package": {
+                    "package_name": "CEAMSModules"
+                }
+            },
+            {
+                "cls": "PSGReader",
+                "name": "PSGReader",
+                "metadata": {},
+                "file_location": "",
+                "module_label": "PSGReader",
+                "module_category": "Files I/O",
+                "module_options": {
+                    "alias": {
+                        "value": null,
+                        "tooltip": "List of aliases separated by a semicolon(;) character"
+                    },
+                    "file_selection_only": {
+                        "value": "0",
+                        "tooltip": "Set it to 1 if you only need to select a file and not its montages and channels."
+                    }
+                },
+                "inputs": {
+                    "files": {
+                        "name": "files",
+                        "value": {},
+                        "sub_plugs": {},
+                        "connections": {}
+                    },
+                    "alias": {
+                        "name": "alias",
+                        "value": {},
+                        "sub_plugs": {},
+                        "connections": {}
+                    }
+                },
+                "outputs": {
+                    "filename": {
+                        "name": "filename",
+                        "value": "",
+                        "sub_plugs": {},
+                        "connections": {}
+                    },
+                    "signals": {
+                        "name": "signals",
+                        "value": "",
+                        "sub_plugs": {},
+                        "connections": {
+                            "b36768be-9cab-41f9-850f-22edf97b1c13": [
+                                "signals"
+                            ]
+                        }
+                    },
+                    "events": {
+                        "name": "events",
+                        "value": "",
+                        "sub_plugs": {},
+                        "connections": {
+                            "4bb8c9ac-64e8-4cec-9c2c-5a00c80b4eae": [
+                                "events"
+                            ]
+                        }
+                    },
+                    "sleep_stages": {
+                        "name": "sleep_stages",
+                        "value": "",
+                        "sub_plugs": {},
+                        "connections": {
+                            "4bb8c9ac-64e8-4cec-9c2c-5a00c80b4eae": [
+                                "sleep_stages"
+                            ]
+                        }
+                    },
+                    "subject_info": {
+                        "name": "subject_info",
+                        "value": "",
+                        "sub_plugs": {},
+                        "connections": {
+                            "4bb8c9ac-64e8-4cec-9c2c-5a00c80b4eae": [
+                                "subject_info"
+                            ]
+                        }
+                    }
+                },
+                "module": "CEAMSModules.PSGReader",
+                "identifier": "377e68c9-e26d-4b06-972e-d88e12ecb208",
+                "pos_x": 0.0,
+                "pos_y": 120.0,
+                "activation_state": "activated",
+                "package": {
+                    "package_name": "CEAMSModules"
+                }
+            }
+        ]
+    }
+}

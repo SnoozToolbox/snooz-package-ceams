@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>Outputfiles</class>
+ <widget class="QWidget" name="Outputfiles">
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <item>
+    <widget class="QLabel" name="report_label">
+     <property name="text"><string>Snooz writes one TSV report for all selected recordings. Results are grouped by channel and sleep stage, without hourly or cycle breakdowns. New results are appended if the file already exists.</string></property>
+     <property name="wordWrap"><bool>true</bool></property>
+    </widget>
+   </item>
+   <item>
+    <layout class="QHBoxLayout" name="filenameLayout">
+     <item>
+      <widget class="QLabel" name="filename_label">
+       <property name="text"><string>Output file</string></property>
+       <property name="buddy"><cstring>filename_lineEdit</cstring></property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLineEdit" name="filename_lineEdit">
+       <property name="placeholderText"><string>Choose a .tsv file</string></property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="choose_pushButton">
+       <property name="text"><string>Browse...</string></property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <spacer name="verticalSpacer">
+     <property name="orientation"><enum>Qt::Vertical</enum></property>
+    </spacer>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

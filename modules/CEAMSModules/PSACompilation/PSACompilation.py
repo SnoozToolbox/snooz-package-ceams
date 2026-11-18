@@ -65,7 +65,7 @@ class PSACompilation(SciNode):
             True to write the spectral activity per hour.
         "dist_cycle" : bool
             True to write the spectral activity per cycle.        
-        "parameters_cycle" : String (dict converted into a string)
+        "parameters_cycle" : dict
             "{
                 'defined_option':'Minimum Criteria'
                 'Include_SOREMP' : '1'
@@ -87,6 +87,7 @@ class PSACompilation(SciNode):
         "artefact_name": String
             Event name to ignore, each name is separated by a comma.
         "cycle_labelled" :  pandas DataFrame
+            Required only for hourly or per-cycle reports.
             List of NREM and REM periods (columns=['group','name','start_sec','duration_sec','channels'])
             where the group is the recording filename.
         "report_constants": dict
@@ -175,7 +176,7 @@ class PSACompilation(SciNode):
                 True to write the spectral activity per hour.
             "dist_cycle" : bool
                 True to write the spectral activity per cycle.        
-            "parameters_cycle" : String (dict converted into a string)
+            "parameters_cycle" : dict
                 "{
                     'defined_option':'Minimum Criteria'
                     'Include_SOREMP' : '1'
@@ -197,6 +198,7 @@ class PSACompilation(SciNode):
             "artefact_name": String
                 Event name to reset signal, each name is separated by a comma, as a pattern occurrence.
             "cycle_labelled" :  pandas DataFrame
+                Required only for hourly or per-cycle reports.
                 List of NREM and REM periods (columns=['group','name','start_sec','duration_sec','channels'])
                 where the group is the recording filename.
             "report_constants": dict
@@ -222,9 +224,13 @@ class PSACompilation(SciNode):
             raise NodeInputException(self.identifier, "parameters_cycle", \
                 f"PSACompilation input of wrong type. Expected: <class 'dict'> received: {type(parameters_cycle)}")
 
-        if (not isinstance(cycle_labelled, pd.DataFrame)) or len(cycle_labelled)==0:
+        report_by_hour = int(dist_hour) == 1
+        report_by_cycle = int(dist_cycle) == 1
+        if (report_by_hour or report_by_cycle) and (
+            not isinstance(cycle_labelled, pd.DataFrame) or cycle_labelled.empty
+        ):
             raise NodeInputException(self.identifier, "cycle_labelled", \
-                f"PSACompilation input of wrong type or empty. Expected: <class 'pd.DataFrame'> received: {type(cycle_labelled)}")            
+                "PSACompilation requires non-empty cycle labels for hourly or per-cycle reports.")
         try:
             mini_bandwidth = float(mini_bandwidth)
         except ValueError:
@@ -340,7 +346,7 @@ class PSACompilation(SciNode):
                         self.PSD_act_param[f"total_{stage_label}_act"] = np.array([np.NaN]*len(miniband_indices)) 
 
             # PSD data per hour
-            if int(dist_hour)==1: 
+            if report_by_hour:
 
                 # Collect and organize FFT windows by stage ONCE before the hour loop
                 stage_window_data, stage_window_counts, stage_valid_counts = self.collect_fft_windows_by_stage(psd_data, psd_stage, win_len)
@@ -400,7 +406,7 @@ class PSACompilation(SciNode):
                             self.PSD_act_param[f"{my_label2}{cur_div+1}_{stage_label}_act"] = np.array([np.NaN]*len(miniband_indices))
 
             # PSD data per sleep cycle
-            if int(dist_cycle)==1:
+            if report_by_cycle:
                 my_label = 'cyc'
                 for cur_div in range(self.N_CYCLES):
                     # Verify if the cycle is valid (at least the start of the first cycle)
@@ -462,11 +468,11 @@ class PSACompilation(SciNode):
 
 
         # Order columns as the doc file
-        if dist_hour and dist_cycle:
+        if report_by_hour and report_by_cycle:
             out_columns = list(_get_doc(self.N_HOURS, self.N_CYCLES).keys())
-        elif dist_hour:
+        elif report_by_hour:
             out_columns = list(_get_doc(self.N_HOURS, 0).keys())
-        elif dist_cycle:
+        elif report_by_cycle:
             out_columns = list(_get_doc(0, self.N_CYCLES).keys())
         else:
             out_columns = list(_get_doc(0, 0).keys())

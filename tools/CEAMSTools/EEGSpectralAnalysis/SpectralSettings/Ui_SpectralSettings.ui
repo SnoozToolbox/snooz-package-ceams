@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>SpectralSettings</class>
+ <widget class="QWidget" name="SpectralSettings">
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <item>
+    <widget class="QLabel" name="method_label">
+     <property name="text">
+      <string>Welch method · Hann window · 1 Hz bands</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <layout class="QFormLayout" name="formLayout">
+     <item row="0" column="0">
+      <widget class="QLabel" name="first_freq_label">
+       <property name="text"><string>First frequency (Hz)</string></property>
+       <property name="buddy"><cstring>first_freq_lineEdit</cstring></property>
+      </widget>
+     </item>
+     <item row="0" column="1">
+      <widget class="QLineEdit" name="first_freq_lineEdit"/>
+     </item>
+     <item row="1" column="0">
+      <widget class="QLabel" name="last_freq_label">
+       <property name="text"><string>Last frequency (Hz)</string></property>
+       <property name="buddy"><cstring>last_freq_lineEdit</cstring></property>
+      </widget>
+     </item>
+     <item row="1" column="1">
+      <widget class="QLineEdit" name="last_freq_lineEdit"/>
+     </item>
+     <item row="2" column="0">
+      <widget class="QLabel" name="win_len_label">
+       <property name="text"><string>Window length (s)</string></property>
+       <property name="buddy"><cstring>win_len_lineEdit</cstring></property>
+      </widget>
+     </item>
+     <item row="2" column="1">
+      <widget class="QLineEdit" name="win_len_lineEdit">
+       <property name="toolTip"><string>Use whole seconds to align the FFT bins with the fixed 1 Hz bands.</string></property>
+      </widget>
+     </item>
+     <item row="3" column="0">
+      <widget class="QLabel" name="win_step_label">
+       <property name="text"><string>Window step (s)</string></property>
+       <property name="buddy"><cstring>win_step_lineEdit</cstring></property>
+      </widget>
+     </item>
+     <item row="3" column="1">
+      <widget class="QLineEdit" name="win_step_lineEdit">
+       <property name="toolTip"><string>Use a step shorter than the window length to overlap consecutive windows.</string></property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <spacer name="verticalSpacer">
+     <property name="orientation"><enum>Qt::Vertical</enum></property>
+    </spacer>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
