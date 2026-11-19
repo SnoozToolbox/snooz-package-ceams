@@ -282,6 +282,9 @@
        </property>
        <item>
         <layout class="QHBoxLayout" name="horizontalLayout_5">
+         <property name="spacing">
+          <number>16</number>
+         </property>
          <item>
           <widget class="QLabel" name="label_Channels">
            <property name="font">
@@ -318,7 +321,7 @@
            </property>
            <layout class="QHBoxLayout" name="horizontalLayout_2">
             <property name="spacing">
-             <number>0</number>
+             <number>8</number>
             </property>
             <property name="leftMargin">
              <number>0</number>
@@ -413,6 +416,9 @@
        </item>
        <item>
         <layout class="QHBoxLayout" name="horizontalLayout_4">
+         <property name="spacing">
+          <number>8</number>
+         </property>
          <item>
           <widget class="QPushButton" name="unselect_all_channels_pushbutton">
            <property name="text">
