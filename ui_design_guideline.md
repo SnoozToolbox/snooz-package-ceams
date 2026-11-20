@@ -49,7 +49,7 @@ So the light and dark themes are both right without any work in the package.
 
 - Never set a style sheet, a color, a palette or a font family in a form, and never colored HTML (such as a red "NOTE:").
 - Qt Designer does not load the Snooz style sheet: cards and callouts look plain there. Check the look in Snooz.
-- The callouts, the step numbers and the link buttons need a Snooz version with the TOOL PAGES rules (after Snooz Toolbox 1.1.0). An older Snooz shows them plain.
+- The callouts, the step numbers, the link buttons and the muted text boxes need Snooz Toolbox 1.2.0 or later (TOOL PAGES rules of its style sheet). An older Snooz shows them plain.
 
 A dynamic property in the `.ui` file (in Qt Designer: **+** at the top of the Property Editor, **String**, untick *translatable*):
 
