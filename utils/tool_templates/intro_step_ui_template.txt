@@ -1,0 +1,441 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- The introduction of a tool (its first step), laid out as in ui_design_guideline.md (root of the
+     package repository): the name of the tool and what it does, "What you will do" (one row per step:
+     number, name, description, a line between two steps) and the methods and references, shown on
+     demand. Add "Before you start" and "Accepted files" when the tool needs them (see the guideline). -->
+<ui version="4.0">
+ <class>{{ step_class }}</class>
+ <widget class="QWidget" name="{{ step_class }}">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>900</width>
+    <height>700</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string/>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <property name="leftMargin">
+    <number>19</number>
+   </property>
+   <property name="topMargin">
+    <number>12</number>
+   </property>
+   <property name="rightMargin">
+    <number>19</number>
+   </property>
+   <property name="bottomMargin">
+    <number>12</number>
+   </property>
+   <item>
+    <layout class="QHBoxLayout" name="content_row" stretch="1,0">
+     <item>
+      <widget class="QWidget" name="content_widget" native="true">
+       <property name="maximumSize">
+        <size>
+         <width>800</width>
+         <height>16777215</height>
+        </size>
+       </property>
+       <layout class="QVBoxLayout" name="content_layout">
+        <property name="spacing">
+         <number>16</number>
+        </property>
+        <property name="leftMargin">
+         <number>0</number>
+        </property>
+        <property name="topMargin">
+         <number>0</number>
+        </property>
+        <property name="rightMargin">
+         <number>0</number>
+        </property>
+        <property name="bottomMargin">
+         <number>0</number>
+        </property>
+        <item>
+         <layout class="QVBoxLayout" name="header_layout">
+          <property name="spacing">
+           <number>6</number>
+          </property>
+          <item>
+           <widget class="QLabel" name="title_label">
+            <property name="font">
+             <font>
+              <pointsize>18</pointsize>
+              <bold>true</bold>
+             </font>
+            </property>
+            <property name="text">
+             <string>{{ tool_label | e }}</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="subtitle_label">
+            <property name="text">
+             <string>{{ tool_description | e }}</string>
+            </property>
+            <property name="wordWrap">
+             <bool>true</bool>
+            </property>
+            <property name="variant" stdset="0">
+             <string notr="true">help</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <layout class="QVBoxLayout" name="steps_section_layout">
+          <property name="spacing">
+           <number>10</number>
+          </property>
+          <item>
+           <widget class="QLabel" name="steps_heading_label">
+            <property name="font">
+             <font>
+              <pointsize>15</pointsize>
+              <bold>true</bold>
+             </font>
+            </property>
+            <property name="text">
+             <string>What you will do</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QFrame" name="steps_card">
+            <property name="frameShape">
+             <enum>QFrame::Shape::StyledPanel</enum>
+            </property>
+            <property name="frameShadow">
+             <enum>QFrame::Shadow::Raised</enum>
+            </property>
+            <layout class="QVBoxLayout" name="steps_card_layout">
+             <property name="spacing">
+              <number>10</number>
+             </property>
+             <property name="leftMargin">
+              <number>10</number>
+             </property>
+             <property name="topMargin">
+              <number>10</number>
+             </property>
+             <property name="rightMargin">
+              <number>10</number>
+             </property>
+             <property name="bottomMargin">
+              <number>10</number>
+             </property>
+             <item>
+              <!-- One row per step: step_N_number_label (column 0), step_N_name_label (column 1),
+                   step_N_label (column 3), and a line (QFrame HLine Plain) spanning the 4 columns
+                   between two steps. Copy the first row for the next steps. -->
+              <layout class="QGridLayout" name="steps_grid" columnstretch="0,0,0,1">
+               <property name="horizontalSpacing">
+                <number>12</number>
+               </property>
+               <property name="verticalSpacing">
+                <number>10</number>
+               </property>
+               <item row="0" column="0" alignment="Qt::AlignmentFlag::AlignTop">
+                <widget class="QLabel" name="step_1_number_label">
+                 <property name="minimumSize">
+                  <size>
+                   <width>24</width>
+                   <height>24</height>
+                  </size>
+                 </property>
+                 <property name="maximumSize">
+                  <size>
+                   <width>24</width>
+                   <height>24</height>
+                  </size>
+                 </property>
+                 <property name="font">
+                  <font>
+                   <pointsize>10</pointsize>
+                  </font>
+                 </property>
+                 <property name="text">
+                  <string>1</string>
+                 </property>
+                 <property name="alignment">
+                  <set>Qt::AlignmentFlag::AlignCenter</set>
+                 </property>
+                 <property name="variant" stdset="0">
+                  <string notr="true">step_number</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="0" column="1">
+                <widget class="QLabel" name="step_1_name_label">
+                 <property name="font">
+                  <font>
+                   <bold>true</bold>
+                  </font>
+                 </property>
+                 <property name="text">
+                  <string>Name of the step</string>
+                 </property>
+                 <property name="alignment">
+                  <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignTop</set>
+                 </property>
+                </widget>
+               </item>
+               <item row="0" column="2">
+                <spacer name="steps_gap">
+                 <property name="orientation">
+                  <enum>Qt::Orientation::Horizontal</enum>
+                 </property>
+                 <property name="sizeType">
+                  <enum>QSizePolicy::Policy::Fixed</enum>
+                 </property>
+                 <property name="sizeHint" stdset="0">
+                  <size>
+                   <width>16</width>
+                   <height>20</height>
+                  </size>
+                 </property>
+                </spacer>
+               </item>
+               <item row="0" column="3">
+                <widget class="QLabel" name="step_1_label">
+                 <property name="text">
+                  <string>What the user does in the step.</string>
+                 </property>
+                 <property name="alignment">
+                  <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignTop</set>
+                 </property>
+                 <property name="wordWrap">
+                  <bool>true</bool>
+                 </property>
+                 <property name="variant" stdset="0">
+                  <string notr="true">help</string>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </item>
+            </layout>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <layout class="QVBoxLayout" name="methods_section_layout">
+          <property name="spacing">
+           <number>2</number>
+          </property>
+          <item>
+           <layout class="QHBoxLayout" name="methods_buttons_layout">
+            <property name="spacing">
+             <number>0</number>
+            </property>
+            <item>
+             <widget class="QPushButton" name="methods_show_button">
+              <property name="focusPolicy">
+               <enum>Qt::FocusPolicy::TabFocus</enum>
+              </property>
+              <property name="text">
+               <string>› Methods and references</string>
+              </property>
+              <property name="flat">
+               <bool>true</bool>
+              </property>
+              <property name="variant" stdset="0">
+               <string notr="true">link</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="methods_hide_button">
+              <property name="focusPolicy">
+               <enum>Qt::FocusPolicy::TabFocus</enum>
+              </property>
+              <property name="visible">
+               <bool>false</bool>
+              </property>
+              <property name="text">
+               <string>⌄ Methods and references</string>
+              </property>
+              <property name="flat">
+               <bool>true</bool>
+              </property>
+              <property name="variant" stdset="0">
+               <string notr="true">link</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <spacer name="methods_buttons_spacer">
+              <property name="orientation">
+               <enum>Qt::Orientation::Horizontal</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>40</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <widget class="QLabel" name="methods_note_label">
+            <property name="font">
+             <font>
+              <pointsize>10</pointsize>
+             </font>
+            </property>
+            <property name="text">
+             <string>The details of each setting are shown in its own step.</string>
+            </property>
+            <property name="wordWrap">
+             <bool>true</bool>
+            </property>
+            <property name="variant" stdset="0">
+             <string notr="true">help</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QWidget" name="methods_widget" native="true">
+            <property name="visible">
+             <bool>false</bool>
+            </property>
+            <layout class="QVBoxLayout" name="methods_layout">
+             <property name="spacing">
+              <number>10</number>
+             </property>
+             <property name="leftMargin">
+              <number>0</number>
+             </property>
+             <property name="topMargin">
+              <number>6</number>
+             </property>
+             <property name="rightMargin">
+              <number>0</number>
+             </property>
+             <property name="bottomMargin">
+              <number>0</number>
+             </property>
+             <item>
+              <widget class="QLabel" name="methods_label">
+               <property name="text">
+                <string>&lt;b&gt;Method:&lt;/b&gt; how the tool computes its results [1].</string>
+               </property>
+               <property name="textFormat">
+                <enum>Qt::TextFormat::RichText</enum>
+               </property>
+               <property name="wordWrap">
+                <bool>true</bool>
+               </property>
+               <property name="variant" stdset="0">
+                <string notr="true">help</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLabel" name="references_label">
+               <property name="font">
+                <font>
+                 <pointsize>10</pointsize>
+                </font>
+               </property>
+               <property name="text">
+                <string>[1] Reference.</string>
+               </property>
+               <property name="wordWrap">
+                <bool>true</bool>
+               </property>
+               <property name="variant" stdset="0">
+                <string notr="true">help</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+          </item>
+         </layout>
+        </item>
+       </layout>
+      </widget>
+     </item>
+     <item>
+      <spacer name="content_spacer">
+       <property name="orientation">
+        <enum>Qt::Orientation::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <spacer name="verticalSpacer">
+     <property name="orientation">
+      <enum>Qt::Orientation::Vertical</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>20</width>
+       <height>40</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+  </layout>
+ </widget>
+ <resources>
+  <include location="../../../../../snooz-toolbox/src/main/python/ui/themes/themes.qrc"/>
+ </resources>
+ <connections>
+  <connection>
+   <sender>methods_show_button</sender>
+   <signal>clicked()</signal>
+   <receiver>methods_widget</receiver>
+   <slot>show()</slot>
+  </connection>
+  <connection>
+   <sender>methods_show_button</sender>
+   <signal>clicked()</signal>
+   <receiver>methods_hide_button</receiver>
+   <slot>show()</slot>
+  </connection>
+  <connection>
+   <sender>methods_show_button</sender>
+   <signal>clicked()</signal>
+   <receiver>methods_show_button</receiver>
+   <slot>hide()</slot>
+  </connection>
+  <connection>
+   <sender>methods_hide_button</sender>
+   <signal>clicked()</signal>
+   <receiver>methods_widget</receiver>
+   <slot>hide()</slot>
+  </connection>
+  <connection>
+   <sender>methods_hide_button</sender>
+   <signal>clicked()</signal>
+   <receiver>methods_show_button</receiver>
+   <slot>show()</slot>
+  </connection>
+  <connection>
+   <sender>methods_hide_button</sender>
+   <signal>clicked()</signal>
+   <receiver>methods_hide_button</receiver>
+   <slot>hide()</slot>
+  </connection>
+ </connections>
+</ui>

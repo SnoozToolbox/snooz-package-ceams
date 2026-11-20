@@ -43,6 +43,12 @@ while not done:
         step_label = input("Step label: ")
         step_description = input("Step description: ")
 
+        # The first step of a tool is its introduction (not numbered in the steps column)
+        tool_description_path = os.path.join(tool_path, f"{tool_name}.json")
+        with open(tool_description_path, "r") as f:
+            tool_params = json.loads(f.read())["tool_params"]
+        is_intro = len(tool_params["steps"]) == 0
+
         # Create module output folder
         root_path = f"{step_path}"
         os.mkdir(step_path)
@@ -56,7 +62,10 @@ while not done:
         def create_file(template_filename, output_filename):
 
             template = env.get_template(template_filename)
-            output = template.render(step_class=step_class, tool_name=tool_name, package_name=package_name)
+            output = template.render(step_class=step_class, tool_name=tool_name, package_name=package_name,
+                                     step_label=step_label, step_description=step_description,
+                                     tool_label=tool_params.get("tool_label", tool_name),
+                                     tool_description=tool_params.get("tool_description", ""))
 
             filepath = os.path.join(root_path, output_filename)
             f = open(filepath, "w", encoding="UTF-8")
@@ -75,7 +84,10 @@ while not done:
 
         # Create all files
         create_file("step_template.txt", f"{step_class}.py")
-        create_file("step_ui_template.txt",f"Ui_{step_class}.ui")
+        # The form follows ui_design_guideline.md (root of the package repository)
+        create_file("intro_step_ui_template.txt" if is_intro else "step_ui_template.txt", f"Ui_{step_class}.ui")
+        if is_intro:
+            print(f"{step_class} is the introduction of the tool: its form lists the steps (What you will do).")
         # Compile the ui file to python
         compiler_exists = False
         compiler_path = shutil.which("pyside6-uic")
@@ -130,6 +142,7 @@ while not done:
 
 if compiler_exists:
     print("Done!")
-else:        
-    print(f"\nWhat to do next?")    
+else:
+    print(f"\nWhat to do next?")
     print(f"- Generate the .py files from the .ui files using pyuic")
+print("Design the pages of the steps following ui_design_guideline.md, at the root of the package repository.")

@@ -1,4 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- The settings view of a module, laid out as in ui_design_guideline.md (root of the package
+     repository): the settings in cards, no page title (the window of the module in the process
+     designer and the steps column of a tool already name it). One field per input: rename the
+     labels, choose the right widget for each input, add the units and a short help. -->
 <ui version="4.0">
  <class>{{ module_class }}SettingsView</class>
  <widget class="QWidget" name="{{ module_class }}SettingsView">
@@ -14,26 +18,127 @@
    <string>Form</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
-   {% for input in inputs -%}
+   <property name="leftMargin">
+    <number>19</number>
+   </property>
+   <property name="topMargin">
+    <number>12</number>
+   </property>
+   <property name="rightMargin">
+    <number>19</number>
+   </property>
+   <property name="bottomMargin">
+    <number>12</number>
+   </property>
    <item>
-    <layout class="QHBoxLayout" name="{{input.name}}_horizontalLayout">
+    <layout class="QHBoxLayout" name="content_row" stretch="1,0">
      <item>
-      <widget class="QLabel" name="{{input.name}}_label">
-       <property name="text">
-        <string>{{input.name}}</string>
+      <widget class="QWidget" name="content_widget" native="true">
+       <property name="maximumSize">
+        <size>
+         <width>800</width>
+         <height>16777215</height>
+        </size>
        </property>
+       <layout class="QVBoxLayout" name="content_layout">
+        <property name="spacing">
+         <number>16</number>
+        </property>
+        <property name="leftMargin">
+         <number>0</number>
+        </property>
+        <property name="topMargin">
+         <number>0</number>
+        </property>
+        <property name="rightMargin">
+         <number>0</number>
+        </property>
+        <property name="bottomMargin">
+         <number>0</number>
+        </property>
+        <item>
+         <widget class="QFrame" name="settings_card">
+          <property name="frameShape">
+           <enum>QFrame::Shape::StyledPanel</enum>
+          </property>
+          <property name="frameShadow">
+           <enum>QFrame::Shadow::Raised</enum>
+          </property>
+          <layout class="QVBoxLayout" name="settings_card_layout">
+           <property name="spacing">
+            <number>10</number>
+           </property>
+           <property name="leftMargin">
+            <number>10</number>
+           </property>
+           <property name="topMargin">
+            <number>10</number>
+           </property>
+           <property name="rightMargin">
+            <number>10</number>
+           </property>
+           <property name="bottomMargin">
+            <number>10</number>
+           </property>
+           <item>
+            <widget class="QLabel" name="settings_title_label">
+             <property name="font">
+              <font>
+               <bold>true</bold>
+              </font>
+             </property>
+             <property name="text">
+              <string>{{ module_label | e }} settings</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <layout class="QGridLayout" name="settings_grid" columnstretch="0,1">
+             <property name="horizontalSpacing">
+              <number>12</number>
+             </property>
+             <property name="verticalSpacing">
+              <number>10</number>
+             </property>
+             {% for input in inputs -%}
+             <item row="{{ loop.index0 }}" column="0">
+              <widget class="QLabel" name="{{ input.name }}_label">
+               <property name="text">
+                <string>{{ input.name }}</string>
+               </property>
+              </widget>
+             </item>
+             <item row="{{ loop.index0 }}" column="1">
+              <widget class="QLineEdit" name="{{ input.name }}_lineedit"/>
+             </item>
+             {% endfor -%}
+            </layout>
+           </item>
+          </layout>
+         </widget>
+        </item>
+       </layout>
       </widget>
      </item>
      <item>
-      <widget class="QLineEdit" name="{{input.name}}_lineedit"/>
+      <spacer name="content_spacer">
+       <property name="orientation">
+        <enum>Qt::Orientation::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>0</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
      </item>
     </layout>
    </item>
-   {%- endfor %}
    <item>
     <spacer name="verticalSpacer">
      <property name="orientation">
-      <enum>Qt::Vertical</enum>
+      <enum>Qt::Orientation::Vertical</enum>
      </property>
      <property name="sizeHint" stdset="0">
       <size>
@@ -49,4 +154,4 @@
   <include location="../../../../snooz-toolbox/src/main/python/ui/themes/themes.qrc"/>
  </resources>
  <connections/>
- </ui>
+</ui>

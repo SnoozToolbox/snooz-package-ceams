@@ -156,6 +156,8 @@ if not is_overwriting:
         json_string = json.dumps(description, indent=4)
         outfile.write(json_string)
 
+print("The settings view shows one field per input: design it following ui_design_guideline.md, "
+      "at the root of the package repository.")
 if compiler_exists:
     print("Done!")
 else:
