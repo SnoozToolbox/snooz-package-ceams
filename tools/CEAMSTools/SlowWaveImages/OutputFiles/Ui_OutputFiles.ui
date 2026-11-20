@@ -557,10 +557,10 @@ Average and STD displayed are across the subjects of each group.</string>
             <bool>false</bool>
            </property>
            <property name="minimum">
-            <double>-5.000000000000000</double>
+            <double>-100.000000000000000</double>
            </property>
            <property name="maximum">
-            <double>5.000000000000000</double>
+            <double>10000.000000000000000</double>
            </property>
            <property name="singleStep">
             <double>0.500000000000000</double>
@@ -583,10 +583,10 @@ Average and STD displayed are across the subjects of each group.</string>
             <bool>false</bool>
            </property>
            <property name="minimum">
-            <double>-5.000000000000000</double>
+            <double>0.000000000000000</double>
            </property>
            <property name="maximum">
-            <double>5.000000000000000</double>
+            <double>100000.000000000000000</double>
            </property>
            <property name="singleStep">
             <double>0.500000000000000</double>
@@ -609,10 +609,10 @@ Average and STD displayed are across the subjects of each group.</string>
             <bool>false</bool>
            </property>
            <property name="minimum">
-            <double>-500.000000000000000</double>
+            <double>-10.000000000000000</double>
            </property>
            <property name="maximum">
-            <double>500.000000000000000</double>
+            <double>1000.000000000000000</double>
            </property>
            <property name="singleStep">
             <double>50.000000000000000</double>
@@ -635,10 +635,10 @@ Average and STD displayed are across the subjects of each group.</string>
             <bool>false</bool>
            </property>
            <property name="minimum">
-            <double>-500.000000000000000</double>
+            <double>0.000000000000000</double>
            </property>
            <property name="maximum">
-            <double>500.000000000000000</double>
+            <double>100000000000000000000.000000000000000</double>
            </property>
            <property name="singleStep">
             <double>50.000000000000000</double>
@@ -867,7 +867,7 @@ Average and STD displayed are across the subjects of each group.</string>
   <slot>out_options_slot()</slot>
  </slots>
  <buttongroups>
-  <buttongroup name="buttonGroup_mean"/>
   <buttongroup name="buttonGroup_subject_pics"/>
+  <buttongroup name="buttonGroup_mean"/>
  </buttongroups>
 </ui>

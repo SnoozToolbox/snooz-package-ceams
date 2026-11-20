@@ -318,8 +318,8 @@ class Ui_OutputFiles(object):
         self.doubleSpinBox_xmin = QDoubleSpinBox(OutputFiles)
         self.doubleSpinBox_xmin.setObjectName(u"doubleSpinBox_xmin")
         self.doubleSpinBox_xmin.setEnabled(False)
-        self.doubleSpinBox_xmin.setMinimum(-5.000000000000000)
-        self.doubleSpinBox_xmin.setMaximum(5.000000000000000)
+        self.doubleSpinBox_xmin.setMinimum(-100.000000000000000)
+        self.doubleSpinBox_xmin.setMaximum(10000.000000000000000)
         self.doubleSpinBox_xmin.setSingleStep(0.500000000000000)
 
         self.horizontalLayout_5.addWidget(self.doubleSpinBox_xmin)
@@ -333,8 +333,8 @@ class Ui_OutputFiles(object):
         self.doubleSpinBox_xmax = QDoubleSpinBox(OutputFiles)
         self.doubleSpinBox_xmax.setObjectName(u"doubleSpinBox_xmax")
         self.doubleSpinBox_xmax.setEnabled(False)
-        self.doubleSpinBox_xmax.setMinimum(-5.000000000000000)
-        self.doubleSpinBox_xmax.setMaximum(5.000000000000000)
+        self.doubleSpinBox_xmax.setMinimum(0.000000000000000)
+        self.doubleSpinBox_xmax.setMaximum(100000.000000000000000)
         self.doubleSpinBox_xmax.setSingleStep(0.500000000000000)
 
         self.horizontalLayout_5.addWidget(self.doubleSpinBox_xmax)
@@ -348,8 +348,8 @@ class Ui_OutputFiles(object):
         self.doubleSpinBox_ymin = QDoubleSpinBox(OutputFiles)
         self.doubleSpinBox_ymin.setObjectName(u"doubleSpinBox_ymin")
         self.doubleSpinBox_ymin.setEnabled(False)
-        self.doubleSpinBox_ymin.setMinimum(-500.000000000000000)
-        self.doubleSpinBox_ymin.setMaximum(500.000000000000000)
+        self.doubleSpinBox_ymin.setMinimum(-10.000000000000000)
+        self.doubleSpinBox_ymin.setMaximum(1000.000000000000000)
         self.doubleSpinBox_ymin.setSingleStep(50.000000000000000)
 
         self.horizontalLayout_5.addWidget(self.doubleSpinBox_ymin)
@@ -363,8 +363,8 @@ class Ui_OutputFiles(object):
         self.doubleSpinBox_ymax = QDoubleSpinBox(OutputFiles)
         self.doubleSpinBox_ymax.setObjectName(u"doubleSpinBox_ymax")
         self.doubleSpinBox_ymax.setEnabled(False)
-        self.doubleSpinBox_ymax.setMinimum(-500.000000000000000)
-        self.doubleSpinBox_ymax.setMaximum(500.000000000000000)
+        self.doubleSpinBox_ymax.setMinimum(0.000000000000000)
+        self.doubleSpinBox_ymax.setMaximum(100000000000000000000.000000000000000)
         self.doubleSpinBox_ymax.setSingleStep(50.000000000000000)
 
         self.horizontalLayout_5.addWidget(self.doubleSpinBox_ymax)
