@@ -552,15 +552,18 @@ Average and STD displayed are across the subjects of each group.</string>
           </widget>
          </item>
          <item>
-          <widget class="QDoubleSpinBox" name="doubleSpinBox_xmin">
+          <widget class="DecimalSpinBox" name="doubleSpinBox_xmin">
            <property name="enabled">
             <bool>false</bool>
            </property>
+           <property name="decimals">
+            <number>2</number>
+           </property>
            <property name="minimum">
-            <double>-100.000000000000000</double>
+            <double>-10.000000000000000</double>
            </property>
            <property name="maximum">
-            <double>10000.000000000000000</double>
+            <double>10.000000000000000</double>
            </property>
            <property name="singleStep">
             <double>0.500000000000000</double>
@@ -578,15 +581,18 @@ Average and STD displayed are across the subjects of each group.</string>
           </widget>
          </item>
          <item>
-          <widget class="QDoubleSpinBox" name="doubleSpinBox_xmax">
+          <widget class="DecimalSpinBox" name="doubleSpinBox_xmax">
            <property name="enabled">
             <bool>false</bool>
            </property>
+           <property name="decimals">
+            <number>2</number>
+           </property>
            <property name="minimum">
-            <double>0.000000000000000</double>
+            <double>-10.000000000000000</double>
            </property>
            <property name="maximum">
-            <double>100000.000000000000000</double>
+            <double>10.000000000000000</double>
            </property>
            <property name="singleStep">
             <double>0.500000000000000</double>
@@ -604,15 +610,18 @@ Average and STD displayed are across the subjects of each group.</string>
           </widget>
          </item>
          <item>
-          <widget class="QDoubleSpinBox" name="doubleSpinBox_ymin">
+          <widget class="DecimalSpinBox" name="doubleSpinBox_ymin">
            <property name="enabled">
             <bool>false</bool>
            </property>
+           <property name="decimals">
+            <number>0</number>
+           </property>
            <property name="minimum">
-            <double>-10.000000000000000</double>
+            <double>-500.000000000000000</double>
            </property>
            <property name="maximum">
-            <double>1000.000000000000000</double>
+            <double>500.000000000000000</double>
            </property>
            <property name="singleStep">
             <double>50.000000000000000</double>
@@ -630,15 +639,18 @@ Average and STD displayed are across the subjects of each group.</string>
           </widget>
          </item>
          <item>
-          <widget class="QDoubleSpinBox" name="doubleSpinBox_ymax">
+          <widget class="DecimalSpinBox" name="doubleSpinBox_ymax">
            <property name="enabled">
             <bool>false</bool>
            </property>
+           <property name="decimals">
+            <number>0</number>
+           </property>
            <property name="minimum">
-            <double>0.000000000000000</double>
+            <double>-500.000000000000000</double>
            </property>
            <property name="maximum">
-            <double>100000000000000000000.000000000000000</double>
+            <double>500.000000000000000</double>
            </property>
            <property name="singleStep">
             <double>50.000000000000000</double>
@@ -761,6 +773,13 @@ Average and STD displayed are across the subjects of each group.</string>
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>DecimalSpinBox</class>
+   <extends>QDoubleSpinBox</extends>
+   <header>CEAMSTools.SlowWaveImages.OutputFiles.DecimalSpinBox</header>
+  </customwidget>
+ </customwidgets>
  <resources>
   <include location="../../../../../snooz-toolbox/src/main/python/ui/themes/themes.qrc"/>
  </resources>
