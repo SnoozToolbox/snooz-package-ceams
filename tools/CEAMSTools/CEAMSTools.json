@@ -247,7 +247,7 @@
         {
             "item_name": "SpindleDetectionA7",
             "item_type": "tool",
-            "item_version": "3.9.2",
+            "item_version": "3.9.3",
             "item_hooks": [
                 {
                     "endpoint_name": "menu_endpoint",
