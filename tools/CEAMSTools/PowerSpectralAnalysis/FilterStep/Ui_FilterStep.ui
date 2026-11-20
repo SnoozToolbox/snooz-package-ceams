@@ -6,217 +6,432 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>813</width>
-    <height>565</height>
+    <width>900</width>
+    <height>700</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string/>
+   <string />
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
+   <property name="leftMargin">
+    <number>19</number>
+   </property>
+   <property name="topMargin">
+    <number>12</number>
+   </property>
+   <property name="rightMargin">
+    <number>19</number>
+   </property>
+   <property name="bottomMargin">
+    <number>12</number>
+   </property>
    <item>
-    <widget class="QLabel" name="label_2">
-     <property name="maximumSize">
-      <size>
-       <width>16777215</width>
-       <height>22</height>
-      </size>
-     </property>
-     <property name="font">
-      <font>
-       <italic>false</italic>
-       <bold>false</bold>
-      </font>
-     </property>
-     <property name="text">
-      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Filtering&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-     </property>
-    </widget>
-   </item>
-   <item>
-    <widget class="QTextEdit" name="textBrowser">
-     <property name="minimumSize">
-      <size>
-       <width>0</width>
-       <height>380</height>
-      </size>
-     </property>
-     <property name="maximumSize">
-      <size>
-       <width>16777215</width>
-       <height>500</height>
-      </size>
-     </property>
-     <property name="frameShape">
-      <enum>QFrame::Shape::NoFrame</enum>
-     </property>
-     <property name="frameShadow">
-      <enum>QFrame::Shadow::Plain</enum>
-     </property>
-     <property name="lineWidth">
+    <layout class="QHBoxLayout" name="content_row" stretch="1,0">
+     <property name="leftMargin">
       <number>0</number>
      </property>
-     <property name="verticalScrollBarPolicy">
-      <enum>Qt::ScrollBarPolicy::ScrollBarAlwaysOff</enum>
+     <property name="topMargin">
+      <number>0</number>
      </property>
-     <property name="horizontalScrollBarPolicy">
-      <enum>Qt::ScrollBarPolicy::ScrollBarAlwaysOff</enum>
+     <property name="rightMargin">
+      <number>0</number>
      </property>
-     <property name="html">
-      <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
-&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;meta charset=&quot;utf-8&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
-p, li { white-space: pre-wrap; }
-hr { height: 1px; border-width: 0; }
-li.unchecked::marker { content: &quot;\2610&quot;; }
-li.checked::marker { content: &quot;\2612&quot;; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-size:12pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;The user may optionally add a bandpass filter and a power-line notch filter, depending on signal quality and the research question.&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;We recommend applying the same filters used during visual review.&lt;/p&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Warning&lt;/span&gt;: The highest cutoff frequency must be lower than &lt;span style=&quot; font-weight:700;&quot;&gt;sample rate / 2&lt;/span&gt;.&lt;/p&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;PSG file not modified&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Filtering is applied only for detection; the original PSG signals remain unchanged.&lt;/p&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Filter Design&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;The filter is a Butterworth design implemented in second-order-section (SOS) form and applied using bidirectional zero-phase filtering. &lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;This approach preserves the requested magnitude response while eliminating phase distortion.&lt;/p&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;   Bandpass filter parameters:&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;      - Type : IIR bandpass&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;      - Order : 6 (internally halved before the forward/backward pass)&lt;/p&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;   Notch filter parameters:&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;      - Type : IIR stopband&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;      - Order : 20 (internally halved before the forward/backward pass)&lt;/p&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+     <property name="bottomMargin">
+      <number>0</number>
      </property>
-    </widget>
-   </item>
-   <item>
-    <layout class="QGridLayout" name="gridLayout">
-     <item row="0" column="0" colspan="2">
-      <widget class="QCheckBox" name="bp_checkBox">
-       <property name="font">
-        <font>
-         <italic>false</italic>
-         <bold>false</bold>
-        </font>
-       </property>
-       <property name="text">
-        <string>Bandpass filter</string>
-       </property>
-       <property name="checked">
-        <bool>true</bool>
-       </property>
-      </widget>
-     </item>
-     <item row="0" column="3">
-      <widget class="QCheckBox" name="notch_checkBox">
-       <property name="font">
-        <font>
-         <italic>false</italic>
-         <bold>false</bold>
-        </font>
-       </property>
-       <property name="text">
-        <string>Power line notch filter</string>
-       </property>
-      </widget>
-     </item>
-     <item row="1" column="0">
-      <widget class="QLabel" name="label">
-       <property name="minimumSize">
-        <size>
-         <width>80</width>
-         <height>0</height>
-        </size>
-       </property>
+     <item>
+      <widget class="QWidget" name="content_widget" native="true">
        <property name="maximumSize">
         <size>
-         <width>100</width>
+         <width>800</width>
          <height>16777215</height>
         </size>
        </property>
-       <property name="toolTip">
-        <string>Edit the low cutoff frequency in Hz (i.e. 0.3).</string>
-       </property>
-       <property name="text">
-        <string>Low cutoff</string>
-       </property>
+       <layout class="QVBoxLayout" name="content_layout">
+        <property name="spacing">
+         <number>16</number>
+        </property>
+        <property name="leftMargin">
+         <number>0</number>
+        </property>
+        <property name="topMargin">
+         <number>0</number>
+        </property>
+        <property name="rightMargin">
+         <number>0</number>
+        </property>
+        <property name="bottomMargin">
+         <number>0</number>
+        </property>
+        <item>
+         <layout class="QVBoxLayout" name="header_layout">
+          <property name="spacing">
+           <number>6</number>
+          </property>
+          <item>
+           <widget class="QLabel" name="title_label">
+            <property name="font">
+             <font>
+              <pointsize>18</pointsize>
+              <bold>true</bold>
+             </font>
+            </property>
+            <property name="text">
+             <string>Filter Settings</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="subtitle_label">
+            <property name="text">
+             <string>Optionally, add a bandpass filter and a power-line notch filter, depending on the signal quality and your research question. We recommend applying the same filters as during the visual review. The filters are applied for the analysis only: the PSG file is not modified.</string>
+            </property>
+            <property name="wordWrap">
+             <bool>true</bool>
+            </property>
+            <property name="variant" stdset="0">
+             <string notr="true">help</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" name="filter_cards_layout" stretch="1,1">
+          <property name="spacing">
+           <number>16</number>
+          </property>
+          <item>
+           <widget class="QFrame" name="bandpass_card">
+            <property name="frameShape">
+             <enum>QFrame::Shape::StyledPanel</enum>
+            </property>
+            <property name="frameShadow">
+             <enum>QFrame::Shadow::Raised</enum>
+            </property>
+            <layout class="QVBoxLayout" name="bandpass_card_layout">
+             <property name="spacing">
+              <number>10</number>
+             </property>
+             <property name="leftMargin">
+              <number>10</number>
+             </property>
+             <property name="topMargin">
+              <number>10</number>
+             </property>
+             <property name="rightMargin">
+              <number>10</number>
+             </property>
+             <property name="bottomMargin">
+              <number>10</number>
+             </property>
+             <item>
+              <widget class="QCheckBox" name="bp_checkBox">
+               <property name="font">
+                <font>
+                 <bold>true</bold>
+                </font>
+               </property>
+               <property name="text">
+                <string>Bandpass filter</string>
+               </property>
+               <property name="checked">
+                <bool>true</bool>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <layout class="QGridLayout" name="cutoff_grid">
+               <property name="horizontalSpacing">
+                <number>12</number>
+               </property>
+               <property name="verticalSpacing">
+                <number>10</number>
+               </property>
+               <item row="0" column="0">
+                <widget class="QLabel" name="label">
+                 <property name="toolTip">
+                  <string>Edit the low cutoff frequency in Hz (i.e. 0.3).</string>
+                 </property>
+                 <property name="text">
+                  <string>Low cutoff</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="0" column="1">
+                <widget class="QLineEdit" name="low_cutoff_lineEdit">
+                 <property name="maximumSize">
+                  <size>
+                   <width>110</width>
+                   <height>16777215</height>
+                  </size>
+                 </property>
+                 <property name="text">
+                  <string>0.3</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="0" column="2">
+                <widget class="QLabel" name="low_cutoff_unit_label">
+                 <property name="text">
+                  <string>Hz</string>
+                 </property>
+                 <property name="variant" stdset="0">
+                  <string notr="true">help</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="1" column="0">
+                <widget class="QLabel" name="label_6">
+                 <property name="toolTip">
+                  <string>Edit the high cutoff frequency in Hz (i.e. 100).</string>
+                 </property>
+                 <property name="text">
+                  <string>High cutoff</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="1" column="1">
+                <widget class="QLineEdit" name="high_cutoff_lineEdit">
+                 <property name="maximumSize">
+                  <size>
+                   <width>110</width>
+                   <height>16777215</height>
+                  </size>
+                 </property>
+                 <property name="text">
+                  <string>100</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="1" column="2">
+                <widget class="QLabel" name="high_cutoff_unit_label">
+                 <property name="text">
+                  <string>Hz</string>
+                 </property>
+                 <property name="variant" stdset="0">
+                  <string notr="true">help</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="0" column="3">
+                <spacer name="cutoff_grid_spacer">
+                 <property name="orientation">
+                  <enum>Qt::Orientation::Horizontal</enum>
+                 </property>
+                 <property name="sizeHint" stdset="0">
+                  <size>
+                   <width>40</width>
+                   <height>20</height>
+                  </size>
+                 </property>
+                </spacer>
+               </item>
+              </layout>
+             </item>
+             <item>
+              <widget class="QLabel" name="bandpass_help_label">
+               <property name="font">
+                <font>
+                 <pointsize>10</pointsize>
+                </font>
+               </property>
+               <property name="text">
+                <string>IIR bandpass, order 6</string>
+               </property>
+               <property name="wordWrap">
+                <bool>true</bool>
+               </property>
+               <property name="variant" stdset="0">
+                <string notr="true">help</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <spacer name="bandpass_stretch">
+               <property name="orientation">
+                <enum>Qt::Orientation::Vertical</enum>
+               </property>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>20</width>
+                 <height>0</height>
+                </size>
+               </property>
+              </spacer>
+             </item>
+            </layout>
+           </widget>
+          </item>
+          <item>
+           <widget class="QFrame" name="notch_card">
+            <property name="frameShape">
+             <enum>QFrame::Shape::StyledPanel</enum>
+            </property>
+            <property name="frameShadow">
+             <enum>QFrame::Shadow::Raised</enum>
+            </property>
+            <layout class="QVBoxLayout" name="notch_card_layout">
+             <property name="spacing">
+              <number>10</number>
+             </property>
+             <property name="leftMargin">
+              <number>10</number>
+             </property>
+             <property name="topMargin">
+              <number>10</number>
+             </property>
+             <property name="rightMargin">
+              <number>10</number>
+             </property>
+             <property name="bottomMargin">
+              <number>10</number>
+             </property>
+             <item>
+              <widget class="QCheckBox" name="notch_checkBox">
+               <property name="font">
+                <font>
+                 <bold>true</bold>
+                </font>
+               </property>
+               <property name="text">
+                <string>Power line notch filter</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QRadioButton" name="radioButton_60Hz">
+               <property name="enabled">
+                <bool>false</bool>
+               </property>
+               <property name="text">
+                <string>60 Hz</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QRadioButton" name="radioButton_50Hz">
+               <property name="enabled">
+                <bool>false</bool>
+               </property>
+               <property name="text">
+                <string>50 Hz</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLabel" name="notch_help_label">
+               <property name="font">
+                <font>
+                 <pointsize>10</pointsize>
+                </font>
+               </property>
+               <property name="text">
+                <string>IIR stopband, order 20</string>
+               </property>
+               <property name="wordWrap">
+                <bool>true</bool>
+               </property>
+               <property name="variant" stdset="0">
+                <string notr="true">help</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <spacer name="notch_stretch">
+               <property name="orientation">
+                <enum>Qt::Orientation::Vertical</enum>
+               </property>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>20</width>
+                 <height>0</height>
+                </size>
+               </property>
+              </spacer>
+             </item>
+            </layout>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <widget class="QFrame" name="nyquist_warning">
+          <property name="frameShape">
+           <enum>QFrame::Shape::NoFrame</enum>
+          </property>
+          <property name="variant" stdset="0">
+           <string notr="true">warning</string>
+          </property>
+          <layout class="QHBoxLayout" name="nyquist_warning_layout">
+           <property name="leftMargin">
+            <number>14</number>
+           </property>
+           <property name="topMargin">
+            <number>10</number>
+           </property>
+           <property name="rightMargin">
+            <number>14</number>
+           </property>
+           <property name="bottomMargin">
+            <number>10</number>
+           </property>
+           <item>
+            <widget class="QLabel" name="nyquist_warning_label">
+             <property name="text">
+              <string>&lt;b&gt;Highest cutoff frequency&lt;/b&gt;&lt;br/&gt;It must be lower than &lt;b&gt;sample rate / 2&lt;/b&gt;.</string>
+             </property>
+             <property name="textFormat">
+              <enum>Qt::TextFormat::RichText</enum>
+             </property>
+             <property name="wordWrap">
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </item>
+        <item>
+         <layout class="QVBoxLayout" name="about_filters_layout">
+          <property name="spacing">
+           <number>6</number>
+          </property>
+          <item>
+           <widget class="QLabel" name="about_filters_title_label">
+            <property name="font">
+             <font>
+              <bold>true</bold>
+             </font>
+            </property>
+            <property name="text">
+             <string>About the filters</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="about_filters_label">
+            <property name="text">
+             <string>Butterworth design in second-order-section (SOS) form, applied with bidirectional zero-phase filtering: the requested magnitude response is preserved and there is no phase distortion. The orders are halved internally before the forward and backward passes.</string>
+            </property>
+            <property name="wordWrap">
+             <bool>true</bool>
+            </property>
+            <property name="variant" stdset="0">
+             <string notr="true">help</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+       </layout>
       </widget>
      </item>
-     <item row="1" column="1">
-      <widget class="QLineEdit" name="low_cutoff_lineEdit">
-       <property name="maximumSize">
-        <size>
-         <width>110</width>
-         <height>16777215</height>
-        </size>
-       </property>
-       <property name="toolTip">
-        <string/>
-       </property>
-       <property name="text">
-        <string>0.3</string>
-       </property>
-      </widget>
-     </item>
-     <item row="1" column="3">
-      <widget class="QRadioButton" name="radioButton_60Hz">
-       <property name="enabled">
-        <bool>false</bool>
-       </property>
-       <property name="text">
-        <string>60 Hz</string>
-       </property>
-      </widget>
-     </item>
-     <item row="2" column="0">
-      <widget class="QLabel" name="label_6">
-       <property name="minimumSize">
-        <size>
-         <width>80</width>
-         <height>0</height>
-        </size>
-       </property>
-       <property name="maximumSize">
-        <size>
-         <width>100</width>
-         <height>16777215</height>
-        </size>
-       </property>
-       <property name="toolTip">
-        <string>Edit the high cutoff frequency in Hz (i.e. 100).</string>
-       </property>
-       <property name="text">
-        <string>High cutoff</string>
-       </property>
-      </widget>
-     </item>
-     <item row="2" column="1">
-      <widget class="QLineEdit" name="high_cutoff_lineEdit">
-       <property name="maximumSize">
-        <size>
-         <width>110</width>
-         <height>16777215</height>
-        </size>
-       </property>
-       <property name="toolTip">
-        <string/>
-       </property>
-       <property name="text">
-        <string>100</string>
-       </property>
-      </widget>
-     </item>
-     <item row="2" column="2">
-      <spacer name="horizontalSpacer_2">
+     <item>
+      <spacer name="content_spacer">
        <property name="orientation">
         <enum>Qt::Orientation::Horizontal</enum>
-       </property>
-       <property name="sizeType">
-        <enum>QSizePolicy::Policy::Fixed</enum>
        </property>
        <property name="sizeHint" stdset="0">
         <size>
@@ -226,16 +441,6 @@ li.checked::marker { content: &quot;\2612&quot;; }
        </property>
       </spacer>
      </item>
-     <item row="2" column="3">
-      <widget class="QRadioButton" name="radioButton_50Hz">
-       <property name="enabled">
-        <bool>false</bool>
-       </property>
-       <property name="text">
-        <string>50 Hz</string>
-       </property>
-      </widget>
-     </item>
     </layout>
    </item>
    <item>
@@ -243,13 +448,10 @@ li.checked::marker { content: &quot;\2612&quot;; }
      <property name="orientation">
       <enum>Qt::Orientation::Vertical</enum>
      </property>
-     <property name="sizeType">
-      <enum>QSizePolicy::Policy::Expanding</enum>
-     </property>
      <property name="sizeHint" stdset="0">
       <size>
-       <width>20</width>
-       <height>10</height>
+       <width>40</width>
+       <height>20</height>
       </size>
      </property>
     </spacer>
@@ -257,7 +459,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
   </layout>
  </widget>
  <resources>
-  <include location="../../../../../snooz-toolbox/src/main/python/ui/themes/themes.qrc"/>
+  <include location="../../../../../snooz-toolbox/src/main/python/ui/themes/themes.qrc" />
  </resources>
  <connections>
   <connection>

@@ -17,212 +17,274 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QPalette, QPixmap, QRadialGradient, QTransform)
 from PySide6.QtWidgets import (QApplication, QCheckBox, QFrame, QHBoxLayout,
     QLabel, QLineEdit, QPushButton, QSizePolicy,
-    QSpacerItem, QTextEdit, QVBoxLayout, QWidget)
+    QSpacerItem, QVBoxLayout, QWidget)
 import themes_rc
 
 class Ui_Outputfiles(object):
     def setupUi(self, Outputfiles):
         if not Outputfiles.objectName():
             Outputfiles.setObjectName(u"Outputfiles")
-        Outputfiles.resize(864, 876)
-        self.verticalLayout_3 = QVBoxLayout(Outputfiles)
-        self.verticalLayout_3.setObjectName(u"verticalLayout_3")
-        self.label = QLabel(Outputfiles)
-        self.label.setObjectName(u"label")
-        font = QFont()
-        font.setBold(False)
-        font.setItalic(False)
-        self.label.setFont(font)
-
-        self.verticalLayout_3.addWidget(self.label)
-
-        self.verticalSpacer_4 = QSpacerItem(20, 13, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Fixed)
-
-        self.verticalLayout_3.addItem(self.verticalSpacer_4)
-
-        self.label_2 = QLabel(Outputfiles)
-        self.label_2.setObjectName(u"label_2")
-
-        self.verticalLayout_3.addWidget(self.label_2)
-
-        self.horizontalLayout_5 = QHBoxLayout()
-        self.horizontalLayout_5.setObjectName(u"horizontalLayout_5")
-        self.horizontalSpacer_2 = QSpacerItem(30, 13, QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Minimum)
-
-        self.horizontalLayout_5.addItem(self.horizontalSpacer_2)
-
-        self.verticalLayout = QVBoxLayout()
+        Outputfiles.resize(900, 700)
+        self.verticalLayout = QVBoxLayout(Outputfiles)
         self.verticalLayout.setObjectName(u"verticalLayout")
-        self.frame = QFrame(Outputfiles)
-        self.frame.setObjectName(u"frame")
-        self.frame.setFrameShape(QFrame.Shape.StyledPanel)
-        self.frame.setFrameShadow(QFrame.Shadow.Raised)
-        self.horizontalLayout = QHBoxLayout(self.frame)
-        self.horizontalLayout.setObjectName(u"horizontalLayout")
-        self.horizontalSpacer_3 = QSpacerItem(2, 20, QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Minimum)
+        self.verticalLayout.setContentsMargins(19, 12, 19, 12)
+        self.content_row = QHBoxLayout()
+        self.content_row.setObjectName(u"content_row")
+        self.content_row.setContentsMargins(0, 0, 0, 0)
+        self.content_widget = QWidget(Outputfiles)
+        self.content_widget.setObjectName(u"content_widget")
+        self.content_widget.setMaximumSize(QSize(800, 16777215))
+        self.content_layout = QVBoxLayout(self.content_widget)
+        self.content_layout.setSpacing(16)
+        self.content_layout.setObjectName(u"content_layout")
+        self.content_layout.setContentsMargins(0, 0, 0, 0)
+        self.header_layout = QVBoxLayout()
+        self.header_layout.setSpacing(6)
+        self.header_layout.setObjectName(u"header_layout")
+        self.title_label = QLabel(self.content_widget)
+        self.title_label.setObjectName(u"title_label")
+        font = QFont()
+        font.setPointSize(18)
+        font.setBold(True)
+        self.title_label.setFont(font)
 
-        self.horizontalLayout.addItem(self.horizontalSpacer_3)
+        self.header_layout.addWidget(self.title_label)
 
-        self.total_checkBox = QCheckBox(self.frame)
+        self.subtitle_label = QLabel(self.content_widget)
+        self.subtitle_label.setObjectName(u"subtitle_label")
+        self.subtitle_label.setWordWrap(True)
+        self.subtitle_label.setProperty(u"variant", u"help")
+
+        self.header_layout.addWidget(self.subtitle_label)
+
+
+        self.content_layout.addLayout(self.header_layout)
+
+        self.distribution_card = QFrame(self.content_widget)
+        self.distribution_card.setObjectName(u"distribution_card")
+        self.distribution_card.setFrameShape(QFrame.Shape.StyledPanel)
+        self.distribution_card.setFrameShadow(QFrame.Shadow.Raised)
+        self.distribution_card_layout = QVBoxLayout(self.distribution_card)
+        self.distribution_card_layout.setSpacing(10)
+        self.distribution_card_layout.setObjectName(u"distribution_card_layout")
+        self.distribution_card_layout.setContentsMargins(10, 10, 10, 10)
+        self.label = QLabel(self.distribution_card)
+        self.label.setObjectName(u"label")
+        font1 = QFont()
+        font1.setBold(True)
+        self.label.setFont(font1)
+
+        self.distribution_card_layout.addWidget(self.label)
+
+        self.distribution_help_label = QLabel(self.distribution_card)
+        self.distribution_help_label.setObjectName(u"distribution_help_label")
+        self.distribution_help_label.setWordWrap(True)
+        self.distribution_help_label.setProperty(u"variant", u"help")
+
+        self.distribution_card_layout.addWidget(self.distribution_help_label)
+
+        self.distribution_layout = QVBoxLayout()
+        self.distribution_layout.setSpacing(8)
+        self.distribution_layout.setObjectName(u"distribution_layout")
+        self.distribution_layout_1_layout = QVBoxLayout()
+        self.distribution_layout_1_layout.setSpacing(2)
+        self.distribution_layout_1_layout.setObjectName(u"distribution_layout_1_layout")
+        self.total_checkBox = QCheckBox(self.distribution_card)
         self.total_checkBox.setObjectName(u"total_checkBox")
         self.total_checkBox.setEnabled(False)
         self.total_checkBox.setMinimumSize(QSize(238, 0))
         self.total_checkBox.setMaximumSize(QSize(238, 16777215))
         self.total_checkBox.setChecked(True)
 
-        self.horizontalLayout.addWidget(self.total_checkBox)
+        self.distribution_layout_1_layout.addWidget(self.total_checkBox)
 
-        self.textEdit_tot = QTextEdit(self.frame)
-        self.textEdit_tot.setObjectName(u"textEdit_tot")
-        sizePolicy = QSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Preferred)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.textEdit_tot.sizePolicy().hasHeightForWidth())
-        self.textEdit_tot.setSizePolicy(sizePolicy)
-        self.textEdit_tot.setMaximumSize(QSize(16777215, 140))
-        self.textEdit_tot.setFrameShape(QFrame.Shape.NoFrame)
-        self.textEdit_tot.setFrameShadow(QFrame.Shadow.Plain)
-        self.textEdit_tot.setLineWidth(0)
-        self.textEdit_tot.setReadOnly(True)
+        self.total_help_label = QLabel(self.distribution_card)
+        self.total_help_label.setObjectName(u"total_help_label")
+        font2 = QFont()
+        font2.setPointSize(10)
+        self.total_help_label.setFont(font2)
+        self.total_help_label.setWordWrap(True)
+        self.total_help_label.setIndent(26)
+        self.total_help_label.setProperty(u"variant", u"help")
 
-        self.horizontalLayout.addWidget(self.textEdit_tot)
+        self.distribution_layout_1_layout.addWidget(self.total_help_label)
 
 
-        self.verticalLayout.addWidget(self.frame)
+        self.distribution_layout.addLayout(self.distribution_layout_1_layout)
 
-        self.frame_2 = QFrame(Outputfiles)
-        self.frame_2.setObjectName(u"frame_2")
-        self.frame_2.setFrameShape(QFrame.Shape.StyledPanel)
-        self.frame_2.setFrameShadow(QFrame.Shadow.Raised)
-        self.horizontalLayout_3 = QHBoxLayout(self.frame_2)
-        self.horizontalLayout_3.setObjectName(u"horizontalLayout_3")
-        self.horizontalSpacer = QSpacerItem(12, 20, QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Minimum)
+        self.distribution_layout_line_1 = QFrame(self.distribution_card)
+        self.distribution_layout_line_1.setObjectName(u"distribution_layout_line_1")
+        self.distribution_layout_line_1.setFrameShape(QFrame.Shape.HLine)
+        self.distribution_layout_line_1.setFrameShadow(QFrame.Shadow.Plain)
 
-        self.horizontalLayout_3.addItem(self.horizontalSpacer)
+        self.distribution_layout.addWidget(self.distribution_layout_line_1)
 
-        self.hour_checkBox = QCheckBox(self.frame_2)
+        self.distribution_layout_2_layout = QVBoxLayout()
+        self.distribution_layout_2_layout.setSpacing(2)
+        self.distribution_layout_2_layout.setObjectName(u"distribution_layout_2_layout")
+        self.hour_checkBox = QCheckBox(self.distribution_card)
         self.hour_checkBox.setObjectName(u"hour_checkBox")
         self.hour_checkBox.setMinimumSize(QSize(238, 0))
         self.hour_checkBox.setMaximumSize(QSize(238, 16777215))
         self.hour_checkBox.setChecked(True)
 
-        self.horizontalLayout_3.addWidget(self.hour_checkBox)
+        self.distribution_layout_2_layout.addWidget(self.hour_checkBox)
 
-        self.textEdit_hour = QTextEdit(self.frame_2)
-        self.textEdit_hour.setObjectName(u"textEdit_hour")
-        sizePolicy1 = QSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
-        sizePolicy1.setHorizontalStretch(0)
-        sizePolicy1.setVerticalStretch(0)
-        sizePolicy1.setHeightForWidth(self.textEdit_hour.sizePolicy().hasHeightForWidth())
-        self.textEdit_hour.setSizePolicy(sizePolicy1)
-        self.textEdit_hour.setMinimumSize(QSize(0, 0))
-        self.textEdit_hour.setMaximumSize(QSize(16777215, 16777215))
-        self.textEdit_hour.setFrameShape(QFrame.Shape.NoFrame)
-        self.textEdit_hour.setFrameShadow(QFrame.Shadow.Plain)
-        self.textEdit_hour.setLineWidth(0)
-        self.textEdit_hour.setReadOnly(True)
+        self.hour_help_label = QLabel(self.distribution_card)
+        self.hour_help_label.setObjectName(u"hour_help_label")
+        self.hour_help_label.setFont(font2)
+        self.hour_help_label.setWordWrap(True)
+        self.hour_help_label.setIndent(26)
+        self.hour_help_label.setProperty(u"variant", u"help")
 
-        self.horizontalLayout_3.addWidget(self.textEdit_hour)
+        self.distribution_layout_2_layout.addWidget(self.hour_help_label)
 
 
-        self.verticalLayout.addWidget(self.frame_2)
+        self.distribution_layout.addLayout(self.distribution_layout_2_layout)
 
-        self.frame_3 = QFrame(Outputfiles)
-        self.frame_3.setObjectName(u"frame_3")
-        self.frame_3.setFrameShape(QFrame.Shape.StyledPanel)
-        self.frame_3.setFrameShadow(QFrame.Shadow.Raised)
-        self.horizontalLayout_4 = QHBoxLayout(self.frame_3)
-        self.horizontalLayout_4.setObjectName(u"horizontalLayout_4")
-        self.horizontalSpacer_4 = QSpacerItem(2, 20, QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Minimum)
+        self.distribution_layout_line_2 = QFrame(self.distribution_card)
+        self.distribution_layout_line_2.setObjectName(u"distribution_layout_line_2")
+        self.distribution_layout_line_2.setFrameShape(QFrame.Shape.HLine)
+        self.distribution_layout_line_2.setFrameShadow(QFrame.Shadow.Plain)
 
-        self.horizontalLayout_4.addItem(self.horizontalSpacer_4)
+        self.distribution_layout.addWidget(self.distribution_layout_line_2)
 
-        self.cycle_checkBox = QCheckBox(self.frame_3)
+        self.distribution_layout_3_layout = QVBoxLayout()
+        self.distribution_layout_3_layout.setSpacing(2)
+        self.distribution_layout_3_layout.setObjectName(u"distribution_layout_3_layout")
+        self.cycle_checkBox = QCheckBox(self.distribution_card)
         self.cycle_checkBox.setObjectName(u"cycle_checkBox")
         self.cycle_checkBox.setMinimumSize(QSize(238, 0))
         self.cycle_checkBox.setMaximumSize(QSize(238, 16777215))
         self.cycle_checkBox.setChecked(True)
 
-        self.horizontalLayout_4.addWidget(self.cycle_checkBox)
+        self.distribution_layout_3_layout.addWidget(self.cycle_checkBox)
 
-        self.textEdit_cycle = QTextEdit(self.frame_3)
-        self.textEdit_cycle.setObjectName(u"textEdit_cycle")
-        sizePolicy1.setHeightForWidth(self.textEdit_cycle.sizePolicy().hasHeightForWidth())
-        self.textEdit_cycle.setSizePolicy(sizePolicy1)
-        self.textEdit_cycle.setMinimumSize(QSize(0, 0))
-        self.textEdit_cycle.setMaximumSize(QSize(16777215, 135))
-        self.textEdit_cycle.setFrameShape(QFrame.Shape.NoFrame)
-        self.textEdit_cycle.setFrameShadow(QFrame.Shadow.Plain)
-        self.textEdit_cycle.setLineWidth(0)
-        self.textEdit_cycle.setReadOnly(True)
+        self.cycle_help_label = QLabel(self.distribution_card)
+        self.cycle_help_label.setObjectName(u"cycle_help_label")
+        self.cycle_help_label.setFont(font2)
+        self.cycle_help_label.setWordWrap(True)
+        self.cycle_help_label.setIndent(26)
+        self.cycle_help_label.setProperty(u"variant", u"help")
 
-        self.horizontalLayout_4.addWidget(self.textEdit_cycle)
+        self.distribution_layout_3_layout.addWidget(self.cycle_help_label)
 
 
-        self.verticalLayout.addWidget(self.frame_3)
-
-        self.verticalSpacer_3 = QSpacerItem(20, 13, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Fixed)
-
-        self.verticalLayout.addItem(self.verticalSpacer_3)
+        self.distribution_layout.addLayout(self.distribution_layout_3_layout)
 
 
-        self.horizontalLayout_5.addLayout(self.verticalLayout)
+        self.distribution_card_layout.addLayout(self.distribution_layout)
+
+        self.limits_help_label = QLabel(self.distribution_card)
+        self.limits_help_label.setObjectName(u"limits_help_label")
+        self.limits_help_label.setFont(font2)
+        self.limits_help_label.setTextFormat(Qt.TextFormat.RichText)
+        self.limits_help_label.setWordWrap(True)
+        self.limits_help_label.setProperty(u"variant", u"help")
+
+        self.distribution_card_layout.addWidget(self.limits_help_label)
 
 
-        self.verticalLayout_3.addLayout(self.horizontalLayout_5)
+        self.content_layout.addWidget(self.distribution_card)
 
-        self.verticalSpacer = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Preferred)
-
-        self.verticalLayout_3.addItem(self.verticalSpacer)
-
-        self.verticalLayout_2 = QVBoxLayout()
-        self.verticalLayout_2.setObjectName(u"verticalLayout_2")
-        self.label_4 = QLabel(Outputfiles)
+        self.output_card = QFrame(self.content_widget)
+        self.output_card.setObjectName(u"output_card")
+        self.output_card.setFrameShape(QFrame.Shape.StyledPanel)
+        self.output_card.setFrameShadow(QFrame.Shadow.Raised)
+        self.output_card_layout = QVBoxLayout(self.output_card)
+        self.output_card_layout.setSpacing(10)
+        self.output_card_layout.setObjectName(u"output_card_layout")
+        self.output_card_layout.setContentsMargins(10, 10, 10, 10)
+        self.label_4 = QLabel(self.output_card)
         self.label_4.setObjectName(u"label_4")
-        sizePolicy2 = QSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Fixed)
-        sizePolicy2.setHorizontalStretch(0)
-        sizePolicy2.setVerticalStretch(0)
-        sizePolicy2.setHeightForWidth(self.label_4.sizePolicy().hasHeightForWidth())
-        self.label_4.setSizePolicy(sizePolicy2)
-        self.label_4.setFont(font)
+        self.label_4.setFont(font1)
 
-        self.verticalLayout_2.addWidget(self.label_4)
+        self.output_card_layout.addWidget(self.label_4)
 
-        self.textEdit_4 = QTextEdit(Outputfiles)
-        self.textEdit_4.setObjectName(u"textEdit_4")
-        self.textEdit_4.setMaximumSize(QSize(16777215, 60))
-        self.textEdit_4.setFrameShape(QFrame.Shape.NoFrame)
-        self.textEdit_4.setFrameShadow(QFrame.Shadow.Plain)
-        self.textEdit_4.setLineWidth(0)
-        self.textEdit_4.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
-        self.textEdit_4.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
-        self.textEdit_4.setReadOnly(True)
-
-        self.verticalLayout_2.addWidget(self.textEdit_4)
-
-        self.horizontalLayout_2 = QHBoxLayout()
-        self.horizontalLayout_2.setObjectName(u"horizontalLayout_2")
-        self.label_3 = QLabel(Outputfiles)
+        self.filename_layout = QHBoxLayout()
+        self.filename_layout.setSpacing(8)
+        self.filename_layout.setObjectName(u"filename_layout")
+        self.label_3 = QLabel(self.output_card)
         self.label_3.setObjectName(u"label_3")
 
-        self.horizontalLayout_2.addWidget(self.label_3)
+        self.filename_layout.addWidget(self.label_3)
 
-        self.filename_lineEdit = QLineEdit(Outputfiles)
+        self.filename_lineEdit = QLineEdit(self.output_card)
         self.filename_lineEdit.setObjectName(u"filename_lineEdit")
         self.filename_lineEdit.setAlignment(Qt.AlignmentFlag.AlignRight|Qt.AlignmentFlag.AlignTrailing|Qt.AlignmentFlag.AlignVCenter)
 
-        self.horizontalLayout_2.addWidget(self.filename_lineEdit)
+        self.filename_layout.addWidget(self.filename_lineEdit)
 
-        self.choose_pushButton = QPushButton(Outputfiles)
+        self.choose_pushButton = QPushButton(self.output_card)
         self.choose_pushButton.setObjectName(u"choose_pushButton")
 
-        self.horizontalLayout_2.addWidget(self.choose_pushButton)
+        self.filename_layout.addWidget(self.choose_pushButton)
 
 
-        self.verticalLayout_2.addLayout(self.horizontalLayout_2)
+        self.output_card_layout.addLayout(self.filename_layout)
+
+        self.filename_help_label = QLabel(self.output_card)
+        self.filename_help_label.setObjectName(u"filename_help_label")
+        self.filename_help_label.setFont(font2)
+        self.filename_help_label.setWordWrap(True)
+        self.filename_help_label.setProperty(u"variant", u"help")
+
+        self.output_card_layout.addWidget(self.filename_help_label)
 
 
-        self.verticalLayout_3.addLayout(self.verticalLayout_2)
+        self.content_layout.addWidget(self.output_card)
+
+        self.append_warning = QFrame(self.content_widget)
+        self.append_warning.setObjectName(u"append_warning")
+        self.append_warning.setFrameShape(QFrame.Shape.NoFrame)
+        self.append_warning.setProperty(u"variant", u"warning")
+        self.append_warning_layout = QHBoxLayout(self.append_warning)
+        self.append_warning_layout.setObjectName(u"append_warning_layout")
+        self.append_warning_layout.setContentsMargins(14, 10, 14, 10)
+        self.append_warning_label = QLabel(self.append_warning)
+        self.append_warning_label.setObjectName(u"append_warning_label")
+        self.append_warning_label.setTextFormat(Qt.TextFormat.RichText)
+        self.append_warning_label.setWordWrap(True)
+
+        self.append_warning_layout.addWidget(self.append_warning_label)
+
+
+        self.content_layout.addWidget(self.append_warning)
+
+        self.about_averages_layout = QVBoxLayout()
+        self.about_averages_layout.setSpacing(6)
+        self.about_averages_layout.setObjectName(u"about_averages_layout")
+        self.about_averages_title_label = QLabel(self.content_widget)
+        self.about_averages_title_label.setObjectName(u"about_averages_title_label")
+        self.about_averages_title_label.setFont(font1)
+
+        self.about_averages_layout.addWidget(self.about_averages_title_label)
+
+        self.about_averages_label = QLabel(self.content_widget)
+        self.about_averages_label.setObjectName(u"about_averages_label")
+        self.about_averages_label.setTextFormat(Qt.TextFormat.RichText)
+        self.about_averages_label.setWordWrap(True)
+        self.about_averages_label.setProperty(u"variant", u"help")
+
+        self.about_averages_layout.addWidget(self.about_averages_label)
+
+
+        self.content_layout.addLayout(self.about_averages_layout)
+
+
+        self.content_row.addWidget(self.content_widget)
+
+        self.content_spacer = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+
+        self.content_row.addItem(self.content_spacer)
+
+        self.content_row.setStretch(0, 1)
+
+        self.verticalLayout.addLayout(self.content_row)
+
+        self.verticalSpacer = QSpacerItem(40, 20, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
+
+        self.verticalLayout.addItem(self.verticalSpacer)
 
 
         self.retranslateUi(Outputfiles)
@@ -233,72 +295,35 @@ class Ui_Outputfiles(object):
 
     def retranslateUi(self, Outputfiles):
         Outputfiles.setWindowTitle("")
-        self.label.setText(QCoreApplication.translate("Outputfiles", u"<html><head/><body><p><span style=\" font-weight:600;\">Spectral power distribution to export</span></p></body></html>", None))
-        self.label_2.setText(QCoreApplication.translate("Outputfiles", u"<html><head/><body><p>Spectral power is computed based on the selected section type in <span style=\" font-weight:700;\">step 4</span>:</p><p><span style=\" font-weight:700;\">Sleep Stages:</span> Power is computed per sleep stage and per hour and/or sleep cycle, according to the selected <br/>options below.</p><p><span style=\" font-weight:700;\">Specific Annotations:</span> Power is computed on selected events, per hour and/or sleep cycle, according to the <br/>selected options below.</p></body></html>", None))
+        self.title_label.setText(QCoreApplication.translate("Outputfiles", u"Output Files", None))
+        self.subtitle_label.setText(QCoreApplication.translate("Outputfiles", u"Choose the distributions of the spectral power to export and the file to write them in.", None))
+        self.label.setText(QCoreApplication.translate("Outputfiles", u"Spectral power distribution to export", None))
+        self.distribution_help_label.setText(QCoreApplication.translate("Outputfiles", u"Computed on the sections chosen in step 4: per sleep stage or on the selected annotations.", None))
 #if QT_CONFIG(tooltip)
         self.total_checkBox.setToolTip("")
 #endif // QT_CONFIG(tooltip)
         self.total_checkBox.setText(QCoreApplication.translate("Outputfiles", u"Total", None))
-        self.textEdit_tot.setHtml(QCoreApplication.translate("Outputfiles", u"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
-"<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset=\"utf-8\" /><style type=\"text/css\">\n"
-"p, li { white-space: pre-wrap; }\n"
-"hr { height: 1px; border-width: 0; }\n"
-"li.unchecked::marker { content: \"\\2610\"; }\n"
-"li.checked::marker { content: \"\\2612\"; }\n"
-"</style></head><body style=\" font-size:12pt; font-weight:400; font-style:normal;\">\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Check &quot;<span style=\" font-weight:600;\">Total</span>&quot; to output the avearge spectral power for the whole recording. <br />The average power includes only valid FFT windows (clean windows of selected stages or periods).</p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
-"<p style=\" margin-top:0px; "
-                        "margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-style:italic;\">If &quot;Analyse power in sleep cycle only&quot; in the step &quot;4-Section Selection&quot; is checked, <br />the starting point is the sleep onset and gabs between cycles are not analysed.<br />Otherwise all the recording is analysed, even before the sleep onset and after the last asleep epoch.</span></p></body></html>", None))
+        self.total_help_label.setText(QCoreApplication.translate("Outputfiles", u"Average power over the whole recording.", None))
 #if QT_CONFIG(tooltip)
         self.hour_checkBox.setToolTip("")
 #endif // QT_CONFIG(tooltip)
         self.hour_checkBox.setText(QCoreApplication.translate("Outputfiles", u"Distribution per hour", None))
-        self.textEdit_hour.setHtml(QCoreApplication.translate("Outputfiles", u"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
-"<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset=\"utf-8\" /><style type=\"text/css\">\n"
-"p, li { white-space: pre-wrap; }\n"
-"hr { height: 1px; border-width: 0; }\n"
-"li.unchecked::marker { content: \"\\2610\"; }\n"
-"li.checked::marker { content: \"\\2612\"; }\n"
-"</style></head><body style=\" font-size:12pt; font-weight:400; font-style:normal;\">\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Check &quot;<span style=\" font-weight:600;\">Distribution per hour</span>&quot; to output the average spectral power for each real clock hour and stage hour, starting from hour 1. <br />The average power includes only valid FFT windows (clean windows of selected stages or periods).</p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-ind"
-                        "ent:0px;\"><br /></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">The spectral power value will be empty if no data is available for a given hour <br />(e.g., if only N2 is selected and there are no N2 stages in the first hour, the reported power will be empty).</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">The maximum clock hour included in the report is defined in the optional settings under &quot;<span style=\" font-weight:600;\">Hours and Cycles</span>&quot;.</p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-style:italic;\">If &quot;Analyse power in sleep cycle only&quot; in the step &quot;"
-                        "4-Section Selection&quot; is checked, <br />the starting point is the sleep onset and gabs between cycles are not analysed.<br />Otherwise all the recording is analysed, even before the sleep onset and after the last asleep epoch.</span></p></body></html>", None))
+        self.hour_help_label.setText(QCoreApplication.translate("Outputfiles", u"Average power for each clock hour and each stage hour, from hour 1. Empty when the hour has no data.", None))
 #if QT_CONFIG(tooltip)
         self.cycle_checkBox.setToolTip("")
 #endif // QT_CONFIG(tooltip)
         self.cycle_checkBox.setText(QCoreApplication.translate("Outputfiles", u"Distribution per sleep cycle", None))
-        self.textEdit_cycle.setHtml(QCoreApplication.translate("Outputfiles", u"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
-"<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset=\"utf-8\" /><style type=\"text/css\">\n"
-"p, li { white-space: pre-wrap; }\n"
-"hr { height: 1px; border-width: 0; }\n"
-"li.unchecked::marker { content: \"\\2610\"; }\n"
-"li.checked::marker { content: \"\\2612\"; }\n"
-"</style></head><body style=\" font-size:12pt; font-weight:400; font-style:normal;\">\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Check &quot;<span style=\" font-weight:600;\">Distribution per sleep cycle</span>&quot; to output the average spectral power for each sleep cycle, starting from cycle 1. </p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">The average power includes only valid FFT windows (clean windows of selected stages or periods).</p>\n"
-"<p style=\"-qt-paragra"
-                        "ph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">The spectral power value will be empty if the cycle does not exist.</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">The maximum number of cycles included in the report is defined in the optional settings under &quot;<span style=\" font-weight:600;\">Hours and Cycles</span>&quot;.</p></body></html>", None))
-        self.label_4.setText(QCoreApplication.translate("Outputfiles", u"<html><head/><body><p><span style=\" font-weight:600;\">Output</span></p></body></html>", None))
-        self.textEdit_4.setHtml(QCoreApplication.translate("Outputfiles", u"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
-"<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset=\"utf-8\" /><style type=\"text/css\">\n"
-"p, li { white-space: pre-wrap; }\n"
-"hr { height: 1px; border-width: 0; }\n"
-"li.unchecked::marker { content: \"\\2610\"; }\n"
-"li.checked::marker { content: \"\\2612\"; }\n"
-"</style></head><body style=\" font-size:12pt; font-weight:400; font-style:normal;\">\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">The output file is a .tsv (tab separated values) file. Each line corresponds to a subject, a channel, and a frequency band. Warning : Spectral data are appended to the output file, so the file will be modified each time the tool is run.</p></body></html>", None))
+        self.cycle_help_label.setText(QCoreApplication.translate("Outputfiles", u"Average power for each sleep cycle, from cycle 1. Empty when the cycle does not exist.", None))
+        self.limits_help_label.setText(QCoreApplication.translate("Outputfiles", u"The number of hours and cycles reported is set in <b>Hours and Cycles</b>, under Optional settings in the left panel.", None))
+        self.label_4.setText(QCoreApplication.translate("Outputfiles", u"Output file", None))
         self.label_3.setText(QCoreApplication.translate("Outputfiles", u"Filename", None))
         self.filename_lineEdit.setInputMask("")
         self.filename_lineEdit.setText("")
         self.filename_lineEdit.setPlaceholderText(QCoreApplication.translate("Outputfiles", u"Select the file to save the cohort EEG spectral report.", None))
         self.choose_pushButton.setText(QCoreApplication.translate("Outputfiles", u"Choose", None))
+        self.filename_help_label.setText(QCoreApplication.translate("Outputfiles", u"A .tsv file (tab separated values): one line per subject, channel and frequency band.", None))
+        self.append_warning_label.setText(QCoreApplication.translate("Outputfiles", u"<b>The data are appended</b><br/>Spectral data are appended to the output file, so the file is modified each time the tool is run.", None))
+        self.about_averages_title_label.setText(QCoreApplication.translate("Outputfiles", u"About the averages", None))
+        self.about_averages_label.setText(QCoreApplication.translate("Outputfiles", u"The averages include only the valid FFT windows: the clean windows of the selected stages or periods. When <i>Analyse power in sleep cycles only</i> is checked in step 4, the analysis starts at the sleep onset and the gaps between the cycles are not analysed. Otherwise the whole recording is analysed, even before the sleep onset and after the last asleep epoch.", None))
     # retranslateUi
 

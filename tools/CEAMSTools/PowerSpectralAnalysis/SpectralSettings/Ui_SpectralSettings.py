@@ -15,333 +15,381 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QFont, QFontDatabase, QGradient, QIcon,
     QImage, QKeySequence, QLinearGradient, QPainter,
     QPalette, QPixmap, QRadialGradient, QTransform)
-from PySide6.QtWidgets import (QAbstractScrollArea, QApplication, QFrame, QGridLayout,
-    QHBoxLayout, QLabel, QLayout, QLineEdit,
-    QRadioButton, QSizePolicy, QSpacerItem, QTextEdit,
-    QVBoxLayout, QWidget)
+from PySide6.QtWidgets import (QApplication, QFrame, QGridLayout, QHBoxLayout,
+    QLabel, QLineEdit, QRadioButton, QSizePolicy,
+    QSpacerItem, QVBoxLayout, QWidget)
 import themes_rc
 
 class Ui_SpectralSettings(object):
     def setupUi(self, SpectralSettings):
         if not SpectralSettings.objectName():
             SpectralSettings.setObjectName(u"SpectralSettings")
-        SpectralSettings.resize(1191, 872)
-        SpectralSettings.setMinimumSize(QSize(0, 0))
-        self.verticalLayout_11 = QVBoxLayout(SpectralSettings)
-        self.verticalLayout_11.setObjectName(u"verticalLayout_11")
-        self.verticalLayout = QVBoxLayout()
-        self.verticalLayout.setSpacing(0)
+        SpectralSettings.resize(900, 700)
+        self.verticalLayout = QVBoxLayout(SpectralSettings)
         self.verticalLayout.setObjectName(u"verticalLayout")
-        self.verticalLayout.setSizeConstraint(QLayout.SizeConstraint.SetMaximumSize)
-        self.label_3 = QLabel(SpectralSettings)
-        self.label_3.setObjectName(u"label_3")
-        self.label_3.setMaximumSize(QSize(16777215, 30))
+        self.verticalLayout.setContentsMargins(19, 12, 19, 12)
+        self.content_row = QHBoxLayout()
+        self.content_row.setObjectName(u"content_row")
+        self.content_row.setContentsMargins(0, 0, 0, 0)
+        self.content_widget = QWidget(SpectralSettings)
+        self.content_widget.setObjectName(u"content_widget")
+        self.content_widget.setMaximumSize(QSize(800, 16777215))
+        self.content_layout = QVBoxLayout(self.content_widget)
+        self.content_layout.setSpacing(16)
+        self.content_layout.setObjectName(u"content_layout")
+        self.content_layout.setContentsMargins(0, 0, 0, 0)
+        self.header_layout = QVBoxLayout()
+        self.header_layout.setSpacing(6)
+        self.header_layout.setObjectName(u"header_layout")
+        self.title_label = QLabel(self.content_widget)
+        self.title_label.setObjectName(u"title_label")
         font = QFont()
-        font.setBold(False)
-        font.setItalic(False)
-        self.label_3.setFont(font)
+        font.setPointSize(18)
+        font.setBold(True)
+        self.title_label.setFont(font)
 
-        self.verticalLayout.addWidget(self.label_3)
+        self.header_layout.addWidget(self.title_label)
 
-        self.textEdit_2 = QTextEdit(SpectralSettings)
-        self.textEdit_2.setObjectName(u"textEdit_2")
-        sizePolicy = QSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.textEdit_2.sizePolicy().hasHeightForWidth())
-        self.textEdit_2.setSizePolicy(sizePolicy)
-        self.textEdit_2.setMaximumSize(QSize(16777215, 70))
-        self.textEdit_2.setFrameShape(QFrame.Shape.NoFrame)
-        self.textEdit_2.setFrameShadow(QFrame.Shadow.Plain)
-        self.textEdit_2.setLineWidth(0)
-        self.textEdit_2.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
-        self.textEdit_2.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
+        self.subtitle_label = QLabel(self.content_widget)
+        self.subtitle_label.setObjectName(u"subtitle_label")
+        self.subtitle_label.setWordWrap(True)
+        self.subtitle_label.setProperty(u"variant", u"help")
 
-        self.verticalLayout.addWidget(self.textEdit_2)
+        self.header_layout.addWidget(self.subtitle_label)
 
-        self.label = QLabel(SpectralSettings)
+
+        self.content_layout.addLayout(self.header_layout)
+
+        self.spectral_cards_layout = QHBoxLayout()
+        self.spectral_cards_layout.setSpacing(16)
+        self.spectral_cards_layout.setObjectName(u"spectral_cards_layout")
+        self.fft_card = QFrame(self.content_widget)
+        self.fft_card.setObjectName(u"fft_card")
+        self.fft_card.setFrameShape(QFrame.Shape.StyledPanel)
+        self.fft_card.setFrameShadow(QFrame.Shadow.Raised)
+        self.fft_card_layout = QVBoxLayout(self.fft_card)
+        self.fft_card_layout.setSpacing(10)
+        self.fft_card_layout.setObjectName(u"fft_card_layout")
+        self.fft_card_layout.setContentsMargins(10, 10, 10, 10)
+        self.label_3 = QLabel(self.fft_card)
+        self.label_3.setObjectName(u"label_3")
+        font1 = QFont()
+        font1.setBold(True)
+        self.label_3.setFont(font1)
+
+        self.fft_card_layout.addWidget(self.label_3)
+
+        self.fft_grid = QGridLayout()
+        self.fft_grid.setObjectName(u"fft_grid")
+        self.fft_grid.setHorizontalSpacing(12)
+        self.fft_grid.setVerticalSpacing(10)
+        self.label = QLabel(self.fft_card)
         self.label.setObjectName(u"label")
-        sizePolicy1 = QSizePolicy(QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Preferred)
-        sizePolicy1.setHorizontalStretch(0)
-        sizePolicy1.setVerticalStretch(0)
-        sizePolicy1.setHeightForWidth(self.label.sizePolicy().hasHeightForWidth())
-        self.label.setSizePolicy(sizePolicy1)
-        self.label.setMinimumSize(QSize(450, 0))
-        self.label.setMaximumSize(QSize(500, 500))
-        self.label.setFont(font)
 
-        self.verticalLayout.addWidget(self.label)
+        self.fft_grid.addWidget(self.label, 0, 0, 1, 1)
 
-        self.gridLayout = QGridLayout()
-        self.gridLayout.setObjectName(u"gridLayout")
-        self.gridLayout.setSizeConstraint(QLayout.SizeConstraint.SetNoConstraint)
-        self.gridLayout.setContentsMargins(-1, -1, -1, 1)
-        self.horizontalSpacer_3 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
-
-        self.gridLayout.addItem(self.horizontalSpacer_3, 6, 3, 1, 1)
-
-        self.win_len_lineEdit = QLineEdit(SpectralSettings)
+        self.win_len_lineEdit = QLineEdit(self.fft_card)
         self.win_len_lineEdit.setObjectName(u"win_len_lineEdit")
         self.win_len_lineEdit.setMaximumSize(QSize(80, 16777215))
 
-        self.gridLayout.addWidget(self.win_len_lineEdit, 1, 1, 2, 1)
+        self.fft_grid.addWidget(self.win_len_lineEdit, 0, 1, 1, 1)
 
-        self.horizontalSpacer_2 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+        self.win_len_unit_label = QLabel(self.fft_card)
+        self.win_len_unit_label.setObjectName(u"win_len_unit_label")
+        self.win_len_unit_label.setProperty(u"variant", u"help")
 
-        self.gridLayout.addItem(self.horizontalSpacer_2, 1, 3, 1, 1)
+        self.fft_grid.addWidget(self.win_len_unit_label, 0, 2, 1, 1)
 
-        self.verticalLayout_3 = QVBoxLayout()
-        self.verticalLayout_3.setObjectName(u"verticalLayout_3")
-        self.label_14 = QLabel(SpectralSettings)
-        self.label_14.setObjectName(u"label_14")
+        self.label_2 = QLabel(self.fft_card)
+        self.label_2.setObjectName(u"label_2")
 
-        self.verticalLayout_3.addWidget(self.label_14)
+        self.fft_grid.addWidget(self.label_2, 1, 0, 1, 1)
 
-
-        self.gridLayout.addLayout(self.verticalLayout_3, 6, 0, 1, 1)
-
-        self.win_step_lineEdit = QLineEdit(SpectralSettings)
+        self.win_step_lineEdit = QLineEdit(self.fft_card)
         self.win_step_lineEdit.setObjectName(u"win_step_lineEdit")
         self.win_step_lineEdit.setMaximumSize(QSize(80, 16777215))
 
-        self.gridLayout.addWidget(self.win_step_lineEdit, 6, 1, 1, 1)
+        self.fft_grid.addWidget(self.win_step_lineEdit, 1, 1, 1, 1)
 
-        self.label_2 = QLabel(SpectralSettings)
-        self.label_2.setObjectName(u"label_2")
-        sizePolicy1.setHeightForWidth(self.label_2.sizePolicy().hasHeightForWidth())
-        self.label_2.setSizePolicy(sizePolicy1)
-        self.label_2.setMinimumSize(QSize(200, 0))
+        self.win_step_unit_label = QLabel(self.fft_card)
+        self.win_step_unit_label.setObjectName(u"win_step_unit_label")
+        self.win_step_unit_label.setProperty(u"variant", u"help")
 
-        self.gridLayout.addWidget(self.label_2, 3, 0, 1, 1)
+        self.fft_grid.addWidget(self.win_step_unit_label, 1, 2, 1, 1)
 
-        self.verticalLayout_2 = QVBoxLayout()
-        self.verticalLayout_2.setObjectName(u"verticalLayout_2")
-        self.label_13 = QLabel(SpectralSettings)
-        self.label_13.setObjectName(u"label_13")
+        self.fft_grid_spacer = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
 
-        self.verticalLayout_2.addWidget(self.label_13)
+        self.fft_grid.addItem(self.fft_grid_spacer, 0, 3, 1, 1)
 
 
-        self.gridLayout.addLayout(self.verticalLayout_2, 1, 0, 1, 1)
+        self.fft_card_layout.addLayout(self.fft_grid)
+
+        self.fft_help_label = QLabel(self.fft_card)
+        self.fft_help_label.setObjectName(u"fft_help_label")
+        font2 = QFont()
+        font2.setPointSize(10)
+        self.fft_help_label.setFont(font2)
+        self.fft_help_label.setWordWrap(True)
+        self.fft_help_label.setProperty(u"variant", u"help")
+
+        self.fft_card_layout.addWidget(self.fft_help_label)
+
+        self.fft_stretch = QSpacerItem(20, 0, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
+
+        self.fft_card_layout.addItem(self.fft_stretch)
 
 
-        self.verticalLayout.addLayout(self.gridLayout)
+        self.spectral_cards_layout.addWidget(self.fft_card)
 
-
-        self.verticalLayout_11.addLayout(self.verticalLayout)
-
-        self.verticalSpacer_3 = QSpacerItem(20, 20, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Fixed)
-
-        self.verticalLayout_11.addItem(self.verticalSpacer_3)
-
-        self.verticalLayout_5 = QVBoxLayout()
-        self.verticalLayout_5.setObjectName(u"verticalLayout_5")
-        self.verticalLayout_5.setSizeConstraint(QLayout.SizeConstraint.SetDefaultConstraint)
-        self.label_7 = QLabel(SpectralSettings)
+        self.bands_card = QFrame(self.content_widget)
+        self.bands_card.setObjectName(u"bands_card")
+        self.bands_card.setFrameShape(QFrame.Shape.StyledPanel)
+        self.bands_card.setFrameShadow(QFrame.Shadow.Raised)
+        self.bands_card_layout = QVBoxLayout(self.bands_card)
+        self.bands_card_layout.setSpacing(10)
+        self.bands_card_layout.setObjectName(u"bands_card_layout")
+        self.bands_card_layout.setContentsMargins(10, 10, 10, 10)
+        self.label_7 = QLabel(self.bands_card)
         self.label_7.setObjectName(u"label_7")
-        self.label_7.setMaximumSize(QSize(16777215, 30))
-        self.label_7.setFont(font)
+        self.label_7.setFont(font1)
 
-        self.verticalLayout_5.addWidget(self.label_7)
+        self.bands_card_layout.addWidget(self.label_7)
 
-        self.textEdit = QTextEdit(SpectralSettings)
-        self.textEdit.setObjectName(u"textEdit")
-        self.textEdit.setFrameShape(QFrame.Shape.NoFrame)
-        self.textEdit.setFrameShadow(QFrame.Shadow.Plain)
-        self.textEdit.setLineWidth(0)
-        self.textEdit.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
-        self.textEdit.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
-        self.textEdit.setSizeAdjustPolicy(QAbstractScrollArea.SizeAdjustPolicy.AdjustIgnored)
-        self.textEdit.setReadOnly(True)
-
-        self.verticalLayout_5.addWidget(self.textEdit)
-
-
-        self.verticalLayout_11.addLayout(self.verticalLayout_5)
-
-        self.gridLayout_2 = QGridLayout()
-        self.gridLayout_2.setObjectName(u"gridLayout_2")
-        self.label_4 = QLabel(SpectralSettings)
-        self.label_4.setObjectName(u"label_4")
-
-        self.gridLayout_2.addWidget(self.label_4, 1, 0, 1, 1)
-
-        self.last_freq_lineEdit = QLineEdit(SpectralSettings)
-        self.last_freq_lineEdit.setObjectName(u"last_freq_lineEdit")
-        self.last_freq_lineEdit.setMaximumSize(QSize(80, 16777215))
-        self.last_freq_lineEdit.setAlignment(Qt.AlignmentFlag.AlignRight|Qt.AlignmentFlag.AlignTrailing|Qt.AlignmentFlag.AlignVCenter)
-
-        self.gridLayout_2.addWidget(self.last_freq_lineEdit, 2, 1, 1, 1)
-
-        self.horizontalSpacer_4 = QSpacerItem(58, 13, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
-
-        self.gridLayout_2.addItem(self.horizontalSpacer_4, 0, 2, 1, 1)
-
-        self.horizontalSpacer_5 = QSpacerItem(58, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
-
-        self.gridLayout_2.addItem(self.horizontalSpacer_5, 2, 2, 1, 1)
-
-        self.label_8 = QLabel(SpectralSettings)
+        self.bands_grid = QGridLayout()
+        self.bands_grid.setObjectName(u"bands_grid")
+        self.bands_grid.setHorizontalSpacing(12)
+        self.bands_grid.setVerticalSpacing(10)
+        self.label_8 = QLabel(self.bands_card)
         self.label_8.setObjectName(u"label_8")
-        sizePolicy1.setHeightForWidth(self.label_8.sizePolicy().hasHeightForWidth())
-        self.label_8.setSizePolicy(sizePolicy1)
-        self.label_8.setMinimumSize(QSize(470, 0))
-        self.label_8.setMaximumSize(QSize(470, 16777215))
 
-        self.gridLayout_2.addWidget(self.label_8, 0, 0, 1, 1)
+        self.bands_grid.addWidget(self.label_8, 0, 0, 1, 1)
 
-        self.label_9 = QLabel(SpectralSettings)
-        self.label_9.setObjectName(u"label_9")
-        sizePolicy1.setHeightForWidth(self.label_9.sizePolicy().hasHeightForWidth())
-        self.label_9.setSizePolicy(sizePolicy1)
-        self.label_9.setMinimumSize(QSize(300, 0))
-        self.label_9.setMaximumSize(QSize(16777215, 16777215))
-
-        self.gridLayout_2.addWidget(self.label_9, 2, 0, 1, 1)
-
-        self.miniband_lineEdit = QLineEdit(SpectralSettings)
+        self.miniband_lineEdit = QLineEdit(self.bands_card)
         self.miniband_lineEdit.setObjectName(u"miniband_lineEdit")
-        self.miniband_lineEdit.setMinimumSize(QSize(0, 0))
         self.miniband_lineEdit.setMaximumSize(QSize(80, 16777215))
         self.miniband_lineEdit.setAlignment(Qt.AlignmentFlag.AlignRight|Qt.AlignmentFlag.AlignTrailing|Qt.AlignmentFlag.AlignVCenter)
 
-        self.gridLayout_2.addWidget(self.miniband_lineEdit, 0, 1, 1, 1)
+        self.bands_grid.addWidget(self.miniband_lineEdit, 0, 1, 1, 1)
 
-        self.horizontalSpacer_6 = QSpacerItem(58, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+        self.miniband_unit_label = QLabel(self.bands_card)
+        self.miniband_unit_label.setObjectName(u"miniband_unit_label")
+        self.miniband_unit_label.setProperty(u"variant", u"help")
 
-        self.gridLayout_2.addItem(self.horizontalSpacer_6, 1, 2, 1, 1)
+        self.bands_grid.addWidget(self.miniband_unit_label, 0, 2, 1, 1)
 
-        self.first_freq_lineEdit = QLineEdit(SpectralSettings)
+        self.label_4 = QLabel(self.bands_card)
+        self.label_4.setObjectName(u"label_4")
+
+        self.bands_grid.addWidget(self.label_4, 1, 0, 1, 1)
+
+        self.first_freq_lineEdit = QLineEdit(self.bands_card)
         self.first_freq_lineEdit.setObjectName(u"first_freq_lineEdit")
         self.first_freq_lineEdit.setMaximumSize(QSize(80, 16777215))
         self.first_freq_lineEdit.setAlignment(Qt.AlignmentFlag.AlignRight|Qt.AlignmentFlag.AlignTrailing|Qt.AlignmentFlag.AlignVCenter)
 
-        self.gridLayout_2.addWidget(self.first_freq_lineEdit, 1, 1, 1, 1)
+        self.bands_grid.addWidget(self.first_freq_lineEdit, 1, 1, 1, 1)
+
+        self.first_freq_unit_label = QLabel(self.bands_card)
+        self.first_freq_unit_label.setObjectName(u"first_freq_unit_label")
+        self.first_freq_unit_label.setProperty(u"variant", u"help")
+
+        self.bands_grid.addWidget(self.first_freq_unit_label, 1, 2, 1, 1)
+
+        self.label_9 = QLabel(self.bands_card)
+        self.label_9.setObjectName(u"label_9")
+
+        self.bands_grid.addWidget(self.label_9, 2, 0, 1, 1)
+
+        self.last_freq_lineEdit = QLineEdit(self.bands_card)
+        self.last_freq_lineEdit.setObjectName(u"last_freq_lineEdit")
+        self.last_freq_lineEdit.setMaximumSize(QSize(80, 16777215))
+        self.last_freq_lineEdit.setAlignment(Qt.AlignmentFlag.AlignRight|Qt.AlignmentFlag.AlignTrailing|Qt.AlignmentFlag.AlignVCenter)
+
+        self.bands_grid.addWidget(self.last_freq_lineEdit, 2, 1, 1, 1)
+
+        self.last_freq_unit_label = QLabel(self.bands_card)
+        self.last_freq_unit_label.setObjectName(u"last_freq_unit_label")
+        self.last_freq_unit_label.setProperty(u"variant", u"help")
+
+        self.bands_grid.addWidget(self.last_freq_unit_label, 2, 2, 1, 1)
+
+        self.bands_grid_spacer = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+
+        self.bands_grid.addItem(self.bands_grid_spacer, 0, 3, 1, 1)
 
 
-        self.verticalLayout_11.addLayout(self.gridLayout_2)
+        self.bands_card_layout.addLayout(self.bands_grid)
 
-        self.label_10 = QLabel(SpectralSettings)
-        self.label_10.setObjectName(u"label_10")
-        self.label_10.setFont(font)
-        self.label_10.setAlignment(Qt.AlignmentFlag.AlignLeading|Qt.AlignmentFlag.AlignLeft|Qt.AlignmentFlag.AlignVCenter)
+        self.bands_help_label = QLabel(self.bands_card)
+        self.bands_help_label.setObjectName(u"bands_help_label")
+        self.bands_help_label.setFont(font2)
+        self.bands_help_label.setWordWrap(True)
+        self.bands_help_label.setProperty(u"variant", u"help")
 
-        self.verticalLayout_11.addWidget(self.label_10)
+        self.bands_card_layout.addWidget(self.bands_help_label)
 
-        self.verticalSpacer_4 = QSpacerItem(20, 20, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Fixed)
+        self.bands_stretch = QSpacerItem(20, 0, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
 
-        self.verticalLayout_11.addItem(self.verticalSpacer_4)
+        self.bands_card_layout.addItem(self.bands_stretch)
 
-        self.verticalLayout_4 = QVBoxLayout()
-        self.verticalLayout_4.setObjectName(u"verticalLayout_4")
-        self.label_6 = QLabel(SpectralSettings)
+
+        self.spectral_cards_layout.addWidget(self.bands_card)
+
+        self.spectral_cards_layout.setStretch(0, 1)
+        self.spectral_cards_layout.setStretch(1, 1)
+
+        self.content_layout.addLayout(self.spectral_cards_layout)
+
+        self.method_card = QFrame(self.content_widget)
+        self.method_card.setObjectName(u"method_card")
+        self.method_card.setFrameShape(QFrame.Shape.StyledPanel)
+        self.method_card.setFrameShadow(QFrame.Shadow.Raised)
+        self.method_card_layout = QVBoxLayout(self.method_card)
+        self.method_card_layout.setSpacing(10)
+        self.method_card_layout.setObjectName(u"method_card_layout")
+        self.method_card_layout.setContentsMargins(10, 10, 10, 10)
+        self.label_6 = QLabel(self.method_card)
         self.label_6.setObjectName(u"label_6")
-        self.label_6.setFont(font)
+        self.label_6.setFont(font1)
 
-        self.verticalLayout_4.addWidget(self.label_6)
+        self.method_card_layout.addWidget(self.label_6)
 
-        self.horizontalLayout_3 = QHBoxLayout()
-        self.horizontalLayout_3.setObjectName(u"horizontalLayout_3")
-        self.verticalLayout_7 = QVBoxLayout()
-        self.verticalLayout_7.setObjectName(u"verticalLayout_7")
-        self.std_radioButton = QRadioButton(SpectralSettings)
+        self.method_layout = QVBoxLayout()
+        self.method_layout.setSpacing(8)
+        self.method_layout.setObjectName(u"method_layout")
+        self.method_layout_1_layout = QVBoxLayout()
+        self.method_layout_1_layout.setSpacing(2)
+        self.method_layout_1_layout.setObjectName(u"method_layout_1_layout")
+        self.std_radioButton = QRadioButton(self.method_card)
         self.std_radioButton.setObjectName(u"std_radioButton")
         self.std_radioButton.setEnabled(True)
-        self.std_radioButton.setMinimumSize(QSize(225, 0))
-        self.std_radioButton.setMaximumSize(QSize(500, 16777215))
-        font1 = QFont()
-        font1.setBold(True)
-        font1.setItalic(False)
-        font1.setUnderline(False)
-        font1.setStrikeOut(False)
-        font1.setKerning(True)
-        self.std_radioButton.setFont(font1)
         self.std_radioButton.setChecked(True)
 
-        self.verticalLayout_7.addWidget(self.std_radioButton)
+        self.method_layout_1_layout.addWidget(self.std_radioButton)
 
-        self.label_5 = QLabel(SpectralSettings)
+        self.label_5 = QLabel(self.method_card)
         self.label_5.setObjectName(u"label_5")
+        self.label_5.setFont(font2)
+        self.label_5.setWordWrap(True)
+        self.label_5.setIndent(26)
+        self.label_5.setProperty(u"variant", u"help")
 
-        self.verticalLayout_7.addWidget(self.label_5)
-
-        self.verticalSpacer_2 = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
-
-        self.verticalLayout_7.addItem(self.verticalSpacer_2)
+        self.method_layout_1_layout.addWidget(self.label_5)
 
 
-        self.horizontalLayout_3.addLayout(self.verticalLayout_7)
+        self.method_layout.addLayout(self.method_layout_1_layout)
 
-        self.horizontalSpacer_7 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+        self.method_layout_line_1 = QFrame(self.method_card)
+        self.method_layout_line_1.setObjectName(u"method_layout_line_1")
+        self.method_layout_line_1.setFrameShape(QFrame.Shape.HLine)
+        self.method_layout_line_1.setFrameShadow(QFrame.Shadow.Plain)
 
-        self.horizontalLayout_3.addItem(self.horizontalSpacer_7)
+        self.method_layout.addWidget(self.method_layout_line_1)
 
-        self.verticalLayout_9 = QVBoxLayout()
-        self.verticalLayout_9.setObjectName(u"verticalLayout_9")
-        self.RA_radioButton = QRadioButton(SpectralSettings)
+        self.method_layout_2_layout = QVBoxLayout()
+        self.method_layout_2_layout.setSpacing(2)
+        self.method_layout_2_layout.setObjectName(u"method_layout_2_layout")
+        self.RA_radioButton = QRadioButton(self.method_card)
         self.RA_radioButton.setObjectName(u"RA_radioButton")
         self.RA_radioButton.setEnabled(True)
-        self.RA_radioButton.setMinimumSize(QSize(225, 0))
-        font2 = QFont()
-        font2.setBold(True)
-        font2.setItalic(False)
-        self.RA_radioButton.setFont(font2)
 
-        self.verticalLayout_9.addWidget(self.RA_radioButton)
+        self.method_layout_2_layout.addWidget(self.RA_radioButton)
 
-        self.label_11 = QLabel(SpectralSettings)
+        self.label_11 = QLabel(self.method_card)
         self.label_11.setObjectName(u"label_11")
+        self.label_11.setFont(font2)
+        self.label_11.setWordWrap(True)
+        self.label_11.setIndent(26)
+        self.label_11.setProperty(u"variant", u"help")
 
-        self.verticalLayout_9.addWidget(self.label_11)
+        self.method_layout_2_layout.addWidget(self.label_11)
 
-        self.verticalLayout_10 = QVBoxLayout()
-        self.verticalLayout_10.setObjectName(u"verticalLayout_10")
-        self.FoooF_radioButton = QRadioButton(SpectralSettings)
+
+        self.method_layout.addLayout(self.method_layout_2_layout)
+
+        self.method_layout_line_2 = QFrame(self.method_card)
+        self.method_layout_line_2.setObjectName(u"method_layout_line_2")
+        self.method_layout_line_2.setFrameShape(QFrame.Shape.HLine)
+        self.method_layout_line_2.setFrameShadow(QFrame.Shadow.Plain)
+
+        self.method_layout.addWidget(self.method_layout_line_2)
+
+        self.method_layout_3_layout = QVBoxLayout()
+        self.method_layout_3_layout.setSpacing(2)
+        self.method_layout_3_layout.setObjectName(u"method_layout_3_layout")
+        self.FoooF_radioButton = QRadioButton(self.method_card)
         self.FoooF_radioButton.setObjectName(u"FoooF_radioButton")
-        self.FoooF_radioButton.setFont(font2)
 
-        self.verticalLayout_10.addWidget(self.FoooF_radioButton)
+        self.method_layout_3_layout.addWidget(self.FoooF_radioButton)
 
-        self.label_12 = QLabel(SpectralSettings)
+        self.label_12 = QLabel(self.method_card)
         self.label_12.setObjectName(u"label_12")
+        self.label_12.setFont(font2)
+        self.label_12.setWordWrap(True)
+        self.label_12.setIndent(26)
+        self.label_12.setProperty(u"variant", u"help")
 
-        self.verticalLayout_10.addWidget(self.label_12)
-
-        self.verticalSpacer_5 = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
-
-        self.verticalLayout_10.addItem(self.verticalSpacer_5)
-
-
-        self.verticalLayout_9.addLayout(self.verticalLayout_10)
+        self.method_layout_3_layout.addWidget(self.label_12)
 
 
-        self.horizontalLayout_3.addLayout(self.verticalLayout_9)
-
-        self.horizontalSpacer_9 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
-
-        self.horizontalLayout_3.addItem(self.horizontalSpacer_9)
-
-        self.horizontalSpacer_8 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
-
-        self.horizontalLayout_3.addItem(self.horizontalSpacer_8)
-
-        self.horizontalSpacer = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
-
-        self.horizontalLayout_3.addItem(self.horizontalSpacer)
+        self.method_layout.addLayout(self.method_layout_3_layout)
 
 
-        self.verticalLayout_4.addLayout(self.horizontalLayout_3)
+        self.method_card_layout.addLayout(self.method_layout)
 
 
-        self.verticalLayout_11.addLayout(self.verticalLayout_4)
+        self.content_layout.addWidget(self.method_card)
 
-        self.verticalSpacer_21 = QSpacerItem(20, 0, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Preferred)
+        self.bands_warning = QFrame(self.content_widget)
+        self.bands_warning.setObjectName(u"bands_warning")
+        self.bands_warning.setFrameShape(QFrame.Shape.NoFrame)
+        self.bands_warning.setProperty(u"variant", u"warning")
+        self.bands_warning_layout = QHBoxLayout(self.bands_warning)
+        self.bands_warning_layout.setObjectName(u"bands_warning_layout")
+        self.bands_warning_layout.setContentsMargins(14, 10, 14, 10)
+        self.bands_warning_label = QLabel(self.bands_warning)
+        self.bands_warning_label.setObjectName(u"bands_warning_label")
+        self.bands_warning_label.setTextFormat(Qt.TextFormat.RichText)
+        self.bands_warning_label.setWordWrap(True)
 
-        self.verticalLayout_11.addItem(self.verticalSpacer_21)
+        self.bands_warning_layout.addWidget(self.bands_warning_label)
 
-        self.verticalSpacer = QSpacerItem(709, 19, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Ignored)
 
-        self.verticalLayout_11.addItem(self.verticalSpacer)
+        self.content_layout.addWidget(self.bands_warning)
+
+        self.about_resolution_layout = QVBoxLayout()
+        self.about_resolution_layout.setSpacing(6)
+        self.about_resolution_layout.setObjectName(u"about_resolution_layout")
+        self.about_resolution_title_label = QLabel(self.content_widget)
+        self.about_resolution_title_label.setObjectName(u"about_resolution_title_label")
+        self.about_resolution_title_label.setFont(font1)
+
+        self.about_resolution_layout.addWidget(self.about_resolution_title_label)
+
+        self.about_resolution_label = QLabel(self.content_widget)
+        self.about_resolution_label.setObjectName(u"about_resolution_label")
+        self.about_resolution_label.setWordWrap(True)
+        self.about_resolution_label.setProperty(u"variant", u"help")
+
+        self.about_resolution_layout.addWidget(self.about_resolution_label)
+
+
+        self.content_layout.addLayout(self.about_resolution_layout)
+
+
+        self.content_row.addWidget(self.content_widget)
+
+        self.content_spacer = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+
+        self.content_row.addItem(self.content_spacer)
+
+        self.content_row.setStretch(0, 1)
+
+        self.verticalLayout.addLayout(self.content_row)
+
+        self.verticalSpacer = QSpacerItem(40, 20, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
+
+        self.verticalLayout.addItem(self.verticalSpacer)
 
 
         self.retranslateUi(SpectralSettings)
@@ -354,67 +402,46 @@ class Ui_SpectralSettings(object):
 
     def retranslateUi(self, SpectralSettings):
         SpectralSettings.setWindowTitle("")
-        self.label_3.setText(QCoreApplication.translate("SpectralSettings", u"<html><head/><body><p><span style=\" font-weight:700;\">Windowed FFT Settings</span></p></body></html>", None))
-        self.textEdit_2.setHtml(QCoreApplication.translate("SpectralSettings", u"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
-"<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset=\"utf-8\" /><style type=\"text/css\">\n"
-"p, li { white-space: pre-wrap; }\n"
-"hr { height: 1px; border-width: 0; }\n"
-"li.unchecked::marker { content: \"\\2610\"; }\n"
-"li.checked::marker { content: \"\\2612\"; }\n"
-"</style></head><body style=\" font-size:12pt; font-weight:400; font-style:normal;\">\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">The analysis is performed by dividing the signal into multiple short windows to estimate spectral power.</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">This procedure is based on Welch\u2019s method, which applies a Fast Fourier Transform (FFT) to each window and averages the resulting periodograms.</p></body></html>", None))
-        self.label.setText(QCoreApplication.translate("SpectralSettings", u"<html><head/><body><p><span style=\" font-weight:700;\">Window length (s)</span></p></body></html>", None))
+        self.title_label.setText(QCoreApplication.translate("SpectralSettings", u"Spectral Settings", None))
+        self.subtitle_label.setText(QCoreApplication.translate("SpectralSettings", u"Define how the spectral power is computed: the FFT windows, the frequency bands and the method.", None))
+        self.label_3.setText(QCoreApplication.translate("SpectralSettings", u"FFT windows", None))
+#if QT_CONFIG(tooltip)
+        self.label.setToolTip(QCoreApplication.translate("SpectralSettings", u"Duration of the signal used to compute each FFT. Longer windows give a finer frequency resolution.", None))
+#endif // QT_CONFIG(tooltip)
+        self.label.setText(QCoreApplication.translate("SpectralSettings", u"Window length", None))
 #if QT_CONFIG(tooltip)
         self.win_len_lineEdit.setToolTip("")
 #endif // QT_CONFIG(tooltip)
+        self.win_len_unit_label.setText(QCoreApplication.translate("SpectralSettings", u"s", None))
 #if QT_CONFIG(tooltip)
-        self.label_14.setToolTip(QCoreApplication.translate("SpectralSettings", u"At which window steps (s) the FFT (Fast Fourier Transform) is performed.", None))
+        self.label_2.setToolTip(QCoreApplication.translate("SpectralSettings", u"Time between the start points of consecutive FFT windows, controlling the overlap and the temporal resolution.", None))
 #endif // QT_CONFIG(tooltip)
-        self.label_14.setText(QCoreApplication.translate("SpectralSettings", u"Time between start point of consecutive FFT windows, controlling overlap and temporal resolution.         ", None))
+        self.label_2.setText(QCoreApplication.translate("SpectralSettings", u"Window step", None))
 #if QT_CONFIG(tooltip)
         self.win_step_lineEdit.setToolTip("")
 #endif // QT_CONFIG(tooltip)
-        self.label_2.setText(QCoreApplication.translate("SpectralSettings", u"<html><head/><body><p><span style=\" font-weight:700;\">Window step (s)</span></p></body></html>", None))
-#if QT_CONFIG(tooltip)
-        self.label_13.setToolTip(QCoreApplication.translate("SpectralSettings", u"Window length (s) used to perform the FFT (Fast Fourier Transform).", None))
-#endif // QT_CONFIG(tooltip)
-        self.label_13.setText(QCoreApplication.translate("SpectralSettings", u"Duration of signal used to compute each FFT. (Longer windows give finer frequency resolution)                ", None))
-        self.label_7.setText(QCoreApplication.translate("SpectralSettings", u"<html><head/><body><p><span style=\" font-weight:600;\">Frequency bands</span></p></body></html>", None))
-        self.textEdit.setHtml(QCoreApplication.translate("SpectralSettings", u"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
-"<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset=\"utf-8\" /><style type=\"text/css\">\n"
-"p, li { white-space: pre-wrap; }\n"
-"hr { height: 1px; border-width: 0; }\n"
-"li.unchecked::marker { content: \"\\2610\"; }\n"
-"li.checked::marker { content: \"\\2612\"; }\n"
-"</style></head><body style=\" font-size:12pt; font-weight:400; font-style:normal;\">\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">It is common to average the power from a few frequency bins in order to estimate the spectral power in a frequency band.</p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">The width of the"
-                        " mini bands has to be equal or larger than the FFT frequency bin resolution (Hz) which is :</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">   1 / [fft windows length (s)]</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">   i.e. 1 / 5 s = 0.2 Hz or 1 / 4 s = 0.25 Hz</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">The mini bandwidth must be a multiple of the frequency bin resolution.</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">-&gt; bandwidth of 0.2 Hz or 1 Hz with a fft windows length of 5 s.</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">-&gt; bandwidth of 0.25 Hz, 0.5 Hz or 1 Hz with a fft windows length of"
-                        " 4 s. </p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">The last frequency analyzed is limited to FS/2.</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">   FS : Sampling rate of the channel (Hz)</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">   i.e. 256 Hz / 2 = 128 Hz</p></body></html>", None))
-        self.label_4.setText(QCoreApplication.translate("SpectralSettings", u"First frequency analyzed (Hz)", None))
-        self.last_freq_lineEdit.setText(QCoreApplication.translate("SpectralSettings", u"64", None))
-        self.label_8.setText(QCoreApplication.translate("SpectralSettings", u"Width of each mini band (Hz) (the first band can be smaller)", None))
-        self.label_9.setText(QCoreApplication.translate("SpectralSettings", u"Last frequency analyzed (Hz)", None))
+        self.win_step_unit_label.setText(QCoreApplication.translate("SpectralSettings", u"s", None))
+        self.fft_help_label.setText(QCoreApplication.translate("SpectralSettings", u"Welch's method: an FFT on each window, then the periodograms are averaged. Longer windows give a finer frequency resolution.", None))
+        self.label_7.setText(QCoreApplication.translate("SpectralSettings", u"Frequency bands", None))
+        self.label_8.setText(QCoreApplication.translate("SpectralSettings", u"Width of each mini band", None))
         self.miniband_lineEdit.setText(QCoreApplication.translate("SpectralSettings", u"0.5", None))
+        self.miniband_unit_label.setText(QCoreApplication.translate("SpectralSettings", u"Hz", None))
+        self.label_4.setText(QCoreApplication.translate("SpectralSettings", u"First frequency analyzed", None))
         self.first_freq_lineEdit.setText(QCoreApplication.translate("SpectralSettings", u"0.0", None))
-        self.label_10.setText(QCoreApplication.translate("SpectralSettings", u"<html><head/><body><p><span style=\" font-style:italic;\">* Warning : The last frequency is limited to FS/2 </span></p><p><span style=\" font-style:italic;\">* Warning: Zero frequency is not supported by IRASA</span></p></body></html>", None))
-        self.label_6.setText(QCoreApplication.translate("SpectralSettings", u"<html><head/><body><p><span style=\" font-weight:600;\">Power Spectral Analysis</span></p></body></html>", None))
+        self.first_freq_unit_label.setText(QCoreApplication.translate("SpectralSettings", u"Hz", None))
+        self.label_9.setText(QCoreApplication.translate("SpectralSettings", u"Last frequency analyzed", None))
+        self.last_freq_lineEdit.setText(QCoreApplication.translate("SpectralSettings", u"64", None))
+        self.last_freq_unit_label.setText(QCoreApplication.translate("SpectralSettings", u"Hz", None))
+        self.bands_help_label.setText(QCoreApplication.translate("SpectralSettings", u"The first band can be smaller.", None))
+        self.label_6.setText(QCoreApplication.translate("SpectralSettings", u"Power spectral analysis", None))
         self.std_radioButton.setText(QCoreApplication.translate("SpectralSettings", u"Standard Spectrum (Welch)", None))
-        self.label_5.setText(QCoreApplication.translate("SpectralSettings", u"Traditional power spectral density estimation", None))
+        self.label_5.setText(QCoreApplication.translate("SpectralSettings", u"Traditional power spectral density estimation.", None))
         self.RA_radioButton.setText(QCoreApplication.translate("SpectralSettings", u"Periodic/Aperiodic Decomposition (IRASA)", None))
-        self.label_11.setText(QCoreApplication.translate("SpectralSettings", u"Separates oscillatory and fractal components using signal resampling", None))
+        self.label_11.setText(QCoreApplication.translate("SpectralSettings", u"Separates the oscillatory and the fractal components using signal resampling.", None))
         self.FoooF_radioButton.setText(QCoreApplication.translate("SpectralSettings", u"Periodic/Aperiodic Decomposition (FOOOF)", None))
-        self.label_12.setText(QCoreApplication.translate("SpectralSettings", u"Models oscillatory peaks and background activity using parametric fitting", None))
+        self.label_12.setText(QCoreApplication.translate("SpectralSettings", u"Models the oscillatory peaks and the background activity using parametric fitting.", None))
+        self.bands_warning_label.setText(QCoreApplication.translate("SpectralSettings", u"<b>Frequency limits</b><br/>The last frequency must be at most half the sampling rate of the channels (<b>FS / 2</b>). The zero frequency is not supported by IRASA.", None))
+        self.about_resolution_title_label.setText(QCoreApplication.translate("SpectralSettings", u"About the frequency resolution", None))
+        self.about_resolution_label.setText(QCoreApplication.translate("SpectralSettings", u"The frequency bin resolution is 1 / window length (s): 0.2 Hz with 5 s windows, 0.25 Hz with 4 s windows. The width of the mini bands must be a multiple of it: 0.2 Hz or 1 Hz with 5 s windows; 0.25 Hz, 0.5 Hz or 1 Hz with 4 s windows. IRASA and FOOOF are described in the documentation of the tool: Read more! below.", None))
     # retranslateUi
 

@@ -15,116 +15,528 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QFont, QFontDatabase, QGradient, QIcon,
     QImage, QKeySequence, QLinearGradient, QPainter,
     QPalette, QPixmap, QRadialGradient, QTransform)
-from PySide6.QtWidgets import (QApplication, QSizePolicy, QTextBrowser, QVBoxLayout,
-    QWidget)
+from PySide6.QtWidgets import (QApplication, QFrame, QGridLayout, QHBoxLayout,
+    QLabel, QPushButton, QSizePolicy, QSpacerItem,
+    QVBoxLayout, QWidget)
 import themes_rc
 
 class Ui_IntroStep(object):
     def setupUi(self, IntroStep):
         if not IntroStep.objectName():
             IntroStep.setObjectName(u"IntroStep")
-        IntroStep.resize(633, 581)
+        IntroStep.resize(900, 700)
         self.verticalLayout = QVBoxLayout(IntroStep)
-        self.verticalLayout.setSpacing(25)
         self.verticalLayout.setObjectName(u"verticalLayout")
-        self.textBrowser = QTextBrowser(IntroStep)
-        self.textBrowser.setObjectName(u"textBrowser")
+        self.verticalLayout.setContentsMargins(19, 12, 19, 12)
+        self.content_row = QHBoxLayout()
+        self.content_row.setObjectName(u"content_row")
+        self.content_row.setContentsMargins(0, 0, 0, 0)
+        self.content_widget = QWidget(IntroStep)
+        self.content_widget.setObjectName(u"content_widget")
+        self.content_widget.setMaximumSize(QSize(800, 16777215))
+        self.content_layout = QVBoxLayout(self.content_widget)
+        self.content_layout.setSpacing(16)
+        self.content_layout.setObjectName(u"content_layout")
+        self.content_layout.setContentsMargins(0, 0, 0, 0)
+        self.header_layout = QVBoxLayout()
+        self.header_layout.setSpacing(6)
+        self.header_layout.setObjectName(u"header_layout")
+        self.title_label = QLabel(self.content_widget)
+        self.title_label.setObjectName(u"title_label")
+        font = QFont()
+        font.setPointSize(18)
+        font.setBold(True)
+        self.title_label.setFont(font)
 
-        self.verticalLayout.addWidget(self.textBrowser)
+        self.header_layout.addWidget(self.title_label)
+
+        self.subtitle_label = QLabel(self.content_widget)
+        self.subtitle_label.setObjectName(u"subtitle_label")
+        self.subtitle_label.setWordWrap(True)
+        self.subtitle_label.setProperty(u"variant", u"help")
+
+        self.header_layout.addWidget(self.subtitle_label)
+
+
+        self.content_layout.addLayout(self.header_layout)
+
+        self.common_settings_info = QFrame(self.content_widget)
+        self.common_settings_info.setObjectName(u"common_settings_info")
+        self.common_settings_info.setFrameShape(QFrame.Shape.NoFrame)
+        self.common_settings_info.setProperty(u"variant", u"info")
+        self.common_settings_info_layout = QHBoxLayout(self.common_settings_info)
+        self.common_settings_info_layout.setObjectName(u"common_settings_info_layout")
+        self.common_settings_info_layout.setContentsMargins(14, 10, 14, 10)
+        self.common_settings_info_label = QLabel(self.common_settings_info)
+        self.common_settings_info_label.setObjectName(u"common_settings_info_label")
+        self.common_settings_info_label.setTextFormat(Qt.TextFormat.RichText)
+        self.common_settings_info_label.setWordWrap(True)
+
+        self.common_settings_info_layout.addWidget(self.common_settings_info_label)
+
+
+        self.content_layout.addWidget(self.common_settings_info)
+
+        self.steps_section_layout = QVBoxLayout()
+        self.steps_section_layout.setSpacing(8)
+        self.steps_section_layout.setObjectName(u"steps_section_layout")
+        self.steps_title_label = QLabel(self.content_widget)
+        self.steps_title_label.setObjectName(u"steps_title_label")
+        font1 = QFont()
+        font1.setPointSize(15)
+        font1.setBold(True)
+        self.steps_title_label.setFont(font1)
+
+        self.steps_section_layout.addWidget(self.steps_title_label)
+
+        self.steps_card = QFrame(self.content_widget)
+        self.steps_card.setObjectName(u"steps_card")
+        self.steps_card.setFrameShape(QFrame.Shape.StyledPanel)
+        self.steps_card.setFrameShadow(QFrame.Shadow.Raised)
+        self.steps_card_layout = QVBoxLayout(self.steps_card)
+        self.steps_card_layout.setSpacing(10)
+        self.steps_card_layout.setObjectName(u"steps_card_layout")
+        self.steps_card_layout.setContentsMargins(10, 10, 10, 10)
+        self.steps_grid = QGridLayout()
+        self.steps_grid.setObjectName(u"steps_grid")
+        self.steps_grid.setHorizontalSpacing(12)
+        self.steps_grid.setVerticalSpacing(10)
+        self.step_1_number_label = QLabel(self.steps_card)
+        self.step_1_number_label.setObjectName(u"step_1_number_label")
+        font2 = QFont()
+        font2.setPointSize(10)
+        self.step_1_number_label.setFont(font2)
+        self.step_1_number_label.setProperty(u"variant", u"step_number")
+        self.step_1_number_label.setMinimumSize(QSize(24, 24))
+        self.step_1_number_label.setMaximumSize(QSize(24, 24))
+        self.step_1_number_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+
+        self.steps_grid.addWidget(self.step_1_number_label, 0, 0, 1, 1, Qt.AlignmentFlag.AlignTop)
+
+        self.step_1_name_label = QLabel(self.steps_card)
+        self.step_1_name_label.setObjectName(u"step_1_name_label")
+        font3 = QFont()
+        font3.setBold(True)
+        self.step_1_name_label.setFont(font3)
+        self.step_1_name_label.setAlignment(Qt.AlignmentFlag.AlignLeading|Qt.AlignmentFlag.AlignLeft|Qt.AlignmentFlag.AlignTop)
+
+        self.steps_grid.addWidget(self.step_1_name_label, 0, 1, 1, 1)
+
+        self.steps_gap = QSpacerItem(16, 20, QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Minimum)
+
+        self.steps_grid.addItem(self.steps_gap, 0, 2, 1, 1)
+
+        self.step_1_label = QLabel(self.steps_card)
+        self.step_1_label.setObjectName(u"step_1_label")
+        self.step_1_label.setWordWrap(True)
+        self.step_1_label.setProperty(u"variant", u"help")
+        self.step_1_label.setAlignment(Qt.AlignmentFlag.AlignLeading|Qt.AlignmentFlag.AlignLeft|Qt.AlignmentFlag.AlignTop)
+
+        self.steps_grid.addWidget(self.step_1_label, 0, 3, 1, 1)
+
+        self.step_line_2 = QFrame(self.steps_card)
+        self.step_line_2.setObjectName(u"step_line_2")
+        self.step_line_2.setFrameShape(QFrame.Shape.HLine)
+        self.step_line_2.setFrameShadow(QFrame.Shadow.Plain)
+
+        self.steps_grid.addWidget(self.step_line_2, 1, 0, 1, 4)
+
+        self.step_2_number_label = QLabel(self.steps_card)
+        self.step_2_number_label.setObjectName(u"step_2_number_label")
+        self.step_2_number_label.setFont(font2)
+        self.step_2_number_label.setProperty(u"variant", u"step_number")
+        self.step_2_number_label.setMinimumSize(QSize(24, 24))
+        self.step_2_number_label.setMaximumSize(QSize(24, 24))
+        self.step_2_number_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+
+        self.steps_grid.addWidget(self.step_2_number_label, 2, 0, 1, 1, Qt.AlignmentFlag.AlignTop)
+
+        self.step_2_name_label = QLabel(self.steps_card)
+        self.step_2_name_label.setObjectName(u"step_2_name_label")
+        self.step_2_name_label.setFont(font3)
+        self.step_2_name_label.setAlignment(Qt.AlignmentFlag.AlignLeading|Qt.AlignmentFlag.AlignLeft|Qt.AlignmentFlag.AlignTop)
+
+        self.steps_grid.addWidget(self.step_2_name_label, 2, 1, 1, 1)
+
+        self.step_2_label = QLabel(self.steps_card)
+        self.step_2_label.setObjectName(u"step_2_label")
+        self.step_2_label.setWordWrap(True)
+        self.step_2_label.setProperty(u"variant", u"help")
+        self.step_2_label.setAlignment(Qt.AlignmentFlag.AlignLeading|Qt.AlignmentFlag.AlignLeft|Qt.AlignmentFlag.AlignTop)
+
+        self.steps_grid.addWidget(self.step_2_label, 2, 3, 1, 1)
+
+        self.step_line_3 = QFrame(self.steps_card)
+        self.step_line_3.setObjectName(u"step_line_3")
+        self.step_line_3.setFrameShape(QFrame.Shape.HLine)
+        self.step_line_3.setFrameShadow(QFrame.Shadow.Plain)
+
+        self.steps_grid.addWidget(self.step_line_3, 3, 0, 1, 4)
+
+        self.step_3_number_label = QLabel(self.steps_card)
+        self.step_3_number_label.setObjectName(u"step_3_number_label")
+        self.step_3_number_label.setFont(font2)
+        self.step_3_number_label.setProperty(u"variant", u"step_number")
+        self.step_3_number_label.setMinimumSize(QSize(24, 24))
+        self.step_3_number_label.setMaximumSize(QSize(24, 24))
+        self.step_3_number_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+
+        self.steps_grid.addWidget(self.step_3_number_label, 4, 0, 1, 1, Qt.AlignmentFlag.AlignTop)
+
+        self.step_3_name_label = QLabel(self.steps_card)
+        self.step_3_name_label.setObjectName(u"step_3_name_label")
+        self.step_3_name_label.setFont(font3)
+        self.step_3_name_label.setAlignment(Qt.AlignmentFlag.AlignLeading|Qt.AlignmentFlag.AlignLeft|Qt.AlignmentFlag.AlignTop)
+
+        self.steps_grid.addWidget(self.step_3_name_label, 4, 1, 1, 1)
+
+        self.step_3_label = QLabel(self.steps_card)
+        self.step_3_label.setObjectName(u"step_3_label")
+        self.step_3_label.setWordWrap(True)
+        self.step_3_label.setProperty(u"variant", u"help")
+        self.step_3_label.setAlignment(Qt.AlignmentFlag.AlignLeading|Qt.AlignmentFlag.AlignLeft|Qt.AlignmentFlag.AlignTop)
+
+        self.steps_grid.addWidget(self.step_3_label, 4, 3, 1, 1)
+
+        self.step_line_4 = QFrame(self.steps_card)
+        self.step_line_4.setObjectName(u"step_line_4")
+        self.step_line_4.setFrameShape(QFrame.Shape.HLine)
+        self.step_line_4.setFrameShadow(QFrame.Shadow.Plain)
+
+        self.steps_grid.addWidget(self.step_line_4, 5, 0, 1, 4)
+
+        self.step_4_number_label = QLabel(self.steps_card)
+        self.step_4_number_label.setObjectName(u"step_4_number_label")
+        self.step_4_number_label.setFont(font2)
+        self.step_4_number_label.setProperty(u"variant", u"step_number")
+        self.step_4_number_label.setMinimumSize(QSize(24, 24))
+        self.step_4_number_label.setMaximumSize(QSize(24, 24))
+        self.step_4_number_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+
+        self.steps_grid.addWidget(self.step_4_number_label, 6, 0, 1, 1, Qt.AlignmentFlag.AlignTop)
+
+        self.step_4_name_label = QLabel(self.steps_card)
+        self.step_4_name_label.setObjectName(u"step_4_name_label")
+        self.step_4_name_label.setFont(font3)
+        self.step_4_name_label.setAlignment(Qt.AlignmentFlag.AlignLeading|Qt.AlignmentFlag.AlignLeft|Qt.AlignmentFlag.AlignTop)
+
+        self.steps_grid.addWidget(self.step_4_name_label, 6, 1, 1, 1)
+
+        self.step_4_label = QLabel(self.steps_card)
+        self.step_4_label.setObjectName(u"step_4_label")
+        self.step_4_label.setWordWrap(True)
+        self.step_4_label.setProperty(u"variant", u"help")
+        self.step_4_label.setAlignment(Qt.AlignmentFlag.AlignLeading|Qt.AlignmentFlag.AlignLeft|Qt.AlignmentFlag.AlignTop)
+
+        self.steps_grid.addWidget(self.step_4_label, 6, 3, 1, 1)
+
+        self.step_line_5 = QFrame(self.steps_card)
+        self.step_line_5.setObjectName(u"step_line_5")
+        self.step_line_5.setFrameShape(QFrame.Shape.HLine)
+        self.step_line_5.setFrameShadow(QFrame.Shadow.Plain)
+
+        self.steps_grid.addWidget(self.step_line_5, 7, 0, 1, 4)
+
+        self.step_5_number_label = QLabel(self.steps_card)
+        self.step_5_number_label.setObjectName(u"step_5_number_label")
+        self.step_5_number_label.setFont(font2)
+        self.step_5_number_label.setProperty(u"variant", u"step_number")
+        self.step_5_number_label.setMinimumSize(QSize(24, 24))
+        self.step_5_number_label.setMaximumSize(QSize(24, 24))
+        self.step_5_number_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+
+        self.steps_grid.addWidget(self.step_5_number_label, 8, 0, 1, 1, Qt.AlignmentFlag.AlignTop)
+
+        self.step_5_name_label = QLabel(self.steps_card)
+        self.step_5_name_label.setObjectName(u"step_5_name_label")
+        self.step_5_name_label.setFont(font3)
+        self.step_5_name_label.setAlignment(Qt.AlignmentFlag.AlignLeading|Qt.AlignmentFlag.AlignLeft|Qt.AlignmentFlag.AlignTop)
+
+        self.steps_grid.addWidget(self.step_5_name_label, 8, 1, 1, 1)
+
+        self.step_5_label = QLabel(self.steps_card)
+        self.step_5_label.setObjectName(u"step_5_label")
+        self.step_5_label.setWordWrap(True)
+        self.step_5_label.setProperty(u"variant", u"help")
+        self.step_5_label.setAlignment(Qt.AlignmentFlag.AlignLeading|Qt.AlignmentFlag.AlignLeft|Qt.AlignmentFlag.AlignTop)
+
+        self.steps_grid.addWidget(self.step_5_label, 8, 3, 1, 1)
+
+        self.step_line_6 = QFrame(self.steps_card)
+        self.step_line_6.setObjectName(u"step_line_6")
+        self.step_line_6.setFrameShape(QFrame.Shape.HLine)
+        self.step_line_6.setFrameShadow(QFrame.Shadow.Plain)
+
+        self.steps_grid.addWidget(self.step_line_6, 9, 0, 1, 4)
+
+        self.step_6_number_label = QLabel(self.steps_card)
+        self.step_6_number_label.setObjectName(u"step_6_number_label")
+        self.step_6_number_label.setFont(font2)
+        self.step_6_number_label.setProperty(u"variant", u"step_number")
+        self.step_6_number_label.setMinimumSize(QSize(24, 24))
+        self.step_6_number_label.setMaximumSize(QSize(24, 24))
+        self.step_6_number_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+
+        self.steps_grid.addWidget(self.step_6_number_label, 10, 0, 1, 1, Qt.AlignmentFlag.AlignTop)
+
+        self.step_6_name_label = QLabel(self.steps_card)
+        self.step_6_name_label.setObjectName(u"step_6_name_label")
+        self.step_6_name_label.setFont(font3)
+        self.step_6_name_label.setAlignment(Qt.AlignmentFlag.AlignLeading|Qt.AlignmentFlag.AlignLeft|Qt.AlignmentFlag.AlignTop)
+
+        self.steps_grid.addWidget(self.step_6_name_label, 10, 1, 1, 1)
+
+        self.step_6_label = QLabel(self.steps_card)
+        self.step_6_label.setObjectName(u"step_6_label")
+        self.step_6_label.setWordWrap(True)
+        self.step_6_label.setProperty(u"variant", u"help")
+        self.step_6_label.setAlignment(Qt.AlignmentFlag.AlignLeading|Qt.AlignmentFlag.AlignLeft|Qt.AlignmentFlag.AlignTop)
+
+        self.steps_grid.addWidget(self.step_6_label, 10, 3, 1, 1)
+
+        self.step_line_7 = QFrame(self.steps_card)
+        self.step_line_7.setObjectName(u"step_line_7")
+        self.step_line_7.setFrameShape(QFrame.Shape.HLine)
+        self.step_line_7.setFrameShadow(QFrame.Shadow.Plain)
+
+        self.steps_grid.addWidget(self.step_line_7, 11, 0, 1, 4)
+
+        self.step_7_number_label = QLabel(self.steps_card)
+        self.step_7_number_label.setObjectName(u"step_7_number_label")
+        self.step_7_number_label.setFont(font2)
+        self.step_7_number_label.setProperty(u"variant", u"step_number")
+        self.step_7_number_label.setMinimumSize(QSize(24, 24))
+        self.step_7_number_label.setMaximumSize(QSize(24, 24))
+        self.step_7_number_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+
+        self.steps_grid.addWidget(self.step_7_number_label, 12, 0, 1, 1, Qt.AlignmentFlag.AlignTop)
+
+        self.step_7_name_label = QLabel(self.steps_card)
+        self.step_7_name_label.setObjectName(u"step_7_name_label")
+        self.step_7_name_label.setFont(font3)
+        self.step_7_name_label.setAlignment(Qt.AlignmentFlag.AlignLeading|Qt.AlignmentFlag.AlignLeft|Qt.AlignmentFlag.AlignTop)
+
+        self.steps_grid.addWidget(self.step_7_name_label, 12, 1, 1, 1)
+
+        self.step_7_label = QLabel(self.steps_card)
+        self.step_7_label.setObjectName(u"step_7_label")
+        self.step_7_label.setWordWrap(True)
+        self.step_7_label.setProperty(u"variant", u"help")
+        self.step_7_label.setAlignment(Qt.AlignmentFlag.AlignLeading|Qt.AlignmentFlag.AlignLeft|Qt.AlignmentFlag.AlignTop)
+
+        self.steps_grid.addWidget(self.step_7_label, 12, 3, 1, 1)
+
+        self.steps_grid.setColumnStretch(3, 1)
+
+        self.steps_card_layout.addLayout(self.steps_grid)
+
+
+        self.steps_section_layout.addWidget(self.steps_card)
+
+
+        self.content_layout.addLayout(self.steps_section_layout)
+
+        self.files_section_layout = QVBoxLayout()
+        self.files_section_layout.setSpacing(8)
+        self.files_section_layout.setObjectName(u"files_section_layout")
+        self.files_title_label = QLabel(self.content_widget)
+        self.files_title_label.setObjectName(u"files_title_label")
+        self.files_title_label.setFont(font1)
+
+        self.files_section_layout.addWidget(self.files_title_label)
+
+        self.files_card = QFrame(self.content_widget)
+        self.files_card.setObjectName(u"files_card")
+        self.files_card.setFrameShape(QFrame.Shape.StyledPanel)
+        self.files_card.setFrameShadow(QFrame.Shadow.Raised)
+        self.files_card_layout = QVBoxLayout(self.files_card)
+        self.files_card_layout.setSpacing(10)
+        self.files_card_layout.setObjectName(u"files_card_layout")
+        self.files_card_layout.setContentsMargins(10, 10, 10, 10)
+        self.files_grid = QGridLayout()
+        self.files_grid.setObjectName(u"files_grid")
+        self.files_grid.setHorizontalSpacing(32)
+        self.files_grid.setVerticalSpacing(6)
+        self.file_1_name_label = QLabel(self.files_card)
+        self.file_1_name_label.setObjectName(u"file_1_name_label")
+        self.file_1_name_label.setFont(font3)
+
+        self.files_grid.addWidget(self.file_1_name_label, 0, 0, 1, 1)
+
+        self.file_1_label = QLabel(self.files_card)
+        self.file_1_label.setObjectName(u"file_1_label")
+        self.file_1_label.setWordWrap(True)
+
+        self.files_grid.addWidget(self.file_1_label, 0, 1, 1, 1)
+
+        self.file_2_name_label = QLabel(self.files_card)
+        self.file_2_name_label.setObjectName(u"file_2_name_label")
+        self.file_2_name_label.setFont(font3)
+
+        self.files_grid.addWidget(self.file_2_name_label, 1, 0, 1, 1)
+
+        self.file_2_label = QLabel(self.files_card)
+        self.file_2_label.setObjectName(u"file_2_label")
+        self.file_2_label.setWordWrap(True)
+
+        self.files_grid.addWidget(self.file_2_label, 1, 1, 1, 1)
+
+        self.file_3_name_label = QLabel(self.files_card)
+        self.file_3_name_label.setObjectName(u"file_3_name_label")
+        self.file_3_name_label.setFont(font3)
+
+        self.files_grid.addWidget(self.file_3_name_label, 2, 0, 1, 1)
+
+        self.file_3_label = QLabel(self.files_card)
+        self.file_3_label.setObjectName(u"file_3_label")
+        self.file_3_label.setTextFormat(Qt.TextFormat.RichText)
+        self.file_3_label.setWordWrap(True)
+
+        self.files_grid.addWidget(self.file_3_label, 2, 1, 1, 1)
+
+        self.files_grid.setColumnStretch(1, 1)
+
+        self.files_card_layout.addLayout(self.files_grid)
+
+
+        self.files_section_layout.addWidget(self.files_card)
+
+
+        self.content_layout.addLayout(self.files_section_layout)
+
+        self.methods_section_layout = QVBoxLayout()
+        self.methods_section_layout.setSpacing(2)
+        self.methods_section_layout.setObjectName(u"methods_section_layout")
+        self.methods_buttons_layout = QHBoxLayout()
+        self.methods_buttons_layout.setSpacing(0)
+        self.methods_buttons_layout.setObjectName(u"methods_buttons_layout")
+        self.methods_show_button = QPushButton(self.content_widget)
+        self.methods_show_button.setObjectName(u"methods_show_button")
+        self.methods_show_button.setFocusPolicy(Qt.FocusPolicy.TabFocus)
+        self.methods_show_button.setFlat(True)
+        self.methods_show_button.setProperty(u"variant", u"link")
+
+        self.methods_buttons_layout.addWidget(self.methods_show_button)
+
+        self.methods_hide_button = QPushButton(self.content_widget)
+        self.methods_hide_button.setObjectName(u"methods_hide_button")
+        self.methods_hide_button.setFocusPolicy(Qt.FocusPolicy.TabFocus)
+        self.methods_hide_button.setVisible(False)
+        self.methods_hide_button.setFlat(True)
+        self.methods_hide_button.setProperty(u"variant", u"link")
+
+        self.methods_buttons_layout.addWidget(self.methods_hide_button)
+
+        self.methods_buttons_spacer = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+
+        self.methods_buttons_layout.addItem(self.methods_buttons_spacer)
+
+
+        self.methods_section_layout.addLayout(self.methods_buttons_layout)
+
+        self.methods_note_label = QLabel(self.content_widget)
+        self.methods_note_label.setObjectName(u"methods_note_label")
+        self.methods_note_label.setFont(font2)
+        self.methods_note_label.setWordWrap(True)
+        self.methods_note_label.setProperty(u"variant", u"help")
+
+        self.methods_section_layout.addWidget(self.methods_note_label)
+
+        self.methods_widget = QWidget(self.content_widget)
+        self.methods_widget.setObjectName(u"methods_widget")
+        self.methods_widget.setVisible(False)
+        self.methods_layout = QVBoxLayout(self.methods_widget)
+        self.methods_layout.setSpacing(10)
+        self.methods_layout.setObjectName(u"methods_layout")
+        self.methods_layout.setContentsMargins(0, 6, 0, 0)
+        self.methods_label = QLabel(self.methods_widget)
+        self.methods_label.setObjectName(u"methods_label")
+        self.methods_label.setTextFormat(Qt.TextFormat.RichText)
+        self.methods_label.setWordWrap(True)
+        self.methods_label.setProperty(u"variant", u"help")
+
+        self.methods_layout.addWidget(self.methods_label)
+
+        self.references_label = QLabel(self.methods_widget)
+        self.references_label.setObjectName(u"references_label")
+        self.references_label.setFont(font2)
+        self.references_label.setTextFormat(Qt.TextFormat.RichText)
+        self.references_label.setWordWrap(True)
+        self.references_label.setProperty(u"variant", u"help")
+
+        self.methods_layout.addWidget(self.references_label)
+
+
+        self.methods_section_layout.addWidget(self.methods_widget)
+
+
+        self.content_layout.addLayout(self.methods_section_layout)
+
+
+        self.content_row.addWidget(self.content_widget)
+
+        self.content_spacer = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+
+        self.content_row.addItem(self.content_spacer)
+
+        self.content_row.setStretch(0, 1)
+
+        self.verticalLayout.addLayout(self.content_row)
+
+        self.verticalSpacer = QSpacerItem(40, 20, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
+
+        self.verticalLayout.addItem(self.verticalSpacer)
 
 
         self.retranslateUi(IntroStep)
+        self.methods_show_button.clicked.connect(self.methods_widget.show)
+        self.methods_show_button.clicked.connect(self.methods_hide_button.show)
+        self.methods_show_button.clicked.connect(self.methods_show_button.hide)
+        self.methods_hide_button.clicked.connect(self.methods_widget.hide)
+        self.methods_hide_button.clicked.connect(self.methods_show_button.show)
+        self.methods_hide_button.clicked.connect(self.methods_hide_button.hide)
 
         QMetaObject.connectSlotsByName(IntroStep)
     # setupUi
 
     def retranslateUi(self, IntroStep):
         IntroStep.setWindowTitle("")
-        self.textBrowser.setHtml(QCoreApplication.translate("IntroStep", u"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
-"<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset=\"utf-8\" /><style type=\"text/css\">\n"
-"p, li { white-space: pre-wrap; }\n"
-"hr { height: 1px; border-width: 0; }\n"
-"li.unchecked::marker { content: \"\\2610\"; }\n"
-"li.checked::marker { content: \"\\2612\"; }\n"
-"</style></head><body style=\" font-size:12pt; font-weight:400; font-style:normal;\">\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-weight:600;\">Analyze EEG Spectral Power</span></p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-weight:600;\"><br /></p>\n"
-"<p style=\" "
-                        "margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">The tool assess the intensity (or power) of a time-domain signal from a polysomnopragphy (PSG) file across various frequency bands.</p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Common settings : </p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-weight:700; color:#ff0000;\">NOTE:</span><span style=\" color:#ff0000;\"> Please define the sleep cycle configuration you wish to use for the analysis using the blue panel on the left.</span></p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0;"
-                        " text-indent:0px;\"><br /></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" text-decoration: underline;\">1 - Input Files :</span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Add the PSG files to analyze.</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-weight:700;\">European Data Format (EDF)</span><span style=\"\"> : The .edf and .tsv files must have the exact same filename and be stored in the same directory.</span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-weight:700;\">Stellate</span><span style=\"\"> : The .sig and .sts files must have the exact same filename and be stored in the same directory.</span></p>\n"
-"<p style=\" ma"
-                        "rgin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-weight:700;\">NATUS</span><span style=\"\"> (</span><span style=\" font-style:italic;\">for CEAMS users</span><span style=\"\">) : </span><span style=\"\"> The entire NATUS subject folder is required.</span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Define the montage and channels for each open file you want to run the tool on.</p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" text-decoration: underline;\">2 - Events to exclude :</span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-"
-                        "indent:0px;\">Select events to exclude from the analysis (i.e. artefacts previously detected and saved in the accessory file).</p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" text-decoration: underline;\">3 - Filtering :</span> </p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Define the appropriate filtering to match your research analyses.</p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" text-decoration: underline;\">4 - Secti"
-                        "on selection :</span> </p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Specify the segment of the signal on which you intend to perform the analysis:</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">on chosen annotations or for each sleep stage selected by the user.</p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Additionally, you have the following options:</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">1. Run the analysis exclusively on the signal within the sleep cycles.</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin"
-                        "-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">2. Run the analysis on the signal within the sleep cycles while excluding NREM periods.</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">3. Run the analysis on the signal within the sleep cycles while excluding REM periods.</p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" text-decoration: underline;\">5 - Annotations Selection : </span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">If the analysis is performed on chosen annotations, select them.</p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-l"
-                        "eft:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" text-decoration: underline;\">6 - Spectral Settings :</span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">The user is able to select among <span style=\" font-weight:700;\">three options</span> to apply power spectral analysis.</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">The <span style=\" font-weight:700;\">first </span>option computes the standard spectrum based on the Welch's [1] method by dividing the signal into multiple short windows to estimate spectral power.<br />This procedure applies a Fast Fourier Transform (FFT) to each window and averages the resulting periodograms.</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0p"
-                        "x; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Define the window length (s) used for each FFT and the step size (s) between consecutive windows.</p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">The frequency bin resolution (Hz) depends on the window length (s) used to perform each FFT.</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Frequency bin resolution : 1 / [fft windows length (s)]</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">I.e. 1 / 5 s = 0.2 Hz or 1 / 4 s = 0.25 Hz</p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:"
-                        "0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">It is common to average the power from a few frequency bins in order to estimate the spectral power in a frequency band.</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Define the width (Hz) of the frequency bands you are interested in. </p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Define also the first and last frequency to analyze (the maximum is half the sampling frequency (Hz) of the channels to analyze).</p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent"
-                        ":0; text-indent:0px;\">The <span style=\" font-weight:700;\">second</span> and <span style=\" font-weight:700;\">third</span> options allow the user to decompose the power spectra into periodic and aperiodic components using two well-known methods from the literature: IRASA [2] and FOOOF [3]. Details of these methods are provided in the tool's documentation, which you can access by clicking the &quot;Read more!&quot; button at the bottom of the page.</p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" text-decoration: underline;\">7 - Output File :</span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">whether the analysis is performed per sleep stage or per annotation, define how t"
-                        "o average the spectral power across the recording:</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">-&quot;Total&quot; - average over the entire recording.</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">-&quot;Distribution per clock hour&quot; \u2013 average for each elapsed hour (1\u20139 by default).</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">-&quot;Distribution per hour spent in each sleep stage&quot; \u2013 average for each stage hour (1\u20139 by default).</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">-&quot;Distribution per sleep cycle&quot; \u2013 average for each sleep cycle (1\u20136 by default).</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-ri"
-                        "ght:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-style:italic;\">The maximum number of hours or sleep cycles are defined in the configuration page &quot;Hours and Cycles&quot;.</span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-style:italic;\">The starting point is either the first sleep stage or the sleep onset, depending on the settings in step 4 - Section Selection.</span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">    </p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">The output file is a .tsv (tab separated values) file. Each line is specific to a subject, a channel and a frequency band. </p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; "
-                        "text-indent:0px;\"><br /></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Warning : the output data is added (appended) to the output file, the output file will be modified each time the tool is run.</p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-weight:700;\">References</span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">[1] Welch PD. The use of fast Fourier transform for the estimation of power spectra: a method based on time averaging over short, modified periodograms. IEEE Trans Audio Electroacoust. 1967;15(2):70\u201373.</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-lef"
-                        "t:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">[2] Wen, H., &amp; Liu, Z. (2016). Separating fractal and oscillatory components in the power spectrum of neurophysiological signal. Brain topography, 29(1), 13-26.</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">[3] Donoghue, T., Haller, M., Peterson, E. J., Varma, P., Sebastian, P., Gao, R., \u2026 &amp; Voytek, B. (2020). Parameterizing neural power spectra into periodic and aperiodic components. Nature neuroscience, 23(12), 1655-1665.</p></body></html>", None))
+        self.title_label.setText(QCoreApplication.translate("IntroStep", u"Analyze EEG Spectral Power", None))
+        self.subtitle_label.setText(QCoreApplication.translate("IntroStep", u"Assesses the intensity (or power) of the signal of your polysomnography (PSG) files across the frequency bands you choose, per sleep stage or on chosen annotations.", None))
+        self.common_settings_info_label.setText(QCoreApplication.translate("IntroStep", u"<b>Before you start</b><br/>Define the sleep cycle configuration to use for the analysis: <b>Common settings \u203a Sleep Cycles</b>, in the left panel.", None))
+        self.steps_title_label.setText(QCoreApplication.translate("IntroStep", u"What you will do", None))
+        self.step_1_number_label.setText(QCoreApplication.translate("IntroStep", u"1", None))
+        self.step_1_name_label.setText(QCoreApplication.translate("IntroStep", u"Input Files", None))
+        self.step_1_label.setText(QCoreApplication.translate("IntroStep", u"Add the PSG files, then define the montage and the channels of each file.", None))
+        self.step_2_number_label.setText(QCoreApplication.translate("IntroStep", u"2", None))
+        self.step_2_name_label.setText(QCoreApplication.translate("IntroStep", u"Events to exclude", None))
+        self.step_2_label.setText(QCoreApplication.translate("IntroStep", u"Select the events to exclude from the analysis, such as artefacts already detected.", None))
+        self.step_3_number_label.setText(QCoreApplication.translate("IntroStep", u"3", None))
+        self.step_3_name_label.setText(QCoreApplication.translate("IntroStep", u"Filter Settings", None))
+        self.step_3_label.setText(QCoreApplication.translate("IntroStep", u"Optional bandpass and power-line notch filters.", None))
+        self.step_4_number_label.setText(QCoreApplication.translate("IntroStep", u"4", None))
+        self.step_4_name_label.setText(QCoreApplication.translate("IntroStep", u"Section Selection", None))
+        self.step_4_label.setText(QCoreApplication.translate("IntroStep", u"Choose the segment of the signal to analyse: the chosen annotations, or each sleep stage you select. You can also analyse only the signal within the sleep cycles, exclude the NREM periods or exclude the REM periods.", None))
+        self.step_5_number_label.setText(QCoreApplication.translate("IntroStep", u"5", None))
+        self.step_5_name_label.setText(QCoreApplication.translate("IntroStep", u"Annotations Selection", None))
+        self.step_5_label.setText(QCoreApplication.translate("IntroStep", u"Only when the analysis is performed on chosen annotations.", None))
+        self.step_6_number_label.setText(QCoreApplication.translate("IntroStep", u"6", None))
+        self.step_6_name_label.setText(QCoreApplication.translate("IntroStep", u"Spectral Settings", None))
+        self.step_6_label.setText(QCoreApplication.translate("IntroStep", u"Welch, IRASA or FOOOF, the FFT windows and the frequency bands.", None))
+        self.step_7_number_label.setText(QCoreApplication.translate("IntroStep", u"7", None))
+        self.step_7_name_label.setText(QCoreApplication.translate("IntroStep", u"Output Files", None))
+        self.step_7_label.setText(QCoreApplication.translate("IntroStep", u"Choose the distributions to export and the output file.", None))
+        self.files_title_label.setText(QCoreApplication.translate("IntroStep", u"Accepted files", None))
+        self.file_1_name_label.setText(QCoreApplication.translate("IntroStep", u"EDF", None))
+        self.file_1_label.setText(QCoreApplication.translate("IntroStep", u"The .edf and .tsv files have the same filename and are in the same directory.", None))
+        self.file_2_name_label.setText(QCoreApplication.translate("IntroStep", u"Stellate", None))
+        self.file_2_label.setText(QCoreApplication.translate("IntroStep", u"The .sig and .sts files have the same filename and are in the same directory.", None))
+        self.file_3_name_label.setText(QCoreApplication.translate("IntroStep", u"NATUS", None))
+        self.file_3_label.setText(QCoreApplication.translate("IntroStep", u"The entire NATUS subject folder is required <i>(for CEAMS users)</i>.", None))
+        self.methods_show_button.setText(QCoreApplication.translate("IntroStep", u"\u203a Methods and references", None))
+        self.methods_hide_button.setText(QCoreApplication.translate("IntroStep", u"\u2304 Methods and references", None))
+        self.methods_note_label.setText(QCoreApplication.translate("IntroStep", u"The details of each setting are shown in its own step.", None))
+        self.methods_label.setText(QCoreApplication.translate("IntroStep", u"<b>Standard spectrum (Welch [1]):</b> the signal is divided into short windows, a Fast Fourier Transform (FFT) is applied to each window and the periodograms are averaged. The frequency bin resolution is 1 / window length (s): 0.2 Hz with 5 s windows. The power of a few bins is averaged to estimate the power in a frequency band, up to half the sampling rate.<br/><br/><b>Periodic and aperiodic decomposition:</b> IRASA [2] and FOOOF [3] separate the oscillatory (periodic) and the fractal (aperiodic) components of the spectrum. They are described in the documentation of the tool (Read more! below).", None))
+        self.references_label.setText(QCoreApplication.translate("IntroStep", u"[1] Welch PD. The use of fast Fourier transform for the estimation of power spectra: a method based on time averaging over short, modified periodograms. IEEE Trans Audio Electroacoust. 1967;15(2):70\u201373.<br/>[2] Wen, H., &amp; Liu, Z. (2016). Separating fractal and oscillatory components in the power spectrum of neurophysiological signal. Brain topography, 29(1), 13-26.<br/>[3] Donoghue, T., Haller, M., Peterson, E. J., Varma, P., Sebastian, P., Gao, R., \u2026 &amp; Voytek, B. (2020). Parameterizing neural power spectra into periodic and aperiodic components. Nature neuroscience, 23(12), 1655-1665.", None))
     # retranslateUi
 

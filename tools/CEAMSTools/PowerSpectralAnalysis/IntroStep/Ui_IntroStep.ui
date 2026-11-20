@@ -6,99 +6,1033 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>633</width>
-    <height>581</height>
+    <width>900</width>
+    <height>700</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string/>
+   <string />
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
-   <property name="spacing">
-    <number>25</number>
+   <property name="leftMargin">
+    <number>19</number>
+   </property>
+   <property name="topMargin">
+    <number>12</number>
+   </property>
+   <property name="rightMargin">
+    <number>19</number>
+   </property>
+   <property name="bottomMargin">
+    <number>12</number>
    </property>
    <item>
-    <widget class="QTextBrowser" name="textBrowser">
-     <property name="html">
-      <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
-&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;meta charset=&quot;utf-8&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
-p, li { white-space: pre-wrap; }
-hr { height: 1px; border-width: 0; }
-li.unchecked::marker { content: &quot;\2610&quot;; }
-li.checked::marker { content: &quot;\2612&quot;; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-size:12pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Analyze EEG Spectral Power&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-weight:600;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;The tool assess the intensity (or power) of a time-domain signal from a polysomnopragphy (PSG) file across various frequency bands.&lt;/p&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Common settings : &lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:700; color:#ff0000;&quot;&gt;NOTE:&lt;/span&gt;&lt;span style=&quot; color:#ff0000;&quot;&gt; Please define the sleep cycle configuration you wish to use for the analysis using the blue panel on the left.&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; text-decoration: underline;&quot;&gt;1 - Input Files :&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Add the PSG files to analyze.&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;European Data Format (EDF)&lt;/span&gt;&lt;span style=&quot;&quot;&gt; : The .edf and .tsv files must have the exact same filename and be stored in the same directory.&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Stellate&lt;/span&gt;&lt;span style=&quot;&quot;&gt; : The .sig and .sts files must have the exact same filename and be stored in the same directory.&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;NATUS&lt;/span&gt;&lt;span style=&quot;&quot;&gt; (&lt;/span&gt;&lt;span style=&quot; font-style:italic;&quot;&gt;for CEAMS users&lt;/span&gt;&lt;span style=&quot;&quot;&gt;) : &lt;/span&gt;&lt;span style=&quot;&quot;&gt; The entire NATUS subject folder is required.&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Define the montage and channels for each open file you want to run the tool on.&lt;/p&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; text-decoration: underline;&quot;&gt;2 - Events to exclude :&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Select events to exclude from the analysis (i.e. artefacts previously detected and saved in the accessory file).&lt;/p&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; text-decoration: underline;&quot;&gt;3 - Filtering :&lt;/span&gt; &lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Define the appropriate filtering to match your research analyses.&lt;/p&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; text-decoration: underline;&quot;&gt;4 - Section selection :&lt;/span&gt; &lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Specify the segment of the signal on which you intend to perform the analysis:&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;on chosen annotations or for each sleep stage selected by the user.&lt;/p&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Additionally, you have the following options:&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;1. Run the analysis exclusively on the signal within the sleep cycles.&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;2. Run the analysis on the signal within the sleep cycles while excluding NREM periods.&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;3. Run the analysis on the signal within the sleep cycles while excluding REM periods.&lt;/p&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; text-decoration: underline;&quot;&gt;5 - Annotations Selection : &lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;If the analysis is performed on chosen annotations, select them.&lt;/p&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; text-decoration: underline;&quot;&gt;6 - Spectral Settings :&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;The user is able to select among &lt;span style=&quot; font-weight:700;&quot;&gt;three options&lt;/span&gt; to apply power spectral analysis.&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;The &lt;span style=&quot; font-weight:700;&quot;&gt;first &lt;/span&gt;option computes the standard spectrum based on the Welch's [1] method by dividing the signal into multiple short windows to estimate spectral power.&lt;br /&gt;This procedure applies a Fast Fourier Transform (FFT) to each window and averages the resulting periodograms.&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Define the window length (s) used for each FFT and the step size (s) between consecutive windows.&lt;/p&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;The frequency bin resolution (Hz) depends on the window length (s) used to perform each FFT.&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Frequency bin resolution : 1 / [fft windows length (s)]&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;I.e. 1 / 5 s = 0.2 Hz or 1 / 4 s = 0.25 Hz&lt;/p&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;It is common to average the power from a few frequency bins in order to estimate the spectral power in a frequency band.&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Define the width (Hz) of the frequency bands you are interested in. &lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Define also the first and last frequency to analyze (the maximum is half the sampling frequency (Hz) of the channels to analyze).&lt;/p&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;The &lt;span style=&quot; font-weight:700;&quot;&gt;second&lt;/span&gt; and &lt;span style=&quot; font-weight:700;&quot;&gt;third&lt;/span&gt; options allow the user to decompose the power spectra into periodic and aperiodic components using two well-known methods from the literature: IRASA [2] and FOOOF [3]. Details of these methods are provided in the tool's documentation, which you can access by clicking the &amp;quot;Read more!&amp;quot; button at the bottom of the page.&lt;/p&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; text-decoration: underline;&quot;&gt;7 - Output File :&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;whether the analysis is performed per sleep stage or per annotation, define how to average the spectral power across the recording:&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;-&amp;quot;Total&amp;quot; - average over the entire recording.&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;-&amp;quot;Distribution per clock hour&amp;quot; – average for each elapsed hour (1–9 by default).&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;-&amp;quot;Distribution per hour spent in each sleep stage&amp;quot; – average for each stage hour (1–9 by default).&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;-&amp;quot;Distribution per sleep cycle&amp;quot; – average for each sleep cycle (1–6 by default).&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-style:italic;&quot;&gt;The maximum number of hours or sleep cycles are defined in the configuration page &amp;quot;Hours and Cycles&amp;quot;.&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-style:italic;&quot;&gt;The starting point is either the first sleep stage or the sleep onset, depending on the settings in step 4 - Section Selection.&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;    &lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;The output file is a .tsv (tab separated values) file. Each line is specific to a subject, a channel and a frequency band. &lt;/p&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Warning : the output data is added (appended) to the output file, the output file will be modified each time the tool is run.&lt;/p&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;References&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;[1] Welch PD. The use of fast Fourier transform for the estimation of power spectra: a method based on time averaging over short, modified periodograms. IEEE Trans Audio Electroacoust. 1967;15(2):70–73.&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;[2] Wen, H., &amp;amp; Liu, Z. (2016). Separating fractal and oscillatory components in the power spectrum of neurophysiological signal. Brain topography, 29(1), 13-26.&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;[3] Donoghue, T., Haller, M., Peterson, E. J., Varma, P., Sebastian, P., Gao, R., … &amp;amp; Voytek, B. (2020). Parameterizing neural power spectra into periodic and aperiodic components. Nature neuroscience, 23(12), 1655-1665.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+    <layout class="QHBoxLayout" name="content_row" stretch="1,0">
+     <property name="leftMargin">
+      <number>0</number>
      </property>
-    </widget>
+     <property name="topMargin">
+      <number>0</number>
+     </property>
+     <property name="rightMargin">
+      <number>0</number>
+     </property>
+     <property name="bottomMargin">
+      <number>0</number>
+     </property>
+     <item>
+      <widget class="QWidget" name="content_widget" native="true">
+       <property name="maximumSize">
+        <size>
+         <width>800</width>
+         <height>16777215</height>
+        </size>
+       </property>
+       <layout class="QVBoxLayout" name="content_layout">
+        <property name="spacing">
+         <number>16</number>
+        </property>
+        <property name="leftMargin">
+         <number>0</number>
+        </property>
+        <property name="topMargin">
+         <number>0</number>
+        </property>
+        <property name="rightMargin">
+         <number>0</number>
+        </property>
+        <property name="bottomMargin">
+         <number>0</number>
+        </property>
+        <item>
+         <layout class="QVBoxLayout" name="header_layout">
+          <property name="spacing">
+           <number>6</number>
+          </property>
+          <item>
+           <widget class="QLabel" name="title_label">
+            <property name="font">
+             <font>
+              <pointsize>18</pointsize>
+              <bold>true</bold>
+             </font>
+            </property>
+            <property name="text">
+             <string>Analyze EEG Spectral Power</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="subtitle_label">
+            <property name="text">
+             <string>Assesses the intensity (or power) of the signal of your polysomnography (PSG) files across the frequency bands you choose, per sleep stage or on chosen annotations.</string>
+            </property>
+            <property name="wordWrap">
+             <bool>true</bool>
+            </property>
+            <property name="variant" stdset="0">
+             <string notr="true">help</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <widget class="QFrame" name="common_settings_info">
+          <property name="frameShape">
+           <enum>QFrame::Shape::NoFrame</enum>
+          </property>
+          <property name="variant" stdset="0">
+           <string notr="true">info</string>
+          </property>
+          <layout class="QHBoxLayout" name="common_settings_info_layout">
+           <property name="leftMargin">
+            <number>14</number>
+           </property>
+           <property name="topMargin">
+            <number>10</number>
+           </property>
+           <property name="rightMargin">
+            <number>14</number>
+           </property>
+           <property name="bottomMargin">
+            <number>10</number>
+           </property>
+           <item>
+            <widget class="QLabel" name="common_settings_info_label">
+             <property name="text">
+              <string>&lt;b&gt;Before you start&lt;/b&gt;&lt;br/&gt;Define the sleep cycle configuration to use for the analysis: &lt;b&gt;Common settings › Sleep Cycles&lt;/b&gt;, in the left panel.</string>
+             </property>
+             <property name="textFormat">
+              <enum>Qt::TextFormat::RichText</enum>
+             </property>
+             <property name="wordWrap">
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </item>
+        <item>
+         <layout class="QVBoxLayout" name="steps_section_layout">
+          <property name="spacing">
+           <number>8</number>
+          </property>
+          <item>
+           <widget class="QLabel" name="steps_title_label">
+            <property name="font">
+             <font>
+              <pointsize>15</pointsize>
+              <bold>true</bold>
+             </font>
+            </property>
+            <property name="text">
+             <string>What you will do</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QFrame" name="steps_card">
+            <property name="frameShape">
+             <enum>QFrame::Shape::StyledPanel</enum>
+            </property>
+            <property name="frameShadow">
+             <enum>QFrame::Shadow::Raised</enum>
+            </property>
+            <layout class="QVBoxLayout" name="steps_card_layout">
+             <property name="spacing">
+              <number>10</number>
+             </property>
+             <property name="leftMargin">
+              <number>10</number>
+             </property>
+             <property name="topMargin">
+              <number>10</number>
+             </property>
+             <property name="rightMargin">
+              <number>10</number>
+             </property>
+             <property name="bottomMargin">
+              <number>10</number>
+             </property>
+             <item>
+              <layout class="QGridLayout" name="steps_grid" columnstretch="0,0,0,1">
+               <property name="horizontalSpacing">
+                <number>12</number>
+               </property>
+               <property name="verticalSpacing">
+                <number>10</number>
+               </property>
+               <item row="0" column="0" alignment="Qt::AlignmentFlag::AlignTop">
+                <widget class="QLabel" name="step_1_number_label">
+                 <property name="font">
+                  <font>
+                   <pointsize>10</pointsize>
+                  </font>
+                 </property>
+                 <property name="text">
+                  <string>1</string>
+                 </property>
+                 <property name="variant" stdset="0">
+                  <string notr="true">step_number</string>
+                 </property>
+                 <property name="minimumSize">
+                  <size>
+                   <width>24</width>
+                   <height>24</height>
+                  </size>
+                 </property>
+                 <property name="maximumSize">
+                  <size>
+                   <width>24</width>
+                   <height>24</height>
+                  </size>
+                 </property>
+                 <property name="alignment">
+                  <set>Qt::AlignmentFlag::AlignCenter</set>
+                 </property>
+                </widget>
+               </item>
+               <item row="0" column="1">
+                <widget class="QLabel" name="step_1_name_label">
+                 <property name="font">
+                  <font>
+                   <bold>true</bold>
+                  </font>
+                 </property>
+                 <property name="text">
+                  <string>Input Files</string>
+                 </property>
+                 <property name="alignment">
+                  <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignTop</set>
+                 </property>
+                </widget>
+               </item>
+               <item row="0" column="2">
+                <spacer name="steps_gap">
+                 <property name="orientation">
+                  <enum>Qt::Orientation::Horizontal</enum>
+                 </property>
+                 <property name="sizeType">
+                  <enum>QSizePolicy::Policy::Fixed</enum>
+                 </property>
+                 <property name="sizeHint" stdset="0">
+                  <size>
+                   <width>16</width>
+                   <height>20</height>
+                  </size>
+                 </property>
+                </spacer>
+               </item>
+               <item row="0" column="3">
+                <widget class="QLabel" name="step_1_label">
+                 <property name="text">
+                  <string>Add the PSG files, then define the montage and the channels of each file.</string>
+                 </property>
+                 <property name="wordWrap">
+                  <bool>true</bool>
+                 </property>
+                 <property name="variant" stdset="0">
+                  <string notr="true">help</string>
+                 </property>
+                 <property name="alignment">
+                  <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignTop</set>
+                 </property>
+                </widget>
+               </item>
+               <item row="1" column="0" rowspan="1" colspan="4">
+                <widget class="QFrame" name="step_line_2">
+                 <property name="frameShape">
+                  <enum>QFrame::Shape::HLine</enum>
+                 </property>
+                 <property name="frameShadow">
+                  <enum>QFrame::Shadow::Plain</enum>
+                 </property>
+                </widget>
+               </item>
+               <item row="2" column="0" alignment="Qt::AlignmentFlag::AlignTop">
+                <widget class="QLabel" name="step_2_number_label">
+                 <property name="font">
+                  <font>
+                   <pointsize>10</pointsize>
+                  </font>
+                 </property>
+                 <property name="text">
+                  <string>2</string>
+                 </property>
+                 <property name="variant" stdset="0">
+                  <string notr="true">step_number</string>
+                 </property>
+                 <property name="minimumSize">
+                  <size>
+                   <width>24</width>
+                   <height>24</height>
+                  </size>
+                 </property>
+                 <property name="maximumSize">
+                  <size>
+                   <width>24</width>
+                   <height>24</height>
+                  </size>
+                 </property>
+                 <property name="alignment">
+                  <set>Qt::AlignmentFlag::AlignCenter</set>
+                 </property>
+                </widget>
+               </item>
+               <item row="2" column="1">
+                <widget class="QLabel" name="step_2_name_label">
+                 <property name="font">
+                  <font>
+                   <bold>true</bold>
+                  </font>
+                 </property>
+                 <property name="text">
+                  <string>Events to exclude</string>
+                 </property>
+                 <property name="alignment">
+                  <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignTop</set>
+                 </property>
+                </widget>
+               </item>
+               <item row="2" column="3">
+                <widget class="QLabel" name="step_2_label">
+                 <property name="text">
+                  <string>Select the events to exclude from the analysis, such as artefacts already detected.</string>
+                 </property>
+                 <property name="wordWrap">
+                  <bool>true</bool>
+                 </property>
+                 <property name="variant" stdset="0">
+                  <string notr="true">help</string>
+                 </property>
+                 <property name="alignment">
+                  <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignTop</set>
+                 </property>
+                </widget>
+               </item>
+               <item row="3" column="0" rowspan="1" colspan="4">
+                <widget class="QFrame" name="step_line_3">
+                 <property name="frameShape">
+                  <enum>QFrame::Shape::HLine</enum>
+                 </property>
+                 <property name="frameShadow">
+                  <enum>QFrame::Shadow::Plain</enum>
+                 </property>
+                </widget>
+               </item>
+               <item row="4" column="0" alignment="Qt::AlignmentFlag::AlignTop">
+                <widget class="QLabel" name="step_3_number_label">
+                 <property name="font">
+                  <font>
+                   <pointsize>10</pointsize>
+                  </font>
+                 </property>
+                 <property name="text">
+                  <string>3</string>
+                 </property>
+                 <property name="variant" stdset="0">
+                  <string notr="true">step_number</string>
+                 </property>
+                 <property name="minimumSize">
+                  <size>
+                   <width>24</width>
+                   <height>24</height>
+                  </size>
+                 </property>
+                 <property name="maximumSize">
+                  <size>
+                   <width>24</width>
+                   <height>24</height>
+                  </size>
+                 </property>
+                 <property name="alignment">
+                  <set>Qt::AlignmentFlag::AlignCenter</set>
+                 </property>
+                </widget>
+               </item>
+               <item row="4" column="1">
+                <widget class="QLabel" name="step_3_name_label">
+                 <property name="font">
+                  <font>
+                   <bold>true</bold>
+                  </font>
+                 </property>
+                 <property name="text">
+                  <string>Filter Settings</string>
+                 </property>
+                 <property name="alignment">
+                  <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignTop</set>
+                 </property>
+                </widget>
+               </item>
+               <item row="4" column="3">
+                <widget class="QLabel" name="step_3_label">
+                 <property name="text">
+                  <string>Optional bandpass and power-line notch filters.</string>
+                 </property>
+                 <property name="wordWrap">
+                  <bool>true</bool>
+                 </property>
+                 <property name="variant" stdset="0">
+                  <string notr="true">help</string>
+                 </property>
+                 <property name="alignment">
+                  <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignTop</set>
+                 </property>
+                </widget>
+               </item>
+               <item row="5" column="0" rowspan="1" colspan="4">
+                <widget class="QFrame" name="step_line_4">
+                 <property name="frameShape">
+                  <enum>QFrame::Shape::HLine</enum>
+                 </property>
+                 <property name="frameShadow">
+                  <enum>QFrame::Shadow::Plain</enum>
+                 </property>
+                </widget>
+               </item>
+               <item row="6" column="0" alignment="Qt::AlignmentFlag::AlignTop">
+                <widget class="QLabel" name="step_4_number_label">
+                 <property name="font">
+                  <font>
+                   <pointsize>10</pointsize>
+                  </font>
+                 </property>
+                 <property name="text">
+                  <string>4</string>
+                 </property>
+                 <property name="variant" stdset="0">
+                  <string notr="true">step_number</string>
+                 </property>
+                 <property name="minimumSize">
+                  <size>
+                   <width>24</width>
+                   <height>24</height>
+                  </size>
+                 </property>
+                 <property name="maximumSize">
+                  <size>
+                   <width>24</width>
+                   <height>24</height>
+                  </size>
+                 </property>
+                 <property name="alignment">
+                  <set>Qt::AlignmentFlag::AlignCenter</set>
+                 </property>
+                </widget>
+               </item>
+               <item row="6" column="1">
+                <widget class="QLabel" name="step_4_name_label">
+                 <property name="font">
+                  <font>
+                   <bold>true</bold>
+                  </font>
+                 </property>
+                 <property name="text">
+                  <string>Section Selection</string>
+                 </property>
+                 <property name="alignment">
+                  <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignTop</set>
+                 </property>
+                </widget>
+               </item>
+               <item row="6" column="3">
+                <widget class="QLabel" name="step_4_label">
+                 <property name="text">
+                  <string>Choose the segment of the signal to analyse: the chosen annotations, or each sleep stage you select. You can also analyse only the signal within the sleep cycles, exclude the NREM periods or exclude the REM periods.</string>
+                 </property>
+                 <property name="wordWrap">
+                  <bool>true</bool>
+                 </property>
+                 <property name="variant" stdset="0">
+                  <string notr="true">help</string>
+                 </property>
+                 <property name="alignment">
+                  <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignTop</set>
+                 </property>
+                </widget>
+               </item>
+               <item row="7" column="0" rowspan="1" colspan="4">
+                <widget class="QFrame" name="step_line_5">
+                 <property name="frameShape">
+                  <enum>QFrame::Shape::HLine</enum>
+                 </property>
+                 <property name="frameShadow">
+                  <enum>QFrame::Shadow::Plain</enum>
+                 </property>
+                </widget>
+               </item>
+               <item row="8" column="0" alignment="Qt::AlignmentFlag::AlignTop">
+                <widget class="QLabel" name="step_5_number_label">
+                 <property name="font">
+                  <font>
+                   <pointsize>10</pointsize>
+                  </font>
+                 </property>
+                 <property name="text">
+                  <string>5</string>
+                 </property>
+                 <property name="variant" stdset="0">
+                  <string notr="true">step_number</string>
+                 </property>
+                 <property name="minimumSize">
+                  <size>
+                   <width>24</width>
+                   <height>24</height>
+                  </size>
+                 </property>
+                 <property name="maximumSize">
+                  <size>
+                   <width>24</width>
+                   <height>24</height>
+                  </size>
+                 </property>
+                 <property name="alignment">
+                  <set>Qt::AlignmentFlag::AlignCenter</set>
+                 </property>
+                </widget>
+               </item>
+               <item row="8" column="1">
+                <widget class="QLabel" name="step_5_name_label">
+                 <property name="font">
+                  <font>
+                   <bold>true</bold>
+                  </font>
+                 </property>
+                 <property name="text">
+                  <string>Annotations Selection</string>
+                 </property>
+                 <property name="alignment">
+                  <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignTop</set>
+                 </property>
+                </widget>
+               </item>
+               <item row="8" column="3">
+                <widget class="QLabel" name="step_5_label">
+                 <property name="text">
+                  <string>Only when the analysis is performed on chosen annotations.</string>
+                 </property>
+                 <property name="wordWrap">
+                  <bool>true</bool>
+                 </property>
+                 <property name="variant" stdset="0">
+                  <string notr="true">help</string>
+                 </property>
+                 <property name="alignment">
+                  <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignTop</set>
+                 </property>
+                </widget>
+               </item>
+               <item row="9" column="0" rowspan="1" colspan="4">
+                <widget class="QFrame" name="step_line_6">
+                 <property name="frameShape">
+                  <enum>QFrame::Shape::HLine</enum>
+                 </property>
+                 <property name="frameShadow">
+                  <enum>QFrame::Shadow::Plain</enum>
+                 </property>
+                </widget>
+               </item>
+               <item row="10" column="0" alignment="Qt::AlignmentFlag::AlignTop">
+                <widget class="QLabel" name="step_6_number_label">
+                 <property name="font">
+                  <font>
+                   <pointsize>10</pointsize>
+                  </font>
+                 </property>
+                 <property name="text">
+                  <string>6</string>
+                 </property>
+                 <property name="variant" stdset="0">
+                  <string notr="true">step_number</string>
+                 </property>
+                 <property name="minimumSize">
+                  <size>
+                   <width>24</width>
+                   <height>24</height>
+                  </size>
+                 </property>
+                 <property name="maximumSize">
+                  <size>
+                   <width>24</width>
+                   <height>24</height>
+                  </size>
+                 </property>
+                 <property name="alignment">
+                  <set>Qt::AlignmentFlag::AlignCenter</set>
+                 </property>
+                </widget>
+               </item>
+               <item row="10" column="1">
+                <widget class="QLabel" name="step_6_name_label">
+                 <property name="font">
+                  <font>
+                   <bold>true</bold>
+                  </font>
+                 </property>
+                 <property name="text">
+                  <string>Spectral Settings</string>
+                 </property>
+                 <property name="alignment">
+                  <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignTop</set>
+                 </property>
+                </widget>
+               </item>
+               <item row="10" column="3">
+                <widget class="QLabel" name="step_6_label">
+                 <property name="text">
+                  <string>Welch, IRASA or FOOOF, the FFT windows and the frequency bands.</string>
+                 </property>
+                 <property name="wordWrap">
+                  <bool>true</bool>
+                 </property>
+                 <property name="variant" stdset="0">
+                  <string notr="true">help</string>
+                 </property>
+                 <property name="alignment">
+                  <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignTop</set>
+                 </property>
+                </widget>
+               </item>
+               <item row="11" column="0" rowspan="1" colspan="4">
+                <widget class="QFrame" name="step_line_7">
+                 <property name="frameShape">
+                  <enum>QFrame::Shape::HLine</enum>
+                 </property>
+                 <property name="frameShadow">
+                  <enum>QFrame::Shadow::Plain</enum>
+                 </property>
+                </widget>
+               </item>
+               <item row="12" column="0" alignment="Qt::AlignmentFlag::AlignTop">
+                <widget class="QLabel" name="step_7_number_label">
+                 <property name="font">
+                  <font>
+                   <pointsize>10</pointsize>
+                  </font>
+                 </property>
+                 <property name="text">
+                  <string>7</string>
+                 </property>
+                 <property name="variant" stdset="0">
+                  <string notr="true">step_number</string>
+                 </property>
+                 <property name="minimumSize">
+                  <size>
+                   <width>24</width>
+                   <height>24</height>
+                  </size>
+                 </property>
+                 <property name="maximumSize">
+                  <size>
+                   <width>24</width>
+                   <height>24</height>
+                  </size>
+                 </property>
+                 <property name="alignment">
+                  <set>Qt::AlignmentFlag::AlignCenter</set>
+                 </property>
+                </widget>
+               </item>
+               <item row="12" column="1">
+                <widget class="QLabel" name="step_7_name_label">
+                 <property name="font">
+                  <font>
+                   <bold>true</bold>
+                  </font>
+                 </property>
+                 <property name="text">
+                  <string>Output Files</string>
+                 </property>
+                 <property name="alignment">
+                  <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignTop</set>
+                 </property>
+                </widget>
+               </item>
+               <item row="12" column="3">
+                <widget class="QLabel" name="step_7_label">
+                 <property name="text">
+                  <string>Choose the distributions to export and the output file.</string>
+                 </property>
+                 <property name="wordWrap">
+                  <bool>true</bool>
+                 </property>
+                 <property name="variant" stdset="0">
+                  <string notr="true">help</string>
+                 </property>
+                 <property name="alignment">
+                  <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignTop</set>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </item>
+            </layout>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <layout class="QVBoxLayout" name="files_section_layout">
+          <property name="spacing">
+           <number>8</number>
+          </property>
+          <item>
+           <widget class="QLabel" name="files_title_label">
+            <property name="font">
+             <font>
+              <pointsize>15</pointsize>
+              <bold>true</bold>
+             </font>
+            </property>
+            <property name="text">
+             <string>Accepted files</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QFrame" name="files_card">
+            <property name="frameShape">
+             <enum>QFrame::Shape::StyledPanel</enum>
+            </property>
+            <property name="frameShadow">
+             <enum>QFrame::Shadow::Raised</enum>
+            </property>
+            <layout class="QVBoxLayout" name="files_card_layout">
+             <property name="spacing">
+              <number>10</number>
+             </property>
+             <property name="leftMargin">
+              <number>10</number>
+             </property>
+             <property name="topMargin">
+              <number>10</number>
+             </property>
+             <property name="rightMargin">
+              <number>10</number>
+             </property>
+             <property name="bottomMargin">
+              <number>10</number>
+             </property>
+             <item>
+              <layout class="QGridLayout" name="files_grid" columnstretch="0,1">
+               <property name="horizontalSpacing">
+                <number>32</number>
+               </property>
+               <property name="verticalSpacing">
+                <number>6</number>
+               </property>
+               <item row="0" column="0">
+                <widget class="QLabel" name="file_1_name_label">
+                 <property name="font">
+                  <font>
+                   <bold>true</bold>
+                  </font>
+                 </property>
+                 <property name="text">
+                  <string>EDF</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="0" column="1">
+                <widget class="QLabel" name="file_1_label">
+                 <property name="text">
+                  <string>The .edf and .tsv files have the same filename and are in the same directory.</string>
+                 </property>
+                 <property name="wordWrap">
+                  <bool>true</bool>
+                 </property>
+                </widget>
+               </item>
+               <item row="1" column="0">
+                <widget class="QLabel" name="file_2_name_label">
+                 <property name="font">
+                  <font>
+                   <bold>true</bold>
+                  </font>
+                 </property>
+                 <property name="text">
+                  <string>Stellate</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="1" column="1">
+                <widget class="QLabel" name="file_2_label">
+                 <property name="text">
+                  <string>The .sig and .sts files have the same filename and are in the same directory.</string>
+                 </property>
+                 <property name="wordWrap">
+                  <bool>true</bool>
+                 </property>
+                </widget>
+               </item>
+               <item row="2" column="0">
+                <widget class="QLabel" name="file_3_name_label">
+                 <property name="font">
+                  <font>
+                   <bold>true</bold>
+                  </font>
+                 </property>
+                 <property name="text">
+                  <string>NATUS</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="2" column="1">
+                <widget class="QLabel" name="file_3_label">
+                 <property name="text">
+                  <string>The entire NATUS subject folder is required &lt;i&gt;(for CEAMS users)&lt;/i&gt;.</string>
+                 </property>
+                 <property name="textFormat">
+                  <enum>Qt::TextFormat::RichText</enum>
+                 </property>
+                 <property name="wordWrap">
+                  <bool>true</bool>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </item>
+            </layout>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <layout class="QVBoxLayout" name="methods_section_layout">
+          <property name="spacing">
+           <number>2</number>
+          </property>
+          <item>
+           <layout class="QHBoxLayout" name="methods_buttons_layout">
+            <property name="spacing">
+             <number>0</number>
+            </property>
+            <item>
+             <widget class="QPushButton" name="methods_show_button">
+              <property name="focusPolicy">
+               <enum>Qt::FocusPolicy::TabFocus</enum>
+              </property>
+              <property name="text">
+               <string>› Methods and references</string>
+              </property>
+              <property name="flat">
+               <bool>true</bool>
+              </property>
+              <property name="variant" stdset="0">
+               <string notr="true">link</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="methods_hide_button">
+              <property name="focusPolicy">
+               <enum>Qt::FocusPolicy::TabFocus</enum>
+              </property>
+              <property name="visible">
+               <bool>false</bool>
+              </property>
+              <property name="text">
+               <string>⌄ Methods and references</string>
+              </property>
+              <property name="flat">
+               <bool>true</bool>
+              </property>
+              <property name="variant" stdset="0">
+               <string notr="true">link</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <spacer name="methods_buttons_spacer">
+              <property name="orientation">
+               <enum>Qt::Orientation::Horizontal</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>40</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <widget class="QLabel" name="methods_note_label">
+            <property name="font">
+             <font>
+              <pointsize>10</pointsize>
+             </font>
+            </property>
+            <property name="text">
+             <string>The details of each setting are shown in its own step.</string>
+            </property>
+            <property name="wordWrap">
+             <bool>true</bool>
+            </property>
+            <property name="variant" stdset="0">
+             <string notr="true">help</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QWidget" name="methods_widget" native="true">
+            <property name="visible">
+             <bool>false</bool>
+            </property>
+            <layout class="QVBoxLayout" name="methods_layout">
+             <property name="spacing">
+              <number>10</number>
+             </property>
+             <property name="leftMargin">
+              <number>0</number>
+             </property>
+             <property name="topMargin">
+              <number>6</number>
+             </property>
+             <property name="rightMargin">
+              <number>0</number>
+             </property>
+             <property name="bottomMargin">
+              <number>0</number>
+             </property>
+             <item>
+              <widget class="QLabel" name="methods_label">
+               <property name="text">
+                <string>&lt;b&gt;Standard spectrum (Welch [1]):&lt;/b&gt; the signal is divided into short windows, a Fast Fourier Transform (FFT) is applied to each window and the periodograms are averaged. The frequency bin resolution is 1 / window length (s): 0.2 Hz with 5 s windows. The power of a few bins is averaged to estimate the power in a frequency band, up to half the sampling rate.&lt;br/&gt;&lt;br/&gt;&lt;b&gt;Periodic and aperiodic decomposition:&lt;/b&gt; IRASA [2] and FOOOF [3] separate the oscillatory (periodic) and the fractal (aperiodic) components of the spectrum. They are described in the documentation of the tool (Read more! below).</string>
+               </property>
+               <property name="textFormat">
+                <enum>Qt::TextFormat::RichText</enum>
+               </property>
+               <property name="wordWrap">
+                <bool>true</bool>
+               </property>
+               <property name="variant" stdset="0">
+                <string notr="true">help</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLabel" name="references_label">
+               <property name="font">
+                <font>
+                 <pointsize>10</pointsize>
+                </font>
+               </property>
+               <property name="text">
+                <string>[1] Welch PD. The use of fast Fourier transform for the estimation of power spectra: a method based on time averaging over short, modified periodograms. IEEE Trans Audio Electroacoust. 1967;15(2):70–73.&lt;br/&gt;[2] Wen, H., &amp;amp; Liu, Z. (2016). Separating fractal and oscillatory components in the power spectrum of neurophysiological signal. Brain topography, 29(1), 13-26.&lt;br/&gt;[3] Donoghue, T., Haller, M., Peterson, E. J., Varma, P., Sebastian, P., Gao, R., … &amp;amp; Voytek, B. (2020). Parameterizing neural power spectra into periodic and aperiodic components. Nature neuroscience, 23(12), 1655-1665.</string>
+               </property>
+               <property name="textFormat">
+                <enum>Qt::TextFormat::RichText</enum>
+               </property>
+               <property name="wordWrap">
+                <bool>true</bool>
+               </property>
+               <property name="variant" stdset="0">
+                <string notr="true">help</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+          </item>
+         </layout>
+        </item>
+       </layout>
+      </widget>
+     </item>
+     <item>
+      <spacer name="content_spacer">
+       <property name="orientation">
+        <enum>Qt::Orientation::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <spacer name="verticalSpacer">
+     <property name="orientation">
+      <enum>Qt::Orientation::Vertical</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>40</width>
+       <height>20</height>
+      </size>
+     </property>
+    </spacer>
    </item>
   </layout>
  </widget>
  <resources>
-  <include location="../../../../../snooz-toolbox/src/main/python/ui/themes/themes.qrc"/>
+  <include location="../../../../../snooz-toolbox/src/main/python/ui/themes/themes.qrc" />
  </resources>
- <connections/>
+ <connections>
+  <connection>
+   <sender>methods_show_button</sender>
+   <signal>clicked()</signal>
+   <receiver>methods_widget</receiver>
+   <slot>show()</slot>
+  </connection>
+  <connection>
+   <sender>methods_show_button</sender>
+   <signal>clicked()</signal>
+   <receiver>methods_hide_button</receiver>
+   <slot>show()</slot>
+  </connection>
+  <connection>
+   <sender>methods_show_button</sender>
+   <signal>clicked()</signal>
+   <receiver>methods_show_button</receiver>
+   <slot>hide()</slot>
+  </connection>
+  <connection>
+   <sender>methods_hide_button</sender>
+   <signal>clicked()</signal>
+   <receiver>methods_widget</receiver>
+   <slot>hide()</slot>
+  </connection>
+  <connection>
+   <sender>methods_hide_button</sender>
+   <signal>clicked()</signal>
+   <receiver>methods_show_button</receiver>
+   <slot>show()</slot>
+  </connection>
+  <connection>
+   <sender>methods_hide_button</sender>
+   <signal>clicked()</signal>
+   <receiver>methods_hide_button</receiver>
+   <slot>hide()</slot>
+  </connection>
+ </connections>
 </ui>

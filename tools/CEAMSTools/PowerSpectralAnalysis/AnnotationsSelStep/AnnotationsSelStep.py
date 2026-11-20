@@ -52,8 +52,9 @@ class AnnotationsSelStep( NonValidEventStep):
         self.match_event_channels_checkBox.setToolTip(
             "Unchecked: analyze selected Input Files channels\n"
             "using the annotated events' time stamps.\n"
-            "I.e. leave unchecked to compute PSA on EEG F3\n"
-            "using REM events scored on the EOG channel."
+            "I.e. leave unchecked to compute the power spectral\n"
+            "analysis on EEG F3 using REM events scored on the\n"
+            "EOG channel."
         )
 
     def load_settings(self):
