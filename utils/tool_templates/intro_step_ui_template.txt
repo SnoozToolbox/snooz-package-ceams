@@ -342,22 +342,57 @@
               </widget>
              </item>
              <item>
-              <widget class="QLabel" name="references_label">
-               <property name="font">
-                <font>
-                 <pointsize>10</pointsize>
-                </font>
+              <layout class="QVBoxLayout" name="references_layout">
+               <property name="spacing">
+                <number>8</number>
                </property>
-               <property name="text">
-                <string>[1] Reference.</string>
+               <property name="leftMargin">
+                <number>0</number>
                </property>
-               <property name="wordWrap">
-                <bool>true</bool>
+               <property name="topMargin">
+                <number>6</number>
                </property>
-               <property name="variant" stdset="0">
-                <string notr="true">help</string>
+               <property name="rightMargin">
+                <number>0</number>
                </property>
-              </widget>
+               <property name="bottomMargin">
+                <number>0</number>
+               </property>
+               <item>
+                <widget class="QFrame" name="references_line">
+                 <property name="frameShape">
+                  <enum>QFrame::Shape::HLine</enum>
+                 </property>
+                 <property name="frameShadow">
+                  <enum>QFrame::Shadow::Plain</enum>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QLabel" name="references_label">
+                 <property name="font">
+                  <font>
+                   <pointsize>10</pointsize>
+                  </font>
+                 </property>
+                 <property name="text">
+                  <string>[1] Author, A. A., &amp;amp; Author, B. B. (Year). Title of the article. &lt;i&gt;Journal Name&lt;/i&gt;, &lt;i&gt;Volume&lt;/i&gt;(Issue), first–last page. &lt;a href="https://doi.org/..."&gt;https://doi.org/...&lt;/a&gt;</string>
+                 </property>
+                 <property name="textFormat">
+                  <enum>Qt::TextFormat::RichText</enum>
+                 </property>
+                 <property name="wordWrap">
+                  <bool>true</bool>
+                 </property>
+                 <property name="openExternalLinks">
+                  <bool>true</bool>
+                 </property>
+                 <property name="variant" stdset="0">
+                  <string notr="true">help</string>
+                 </property>
+                </widget>
+               </item>
+              </layout>
              </item>
             </layout>
            </widget>

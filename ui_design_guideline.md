@@ -89,6 +89,7 @@ Never use another size. Set the size or the bold on the widget that shows the te
 | About | QVBoxLayout (spacing 6): a bold QLabel ("About the filters"), then a QLabel `wordWrap`, `variant` = `help` | 16 px, muted |
 | Step number | QLabel 10 pt, `variant` = `step_number`, minimum and maximum size 24 x 24, centered | number in a blue circle |
 | Link button | QPushButton, `flat`, `variant` = `link`, `focusPolicy` TabFocus ("› Methods and references") | blue text |
+| References | QVBoxLayout `references_layout` (margins 0, 6, 0, 0; spacing 8): a line `references_line`, then a QLabel `references_label` 10 pt, `wordWrap`, `variant` = `help`, rich text, `openExternalLinks` true, one reference per line (`<br/>`). Under the text that cites them, see [Writing the texts](#writing-the-texts) | a line, then the references: 13 px, muted, blue links |
 
 Give the widgets that are not inputs names that say what they are: `bandpass_card`, `nyquist_warning`, `about_filters_label`.
 
@@ -168,7 +169,7 @@ The first step of a tool presents it. From top to bottom:
 5. **Methods and references**, shown on demand:
    - **Link buttons:** `methods_show_button` "› Methods and references" and `methods_hide_button` "⌄ Methods and references" (`visible` false), in a QHBoxLayout with a spacer.
    - **Note** under them, a help: "The details of each setting are shown in its own step."
-   - **Hidden part:** `methods_widget` (`visible` false) holds `methods_label` (the methods, rich text, `variant` help) and `references_label` (10 pt, `variant` help).
+   - **Hidden part:** `methods_widget` (`visible` false) holds `methods_label` (the methods, rich text, `variant` help), then the references block (`references_layout`: the line and `references_label`).
    - **Connections** in the `.ui` file:
      - `clicked()` of `methods_show_button` → `show()` of `methods_widget` and of `methods_hide_button`, and `hide()` of `methods_show_button`;
      - `clicked()` of `methods_hide_button` → `hide()` of `methods_widget` and of `methods_hide_button`, and `show()` of `methods_show_button`.
@@ -193,6 +194,17 @@ Its design:
 - **A module without settings the user can edit** keeps an empty settings view: only the root widget (see the module How To of the documentation).
 - **The results view** is filled in code. For a text created in Python, use the text styles of the toolbox (`commons.fonts`: `h1`, `h2`, `h3`, `body`, `small`, `mono`), never `setFont` or a style sheet.
 
+## Pages shared by several tools
+
+Some step forms are used by several tools: the step of another tool inherits the class of the step. Example: `NonValidEventStep` of Analyze EEG Spectral Power, used by the event steps of 9 tools. The settings views of the modules are shared the same way (see above).
+
+- **No page title:** each tool gives the step its own name.
+- **Keep every widget name:** the steps that inherit the form use them (`setText`, `setEnabled`).
+- **A page of lists** (files, events, channels):
+  - the lists take the whole page: no `content_widget` of 800 px, the cards side by side fill the page;
+  - its helps are tooltips, on the title of the list or on the control they describe, so the lists keep their room.
+- **Check** the page in every tool that uses it. Raise the version of each of these tools when you redesign the pages of that tool.
+
 ## Writing the texts
 
 - **Short and simple**, in the user's words: what the setting does or what to do.
@@ -209,6 +221,16 @@ Its design:
   - Put the tooltip of a setting on its label, so the help mark (?) is next to the name of the setting.
   - No tooltip that only repeats the name of the widget ("Check to perform the analysis on N1." on the check box N1).
   - When you remove a description from the page, keep the most accurate description in the tooltip.
+- **References:** the same format everywhere, APA style:
+  - numbered in the order of the text: [1], [2]...;
+  - up to 20 authors, "&" before the last one; the journal and the volume in italics; a dash (–) between the pages;
+  - the DOI link at the end;
+  - in the references block (see [Building blocks](#building-blocks)): a line separates them from the text that cites them;
+  - a text set by the code (a text box) never holds its references: put them in the references block of the form, and hide the block when the text has no reference.
+
+  ```html
+  [1] Feinberg, I., &amp; Floyd, T. C. (1979). Systematic trends across the night in human sleep cycles. <i>Psychophysiology</i>, <i>16</i>(3), 283–291. <a href="https://doi.org/10.1111/j.1469-8986.1979.tb02991.x">https://doi.org/10.1111/j.1469-8986.1979.tb02991.x</a>
+  ```
 
 ## Things not to do
 
@@ -242,6 +264,7 @@ Its design:
    - its signal connections.
 
    Keep the name of every widget used in the code (`self.<name>`), labels included, and keep the tooltips (see [Writing the texts](#writing-the-texts)).
+   A text box whose text the code sets or saves stays a text box: frameless (`frameShape` NoFrame), with `variant` = `help` for a muted text.
 3. **Check:** the workspaces saved the same way after the change must be identical to the ones saved before. Only the versions differ. No text is cut.
 4. **Versions:**
    - raise the version: `item_version` of the tool or module in the json file of the package, and `tool_version` in the json file of a tool;
@@ -257,6 +280,8 @@ Its design:
 - How the method works last, in About.
 - Introduction: Before you start (if needed), What you will do (one row per step), Accepted files (if PSG files), Methods and references on demand.
 - Texts short, information kept, abbreviations written out, tooltips on the labels and never only repeating a name.
+- References after a line, in APA style with their DOI link, 10 pt, muted.
+- Page shared by several tools: no title, widget names kept, checked in every tool; a page of lists: helps in tooltips.
 - No style sheet, color, font family, other font size or text box for a fixed text.
 - Python files generated with pyside6-uic 6.8.2, fonts checked.
 - Checked in Snooz: light and dark themes, about 1300 px, 1500 px and maximized, no text cut.
@@ -369,6 +394,34 @@ About:
   <widget class="QLabel" name="about_filters_label">
    <property name="text"><string>Butterworth design in second-order-section (SOS) form, applied with bidirectional zero-phase filtering.</string></property>
    <property name="wordWrap"><bool>true</bool></property>
+   <property name="variant" stdset="0"><string notr="true">help</string></property>
+  </widget>
+ </item>
+</layout>
+```
+
+References (under the text that cites them):
+
+```xml
+<layout class="QVBoxLayout" name="references_layout">
+ <property name="spacing"><number>8</number></property>
+ <property name="leftMargin"><number>0</number></property>
+ <property name="topMargin"><number>6</number></property>
+ <property name="rightMargin"><number>0</number></property>
+ <property name="bottomMargin"><number>0</number></property>
+ <item>
+  <widget class="QFrame" name="references_line">
+   <property name="frameShape"><enum>QFrame::Shape::HLine</enum></property>
+   <property name="frameShadow"><enum>QFrame::Shadow::Plain</enum></property>
+  </widget>
+ </item>
+ <item>
+  <widget class="QLabel" name="references_label">
+   <property name="font"><font><pointsize>10</pointsize></font></property>
+   <property name="text"><string>[1] Feinberg, I., &amp;amp; Floyd, T. C. (1979). Systematic trends across the night in human sleep cycles. &lt;i&gt;Psychophysiology&lt;/i&gt;, &lt;i&gt;16&lt;/i&gt;(3), 283–291. &lt;a href="https://doi.org/10.1111/j.1469-8986.1979.tb02991.x"&gt;https://doi.org/10.1111/j.1469-8986.1979.tb02991.x&lt;/a&gt;</string></property>
+   <property name="textFormat"><enum>Qt::TextFormat::RichText</enum></property>
+   <property name="wordWrap"><bool>true</bool></property>
+   <property name="openExternalLinks"><bool>true</bool></property>
    <property name="variant" stdset="0"><string notr="true">help</string></property>
   </widget>
  </item>
