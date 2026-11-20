@@ -34,6 +34,20 @@ from CEAMSModules.PSGReader.ChannelsProxyModel import ChannelsProxyModel
 
 DEBUG = False
 
+
+class _FileNameDelegate(QtWidgets.QStyledItemDelegate):
+    """ The column Filename of the tables shows the name of the file, like the list of the
+        PSG files, and its tooltip the whole path. The data keep the whole path (filters). """
+    def displayText(self, value, locale):
+        return os.path.basename(str(value))
+
+    def helpEvent(self, event, view, option, index):
+        if event.type() == QtCore.QEvent.ToolTip and index.isValid():
+            QtWidgets.QToolTip.showText(event.globalPos(), str(index.data()), view)
+            return True
+        return super().helpEvent(event, view, option, index)
+
+
 class PSGReaderSettingsView( BaseSettingsView,  Ui_PSGReaderSettingsView, QtWidgets.QWidget):
     
     # To send a signal each time the self.files_model is modified
@@ -343,6 +357,8 @@ class PSGReaderSettingsView( BaseSettingsView,  Ui_PSGReaderSettingsView, QtWidg
         self.montage_use_delegate.set_on_change_callback(self.on_montages_selection_changed)
 
         self.montages_tableview.setItemDelegateForColumn(0, self.montage_use_delegate)
+        self.montage_filename_delegate = _FileNameDelegate(self.montages_tableview)
+        self.montages_tableview.setItemDelegateForColumn(2, self.montage_filename_delegate)
 
 
     def init_channels_table_model(self):
@@ -358,6 +374,8 @@ class PSGReaderSettingsView( BaseSettingsView,  Ui_PSGReaderSettingsView, QtWidg
         
         self.channel_use_delegate = CheckBoxDelegate(None)
         self.channels_tableview.setItemDelegateForColumn(0, self.channel_use_delegate)
+        self.channel_filename_delegate = _FileNameDelegate(self.channels_tableview)
+        self.channels_tableview.setItemDelegateForColumn(4, self.channel_filename_delegate)
 
 
     def init_alias_ui(self):

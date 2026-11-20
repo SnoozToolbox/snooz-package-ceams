@@ -37,6 +37,28 @@ def _details_in_snooz_style(html):
     return _LINK.sub(lambda link: _COLOR.sub("", link.group(1)) + _COLOR.sub("", link.group(2)) + link.group(3), html)
 
 
+# The description of each criteria and its reference. The description is in the muted
+# text box of the page (style sheet: variant help); the reference is under it, after a
+# line, in the references label of the form (the format of the references of Snooz, see
+# ui_design_guideline.md of the package: APA style, number in brackets, DOI link). They
+# are shown from the criteria chosen, so the settings saved before show them this way too.
+_FIRST = '<p style="margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px;">'
+_NEXT = '<p style="margin-top:8px; margin-bottom:0px; margin-left:0px; margin-right:0px;">'
+_CRITERIA_DETAILS = {
+    "Minimum Criteria": (
+        _FIRST + 'Adjust options based on minimum criteria.<br />These criteria are generally used in the clinic.</p>',
+        None),
+    "Aeschbach 1993": (
+        _FIRST + 'Adjust options based on [1].</p>'
+        + _NEXT + 'NREM-REMS cycles were defined [...] by the succession of a NREMS episode of at least 15 min duration and a REMS episode of at least 5 min duration. No minimal duration of the REMS episode was required for the completion of the first and last cycle. NREMS episodes were defined as the time interval between the first occurrence of stage 2 and the first occurrence of REMS within a cycle. Consequently REMS episodes were defined as the time intervals between two consecutive NREMS episodes or the time interval between the last NREMS episode and the final awakening. Thus occasional stage 1 epochs between REMS and stage 2 were included in the REMS episode. The reasons for selecting this criterion were the similarity of the EEG in REMS and stage 1, the better delimitation of cycle onset by using stage 2 instead of stage 1, and the fact that the initiation of cycle 1 with stage 2 corresponds to a frequently used criterion of sleep onset.</p>',
+        '[1] Aeschbach, D., &amp; Borbély, A. A. (1993). All-night dynamics of the human sleep EEG. <i>Journal of Sleep Research</i>, <i>2</i>(2), 70–81. <a href="https://doi.org/10.1111/j.1365-2869.1993.tb00065.x">https://doi.org/10.1111/j.1365-2869.1993.tb00065.x</a>'),
+    "Feinberg 1979": (
+        _FIRST + 'Adjust options based on [1].</p>'
+        + _NEXT + '[...] 15-min minimum for NREMPs in order to avoid considering brief stage 2 epochs in REM as separate NREMPs. Since we controlled time in bed, i.e., awoke subjects in the morning, additional criteria were needed. We defined as complete the last NREMP of the night if it was followed by 5 min or more of REM sleep before awakening, which sometimes was experimenter-induced rather than spontaneous. Similarly, the last REMP was considered complete if it was followed by 5 min or longer of NREM sleep. Thus, no sleep period was considered complete if it was interrupted by the final awakening of the night.</p>',
+        '[1] Feinberg, I., &amp; Floyd, T. C. (1979). Systematic trends across the night in human sleep cycles. <i>Psychophysiology</i>, <i>16</i>(3), 283–291. <a href="https://doi.org/10.1111/j.1469-8986.1979.tb02991.x">https://doi.org/10.1111/j.1469-8986.1979.tb02991.x</a>'),
+}
+
+
 class SleepCyclesDelimiterSettingsView( BaseSettingsView,  Ui_SleepCyclesDelimiterSettingsView, QtWidgets.QWidget):
     """
         SleepCyclesDelimiterView display the settings for the SleepCyclesDelimiter plugin.
@@ -48,6 +70,11 @@ class SleepCyclesDelimiterSettingsView( BaseSettingsView,  Ui_SleepCyclesDelimit
 
         # init UI
         self.setupUi(self)
+        # The description of the criteria starts at the left of the page, like the definitions
+        self.textBrowser.document().setDocumentMargin(0)
+        # The reference of the criteria is shown with the criteria
+        self.references_line.hide()
+        self.references_label.hide()
         # keep the qrc module alive
         #self._SleepCycleDelimiter_ref = SleepCycleDelimiter_rs  # prevent it from being garbage collected
         
@@ -209,10 +236,11 @@ class SleepCyclesDelimiterSettingsView( BaseSettingsView,  Ui_SleepCyclesDelimit
             # Sleep Onset
             self.sleep_stages = self.parameters['sleep_stages']
 
-            # Details
-            self.textBrowser.setReadOnly(False)
-            self.textBrowser.setHtml(_details_in_snooz_style(self.parameters['details']))
-            self.textBrowser.setReadOnly(True)
+            # Details: the description of the criteria chosen, the saved details otherwise
+            details = _CRITERIA_DETAILS.get(self.parameters['defined_option'])
+            if details is None:
+                details = (_details_in_snooz_style(self.parameters['details']), None)
+            self._show_details(*details)
 
             # Set if the incomplete cycles should be kept
             self.checkBox_incl_SOREMP.setChecked(int(self.parameters['Include_SOREMP']))
@@ -248,9 +276,7 @@ class SleepCyclesDelimiterSettingsView( BaseSettingsView,  Ui_SleepCyclesDelimit
             # Sleep Stages
             self.sleep_stages = "N1, N2, N3, N4, R"
             # Details
-            self.textBrowser.setReadOnly(False)
-            self.textBrowser.setHtml("<p>Adjust options based on minimum criteria.<br />These criteria are generally used in the clinic.</p>")
-            self.textBrowser.setReadOnly(True)
+            self._show_details(*_CRITERIA_DETAILS["Minimum Criteria"])
 
         elif self.radioButton_Aesch.isChecked():
             self._load_embedded_pixmap('aeschbach')
@@ -274,10 +300,7 @@ class SleepCyclesDelimiterSettingsView( BaseSettingsView,  Ui_SleepCyclesDelimit
             # Sleep Stages
             self.sleep_stages = "N2, N3, N4, R"
             # Details
-            self.textBrowser.setReadOnly(False)
-            self.textBrowser.setHtml('<div>Adjust options based on [1].</div><div>&nbsp;</div><div>NREM-REMS cycles were defined [...] by the succession of a NREMS episode of at least 15 min duration and a REMS episode of at least 5 min duration. No minimal duration of the REMS episode was required for the completion of the first and last cycle. NREMS episodes were defined as the time interval between the first occurrence of stage 2 and the first occurrence of REMS within a cycle. Consequently REMS episodes were defined as the time intervals between two consecutive NREMS episodes or the time interval between the last NREMS episode and the final awakening. Thus occasional stage 1 epochs between REMS and stage 2 were included in the REMS episode. The reasons for selecting this criterion were the similarity of the EEG in REMS and stage 1, the better delimitation of cycle onset by using stage 2 instead of stage 1, and the fact that the initiation of cycle 1 with stage 2 corresponds to a frequently used criterion of sleep onset.</div><div>&nbsp;</div>'\
-                + '<div>[1] Aeschbach D, Borbely AA. All-night dynamics of the human sleep EEG. J Sleep Res. 1993 Jun; 2(2):70-81. <a href="https://doi.org/10.1111/j.1365-2869.1993.tb00065.x" aria-label="Digital Object Identifier">https://doi.org/10.1111/j.1365-2869.1993.tb00065.x</a></div>')
-            self.textBrowser.setReadOnly(True)
+            self._show_details(*_CRITERIA_DETAILS["Aeschbach 1993"])
 
         elif self.radioButton_Floyd.isChecked():
             self._load_embedded_pixmap('feinberg_floyd')
@@ -301,11 +324,18 @@ class SleepCyclesDelimiterSettingsView( BaseSettingsView,  Ui_SleepCyclesDelimit
             # Sleep Stages
             self.sleep_stages = "N2, N3, N4, R"
             # Details
-            self.textBrowser.setReadOnly(False)
-            self.textBrowser.setHtml('<div>Adjust options based on [1].</div><div>&nbsp;</div><div>[] 15-min minimum for NREMPs in order to avoid considering brief stage 2 epochs in REM as separate NREMPs. Since we controlled time in bed, i.e., awoke subjects in the moming, additional criteria were needed. We defined as complete the last NREMP of the night if it was followed by 5 min or more of REM sleep before awakening, which sometimes was experimenter-induced rather than spontaneous. Similarly, the last REMP was considered complete if it was followed by 5 min or longer of NREM sleep. Thus, no sleep period was considered complete if it was interrupted by the final awakening of the night.</div>'\
-                + '<div>&nbsp;</div><div>[1] Feinberg I, Floyd TC. Systematic trends across the night in human sleep cycles. Psychophysiology. 1979 May; 16(3):283-91. <a href="https://doi.org/10.1111/j.1469-8986.1979.tb02991.x" aria-label="Digital Object Identifier">https://doi.org/10.1111/j.1469-8986.1979.tb02991.x</a></div><div>&nbsp;</div><div>&nbsp;</div>')
-            self.textBrowser.setReadOnly(True)
+            self._show_details(*_CRITERIA_DETAILS["Feinberg 1979"])
      
+
+
+    def _show_details(self, html, reference=None):
+        """ Show the description of the criteria (read only) and its reference, if any. """
+        self.textBrowser.setReadOnly(False)
+        self.textBrowser.setHtml(html)
+        self.textBrowser.setReadOnly(True)
+        self.references_label.setText(reference or "")
+        self.references_line.setVisible(bool(reference))
+        self.references_label.setVisible(bool(reference))
 
 
     # Called when the user check/uncheck the checkbox to include all incomplete cycles.

@@ -457,14 +457,29 @@ class Ui_IntroStep(object):
 
         self.methods_layout.addWidget(self.methods_label)
 
+        self.references_layout = QVBoxLayout()
+        self.references_layout.setSpacing(8)
+        self.references_layout.setObjectName(u"references_layout")
+        self.references_layout.setContentsMargins(0, 6, 0, 0)
+        self.references_line = QFrame(self.methods_widget)
+        self.references_line.setObjectName(u"references_line")
+        self.references_line.setFrameShape(QFrame.Shape.HLine)
+        self.references_line.setFrameShadow(QFrame.Shadow.Plain)
+
+        self.references_layout.addWidget(self.references_line)
+
         self.references_label = QLabel(self.methods_widget)
         self.references_label.setObjectName(u"references_label")
         self.references_label.setFont(font2)
         self.references_label.setTextFormat(Qt.TextFormat.RichText)
         self.references_label.setWordWrap(True)
+        self.references_label.setOpenExternalLinks(True)
         self.references_label.setProperty(u"variant", u"help")
 
-        self.methods_layout.addWidget(self.references_label)
+        self.references_layout.addWidget(self.references_label)
+
+
+        self.methods_layout.addLayout(self.references_layout)
 
 
         self.methods_section_layout.addWidget(self.methods_widget)
@@ -537,6 +552,7 @@ class Ui_IntroStep(object):
         self.methods_hide_button.setText(QCoreApplication.translate("IntroStep", u"\u2304 Methods and references", None))
         self.methods_note_label.setText(QCoreApplication.translate("IntroStep", u"The details of each setting are shown in its own step.", None))
         self.methods_label.setText(QCoreApplication.translate("IntroStep", u"<b>Standard spectrum (Welch [1]):</b> the signal is divided into short windows, a Fast Fourier Transform (FFT) is applied to each window and the periodograms are averaged. The frequency bin resolution is 1 / window length (s): 0.2 Hz with 5 s windows. The power of a few bins is averaged to estimate the power in a frequency band, up to half the sampling rate.<br/><br/><b>Periodic and aperiodic decomposition:</b> IRASA [2] and FOOOF [3] separate the oscillatory (periodic) and the fractal (aperiodic) components of the spectrum. They are described in the documentation of the tool (Read more! below).", None))
-        self.references_label.setText(QCoreApplication.translate("IntroStep", u"[1] Welch PD. The use of fast Fourier transform for the estimation of power spectra: a method based on time averaging over short, modified periodograms. IEEE Trans Audio Electroacoust. 1967;15(2):70\u201373.<br/>[2] Wen, H., &amp; Liu, Z. (2016). Separating fractal and oscillatory components in the power spectrum of neurophysiological signal. Brain topography, 29(1), 13-26.<br/>[3] Donoghue, T., Haller, M., Peterson, E. J., Varma, P., Sebastian, P., Gao, R., \u2026 &amp; Voytek, B. (2020). Parameterizing neural power spectra into periodic and aperiodic components. Nature neuroscience, 23(12), 1655-1665.", None))
+        self.references_label.setText(QCoreApplication.translate("IntroStep", u"[1] Welch, P. D. (1967). The use of fast Fourier transform for the estimation of power spectra: A method based on time averaging over short, modified periodograms. <i>IEEE Transactions on Audio and Electroacoustics</i>, <i>15</i>(2), 70\u201373. <a href=\"https://doi.org/10.1109/TAU.1967.1161901\">https://doi.org/10.1109/TAU.1967.1161901</a><br/>[2] Wen, H., &amp; Liu, Z. (2016). Separating fractal and oscillatory components in the power spectrum of neurophysiological signal. <i>Brain Topography</i>, <i>29</i>(1), 13\u201326. <a href=\"https://doi.org/10.1007/s10548-015-0448-0\">https://doi.org/10.1007/s10548-015-0448-0</a><br/>[3] Donoghue, T., Haller, M., Peterson, E. J., Varma, P., Sebastian, P., Gao, R., Noto, T., Lara, A. H., Wallis, J. D., Knight, R. T., Shestyuk, A., &amp; Voytek, B. (2020). Parameterizing neural power spectra into periodic and aperiodic components. <i>Nature Neuroscience</i>, <i>23</i>(12), 1655\u20131665. <a href=\"https://doi.org/10.1038/s41593-020-00744-x\">https://doi.org/10.1038/s"
+                        "41593-020-00744-x</a>", None))
     # retranslateUi
 

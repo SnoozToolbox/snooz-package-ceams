@@ -45,7 +45,7 @@ class Ui_PSGReaderSettingsView(object):
         self.label_PSG = QLabel(self.frame_files)
         self.label_PSG.setObjectName(u"label_PSG")
         font = QFont()
-        font.setBold(False)
+        font.setBold(True)
         font.setItalic(False)
         self.label_PSG.setFont(font)
 
@@ -287,7 +287,7 @@ class Ui_PSGReaderSettingsView(object):
         self.label_Montages.setText(QCoreApplication.translate("PSGReaderSettingsView", u"Montages", None))
         self.unselect_all_montage_pushbutton.setText(QCoreApplication.translate("PSGReaderSettingsView", u"Unselect all", None))
         self.select_all_montage_pushbutton.setText(QCoreApplication.translate("PSGReaderSettingsView", u"Select all", None))
-        self.montage_search_lineedit.setPlaceholderText(QCoreApplication.translate("PSGReaderSettingsView", u"Search Montages", None))
+        self.montage_search_lineedit.setPlaceholderText(QCoreApplication.translate("PSGReaderSettingsView", u"Search", None))
         self.label_Channels.setText(QCoreApplication.translate("PSGReaderSettingsView", u"Channels", None))
         self.label_selection.setText(QCoreApplication.translate("PSGReaderSettingsView", u"Selections", None))
 #if QT_CONFIG(tooltip)
@@ -301,6 +301,6 @@ class Ui_PSGReaderSettingsView(object):
         self.unselect_all_channels_pushbutton.setText(QCoreApplication.translate("PSGReaderSettingsView", u"Unselect all", None))
         self.select_all_channels_pushbutton.setText(QCoreApplication.translate("PSGReaderSettingsView", u"Select all", None))
         self.search_channels_lineedit.setInputMask("")
-        self.search_channels_lineedit.setPlaceholderText(QCoreApplication.translate("PSGReaderSettingsView", u"Search Channels", None))
+        self.search_channels_lineedit.setPlaceholderText(QCoreApplication.translate("PSGReaderSettingsView", u"Search", None))
     # retranslateUi
 

@@ -936,25 +936,57 @@
               </widget>
              </item>
              <item>
-              <widget class="QLabel" name="references_label">
-               <property name="font">
-                <font>
-                 <pointsize>10</pointsize>
-                </font>
+              <layout class="QVBoxLayout" name="references_layout">
+               <property name="spacing">
+                <number>8</number>
                </property>
-               <property name="text">
-                <string>[1] Welch PD. The use of fast Fourier transform for the estimation of power spectra: a method based on time averaging over short, modified periodograms. IEEE Trans Audio Electroacoust. 1967;15(2):70–73.&lt;br/&gt;[2] Wen, H., &amp;amp; Liu, Z. (2016). Separating fractal and oscillatory components in the power spectrum of neurophysiological signal. Brain topography, 29(1), 13-26.&lt;br/&gt;[3] Donoghue, T., Haller, M., Peterson, E. J., Varma, P., Sebastian, P., Gao, R., … &amp;amp; Voytek, B. (2020). Parameterizing neural power spectra into periodic and aperiodic components. Nature neuroscience, 23(12), 1655-1665.</string>
+               <property name="leftMargin">
+                <number>0</number>
                </property>
-               <property name="textFormat">
-                <enum>Qt::TextFormat::RichText</enum>
+               <property name="topMargin">
+                <number>6</number>
                </property>
-               <property name="wordWrap">
-                <bool>true</bool>
+               <property name="rightMargin">
+                <number>0</number>
                </property>
-               <property name="variant" stdset="0">
-                <string notr="true">help</string>
+               <property name="bottomMargin">
+                <number>0</number>
                </property>
-              </widget>
+               <item>
+                <widget class="QFrame" name="references_line">
+                 <property name="frameShape">
+                  <enum>QFrame::Shape::HLine</enum>
+                 </property>
+                 <property name="frameShadow">
+                  <enum>QFrame::Shadow::Plain</enum>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QLabel" name="references_label">
+                 <property name="font">
+                  <font>
+                   <pointsize>10</pointsize>
+                  </font>
+                 </property>
+                 <property name="text">
+                  <string>[1] Welch, P. D. (1967). The use of fast Fourier transform for the estimation of power spectra: A method based on time averaging over short, modified periodograms. &lt;i&gt;IEEE Transactions on Audio and Electroacoustics&lt;/i&gt;, &lt;i&gt;15&lt;/i&gt;(2), 70–73. &lt;a href="https://doi.org/10.1109/TAU.1967.1161901"&gt;https://doi.org/10.1109/TAU.1967.1161901&lt;/a&gt;&lt;br/&gt;[2] Wen, H., &amp;amp; Liu, Z. (2016). Separating fractal and oscillatory components in the power spectrum of neurophysiological signal. &lt;i&gt;Brain Topography&lt;/i&gt;, &lt;i&gt;29&lt;/i&gt;(1), 13–26. &lt;a href="https://doi.org/10.1007/s10548-015-0448-0"&gt;https://doi.org/10.1007/s10548-015-0448-0&lt;/a&gt;&lt;br/&gt;[3] Donoghue, T., Haller, M., Peterson, E. J., Varma, P., Sebastian, P., Gao, R., Noto, T., Lara, A. H., Wallis, J. D., Knight, R. T., Shestyuk, A., &amp;amp; Voytek, B. (2020). Parameterizing neural power spectra into periodic and aperiodic components. &lt;i&gt;Nature Neuroscience&lt;/i&gt;, &lt;i&gt;23&lt;/i&gt;(12), 1655–1665. &lt;a href="https://doi.org/10.1038/s41593-020-00744-x"&gt;https://doi.org/10.1038/s41593-020-00744-x&lt;/a&gt;</string>
+                 </property>
+                 <property name="textFormat">
+                  <enum>Qt::TextFormat::RichText</enum>
+                 </property>
+                 <property name="wordWrap">
+                  <bool>true</bool>
+                 </property>
+                 <property name="openExternalLinks">
+                  <bool>true</bool>
+                 </property>
+                 <property name="variant" stdset="0">
+                  <string notr="true">help</string>
+                 </property>
+                </widget>
+               </item>
+              </layout>
              </item>
             </layout>
            </widget>

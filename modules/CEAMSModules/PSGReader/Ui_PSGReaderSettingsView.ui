@@ -53,7 +53,7 @@
          <property name="font">
           <font>
            <italic>false</italic>
-           <bold>false</bold>
+           <bold>true</bold>
           </font>
          </property>
          <property name="text">
@@ -124,7 +124,7 @@
          <property name="font">
           <font>
            <italic>false</italic>
-           <bold>false</bold>
+           <bold>true</bold>
           </font>
          </property>
          <property name="text">
@@ -204,7 +204,7 @@
            <property name="font">
             <font>
              <italic>false</italic>
-             <bold>false</bold>
+             <bold>true</bold>
             </font>
            </property>
            <property name="text">
@@ -247,7 +247,7 @@
            <item>
             <widget class="QLineEdit" name="montage_search_lineedit">
              <property name="placeholderText">
-              <string>Search Montages</string>
+              <string>Search</string>
              </property>
             </widget>
            </item>
@@ -290,7 +290,7 @@
            <property name="font">
             <font>
              <italic>false</italic>
-             <bold>false</bold>
+             <bold>true</bold>
             </font>
            </property>
            <property name="text">
@@ -439,7 +439,7 @@
             <string/>
            </property>
            <property name="placeholderText">
-            <string>Search Channels</string>
+            <string>Search</string>
            </property>
           </widget>
          </item>
