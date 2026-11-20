@@ -89,6 +89,7 @@ Never use another size. Set the size or the bold on the widget that shows the te
 | About | QVBoxLayout (spacing 6): a bold QLabel ("About the filters"), then a QLabel `wordWrap`, `variant` = `help` | 16 px, muted |
 | Step number | QLabel 10 pt, `variant` = `step_number`, minimum and maximum size 24 x 24, centered | number in a blue circle |
 | Link button | QPushButton, `flat`, `variant` = `link`, `focusPolicy` TabFocus ("› Methods and references") | blue text |
+| Illustration | A drawing of the code, in the colors of the theme (palette `Text` and `Link`), painted on a QLabel without picture, in a card with a small caption (Detect Spindles with A7: `SpindleDetectionDoc.py`). Snooz puts a picture (QLabel with a pixmap) in a white card, made for pictures on a white background | sharp, light and dark themes |
 | References | QVBoxLayout `references_layout` (margins 0, 6, 0, 0; spacing 8): a line `references_line`, then a QLabel `references_label` 10 pt, `wordWrap`, `variant` = `help`, rich text, `openExternalLinks` true, one reference per line (`<br/>`). Under the text that cites them, see [Writing the texts](#writing-the-texts) | a line, then the references: 13 px, muted, blue links |
 
 Give the widgets that are not inputs names that say what they are: `bandpass_card`, `nyquist_warning`, `about_filters_label`.
