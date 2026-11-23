@@ -15,25 +15,238 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QFont, QFontDatabase, QGradient, QIcon,
     QImage, QKeySequence, QLinearGradient, QPainter,
     QPalette, QPixmap, QRadialGradient, QTransform)
-from PySide6.QtWidgets import (QApplication, QFrame, QHBoxLayout, QSizePolicy,
-    QTextEdit, QWidget)
+from PySide6.QtWidgets import (QApplication, QFrame, QGridLayout, QHBoxLayout,
+    QLabel, QSizePolicy, QSpacerItem, QVBoxLayout,
+    QWidget)
 import themes_rc
 
 class Ui_IntroStep(object):
     def setupUi(self, IntroStep):
         if not IntroStep.objectName():
             IntroStep.setObjectName(u"IntroStep")
-        IntroStep.resize(1018, 841)
-        self.horizontalLayout = QHBoxLayout(IntroStep)
-        self.horizontalLayout.setObjectName(u"horizontalLayout")
-        self.textEdit = QTextEdit(IntroStep)
-        self.textEdit.setObjectName(u"textEdit")
-        self.textEdit.setFrameShape(QFrame.Shape.NoFrame)
-        self.textEdit.setFrameShadow(QFrame.Shadow.Plain)
-        self.textEdit.setLineWidth(0)
-        self.textEdit.setReadOnly(True)
+        IntroStep.resize(900, 700)
+        self.verticalLayout = QVBoxLayout(IntroStep)
+        self.verticalLayout.setObjectName(u"verticalLayout")
+        self.verticalLayout.setContentsMargins(19, 12, 19, 12)
+        self.content_row = QHBoxLayout()
+        self.content_row.setObjectName(u"content_row")
+        self.content_row.setContentsMargins(0, 0, 0, 0)
+        self.content_widget = QWidget(IntroStep)
+        self.content_widget.setObjectName(u"content_widget")
+        self.content_widget.setMaximumSize(QSize(800, 16777215))
+        self.content_layout = QVBoxLayout(self.content_widget)
+        self.content_layout.setSpacing(16)
+        self.content_layout.setObjectName(u"content_layout")
+        self.content_layout.setContentsMargins(0, 0, 0, 0)
+        self.header_layout = QVBoxLayout()
+        self.header_layout.setSpacing(6)
+        self.header_layout.setObjectName(u"header_layout")
+        self.title_label = QLabel(self.content_widget)
+        self.title_label.setObjectName(u"title_label")
+        font = QFont()
+        font.setPointSize(18)
+        font.setBold(True)
+        self.title_label.setFont(font)
 
-        self.horizontalLayout.addWidget(self.textEdit)
+        self.header_layout.addWidget(self.title_label)
+
+        self.subtitle_label = QLabel(self.content_widget)
+        self.subtitle_label.setObjectName(u"subtitle_label")
+        self.subtitle_label.setWordWrap(True)
+        self.subtitle_label.setProperty(u"variant", u"help")
+
+        self.header_layout.addWidget(self.subtitle_label)
+
+
+        self.content_layout.addLayout(self.header_layout)
+
+        self.before_info = QFrame(self.content_widget)
+        self.before_info.setObjectName(u"before_info")
+        self.before_info.setFrameShape(QFrame.Shape.NoFrame)
+        self.before_info.setProperty(u"variant", u"info")
+        self.before_info_layout = QHBoxLayout(self.before_info)
+        self.before_info_layout.setObjectName(u"before_info_layout")
+        self.before_info_layout.setContentsMargins(14, 10, 14, 10)
+        self.before_info_label = QLabel(self.before_info)
+        self.before_info_label.setObjectName(u"before_info_label")
+        self.before_info_label.setTextFormat(Qt.TextFormat.RichText)
+        self.before_info_label.setWordWrap(True)
+
+        self.before_info_layout.addWidget(self.before_info_label)
+
+
+        self.content_layout.addWidget(self.before_info)
+
+        self.steps_section_layout = QVBoxLayout()
+        self.steps_section_layout.setSpacing(8)
+        self.steps_section_layout.setObjectName(u"steps_section_layout")
+        self.steps_title_label = QLabel(self.content_widget)
+        self.steps_title_label.setObjectName(u"steps_title_label")
+        font1 = QFont()
+        font1.setPointSize(15)
+        font1.setBold(True)
+        self.steps_title_label.setFont(font1)
+
+        self.steps_section_layout.addWidget(self.steps_title_label)
+
+        self.steps_card = QFrame(self.content_widget)
+        self.steps_card.setObjectName(u"steps_card")
+        self.steps_card.setFrameShape(QFrame.Shape.StyledPanel)
+        self.steps_card.setFrameShadow(QFrame.Shadow.Raised)
+        self.steps_card_layout = QVBoxLayout(self.steps_card)
+        self.steps_card_layout.setSpacing(10)
+        self.steps_card_layout.setObjectName(u"steps_card_layout")
+        self.steps_card_layout.setContentsMargins(10, 10, 10, 10)
+        self.steps_grid = QGridLayout()
+        self.steps_grid.setObjectName(u"steps_grid")
+        self.steps_grid.setHorizontalSpacing(12)
+        self.steps_grid.setVerticalSpacing(10)
+        self.step_1_number_label = QLabel(self.steps_card)
+        self.step_1_number_label.setObjectName(u"step_1_number_label")
+        font2 = QFont()
+        font2.setPointSize(10)
+        self.step_1_number_label.setFont(font2)
+        self.step_1_number_label.setProperty(u"variant", u"step_number")
+        self.step_1_number_label.setMinimumSize(QSize(24, 24))
+        self.step_1_number_label.setMaximumSize(QSize(24, 24))
+        self.step_1_number_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+
+        self.steps_grid.addWidget(self.step_1_number_label, 0, 0, 1, 1, Qt.AlignmentFlag.AlignTop)
+
+        self.step_1_name_label = QLabel(self.steps_card)
+        self.step_1_name_label.setObjectName(u"step_1_name_label")
+        font3 = QFont()
+        font3.setBold(True)
+        self.step_1_name_label.setFont(font3)
+        self.step_1_name_label.setAlignment(Qt.AlignmentFlag.AlignLeading|Qt.AlignmentFlag.AlignLeft|Qt.AlignmentFlag.AlignTop)
+
+        self.steps_grid.addWidget(self.step_1_name_label, 0, 1, 1, 1)
+
+        self.steps_gap = QSpacerItem(16, 20, QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Minimum)
+
+        self.steps_grid.addItem(self.steps_gap, 0, 2, 1, 1)
+
+        self.step_1_label = QLabel(self.steps_card)
+        self.step_1_label.setObjectName(u"step_1_label")
+        self.step_1_label.setWordWrap(True)
+        self.step_1_label.setProperty(u"variant", u"help")
+        self.step_1_label.setAlignment(Qt.AlignmentFlag.AlignLeading|Qt.AlignmentFlag.AlignLeft|Qt.AlignmentFlag.AlignTop)
+
+        self.steps_grid.addWidget(self.step_1_label, 0, 3, 1, 1)
+
+        self.step_line_2 = QFrame(self.steps_card)
+        self.step_line_2.setObjectName(u"step_line_2")
+        self.step_line_2.setFrameShape(QFrame.Shape.HLine)
+        self.step_line_2.setFrameShadow(QFrame.Shadow.Plain)
+
+        self.steps_grid.addWidget(self.step_line_2, 1, 0, 1, 4)
+
+        self.step_2_number_label = QLabel(self.steps_card)
+        self.step_2_number_label.setObjectName(u"step_2_number_label")
+        self.step_2_number_label.setFont(font2)
+        self.step_2_number_label.setProperty(u"variant", u"step_number")
+        self.step_2_number_label.setMinimumSize(QSize(24, 24))
+        self.step_2_number_label.setMaximumSize(QSize(24, 24))
+        self.step_2_number_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+
+        self.steps_grid.addWidget(self.step_2_number_label, 2, 0, 1, 1, Qt.AlignmentFlag.AlignTop)
+
+        self.step_2_name_label = QLabel(self.steps_card)
+        self.step_2_name_label.setObjectName(u"step_2_name_label")
+        self.step_2_name_label.setFont(font3)
+        self.step_2_name_label.setAlignment(Qt.AlignmentFlag.AlignLeading|Qt.AlignmentFlag.AlignLeft|Qt.AlignmentFlag.AlignTop)
+
+        self.steps_grid.addWidget(self.step_2_name_label, 2, 1, 1, 1)
+
+        self.step_2_label = QLabel(self.steps_card)
+        self.step_2_label.setObjectName(u"step_2_label")
+        self.step_2_label.setWordWrap(True)
+        self.step_2_label.setProperty(u"variant", u"help")
+        self.step_2_label.setAlignment(Qt.AlignmentFlag.AlignLeading|Qt.AlignmentFlag.AlignLeft|Qt.AlignmentFlag.AlignTop)
+
+        self.steps_grid.addWidget(self.step_2_label, 2, 3, 1, 1)
+
+        self.steps_grid.setColumnStretch(3, 1)
+
+        self.steps_card_layout.addLayout(self.steps_grid)
+
+
+        self.steps_section_layout.addWidget(self.steps_card)
+
+
+        self.content_layout.addLayout(self.steps_section_layout)
+
+        self.files_section_layout = QVBoxLayout()
+        self.files_section_layout.setSpacing(8)
+        self.files_section_layout.setObjectName(u"files_section_layout")
+        self.files_title_label = QLabel(self.content_widget)
+        self.files_title_label.setObjectName(u"files_title_label")
+        self.files_title_label.setFont(font1)
+
+        self.files_section_layout.addWidget(self.files_title_label)
+
+        self.files_card = QFrame(self.content_widget)
+        self.files_card.setObjectName(u"files_card")
+        self.files_card.setFrameShape(QFrame.Shape.StyledPanel)
+        self.files_card.setFrameShadow(QFrame.Shadow.Raised)
+        self.files_card_layout = QVBoxLayout(self.files_card)
+        self.files_card_layout.setSpacing(10)
+        self.files_card_layout.setObjectName(u"files_card_layout")
+        self.files_card_layout.setContentsMargins(10, 10, 10, 10)
+        self.files_grid = QGridLayout()
+        self.files_grid.setObjectName(u"files_grid")
+        self.files_grid.setHorizontalSpacing(32)
+        self.files_grid.setVerticalSpacing(6)
+        self.file_1_name_label = QLabel(self.files_card)
+        self.file_1_name_label.setObjectName(u"file_1_name_label")
+        self.file_1_name_label.setFont(font3)
+        self.file_1_name_label.setAlignment(Qt.AlignmentFlag.AlignLeading|Qt.AlignmentFlag.AlignLeft|Qt.AlignmentFlag.AlignTop)
+
+        self.files_grid.addWidget(self.file_1_name_label, 0, 0, 1, 1)
+
+        self.file_1_label = QLabel(self.files_card)
+        self.file_1_label.setObjectName(u"file_1_label")
+        self.file_1_label.setWordWrap(True)
+
+        self.files_grid.addWidget(self.file_1_label, 0, 1, 1, 1)
+
+        self.file_2_name_label = QLabel(self.files_card)
+        self.file_2_name_label.setObjectName(u"file_2_name_label")
+        self.file_2_name_label.setFont(font3)
+        self.file_2_name_label.setAlignment(Qt.AlignmentFlag.AlignLeading|Qt.AlignmentFlag.AlignLeft|Qt.AlignmentFlag.AlignTop)
+
+        self.files_grid.addWidget(self.file_2_name_label, 1, 0, 1, 1)
+
+        self.file_2_label = QLabel(self.files_card)
+        self.file_2_label.setObjectName(u"file_2_label")
+        self.file_2_label.setWordWrap(True)
+
+        self.files_grid.addWidget(self.file_2_label, 1, 1, 1, 1)
+
+        self.files_grid.setColumnStretch(1, 1)
+
+        self.files_card_layout.addLayout(self.files_grid)
+
+
+        self.files_section_layout.addWidget(self.files_card)
+
+
+        self.content_layout.addLayout(self.files_section_layout)
+
+
+        self.content_row.addWidget(self.content_widget)
+
+        self.content_spacer = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+
+        self.content_row.addItem(self.content_spacer)
+
+        self.content_row.setStretch(0, 1)
+
+        self.verticalLayout.addLayout(self.content_row)
+
+        self.verticalSpacer = QSpacerItem(40, 20, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
+
+        self.verticalLayout.addItem(self.verticalSpacer)
 
 
         self.retranslateUi(IntroStep)
@@ -43,60 +256,20 @@ class Ui_IntroStep(object):
 
     def retranslateUi(self, IntroStep):
         IntroStep.setWindowTitle("")
-        self.textEdit.setHtml(QCoreApplication.translate("IntroStep", u"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
-"<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset=\"utf-8\" /><style type=\"text/css\">\n"
-"p, li { white-space: pre-wrap; }\n"
-"hr { height: 1px; border-width: 0; }\n"
-"li.unchecked::marker { content: \"\\2610\"; }\n"
-"li.checked::marker { content: \"\\2612\"; }\n"
-"</style></head><body style=\" font-size:12pt; font-weight:400; font-style:normal;\">\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-weight:600;\">Review Detections for the Cohort </span></p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-weight:600;\"><br /></p>\n"
-"<p st"
-                        "yle=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">A tool to explore, clean (such as removing bad channels or renaming channels), and transpose the 'Detailed Events Cohort Report' to have one subject per row.</p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">The &quot;Detailed events cohort report&quot; is generated by any of the Spindle or the Slow Wave detectors incorporated in Snooz.</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">*Warning: the option to generate the cohort report has to be checked by the user on step &quot;4 - Output Files&quot; in those 2 tools.</p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; marg"
-                        "in-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">The generated report includes the same variable names as the input report. However, in the transposed report, the channel label is concatenated to the variable name as a suffix.</p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" text-decoration: underline;\">1 - Input Files :</span></p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; text-decoration: underline;\"><br /></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; m"
-                        "argin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-weight:700;\">Detailed Events Cohort Report : </span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Add your reports generated by the event detector tool.</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">You can append more than one report. </p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-weight:700;\">Channel label : </span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" color:#000000; background-color:transparent;\">The c"
-                        "hannel label is editable by double-clicking on the name.</span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" color:#000000; background-color:transparent;\">You can change the channel name at the subject level or at the cohort level.</span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; line-height:138%;\"><span style=\" color:#000000; background-color:transparent;\">A channel label changed at the cohort level will be effective to all the subjects loaded.<br /></span><a name=\"docs-internal-guid-f4d620f5-7fff-c293-f18e-2502f4c333fa\"></a><span style=\" color:#000000; background-color:transparent;\">U</span><span style=\" color:#000000; background-color:transparent;\">ncheck a channel to remove it.</span></p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0"
-                        "; text-indent:0px; line-height:138%; color:#000000;\"><br /></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; line-height:138%;\"><a name=\"docs-internal-guid-dddb6927-7fff-085b-95eb-f8ee0decd42b\"></a><span style=\" font-weight:700; color:#000000; background-color:transparent;\">R</span><span style=\" font-weight:700; color:#000000; background-color:transparent;\">egion Of Interest : </span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; line-height:138%;\"><span style=\" color:#000000; background-color:transparent;\">You can add ROI at the cohort level to average many channels together.</span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; line-height:138%;\"><span style=\" color:#000000; background-color:transparent;\">Once you press the &quot;Add ROI&quot; button : check t"
-                        "he channels to include in the ROI (this list will be adapted to the cohort loaded).</span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; line-height:138%;\"><span style=\" color:#000000; background-color:transparent;\">Check the blank option if you want the ROI empty (blank) when data is missing for the mean otherwise missing data is just ignored.</span></p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" text-decoration: underline;\">2 - Output File :</span></p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; text-decoration: underline;\"><br /></p>\n"
-"<p style=\" margin-top:0px; ma"
-                        "rgin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Check the file you want to generate: the report cleaned (with edited channels) and/or the report transposed. </p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">To export the transposed report, define how to average the events characteristics across the recording by selecting: </p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">-<span style=\" font-weight:700;\">Total</span> to output the average through the whole recording.<br />-<span style=\" font-weight:700;\">Distribution per clock hou</span>r to output the average per real clock hour (from 1 to 9 as default).</p>\n"
-"<p style=\" margin-top:0px; margin-bo"
-                        "ttom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">-<span style=\" font-weight:700;\">Distribution per hour spent in each sleep stage</span> to output the average per stage when it reaches an hour (from 1 to 9 as default).</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">-<span style=\" font-weight:700;\">Distribution per sleep cycle </span>to output the average per sleep cycle (from 1 to 6 as default).<br /></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">The maximum number of hours and sleep cycles, and the starting point (either the first sleep stage or the sleep onset) are defined when running any of the Spindle or the Slow Wave detectors incorporated in Snooz.</p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br"
-                        " /></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Define the filename to save the exported files (the sufix _clean or _transposed will be added to the filename)</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">The output file is a .tsv (tab separated values) file. </p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">*Warning : the current output is added (appended) to the existing output file.</p></body></html>", None))
+        self.title_label.setText(QCoreApplication.translate("IntroStep", u"Review Detections for the Cohort", None))
+        self.subtitle_label.setText(QCoreApplication.translate("IntroStep", u"Explores, cleans and transposes the detailed events cohort reports of the spindle and slow wave detection tools: rename or remove channels, average channels into regions of interest, and get one subject per row.", None))
+        self.before_info_label.setText(QCoreApplication.translate("IntroStep", u"<b>Before you start</b><br/>The detailed events cohort report is written by the detection tool only when its cohort report option is checked, in its step <b>4 - Output Files</b>.", None))
+        self.steps_title_label.setText(QCoreApplication.translate("IntroStep", u"What you will do", None))
+        self.step_1_number_label.setText(QCoreApplication.translate("IntroStep", u"1", None))
+        self.step_1_name_label.setText(QCoreApplication.translate("IntroStep", u"Input Files", None))
+        self.step_1_label.setText(QCoreApplication.translate("IntroStep", u"Add the detailed events cohort reports: you can add more than one. Then rename the channels (double-click a label), uncheck the channels to remove and add regions of interest (ROIs) that average channels.", None))
+        self.step_2_number_label.setText(QCoreApplication.translate("IntroStep", u"2", None))
+        self.step_2_name_label.setText(QCoreApplication.translate("IntroStep", u"Output File", None))
+        self.step_2_label.setText(QCoreApplication.translate("IntroStep", u"Export the clean report (selected and renamed channels) and the transposed report (one subject per row), and choose the output file.", None))
+        self.files_title_label.setText(QCoreApplication.translate("IntroStep", u"Accepted files", None))
+        self.file_1_name_label.setText(QCoreApplication.translate("IntroStep", u"Spindles", None))
+        self.file_1_label.setText(QCoreApplication.translate("IntroStep", u"The detailed report for the cohort of Detect Spindles with A7, with Martin or with SUMO (.tsv).", None))
+        self.file_2_name_label.setText(QCoreApplication.translate("IntroStep", u"Slow waves", None))
+        self.file_2_label.setText(QCoreApplication.translate("IntroStep", u"The detailed report for the cohort of Detect Slow Waves (.tsv).", None))
     # retranslateUi
 

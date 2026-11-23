@@ -105,11 +105,11 @@ class OutputFileStep(BaseStepView, Ui_OutputFileStep, QtWidgets.QWidget):
 
         # Make sure at least one expert is checked
         if not self.export_raw_checkBox.isChecked() and not self.export_transpose_checkBox.isChecked():
-            WarningDialog(f"Select at least one export in the step '3-Output File'")
+            WarningDialog(f"Select at least one export in the step '2-Output File'")
             return False            
         # Make sure the output file is chosen
         if len(self.filename_lineEdit.text())==0:
-            WarningDialog(f"Choose to filename to save the exported files in the step '3-Output File'")
+            WarningDialog(f"Choose the filename to save the exported files in the step '2-Output File'")
             return False
         return True
 

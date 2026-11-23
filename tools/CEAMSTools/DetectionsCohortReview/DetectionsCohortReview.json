@@ -6,7 +6,7 @@
     "item_author": "Karine Lacourse",
     "item_description": "To clean and transpose the Spindle/Slow wave detector output.",
     "tool_params": {
-        "tool_version": "2.2.1",
+        "tool_version": "2.2.2",
         "tool_label": "Review Detections for the Cohort",
         "tool_category": "3-Postprocessing",
         "asset_directory": "",
@@ -20,13 +20,13 @@
             },
             {
                 "name": "Input Files",
-                "description": "To add your 'Detailed events cohort report' files.\n\nThe channel label is editable by double-clicking on the name.",
+                "description": "Add the detailed events cohort reports. Double-click a channel label to rename it.",
                 "custom_step_name": "InputFiles",
                 "show_index": true
             },
             {
                 "name": "Output File",
-                "description": "To define the output file.",
+                "description": "Choose the reports to export, clean or transposed, and the output file.",
                 "custom_step_name": "OutputFileStep",
                 "show_index": true
             }
