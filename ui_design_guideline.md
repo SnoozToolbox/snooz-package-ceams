@@ -135,7 +135,7 @@ From top to bottom:
    - **Two short cards side by side:**
      - a QHBoxLayout, spacing 16, stretch `1,1`;
      - each card ends with a vertical spacer.
-   - **A card alone with two fields** takes half the width: a QHBoxLayout with a horizontal spacer, stretch `1,1`.
+   - **A card alone with two fields** takes half the width: a QHBoxLayout, spacing 16, with the card, a fixed horizontal spacer of 16 px and a horizontal spacer, stretch `1,0,1`. Qt adds no spacing next to a spacer: without the fixed spacer, the card is 8 px wider than the cards of a row below it.
    - **One small help line** at the end of a card when the settings need it ("IIR bandpass, order 6").
 4. **Warning callouts** (amber), under the cards: a limit to respect, such as the sampling rate or a minimum duration.
    - The title says what it is about ("Highest cutoff frequency").
