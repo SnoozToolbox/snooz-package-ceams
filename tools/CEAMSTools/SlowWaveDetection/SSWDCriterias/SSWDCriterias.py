@@ -3,14 +3,130 @@
     SSWDCriterias
     Settings viewer of the save files plugin for the Slow Wave Detector tool
 """
-import base64
+import math
 
-from qtpy import QtWidgets
+from qtpy import QtCore, QtGui, QtWidgets
 from qtpy.QtCore import QRegularExpression
-from qtpy.QtGui import QPixmap, QRegularExpressionValidator
+from qtpy.QtGui import QRegularExpressionValidator
 
 from CEAMSTools.SlowWaveDetection.SSWDCriterias.Ui_SSWDCriterias import Ui_SSWDCriterias
 from commons.BaseStepView import BaseStepView
+
+# Size of the drawing of the phase of a slow wave (pixels): at most PHASE_WIDTH wide, left aligned
+PHASE_HEIGHT = 224
+PHASE_WIDTH = 440
+
+
+def draw_phase(painter, width, height, palette, font):
+    """ Draw one slow wave and its phase (Bouchard et al., 2021, figure 1A) in the colors of the theme
+        (palette): from a zero crossing, positive to negative (-3pi/2), to the next one (+pi/2), with the
+        negative peak H (hyperpolarization, -pi), the positive peak D (depolarization, 0), the duration T
+        of the wave and the time tau from H to D. The transition from H to D is in the link color.
+    """
+    painter.setRenderHint(QtGui.QPainter.RenderHint.Antialiasing)
+    small = QtGui.QFont(font)
+    small.setPixelSize(13)
+    painter.setFont(small)
+    label_height = QtGui.QFontMetrics(small).height()
+
+    text = palette.color(QtGui.QPalette.ColorRole.Text)
+    muted = QtGui.QColor(text)
+    muted.setAlpha(150)
+    faint = QtGui.QColor(text)
+    faint.setAlpha(70)
+    link = palette.color(QtGui.QPalette.ColorRole.Link)
+
+    # The wave: phase -3pi/2 .. pi/2 (value cos(phase)), the times of the knots in fractions of T
+    area = min(width, PHASE_WIDTH)
+    start_x, end_x = 52.0, area - 52.0
+    phases = [-1.5 * math.pi, -math.pi, 0.0, 0.5 * math.pi]
+    times = [0.0, 0.24, 0.72, 1.0]
+    d_y = label_height + 8.0                      # positive peak D
+    zero_y = d_y + 46.0
+    h_y = zero_y + 62.0                           # negative peak H
+    tau_y = h_y + label_height + 26.0             # arrow of tau
+    t_y = height - 6.0                            # arrow of T
+
+    def x_of(phase):
+        for index in range(len(phases) - 1):
+            if phase <= phases[index + 1]:
+                ratio = (phase - phases[index]) / (phases[index + 1] - phases[index])
+                fraction = times[index] + ratio * (times[index + 1] - times[index])
+                return start_x + fraction * (end_x - start_x)
+        return end_x
+
+    def point(phase):
+        value = math.cos(phase)
+        return QtCore.QPointF(x_of(phase), zero_y - value * ((zero_y - d_y) if value > 0 else (h_y - zero_y)))
+
+    def trace(first, last, count=120):
+        path = QtGui.QPainterPath(point(first))
+        for index in range(1, count + 1):
+            path.lineTo(point(first + (last - first) * index / count))
+        return path
+
+    def arrow(x1, x2, y):
+        painter.drawLine(QtCore.QPointF(x1, y), QtCore.QPointF(x2, y))
+        for tip, direction in ((x1, 1), (x2, -1)):
+            painter.drawLine(QtCore.QPointF(tip, y), QtCore.QPointF(tip + 6 * direction, y - 4))
+            painter.drawLine(QtCore.QPointF(tip, y), QtCore.QPointF(tip + 6 * direction, y + 4))
+
+    def text_at(x, y, value, align):
+        left = {"left": x, "right": x - 160, "center": x - 80}[align]
+        flags = {"left": QtCore.Qt.AlignmentFlag.AlignLeft, "right": QtCore.Qt.AlignmentFlag.AlignRight,
+                 "center": QtCore.Qt.AlignmentFlag.AlignHCenter}[align]
+        painter.drawText(QtCore.QRectF(left, y - label_height / 2, 160, label_height),
+                         flags | QtCore.Qt.AlignmentFlag.AlignVCenter, value)
+
+    h, d = point(-math.pi), point(0.0)
+    # Zero line and guides
+    painter.setPen(QtGui.QPen(faint, 1.0, QtCore.Qt.PenStyle.DashLine))
+    painter.drawLine(QtCore.QPointF(start_x - 12, zero_y), QtCore.QPointF(end_x + 12, zero_y))
+    painter.setPen(QtGui.QPen(faint, 1.0, QtCore.Qt.PenStyle.DotLine))
+    for x in (start_x, end_x):
+        painter.drawLine(QtCore.QPointF(x, zero_y), QtCore.QPointF(x, t_y))
+    painter.drawLine(QtCore.QPointF(h.x(), h.y() + label_height + 4), QtCore.QPointF(h.x(), tau_y))
+    painter.drawLine(QtCore.QPointF(d.x(), d.y()), QtCore.QPointF(d.x(), tau_y))
+    # The wave, the transition from H to D in the link color
+    painter.setBrush(QtCore.Qt.BrushStyle.NoBrush)
+    painter.setPen(QtGui.QPen(muted, 2.0))
+    painter.drawPath(trace(phases[0], phases[-1], 240))
+    painter.setPen(QtGui.QPen(link, 3.0))
+    painter.drawPath(trace(-math.pi, 0.0))
+    painter.setPen(QtCore.Qt.PenStyle.NoPen)
+    painter.setBrush(text)
+    for center, radius in ((h, 4.0), (d, 4.0), (point(phases[0]), 3.0), (point(phases[-1]), 3.0)):
+        painter.drawEllipse(center, radius, radius)
+    # Labels and arrows
+    painter.setPen(QtGui.QPen(text, 1.2))
+    text_at(d.x(), d.y() - label_height / 2 - 4, "D (0)", "center")
+    text_at(h.x(), h.y() + label_height / 2 + 4, "H (−π)", "center")
+    text_at(start_x - 8, zero_y, "−3π/2", "right")
+    text_at(end_x + 8, zero_y, "+π/2", "left")
+    arrow(h.x(), d.x(), tau_y)
+    text_at((h.x() + d.x()) / 2, tau_y - label_height / 2 - 2, "τ", "center")
+    arrow(start_x, end_x, t_y)
+    text_at((start_x + end_x) / 2, t_y - label_height / 2 - 2, "T", "center")
+
+
+class PhaseDrawing(QtCore.QObject):
+    """ Paints the phase of a slow wave on its label (pages Detection Criteria and Output Files), when
+        the label is painted: sharp on every screen and in the colors of the theme. The label has no
+        picture, so the page does not put it in a picture card (made for pictures on a white background).
+    """
+    def __init__(self, label):
+        super().__init__(label)
+        label.setMinimumHeight(PHASE_HEIGHT)
+        label.setMaximumHeight(PHASE_HEIGHT)
+        label.installEventFilter(self)
+
+    def eventFilter(self, label, event):
+        if event.type() == QtCore.QEvent.Type.Paint:
+            painter = QtGui.QPainter(label)
+            draw_phase(painter, label.width(), label.height(), label.palette(), label.font())
+            painter.end()
+            return True
+        return super().eventFilter(label, event)
 
 class SSWDCriterias( BaseStepView,  Ui_SSWDCriterias, QtWidgets.QWidget):
     """
@@ -22,7 +138,8 @@ class SSWDCriterias( BaseStepView,  Ui_SSWDCriterias, QtWidgets.QWidget):
 
         # init UI
         self.setupUi(self)
-        self._load_embedded_image()
+        # The phase of a slow wave (H, D, T and tau of the criteria), painted on phase_image
+        self._phase_drawing = PhaseDrawing(self.phase_image)
 
         # Set input validators
         # Create a QRegularExpressionValidator with the desired regular expression
@@ -168,15 +285,6 @@ class SSWDCriterias( BaseStepView,  Ui_SSWDCriterias, QtWidgets.QWidget):
         """When checkBox_r (REM stage) is checked, automatically check radioButton_incl_remp."""
         if checked:
             self.radioButton_incl_remp.setChecked(True)
-
-    def _load_embedded_image(self):
-        """Load the embedded base64 image data into SW_picture."""
-        from .art_image_data import PHASE_SLOW_WAVE_SMALL_JPG_IMAGE_BASE64
-        
-        image_bytes = base64.b64decode(PHASE_SLOW_WAVE_SMALL_JPG_IMAGE_BASE64)
-        pixmap = QPixmap()
-        pixmap.loadFromData(image_bytes)
-        self.SW_picture.setPixmap(pixmap)
 
     def load_settings(self):
         # Ask for the settings to the publisher to display on the SettingsView

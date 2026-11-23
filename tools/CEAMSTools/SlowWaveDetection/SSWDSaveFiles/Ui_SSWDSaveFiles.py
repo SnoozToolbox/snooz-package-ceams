@@ -17,196 +17,284 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QPalette, QPixmap, QRadialGradient, QTransform)
 from PySide6.QtWidgets import (QApplication, QCheckBox, QFrame, QHBoxLayout,
     QLabel, QLineEdit, QPushButton, QSizePolicy,
-    QSpacerItem, QTextEdit, QVBoxLayout, QWidget)
+    QSpacerItem, QVBoxLayout, QWidget)
 import themes_rc
 
 class Ui_SSWDSaveFiles(object):
     def setupUi(self, SSWDSaveFiles):
         if not SSWDSaveFiles.objectName():
             SSWDSaveFiles.setObjectName(u"SSWDSaveFiles")
-        SSWDSaveFiles.resize(999, 951)
-        SSWDSaveFiles.setMinimumSize(QSize(0, 0))
-        self.verticalLayout_4 = QVBoxLayout(SSWDSaveFiles)
-        self.verticalLayout_4.setObjectName(u"verticalLayout_4")
-        self.label_title = QLabel(SSWDSaveFiles)
-        self.label_title.setObjectName(u"label_title")
-        sizePolicy = QSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Maximum)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.label_title.sizePolicy().hasHeightForWidth())
-        self.label_title.setSizePolicy(sizePolicy)
-        font = QFont()
-        font.setBold(False)
-        font.setItalic(False)
-        self.label_title.setFont(font)
-
-        self.verticalLayout_4.addWidget(self.label_title)
-
-        self.label_3 = QLabel(SSWDSaveFiles)
-        self.label_3.setObjectName(u"label_3")
-        sizePolicy.setHeightForWidth(self.label_3.sizePolicy().hasHeightForWidth())
-        self.label_3.setSizePolicy(sizePolicy)
-
-        self.verticalLayout_4.addWidget(self.label_3)
-
-        self.verticalSpacer_3 = QSpacerItem(20, 13, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Fixed)
-
-        self.verticalLayout_4.addItem(self.verticalSpacer_3)
-
-        self.label_title_2 = QLabel(SSWDSaveFiles)
-        self.label_title_2.setObjectName(u"label_title_2")
-        sizePolicy.setHeightForWidth(self.label_title_2.sizePolicy().hasHeightForWidth())
-        self.label_title_2.setSizePolicy(sizePolicy)
-        self.label_title_2.setFont(font)
-
-        self.verticalLayout_4.addWidget(self.label_title_2)
-
-        self.horizontalLayout_2 = QHBoxLayout()
-        self.horizontalLayout_2.setObjectName(u"horizontalLayout_2")
-        self.verticalLayout = QVBoxLayout()
+        SSWDSaveFiles.resize(900, 700)
+        self.verticalLayout = QVBoxLayout(SSWDSaveFiles)
         self.verticalLayout.setObjectName(u"verticalLayout")
-        self.textEdit = QTextEdit(SSWDSaveFiles)
-        self.textEdit.setObjectName(u"textEdit")
-        sizePolicy1 = QSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
-        sizePolicy1.setHorizontalStretch(0)
-        sizePolicy1.setVerticalStretch(0)
-        sizePolicy1.setHeightForWidth(self.textEdit.sizePolicy().hasHeightForWidth())
-        self.textEdit.setSizePolicy(sizePolicy1)
-        self.textEdit.setMaximumSize(QSize(800, 16777215))
-        self.textEdit.setFrameShape(QFrame.Shape.NoFrame)
-        self.textEdit.setFrameShadow(QFrame.Shadow.Plain)
-        self.textEdit.setLineWidth(0)
-        self.textEdit.setReadOnly(True)
+        self.verticalLayout.setContentsMargins(19, 12, 19, 12)
+        self.content_row = QHBoxLayout()
+        self.content_row.setObjectName(u"content_row")
+        self.content_row.setContentsMargins(0, 0, 0, 0)
+        self.content_widget = QWidget(SSWDSaveFiles)
+        self.content_widget.setObjectName(u"content_widget")
+        self.content_widget.setMaximumSize(QSize(800, 16777215))
+        self.content_layout = QVBoxLayout(self.content_widget)
+        self.content_layout.setSpacing(16)
+        self.content_layout.setObjectName(u"content_layout")
+        self.content_layout.setContentsMargins(0, 0, 0, 0)
+        self.header_layout = QVBoxLayout()
+        self.header_layout.setSpacing(6)
+        self.header_layout.setObjectName(u"header_layout")
+        self.title_label = QLabel(self.content_widget)
+        self.title_label.setObjectName(u"title_label")
+        font = QFont()
+        font.setPointSize(18)
+        font.setBold(True)
+        self.title_label.setFont(font)
 
-        self.verticalLayout.addWidget(self.textEdit)
+        self.header_layout.addWidget(self.title_label)
 
-        self.checkBox_export_sw = QCheckBox(SSWDSaveFiles)
-        self.checkBox_export_sw.setObjectName(u"checkBox_export_sw")
+        self.subtitle_label = QLabel(self.content_widget)
+        self.subtitle_label.setObjectName(u"subtitle_label")
+        self.subtitle_label.setWordWrap(True)
+        self.subtitle_label.setProperty(u"variant", u"help")
 
-        self.verticalLayout.addWidget(self.checkBox_export_sw)
-
-
-        self.horizontalLayout_2.addLayout(self.verticalLayout)
-
-        self.image = QLabel(SSWDSaveFiles)
-        self.image.setObjectName(u"image")
-        self.image.setLineWidth(0)
-        self.image.setAlignment(Qt.AlignmentFlag.AlignCenter)
-
-        self.horizontalLayout_2.addWidget(self.image)
+        self.header_layout.addWidget(self.subtitle_label)
 
 
-        self.verticalLayout_4.addLayout(self.horizontalLayout_2)
+        self.content_layout.addLayout(self.header_layout)
 
-        self.verticalSpacer_2 = QSpacerItem(20, 13, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Fixed)
+        self.events_info = QFrame(self.content_widget)
+        self.events_info.setObjectName(u"events_info")
+        self.events_info.setFrameShape(QFrame.Shape.NoFrame)
+        self.events_info.setProperty(u"variant", u"info")
+        self.events_info_layout = QHBoxLayout(self.events_info)
+        self.events_info_layout.setObjectName(u"events_info_layout")
+        self.events_info_layout.setContentsMargins(14, 10, 14, 10)
+        self.events_info_label = QLabel(self.events_info)
+        self.events_info_label.setObjectName(u"events_info_label")
+        self.events_info_label.setTextFormat(Qt.TextFormat.RichText)
+        self.events_info_label.setWordWrap(True)
 
-        self.verticalLayout_4.addItem(self.verticalSpacer_2)
+        self.events_info_layout.addWidget(self.events_info_label)
 
-        self.horizontalLayout_4 = QHBoxLayout()
-        self.horizontalLayout_4.setObjectName(u"horizontalLayout_4")
-        self.verticalLayout_2 = QVBoxLayout()
-        self.verticalLayout_2.setObjectName(u"verticalLayout_2")
-        self.label = QLabel(SSWDSaveFiles)
-        self.label.setObjectName(u"label")
-        sizePolicy.setHeightForWidth(self.label.sizePolicy().hasHeightForWidth())
-        self.label.setSizePolicy(sizePolicy)
-        self.label.setFont(font)
 
-        self.verticalLayout_2.addWidget(self.label)
+        self.content_layout.addWidget(self.events_info)
 
-        self.textEdit_2 = QTextEdit(SSWDSaveFiles)
-        self.textEdit_2.setObjectName(u"textEdit_2")
-        sizePolicy1.setHeightForWidth(self.textEdit_2.sizePolicy().hasHeightForWidth())
-        self.textEdit_2.setSizePolicy(sizePolicy1)
-        self.textEdit_2.setMaximumSize(QSize(800, 16777215))
-        self.textEdit_2.setFrameShape(QFrame.Shape.NoFrame)
-        self.textEdit_2.setFrameShadow(QFrame.Shadow.Plain)
-        self.textEdit_2.setLineWidth(0)
-        self.textEdit_2.setReadOnly(True)
-
-        self.verticalLayout_2.addWidget(self.textEdit_2)
-
-        self.horizontalLayout_3 = QHBoxLayout()
-        self.horizontalLayout_3.setObjectName(u"horizontalLayout_3")
-        self.checkBox_save_cohort = QCheckBox(SSWDSaveFiles)
+        self.output_cards_layout = QHBoxLayout()
+        self.output_cards_layout.setSpacing(16)
+        self.output_cards_layout.setObjectName(u"output_cards_layout")
+        self.cohort_card = QFrame(self.content_widget)
+        self.cohort_card.setObjectName(u"cohort_card")
+        self.cohort_card.setFrameShape(QFrame.Shape.StyledPanel)
+        self.cohort_card.setFrameShadow(QFrame.Shadow.Raised)
+        self.cohort_card_layout = QVBoxLayout(self.cohort_card)
+        self.cohort_card_layout.setSpacing(10)
+        self.cohort_card_layout.setObjectName(u"cohort_card_layout")
+        self.cohort_card_layout.setContentsMargins(10, 10, 10, 10)
+        self.checkBox_save_cohort = QCheckBox(self.cohort_card)
         self.checkBox_save_cohort.setObjectName(u"checkBox_save_cohort")
-        sizePolicy2 = QSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Maximum)
-        sizePolicy2.setHorizontalStretch(0)
-        sizePolicy2.setVerticalStretch(0)
-        sizePolicy2.setHeightForWidth(self.checkBox_save_cohort.sizePolicy().hasHeightForWidth())
-        self.checkBox_save_cohort.setSizePolicy(sizePolicy2)
-        self.checkBox_save_cohort.setMaximumSize(QSize(16777215, 16777215))
+        font1 = QFont()
+        font1.setBold(True)
+        self.checkBox_save_cohort.setFont(font1)
 
-        self.horizontalLayout_3.addWidget(self.checkBox_save_cohort)
+        self.cohort_card_layout.addWidget(self.checkBox_save_cohort)
 
+        self.cohort_file_layout = QHBoxLayout()
+        self.cohort_file_layout.setSpacing(8)
+        self.cohort_file_layout.setObjectName(u"cohort_file_layout")
+        self.cohort_file_label = QLabel(self.cohort_card)
+        self.cohort_file_label.setObjectName(u"cohort_file_label")
 
-        self.verticalLayout_2.addLayout(self.horizontalLayout_3)
+        self.cohort_file_layout.addWidget(self.cohort_file_label)
 
-        self.horizontalLayout = QHBoxLayout()
-        self.horizontalLayout.setObjectName(u"horizontalLayout")
-        self.lineEdit_cohort_report = QLineEdit(SSWDSaveFiles)
+        self.lineEdit_cohort_report = QLineEdit(self.cohort_card)
         self.lineEdit_cohort_report.setObjectName(u"lineEdit_cohort_report")
         self.lineEdit_cohort_report.setEnabled(False)
-        sizePolicy2.setHeightForWidth(self.lineEdit_cohort_report.sizePolicy().hasHeightForWidth())
-        self.lineEdit_cohort_report.setSizePolicy(sizePolicy2)
-        self.lineEdit_cohort_report.setMaximumSize(QSize(16777215, 16777215))
-        self.lineEdit_cohort_report.setAlignment(Qt.AlignmentFlag.AlignRight|Qt.AlignmentFlag.AlignTrailing|Qt.AlignmentFlag.AlignVCenter)
 
-        self.horizontalLayout.addWidget(self.lineEdit_cohort_report)
+        self.cohort_file_layout.addWidget(self.lineEdit_cohort_report)
 
-        self.pushButto_browse = QPushButton(SSWDSaveFiles)
+        self.pushButto_browse = QPushButton(self.cohort_card)
         self.pushButto_browse.setObjectName(u"pushButto_browse")
         self.pushButto_browse.setEnabled(False)
-        sizePolicy3 = QSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Fixed)
-        sizePolicy3.setHorizontalStretch(0)
-        sizePolicy3.setVerticalStretch(0)
-        sizePolicy3.setHeightForWidth(self.pushButto_browse.sizePolicy().hasHeightForWidth())
-        self.pushButto_browse.setSizePolicy(sizePolicy3)
 
-        self.horizontalLayout.addWidget(self.pushButto_browse)
+        self.cohort_file_layout.addWidget(self.pushButto_browse)
 
 
-        self.verticalLayout_2.addLayout(self.horizontalLayout)
+        self.cohort_card_layout.addLayout(self.cohort_file_layout)
 
-        self.label_2 = QLabel(SSWDSaveFiles)
+        self.label_2 = QLabel(self.cohort_card)
         self.label_2.setObjectName(u"label_2")
-        sizePolicy.setHeightForWidth(self.label_2.sizePolicy().hasHeightForWidth())
-        self.label_2.setSizePolicy(sizePolicy)
+        font2 = QFont()
+        font2.setPointSize(10)
+        self.label_2.setFont(font2)
+        self.label_2.setTextFormat(Qt.TextFormat.RichText)
+        self.label_2.setWordWrap(True)
+        self.label_2.setProperty(u"variant", u"help")
 
-        self.verticalLayout_2.addWidget(self.label_2)
+        self.cohort_card_layout.addWidget(self.label_2)
+
+        self.cohort_stretch = QSpacerItem(20, 0, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
+
+        self.cohort_card_layout.addItem(self.cohort_stretch)
 
 
-        self.horizontalLayout_4.addLayout(self.verticalLayout_2)
+        self.output_cards_layout.addWidget(self.cohort_card)
 
-        self.horizontalSpacer_4 = QSpacerItem(20, 20, QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Minimum)
+        self.waves_card = QFrame(self.content_widget)
+        self.waves_card.setObjectName(u"waves_card")
+        self.waves_card.setFrameShape(QFrame.Shape.StyledPanel)
+        self.waves_card.setFrameShadow(QFrame.Shadow.Raised)
+        self.waves_card_layout = QVBoxLayout(self.waves_card)
+        self.waves_card_layout.setSpacing(10)
+        self.waves_card_layout.setObjectName(u"waves_card_layout")
+        self.waves_card_layout.setContentsMargins(10, 10, 10, 10)
+        self.checkBox_export_sw = QCheckBox(self.waves_card)
+        self.checkBox_export_sw.setObjectName(u"checkBox_export_sw")
+        self.checkBox_export_sw.setFont(font1)
 
-        self.horizontalLayout_4.addItem(self.horizontalSpacer_4)
+        self.waves_card_layout.addWidget(self.checkBox_export_sw)
 
-        self.verticalLayout_3 = QVBoxLayout()
-        self.verticalLayout_3.setObjectName(u"verticalLayout_3")
-        self.label_6 = QLabel(SSWDSaveFiles)
-        self.label_6.setObjectName(u"label_6")
-        sizePolicy.setHeightForWidth(self.label_6.sizePolicy().hasHeightForWidth())
-        self.label_6.setSizePolicy(sizePolicy)
+        self.waves_label = QLabel(self.waves_card)
+        self.waves_label.setObjectName(u"waves_label")
+        self.waves_label.setWordWrap(True)
+        self.waves_label.setProperty(u"variant", u"help")
 
-        self.verticalLayout_3.addWidget(self.label_6)
+        self.waves_card_layout.addWidget(self.waves_label)
 
-        self.textEdit_3 = QTextEdit(SSWDSaveFiles)
+        self.waves_help_label = QLabel(self.waves_card)
+        self.waves_help_label.setObjectName(u"waves_help_label")
+        self.waves_help_label.setFont(font2)
+        self.waves_help_label.setWordWrap(True)
+        self.waves_help_label.setProperty(u"variant", u"help")
+
+        self.waves_card_layout.addWidget(self.waves_help_label)
+
+        self.waves_stretch = QSpacerItem(20, 0, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
+
+        self.waves_card_layout.addItem(self.waves_stretch)
+
+
+        self.output_cards_layout.addWidget(self.waves_card)
+
+        self.output_cards_layout.setStretch(0, 1)
+        self.output_cards_layout.setStretch(1, 1)
+
+        self.content_layout.addLayout(self.output_cards_layout)
+
+        self.textEdit_3 = QFrame(self.content_widget)
         self.textEdit_3.setObjectName(u"textEdit_3")
-        sizePolicy1.setHeightForWidth(self.textEdit_3.sizePolicy().hasHeightForWidth())
-        self.textEdit_3.setSizePolicy(sizePolicy1)
         self.textEdit_3.setFrameShape(QFrame.Shape.NoFrame)
-        self.textEdit_3.setFrameShadow(QFrame.Shadow.Plain)
-        self.textEdit_3.setLineWidth(0)
-        self.textEdit_3.setReadOnly(True)
+        self.textEdit_3.setProperty(u"variant", u"info")
+        self.textEdit_3_layout = QHBoxLayout(self.textEdit_3)
+        self.textEdit_3_layout.setObjectName(u"textEdit_3_layout")
+        self.textEdit_3_layout.setContentsMargins(14, 10, 14, 10)
+        self.textEdit_3_label = QLabel(self.textEdit_3)
+        self.textEdit_3_label.setObjectName(u"textEdit_3_label")
+        self.textEdit_3_label.setTextFormat(Qt.TextFormat.RichText)
+        self.textEdit_3_label.setWordWrap(True)
 
-        self.verticalLayout_3.addWidget(self.textEdit_3)
+        self.textEdit_3_layout.addWidget(self.textEdit_3_label)
 
 
-        self.horizontalLayout_4.addLayout(self.verticalLayout_3)
+        self.content_layout.addWidget(self.textEdit_3)
+
+        self.about_characteristics_layout = QVBoxLayout()
+        self.about_characteristics_layout.setSpacing(6)
+        self.about_characteristics_layout.setObjectName(u"about_characteristics_layout")
+        self.label_title_2 = QLabel(self.content_widget)
+        self.label_title_2.setObjectName(u"label_title_2")
+        self.label_title_2.setFont(font1)
+
+        self.about_characteristics_layout.addWidget(self.label_title_2)
+
+        self.characteristics_layout = QHBoxLayout()
+        self.characteristics_layout.setSpacing(16)
+        self.characteristics_layout.setObjectName(u"characteristics_layout")
+        self.textEdit = QLabel(self.content_widget)
+        self.textEdit.setObjectName(u"textEdit")
+        self.textEdit.setTextFormat(Qt.TextFormat.RichText)
+        self.textEdit.setWordWrap(True)
+        self.textEdit.setProperty(u"variant", u"help")
+        self.textEdit.setAlignment(Qt.AlignmentFlag.AlignLeading|Qt.AlignmentFlag.AlignLeft|Qt.AlignmentFlag.AlignTop)
+
+        self.characteristics_layout.addWidget(self.textEdit)
+
+        self.phase_card = QFrame(self.content_widget)
+        self.phase_card.setObjectName(u"phase_card")
+        self.phase_card.setFrameShape(QFrame.Shape.StyledPanel)
+        self.phase_card.setFrameShadow(QFrame.Shadow.Raised)
+        self.phase_card_layout = QVBoxLayout(self.phase_card)
+        self.phase_card_layout.setSpacing(10)
+        self.phase_card_layout.setObjectName(u"phase_card_layout")
+        self.phase_card_layout.setContentsMargins(10, 10, 10, 10)
+        self.phase_image = QLabel(self.phase_card)
+        self.phase_image.setObjectName(u"phase_image")
+
+        self.phase_card_layout.addWidget(self.phase_image)
+
+        self.phase_caption_label = QLabel(self.phase_card)
+        self.phase_caption_label.setObjectName(u"phase_caption_label")
+        self.phase_caption_label.setFont(font2)
+        self.phase_caption_label.setWordWrap(True)
+        self.phase_caption_label.setProperty(u"variant", u"help")
+
+        self.phase_card_layout.addWidget(self.phase_caption_label)
 
 
-        self.verticalLayout_4.addLayout(self.horizontalLayout_4)
+        self.characteristics_layout.addWidget(self.phase_card)
+
+        self.characteristics_layout.setStretch(0, 1)
+        self.characteristics_layout.setStretch(1, 1)
+
+        self.about_characteristics_layout.addLayout(self.characteristics_layout)
+
+        self.textEdit_2 = QLabel(self.content_widget)
+        self.textEdit_2.setObjectName(u"textEdit_2")
+        self.textEdit_2.setTextFormat(Qt.TextFormat.RichText)
+        self.textEdit_2.setWordWrap(True)
+        self.textEdit_2.setProperty(u"variant", u"help")
+        self.textEdit_2.setAlignment(Qt.AlignmentFlag.AlignLeading|Qt.AlignmentFlag.AlignLeft|Qt.AlignmentFlag.AlignTop)
+
+        self.about_characteristics_layout.addWidget(self.textEdit_2)
+
+        self.references_layout = QVBoxLayout()
+        self.references_layout.setSpacing(8)
+        self.references_layout.setObjectName(u"references_layout")
+        self.references_layout.setContentsMargins(0, 6, 0, 0)
+        self.references_line = QFrame(self.content_widget)
+        self.references_line.setObjectName(u"references_line")
+        self.references_line.setFrameShape(QFrame.Shape.HLine)
+        self.references_line.setFrameShadow(QFrame.Shadow.Plain)
+
+        self.references_layout.addWidget(self.references_line)
+
+        self.references_label = QLabel(self.content_widget)
+        self.references_label.setObjectName(u"references_label")
+        self.references_label.setFont(font2)
+        self.references_label.setTextFormat(Qt.TextFormat.RichText)
+        self.references_label.setWordWrap(True)
+        self.references_label.setOpenExternalLinks(True)
+        self.references_label.setProperty(u"variant", u"help")
+
+        self.references_layout.addWidget(self.references_label)
+
+
+        self.about_characteristics_layout.addLayout(self.references_layout)
+
+
+        self.content_layout.addLayout(self.about_characteristics_layout)
+
+
+        self.content_row.addWidget(self.content_widget)
+
+        self.content_spacer = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+
+        self.content_row.addItem(self.content_spacer)
+
+        self.content_row.setStretch(0, 1)
+
+        self.verticalLayout.addLayout(self.content_row)
+
+        self.verticalSpacer = QSpacerItem(40, 20, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
+
+        self.verticalLayout.addItem(self.verticalSpacer)
 
 
         self.retranslateUi(SSWDSaveFiles)
@@ -219,70 +307,23 @@ class Ui_SSWDSaveFiles(object):
 
     def retranslateUi(self, SSWDSaveFiles):
         SSWDSaveFiles.setWindowTitle("")
-        self.label_title.setText(QCoreApplication.translate("SSWDSaveFiles", u"<html><head/><body><p><span style=\" font-weight:600;\">Slow wave events</span></p></body></html>", None))
-        self.label_3.setText(QCoreApplication.translate("SSWDSaveFiles", u"Slow wave events are added in the accessory file (.tsv, .sts or .ent) of each PSG recording.", None))
-        self.label_title_2.setText(QCoreApplication.translate("SSWDSaveFiles", u"<html><head/><body><p><span style=\" font-weight:600;\">Slow wave characteristics per-event level</span></p></body></html>", None))
-        self.textEdit.setHtml(QCoreApplication.translate("SSWDSaveFiles", u"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
-"<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset=\"utf-8\" /><style type=\"text/css\">\n"
-"p, li { white-space: pre-wrap; }\n"
-"hr { height: 1px; border-width: 0; }\n"
-"li.unchecked::marker { content: \"\\2610\"; }\n"
-"li.checked::marker { content: \"\\2612\"; }\n"
-"</style></head><body style=\" font-size:12pt; font-weight:400; font-style:normal;\">\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">   -Total wave duration (s): corresponds to T on image (A)</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">   - Frequency (Hz): inverse of total duration (1/T on image A)</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">   - Peak-to-peak amplitude (\u00b5V): corresp"
-                        "onds to H to D on image (A)</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">   - Negative peak amplitude (\u00b5V): corresponds to H on image (A)</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">   - Positive peak amplitude (\u00b5V): corresponds to D on image (A)</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">   - Negative half-wave duration (s): duration of negative portion</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">   - Negative peak occurrence (s): time from wave onset to negative peak</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">   - Positive half-wave duration (s): duration of positive portion</p>\n"
-""
-                        "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">   - Positive peak occurrence (s): time from wave onset to positive peak</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">   - Slope to negative peak (\u00b5V/s): from zero-crossing to negative peak</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">   - Slope from positive peak (\u00b5V/s): from positive peak to zero-crossing</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">   - Transition slope (\u00b5V/s): from negative peak to positive peak</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">   - Transition frequency (Hz): inverse of twice the peak-to-peak interval [1/(2*tau) on"
-                        " image A]</p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; color:#000000;\"><br /></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" color:#000000;\">*Files are saved in a new folder named &quot;slow_waves_characteristics&quot; at the cohort report level.</span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" color:#000000;\">*Without the cohort report : each file is saved in the same folder as the PSG file.</span></p></body></html>", None))
-        self.checkBox_export_sw.setText(QCoreApplication.translate("SSWDSaveFiles", u"To export characteristics of each slow wave (one file per recording)", None))
-        self.image.setText("")
-        self.label.setText(QCoreApplication.translate("SSWDSaveFiles", u"<html><head/><body><p><span style=\" font-weight:600;\">Slow wave cohort report per-</span><span style=\" font-weight:700;\">subject level</span></p></body></html>", None))
-        self.textEdit_2.setHtml(QCoreApplication.translate("SSWDSaveFiles", u"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
-"<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset=\"utf-8\" /><style type=\"text/css\">\n"
-"p, li { white-space: pre-wrap; }\n"
-"hr { height: 1px; border-width: 0; }\n"
-"li.unchecked::marker { content: \"\\2610\"; }\n"
-"li.checked::marker { content: \"\\2612\"; }\n"
-"</style></head><body style=\" font-size:12pt; font-weight:400; font-style:normal;\">\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">    - slow wave count</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">    - the average slow wave characteristics listed above</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">        - total (all selected stages) - Start time is the sleep onset</p>\n"
-"<p style=\" "
-                        "margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">        - per sleep stage - Only the time spent in each individual sleep stage is considered.</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">        - per sleep cycle - Start time is the sleep onset</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">        - per clock hour - Start time is the sleep onset</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">        - per hour spent in each stage - Start time is when each specific stage first begins in the timeline.</p></body></html>", None))
-        self.checkBox_save_cohort.setText(QCoreApplication.translate("SSWDSaveFiles", u"To save the detailed events report for the cohort (cohort report)", None))
-        self.lineEdit_cohort_report.setPlaceholderText(QCoreApplication.translate("SSWDSaveFiles", u"Select the file to save the detailed cohort report...", None))
+        self.title_label.setText(QCoreApplication.translate("SSWDSaveFiles", u"Output Files", None))
+        self.subtitle_label.setText(QCoreApplication.translate("SSWDSaveFiles", u"Choose the characteristics of the slow waves to export.", None))
+        self.events_info_label.setText(QCoreApplication.translate("SSWDSaveFiles", u"<b>Slow wave events</b><br/>They are added to the accessory file (.tsv, .sts or .ent) of each PSG recording as [group, name, start_sec, duration_sec, channels].", None))
+        self.checkBox_save_cohort.setText(QCoreApplication.translate("SSWDSaveFiles", u"Detailed report for the cohort", None))
+        self.cohort_file_label.setText(QCoreApplication.translate("SSWDSaveFiles", u"Filename", None))
+        self.lineEdit_cohort_report.setPlaceholderText(QCoreApplication.translate("SSWDSaveFiles", u"Select a .tsv file", None))
         self.pushButto_browse.setText(QCoreApplication.translate("SSWDSaveFiles", u"Choose", None))
-        self.label_2.setText(QCoreApplication.translate("SSWDSaveFiles", u"* The slow wave details are appended at the end of the cohort report if it exists.", None))
-        self.label_6.setText(QCoreApplication.translate("SSWDSaveFiles", u"<html><head/><body><p><span style=\" font-weight:600;\">Sleep stages</span></p></body></html>", None))
-        self.textEdit_3.setHtml(QCoreApplication.translate("SSWDSaveFiles", u"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
-"<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset=\"utf-8\" /><style type=\"text/css\">\n"
-"p, li { white-space: pre-wrap; }\n"
-"hr { height: 1px; border-width: 0; }\n"
-"li.unchecked::marker { content: \"\\2610\"; }\n"
-"li.checked::marker { content: \"\\2612\"; }\n"
-"</style></head><body style=\" font-size:12pt; font-weight:400; font-style:normal;\">\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Sleep stages seen by the slow wave detector are saved in a new folder named &quot;slow_wave_sleep_stages&quot; at the cohort report level.  </p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px"
-                        ";\">Sleep stages selected for detection are useful to compute the slow wave density per division of the night.</p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">* Sleep stages files are generated only when the slow wave characteristics files and the slow wave cohort report are generated.</p></body></html>", None))
+        self.label_2.setText(QCoreApplication.translate("SSWDSaveFiles", u"The slow wave details are appended at the end of the cohort report if it exists. The number of hours and cycles reported is set in <b>Hours and Cycles</b>, under Optional settings in the left panel.", None))
+        self.checkBox_export_sw.setText(QCoreApplication.translate("SSWDSaveFiles", u"Characteristics of each slow wave", None))
+        self.waves_label.setText(QCoreApplication.translate("SSWDSaveFiles", u"One file per recording.", None))
+        self.waves_help_label.setText(QCoreApplication.translate("SSWDSaveFiles", u"Files are saved in a new folder named \"slow_wave_characteristics\" at the cohort report level. Without cohort report, the file is saved in the same folder as the PSG file.", None))
+        self.textEdit_3_label.setText(QCoreApplication.translate("SSWDSaveFiles", u"<b>Sleep stages</b><br/>When both files are exported, the sleep stages selected for the detection are also saved, one file per recording, in a new folder named \"slow_wave_sleep_stages\" at the cohort report level (recordings with sleep stages only). They are used to compute the slow wave density per division of the night. The tool Classify Slow Waves needs the three outputs.", None))
+        self.label_title_2.setText(QCoreApplication.translate("SSWDSaveFiles", u"About the slow wave characteristics", None))
+        self.textEdit.setText(QCoreApplication.translate("SSWDSaveFiles", u"<b>For each slow wave</b><br/>\u2022 duration (s): T<br/>\u2022 frequency (Hz): 1/T<br/>\u2022 peak-to-peak amplitude (\u00b5V): H to D<br/>\u2022 negative peak amplitude (\u00b5V): H<br/>\u2022 duration of the negative half-wave (s)<br/>\u2022 time from the onset to the negative peak (s)<br/>\u2022 duration of the positive half-wave (s)<br/>\u2022 time from the onset to the positive peak (s)<br/>\u2022 slope to the negative peak (\u00b5V/s), from the zero crossing<br/>\u2022 slope from the positive peak (\u00b5V/s), to the zero crossing<br/>\u2022 transition slope (\u00b5V/s), from H to D<br/>\u2022 transition frequency (Hz): 1/(2\u03c4)", None))
+        self.phase_image.setText("")
+        self.phase_caption_label.setText(QCoreApplication.translate("SSWDSaveFiles", u"Phase of a slow wave [1]: the transition from H to D is highlighted.", None))
+        self.textEdit_2.setText(QCoreApplication.translate("SSWDSaveFiles", u"<b>For the cohort</b><br/>\u2022 slow wave count<br/>\u2022 slow wave density (slow waves per minute)<br/>\u2022 the average of the characteristics of the slow waves:<br/>&nbsp;&nbsp;\u2013 total (all selected stages), from the sleep onset<br/>&nbsp;&nbsp;\u2013 per sleep stage: only the time spent in each stage<br/>&nbsp;&nbsp;\u2013 per sleep cycle, from the sleep onset<br/>&nbsp;&nbsp;\u2013 per clock hour, from the sleep onset<br/>&nbsp;&nbsp;\u2013 per hour spent in each stage, from the first epoch of each stage", None))
+        self.references_label.setText(QCoreApplication.translate("SSWDSaveFiles", u"[1] Bouchard, M., Lina, J.-M., Gaudreault, P.-O., Lafreni\u00e8re, A., Dub\u00e9, J., Gosselin, N., &amp; Carrier, J. (2021). Sleeping at the switch. <i>eLife</i>, <i>10</i>, Article e64337. <a href=\"https://doi.org/10.7554/eLife.64337\">https://doi.org/10.7554/eLife.64337</a>", None))
     # retranslateUi
 
