@@ -6,7 +6,7 @@
     "item_author": "",
     "item_description": "",
     "tool_params": {
-        "tool_version": "2.9.1",
+        "tool_version": "2.9.2",
         "tool_label": "Report Sleep Variables",
         "tool_category": "2-Processing",
         "asset_directory": "",
@@ -30,25 +30,25 @@
             },
             {
                 "name": "Input Files",
-                "description": "<div>Add the PSG files you want to perform the analysis on.<br><br>The PSG file and the accessory file must share the same filename and folder.<br><br>Open your files:<br> <strong>.edf</strong> : .tsv file is mandatory.<br> <strong>.sts</strong> : .sig file is mandatory.<br> <strong>.eeg</strong> for CEAMS user : NATUS subject folder is mandatory.</div>",
+                "description": "Add the PSG files, then check the information of each subject.",
                 "custom_step_name": "InputFilesStep",
                 "show_index": true
             },
             {
                 "name": "Events Report",
-                "description": "Define all the events reports you want to generate.\n\nBegin by selecting a recording (left window : 'filename'), then select an event (at the group or name level).\n\nIn the right window via the scrolling menu, select your Event Report.\n\n'Add' it or 'Add to all files'.\n\nLook for possible missing events.  ",
+                "description": "Select a file and an event group or name, then add an events report to this file or to all files. Check for missing events.",
                 "custom_step_name": "EventReportStep",
                 "show_index": true
             },
             {
                 "name": "Temporal Links",
-                "description": "Define all the Temporal links reports you want to generate.\n\nBegin by selecting a recording (left window : 'filename'), then check all the temporal links reports to generate.\n\nClilck on 'Apply to all files' or check individually each temporal links report for each recording. \n\nLook for possible missing events when the 'Apply to all files' is performed.  ",
+                "description": "Check the pairs of events reports to link in each file, or apply them to all files. Check for missing events.",
                 "custom_step_name": "TemporalLinkStep",
                 "show_index": true
             },
             {
                 "name": "Generate Reports",
-                "description": "Choose where to save the reports. \n\nLook at the list of reports to generate.\n\nGo back and fix the list if you see errors.  ",
+                "description": "Choose where to save the reports, then check the list of reports to generate.",
                 "custom_step_name": "GenerateReportStep",
                 "show_index": true,
                 "configs": {
