@@ -261,7 +261,7 @@
         {
             "item_name": "SpindleDetectionMartin",
             "item_type": "tool",
-            "item_version": "2.11.2",
+            "item_version": "2.11.3",
             "item_hooks": [
                 {
                     "endpoint_name": "menu_endpoint",
@@ -275,7 +275,7 @@
         {
             "item_name": "SpindleDetectionSumo",
             "item_type": "tool",
-            "item_version": "2.13.2",
+            "item_version": "2.13.3",
             "item_hooks": [
                 {
                     "endpoint_name": "menu_endpoint",

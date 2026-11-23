@@ -230,6 +230,8 @@ class SpindleDetectorSelStep( BaseStepView,  Ui_SpindleDetectorSelStep, QtWidget
     def on_topic_response(self, topic, message, sender):
         
         # added
+        if topic == self._group_topic:
+            self.group_lineEdit.setText(message)
         if topic == self._name_topic:
             self.name_lineEdit.setText(message)     
              

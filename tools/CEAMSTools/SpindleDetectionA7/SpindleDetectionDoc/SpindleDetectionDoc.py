@@ -86,10 +86,11 @@ def draw_spindle(painter, width, height, palette, font):
                      QtCore.Qt.AlignmentFlag.AlignLeft | QtCore.Qt.AlignmentFlag.AlignVCenter, "1 s")
 
 
-class _SpindleDrawing(QtCore.QObject):
+class SpindleDrawing(QtCore.QObject):
     """ Paints the illustration of a spindle on its label, at the width of the label, when the label
         is painted: sharp on every screen and in the colors of the theme. The label has no picture,
         so the page does not put it in a picture card (made for pictures on a white background).
+        Also used by the introductions of Detect Spindles with Martin and with SUMO.
     """
     def __init__(self, label):
         super().__init__(label)
@@ -120,7 +121,7 @@ class SpindleDetectionDoc( BaseStepView,  Ui_SpindleDetectionDoc, QtWidgets.QWid
 
     def _draw_spindle_image(self):
         """ The illustration of a spindle (simulated EEG), painted on spindle_image. """
-        self._spindle_drawing = _SpindleDrawing(self.spindle_image)
+        self._spindle_drawing = SpindleDrawing(self.spindle_image)
 
     def load_settings(self):
         pass

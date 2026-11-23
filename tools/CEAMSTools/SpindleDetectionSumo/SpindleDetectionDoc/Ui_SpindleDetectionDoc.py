@@ -15,104 +15,464 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QFont, QFontDatabase, QGradient, QIcon,
     QImage, QKeySequence, QLinearGradient, QPainter,
     QPalette, QPixmap, QRadialGradient, QTransform)
-from PySide6.QtWidgets import (QApplication, QFrame, QLabel, QSizePolicy,
-    QSpacerItem, QTextEdit, QVBoxLayout, QWidget)
+from PySide6.QtWidgets import (QApplication, QFrame, QGridLayout, QHBoxLayout,
+    QLabel, QPushButton, QSizePolicy, QSpacerItem,
+    QVBoxLayout, QWidget)
 import themes_rc
 
 class Ui_SpindleDetectionDoc(object):
     def setupUi(self, SpindleDetectionDoc):
         if not SpindleDetectionDoc.objectName():
             SpindleDetectionDoc.setObjectName(u"SpindleDetectionDoc")
-        SpindleDetectionDoc.resize(1440, 797)
-        self.verticalLayout_2 = QVBoxLayout(SpindleDetectionDoc)
-        self.verticalLayout_2.setObjectName(u"verticalLayout_2")
-        self.spindle_image = QLabel(SpindleDetectionDoc)
+        SpindleDetectionDoc.resize(900, 700)
+        self.verticalLayout = QVBoxLayout(SpindleDetectionDoc)
+        self.verticalLayout.setObjectName(u"verticalLayout")
+        self.verticalLayout.setContentsMargins(19, 12, 19, 12)
+        self.content_row = QHBoxLayout()
+        self.content_row.setObjectName(u"content_row")
+        self.content_row.setContentsMargins(0, 0, 0, 0)
+        self.content_widget = QWidget(SpindleDetectionDoc)
+        self.content_widget.setObjectName(u"content_widget")
+        self.content_widget.setMaximumSize(QSize(800, 16777215))
+        self.content_layout = QVBoxLayout(self.content_widget)
+        self.content_layout.setSpacing(16)
+        self.content_layout.setObjectName(u"content_layout")
+        self.content_layout.setContentsMargins(0, 0, 0, 0)
+        self.header_layout = QVBoxLayout()
+        self.header_layout.setSpacing(6)
+        self.header_layout.setObjectName(u"header_layout")
+        self.title_label = QLabel(self.content_widget)
+        self.title_label.setObjectName(u"title_label")
+        font = QFont()
+        font.setPointSize(18)
+        font.setBold(True)
+        self.title_label.setFont(font)
+
+        self.header_layout.addWidget(self.title_label)
+
+        self.subtitle_label = QLabel(self.content_widget)
+        self.subtitle_label.setObjectName(u"subtitle_label")
+        self.subtitle_label.setWordWrap(True)
+        self.subtitle_label.setProperty(u"variant", u"help")
+
+        self.header_layout.addWidget(self.subtitle_label)
+
+
+        self.content_layout.addLayout(self.header_layout)
+
+        self.spindle_card = QFrame(self.content_widget)
+        self.spindle_card.setObjectName(u"spindle_card")
+        self.spindle_card.setFrameShape(QFrame.Shape.StyledPanel)
+        self.spindle_card.setFrameShadow(QFrame.Shadow.Raised)
+        self.spindle_card_layout = QVBoxLayout(self.spindle_card)
+        self.spindle_card_layout.setSpacing(10)
+        self.spindle_card_layout.setObjectName(u"spindle_card_layout")
+        self.spindle_card_layout.setContentsMargins(10, 10, 10, 10)
+        self.spindle_image = QLabel(self.spindle_card)
         self.spindle_image.setObjectName(u"spindle_image")
         self.spindle_image.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
-        self.verticalLayout_2.addWidget(self.spindle_image)
+        self.spindle_card_layout.addWidget(self.spindle_image)
 
-        self.verticalLayout = QVBoxLayout()
-        self.verticalLayout.setObjectName(u"verticalLayout")
-        self.label = QLabel(SpindleDetectionDoc)
-        self.label.setObjectName(u"label")
-        font = QFont()
-        font.setBold(False)
-        font.setItalic(False)
-        self.label.setFont(font)
+        self.spindle_caption_label = QLabel(self.spindle_card)
+        self.spindle_caption_label.setObjectName(u"spindle_caption_label")
+        font1 = QFont()
+        font1.setPointSize(10)
+        self.spindle_caption_label.setFont(font1)
+        self.spindle_caption_label.setWordWrap(True)
+        self.spindle_caption_label.setProperty(u"variant", u"help")
 
-        self.verticalLayout.addWidget(self.label)
+        self.spindle_card_layout.addWidget(self.spindle_caption_label)
 
-        self.verticalSpacer = QSpacerItem(20, 10, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Fixed)
+
+        self.content_layout.addWidget(self.spindle_card)
+
+        self.common_settings_info = QFrame(self.content_widget)
+        self.common_settings_info.setObjectName(u"common_settings_info")
+        self.common_settings_info.setFrameShape(QFrame.Shape.NoFrame)
+        self.common_settings_info.setProperty(u"variant", u"info")
+        self.common_settings_info_layout = QHBoxLayout(self.common_settings_info)
+        self.common_settings_info_layout.setObjectName(u"common_settings_info_layout")
+        self.common_settings_info_layout.setContentsMargins(14, 10, 14, 10)
+        self.common_settings_info_label = QLabel(self.common_settings_info)
+        self.common_settings_info_label.setObjectName(u"common_settings_info_label")
+        self.common_settings_info_label.setTextFormat(Qt.TextFormat.RichText)
+        self.common_settings_info_label.setWordWrap(True)
+
+        self.common_settings_info_layout.addWidget(self.common_settings_info_label)
+
+
+        self.content_layout.addWidget(self.common_settings_info)
+
+        self.steps_section_layout = QVBoxLayout()
+        self.steps_section_layout.setSpacing(8)
+        self.steps_section_layout.setObjectName(u"steps_section_layout")
+        self.steps_title_label = QLabel(self.content_widget)
+        self.steps_title_label.setObjectName(u"steps_title_label")
+        font2 = QFont()
+        font2.setPointSize(15)
+        font2.setBold(True)
+        self.steps_title_label.setFont(font2)
+
+        self.steps_section_layout.addWidget(self.steps_title_label)
+
+        self.steps_card = QFrame(self.content_widget)
+        self.steps_card.setObjectName(u"steps_card")
+        self.steps_card.setFrameShape(QFrame.Shape.StyledPanel)
+        self.steps_card.setFrameShadow(QFrame.Shadow.Raised)
+        self.steps_card_layout = QVBoxLayout(self.steps_card)
+        self.steps_card_layout.setSpacing(10)
+        self.steps_card_layout.setObjectName(u"steps_card_layout")
+        self.steps_card_layout.setContentsMargins(10, 10, 10, 10)
+        self.steps_grid = QGridLayout()
+        self.steps_grid.setObjectName(u"steps_grid")
+        self.steps_grid.setHorizontalSpacing(12)
+        self.steps_grid.setVerticalSpacing(10)
+        self.step_1_number_label = QLabel(self.steps_card)
+        self.step_1_number_label.setObjectName(u"step_1_number_label")
+        self.step_1_number_label.setFont(font1)
+        self.step_1_number_label.setProperty(u"variant", u"step_number")
+        self.step_1_number_label.setMinimumSize(QSize(24, 24))
+        self.step_1_number_label.setMaximumSize(QSize(24, 24))
+        self.step_1_number_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+
+        self.steps_grid.addWidget(self.step_1_number_label, 0, 0, 1, 1, Qt.AlignmentFlag.AlignTop)
+
+        self.step_1_name_label = QLabel(self.steps_card)
+        self.step_1_name_label.setObjectName(u"step_1_name_label")
+        font3 = QFont()
+        font3.setBold(True)
+        self.step_1_name_label.setFont(font3)
+        self.step_1_name_label.setAlignment(Qt.AlignmentFlag.AlignLeading|Qt.AlignmentFlag.AlignLeft|Qt.AlignmentFlag.AlignTop)
+
+        self.steps_grid.addWidget(self.step_1_name_label, 0, 1, 1, 1)
+
+        self.steps_gap = QSpacerItem(16, 20, QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Minimum)
+
+        self.steps_grid.addItem(self.steps_gap, 0, 2, 1, 1)
+
+        self.step_1_label = QLabel(self.steps_card)
+        self.step_1_label.setObjectName(u"step_1_label")
+        self.step_1_label.setWordWrap(True)
+        self.step_1_label.setProperty(u"variant", u"help")
+        self.step_1_label.setAlignment(Qt.AlignmentFlag.AlignLeading|Qt.AlignmentFlag.AlignLeft|Qt.AlignmentFlag.AlignTop)
+
+        self.steps_grid.addWidget(self.step_1_label, 0, 3, 1, 1)
+
+        self.step_line_2 = QFrame(self.steps_card)
+        self.step_line_2.setObjectName(u"step_line_2")
+        self.step_line_2.setFrameShape(QFrame.Shape.HLine)
+        self.step_line_2.setFrameShadow(QFrame.Shadow.Plain)
+
+        self.steps_grid.addWidget(self.step_line_2, 1, 0, 1, 4)
+
+        self.step_2_number_label = QLabel(self.steps_card)
+        self.step_2_number_label.setObjectName(u"step_2_number_label")
+        self.step_2_number_label.setFont(font1)
+        self.step_2_number_label.setProperty(u"variant", u"step_number")
+        self.step_2_number_label.setMinimumSize(QSize(24, 24))
+        self.step_2_number_label.setMaximumSize(QSize(24, 24))
+        self.step_2_number_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+
+        self.steps_grid.addWidget(self.step_2_number_label, 2, 0, 1, 1, Qt.AlignmentFlag.AlignTop)
+
+        self.step_2_name_label = QLabel(self.steps_card)
+        self.step_2_name_label.setObjectName(u"step_2_name_label")
+        self.step_2_name_label.setFont(font3)
+        self.step_2_name_label.setAlignment(Qt.AlignmentFlag.AlignLeading|Qt.AlignmentFlag.AlignLeft|Qt.AlignmentFlag.AlignTop)
+
+        self.steps_grid.addWidget(self.step_2_name_label, 2, 1, 1, 1)
+
+        self.step_2_label = QLabel(self.steps_card)
+        self.step_2_label.setObjectName(u"step_2_label")
+        self.step_2_label.setWordWrap(True)
+        self.step_2_label.setProperty(u"variant", u"help")
+        self.step_2_label.setAlignment(Qt.AlignmentFlag.AlignLeading|Qt.AlignmentFlag.AlignLeft|Qt.AlignmentFlag.AlignTop)
+
+        self.steps_grid.addWidget(self.step_2_label, 2, 3, 1, 1)
+
+        self.step_line_3 = QFrame(self.steps_card)
+        self.step_line_3.setObjectName(u"step_line_3")
+        self.step_line_3.setFrameShape(QFrame.Shape.HLine)
+        self.step_line_3.setFrameShadow(QFrame.Shadow.Plain)
+
+        self.steps_grid.addWidget(self.step_line_3, 3, 0, 1, 4)
+
+        self.step_3_number_label = QLabel(self.steps_card)
+        self.step_3_number_label.setObjectName(u"step_3_number_label")
+        self.step_3_number_label.setFont(font1)
+        self.step_3_number_label.setProperty(u"variant", u"step_number")
+        self.step_3_number_label.setMinimumSize(QSize(24, 24))
+        self.step_3_number_label.setMaximumSize(QSize(24, 24))
+        self.step_3_number_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+
+        self.steps_grid.addWidget(self.step_3_number_label, 4, 0, 1, 1, Qt.AlignmentFlag.AlignTop)
+
+        self.step_3_name_label = QLabel(self.steps_card)
+        self.step_3_name_label.setObjectName(u"step_3_name_label")
+        self.step_3_name_label.setFont(font3)
+        self.step_3_name_label.setAlignment(Qt.AlignmentFlag.AlignLeading|Qt.AlignmentFlag.AlignLeft|Qt.AlignmentFlag.AlignTop)
+
+        self.steps_grid.addWidget(self.step_3_name_label, 4, 1, 1, 1)
+
+        self.step_3_label = QLabel(self.steps_card)
+        self.step_3_label.setObjectName(u"step_3_label")
+        self.step_3_label.setWordWrap(True)
+        self.step_3_label.setProperty(u"variant", u"help")
+        self.step_3_label.setAlignment(Qt.AlignmentFlag.AlignLeading|Qt.AlignmentFlag.AlignLeft|Qt.AlignmentFlag.AlignTop)
+
+        self.steps_grid.addWidget(self.step_3_label, 4, 3, 1, 1)
+
+        self.step_line_4 = QFrame(self.steps_card)
+        self.step_line_4.setObjectName(u"step_line_4")
+        self.step_line_4.setFrameShape(QFrame.Shape.HLine)
+        self.step_line_4.setFrameShadow(QFrame.Shadow.Plain)
+
+        self.steps_grid.addWidget(self.step_line_4, 5, 0, 1, 4)
+
+        self.step_4_number_label = QLabel(self.steps_card)
+        self.step_4_number_label.setObjectName(u"step_4_number_label")
+        self.step_4_number_label.setFont(font1)
+        self.step_4_number_label.setProperty(u"variant", u"step_number")
+        self.step_4_number_label.setMinimumSize(QSize(24, 24))
+        self.step_4_number_label.setMaximumSize(QSize(24, 24))
+        self.step_4_number_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+
+        self.steps_grid.addWidget(self.step_4_number_label, 6, 0, 1, 1, Qt.AlignmentFlag.AlignTop)
+
+        self.step_4_name_label = QLabel(self.steps_card)
+        self.step_4_name_label.setObjectName(u"step_4_name_label")
+        self.step_4_name_label.setFont(font3)
+        self.step_4_name_label.setAlignment(Qt.AlignmentFlag.AlignLeading|Qt.AlignmentFlag.AlignLeft|Qt.AlignmentFlag.AlignTop)
+
+        self.steps_grid.addWidget(self.step_4_name_label, 6, 1, 1, 1)
+
+        self.step_4_label = QLabel(self.steps_card)
+        self.step_4_label.setObjectName(u"step_4_label")
+        self.step_4_label.setWordWrap(True)
+        self.step_4_label.setProperty(u"variant", u"help")
+        self.step_4_label.setAlignment(Qt.AlignmentFlag.AlignLeading|Qt.AlignmentFlag.AlignLeft|Qt.AlignmentFlag.AlignTop)
+
+        self.steps_grid.addWidget(self.step_4_label, 6, 3, 1, 1)
+
+        self.steps_grid.setColumnStretch(3, 1)
+
+        self.steps_card_layout.addLayout(self.steps_grid)
+
+
+        self.steps_section_layout.addWidget(self.steps_card)
+
+
+        self.content_layout.addLayout(self.steps_section_layout)
+
+        self.files_section_layout = QVBoxLayout()
+        self.files_section_layout.setSpacing(8)
+        self.files_section_layout.setObjectName(u"files_section_layout")
+        self.files_title_label = QLabel(self.content_widget)
+        self.files_title_label.setObjectName(u"files_title_label")
+        self.files_title_label.setFont(font2)
+
+        self.files_section_layout.addWidget(self.files_title_label)
+
+        self.files_card = QFrame(self.content_widget)
+        self.files_card.setObjectName(u"files_card")
+        self.files_card.setFrameShape(QFrame.Shape.StyledPanel)
+        self.files_card.setFrameShadow(QFrame.Shadow.Raised)
+        self.files_card_layout = QVBoxLayout(self.files_card)
+        self.files_card_layout.setSpacing(10)
+        self.files_card_layout.setObjectName(u"files_card_layout")
+        self.files_card_layout.setContentsMargins(10, 10, 10, 10)
+        self.files_grid = QGridLayout()
+        self.files_grid.setObjectName(u"files_grid")
+        self.files_grid.setHorizontalSpacing(32)
+        self.files_grid.setVerticalSpacing(6)
+        self.file_1_name_label = QLabel(self.files_card)
+        self.file_1_name_label.setObjectName(u"file_1_name_label")
+        self.file_1_name_label.setFont(font3)
+
+        self.files_grid.addWidget(self.file_1_name_label, 0, 0, 1, 1)
+
+        self.file_1_label = QLabel(self.files_card)
+        self.file_1_label.setObjectName(u"file_1_label")
+        self.file_1_label.setWordWrap(True)
+
+        self.files_grid.addWidget(self.file_1_label, 0, 1, 1, 1)
+
+        self.file_2_name_label = QLabel(self.files_card)
+        self.file_2_name_label.setObjectName(u"file_2_name_label")
+        self.file_2_name_label.setFont(font3)
+
+        self.files_grid.addWidget(self.file_2_name_label, 1, 0, 1, 1)
+
+        self.file_2_label = QLabel(self.files_card)
+        self.file_2_label.setObjectName(u"file_2_label")
+        self.file_2_label.setWordWrap(True)
+
+        self.files_grid.addWidget(self.file_2_label, 1, 1, 1, 1)
+
+        self.file_3_name_label = QLabel(self.files_card)
+        self.file_3_name_label.setObjectName(u"file_3_name_label")
+        self.file_3_name_label.setFont(font3)
+
+        self.files_grid.addWidget(self.file_3_name_label, 2, 0, 1, 1)
+
+        self.file_3_label = QLabel(self.files_card)
+        self.file_3_label.setObjectName(u"file_3_label")
+        self.file_3_label.setTextFormat(Qt.TextFormat.RichText)
+        self.file_3_label.setWordWrap(True)
+
+        self.files_grid.addWidget(self.file_3_label, 2, 1, 1, 1)
+
+        self.files_grid.setColumnStretch(1, 1)
+
+        self.files_card_layout.addLayout(self.files_grid)
+
+
+        self.files_section_layout.addWidget(self.files_card)
+
+
+        self.content_layout.addLayout(self.files_section_layout)
+
+        self.methods_section_layout = QVBoxLayout()
+        self.methods_section_layout.setSpacing(2)
+        self.methods_section_layout.setObjectName(u"methods_section_layout")
+        self.methods_buttons_layout = QHBoxLayout()
+        self.methods_buttons_layout.setSpacing(0)
+        self.methods_buttons_layout.setObjectName(u"methods_buttons_layout")
+        self.methods_show_button = QPushButton(self.content_widget)
+        self.methods_show_button.setObjectName(u"methods_show_button")
+        self.methods_show_button.setFocusPolicy(Qt.FocusPolicy.TabFocus)
+        self.methods_show_button.setFlat(True)
+        self.methods_show_button.setProperty(u"variant", u"link")
+
+        self.methods_buttons_layout.addWidget(self.methods_show_button)
+
+        self.methods_hide_button = QPushButton(self.content_widget)
+        self.methods_hide_button.setObjectName(u"methods_hide_button")
+        self.methods_hide_button.setFocusPolicy(Qt.FocusPolicy.TabFocus)
+        self.methods_hide_button.setVisible(False)
+        self.methods_hide_button.setFlat(True)
+        self.methods_hide_button.setProperty(u"variant", u"link")
+
+        self.methods_buttons_layout.addWidget(self.methods_hide_button)
+
+        self.methods_buttons_spacer = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+
+        self.methods_buttons_layout.addItem(self.methods_buttons_spacer)
+
+
+        self.methods_section_layout.addLayout(self.methods_buttons_layout)
+
+        self.methods_note_label = QLabel(self.content_widget)
+        self.methods_note_label.setObjectName(u"methods_note_label")
+        self.methods_note_label.setFont(font1)
+        self.methods_note_label.setWordWrap(True)
+        self.methods_note_label.setProperty(u"variant", u"help")
+
+        self.methods_section_layout.addWidget(self.methods_note_label)
+
+        self.methods_widget = QWidget(self.content_widget)
+        self.methods_widget.setObjectName(u"methods_widget")
+        self.methods_widget.setVisible(False)
+        self.methods_layout = QVBoxLayout(self.methods_widget)
+        self.methods_layout.setSpacing(10)
+        self.methods_layout.setObjectName(u"methods_layout")
+        self.methods_layout.setContentsMargins(0, 6, 0, 0)
+        self.methods_label = QLabel(self.methods_widget)
+        self.methods_label.setObjectName(u"methods_label")
+        self.methods_label.setTextFormat(Qt.TextFormat.RichText)
+        self.methods_label.setWordWrap(True)
+        self.methods_label.setProperty(u"variant", u"help")
+
+        self.methods_layout.addWidget(self.methods_label)
+
+        self.references_layout = QVBoxLayout()
+        self.references_layout.setSpacing(8)
+        self.references_layout.setObjectName(u"references_layout")
+        self.references_layout.setContentsMargins(0, 6, 0, 0)
+        self.references_line = QFrame(self.methods_widget)
+        self.references_line.setObjectName(u"references_line")
+        self.references_line.setFrameShape(QFrame.Shape.HLine)
+        self.references_line.setFrameShadow(QFrame.Shadow.Plain)
+
+        self.references_layout.addWidget(self.references_line)
+
+        self.references_label = QLabel(self.methods_widget)
+        self.references_label.setObjectName(u"references_label")
+        self.references_label.setFont(font1)
+        self.references_label.setTextFormat(Qt.TextFormat.RichText)
+        self.references_label.setWordWrap(True)
+        self.references_label.setOpenExternalLinks(True)
+        self.references_label.setProperty(u"variant", u"help")
+
+        self.references_layout.addWidget(self.references_label)
+
+
+        self.methods_layout.addLayout(self.references_layout)
+
+
+        self.methods_section_layout.addWidget(self.methods_widget)
+
+
+        self.content_layout.addLayout(self.methods_section_layout)
+
+
+        self.content_row.addWidget(self.content_widget)
+
+        self.content_spacer = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+
+        self.content_row.addItem(self.content_spacer)
+
+        self.content_row.setStretch(0, 1)
+
+        self.verticalLayout.addLayout(self.content_row)
+
+        self.verticalSpacer = QSpacerItem(40, 20, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
 
         self.verticalLayout.addItem(self.verticalSpacer)
 
-        self.textEdit = QTextEdit(SpindleDetectionDoc)
-        self.textEdit.setObjectName(u"textEdit")
-        self.textEdit.setFrameShape(QFrame.Shape.NoFrame)
-        self.textEdit.setFrameShadow(QFrame.Shadow.Plain)
-        self.textEdit.setLineWidth(0)
-        self.textEdit.setReadOnly(True)
-
-        self.verticalLayout.addWidget(self.textEdit)
-
-
-        self.verticalLayout_2.addLayout(self.verticalLayout)
-
 
         self.retranslateUi(SpindleDetectionDoc)
+        self.methods_show_button.clicked.connect(self.methods_widget.show)
+        self.methods_show_button.clicked.connect(self.methods_hide_button.show)
+        self.methods_show_button.clicked.connect(self.methods_show_button.hide)
+        self.methods_hide_button.clicked.connect(self.methods_widget.hide)
+        self.methods_hide_button.clicked.connect(self.methods_show_button.show)
+        self.methods_hide_button.clicked.connect(self.methods_hide_button.hide)
 
         QMetaObject.connectSlotsByName(SpindleDetectionDoc)
     # setupUi
 
     def retranslateUi(self, SpindleDetectionDoc):
         SpindleDetectionDoc.setWindowTitle("")
-        self.spindle_image.setText(QCoreApplication.translate("SpindleDetectionDoc", u"TextLabel", None))
-        self.label.setText(QCoreApplication.translate("SpindleDetectionDoc", u"<html><head/><body><p><span style=\" font-weight:600;\">SUMO Spindle detection</span></p></body></html>", None))
-        self.textEdit.setHtml(QCoreApplication.translate("SpindleDetectionDoc", u"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
-"<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset=\"utf-8\" /><style type=\"text/css\">\n"
-"p, li { white-space: pre-wrap; }\n"
-"hr { height: 1px; border-width: 0; }\n"
-"li.unchecked::marker { content: \"\\2610\"; }\n"
-"li.checked::marker { content: \"\\2612\"; }\n"
-"</style></head><body style=\" font-size:12pt; font-weight:400; font-style:normal;\">\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">A spindle is &quot;a train of distinct waves with frequency 11\u201316 Hz (most commonly 12\u201314 Hz) with a duration \u22650.5 s, usually maximal in amplitude using central derivations&quot; [1]</p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0"
-                        "px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">This tool allows to detect spindles, on specific sleep stages, with the algorithms from (Kaulen et al. 2022) [2]</p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Common settings : </p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-weight:700; color:#ff0000;\">    NOTE:</span><span style=\" color:#ff0000;\"> Please define the sleep cycle configuration you wish to use for the analysis using the blue panel on the left.</span></p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
-"<p style=\" margin-top:0px; "
-                        "margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" text-decoration: underline;\">1 - Input Files :</span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">	Add the PSG files to analyze.</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\"\">   	- European Data Format (EDF) : The .edf and .tsv files must have the exact same filename and be stored in the same directory.</span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\"\">   	- Stellate : The .sig and .sts files must have the exact same filename and be stored in the same directory.</span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\"\">   	- NA"
-                        "TUS (</span><span style=\" font-style:italic;\">for CEAMS users</span><span style=\"\">) : </span><span style=\"\"> The entire NATUS subject folder is required.</span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">   	Define the montage and channels for each open file you want to run the tool on.</p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" text-decoration: underline;\">2 - Non valid events :</span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">	Select events to disable the spindle detection (i.e. artefacts previously detected and saved in the accessory file).</p>\n"
-"<p style=\"-qt-paragraph"
-                        "-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" text-decoration: underline;\">3 - Spindle Detector : </span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">	Define the minimum and maximum duration of kept spindles.</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">	Define in which sleep stage you want to detect spindles.</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">	You can also choose to detect spindle in the sleep cycles only or to exclude REM periods from the analysis.</p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px"
-                        "; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" text-decoration: underline;\">4 - Output Files :</span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">	The spindle events are added into the accessory file (.tsv, .STS or .ent).</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">	Define your output files for the spindles characteristics (signal characteristics). </p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">	    - Check &quot;To save the detailed spindles report for the cohort&quot; if wanted and select the filename to save the report.</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-"
-                        "left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">	    - Check &quot;To export characteristics of each spinlde (one file per recording)&quot; if wanted.</p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">References:</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">   [1] Iber, C., American Academy of Sleep Medicine, 2007. The AASM Manual for the Scoring of Sleep and Associated Events: Rules, Terminology and Technical Specifications. American Academy of Sleep Medicine. </p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">   [2] <span style=\"\">Kaulen, L., Schwabedal, J.T., Schneider, J., Ritter, P. and Bi"
-                        "alonski, S., 2022. Advanced sleep spindle identification with neural networks.\u00a0</span><span style=\" font-style:italic;\">Scientific reports</span><span style=\"\">,\u00a0</span><span style=\" font-style:italic;\">12</span><span style=\"\">(1), p.7686.</span>  <a href=\"https://doi.org/10.1038/s41598-022-11210-y\"><span style=\" text-decoration: underline; color:#419cff;\">https://doi.org/10.1038/s41598-022-11210-y</span></a> </p></body></html>", None))
+        self.title_label.setText(QCoreApplication.translate("SpindleDetectionDoc", u"Detect Spindles with SUMO", None))
+        self.subtitle_label.setText(QCoreApplication.translate("SpindleDetectionDoc", u"Detects the sleep spindles of your polysomnography (PSG) files in the sleep stages you choose, with SUMO [2], a deep learning model, and exports their characteristics.", None))
+        self.spindle_caption_label.setText(QCoreApplication.translate("SpindleDetectionDoc", u"Simulated EEG of N2 sleep with a sleep spindle (13 Hz).", None))
+        self.common_settings_info_label.setText(QCoreApplication.translate("SpindleDetectionDoc", u"<b>Before you start</b><br/>Define the sleep cycle configuration to use for the analysis: <b>Common settings \u203a Sleep Cycles</b>, in the left panel.", None))
+        self.steps_title_label.setText(QCoreApplication.translate("SpindleDetectionDoc", u"What you will do", None))
+        self.step_1_number_label.setText(QCoreApplication.translate("SpindleDetectionDoc", u"1", None))
+        self.step_1_name_label.setText(QCoreApplication.translate("SpindleDetectionDoc", u"Input Files", None))
+        self.step_1_label.setText(QCoreApplication.translate("SpindleDetectionDoc", u"Add the PSG files, then define the montage and the channels of each file.", None))
+        self.step_2_number_label.setText(QCoreApplication.translate("SpindleDetectionDoc", u"2", None))
+        self.step_2_name_label.setText(QCoreApplication.translate("SpindleDetectionDoc", u"Non valid events", None))
+        self.step_2_label.setText(QCoreApplication.translate("SpindleDetectionDoc", u"Select the events that disable the spindle detection, such as artefacts already detected and saved in the accessory file. For a better detection, detect the artefacts first (tool Detect EEG Artifacts).", None))
+        self.step_3_number_label.setText(QCoreApplication.translate("SpindleDetectionDoc", u"3", None))
+        self.step_3_name_label.setText(QCoreApplication.translate("SpindleDetectionDoc", u"Detection Settings", None))
+        self.step_3_label.setText(QCoreApplication.translate("SpindleDetectionDoc", u"Define the group and name of the spindle events, the minimum and maximum duration of the kept spindles and the sleep stages in which spindles are detected. You can also detect spindles in the sleep cycles only, or exclude the REM periods.", None))
+        self.step_4_number_label.setText(QCoreApplication.translate("SpindleDetectionDoc", u"4", None))
+        self.step_4_name_label.setText(QCoreApplication.translate("SpindleDetectionDoc", u"Output Files", None))
+        self.step_4_label.setText(QCoreApplication.translate("SpindleDetectionDoc", u"The spindle events are added to the accessory file (.tsv, .sts or .ent). Optionally, export the characteristics of the spindles: a detailed report for the cohort and one file per recording.", None))
+        self.files_title_label.setText(QCoreApplication.translate("SpindleDetectionDoc", u"Accepted files", None))
+        self.file_1_name_label.setText(QCoreApplication.translate("SpindleDetectionDoc", u"EDF", None))
+        self.file_1_label.setText(QCoreApplication.translate("SpindleDetectionDoc", u"The .edf and .tsv files have the same filename and are in the same directory.", None))
+        self.file_2_name_label.setText(QCoreApplication.translate("SpindleDetectionDoc", u"Stellate", None))
+        self.file_2_label.setText(QCoreApplication.translate("SpindleDetectionDoc", u"The .sig and .sts files have the same filename and are in the same directory.", None))
+        self.file_3_name_label.setText(QCoreApplication.translate("SpindleDetectionDoc", u"NATUS", None))
+        self.file_3_label.setText(QCoreApplication.translate("SpindleDetectionDoc", u"The entire NATUS subject folder is required <i>(for CEAMS users)</i>.", None))
+        self.methods_show_button.setText(QCoreApplication.translate("SpindleDetectionDoc", u"\u203a Methods and references", None))
+        self.methods_hide_button.setText(QCoreApplication.translate("SpindleDetectionDoc", u"\u2304 Methods and references", None))
+        self.methods_note_label.setText(QCoreApplication.translate("SpindleDetectionDoc", u"The details of each setting are shown in its own step.", None))
+        self.methods_label.setText(QCoreApplication.translate("SpindleDetectionDoc", u"<b>Spindle:</b> \"a train of distinct waves with frequency 11\u201316 Hz (most commonly 12\u201314 Hz) with a duration \u22650.5 s, usually maximal in amplitude using central derivations\" [1].<br/><br/><b>SUMO [2]:</b> detects spindles on specific sleep stages, with SUMO (Slim U-Net trained on MODA) from Kaulen et al. (2022): a deep learning model with a U-Net architecture, trained to reproduce the consensus of the experts of the MODA dataset. Before the detection, the EEG is band-pass filtered to 0.3\u201330 Hz and resampled to 100 Hz.", None))
+        self.references_label.setText(QCoreApplication.translate("SpindleDetectionDoc", u"[1] Iber, C., Ancoli-Israel, S., Chesson, A. L., Jr., &amp; Quan, S. F. (2007). <i>The AASM manual for the scoring of sleep and associated events: Rules, terminology and technical specifications</i>. American Academy of Sleep Medicine.<br/>[2] Kaulen, L., Schwabedal, J. T. C., Schneider, J., Ritter, P., &amp; Bialonski, S. (2022). Advanced sleep spindle identification with neural networks. <i>Scientific Reports</i>, <i>12</i>(1), Article 7686. <a href=\"https://doi.org/10.1038/s41598-022-11210-y\">https://doi.org/10.1038/s41598-022-11210-y</a>", None))
     # retranslateUi
 

@@ -8,9 +8,8 @@ See the file LICENCE for full license details.
 """
 
 from qtpy import QtWidgets
-from qtpy.QtGui import QPixmap
-import base64
 
+from CEAMSTools.SpindleDetectionA7.SpindleDetectionDoc.SpindleDetectionDoc import SpindleDrawing
 from .Ui_SpindleDetectionDoc import Ui_SpindleDetectionDoc
 from commons.BaseStepView import BaseStepView
 
@@ -23,22 +22,11 @@ class SpindleDetectionDoc( BaseStepView,  Ui_SpindleDetectionDoc, QtWidgets.QWid
         super().__init__(**kwargs)
         # init UI
         self.setupUi(self)
-        self._load_embedded_pixmap()
+        # The illustration of a spindle (simulated EEG), painted on spindle_image
+        self._spindle_drawing = SpindleDrawing(self.spindle_image)
 
     def load_settings(self):
         pass
 
     def on_apply_settings(self):
         pass
-
-    def _load_embedded_pixmap(self):
-        """Load the embedded base64 image data into the QLabel."""
-        from .spindle_image_data import SPINDLE_IMAGE_BASE64
-        
-        # Decode base64 data to bytes
-        image_bytes = base64.b64decode(SPINDLE_IMAGE_BASE64)
-        
-        # Create QPixmap from bytes
-        pixmap = QPixmap()
-        pixmap.loadFromData(image_bytes)
-        self.spindle_image.setPixmap(pixmap)
