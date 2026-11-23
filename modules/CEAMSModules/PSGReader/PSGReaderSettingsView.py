@@ -400,6 +400,10 @@ class PSGReaderSettingsView( BaseSettingsView,  Ui_PSGReaderSettingsView, QtWidg
         self._alias_layout.setSizeConstraint(QtWidgets.QLayout.SetNoConstraint)
         
         alias_title = QtWidgets.QLabel(text="Alias")
+        # Bold, as the titles of the other lists of the page (PSG files, Montages, Channels)
+        font = QtGui.QFont()
+        font.setBold(True)
+        alias_title.setFont(font)
         self._alias_layout.addWidget(alias_title)
 
         for a in alias.split(";"):

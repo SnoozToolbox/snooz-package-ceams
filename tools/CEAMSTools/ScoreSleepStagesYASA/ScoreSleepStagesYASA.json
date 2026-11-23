@@ -9,7 +9,7 @@
         "tool_author": "Mohammad Hasan Azad",
         "tool_url": "https://snooz-toolbox-documentation.readthedocs.io/latest/user_guide/tools/Preprocessing/YASA_Automatic_Sleep_Scoring.html",
         "tool_description": "This is a tool to score sleep stages automaticly",
-        "tool_version": "2.6.1",
+        "tool_version": "2.6.2",
         "package_name": "CEAMSTools",
         "steps": [
             {
@@ -20,12 +20,12 @@
             },
             {
                 "name": "Input Files",
-                "description": "Add your files, select .edf, .sts or .eeg files.\n\nFor accepted PSG formats, click 'Read more!' below.\n\nSelect the montage and the channels you want to use for scoring.\n\nThe Alias are needed to distinguish EEG channels from EOG and EMG channels.\n\nEOG and EMG channels are not mandatory, but they can enhance the final accuracy.\n\nMake sure to add the selected channels into the Alias.\n\nOnly one EOG and EMG channel is sufficient.\n\n",
+                "description": "Add the PSG files, select the montage and the channels, then add each channel to its alias: EEG, EOG or EMG. EOG and EMG are optional.",
                 "custom_step_name": "InputFilesScoreStep"
             },
             {
                 "name": "Export Scoring",
-                "description": "Select the destination where you want to save the results.",
+                "description": "Define the group of the predicted sleep stages. Optionally, compare them with the expert scoring.",
                 "custom_step_name": "ExportResultsStep"
             }
         ]

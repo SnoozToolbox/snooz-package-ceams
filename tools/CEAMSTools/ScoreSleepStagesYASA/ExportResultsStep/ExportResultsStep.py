@@ -57,7 +57,7 @@ class ExportResultsStep( BaseStepView,  Ui_ExportResultsStep, QtWidgets.QWidget)
         self._Checkbox_topic = f'{node_id_YASA}.validation_on'
         self._pub_sub_manager.subscribe(self, self._Checkbox_topic)
 
-        self.lineEdit.setPlaceholderText(QCoreApplication.translate("OutputFiles", u"Select a folder where the exported files are supposed to be saved", None))
+        self.lineEdit.setPlaceholderText(QCoreApplication.translate("OutputFiles", u"Select a folder", None))
         # Connect the browse push button to the browse_slot function
         self.pushButton.clicked.connect(self.browse_slot)
 
@@ -110,7 +110,7 @@ class ExportResultsStep( BaseStepView,  Ui_ExportResultsStep, QtWidgets.QWidget)
         # This is called just before the apply settings function.
         # Returning False will prevent the process from executing.
         if len(self.lineEdit.text())==0 and self.checkBox_2.isChecked():
-            WarningDialog(f"You need to define the output destination in step '3 - Export Results.")
+            WarningDialog(f"You need to define the output destination in step '2 - Export Scoring'.")
             return False
         if self.lineEdit_2.text() == 'stage':
             if WarningDialogWithButtons.show_warning(f"If you do not change the group label, the predicted sleep stages group label will be overwritten with 'stage', which is the gold standard."):
@@ -118,7 +118,7 @@ class ExportResultsStep( BaseStepView,  Ui_ExportResultsStep, QtWidgets.QWidget)
             else:
                 return False
         if self.lineEdit_2.text() == '':
-            WarningDialog(f"You need to define the group label in step '3 - Export Results.")
+            WarningDialog(f"You need to define the group label in step '2 - Export Scoring'.")
             return False
         
         return True

@@ -15,209 +15,244 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QFont, QFontDatabase, QGradient, QIcon,
     QImage, QKeySequence, QLinearGradient, QPainter,
     QPalette, QPixmap, QRadialGradient, QTransform)
-from PySide6.QtWidgets import (QApplication, QCheckBox, QFrame, QHBoxLayout,
-    QLabel, QLineEdit, QPushButton, QSizePolicy,
-    QSpacerItem, QVBoxLayout, QWidget)
+from PySide6.QtWidgets import (QApplication, QCheckBox, QFrame, QGridLayout,
+    QHBoxLayout, QLabel, QLineEdit, QPushButton,
+    QSizePolicy, QSpacerItem, QVBoxLayout, QWidget)
 import themes_rc
 
 class Ui_ExportResultsStep(object):
     def setupUi(self, ExportResultsStep):
         if not ExportResultsStep.objectName():
             ExportResultsStep.setObjectName(u"ExportResultsStep")
-        ExportResultsStep.resize(1018, 773)
-        self.verticalLayout_2 = QVBoxLayout(ExportResultsStep)
-        self.verticalLayout_2.setObjectName(u"verticalLayout_2")
-        self.verticalLayout = QVBoxLayout()
+        ExportResultsStep.resize(900, 700)
+        self.verticalLayout = QVBoxLayout(ExportResultsStep)
         self.verticalLayout.setObjectName(u"verticalLayout")
-        self.frame = QFrame(ExportResultsStep)
-        self.frame.setObjectName(u"frame")
-        self.frame.setStyleSheet(u"")
-        self.frame.setFrameShape(QFrame.Shape.NoFrame)
-        self.verticalLayout_4 = QVBoxLayout(self.frame)
-        self.verticalLayout_4.setObjectName(u"verticalLayout_4")
-        self.label = QLabel(self.frame)
-        self.label.setObjectName(u"label")
-        self.label.setStyleSheet(u"")
-        self.label.setLineWidth(0)
-        self.label.setWordWrap(True)
+        self.verticalLayout.setContentsMargins(19, 12, 19, 12)
+        self.content_row = QHBoxLayout()
+        self.content_row.setObjectName(u"content_row")
+        self.content_row.setContentsMargins(0, 0, 0, 0)
+        self.content_widget = QWidget(ExportResultsStep)
+        self.content_widget.setObjectName(u"content_widget")
+        self.content_widget.setMaximumSize(QSize(800, 16777215))
+        self.content_layout = QVBoxLayout(self.content_widget)
+        self.content_layout.setSpacing(16)
+        self.content_layout.setObjectName(u"content_layout")
+        self.content_layout.setContentsMargins(0, 0, 0, 0)
+        self.header_layout = QVBoxLayout()
+        self.header_layout.setSpacing(6)
+        self.header_layout.setObjectName(u"header_layout")
+        self.title_label = QLabel(self.content_widget)
+        self.title_label.setObjectName(u"title_label")
+        font = QFont()
+        font.setPointSize(18)
+        font.setBold(True)
+        self.title_label.setFont(font)
 
-        self.verticalLayout_4.addWidget(self.label)
+        self.header_layout.addWidget(self.title_label)
 
-        self.frame_7 = QFrame(self.frame)
-        self.frame_7.setObjectName(u"frame_7")
-        sizePolicy = QSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Fixed)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.frame_7.sizePolicy().hasHeightForWidth())
-        self.frame_7.setSizePolicy(sizePolicy)
-        self.frame_7.setStyleSheet(u"background-color: ")
-        self.frame_7.setFrameShape(QFrame.Shape.NoFrame)
-        self.frame_7.setLineWidth(0)
-        self.verticalLayout_6 = QVBoxLayout(self.frame_7)
-        self.verticalLayout_6.setObjectName(u"verticalLayout_6")
-        self.label_7 = QLabel(self.frame_7)
-        self.label_7.setObjectName(u"label_7")
+        self.subtitle_label = QLabel(self.content_widget)
+        self.subtitle_label.setObjectName(u"subtitle_label")
+        self.subtitle_label.setWordWrap(True)
+        self.subtitle_label.setProperty(u"variant", u"help")
 
-        self.verticalLayout_6.addWidget(self.label_7)
+        self.header_layout.addWidget(self.subtitle_label)
 
 
-        self.verticalLayout_4.addWidget(self.frame_7)
+        self.content_layout.addLayout(self.header_layout)
 
-        self.verticalSpacer_4 = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
+        self.scoring_card = QFrame(self.content_widget)
+        self.scoring_card.setObjectName(u"scoring_card")
+        self.scoring_card.setFrameShape(QFrame.Shape.StyledPanel)
+        self.scoring_card.setFrameShadow(QFrame.Shadow.Raised)
+        self.scoring_card_layout = QVBoxLayout(self.scoring_card)
+        self.scoring_card_layout.setSpacing(10)
+        self.scoring_card_layout.setObjectName(u"scoring_card_layout")
+        self.scoring_card_layout.setContentsMargins(10, 10, 10, 10)
+        self.checkBox = QCheckBox(self.scoring_card)
+        self.checkBox.setObjectName(u"checkBox")
+        font1 = QFont()
+        font1.setBold(True)
+        self.checkBox.setFont(font1)
+        self.checkBox.setChecked(True)
 
-        self.verticalLayout_4.addItem(self.verticalSpacer_4)
+        self.scoring_card_layout.addWidget(self.checkBox)
 
-        self.frame_4 = QFrame(self.frame)
-        self.frame_4.setObjectName(u"frame_4")
-        self.frame_4.setStyleSheet(u"background-color: ")
-        self.frame_4.setFrameShape(QFrame.Shape.NoFrame)
-        self.horizontalLayout_3 = QHBoxLayout(self.frame_4)
-        self.horizontalLayout_3.setObjectName(u"horizontalLayout_3")
-        self.label_2 = QLabel(self.frame_4)
+        self.label_3 = QLabel(self.scoring_card)
+        self.label_3.setObjectName(u"label_3")
+        font2 = QFont()
+        font2.setPointSize(10)
+        self.label_3.setFont(font2)
+        self.label_3.setWordWrap(True)
+        self.label_3.setIndent(26)
+        self.label_3.setProperty(u"variant", u"help")
+
+        self.scoring_card_layout.addWidget(self.label_3)
+
+        self.group_grid = QGridLayout()
+        self.group_grid.setObjectName(u"group_grid")
+        self.group_grid.setHorizontalSpacing(12)
+        self.group_grid.setVerticalSpacing(10)
+        self.label_2 = QLabel(self.scoring_card)
         self.label_2.setObjectName(u"label_2")
-        self.label_2.setMinimumSize(QSize(500, 0))
-        self.label_2.setLineWidth(0)
-        self.label_2.setWordWrap(True)
 
-        self.horizontalLayout_3.addWidget(self.label_2)
+        self.group_grid.addWidget(self.label_2, 0, 0, 1, 1)
 
-        self.lineEdit_2 = QLineEdit(self.frame_4)
+        self.lineEdit_2 = QLineEdit(self.scoring_card)
         self.lineEdit_2.setObjectName(u"lineEdit_2")
         self.lineEdit_2.setMaximumSize(QSize(500, 16777215))
 
-        self.horizontalLayout_3.addWidget(self.lineEdit_2)
+        self.group_grid.addWidget(self.lineEdit_2, 0, 1, 1, 1)
 
-        self.horizontalSpacer_2 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+        self.group_grid_spacer = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
 
-        self.horizontalLayout_3.addItem(self.horizontalSpacer_2)
-
-
-        self.verticalLayout_4.addWidget(self.frame_4)
-
-        self.verticalSpacer_2 = QSpacerItem(20, 20, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Fixed)
-
-        self.verticalLayout_4.addItem(self.verticalSpacer_2)
-
-        self.checkBox = QCheckBox(self.frame)
-        self.checkBox.setObjectName(u"checkBox")
-        font = QFont()
-        font.setBold(False)
-        font.setItalic(False)
-        self.checkBox.setFont(font)
-        self.checkBox.setStyleSheet(u"")
-        self.checkBox.setChecked(True)
-
-        self.verticalLayout_4.addWidget(self.checkBox)
-
-        self.frame_3 = QFrame(self.frame)
-        self.frame_3.setObjectName(u"frame_3")
-        self.frame_3.setStyleSheet(u"")
-        self.frame_3.setFrameShape(QFrame.Shape.NoFrame)
-        self.frame_3.setLineWidth(0)
-        self.horizontalLayout_2 = QHBoxLayout(self.frame_3)
-        self.horizontalLayout_2.setObjectName(u"horizontalLayout_2")
-        self.label_3 = QLabel(self.frame_3)
-        self.label_3.setObjectName(u"label_3")
-        self.label_3.setStyleSheet(u"")
-        self.label_3.setLineWidth(0)
-        self.label_3.setWordWrap(True)
-
-        self.horizontalLayout_2.addWidget(self.label_3)
+        self.group_grid.addItem(self.group_grid_spacer, 0, 3, 1, 1)
 
 
-        self.verticalLayout_4.addWidget(self.frame_3)
+        self.scoring_card_layout.addLayout(self.group_grid)
+
+        self.group_help_label = QLabel(self.scoring_card)
+        self.group_help_label.setObjectName(u"group_help_label")
+        self.group_help_label.setFont(font2)
+        self.group_help_label.setWordWrap(True)
+        self.group_help_label.setProperty(u"variant", u"help")
+
+        self.scoring_card_layout.addWidget(self.group_help_label)
+
+        self.scoring_stretch = QSpacerItem(20, 0, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
+
+        self.scoring_card_layout.addItem(self.scoring_stretch)
 
 
-        self.verticalLayout.addWidget(self.frame)
+        self.content_layout.addWidget(self.scoring_card)
 
-        self.verticalSpacer_3 = QSpacerItem(20, 20, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Fixed)
-
-        self.verticalLayout.addItem(self.verticalSpacer_3)
-
-        self.frame_5 = QFrame(ExportResultsStep)
-        self.frame_5.setObjectName(u"frame_5")
-        self.frame_5.setStyleSheet(u"")
-        self.frame_5.setFrameShape(QFrame.Shape.NoFrame)
-        self.verticalLayout_3 = QVBoxLayout(self.frame_5)
-        self.verticalLayout_3.setObjectName(u"verticalLayout_3")
-        self.checkBox_2 = QCheckBox(self.frame_5)
+        self.compare_card = QFrame(self.content_widget)
+        self.compare_card.setObjectName(u"compare_card")
+        self.compare_card.setFrameShape(QFrame.Shape.StyledPanel)
+        self.compare_card.setFrameShadow(QFrame.Shadow.Raised)
+        self.compare_card_layout = QVBoxLayout(self.compare_card)
+        self.compare_card_layout.setSpacing(10)
+        self.compare_card_layout.setObjectName(u"compare_card_layout")
+        self.compare_card_layout.setContentsMargins(10, 10, 10, 10)
+        self.checkBox_2 = QCheckBox(self.compare_card)
         self.checkBox_2.setObjectName(u"checkBox_2")
-        self.checkBox_2.setFont(font)
+        self.checkBox_2.setFont(font1)
 
-        self.verticalLayout_3.addWidget(self.checkBox_2)
+        self.compare_card_layout.addWidget(self.checkBox_2)
 
-        self.frame_9 = QFrame(self.frame_5)
+        self.frame_9 = QFrame(self.compare_card)
         self.frame_9.setObjectName(u"frame_9")
         self.frame_9.setFrameShape(QFrame.Shape.NoFrame)
-        self.frame_9.setLineWidth(0)
-        self.verticalLayout_5 = QVBoxLayout(self.frame_9)
-        self.verticalLayout_5.setObjectName(u"verticalLayout_5")
+        self.frame_9_layout = QVBoxLayout(self.frame_9)
+        self.frame_9_layout.setSpacing(6)
+        self.frame_9_layout.setObjectName(u"frame_9_layout")
+        self.frame_9_layout.setContentsMargins(0, 0, 0, 0)
         self.label_4 = QLabel(self.frame_9)
         self.label_4.setObjectName(u"label_4")
         self.label_4.setWordWrap(True)
+        self.label_4.setProperty(u"variant", u"help")
 
-        self.verticalLayout_5.addWidget(self.label_4)
+        self.frame_9_layout.addWidget(self.label_4)
 
         self.label_5 = QLabel(self.frame_9)
         self.label_5.setObjectName(u"label_5")
-        self.label_5.setLineWidth(0)
+        self.label_5.setFont(font2)
+        self.label_5.setTextFormat(Qt.TextFormat.RichText)
         self.label_5.setWordWrap(True)
+        self.label_5.setProperty(u"variant", u"help")
 
-        self.verticalLayout_5.addWidget(self.label_5)
+        self.frame_9_layout.addWidget(self.label_5)
 
 
-        self.verticalLayout_3.addWidget(self.frame_9)
+        self.compare_card_layout.addWidget(self.frame_9)
 
-        self.frame_6 = QFrame(self.frame_5)
+        self.frame_6 = QFrame(self.compare_card)
         self.frame_6.setObjectName(u"frame_6")
         self.frame_6.setFrameShape(QFrame.Shape.NoFrame)
-        self.frame_6.setLineWidth(0)
-        self.horizontalLayout_4 = QHBoxLayout(self.frame_6)
-        self.horizontalLayout_4.setObjectName(u"horizontalLayout_4")
+        self.frame_6_layout = QVBoxLayout(self.frame_6)
+        self.frame_6_layout.setSpacing(8)
+        self.frame_6_layout.setObjectName(u"frame_6_layout")
+        self.frame_6_layout.setContentsMargins(0, 0, 0, 0)
+        self.folder_layout = QHBoxLayout()
+        self.folder_layout.setSpacing(8)
+        self.folder_layout.setObjectName(u"folder_layout")
+        self.folder_label = QLabel(self.frame_6)
+        self.folder_label.setObjectName(u"folder_label")
+
+        self.folder_layout.addWidget(self.folder_label)
+
         self.lineEdit = QLineEdit(self.frame_6)
         self.lineEdit.setObjectName(u"lineEdit")
-        self.lineEdit.setMinimumSize(QSize(500, 0))
 
-        self.horizontalLayout_4.addWidget(self.lineEdit)
+        self.folder_layout.addWidget(self.lineEdit)
 
         self.pushButton = QPushButton(self.frame_6)
         self.pushButton.setObjectName(u"pushButton")
         self.pushButton.setMaximumSize(QSize(500, 16777215))
 
-        self.horizontalLayout_4.addWidget(self.pushButton)
-
-        self.horizontalSpacer_3 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
-
-        self.horizontalLayout_4.addItem(self.horizontalSpacer_3)
+        self.folder_layout.addWidget(self.pushButton)
 
 
-        self.verticalLayout_3.addWidget(self.frame_6)
+        self.frame_6_layout.addLayout(self.folder_layout)
 
-        self.frame_8 = QFrame(self.frame_5)
+
+        self.compare_card_layout.addWidget(self.frame_6)
+
+        self.frame_8 = QFrame(self.compare_card)
         self.frame_8.setObjectName(u"frame_8")
         self.frame_8.setFrameShape(QFrame.Shape.NoFrame)
-        self.frame_8.setLineWidth(0)
-        self.horizontalLayout_6 = QHBoxLayout(self.frame_8)
-        self.horizontalLayout_6.setObjectName(u"horizontalLayout_6")
+        self.frame_8_layout = QVBoxLayout(self.frame_8)
+        self.frame_8_layout.setSpacing(8)
+        self.frame_8_layout.setObjectName(u"frame_8_layout")
+        self.frame_8_layout.setContentsMargins(0, 0, 0, 0)
         self.label_6 = QLabel(self.frame_8)
         self.label_6.setObjectName(u"label_6")
-        self.label_6.setLineWidth(0)
+        self.label_6.setFont(font2)
         self.label_6.setWordWrap(True)
+        self.label_6.setProperty(u"variant", u"help")
 
-        self.horizontalLayout_6.addWidget(self.label_6)
-
-
-        self.verticalLayout_3.addWidget(self.frame_8)
+        self.frame_8_layout.addWidget(self.label_6)
 
 
-        self.verticalLayout.addWidget(self.frame_5)
+        self.compare_card_layout.addWidget(self.frame_8)
+
+        self.compare_stretch = QSpacerItem(20, 0, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
+
+        self.compare_card_layout.addItem(self.compare_stretch)
 
 
-        self.verticalLayout_2.addLayout(self.verticalLayout)
+        self.content_layout.addWidget(self.compare_card)
 
-        self.verticalSpacer = QSpacerItem(20, 107, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
+        self.stage_group_warning = QFrame(self.content_widget)
+        self.stage_group_warning.setObjectName(u"stage_group_warning")
+        self.stage_group_warning.setFrameShape(QFrame.Shape.NoFrame)
+        self.stage_group_warning.setProperty(u"variant", u"warning")
+        self.stage_group_warning_layout = QHBoxLayout(self.stage_group_warning)
+        self.stage_group_warning_layout.setObjectName(u"stage_group_warning_layout")
+        self.stage_group_warning_layout.setContentsMargins(14, 10, 14, 10)
+        self.stage_group_warning_label = QLabel(self.stage_group_warning)
+        self.stage_group_warning_label.setObjectName(u"stage_group_warning_label")
+        self.stage_group_warning_label.setTextFormat(Qt.TextFormat.RichText)
+        self.stage_group_warning_label.setWordWrap(True)
 
-        self.verticalLayout_2.addItem(self.verticalSpacer)
+        self.stage_group_warning_layout.addWidget(self.stage_group_warning_label)
+
+
+        self.content_layout.addWidget(self.stage_group_warning)
+
+
+        self.content_row.addWidget(self.content_widget)
+
+        self.content_spacer = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+
+        self.content_row.addItem(self.content_spacer)
+
+        self.content_row.setStretch(0, 1)
+
+        self.verticalLayout.addLayout(self.content_row)
+
+        self.verticalSpacer = QSpacerItem(40, 20, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
+
+        self.verticalLayout.addItem(self.verticalSpacer)
 
 
         self.retranslateUi(ExportResultsStep)
@@ -227,17 +262,19 @@ class Ui_ExportResultsStep(object):
 
     def retranslateUi(self, ExportResultsStep):
         ExportResultsStep.setWindowTitle("")
-        self.label.setText(QCoreApplication.translate("ExportResultsStep", u"<html><head/><body><p><span style=\" font-weight:700;\">Export Scoring</span></p></body></html>", None))
-        self.label_7.setText(QCoreApplication.translate("ExportResultsStep", u"<html><head/><body><p>In this step, you can run automatic sleep staging or compare YASA results with expert-annotated sleep stage files.<br/>The YASA sleep staging will then be exported.</p></body></html>", None))
-        self.label_2.setText(QCoreApplication.translate("ExportResultsStep", u"<html><head/><body><p>Define a label for the predicted sleep stages group label in the accessory file.</p></body></html>", None))
+        self.title_label.setText(QCoreApplication.translate("ExportResultsStep", u"Export Scoring", None))
+        self.subtitle_label.setText(QCoreApplication.translate("ExportResultsStep", u"Define where the predicted sleep stages are saved. Optionally, compare them with the expert scoring.", None))
+        self.checkBox.setText(QCoreApplication.translate("ExportResultsStep", u"Automatic scoring", None))
+        self.label_3.setText(QCoreApplication.translate("ExportResultsStep", u"Always on: the predicted sleep stages are added to the accessory file, and a hypnodensity plot (PDF) of each recording is saved next to its PSG file.", None))
+        self.label_2.setText(QCoreApplication.translate("ExportResultsStep", u"Group", None))
         self.lineEdit_2.setText(QCoreApplication.translate("ExportResultsStep", u"stage", None))
-        self.checkBox.setText(QCoreApplication.translate("ExportResultsStep", u"Automatic Scoring", None))
-        self.label_3.setText(QCoreApplication.translate("ExportResultsStep", u"<html><head/><body><p>Be careful! Changing the group label <span style=\" font-weight:700;\">'stage'</span> to a different value may prevent Snooz from correctly identifying sleep stages<br/>in other tools.</p></body></html>", None))
-        self.checkBox_2.setText(QCoreApplication.translate("ExportResultsStep", u"Compare with Expert Scoring", None))
-        self.label_4.setText(QCoreApplication.translate("ExportResultsStep", u"<html><head/><body><p>To validate sleep stage scoring, expert annotations must be added to the accessory file (such as the TSV file associated with the EDF format) before running this tool.</p></body></html>", None))
-        self.label_5.setText(QCoreApplication.translate("ExportResultsStep", u"<html><head/><body><p>Sleep stage annotations for gold standard are defined with <span style=\" font-weight:700;\">group = &quot;stage&quot;</span>, and the <span style=\" font-weight:700;\">name</span> values correspond to: 0 (W), 1 (N1), 2 (N2), 3 (N3), 5 (R), and 9 (Unscored).</p></body></html>", None))
-        self.lineEdit.setText(QCoreApplication.translate("ExportResultsStep", u"Select the folder where the exported files are supposed to be saved", None))
+        self.group_help_label.setText(QCoreApplication.translate("ExportResultsStep", u"The group of the predicted sleep stages in the accessory file (default: stage).", None))
+        self.checkBox_2.setText(QCoreApplication.translate("ExportResultsStep", u"Compare with the expert scoring", None))
+        self.label_4.setText(QCoreApplication.translate("ExportResultsStep", u"The expert sleep stages must be in the accessory file (such as the .tsv file of an EDF file) before running this tool.", None))
+        self.label_5.setText(QCoreApplication.translate("ExportResultsStep", u"Expert sleep stages: group <b>stage</b>, names 0 (W), 1 (N1), 2 (N2), 3 (N3), 5 (R) and 9 (unscored).", None))
+        self.folder_label.setText(QCoreApplication.translate("ExportResultsStep", u"Folder", None))
         self.pushButton.setText(QCoreApplication.translate("ExportResultsStep", u"Choose", None))
-        self.label_6.setText(QCoreApplication.translate("ExportResultsStep", u"<html><head/><body><p>The exported file includes, the expert annotated hypnogram, the predicted hypnogram, confusion matrix, accuracy, and the average confidence.</p></body></html>", None))
+        self.label_6.setText(QCoreApplication.translate("ExportResultsStep", u"Saved in this folder: for each recording, a PDF with the expert and predicted hypnograms, the confusion matrix, the accuracy, the average confidence and Cohen's kappa, and the hypnodensity plot; for the cohort, the accuracy, average confidence and kappa of each recording in YASA_sleep_staging_metrics_cohort_report.tsv.", None))
+        self.stage_group_warning_label.setText(QCoreApplication.translate("ExportResultsStep", u"<b>Group of the sleep stages</b><br/>The other tools of Snooz find the sleep stages in the group <b>stage</b>: with another group, they may not find the predicted sleep stages. With <b>stage</b>, the predicted sleep stages replace the sleep stages of the accessory file.", None))
     # retranslateUi
 
