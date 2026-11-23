@@ -30,19 +30,19 @@
             },
             {
                 "name": "Input Files",
-                "description": "<div>Add the PSG files you want to perform the analysis on.<br><br>The PSG file and the accessory file must share the same filename and folder.<br><br>Open your files:<br> <strong>.edf</strong> : .tsv file is mandatory.<br> <strong>.sts</strong> : .sig file is mandatory.<br> <strong>.eeg</strong> for CEAMS user : NATUS subject folder is mandatory<br> <br><br>Select the montage and channels</div>",
+                "description": "Add the PSG files, then select the montage and the channels of each file.",
                 "custom_step_name": "InputFileSpindleStep",
                 "show_index": true
             },
             {
                 "name": "Non valid events",
-                "description": "Select events that disable the spindle detection i.e. artifact.\n\nStart by selecting one PSG or multiple files (with the ctrl key pressed), then select an event group or name.\n\nBe aware that the files must still be highlighted in the GUI to apply the 'Select All' option.",
+                "description": "Select the events that disable the spindle detection, such as artefacts.",
                 "custom_step_name": "NonValidEventSpindleStep",
                 "show_index": true
             },
             {
                 "name": "Detection Settings",
-                "description": "Define detection settings",
+                "description": "Define the duration of the kept spindles and the sleep stages and cycles in which they are detected.",
                 "custom_step_name": "SpindleDetectorSelStep",
                 "show_index": true,
                 "configs": {
@@ -58,7 +58,7 @@
             },
             {
                 "name": "Output Files",
-                "description": "Define the spindles output files for your study.",
+                "description": "Optionally, export the characteristics of the spindles: a cohort report and one file per recording.",
                 "custom_step_name": "OutputFilesStep",
                 "show_index": true,
                 "configs": {
