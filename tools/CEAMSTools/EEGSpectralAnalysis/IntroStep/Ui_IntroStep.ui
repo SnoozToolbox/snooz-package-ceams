@@ -2,16 +2,64 @@
 <ui version="4.0">
  <class>IntroStep</class>
  <widget class="QWidget" name="IntroStep">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>787</width>
+    <height>522</height>
+   </rect>
+  </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
-    <widget class="QTextBrowser" name="textBrowser">
-     <property name="html">
-      <string>&lt;p&gt;Estimate EEG spectral power with the Welch method.&lt;/p&gt;&lt;ol&gt;&lt;li&gt;Add PSG files and select the EEG channels.&lt;/li&gt;&lt;li&gt;Set the frequency range and analysis windows, or keep the defaults.&lt;/li&gt;&lt;li&gt;Choose a TSV file for the whole-recording report by sleep stage and channel.&lt;/li&gt;&lt;/ol&gt;&lt;p&gt;A fixed 0.3–62 Hz band-pass filter is applied. Use channels sampled above 124 Hz (e.g., 125 Hz).&lt;/p&gt;</string>
+    <widget class="QLabel" name="label_2">
+     <property name="text">
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Estimate EEG spectral power with the Welch method.&lt;/span&gt;&lt;/p&gt;&lt;p&gt;1. Add PSG files and select the EEG channels.&lt;/p&gt;&lt;p&gt;2. Set the frequency range and analysis windows, or keep the defaults.&lt;/p&gt;&lt;p&gt;3. Choose a TSV file for the whole-recording report by sleep stage and channel.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
      </property>
     </widget>
    </item>
+   <item>
+    <layout class="QHBoxLayout" name="horizontalLayout">
+     <item>
+      <widget class="QLabel" name="spectra_CZ_image">
+       <property name="text">
+        <string>spectra_CZ_image</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="spectra_O1_image">
+       <property name="text">
+        <string>spectra_O1_image</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <widget class="QLabel" name="label">
+     <property name="text">
+      <string>A fixed 0.3–62 Hz band-pass filter is applied. Use channels sampled above 124 Hz (e.g., 125 Hz).</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <spacer name="verticalSpacer">
+     <property name="orientation">
+      <enum>Qt::Orientation::Vertical</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>20</width>
+       <height>40</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
   </layout>
  </widget>
- <resources/>
+ <resources>
+  <include location="../../../../../snooz-toolbox/src/main/python/ui/themes/themes.qrc"/>
+ </resources>
  <connections/>
 </ui>
