@@ -6,7 +6,7 @@
     "item_author": "",
     "item_description": "",
     "tool_params": {
-        "tool_version": "2.7.1",
+        "tool_version": "2.7.2",
         "tool_label": "Report Sleep Cycle",
         "tool_category": "2-Processing",
         "asset_directory": "",
@@ -20,19 +20,19 @@
             },
             {
                 "name": "Input Files",
-                "description": "<div>Add the PSG files you want to perform the analysis on.<br><br>The PSG file and the accessory file must share the same filename and folder.<br><br>Open your files:<br> <strong>.edf</strong> : .tsv file is mandatory.<br> <strong>.sts</strong> : .sig file is mandatory.<br> <strong>.eeg</strong> for CEAMS user : NATUS subject folder is mandatory.</div>",
+                "description": "Add the PSG files to analyze.",
                 "module_id": "04840c4b-cc36-4e0f-ba47-474807dec329",
                 "show_index": true
             },
             {
                 "name": "Cycle Definition",
-                "description": "Define your sleep cycle.",
+                "description": "Select or define the duration criteria of the NREM and REM periods.",
                 "module_id": "4ae3d940-e282-414a-a1a7-c71f0a7acc98",
                 "show_index": true
             },
             {
                 "name": "Output Files",
-                "description": "Define where the files will be saved.",
+                "description": "Choose the cohort report and the suffix of the hypnogram images.",
                 "custom_step_name": "OutputFileStep",
                 "show_index": true
             }
