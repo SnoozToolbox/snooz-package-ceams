@@ -36,7 +36,7 @@ class ComplexitySettings(BaseStepView, Ui_ComplexitySettings, QtWidgets.QWidget)
     def __init__(self, **kwargs):
         # The process is modified only once the saved settings are restored.
         self._settings_loaded = False
-        self._mode_restored = False
+        self._restore_errors = []
         super().__init__(**kwargs)
 
         # init UI
@@ -92,7 +92,9 @@ class ComplexitySettings(BaseStepView, Ui_ComplexitySettings, QtWidgets.QWidget)
         mode = str(mode).strip().lower() if mode is not None else ""
         if mode in self._mode_radio_buttons:
             self._mode_radio_buttons[mode].setChecked(True)
-            self._mode_restored = True
+        else:
+            self._restore_errors.append(
+                f"the complexity mode '{mode}' must be univariate, joint or concat")
 
     # -------------------------------------------------------------------------
     # Output files
@@ -121,19 +123,19 @@ class ComplexitySettings(BaseStepView, Ui_ComplexitySettings, QtWidgets.QWidget)
             The answers (on_topic_response) only update the interface.
         """
         self._settings_loaded = False
-        self._mode_restored = False
+        self._restore_errors = []
         self._pub_sub_manager.publish(self, self._mode_topic, 'ping')
         self._pub_sub_manager.publish(self, self._cohort_file_topic, 'ping')
         self._pub_sub_manager.publish(self, self._export_details_topic, 'ping')
         self._pub_sub_manager.publish(self, self._epoch_length_topic, 'ping')
         self._pub_sub_manager.publish(self, self._overlap_topic, 'ping')
-        # An unknown saved mode is reported instead of being silently replaced
-        # by the default mode of the interface.
-        if not self._mode_restored:
+        # Invalid saved values are reported instead of being silently replaced
+        # by the default values of the interface.
+        if self._restore_errors:
             self._pub_sub_manager.publish(
                 self, "show_error_message",
-                "Could not restore the complexity settings : the complexity mode "
-                "saved in the process must be univariate, joint or concat.")
+                "Could not restore the complexity settings : "
+                + "; ".join(self._restore_errors) + ".")
             return
         self._settings_loaded = True
 
@@ -150,11 +152,20 @@ class ComplexitySettings(BaseStepView, Ui_ComplexitySettings, QtWidgets.QWidget)
             self.export_details_checkBox.setChecked(
                 str(message).strip().lower() in ('true', '1'))
         elif topic == self._epoch_length_topic:
-            if message is not None and str(message).strip() != "":
-                self.epoch_length_doubleSpinBox.setValue(float(message))
+            self._restore_number(message, self.epoch_length_doubleSpinBox, "epoch length")
         elif topic == self._overlap_topic:
-            if message is not None and str(message).strip() != "":
-                self.overlap_length_doubleSpinBox.setValue(float(message))
+            self._restore_number(message, self.overlap_length_doubleSpinBox, "overlap length")
+
+    def _restore_number(self, message, spin_box, label):
+        """ Show a saved number in a spin box. An empty value was never set :
+            the default value of the interface is kept.
+        """
+        if message is None or str(message).strip() == "":
+            return
+        try:
+            spin_box.setValue(float(message))
+        except ValueError:
+            self._restore_errors.append(f"invalid {label} '{message}'")
 
     def on_validate_settings(self):
         """ Validate the settings selected by the user. """

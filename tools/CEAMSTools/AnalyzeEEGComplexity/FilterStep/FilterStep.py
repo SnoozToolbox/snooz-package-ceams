@@ -59,6 +59,7 @@ class FilterStep(BaseStepView, Ui_FilterStep, QtWidgets.QWidget):
         self._settings_loaded = False
         self._activation_states = {}
         self._sleep_stages_received = False
+        self._restore_errors = []
         super().__init__(**kwargs)
 
         # init UI
@@ -286,6 +287,7 @@ class FilterStep(BaseStepView, Ui_FilterStep, QtWidgets.QWidget):
         """
         self._settings_loaded = False
         self._sleep_stages_received = False
+        self._restore_errors = []
 
         # Read the activation state of the chains and of the Trim Signal module.
         # NodeGraphicsItem replies synchronously through on_topic_response.
@@ -332,10 +334,14 @@ class FilterStep(BaseStepView, Ui_FilterStep, QtWidgets.QWidget):
         self._pub_sub_manager.publish(self, self._trim_duration_time_topic, 'ping')
         self._pub_sub_manager.publish(self, self._sleep_stages_topic, 'ping')
         if not self._sleep_stages_received:
+            self._restore_errors.append("expected a comma-separated sleep stage list")
+        # Invalid saved values are reported instead of being replaced by the
+        # default values of the interface.
+        if self._restore_errors:
             self._pub_sub_manager.publish(
                 self, "show_error_message",
                 "Could not restore the filter settings of the complexity tool : "
-                "expected a comma-separated sleep stage list.")
+                + "; ".join(self._restore_errors) + ".")
             return
 
         self.enable_scope_widgets()
@@ -370,20 +376,21 @@ class FilterStep(BaseStepView, Ui_FilterStep, QtWidgets.QWidget):
                 try:
                     self.start_time_doubleSpinBox.setValue(float(message))
                 except (TypeError, ValueError):
-                    print(f"FilterStep : failed to read the start time {message}")
+                    self._restore_errors.append(f"invalid trim start time '{message}'")
         elif topic == self._trim_duration_time_topic:
             if message not in (None, ''):
                 try:
                     self.duration_doubleSpinBox.setValue(float(message))
                 except (TypeError, ValueError):
-                    print(f"FilterStep : failed to read the duration {message}")
+                    self._restore_errors.append(f"invalid trim duration '{message}'")
 
     def select_band_from_cutoff(self, cutoff):
         """ Check the radio button matching the cutoff read from the pipeline. """
         try:
             low, high = map(float, str(cutoff).split())
         except (TypeError, ValueError):
-            print(f"FilterStep : failed to read the cutoff {cutoff}")
+            self._restore_errors.append(
+                f"invalid cutoff '{cutoff}' (expected 'low high', ex. '4 8')")
             return
 
         band_buttons = {

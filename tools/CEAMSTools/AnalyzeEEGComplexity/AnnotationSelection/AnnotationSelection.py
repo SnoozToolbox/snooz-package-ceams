@@ -31,15 +31,17 @@ class AnnotationSelection(NonValidEventStep):
 
         self.reset_excl_event_checkBox.setEnabled(False)
 
-        # Annotation-branch SignalsFromEvents in AnalyzeEEGComplexity.json
-        self._node_id_SignalsFromEvents = "d322fe3a-7e09-474b-aee5-9f202836dee4"
-        self.sleep_stage_scope = False
+        # Recording scope restored by FilterStep (None until it is restored)
+        self._scope = None
         self.annot_selection_scope = False
         self.enable_widgets(False)
         self.match_event_channels_checkBox.setChecked(True)
 
     def on_apply_settings(self):
-
+        # Also called when the workspace is saved (without validation). Without
+        # a scope restored by FilterStep, the saved annotation selection is kept.
+        if self._scope is None:
+            return
         if self.annot_selection_scope:
             # Specific annotations: publish the user-selected group/name dicts so
             # SignalsFromEvents crops the signal on those annotations.
@@ -60,16 +62,12 @@ class AnnotationSelection(NonValidEventStep):
         # Sync the scope from the context (it may have been set by FilterStep
         # before this step subscribed to the context manager).
         self._sync_scope_from_context()
-        # Ping activation state of the annotation-branch SignalsFromEvents
-        self._pub_sub_manager.publish(self, self._node_id_SignalsFromEvents+".get_activation_state", None)
 
     def _sync_scope_from_context(self):
-        try:
-            scope = self._context_manager[FilterStep.context_Con_scope]
-        except (KeyError, TypeError):
-            scope = "sleep_stages"
-        self.annot_selection_scope = (scope == "specific_annotations")
-        self.sleep_stage_scope = (scope == "sleep_stages")
+        # FilterStep shares the scope once it has restored it from the process
+        # (it checks the Signals From Events module of this branch).
+        self._scope = self._context_manager.get(FilterStep.context_Con_scope)
+        self.annot_selection_scope = (self._scope == "specific_annotations")
         # Only enable the annotation selection widgets for the annotation scope.
         self.enable_widgets(self.annot_selection_scope)
 

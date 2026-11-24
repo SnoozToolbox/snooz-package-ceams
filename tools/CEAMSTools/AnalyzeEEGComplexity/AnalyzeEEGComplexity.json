@@ -281,7 +281,7 @@
                     }
                 },
                 "identifier": "7ab4b952-e314-420d-b70c-a52f1b3febc6",
-                "activation_state": "activated",
+                "activation_state": "deactivated",
                 "package": {
                     "package_name": "CEAMSModules"
                 },
@@ -359,7 +359,7 @@
                     }
                 },
                 "identifier": "332c530d-6115-4b6b-82c6-6e9e739430d5",
-                "activation_state": "activated",
+                "activation_state": "deactivated",
                 "package": {
                     "package_name": "CEAMSModules"
                 },
