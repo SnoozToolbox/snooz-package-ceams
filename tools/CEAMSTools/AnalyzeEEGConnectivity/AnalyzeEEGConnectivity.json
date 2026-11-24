@@ -9,7 +9,7 @@
         "tool_author": "Hanieh Bazreagrzadeh",
         "tool_url": "",
         "tool_description": "",
-        "tool_version": "2.7.1",
+        "tool_version": "2.7.2",
         "package_name": "CEAMSTools",
         "steps": [
             {
@@ -20,37 +20,37 @@
             },
             {
                 "name": "Input Files",
-                "description": "<div>Add the PSG files you want to perform the analysis on.<br><br>The PSG file and the accessory file must share the same filename and folder.<br><br>Open your files:<br> <strong>.edf</strong> : .tsv file is optional.<br> <strong>.sts</strong> : .sig file is mandatory.<br> <strong>.eeg</strong> for CEAMS user : NATUS subject folder is mandatory<br> <br><br>Select the montage and channels</div>",
+                "description": "Add the PSG files, then select the montage and the channels of each file.",
                 "custom_step_name": "InputFilesConStep",
                 "show_index": true
             },
             {
-                "name": "Events Exlusion",
-                "description": "Select events to exclude from the analysis",
+                "name": "Events Exclusion",
+                "description": "Select the events to exclude from the analysis, such as artefacts.",
                 "custom_step_name": "NonValidEventConStep",
                 "show_index": true
             },
             {
                 "name": "Filter Settings",
-                "description": "Define the filter settings for the analysis.",
+                "description": "Choose the frequency band and the part of the recording to analyze.",
                 "custom_step_name": "FilterStep",
                 "show_index": true
             },
             {
                 "name": "Annotation Selection",
-                "description": "",
+                "description": "Select the annotations to analyze, when the analysis is on chosen annotations.",
                 "custom_step_name": "AnnotationSelection",
                 "show_index": true
             },
             {
                 "name": "Connectivity Settings",
-                "description": "Define the connectivity settings for your study",
+                "description": "Choose the connectivity measure (wPLI, dPLI or AEC), the epochs and the statistical testing.",
                 "custom_step_name": "ConnectivitySettings",
                 "show_index": true
             },
             {
                 "name": "Output Files",
-                "description": "Select the path to indicate where the output files will be saved.",
+                "description": "Choose where the output files are saved.",
                 "custom_step_name": "OutputFiles",
                 "show_index": true
             }

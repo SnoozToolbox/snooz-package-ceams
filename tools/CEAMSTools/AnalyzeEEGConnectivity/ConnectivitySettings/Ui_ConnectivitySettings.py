@@ -16,8 +16,8 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QImage, QKeySequence, QLinearGradient, QPainter,
     QPalette, QPixmap, QRadialGradient, QTransform)
 from PySide6.QtWidgets import (QApplication, QButtonGroup, QDoubleSpinBox, QFrame,
-    QHBoxLayout, QLabel, QLineEdit, QRadioButton,
-    QSizePolicy, QSpacerItem, QTextEdit, QVBoxLayout,
+    QGridLayout, QHBoxLayout, QLabel, QLineEdit,
+    QRadioButton, QSizePolicy, QSpacerItem, QVBoxLayout,
     QWidget)
 import themes_rc
 
@@ -25,277 +25,435 @@ class Ui_ConnectivitySettings(object):
     def setupUi(self, ConnectivitySettings):
         if not ConnectivitySettings.objectName():
             ConnectivitySettings.setObjectName(u"ConnectivitySettings")
-        ConnectivitySettings.resize(877, 850)
+        ConnectivitySettings.resize(900, 700)
         self.verticalLayout = QVBoxLayout(ConnectivitySettings)
-        self.verticalLayout.setSpacing(25)
         self.verticalLayout.setObjectName(u"verticalLayout")
-        self.frame_2 = QFrame(ConnectivitySettings)
-        self.frame_2.setObjectName(u"frame_2")
-        self.frame_2.setFrameShape(QFrame.Shape.NoFrame)
-        self.frame_2.setFrameShadow(QFrame.Shadow.Raised)
-        self.verticalLayout_4 = QVBoxLayout(self.frame_2)
-        self.verticalLayout_4.setObjectName(u"verticalLayout_4")
-        self.connectivity_type_label = QLabel(self.frame_2)
+        self.verticalLayout.setContentsMargins(19, 12, 19, 12)
+        self.content_row = QHBoxLayout()
+        self.content_row.setObjectName(u"content_row")
+        self.content_row.setContentsMargins(0, 0, 0, 0)
+        self.content_widget = QWidget(ConnectivitySettings)
+        self.content_widget.setObjectName(u"content_widget")
+        self.content_widget.setMaximumSize(QSize(800, 16777215))
+        self.content_layout = QVBoxLayout(self.content_widget)
+        self.content_layout.setSpacing(16)
+        self.content_layout.setObjectName(u"content_layout")
+        self.content_layout.setContentsMargins(0, 0, 0, 0)
+        self.header_layout = QVBoxLayout()
+        self.header_layout.setSpacing(6)
+        self.header_layout.setObjectName(u"header_layout")
+        self.title_label = QLabel(self.content_widget)
+        self.title_label.setObjectName(u"title_label")
+        font = QFont()
+        font.setPointSize(18)
+        font.setBold(True)
+        self.title_label.setFont(font)
+
+        self.header_layout.addWidget(self.title_label)
+
+        self.subtitle_label = QLabel(self.content_widget)
+        self.subtitle_label.setObjectName(u"subtitle_label")
+        self.subtitle_label.setWordWrap(True)
+        self.subtitle_label.setProperty(u"variant", u"help")
+
+        self.header_layout.addWidget(self.subtitle_label)
+
+
+        self.content_layout.addLayout(self.header_layout)
+
+        self.measure_card = QFrame(self.content_widget)
+        self.measure_card.setObjectName(u"measure_card")
+        self.measure_card.setFrameShape(QFrame.Shape.StyledPanel)
+        self.measure_card.setFrameShadow(QFrame.Shadow.Raised)
+        self.measure_card_layout = QVBoxLayout(self.measure_card)
+        self.measure_card_layout.setSpacing(10)
+        self.measure_card_layout.setObjectName(u"measure_card_layout")
+        self.measure_card_layout.setContentsMargins(10, 10, 10, 10)
+        self.connectivity_type_label = QLabel(self.measure_card)
         self.connectivity_type_label.setObjectName(u"connectivity_type_label")
+        font1 = QFont()
+        font1.setBold(True)
+        self.connectivity_type_label.setFont(font1)
 
-        self.verticalLayout_4.addWidget(self.connectivity_type_label)
+        self.measure_card_layout.addWidget(self.connectivity_type_label)
 
-        self.label_4 = QLabel(self.frame_2)
+        self.label_4 = QLabel(self.measure_card)
         self.label_4.setObjectName(u"label_4")
+        self.label_4.setWordWrap(True)
+        self.label_4.setProperty(u"variant", u"help")
 
-        self.verticalLayout_4.addWidget(self.label_4)
+        self.measure_card_layout.addWidget(self.label_4)
 
-        self.horizontalLayout_2 = QHBoxLayout()
-        self.horizontalLayout_2.setObjectName(u"horizontalLayout_2")
-        self.wpli_radioButton = QRadioButton(self.frame_2)
+        self.measure_layout = QVBoxLayout()
+        self.measure_layout.setSpacing(8)
+        self.measure_layout.setObjectName(u"measure_layout")
+        self.measure_layout_1_layout = QVBoxLayout()
+        self.measure_layout_1_layout.setSpacing(2)
+        self.measure_layout_1_layout.setObjectName(u"measure_layout_1_layout")
+        self.wpli_radioButton = QRadioButton(self.measure_card)
         self.connectivity_buttonGroup = QButtonGroup(ConnectivitySettings)
         self.connectivity_buttonGroup.setObjectName(u"connectivity_buttonGroup")
         self.connectivity_buttonGroup.addButton(self.wpli_radioButton)
         self.wpli_radioButton.setObjectName(u"wpli_radioButton")
         self.wpli_radioButton.setChecked(True)
 
-        self.horizontalLayout_2.addWidget(self.wpli_radioButton)
+        self.measure_layout_1_layout.addWidget(self.wpli_radioButton)
 
-        self.dpli_radioButton = QRadioButton(self.frame_2)
+        self.wpli_help_label = QLabel(self.measure_card)
+        self.wpli_help_label.setObjectName(u"wpli_help_label")
+        font2 = QFont()
+        font2.setPointSize(10)
+        self.wpli_help_label.setFont(font2)
+        self.wpli_help_label.setWordWrap(True)
+        self.wpli_help_label.setIndent(26)
+        self.wpli_help_label.setProperty(u"variant", u"help")
+
+        self.measure_layout_1_layout.addWidget(self.wpli_help_label)
+
+
+        self.measure_layout.addLayout(self.measure_layout_1_layout)
+
+        self.measure_layout_line_1 = QFrame(self.measure_card)
+        self.measure_layout_line_1.setObjectName(u"measure_layout_line_1")
+        self.measure_layout_line_1.setFrameShape(QFrame.Shape.HLine)
+        self.measure_layout_line_1.setFrameShadow(QFrame.Shadow.Plain)
+
+        self.measure_layout.addWidget(self.measure_layout_line_1)
+
+        self.measure_layout_2_layout = QVBoxLayout()
+        self.measure_layout_2_layout.setSpacing(2)
+        self.measure_layout_2_layout.setObjectName(u"measure_layout_2_layout")
+        self.dpli_radioButton = QRadioButton(self.measure_card)
         self.connectivity_buttonGroup.addButton(self.dpli_radioButton)
         self.dpli_radioButton.setObjectName(u"dpli_radioButton")
 
-        self.horizontalLayout_2.addWidget(self.dpli_radioButton)
+        self.measure_layout_2_layout.addWidget(self.dpli_radioButton)
 
-        self.aec_radioButton = QRadioButton(self.frame_2)
+        self.dpli_help_label = QLabel(self.measure_card)
+        self.dpli_help_label.setObjectName(u"dpli_help_label")
+        self.dpli_help_label.setFont(font2)
+        self.dpli_help_label.setWordWrap(True)
+        self.dpli_help_label.setIndent(26)
+        self.dpli_help_label.setProperty(u"variant", u"help")
+
+        self.measure_layout_2_layout.addWidget(self.dpli_help_label)
+
+
+        self.measure_layout.addLayout(self.measure_layout_2_layout)
+
+        self.measure_layout_line_2 = QFrame(self.measure_card)
+        self.measure_layout_line_2.setObjectName(u"measure_layout_line_2")
+        self.measure_layout_line_2.setFrameShape(QFrame.Shape.HLine)
+        self.measure_layout_line_2.setFrameShadow(QFrame.Shadow.Plain)
+
+        self.measure_layout.addWidget(self.measure_layout_line_2)
+
+        self.measure_layout_3_layout = QVBoxLayout()
+        self.measure_layout_3_layout.setSpacing(2)
+        self.measure_layout_3_layout.setObjectName(u"measure_layout_3_layout")
+        self.aec_radioButton = QRadioButton(self.measure_card)
         self.connectivity_buttonGroup.addButton(self.aec_radioButton)
         self.aec_radioButton.setObjectName(u"aec_radioButton")
 
-        self.horizontalLayout_2.addWidget(self.aec_radioButton)
+        self.measure_layout_3_layout.addWidget(self.aec_radioButton)
+
+        self.aec_help_label = QLabel(self.measure_card)
+        self.aec_help_label.setObjectName(u"aec_help_label")
+        self.aec_help_label.setFont(font2)
+        self.aec_help_label.setWordWrap(True)
+        self.aec_help_label.setIndent(26)
+        self.aec_help_label.setProperty(u"variant", u"help")
+
+        self.measure_layout_3_layout.addWidget(self.aec_help_label)
 
 
-        self.verticalLayout_4.addLayout(self.horizontalLayout_2)
+        self.measure_layout.addLayout(self.measure_layout_3_layout)
 
 
-        self.verticalLayout.addWidget(self.frame_2)
-
-        self.frame = QFrame(ConnectivitySettings)
-        self.frame.setObjectName(u"frame")
-        self.frame.setFrameShape(QFrame.Shape.NoFrame)
-        self.frame.setFrameShadow(QFrame.Shadow.Raised)
-        self.verticalLayout_2 = QVBoxLayout(self.frame)
-        self.verticalLayout_2.setObjectName(u"verticalLayout_2")
-        self.connectivity_settings_header_label = QLabel(self.frame)
-        self.connectivity_settings_header_label.setObjectName(u"connectivity_settings_header_label")
-
-        self.verticalLayout_2.addWidget(self.connectivity_settings_header_label)
-
-        self.connectivity_settings_label = QLabel(self.frame)
-        self.connectivity_settings_label.setObjectName(u"connectivity_settings_label")
-        self.connectivity_settings_label.setWordWrap(True)
-
-        self.verticalLayout_2.addWidget(self.connectivity_settings_label)
-
-        self.horizontalLayout_10 = QHBoxLayout()
-        self.horizontalLayout_10.setObjectName(u"horizontalLayout_10")
-        self.horizontalLayout_5 = QHBoxLayout()
-        self.horizontalLayout_5.setObjectName(u"horizontalLayout_5")
-        self.horizontalSpacer_2 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
-
-        self.horizontalLayout_5.addItem(self.horizontalSpacer_2)
-
-        self.num_surr_label = QLabel(self.frame)
-        self.num_surr_label.setObjectName(u"num_surr_label")
-        self.num_surr_label.setMinimumSize(QSize(175, 0))
-
-        self.horizontalLayout_5.addWidget(self.num_surr_label)
-
-        self.num_surr_lineedit = QLineEdit(self.frame)
-        self.num_surr_lineedit.setObjectName(u"num_surr_lineedit")
-        self.num_surr_lineedit.setMaximumSize(QSize(100, 16777215))
-        self.num_surr_lineedit.setMaxLength(3)
-
-        self.horizontalLayout_5.addWidget(self.num_surr_lineedit)
-
-        self.horizontalSpacer_4 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
-
-        self.horizontalLayout_5.addItem(self.horizontalSpacer_4)
+        self.measure_card_layout.addLayout(self.measure_layout)
 
 
-        self.horizontalLayout_10.addLayout(self.horizontalLayout_5)
+        self.content_layout.addWidget(self.measure_card)
 
-        self.horizontalLayout = QHBoxLayout()
-        self.horizontalLayout.setObjectName(u"horizontalLayout")
-        self.p_value_label = QLabel(self.frame)
-        self.p_value_label.setObjectName(u"p_value_label")
-        self.p_value_label.setMinimumSize(QSize(125, 0))
-
-        self.horizontalLayout.addWidget(self.p_value_label)
-
-        self.p_value_lineedit = QLineEdit(self.frame)
-        self.p_value_lineedit.setObjectName(u"p_value_lineedit")
-        self.p_value_lineedit.setMaximumSize(QSize(100, 16777215))
-        self.p_value_lineedit.setMaxLength(4)
-
-        self.horizontalLayout.addWidget(self.p_value_lineedit)
-
-        self.horizontalSpacer_5 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
-
-        self.horizontalLayout.addItem(self.horizontalSpacer_5)
-
-
-        self.horizontalLayout_10.addLayout(self.horizontalLayout)
-
-
-        self.verticalLayout_2.addLayout(self.horizontalLayout_10)
-
-        self.verticalSpacer_2 = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
-
-        self.verticalLayout_2.addItem(self.verticalSpacer_2)
-
-        self.select_epoch_label = QLabel(self.frame)
+        self.settings_cards_layout = QHBoxLayout()
+        self.settings_cards_layout.setSpacing(16)
+        self.settings_cards_layout.setObjectName(u"settings_cards_layout")
+        self.epochs_card = QFrame(self.content_widget)
+        self.epochs_card.setObjectName(u"epochs_card")
+        self.epochs_card.setFrameShape(QFrame.Shape.StyledPanel)
+        self.epochs_card.setFrameShadow(QFrame.Shadow.Raised)
+        self.epochs_card_layout = QVBoxLayout(self.epochs_card)
+        self.epochs_card_layout.setSpacing(10)
+        self.epochs_card_layout.setObjectName(u"epochs_card_layout")
+        self.epochs_card_layout.setContentsMargins(10, 10, 10, 10)
+        self.select_epoch_label = QLabel(self.epochs_card)
         self.select_epoch_label.setObjectName(u"select_epoch_label")
+        self.select_epoch_label.setFont(font1)
 
-        self.verticalLayout_2.addWidget(self.select_epoch_label)
+        self.epochs_card_layout.addWidget(self.select_epoch_label)
 
-        self.horizontalLayout_7 = QHBoxLayout()
-        self.horizontalLayout_7.setObjectName(u"horizontalLayout_7")
-        self.horizontalLayout_4 = QHBoxLayout()
-        self.horizontalLayout_4.setObjectName(u"horizontalLayout_4")
-        self.horizontalSpacer = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
-
-        self.horizontalLayout_4.addItem(self.horizontalSpacer)
-
-        self.epoch_length_label = QLabel(self.frame)
+        self.epochs_grid = QGridLayout()
+        self.epochs_grid.setObjectName(u"epochs_grid")
+        self.epochs_grid.setHorizontalSpacing(12)
+        self.epochs_grid.setVerticalSpacing(10)
+        self.epoch_length_label = QLabel(self.epochs_card)
         self.epoch_length_label.setObjectName(u"epoch_length_label")
-        self.epoch_length_label.setMinimumSize(QSize(175, 0))
 
-        self.horizontalLayout_4.addWidget(self.epoch_length_label)
+        self.epochs_grid.addWidget(self.epoch_length_label, 0, 0, 1, 1)
 
-        self.epoch_length_lineEdit = QLineEdit(self.frame)
+        self.epoch_length_lineEdit = QLineEdit(self.epochs_card)
         self.epoch_length_lineEdit.setObjectName(u"epoch_length_lineEdit")
         self.epoch_length_lineEdit.setMaximumSize(QSize(100, 16777215))
         self.epoch_length_lineEdit.setMaxLength(3)
 
-        self.horizontalLayout_4.addWidget(self.epoch_length_lineEdit)
+        self.epochs_grid.addWidget(self.epoch_length_lineEdit, 0, 1, 1, 1)
 
-        self.horizontalSpacer_3 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+        self.epoch_length_unit_label = QLabel(self.epochs_card)
+        self.epoch_length_unit_label.setObjectName(u"epoch_length_unit_label")
+        self.epoch_length_unit_label.setProperty(u"variant", u"help")
 
-        self.horizontalLayout_4.addItem(self.horizontalSpacer_3)
+        self.epochs_grid.addWidget(self.epoch_length_unit_label, 0, 2, 1, 1)
 
-
-        self.horizontalLayout_7.addLayout(self.horizontalLayout_4)
-
-        self.horizontalLayout_3 = QHBoxLayout()
-        self.horizontalLayout_3.setObjectName(u"horizontalLayout_3")
-        self.epoch_overlap_label = QLabel(self.frame)
+        self.epoch_overlap_label = QLabel(self.epochs_card)
         self.epoch_overlap_label.setObjectName(u"epoch_overlap_label")
-        self.epoch_overlap_label.setMinimumSize(QSize(125, 0))
 
-        self.horizontalLayout_3.addWidget(self.epoch_overlap_label)
+        self.epochs_grid.addWidget(self.epoch_overlap_label, 1, 0, 1, 1)
 
-        self.epoch_overlap_lineEdit = QLineEdit(self.frame)
+        self.epoch_overlap_lineEdit = QLineEdit(self.epochs_card)
         self.epoch_overlap_lineEdit.setObjectName(u"epoch_overlap_lineEdit")
         self.epoch_overlap_lineEdit.setMaximumSize(QSize(100, 16777215))
         self.epoch_overlap_lineEdit.setMaxLength(3)
 
-        self.horizontalLayout_3.addWidget(self.epoch_overlap_lineEdit)
+        self.epochs_grid.addWidget(self.epoch_overlap_lineEdit, 1, 1, 1, 1)
 
-        self.horizontalSpacer_6 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+        self.epoch_overlap_unit_label = QLabel(self.epochs_card)
+        self.epoch_overlap_unit_label.setObjectName(u"epoch_overlap_unit_label")
+        self.epoch_overlap_unit_label.setProperty(u"variant", u"help")
 
-        self.horizontalLayout_3.addItem(self.horizontalSpacer_6)
+        self.epochs_grid.addWidget(self.epoch_overlap_unit_label, 1, 2, 1, 1)
+
+        self.epochs_grid_spacer = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+
+        self.epochs_grid.addItem(self.epochs_grid_spacer, 0, 3, 1, 1)
 
 
-        self.horizontalLayout_7.addLayout(self.horizontalLayout_3)
+        self.epochs_card_layout.addLayout(self.epochs_grid)
+
+        self.epochs_help_label = QLabel(self.epochs_card)
+        self.epochs_help_label.setObjectName(u"epochs_help_label")
+        self.epochs_help_label.setFont(font2)
+        self.epochs_help_label.setWordWrap(True)
+        self.epochs_help_label.setProperty(u"variant", u"help")
+
+        self.epochs_card_layout.addWidget(self.epochs_help_label)
+
+        self.epochs_stretch = QSpacerItem(20, 0, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
+
+        self.epochs_card_layout.addItem(self.epochs_stretch)
 
 
-        self.verticalLayout_2.addLayout(self.horizontalLayout_7)
+        self.settings_cards_layout.addWidget(self.epochs_card)
+
+        self.statistics_card = QFrame(self.content_widget)
+        self.statistics_card.setObjectName(u"statistics_card")
+        self.statistics_card.setFrameShape(QFrame.Shape.StyledPanel)
+        self.statistics_card.setFrameShadow(QFrame.Shadow.Raised)
+        self.statistics_card_layout = QVBoxLayout(self.statistics_card)
+        self.statistics_card_layout.setSpacing(10)
+        self.statistics_card_layout.setObjectName(u"statistics_card_layout")
+        self.statistics_card_layout.setContentsMargins(10, 10, 10, 10)
+        self.connectivity_settings_header_label = QLabel(self.statistics_card)
+        self.connectivity_settings_header_label.setObjectName(u"connectivity_settings_header_label")
+        self.connectivity_settings_header_label.setFont(font1)
+
+        self.statistics_card_layout.addWidget(self.connectivity_settings_header_label)
+
+        self.statistics_grid = QGridLayout()
+        self.statistics_grid.setObjectName(u"statistics_grid")
+        self.statistics_grid.setHorizontalSpacing(12)
+        self.statistics_grid.setVerticalSpacing(10)
+        self.num_surr_label = QLabel(self.statistics_card)
+        self.num_surr_label.setObjectName(u"num_surr_label")
+
+        self.statistics_grid.addWidget(self.num_surr_label, 0, 0, 1, 1)
+
+        self.num_surr_lineedit = QLineEdit(self.statistics_card)
+        self.num_surr_lineedit.setObjectName(u"num_surr_lineedit")
+        self.num_surr_lineedit.setMaximumSize(QSize(100, 16777215))
+        self.num_surr_lineedit.setMaxLength(3)
+
+        self.statistics_grid.addWidget(self.num_surr_lineedit, 0, 1, 1, 1)
+
+        self.p_value_label = QLabel(self.statistics_card)
+        self.p_value_label.setObjectName(u"p_value_label")
+
+        self.statistics_grid.addWidget(self.p_value_label, 1, 0, 1, 1)
+
+        self.p_value_lineedit = QLineEdit(self.statistics_card)
+        self.p_value_lineedit.setObjectName(u"p_value_lineedit")
+        self.p_value_lineedit.setMaximumSize(QSize(100, 16777215))
+        self.p_value_lineedit.setMaxLength(4)
+
+        self.statistics_grid.addWidget(self.p_value_lineedit, 1, 1, 1, 1)
+
+        self.statistics_grid_spacer = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+
+        self.statistics_grid.addItem(self.statistics_grid_spacer, 0, 3, 1, 1)
 
 
-        self.verticalLayout.addWidget(self.frame)
+        self.statistics_card_layout.addLayout(self.statistics_grid)
 
-        self.frame_3 = QFrame(ConnectivitySettings)
-        self.frame_3.setObjectName(u"frame_3")
-        self.frame_3.setFrameShape(QFrame.Shape.NoFrame)
-        self.frame_3.setFrameShadow(QFrame.Shadow.Raised)
-        self.verticalLayout_7 = QVBoxLayout(self.frame_3)
-        self.verticalLayout_7.setObjectName(u"verticalLayout_7")
-        self.network_properties_header_label = QLabel(self.frame_3)
+        self.connectivity_settings_label = QLabel(self.statistics_card)
+        self.connectivity_settings_label.setObjectName(u"connectivity_settings_label")
+        self.connectivity_settings_label.setProperty(u"variant", u"help")
+        self.connectivity_settings_label.setFont(font2)
+        self.connectivity_settings_label.setWordWrap(True)
+
+        self.statistics_card_layout.addWidget(self.connectivity_settings_label)
+
+        self.statistics_stretch = QSpacerItem(20, 0, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
+
+        self.statistics_card_layout.addItem(self.statistics_stretch)
+
+
+        self.settings_cards_layout.addWidget(self.statistics_card)
+
+        self.settings_cards_layout.setStretch(0, 1)
+        self.settings_cards_layout.setStretch(1, 1)
+
+        self.content_layout.addLayout(self.settings_cards_layout)
+
+        self.network_card = QFrame(self.content_widget)
+        self.network_card.setObjectName(u"network_card")
+        self.network_card.setFrameShape(QFrame.Shape.StyledPanel)
+        self.network_card.setFrameShadow(QFrame.Shadow.Raised)
+        self.network_card_layout = QVBoxLayout(self.network_card)
+        self.network_card_layout.setSpacing(10)
+        self.network_card_layout.setObjectName(u"network_card_layout")
+        self.network_card_layout.setContentsMargins(10, 10, 10, 10)
+        self.network_properties_header_label = QLabel(self.network_card)
         self.network_properties_header_label.setObjectName(u"network_properties_header_label")
+        self.network_properties_header_label.setFont(font1)
 
-        self.verticalLayout_7.addWidget(self.network_properties_header_label)
+        self.network_card_layout.addWidget(self.network_properties_header_label)
 
-        self.network_properties_textEdit = QTextEdit(self.frame_3)
+        self.network_properties_textEdit = QLabel(self.network_card)
         self.network_properties_textEdit.setObjectName(u"network_properties_textEdit")
-        self.network_properties_textEdit.setFrameShape(QFrame.Shape.NoFrame)
+        self.network_properties_textEdit.setWordWrap(True)
+        self.network_properties_textEdit.setProperty(u"variant", u"help")
 
-        self.verticalLayout_7.addWidget(self.network_properties_textEdit)
+        self.network_card_layout.addWidget(self.network_properties_textEdit)
 
-        self.select_mode_label = QLabel(self.frame_3)
+        self.select_mode_label = QLabel(self.network_card)
         self.select_mode_label.setObjectName(u"select_mode_label")
 
-        self.verticalLayout_7.addWidget(self.select_mode_label)
+        self.network_card_layout.addWidget(self.select_mode_label)
 
-        self.horizontalLayout_9 = QHBoxLayout()
-        self.horizontalLayout_9.setObjectName(u"horizontalLayout_9")
-        self.verticalLayout_6 = QVBoxLayout()
-        self.verticalLayout_6.setObjectName(u"verticalLayout_6")
-        self.horizontalLayout_6 = QHBoxLayout()
-        self.horizontalLayout_6.setObjectName(u"horizontalLayout_6")
-        self.mst_radioButton = QRadioButton(self.frame_3)
+        self.threshold_layout = QVBoxLayout()
+        self.threshold_layout.setSpacing(8)
+        self.threshold_layout.setObjectName(u"threshold_layout")
+        self.threshold_layout_1_layout = QVBoxLayout()
+        self.threshold_layout_1_layout.setSpacing(2)
+        self.threshold_layout_1_layout.setObjectName(u"threshold_layout_1_layout")
+        self.mst_radioButton = QRadioButton(self.network_card)
         self.threshold_buttonGroup = QButtonGroup(ConnectivitySettings)
         self.threshold_buttonGroup.setObjectName(u"threshold_buttonGroup")
         self.threshold_buttonGroup.addButton(self.mst_radioButton)
         self.mst_radioButton.setObjectName(u"mst_radioButton")
         self.mst_radioButton.setChecked(True)
 
-        self.horizontalLayout_6.addWidget(self.mst_radioButton)
+        self.threshold_layout_1_layout.addWidget(self.mst_radioButton)
 
-        self.horizontalSpacer_8 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+        self.mst_help_label = QLabel(self.network_card)
+        self.mst_help_label.setObjectName(u"mst_help_label")
+        self.mst_help_label.setFont(font2)
+        self.mst_help_label.setWordWrap(True)
+        self.mst_help_label.setIndent(26)
+        self.mst_help_label.setProperty(u"variant", u"help")
 
-        self.horizontalLayout_6.addItem(self.horizontalSpacer_8)
+        self.threshold_layout_1_layout.addWidget(self.mst_help_label)
 
-        self.custom_threshold_radioButton = QRadioButton(self.frame_3)
+
+        self.threshold_layout.addLayout(self.threshold_layout_1_layout)
+
+        self.threshold_layout_line_1 = QFrame(self.network_card)
+        self.threshold_layout_line_1.setObjectName(u"threshold_layout_line_1")
+        self.threshold_layout_line_1.setFrameShape(QFrame.Shape.HLine)
+        self.threshold_layout_line_1.setFrameShadow(QFrame.Shadow.Plain)
+
+        self.threshold_layout.addWidget(self.threshold_layout_line_1)
+
+        self.threshold_layout_2_layout = QVBoxLayout()
+        self.threshold_layout_2_layout.setSpacing(2)
+        self.threshold_layout_2_layout.setObjectName(u"threshold_layout_2_layout")
+        self.custom_threshold_radioButton = QRadioButton(self.network_card)
         self.threshold_buttonGroup.addButton(self.custom_threshold_radioButton)
         self.custom_threshold_radioButton.setObjectName(u"custom_threshold_radioButton")
 
-        self.horizontalLayout_6.addWidget(self.custom_threshold_radioButton)
+        self.threshold_layout_2_layout.addWidget(self.custom_threshold_radioButton)
 
+        self.custom_threshold_layout = QVBoxLayout()
+        self.custom_threshold_layout.setSpacing(6)
+        self.custom_threshold_layout.setObjectName(u"custom_threshold_layout")
+        self.custom_threshold_help_label = QLabel(self.network_card)
+        self.custom_threshold_help_label.setObjectName(u"custom_threshold_help_label")
+        self.custom_threshold_help_label.setFont(font2)
+        self.custom_threshold_help_label.setWordWrap(True)
+        self.custom_threshold_help_label.setIndent(26)
+        self.custom_threshold_help_label.setProperty(u"variant", u"help")
 
-        self.verticalLayout_6.addLayout(self.horizontalLayout_6)
+        self.custom_threshold_layout.addWidget(self.custom_threshold_help_label)
 
-        self.horizontalLayout_8 = QHBoxLayout()
-        self.horizontalLayout_8.setObjectName(u"horizontalLayout_8")
-        self.threshold_val_label = QLabel(self.frame_3)
+        self.threshold_value_layout = QHBoxLayout()
+        self.threshold_value_layout.setSpacing(8)
+        self.threshold_value_layout.setObjectName(u"threshold_value_layout")
+        self.threshold_value_layout.setContentsMargins(26, 0, 0, 0)
+        self.threshold_val_label = QLabel(self.network_card)
         self.threshold_val_label.setObjectName(u"threshold_val_label")
 
-        self.horizontalLayout_8.addWidget(self.threshold_val_label)
+        self.threshold_value_layout.addWidget(self.threshold_val_label)
 
-        self.threshold_val_doubleSpinBox = QDoubleSpinBox(self.frame_3)
+        self.threshold_val_doubleSpinBox = QDoubleSpinBox(self.network_card)
         self.threshold_val_doubleSpinBox.setObjectName(u"threshold_val_doubleSpinBox")
+        self.threshold_val_doubleSpinBox.setMaximumSize(QSize(110, 16777215))
         self.threshold_val_doubleSpinBox.setMinimum(0.010000000000000)
         self.threshold_val_doubleSpinBox.setMaximum(0.990000000000000)
         self.threshold_val_doubleSpinBox.setSingleStep(0.010000000000000)
         self.threshold_val_doubleSpinBox.setValue(0.050000000000000)
 
-        self.horizontalLayout_8.addWidget(self.threshold_val_doubleSpinBox)
+        self.threshold_value_layout.addWidget(self.threshold_val_doubleSpinBox)
 
-        self.horizontalSpacer_9 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+        self.threshold_value_spacer = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
 
-        self.horizontalLayout_8.addItem(self.horizontalSpacer_9)
-
-
-        self.verticalLayout_6.addLayout(self.horizontalLayout_8)
+        self.threshold_value_layout.addItem(self.threshold_value_spacer)
 
 
-        self.horizontalLayout_9.addLayout(self.verticalLayout_6)
-
-        self.horizontalSpacer_7 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
-
-        self.horizontalLayout_9.addItem(self.horizontalSpacer_7)
+        self.custom_threshold_layout.addLayout(self.threshold_value_layout)
 
 
-        self.verticalLayout_7.addLayout(self.horizontalLayout_9)
+        self.threshold_layout_2_layout.addLayout(self.custom_threshold_layout)
 
 
-        self.verticalLayout.addWidget(self.frame_3)
+        self.threshold_layout.addLayout(self.threshold_layout_2_layout)
 
-        self.verticalSpacer = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
+
+        self.network_card_layout.addLayout(self.threshold_layout)
+
+
+        self.content_layout.addWidget(self.network_card)
+
+
+        self.content_row.addWidget(self.content_widget)
+
+        self.content_spacer = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+
+        self.content_row.addItem(self.content_spacer)
+
+        self.content_row.setStretch(0, 1)
+
+        self.verticalLayout.addLayout(self.content_row)
+
+        self.verticalSpacer = QSpacerItem(40, 20, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
 
         self.verticalLayout.addItem(self.verticalSpacer)
 
@@ -307,41 +465,37 @@ class Ui_ConnectivitySettings(object):
 
     def retranslateUi(self, ConnectivitySettings):
         ConnectivitySettings.setWindowTitle("")
-        self.connectivity_type_label.setText(QCoreApplication.translate("ConnectivitySettings", u"<html><head/><body><p><span style=\" font-weight:700;\">Connectivity Type:</span></p></body></html>", None))
-        self.label_4.setText(QCoreApplication.translate("ConnectivitySettings", u"Choose the connectivity analysis you want to run. You may run the tool twice if you wish to use both metrics.", None))
-        self.wpli_radioButton.setText(QCoreApplication.translate("ConnectivitySettings", u"Weighted Phase Lag Index (WPLI)", None))
-        self.dpli_radioButton.setText(QCoreApplication.translate("ConnectivitySettings", u"Directed Phase Lag Index (DPLI)", None))
-        self.aec_radioButton.setText(QCoreApplication.translate("ConnectivitySettings", u"Amplitude Envelope Correlation (AEC)", None))
-        self.connectivity_settings_header_label.setText(QCoreApplication.translate("ConnectivitySettings", u"<html><head/><body><p><span style=\" font-weight:700;\">Connectivity Settings:</span></p></body></html>", None))
-        self.connectivity_settings_label.setText(QCoreApplication.translate("ConnectivitySettings", u"Specify the number of surrogates and the p-value to use for the connectivity analysis:\n"
-"\n"
-"Surrogates and p-value help remove connections that could appear by chance, keeping only the statistically significant brain connections.\n"
-"", None))
-        self.num_surr_label.setText(QCoreApplication.translate("ConnectivitySettings", u"Number of surrogrations", None))
-        self.num_surr_lineedit.setText(QCoreApplication.translate("ConnectivitySettings", u"20", None))
-        self.p_value_label.setText(QCoreApplication.translate("ConnectivitySettings", u"P_value", None))
-        self.p_value_lineedit.setText(QCoreApplication.translate("ConnectivitySettings", u"0.05", None))
-        self.select_epoch_label.setText(QCoreApplication.translate("ConnectivitySettings", u"Set window length and overlap for epoching the data:", None))
-        self.epoch_length_label.setText(QCoreApplication.translate("ConnectivitySettings", u"Epoch length (s)", None))
+        self.title_label.setText(QCoreApplication.translate("ConnectivitySettings", u"Connectivity Settings", None))
+        self.subtitle_label.setText(QCoreApplication.translate("ConnectivitySettings", u"Define the connectivity settings for your study: the connectivity measure, the epochs and the statistical testing.", None))
+        self.connectivity_type_label.setText(QCoreApplication.translate("ConnectivitySettings", u"Connectivity type", None))
+        self.label_4.setText(QCoreApplication.translate("ConnectivitySettings", u"Choose the connectivity analysis to run. To use more than one measure, run the tool once for each.", None))
+        self.wpli_radioButton.setText(QCoreApplication.translate("ConnectivitySettings", u"Weighted phase lag index (wPLI)", None))
+        self.wpli_help_label.setText(QCoreApplication.translate("ConnectivitySettings", u"Strength of the phase-lagged coupling, robust to noise and common sources.", None))
+        self.dpli_radioButton.setText(QCoreApplication.translate("ConnectivitySettings", u"Directed phase lag index (dPLI)", None))
+        self.dpli_help_label.setText(QCoreApplication.translate("ConnectivitySettings", u"Direction of the coupling: which channel leads the other.", None))
+        self.aec_radioButton.setText(QCoreApplication.translate("ConnectivitySettings", u"Amplitude envelope correlation (AEC)", None))
+        self.aec_help_label.setText(QCoreApplication.translate("ConnectivitySettings", u"Coupling of the amplitude envelopes, with leakage correction.", None))
+        self.select_epoch_label.setText(QCoreApplication.translate("ConnectivitySettings", u"Epochs", None))
+        self.epoch_length_label.setText(QCoreApplication.translate("ConnectivitySettings", u"Epoch length", None))
         self.epoch_length_lineEdit.setText(QCoreApplication.translate("ConnectivitySettings", u"10", None))
-        self.epoch_overlap_label.setText(QCoreApplication.translate("ConnectivitySettings", u"Epoch overlap (s)", None))
+        self.epoch_length_unit_label.setText(QCoreApplication.translate("ConnectivitySettings", u"s", None))
+        self.epoch_overlap_label.setText(QCoreApplication.translate("ConnectivitySettings", u"Epoch overlap", None))
         self.epoch_overlap_lineEdit.setText(QCoreApplication.translate("ConnectivitySettings", u"0", None))
-        self.network_properties_header_label.setText(QCoreApplication.translate("ConnectivitySettings", u"<html><head/><body><p><span style=\" font-weight:700;\">Network Properties Settings:</span></p></body></html>", None))
-        self.network_properties_textEdit.setHtml(QCoreApplication.translate("ConnectivitySettings", u"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
-"<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset=\"utf-8\" /><style type=\"text/css\">\n"
-"p, li { white-space: pre-wrap; }\n"
-"hr { height: 1px; border-width: 0; }\n"
-"li.unchecked::marker { content: \"\\2610\"; }\n"
-"li.checked::marker { content: \"\\2612\"; }\n"
-"</style></head><body style=\" font-size:12pt; font-weight:400; font-style:normal;\">\n"
-"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Network Properties computes key graph metrics to characterize the network\u2019s efficiency, integration, segregation, and small-world organization.</p>\n"
-"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">The output includes five global measures: average shortest path length, clustering coefficient, global efficiency, small-worldness (clustering/pa"
-                        "th ratio), and modularity.</p>\n"
-"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">This analysis runs only when the number of channels is greater than 32. Connectivity can be thresholded using either a minimum spanning tree or a custom threshold.</p>\n"
-"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-weight:700;\">minimally_spanning_tree</span>: finds the smallest threshold that keeps the network fully connected (recommended).<br /><span style=\" font-weight:700;\">custom_threshold</span> : retains the top X % of strongest edges (value between 0 and 1).</p></body></html>", None))
-        self.select_mode_label.setText(QCoreApplication.translate("ConnectivitySettings", u"<html><head/><body><p>Select threshold mode, and threshold value if threshold mode is set to custom threshold.</p></body></html>", None))
+        self.epoch_overlap_unit_label.setText(QCoreApplication.translate("ConnectivitySettings", u"s", None))
+        self.epochs_help_label.setText(QCoreApplication.translate("ConnectivitySettings", u"Window length and overlap for epoching the data. All measures.", None))
+        self.connectivity_settings_header_label.setText(QCoreApplication.translate("ConnectivitySettings", u"Statistical testing", None))
+        self.num_surr_label.setText(QCoreApplication.translate("ConnectivitySettings", u"Number of surrogates", None))
+        self.num_surr_lineedit.setText(QCoreApplication.translate("ConnectivitySettings", u"20", None))
+        self.p_value_label.setText(QCoreApplication.translate("ConnectivitySettings", u"p-value", None))
+        self.p_value_lineedit.setText(QCoreApplication.translate("ConnectivitySettings", u"0.05", None))
+        self.connectivity_settings_label.setText(QCoreApplication.translate("ConnectivitySettings", u"Removes the connections that could appear by chance: only the statistically significant brain connections are kept. wPLI and dPLI only.", None))
+        self.network_properties_header_label.setText(QCoreApplication.translate("ConnectivitySettings", u"Network properties", None))
+        self.network_properties_textEdit.setText(QCoreApplication.translate("ConnectivitySettings", u"Graph metrics of the wPLI connectivity matrix: characteristic path length, clustering coefficient, global efficiency, small-worldness, modularity and participation coefficient. wPLI only, with at least 32 channels.", None))
+        self.select_mode_label.setText(QCoreApplication.translate("ConnectivitySettings", u"Threshold of the connectivity matrix", None))
         self.mst_radioButton.setText(QCoreApplication.translate("ConnectivitySettings", u"Minimally spanning tree", None))
+        self.mst_help_label.setText(QCoreApplication.translate("ConnectivitySettings", u"Finds the smallest threshold that keeps the network fully connected (recommended).", None))
         self.custom_threshold_radioButton.setText(QCoreApplication.translate("ConnectivitySettings", u"Custom threshold", None))
+        self.custom_threshold_help_label.setText(QCoreApplication.translate("ConnectivitySettings", u"Keeps this fraction of the strongest connections (0.05: the top 5 %).", None))
         self.threshold_val_label.setText(QCoreApplication.translate("ConnectivitySettings", u"Threshold value", None))
     # retranslateUi
 
