@@ -15,80 +15,438 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QFont, QFontDatabase, QGradient, QIcon,
     QImage, QKeySequence, QLinearGradient, QPainter,
     QPalette, QPixmap, QRadialGradient, QTransform)
-from PySide6.QtWidgets import (QAbstractScrollArea, QApplication, QFrame, QHBoxLayout,
-    QSizePolicy, QTextEdit, QWidget)
+from PySide6.QtWidgets import (QApplication, QFrame, QGridLayout, QHBoxLayout,
+    QLabel, QPushButton, QSizePolicy, QSpacerItem,
+    QVBoxLayout, QWidget)
 import themes_rc
 
 class Ui_IntroStep(object):
     def setupUi(self, IntroStep):
         if not IntroStep.objectName():
             IntroStep.setObjectName(u"IntroStep")
-        IntroStep.resize(1008, 773)
-        self.horizontalLayout = QHBoxLayout(IntroStep)
-        self.horizontalLayout.setObjectName(u"horizontalLayout")
-        self.textEdit = QTextEdit(IntroStep)
-        self.textEdit.setObjectName(u"textEdit")
-        self.textEdit.setFrameShape(QFrame.Shape.NoFrame)
-        self.textEdit.setFrameShadow(QFrame.Shadow.Plain)
-        self.textEdit.setLineWidth(0)
-        self.textEdit.setSizeAdjustPolicy(QAbstractScrollArea.SizeAdjustPolicy.AdjustToContents)
-        self.textEdit.setReadOnly(True)
+        IntroStep.resize(900, 700)
+        self.verticalLayout = QVBoxLayout(IntroStep)
+        self.verticalLayout.setObjectName(u"verticalLayout")
+        self.verticalLayout.setContentsMargins(19, 12, 19, 12)
+        self.content_row = QHBoxLayout()
+        self.content_row.setObjectName(u"content_row")
+        self.content_row.setContentsMargins(0, 0, 0, 0)
+        self.content_widget = QWidget(IntroStep)
+        self.content_widget.setObjectName(u"content_widget")
+        self.content_widget.setMaximumSize(QSize(800, 16777215))
+        self.content_layout = QVBoxLayout(self.content_widget)
+        self.content_layout.setSpacing(16)
+        self.content_layout.setObjectName(u"content_layout")
+        self.content_layout.setContentsMargins(0, 0, 0, 0)
+        self.header_layout = QVBoxLayout()
+        self.header_layout.setSpacing(6)
+        self.header_layout.setObjectName(u"header_layout")
+        self.title_label = QLabel(self.content_widget)
+        self.title_label.setObjectName(u"title_label")
+        font = QFont()
+        font.setPointSize(18)
+        font.setBold(True)
+        self.title_label.setFont(font)
 
-        self.horizontalLayout.addWidget(self.textEdit)
+        self.header_layout.addWidget(self.title_label)
+
+        self.subtitle_label = QLabel(self.content_widget)
+        self.subtitle_label.setObjectName(u"subtitle_label")
+        self.subtitle_label.setWordWrap(True)
+        self.subtitle_label.setProperty(u"variant", u"help")
+
+        self.header_layout.addWidget(self.subtitle_label)
+
+
+        self.content_layout.addLayout(self.header_layout)
+
+        self.common_settings_info = QFrame(self.content_widget)
+        self.common_settings_info.setObjectName(u"common_settings_info")
+        self.common_settings_info.setFrameShape(QFrame.Shape.NoFrame)
+        self.common_settings_info.setProperty(u"variant", u"info")
+        self.common_settings_info_layout = QHBoxLayout(self.common_settings_info)
+        self.common_settings_info_layout.setObjectName(u"common_settings_info_layout")
+        self.common_settings_info_layout.setContentsMargins(14, 10, 14, 10)
+        self.common_settings_info_label = QLabel(self.common_settings_info)
+        self.common_settings_info_label.setObjectName(u"common_settings_info_label")
+        self.common_settings_info_label.setTextFormat(Qt.TextFormat.RichText)
+        self.common_settings_info_label.setWordWrap(True)
+
+        self.common_settings_info_layout.addWidget(self.common_settings_info_label)
+
+
+        self.content_layout.addWidget(self.common_settings_info)
+
+        self.steps_section_layout = QVBoxLayout()
+        self.steps_section_layout.setSpacing(8)
+        self.steps_section_layout.setObjectName(u"steps_section_layout")
+        self.steps_title_label = QLabel(self.content_widget)
+        self.steps_title_label.setObjectName(u"steps_title_label")
+        font1 = QFont()
+        font1.setPointSize(15)
+        font1.setBold(True)
+        self.steps_title_label.setFont(font1)
+
+        self.steps_section_layout.addWidget(self.steps_title_label)
+
+        self.steps_card = QFrame(self.content_widget)
+        self.steps_card.setObjectName(u"steps_card")
+        self.steps_card.setFrameShape(QFrame.Shape.StyledPanel)
+        self.steps_card.setFrameShadow(QFrame.Shadow.Raised)
+        self.steps_card_layout = QVBoxLayout(self.steps_card)
+        self.steps_card_layout.setSpacing(10)
+        self.steps_card_layout.setObjectName(u"steps_card_layout")
+        self.steps_card_layout.setContentsMargins(10, 10, 10, 10)
+        self.steps_grid = QGridLayout()
+        self.steps_grid.setObjectName(u"steps_grid")
+        self.steps_grid.setHorizontalSpacing(12)
+        self.steps_grid.setVerticalSpacing(10)
+        self.step_1_number_label = QLabel(self.steps_card)
+        self.step_1_number_label.setObjectName(u"step_1_number_label")
+        font2 = QFont()
+        font2.setPointSize(10)
+        self.step_1_number_label.setFont(font2)
+        self.step_1_number_label.setProperty(u"variant", u"step_number")
+        self.step_1_number_label.setMinimumSize(QSize(24, 24))
+        self.step_1_number_label.setMaximumSize(QSize(24, 24))
+        self.step_1_number_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+
+        self.steps_grid.addWidget(self.step_1_number_label, 0, 0, 1, 1, Qt.AlignmentFlag.AlignTop)
+
+        self.step_1_name_label = QLabel(self.steps_card)
+        self.step_1_name_label.setObjectName(u"step_1_name_label")
+        font3 = QFont()
+        font3.setBold(True)
+        self.step_1_name_label.setFont(font3)
+        self.step_1_name_label.setAlignment(Qt.AlignmentFlag.AlignLeading|Qt.AlignmentFlag.AlignLeft|Qt.AlignmentFlag.AlignTop)
+
+        self.steps_grid.addWidget(self.step_1_name_label, 0, 1, 1, 1)
+
+        self.steps_gap = QSpacerItem(16, 20, QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Minimum)
+
+        self.steps_grid.addItem(self.steps_gap, 0, 2, 1, 1)
+
+        self.step_1_label = QLabel(self.steps_card)
+        self.step_1_label.setObjectName(u"step_1_label")
+        self.step_1_label.setWordWrap(True)
+        self.step_1_label.setProperty(u"variant", u"help")
+        self.step_1_label.setAlignment(Qt.AlignmentFlag.AlignLeading|Qt.AlignmentFlag.AlignLeft|Qt.AlignmentFlag.AlignTop)
+
+        self.steps_grid.addWidget(self.step_1_label, 0, 3, 1, 1)
+
+        self.step_line_2 = QFrame(self.steps_card)
+        self.step_line_2.setObjectName(u"step_line_2")
+        self.step_line_2.setFrameShape(QFrame.Shape.HLine)
+        self.step_line_2.setFrameShadow(QFrame.Shadow.Plain)
+
+        self.steps_grid.addWidget(self.step_line_2, 1, 0, 1, 4)
+
+        self.step_2_number_label = QLabel(self.steps_card)
+        self.step_2_number_label.setObjectName(u"step_2_number_label")
+        self.step_2_number_label.setFont(font2)
+        self.step_2_number_label.setProperty(u"variant", u"step_number")
+        self.step_2_number_label.setMinimumSize(QSize(24, 24))
+        self.step_2_number_label.setMaximumSize(QSize(24, 24))
+        self.step_2_number_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+
+        self.steps_grid.addWidget(self.step_2_number_label, 2, 0, 1, 1, Qt.AlignmentFlag.AlignTop)
+
+        self.step_2_name_label = QLabel(self.steps_card)
+        self.step_2_name_label.setObjectName(u"step_2_name_label")
+        self.step_2_name_label.setFont(font3)
+        self.step_2_name_label.setAlignment(Qt.AlignmentFlag.AlignLeading|Qt.AlignmentFlag.AlignLeft|Qt.AlignmentFlag.AlignTop)
+
+        self.steps_grid.addWidget(self.step_2_name_label, 2, 1, 1, 1)
+
+        self.step_2_label = QLabel(self.steps_card)
+        self.step_2_label.setObjectName(u"step_2_label")
+        self.step_2_label.setWordWrap(True)
+        self.step_2_label.setProperty(u"variant", u"help")
+        self.step_2_label.setAlignment(Qt.AlignmentFlag.AlignLeading|Qt.AlignmentFlag.AlignLeft|Qt.AlignmentFlag.AlignTop)
+
+        self.steps_grid.addWidget(self.step_2_label, 2, 3, 1, 1)
+
+        self.step_line_3 = QFrame(self.steps_card)
+        self.step_line_3.setObjectName(u"step_line_3")
+        self.step_line_3.setFrameShape(QFrame.Shape.HLine)
+        self.step_line_3.setFrameShadow(QFrame.Shadow.Plain)
+
+        self.steps_grid.addWidget(self.step_line_3, 3, 0, 1, 4)
+
+        self.step_3_number_label = QLabel(self.steps_card)
+        self.step_3_number_label.setObjectName(u"step_3_number_label")
+        self.step_3_number_label.setFont(font2)
+        self.step_3_number_label.setProperty(u"variant", u"step_number")
+        self.step_3_number_label.setMinimumSize(QSize(24, 24))
+        self.step_3_number_label.setMaximumSize(QSize(24, 24))
+        self.step_3_number_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+
+        self.steps_grid.addWidget(self.step_3_number_label, 4, 0, 1, 1, Qt.AlignmentFlag.AlignTop)
+
+        self.step_3_name_label = QLabel(self.steps_card)
+        self.step_3_name_label.setObjectName(u"step_3_name_label")
+        self.step_3_name_label.setFont(font3)
+        self.step_3_name_label.setAlignment(Qt.AlignmentFlag.AlignLeading|Qt.AlignmentFlag.AlignLeft|Qt.AlignmentFlag.AlignTop)
+
+        self.steps_grid.addWidget(self.step_3_name_label, 4, 1, 1, 1)
+
+        self.step_3_label = QLabel(self.steps_card)
+        self.step_3_label.setObjectName(u"step_3_label")
+        self.step_3_label.setWordWrap(True)
+        self.step_3_label.setProperty(u"variant", u"help")
+        self.step_3_label.setAlignment(Qt.AlignmentFlag.AlignLeading|Qt.AlignmentFlag.AlignLeft|Qt.AlignmentFlag.AlignTop)
+
+        self.steps_grid.addWidget(self.step_3_label, 4, 3, 1, 1)
+
+        self.step_line_4 = QFrame(self.steps_card)
+        self.step_line_4.setObjectName(u"step_line_4")
+        self.step_line_4.setFrameShape(QFrame.Shape.HLine)
+        self.step_line_4.setFrameShadow(QFrame.Shadow.Plain)
+
+        self.steps_grid.addWidget(self.step_line_4, 5, 0, 1, 4)
+
+        self.step_4_number_label = QLabel(self.steps_card)
+        self.step_4_number_label.setObjectName(u"step_4_number_label")
+        self.step_4_number_label.setFont(font2)
+        self.step_4_number_label.setProperty(u"variant", u"step_number")
+        self.step_4_number_label.setMinimumSize(QSize(24, 24))
+        self.step_4_number_label.setMaximumSize(QSize(24, 24))
+        self.step_4_number_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+
+        self.steps_grid.addWidget(self.step_4_number_label, 6, 0, 1, 1, Qt.AlignmentFlag.AlignTop)
+
+        self.step_4_name_label = QLabel(self.steps_card)
+        self.step_4_name_label.setObjectName(u"step_4_name_label")
+        self.step_4_name_label.setFont(font3)
+        self.step_4_name_label.setAlignment(Qt.AlignmentFlag.AlignLeading|Qt.AlignmentFlag.AlignLeft|Qt.AlignmentFlag.AlignTop)
+
+        self.steps_grid.addWidget(self.step_4_name_label, 6, 1, 1, 1)
+
+        self.step_4_label = QLabel(self.steps_card)
+        self.step_4_label.setObjectName(u"step_4_label")
+        self.step_4_label.setWordWrap(True)
+        self.step_4_label.setProperty(u"variant", u"help")
+        self.step_4_label.setAlignment(Qt.AlignmentFlag.AlignLeading|Qt.AlignmentFlag.AlignLeft|Qt.AlignmentFlag.AlignTop)
+
+        self.steps_grid.addWidget(self.step_4_label, 6, 3, 1, 1)
+
+        self.steps_grid.setColumnStretch(3, 1)
+
+        self.steps_card_layout.addLayout(self.steps_grid)
+
+
+        self.steps_section_layout.addWidget(self.steps_card)
+
+
+        self.content_layout.addLayout(self.steps_section_layout)
+
+        self.files_section_layout = QVBoxLayout()
+        self.files_section_layout.setSpacing(8)
+        self.files_section_layout.setObjectName(u"files_section_layout")
+        self.files_title_label = QLabel(self.content_widget)
+        self.files_title_label.setObjectName(u"files_title_label")
+        self.files_title_label.setFont(font1)
+
+        self.files_section_layout.addWidget(self.files_title_label)
+
+        self.files_card = QFrame(self.content_widget)
+        self.files_card.setObjectName(u"files_card")
+        self.files_card.setFrameShape(QFrame.Shape.StyledPanel)
+        self.files_card.setFrameShadow(QFrame.Shadow.Raised)
+        self.files_card_layout = QVBoxLayout(self.files_card)
+        self.files_card_layout.setSpacing(10)
+        self.files_card_layout.setObjectName(u"files_card_layout")
+        self.files_card_layout.setContentsMargins(10, 10, 10, 10)
+        self.files_grid = QGridLayout()
+        self.files_grid.setObjectName(u"files_grid")
+        self.files_grid.setHorizontalSpacing(32)
+        self.files_grid.setVerticalSpacing(6)
+        self.file_1_name_label = QLabel(self.files_card)
+        self.file_1_name_label.setObjectName(u"file_1_name_label")
+        self.file_1_name_label.setFont(font3)
+
+        self.files_grid.addWidget(self.file_1_name_label, 0, 0, 1, 1)
+
+        self.file_1_label = QLabel(self.files_card)
+        self.file_1_label.setObjectName(u"file_1_label")
+        self.file_1_label.setWordWrap(True)
+
+        self.files_grid.addWidget(self.file_1_label, 0, 1, 1, 1)
+
+        self.file_2_name_label = QLabel(self.files_card)
+        self.file_2_name_label.setObjectName(u"file_2_name_label")
+        self.file_2_name_label.setFont(font3)
+
+        self.files_grid.addWidget(self.file_2_name_label, 1, 0, 1, 1)
+
+        self.file_2_label = QLabel(self.files_card)
+        self.file_2_label.setObjectName(u"file_2_label")
+        self.file_2_label.setWordWrap(True)
+
+        self.files_grid.addWidget(self.file_2_label, 1, 1, 1, 1)
+
+        self.file_3_name_label = QLabel(self.files_card)
+        self.file_3_name_label.setObjectName(u"file_3_name_label")
+        self.file_3_name_label.setFont(font3)
+
+        self.files_grid.addWidget(self.file_3_name_label, 2, 0, 1, 1)
+
+        self.file_3_label = QLabel(self.files_card)
+        self.file_3_label.setObjectName(u"file_3_label")
+        self.file_3_label.setTextFormat(Qt.TextFormat.RichText)
+        self.file_3_label.setWordWrap(True)
+
+        self.files_grid.addWidget(self.file_3_label, 2, 1, 1, 1)
+
+        self.files_grid.setColumnStretch(1, 1)
+
+        self.files_card_layout.addLayout(self.files_grid)
+
+
+        self.files_section_layout.addWidget(self.files_card)
+
+
+        self.content_layout.addLayout(self.files_section_layout)
+
+        self.methods_section_layout = QVBoxLayout()
+        self.methods_section_layout.setSpacing(2)
+        self.methods_section_layout.setObjectName(u"methods_section_layout")
+        self.methods_buttons_layout = QHBoxLayout()
+        self.methods_buttons_layout.setSpacing(0)
+        self.methods_buttons_layout.setObjectName(u"methods_buttons_layout")
+        self.methods_show_button = QPushButton(self.content_widget)
+        self.methods_show_button.setObjectName(u"methods_show_button")
+        self.methods_show_button.setFocusPolicy(Qt.FocusPolicy.TabFocus)
+        self.methods_show_button.setFlat(True)
+        self.methods_show_button.setProperty(u"variant", u"link")
+
+        self.methods_buttons_layout.addWidget(self.methods_show_button)
+
+        self.methods_hide_button = QPushButton(self.content_widget)
+        self.methods_hide_button.setObjectName(u"methods_hide_button")
+        self.methods_hide_button.setFocusPolicy(Qt.FocusPolicy.TabFocus)
+        self.methods_hide_button.setVisible(False)
+        self.methods_hide_button.setFlat(True)
+        self.methods_hide_button.setProperty(u"variant", u"link")
+
+        self.methods_buttons_layout.addWidget(self.methods_hide_button)
+
+        self.methods_buttons_spacer = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+
+        self.methods_buttons_layout.addItem(self.methods_buttons_spacer)
+
+
+        self.methods_section_layout.addLayout(self.methods_buttons_layout)
+
+        self.methods_note_label = QLabel(self.content_widget)
+        self.methods_note_label.setObjectName(u"methods_note_label")
+        self.methods_note_label.setFont(font2)
+        self.methods_note_label.setWordWrap(True)
+        self.methods_note_label.setProperty(u"variant", u"help")
+
+        self.methods_section_layout.addWidget(self.methods_note_label)
+
+        self.methods_widget = QWidget(self.content_widget)
+        self.methods_widget.setObjectName(u"methods_widget")
+        self.methods_widget.setVisible(False)
+        self.methods_layout = QVBoxLayout(self.methods_widget)
+        self.methods_layout.setSpacing(10)
+        self.methods_layout.setObjectName(u"methods_layout")
+        self.methods_layout.setContentsMargins(0, 6, 0, 0)
+        self.methods_label = QLabel(self.methods_widget)
+        self.methods_label.setObjectName(u"methods_label")
+        self.methods_label.setTextFormat(Qt.TextFormat.RichText)
+        self.methods_label.setWordWrap(True)
+        self.methods_label.setProperty(u"variant", u"help")
+
+        self.methods_layout.addWidget(self.methods_label)
+
+        self.references_layout = QVBoxLayout()
+        self.references_layout.setSpacing(8)
+        self.references_layout.setObjectName(u"references_layout")
+        self.references_layout.setContentsMargins(0, 6, 0, 0)
+        self.references_line = QFrame(self.methods_widget)
+        self.references_line.setObjectName(u"references_line")
+        self.references_line.setFrameShape(QFrame.Shape.HLine)
+        self.references_line.setFrameShadow(QFrame.Shadow.Plain)
+
+        self.references_layout.addWidget(self.references_line)
+
+        self.references_label = QLabel(self.methods_widget)
+        self.references_label.setObjectName(u"references_label")
+        self.references_label.setFont(font2)
+        self.references_label.setTextFormat(Qt.TextFormat.RichText)
+        self.references_label.setWordWrap(True)
+        self.references_label.setOpenExternalLinks(True)
+        self.references_label.setProperty(u"variant", u"help")
+
+        self.references_layout.addWidget(self.references_label)
+
+
+        self.methods_layout.addLayout(self.references_layout)
+
+
+        self.methods_section_layout.addWidget(self.methods_widget)
+
+
+        self.content_layout.addLayout(self.methods_section_layout)
+
+
+        self.content_row.addWidget(self.content_widget)
+
+        self.content_spacer = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+
+        self.content_row.addItem(self.content_spacer)
+
+        self.content_row.setStretch(0, 1)
+
+        self.verticalLayout.addLayout(self.content_row)
+
+        self.verticalSpacer = QSpacerItem(40, 20, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
+
+        self.verticalLayout.addItem(self.verticalSpacer)
 
 
         self.retranslateUi(IntroStep)
+        self.methods_show_button.clicked.connect(self.methods_widget.show)
+        self.methods_show_button.clicked.connect(self.methods_hide_button.show)
+        self.methods_show_button.clicked.connect(self.methods_show_button.hide)
+        self.methods_hide_button.clicked.connect(self.methods_widget.hide)
+        self.methods_hide_button.clicked.connect(self.methods_show_button.show)
+        self.methods_hide_button.clicked.connect(self.methods_hide_button.hide)
 
         QMetaObject.connectSlotsByName(IntroStep)
     # setupUi
 
     def retranslateUi(self, IntroStep):
         IntroStep.setWindowTitle("")
-        self.textEdit.setHtml(QCoreApplication.translate("IntroStep", u"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
-"<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset=\"utf-8\" /><style type=\"text/css\">\n"
-"p, li { white-space: pre-wrap; }\n"
-"hr { height: 1px; border-width: 0; }\n"
-"li.unchecked::marker { content: \"\\2610\"; }\n"
-"li.checked::marker { content: \"\\2612\"; }\n"
-"</style></head><body style=\" font-size:12pt; font-weight:400; font-style:normal;\">\n"
-"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-weight:600;\">Oxygen Saturation Report</span></p>\n"
-"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">A tool to analyze oxygen saturation, detect oxygen desaturations, and export an Oxygen Saturation Report.</p>\n"
-"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-inden"
-                        "t:0px;\">Sleep staging is essential because oxygen saturation is particularly relevant during the sleep period (SP).<br />The SP is defined as the duration (in minutes) from the first epoch scored as sleep (N1, N2, N3, R) to the final awakening, including the last epoch scored as sleep.</p>\n"
-"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">The desaturation detector is inspired by ABOSA v1.2.2 [1], a freely available automatic oxygen saturation analysis software.</p>\n"
-"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Common settings : <br /><span style=\" font-weight:700; color:#ff0000;\">NOTE:</span><span style=\" color:#ff0000;\"> Please define the sleep cycle configuration to use for the analysis using the blue panel on the left.</span></p>\n"
-"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent"
-                        ":0px;\"><span style=\" text-decoration: underline;\">1 - Input Files :</span></p>\n"
-"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Add the PSG files to analyze.</p>\n"
-"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\"\">- European Data Format (EDF) : The .edf and .tsv files must have the exact same filename and be stored in the same directory.<br />- Stellate : The .sig and .sts files must have the exact same filename and be stored in the same directory.<br />- NATUS (</span><span style=\" font-style:italic;\">for CEAMS users</span><span style=\"\">) : </span><span style=\"\">The entire NATUS subject folder is required.</span></p>\n"
-"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Define the montage and channels for each open file you want to run the tool on.</p>\n"
-"<p s"
-                        "tyle=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" text-decoration: underline;\">2 - Invalid sections :</span></p>\n"
-"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">The detector includes basic automatic artifact detection (limited to obvious artifacts). <br />Manual annotation of subtle artifacts is recommended prior to analysis.<br />The user must select any annotations to be excluded from the oxygen saturation analysis.</p>\n"
-"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" text-decoration: underline;\">3 - Detection Settings : </span></p>\n"
-"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">The user must define the oxygen desaturation criteria, including:</p>\n"
-"<p style=\" margin-top:12"
-                        "px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">- the oxygen drop threshold (%)<br />- the minimum desaturation duration (s)<br />- the maximum desaturation duration (s)</p>\n"
-"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" text-decoration: underline;\">4 - Output Files :</span></p>\n"
-"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-weight:700;\">Cohort Saturation Report</span></p>\n"
-"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">The Cohort Oxygen Saturation Report includes three categories of metrics:</p>\n"
-"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-weight:700;\">1. Oxygen saturation variables</span"
-                        "> <br />Minimum, maximum, and average oxygen saturation per recording, computed for:</p>\n"
-"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">- the full sleep period<br />- sleep halves and thirds<br />- individual sleep cycles<br />- sleep stages</p>\n"
-"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-weight:700;\">2. Oxygen desaturation variables </span></p>\n"
-"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">- oxygen desaturation index (ODI, events per sleep hour)<br />- desaturation severity (sum of areas under desaturation events, in percent\u00b7sec, over the sleep period)<br />- percentage of sleep time spent in desaturation<br />- average and median desaturation characteristics (duration, area, slope, drop)</p>\n"
-"<p style=\" margin-top:12px; margin-bottom:12px;"
-                        " margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-weight:700;\">3. Oxygen recovery variables </span></p>\n"
-"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Index, severity, percentage of sleep time spent in recovery and the average and median recovery characteristics.</p>\n"
-"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">The <span style=\" font-weight:700;\">Total Severity </span>corresponds to the sum of the individual desaturation and recovery areas in percent*sec over the valid sleep period (sec).</p>\n"
-"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">All variables are computed for the total sleep period. <br />Each recording is saved as a single row in the cohort report. New recordings are appended to the existing file.</p>\n"
-"<p style="
-                        "\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">The user specifies the file location to save the Cohort Oxygen Saturation Report.</p>\n"
-"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-weight:700;\">Optional outputs</span></p>\n"
-"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">The detected desaturation and recovery events can be saved in the accessory file associated with the recording, for review.</p>\n"
-"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Annotation for desaturation events : group = SpO2; name = desat_SpO2; <br />Annotation for recovery events : group = SpO2; name = recovery_SpO2;</p>\n"
-"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:"
-                        "0; text-indent:0px;\">The user can select an output directory to save the following outputs for each recording:<br />- A desaturation characteristics report, including:<br />   - start time (s)<br />   - duration (s)<br />   - slope (%/s)<br />   - depth (%)<br />   - area (%*s)<br />- The oxygen saturation graph, including saturation signal for the entire recording and invalid sections highlighted.</p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p></body></html>", None))
+        self.title_label.setText(QCoreApplication.translate("IntroStep", u"Report Oxygen Saturation", None))
+        self.subtitle_label.setText(QCoreApplication.translate("IntroStep", u"Analyzes the oxygen saturation of your polysomnography (PSG) files, detects the oxygen desaturations and exports a report for the cohort.", None))
+        self.common_settings_info_label.setText(QCoreApplication.translate("IntroStep", u"<b>Before you start</b><br/>The PSG files must be scored: the oxygen saturation is analyzed during the sleep period. Define the sleep cycle configuration to use for the analysis: <b>Common settings \u203a Sleep Cycles</b>, in the left panel.", None))
+        self.steps_title_label.setText(QCoreApplication.translate("IntroStep", u"What you will do", None))
+        self.step_1_number_label.setText(QCoreApplication.translate("IntroStep", u"1", None))
+        self.step_1_name_label.setText(QCoreApplication.translate("IntroStep", u"Input Files", None))
+        self.step_1_label.setText(QCoreApplication.translate("IntroStep", u"Add the PSG files, then define the montage and the oxygen channel (such as SpO2 or OSAT) of each file.", None))
+        self.step_2_number_label.setText(QCoreApplication.translate("IntroStep", u"2", None))
+        self.step_2_name_label.setText(QCoreApplication.translate("IntroStep", u"Non valid sections", None))
+        self.step_2_label.setText(QCoreApplication.translate("IntroStep", u"Select the annotations to exclude from the oxygen saturation analysis. The detector excludes the obvious artefacts only: annotate the subtle artefacts before the analysis.", None))
+        self.step_3_number_label.setText(QCoreApplication.translate("IntroStep", u"3", None))
+        self.step_3_name_label.setText(QCoreApplication.translate("IntroStep", u"Detection Settings", None))
+        self.step_3_label.setText(QCoreApplication.translate("IntroStep", u"Define the desaturation criteria: the oxygen level drop (3 or 4%) and the minimum and maximum desaturation durations.", None))
+        self.step_4_number_label.setText(QCoreApplication.translate("IntroStep", u"4", None))
+        self.step_4_name_label.setText(QCoreApplication.translate("IntroStep", u"Output Files", None))
+        self.step_4_label.setText(QCoreApplication.translate("IntroStep", u"Choose the file of the report for the cohort. Optionally, write the detected events in the accessory file and save the characteristics of the events and a graph for each recording.", None))
+        self.files_title_label.setText(QCoreApplication.translate("IntroStep", u"Accepted files", None))
+        self.file_1_name_label.setText(QCoreApplication.translate("IntroStep", u"EDF", None))
+        self.file_1_label.setText(QCoreApplication.translate("IntroStep", u"The .edf and .tsv files have the same filename and are in the same directory.", None))
+        self.file_2_name_label.setText(QCoreApplication.translate("IntroStep", u"Stellate", None))
+        self.file_2_label.setText(QCoreApplication.translate("IntroStep", u"The .sig and .sts files have the same filename and are in the same directory.", None))
+        self.file_3_name_label.setText(QCoreApplication.translate("IntroStep", u"NATUS", None))
+        self.file_3_label.setText(QCoreApplication.translate("IntroStep", u"The entire NATUS subject folder is required <i>(for CEAMS users)</i>.", None))
+        self.methods_show_button.setText(QCoreApplication.translate("IntroStep", u"\u203a Methods and references", None))
+        self.methods_hide_button.setText(QCoreApplication.translate("IntroStep", u"\u2304 Methods and references", None))
+        self.methods_note_label.setText(QCoreApplication.translate("IntroStep", u"The details of each setting are shown in its own step.", None))
+        self.methods_label.setText(QCoreApplication.translate("IntroStep", u"<b>Sleep period:</b> from the first epoch scored as sleep (N1, N2, N3 or R) to the final awakening, including the last epoch scored as sleep. The oxygen saturation is particularly relevant during this period.<br/><br/><b>Desaturation detector:</b> inspired by ABOSA v1.2.2 [1], a freely available automatic oxygen saturation analysis software. It also detects the recoveries that follow the desaturations, and the obvious artefacts of the oximeter signal.", None))
+        self.references_label.setText(QCoreApplication.translate("IntroStep", u"[1] Karhu, T., Lepp\u00e4nen, T., T\u00f6yr\u00e4s, J., Oksenberg, A., Myllymaa, S., &amp; Nikkonen, S. (2022). ABOSA \u2013 Freely available automatic blood oxygen saturation signal analysis software: Structure and validation. <i>Computer Methods and Programs in Biomedicine</i>, <i>226</i>, Article 107120. <a href=\"https://doi.org/10.1016/j.cmpb.2022.107120\">https://doi.org/10.1016/j.cmpb.2022.107120</a>", None))
     # retranslateUi
 

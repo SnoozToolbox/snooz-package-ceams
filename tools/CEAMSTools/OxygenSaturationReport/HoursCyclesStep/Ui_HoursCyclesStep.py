@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file ''
+## Form generated from reading UI file 'Ui_HoursCyclesStep.ui'
 ##
 ## Created by: Qt User Interface Compiler version 6.8.2
 ##
@@ -15,87 +15,148 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QFont, QFontDatabase, QGradient, QIcon,
     QImage, QKeySequence, QLinearGradient, QPainter,
     QPalette, QPixmap, QRadialGradient, QTransform)
-from PySide6.QtWidgets import (QApplication, QHBoxLayout, QLabel, QSizePolicy,
-    QSpacerItem, QSpinBox, QVBoxLayout, QWidget)
+from PySide6.QtWidgets import (QApplication, QFrame, QGridLayout, QHBoxLayout,
+    QLabel, QSizePolicy, QSpacerItem, QSpinBox,
+    QVBoxLayout, QWidget)
 import themes_rc
 
 class Ui_HoursCyclesStep(object):
     def setupUi(self, HoursCyclesStep):
         if not HoursCyclesStep.objectName():
             HoursCyclesStep.setObjectName(u"HoursCyclesStep")
-        HoursCyclesStep.resize(616, 229)
+        HoursCyclesStep.resize(900, 700)
         self.verticalLayout = QVBoxLayout(HoursCyclesStep)
         self.verticalLayout.setObjectName(u"verticalLayout")
-        self.label_2 = QLabel(HoursCyclesStep)
+        self.verticalLayout.setContentsMargins(19, 12, 19, 12)
+        self.content_row = QHBoxLayout()
+        self.content_row.setObjectName(u"content_row")
+        self.content_row.setContentsMargins(0, 0, 0, 0)
+        self.content_widget = QWidget(HoursCyclesStep)
+        self.content_widget.setObjectName(u"content_widget")
+        self.content_widget.setMaximumSize(QSize(800, 16777215))
+        self.content_layout = QVBoxLayout(self.content_widget)
+        self.content_layout.setSpacing(16)
+        self.content_layout.setObjectName(u"content_layout")
+        self.content_layout.setContentsMargins(0, 0, 0, 0)
+        self.header_layout = QVBoxLayout()
+        self.header_layout.setSpacing(6)
+        self.header_layout.setObjectName(u"header_layout")
+        self.title_label = QLabel(self.content_widget)
+        self.title_label.setObjectName(u"title_label")
+        font = QFont()
+        font.setPointSize(18)
+        font.setBold(True)
+        self.title_label.setFont(font)
+
+        self.header_layout.addWidget(self.title_label)
+
+        self.subtitle_label = QLabel(self.content_widget)
+        self.subtitle_label.setObjectName(u"subtitle_label")
+        self.subtitle_label.setWordWrap(True)
+        self.subtitle_label.setProperty(u"variant", u"help")
+
+        self.header_layout.addWidget(self.subtitle_label)
+
+
+        self.content_layout.addLayout(self.header_layout)
+
+        self.limits_row = QHBoxLayout()
+        self.limits_row.setSpacing(16)
+        self.limits_row.setObjectName(u"limits_row")
+        self.limits_card = QFrame(self.content_widget)
+        self.limits_card.setObjectName(u"limits_card")
+        self.limits_card.setFrameShape(QFrame.Shape.StyledPanel)
+        self.limits_card.setFrameShadow(QFrame.Shadow.Raised)
+        self.limits_card_layout = QVBoxLayout(self.limits_card)
+        self.limits_card_layout.setSpacing(10)
+        self.limits_card_layout.setObjectName(u"limits_card_layout")
+        self.limits_card_layout.setContentsMargins(10, 10, 10, 10)
+        self.limits_grid = QGridLayout()
+        self.limits_grid.setObjectName(u"limits_grid")
+        self.limits_grid.setHorizontalSpacing(12)
+        self.limits_grid.setVerticalSpacing(10)
+        self.label_2 = QLabel(self.limits_card)
         self.label_2.setObjectName(u"label_2")
 
-        self.verticalLayout.addWidget(self.label_2)
+        self.limits_grid.addWidget(self.label_2, 0, 0, 1, 1)
 
-        self.verticalSpacer_4 = QSpacerItem(20, 10, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Fixed)
-
-        self.verticalLayout.addItem(self.verticalSpacer_4)
-
-        self.horizontalLayout_2 = QHBoxLayout()
-        self.horizontalLayout_2.setObjectName(u"horizontalLayout_2")
-        self.spinBox_cycles = QSpinBox(HoursCyclesStep)
+        self.spinBox_cycles = QSpinBox(self.limits_card)
         self.spinBox_cycles.setObjectName(u"spinBox_cycles")
         self.spinBox_cycles.setMinimum(1)
         self.spinBox_cycles.setMaximum(12)
         self.spinBox_cycles.setValue(6)
 
-        self.horizontalLayout_2.addWidget(self.spinBox_cycles)
+        self.limits_grid.addWidget(self.spinBox_cycles, 0, 1, 1, 1)
 
-        self.label_4 = QLabel(HoursCyclesStep)
-        self.label_4.setObjectName(u"label_4")
-
-        self.horizontalLayout_2.addWidget(self.label_4)
-
-        self.horizontalSpacer_2 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
-
-        self.horizontalLayout_2.addItem(self.horizontalSpacer_2)
-
-
-        self.verticalLayout.addLayout(self.horizontalLayout_2)
-
-        self.verticalSpacer_2 = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Minimum)
-
-        self.verticalLayout.addItem(self.verticalSpacer_2)
-
-        self.label = QLabel(HoursCyclesStep)
+        self.label = QLabel(self.limits_card)
         self.label.setObjectName(u"label")
         self.label.setEnabled(False)
 
-        self.verticalLayout.addWidget(self.label)
+        self.limits_grid.addWidget(self.label, 1, 0, 1, 1)
 
-        self.verticalSpacer_3 = QSpacerItem(20, 10, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Fixed)
-
-        self.verticalLayout.addItem(self.verticalSpacer_3)
-
-        self.horizontalLayout = QHBoxLayout()
-        self.horizontalLayout.setObjectName(u"horizontalLayout")
-        self.spinBox_hours = QSpinBox(HoursCyclesStep)
+        self.spinBox_hours = QSpinBox(self.limits_card)
         self.spinBox_hours.setObjectName(u"spinBox_hours")
         self.spinBox_hours.setEnabled(False)
         self.spinBox_hours.setMinimum(1)
         self.spinBox_hours.setMaximum(48)
         self.spinBox_hours.setValue(8)
 
-        self.horizontalLayout.addWidget(self.spinBox_hours)
+        self.limits_grid.addWidget(self.spinBox_hours, 1, 1, 1, 1)
 
-        self.label_3 = QLabel(HoursCyclesStep)
+        self.limits_grid_spacer = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+
+        self.limits_grid.addItem(self.limits_grid_spacer, 0, 3, 1, 1)
+
+
+        self.limits_card_layout.addLayout(self.limits_grid)
+
+        self.label_4 = QLabel(self.limits_card)
+        self.label_4.setObjectName(u"label_4")
+        font1 = QFont()
+        font1.setPointSize(10)
+        self.label_4.setFont(font1)
+        self.label_4.setWordWrap(True)
+        self.label_4.setProperty(u"variant", u"help")
+
+        self.limits_card_layout.addWidget(self.label_4)
+
+        self.label_3 = QLabel(self.limits_card)
         self.label_3.setObjectName(u"label_3")
+        self.label_3.setFont(font1)
+        self.label_3.setWordWrap(True)
+        self.label_3.setProperty(u"variant", u"help")
         self.label_3.setEnabled(False)
 
-        self.horizontalLayout.addWidget(self.label_3)
-
-        self.horizontalSpacer = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
-
-        self.horizontalLayout.addItem(self.horizontalSpacer)
+        self.limits_card_layout.addWidget(self.label_3)
 
 
-        self.verticalLayout.addLayout(self.horizontalLayout)
+        self.limits_row.addWidget(self.limits_card)
 
-        self.verticalSpacer = QSpacerItem(20, 9, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
+        self.limits_row_gap = QSpacerItem(16, 20, QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Minimum)
+
+        self.limits_row.addItem(self.limits_row_gap)
+
+        self.limits_row_spacer = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+
+        self.limits_row.addItem(self.limits_row_spacer)
+
+        self.limits_row.setStretch(0, 1)
+        self.limits_row.setStretch(2, 1)
+
+        self.content_layout.addLayout(self.limits_row)
+
+
+        self.content_row.addWidget(self.content_widget)
+
+        self.content_spacer = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+
+        self.content_row.addItem(self.content_spacer)
+
+        self.content_row.setStretch(0, 1)
+
+        self.verticalLayout.addLayout(self.content_row)
+
+        self.verticalSpacer = QSpacerItem(40, 20, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
 
         self.verticalLayout.addItem(self.verticalSpacer)
 
@@ -107,9 +168,11 @@ class Ui_HoursCyclesStep(object):
 
     def retranslateUi(self, HoursCyclesStep):
         HoursCyclesStep.setWindowTitle("")
-        self.label_2.setText(QCoreApplication.translate("HoursCyclesStep", u"<html><head/><body><p><span style=\" font-weight:600;\">Maximum number of sleep cycles</span></p></body></html>", None))
-        self.label_4.setText(QCoreApplication.translate("HoursCyclesStep", u"Define the maximum number of cycles to analyze in the reports.", None))
-        self.label.setText(QCoreApplication.translate("HoursCyclesStep", u"<html><head/><body><p><span style=\" font-weight:600;\">Maximum number of hours</span></p></body></html>", None))
-        self.label_3.setText(QCoreApplication.translate("HoursCyclesStep", u"Define the maximum number of hours to analyze in the reports.", None))
+        self.title_label.setText(QCoreApplication.translate("HoursCyclesStep", u"Hours and Cycles", None))
+        self.subtitle_label.setText(QCoreApplication.translate("HoursCyclesStep", u"The maximum number of sleep cycles to analyze in the reports (step Output Files).", None))
+        self.label_2.setText(QCoreApplication.translate("HoursCyclesStep", u"Maximum number of sleep cycles", None))
+        self.label.setText(QCoreApplication.translate("HoursCyclesStep", u"Maximum number of hours", None))
+        self.label_4.setText(QCoreApplication.translate("HoursCyclesStep", u"The cycles after this number are not reported.", None))
+        self.label_3.setText(QCoreApplication.translate("HoursCyclesStep", u"The number of hours is not used: the reports have no values per hour.", None))
     # retranslateUi
 
