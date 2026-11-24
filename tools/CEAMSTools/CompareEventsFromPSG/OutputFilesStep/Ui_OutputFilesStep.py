@@ -17,182 +17,313 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QPalette, QPixmap, QRadialGradient, QTransform)
 from PySide6.QtWidgets import (QApplication, QCheckBox, QFrame, QGridLayout,
     QHBoxLayout, QLabel, QLineEdit, QSizePolicy,
-    QSpacerItem, QTextEdit, QVBoxLayout, QWidget)
+    QSpacerItem, QVBoxLayout, QWidget)
 import themes_rc
 
 class Ui_OutputFilesStep(object):
     def setupUi(self, OutputFilesStep):
         if not OutputFilesStep.objectName():
             OutputFilesStep.setObjectName(u"OutputFilesStep")
-        OutputFilesStep.resize(854, 757)
-        self.verticalLayout_3 = QVBoxLayout(OutputFilesStep)
-        self.verticalLayout_3.setObjectName(u"verticalLayout_3")
-        self.verticalLayout = QVBoxLayout()
+        OutputFilesStep.resize(900, 700)
+        self.verticalLayout = QVBoxLayout(OutputFilesStep)
         self.verticalLayout.setObjectName(u"verticalLayout")
-        self.label_5 = QLabel(OutputFilesStep)
-        self.label_5.setObjectName(u"label_5")
+        self.verticalLayout.setContentsMargins(19, 12, 19, 12)
+        self.content_row = QHBoxLayout()
+        self.content_row.setObjectName(u"content_row")
+        self.content_row.setContentsMargins(0, 0, 0, 0)
+        self.content_widget = QWidget(OutputFilesStep)
+        self.content_widget.setObjectName(u"content_widget")
+        self.content_widget.setMaximumSize(QSize(800, 16777215))
+        self.content_layout = QVBoxLayout(self.content_widget)
+        self.content_layout.setSpacing(16)
+        self.content_layout.setObjectName(u"content_layout")
+        self.content_layout.setContentsMargins(0, 0, 0, 0)
+        self.header_layout = QVBoxLayout()
+        self.header_layout.setSpacing(6)
+        self.header_layout.setObjectName(u"header_layout")
+        self.title_label = QLabel(self.content_widget)
+        self.title_label.setObjectName(u"title_label")
         font = QFont()
-        font.setBold(False)
-        font.setItalic(False)
-        self.label_5.setFont(font)
+        font.setPointSize(18)
+        font.setBold(True)
+        self.title_label.setFont(font)
 
-        self.verticalLayout.addWidget(self.label_5)
+        self.header_layout.addWidget(self.title_label)
 
-        self.gridLayout = QGridLayout()
-        self.gridLayout.setObjectName(u"gridLayout")
-        self.checkBox_W = QCheckBox(OutputFilesStep)
+        self.subtitle_label = QLabel(self.content_widget)
+        self.subtitle_label.setObjectName(u"subtitle_label")
+        self.subtitle_label.setWordWrap(True)
+        self.subtitle_label.setProperty(u"variant", u"help")
+
+        self.header_layout.addWidget(self.subtitle_label)
+
+
+        self.content_layout.addLayout(self.header_layout)
+
+        self.settings_cards_layout = QHBoxLayout()
+        self.settings_cards_layout.setSpacing(16)
+        self.settings_cards_layout.setObjectName(u"settings_cards_layout")
+        self.stages_card = QFrame(self.content_widget)
+        self.stages_card.setObjectName(u"stages_card")
+        self.stages_card.setFrameShape(QFrame.Shape.StyledPanel)
+        self.stages_card.setFrameShadow(QFrame.Shadow.Raised)
+        self.stages_card_layout = QVBoxLayout(self.stages_card)
+        self.stages_card_layout.setSpacing(10)
+        self.stages_card_layout.setObjectName(u"stages_card_layout")
+        self.stages_card_layout.setContentsMargins(10, 10, 10, 10)
+        self.label_5 = QLabel(self.stages_card)
+        self.label_5.setObjectName(u"label_5")
+        font1 = QFont()
+        font1.setBold(True)
+        self.label_5.setFont(font1)
+
+        self.stages_card_layout.addWidget(self.label_5)
+
+        self.stages_help_label = QLabel(self.stages_card)
+        self.stages_help_label.setObjectName(u"stages_help_label")
+        self.stages_help_label.setWordWrap(True)
+        self.stages_help_label.setProperty(u"variant", u"help")
+
+        self.stages_card_layout.addWidget(self.stages_help_label)
+
+        self.stages_layout = QHBoxLayout()
+        self.stages_layout.setSpacing(18)
+        self.stages_layout.setObjectName(u"stages_layout")
+        self.checkBox_W = QCheckBox(self.stages_card)
         self.checkBox_W.setObjectName(u"checkBox_W")
 
-        self.gridLayout.addWidget(self.checkBox_W, 0, 0, 1, 1)
+        self.stages_layout.addWidget(self.checkBox_W)
 
-        self.checkBox_1 = QCheckBox(OutputFilesStep)
+        self.checkBox_1 = QCheckBox(self.stages_card)
         self.checkBox_1.setObjectName(u"checkBox_1")
         self.checkBox_1.setChecked(False)
 
-        self.gridLayout.addWidget(self.checkBox_1, 0, 1, 1, 1)
+        self.stages_layout.addWidget(self.checkBox_1)
 
-        self.checkBox_R = QCheckBox(OutputFilesStep)
-        self.checkBox_R.setObjectName(u"checkBox_R")
-
-        self.gridLayout.addWidget(self.checkBox_R, 1, 0, 1, 1)
-
-        self.checkBox_2 = QCheckBox(OutputFilesStep)
+        self.checkBox_2 = QCheckBox(self.stages_card)
         self.checkBox_2.setObjectName(u"checkBox_2")
         self.checkBox_2.setChecked(True)
 
-        self.gridLayout.addWidget(self.checkBox_2, 1, 1, 1, 1)
+        self.stages_layout.addWidget(self.checkBox_2)
 
-        self.checkBox_4 = QCheckBox(OutputFilesStep)
-        self.checkBox_4.setObjectName(u"checkBox_4")
-        self.checkBox_4.setEnabled(False)
-
-        self.gridLayout.addWidget(self.checkBox_4, 2, 0, 1, 1)
-
-        self.checkBox_3 = QCheckBox(OutputFilesStep)
+        self.checkBox_3 = QCheckBox(self.stages_card)
         self.checkBox_3.setObjectName(u"checkBox_3")
         self.checkBox_3.setChecked(True)
 
-        self.gridLayout.addWidget(self.checkBox_3, 2, 1, 1, 1)
+        self.stages_layout.addWidget(self.checkBox_3)
+
+        self.checkBox_R = QCheckBox(self.stages_card)
+        self.checkBox_R.setObjectName(u"checkBox_R")
+
+        self.stages_layout.addWidget(self.checkBox_R)
+
+        self.checkBox_4 = QCheckBox(self.stages_card)
+        self.checkBox_4.setObjectName(u"checkBox_4")
+        self.checkBox_4.setEnabled(False)
+
+        self.stages_layout.addWidget(self.checkBox_4)
+
+        self.stages_spacer = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+
+        self.stages_layout.addItem(self.stages_spacer)
 
 
-        self.verticalLayout.addLayout(self.gridLayout)
+        self.stages_card_layout.addLayout(self.stages_layout)
 
-        self.verticalSpacer_3 = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Fixed)
+        self.stages_stretch = QSpacerItem(20, 0, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
 
-        self.verticalLayout.addItem(self.verticalSpacer_3)
+        self.stages_card_layout.addItem(self.stages_stretch)
 
-        self.label = QLabel(OutputFilesStep)
+
+        self.settings_cards_layout.addWidget(self.stages_card)
+
+        self.evaluation_card = QFrame(self.content_widget)
+        self.evaluation_card.setObjectName(u"evaluation_card")
+        self.evaluation_card.setFrameShape(QFrame.Shape.StyledPanel)
+        self.evaluation_card.setFrameShadow(QFrame.Shadow.Raised)
+        self.evaluation_card_layout = QVBoxLayout(self.evaluation_card)
+        self.evaluation_card_layout.setSpacing(10)
+        self.evaluation_card_layout.setObjectName(u"evaluation_card_layout")
+        self.evaluation_card_layout.setContentsMargins(10, 10, 10, 10)
+        self.label = QLabel(self.evaluation_card)
         self.label.setObjectName(u"label")
-        self.label.setMaximumSize(QSize(16777215, 16777215))
-        self.label.setFont(font)
+        self.label.setFont(font1)
 
-        self.verticalLayout.addWidget(self.label)
+        self.evaluation_card_layout.addWidget(self.label)
 
-        self.horizontalLayout = QHBoxLayout()
-        self.horizontalLayout.setObjectName(u"horizontalLayout")
-        self.label_2 = QLabel(OutputFilesStep)
+        self.jaccard_grid = QGridLayout()
+        self.jaccard_grid.setObjectName(u"jaccard_grid")
+        self.jaccard_grid.setHorizontalSpacing(12)
+        self.jaccard_grid.setVerticalSpacing(10)
+        self.label_2 = QLabel(self.evaluation_card)
         self.label_2.setObjectName(u"label_2")
-        self.label_2.setMinimumSize(QSize(200, 0))
-        self.label_2.setMaximumSize(QSize(200, 16777215))
 
-        self.horizontalLayout.addWidget(self.label_2)
+        self.jaccard_grid.addWidget(self.label_2, 0, 0, 1, 1)
 
-        self.lineEdit_jaccord = QLineEdit(OutputFilesStep)
+        self.lineEdit_jaccord = QLineEdit(self.evaluation_card)
         self.lineEdit_jaccord.setObjectName(u"lineEdit_jaccord")
 
-        self.horizontalLayout.addWidget(self.lineEdit_jaccord)
+        self.jaccard_grid.addWidget(self.lineEdit_jaccord, 0, 1, 1, 1)
+
+        self.jaccard_grid_spacer = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+
+        self.jaccard_grid.addItem(self.jaccard_grid_spacer, 0, 3, 1, 1)
 
 
-        self.verticalLayout.addLayout(self.horizontalLayout)
+        self.evaluation_card_layout.addLayout(self.jaccard_grid)
 
-        self.textEdit = QTextEdit(OutputFilesStep)
+        self.textEdit = QLabel(self.evaluation_card)
         self.textEdit.setObjectName(u"textEdit")
-        self.textEdit.setMinimumSize(QSize(500, 0))
-        self.textEdit.setMaximumSize(QSize(16777215, 125))
-        self.textEdit.setFrameShape(QFrame.Shape.HLine)
-        self.textEdit.setLineWidth(0)
-        self.textEdit.setReadOnly(True)
+        font2 = QFont()
+        font2.setPointSize(10)
+        self.textEdit.setFont(font2)
+        self.textEdit.setWordWrap(True)
+        self.textEdit.setProperty(u"variant", u"help")
 
-        self.verticalLayout.addWidget(self.textEdit)
+        self.evaluation_card_layout.addWidget(self.textEdit)
 
-        self.verticalSpacer = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Fixed)
+        self.evaluation_stretch = QSpacerItem(20, 0, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
 
-        self.verticalLayout.addItem(self.verticalSpacer)
+        self.evaluation_card_layout.addItem(self.evaluation_stretch)
 
-        self.verticalLayout_2 = QVBoxLayout()
-        self.verticalLayout_2.setObjectName(u"verticalLayout_2")
-        self.label_3 = QLabel(OutputFilesStep)
+
+        self.settings_cards_layout.addWidget(self.evaluation_card)
+
+        self.settings_cards_layout.setStretch(0, 1)
+        self.settings_cards_layout.setStretch(1, 1)
+
+        self.content_layout.addLayout(self.settings_cards_layout)
+
+        self.output_card = QFrame(self.content_widget)
+        self.output_card.setObjectName(u"output_card")
+        self.output_card.setFrameShape(QFrame.Shape.StyledPanel)
+        self.output_card.setFrameShadow(QFrame.Shadow.Raised)
+        self.output_card_layout = QVBoxLayout(self.output_card)
+        self.output_card_layout.setSpacing(10)
+        self.output_card_layout.setObjectName(u"output_card_layout")
+        self.output_card_layout.setContentsMargins(10, 10, 10, 10)
+        self.label_3 = QLabel(self.output_card)
         self.label_3.setObjectName(u"label_3")
-        self.label_3.setMaximumSize(QSize(16777215, 16777215))
-        self.label_3.setFont(font)
+        self.label_3.setFont(font1)
 
-        self.verticalLayout_2.addWidget(self.label_3)
+        self.output_card_layout.addWidget(self.label_3)
 
-        self.textEdit_2 = QTextEdit(OutputFilesStep)
-        self.textEdit_2.setObjectName(u"textEdit_2")
-        self.textEdit_2.setMaximumSize(QSize(16777215, 85))
-        self.textEdit_2.setFrameShape(QFrame.Shape.HLine)
-        self.textEdit_2.setLineWidth(0)
-        self.textEdit_2.setReadOnly(True)
-
-        self.verticalLayout_2.addWidget(self.textEdit_2)
-
-        self.horizontalLayout_2 = QHBoxLayout()
-        self.horizontalLayout_2.setObjectName(u"horizontalLayout_2")
-        self.label_4 = QLabel(OutputFilesStep)
+        self.suffix_grid = QGridLayout()
+        self.suffix_grid.setObjectName(u"suffix_grid")
+        self.suffix_grid.setHorizontalSpacing(12)
+        self.suffix_grid.setVerticalSpacing(10)
+        self.label_4 = QLabel(self.output_card)
         self.label_4.setObjectName(u"label_4")
-        self.label_4.setMinimumSize(QSize(200, 0))
-        self.label_4.setMaximumSize(QSize(16777215, 16777215))
 
-        self.horizontalLayout_2.addWidget(self.label_4)
+        self.suffix_grid.addWidget(self.label_4, 0, 0, 1, 1)
 
-        self.lineEdit_suffix = QLineEdit(OutputFilesStep)
+        self.lineEdit_suffix = QLineEdit(self.output_card)
         self.lineEdit_suffix.setObjectName(u"lineEdit_suffix")
 
-        self.horizontalLayout_2.addWidget(self.lineEdit_suffix)
+        self.suffix_grid.addWidget(self.lineEdit_suffix, 0, 1, 1, 1)
+
+        self.suffix_grid_spacer = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+
+        self.suffix_grid.addItem(self.suffix_grid_spacer, 0, 3, 1, 1)
 
 
-        self.verticalLayout_2.addLayout(self.horizontalLayout_2)
+        self.output_card_layout.addLayout(self.suffix_grid)
+
+        self.textEdit_2 = QLabel(self.output_card)
+        self.textEdit_2.setObjectName(u"textEdit_2")
+        self.textEdit_2.setFont(font2)
+        self.textEdit_2.setWordWrap(True)
+        self.textEdit_2.setProperty(u"variant", u"help")
+
+        self.output_card_layout.addWidget(self.textEdit_2)
 
 
-        self.verticalLayout.addLayout(self.verticalLayout_2)
+        self.content_layout.addWidget(self.output_card)
 
-        self.verticalSpacer_4 = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Fixed)
-
-        self.verticalLayout.addItem(self.verticalSpacer_4)
-
-        self.label_title = QLabel(OutputFilesStep)
+        self.extra_card = QFrame(self.content_widget)
+        self.extra_card.setObjectName(u"extra_card")
+        self.extra_card.setFrameShape(QFrame.Shape.StyledPanel)
+        self.extra_card.setFrameShadow(QFrame.Shadow.Raised)
+        self.extra_card_layout = QVBoxLayout(self.extra_card)
+        self.extra_card_layout.setSpacing(10)
+        self.extra_card_layout.setObjectName(u"extra_card_layout")
+        self.extra_card_layout.setContentsMargins(10, 10, 10, 10)
+        self.label_title = QLabel(self.extra_card)
         self.label_title.setObjectName(u"label_title")
-        self.label_title.setFont(font)
+        self.label_title.setFont(font1)
 
-        self.verticalLayout.addWidget(self.label_title)
+        self.extra_card_layout.addWidget(self.label_title)
 
-        self.checkBox_TP_exp = QCheckBox(OutputFilesStep)
+        self.extra_layout = QVBoxLayout()
+        self.extra_layout.setSpacing(8)
+        self.extra_layout.setObjectName(u"extra_layout")
+        self.extra_layout_1_layout = QVBoxLayout()
+        self.extra_layout_1_layout.setSpacing(2)
+        self.extra_layout_1_layout.setObjectName(u"extra_layout_1_layout")
+        self.checkBox_TP_exp = QCheckBox(self.extra_card)
         self.checkBox_TP_exp.setObjectName(u"checkBox_TP_exp")
 
-        self.verticalLayout.addWidget(self.checkBox_TP_exp)
+        self.extra_layout_1_layout.addWidget(self.checkBox_TP_exp)
 
-        self.label_6 = QLabel(OutputFilesStep)
+        self.label_6 = QLabel(self.extra_card)
         self.label_6.setObjectName(u"label_6")
+        self.label_6.setFont(font2)
+        self.label_6.setWordWrap(True)
+        self.label_6.setIndent(26)
+        self.label_6.setProperty(u"variant", u"help")
 
-        self.verticalLayout.addWidget(self.label_6)
+        self.extra_layout_1_layout.addWidget(self.label_6)
 
-        self.checkBox_FPFN_exp = QCheckBox(OutputFilesStep)
+
+        self.extra_layout.addLayout(self.extra_layout_1_layout)
+
+        self.extra_layout_line_1 = QFrame(self.extra_card)
+        self.extra_layout_line_1.setObjectName(u"extra_layout_line_1")
+        self.extra_layout_line_1.setFrameShape(QFrame.Shape.HLine)
+        self.extra_layout_line_1.setFrameShadow(QFrame.Shadow.Plain)
+
+        self.extra_layout.addWidget(self.extra_layout_line_1)
+
+        self.extra_layout_2_layout = QVBoxLayout()
+        self.extra_layout_2_layout.setSpacing(2)
+        self.extra_layout_2_layout.setObjectName(u"extra_layout_2_layout")
+        self.checkBox_FPFN_exp = QCheckBox(self.extra_card)
         self.checkBox_FPFN_exp.setObjectName(u"checkBox_FPFN_exp")
 
-        self.verticalLayout.addWidget(self.checkBox_FPFN_exp)
+        self.extra_layout_2_layout.addWidget(self.checkBox_FPFN_exp)
 
-        self.label_7 = QLabel(OutputFilesStep)
+        self.label_7 = QLabel(self.extra_card)
         self.label_7.setObjectName(u"label_7")
+        self.label_7.setFont(font2)
+        self.label_7.setWordWrap(True)
+        self.label_7.setIndent(26)
+        self.label_7.setProperty(u"variant", u"help")
 
-        self.verticalLayout.addWidget(self.label_7)
-
-        self.verticalSpacer_2 = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
-
-        self.verticalLayout.addItem(self.verticalSpacer_2)
+        self.extra_layout_2_layout.addWidget(self.label_7)
 
 
-        self.verticalLayout_3.addLayout(self.verticalLayout)
+        self.extra_layout.addLayout(self.extra_layout_2_layout)
+
+
+        self.extra_card_layout.addLayout(self.extra_layout)
+
+
+        self.content_layout.addWidget(self.extra_card)
+
+
+        self.content_row.addWidget(self.content_widget)
+
+        self.content_spacer = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+
+        self.content_row.addItem(self.content_spacer)
+
+        self.content_row.setStretch(0, 1)
+
+        self.verticalLayout.addLayout(self.content_row)
+
+        self.verticalSpacer = QSpacerItem(40, 20, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
+
+        self.verticalLayout.addItem(self.verticalSpacer)
 
 
         self.retranslateUi(OutputFilesStep)
@@ -202,47 +333,27 @@ class Ui_OutputFilesStep(object):
 
     def retranslateUi(self, OutputFilesStep):
         OutputFilesStep.setWindowTitle("")
-        self.label_5.setText(QCoreApplication.translate("OutputFilesStep", u"<html><head/><body><p><span style=\" font-weight:600;\">Sleep stage selection</span></p></body></html>", None))
+        self.title_label.setText(QCoreApplication.translate("OutputFilesStep", u"Output File", None))
+        self.subtitle_label.setText(QCoreApplication.translate("OutputFilesStep", u"Define the output parameters: the sleep stages in which the events are compared, the threshold of the evaluation and the output files.", None))
+        self.label_5.setText(QCoreApplication.translate("OutputFilesStep", u"Sleep stages", None))
+        self.stages_help_label.setText(QCoreApplication.translate("OutputFilesStep", u"The events are compared in the selected stages (e.g. N2 for sleep spindles).", None))
         self.checkBox_W.setText(QCoreApplication.translate("OutputFilesStep", u"Wake", None))
         self.checkBox_1.setText(QCoreApplication.translate("OutputFilesStep", u"N1", None))
-        self.checkBox_R.setText(QCoreApplication.translate("OutputFilesStep", u"R", None))
         self.checkBox_2.setText(QCoreApplication.translate("OutputFilesStep", u"N2", None))
-        self.checkBox_4.setText(QCoreApplication.translate("OutputFilesStep", u"Stage 4", None))
         self.checkBox_3.setText(QCoreApplication.translate("OutputFilesStep", u"N3", None))
-        self.label.setText(QCoreApplication.translate("OutputFilesStep", u"<html><head/><body><p><span style=\" font-weight:600;\">Performance evaluation</span></p></body></html>", None))
-        self.label_2.setText(QCoreApplication.translate("OutputFilesStep", u"Jaccord index threshold", None))
-        self.textEdit.setHtml(QCoreApplication.translate("OutputFilesStep", u"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
-"<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset=\"utf-8\" /><style type=\"text/css\">\n"
-"p, li { white-space: pre-wrap; }\n"
-"hr { height: 1px; border-width: 0; }\n"
-"li.unchecked::marker { content: \"\\2610\"; }\n"
-"li.checked::marker { content: \"\\2612\"; }\n"
-"</style></head><body style=\" font-size:12pt; font-weight:400; font-style:normal;\">\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Note:</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">    e represents the event from the expert</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">    d represents the detection</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px;"
-                        " -qt-block-indent:0; text-indent:0px;\">    Jaccord index : (intersection between e and d) / (union of e and d)</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">    To considere a &quot;d&quot; as a True Positive, the jaccord index must exceed a certain threshold.</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">    Only one &quot;d&quot; can match a &quot;e&quot;, the one with the highest Jaccord index.</p></body></html>", None))
-        self.label_3.setText(QCoreApplication.translate("OutputFilesStep", u"<html><head/><body><p><span style=\" font-weight:600;\">Output file</span></p></body></html>", None))
-        self.textEdit_2.setHtml(QCoreApplication.translate("OutputFilesStep", u"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
-"<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset=\"utf-8\" /><style type=\"text/css\">\n"
-"p, li { white-space: pre-wrap; }\n"
-"hr { height: 1px; border-width: 0; }\n"
-"li.unchecked::marker { content: \"\\2610\"; }\n"
-"li.checked::marker { content: \"\\2612\"; }\n"
-"</style></head><body style=\" font-size:12pt; font-weight:400; font-style:normal;\">\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">The output performance file is written in the same directory as the PSG file.</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">The performance at by-sample and by-event level are included.</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">The output file is named as t"
-                        "he PSG file with an additional suffix and the extension .tsv.</p></body></html>", None))
-        self.label_4.setText(QCoreApplication.translate("OutputFilesStep", u"Suffix for the performance file", None))
+        self.checkBox_R.setText(QCoreApplication.translate("OutputFilesStep", u"R", None))
+        self.checkBox_4.setText(QCoreApplication.translate("OutputFilesStep", u"Stage 4", None))
+        self.label.setText(QCoreApplication.translate("OutputFilesStep", u"Performance evaluation", None))
+        self.label_2.setText(QCoreApplication.translate("OutputFilesStep", u"Jaccard index threshold", None))
+        self.textEdit.setText(QCoreApplication.translate("OutputFilesStep", u"A detection is a true positive when its Jaccard index with an expert event, (intersection) / (union), exceeds this threshold. Only one detection can match an event: the one with the highest Jaccard index.", None))
+        self.label_3.setText(QCoreApplication.translate("OutputFilesStep", u"Output file", None))
+        self.label_4.setText(QCoreApplication.translate("OutputFilesStep", u"Suffix", None))
         self.lineEdit_suffix.setPlaceholderText(QCoreApplication.translate("OutputFilesStep", u"_perf", None))
-        self.label_title.setText(QCoreApplication.translate("OutputFilesStep", u"<html><head/><body><p><span style=\" font-weight:600;\">Additional output file</span></p></body></html>", None))
-        self.checkBox_TP_exp.setText(QCoreApplication.translate("OutputFilesStep", u"Check to export the True Positive (TP) events (detected events that match the expert scoring).", None))
-        self.label_6.setText(QCoreApplication.translate("OutputFilesStep", u"    The output file of the TP events is named with the suffix TP.", None))
-        self.checkBox_FPFN_exp.setText(QCoreApplication.translate("OutputFilesStep", u"Check to export the False Negative (FN) and False Positive (FP) events (false detections and expert events missed).", None))
-        self.label_7.setText(QCoreApplication.translate("OutputFilesStep", u"    The output file of the FN and FP events is named with the suffix FNFP.", None))
+        self.textEdit_2.setText(QCoreApplication.translate("OutputFilesStep", u"Written in the folder of the PSG file, named as the PSG file with this suffix and the extension .tsv. One file per PSG file, with the performance in the samples and the events domains: one column per channel, one row per metric.", None))
+        self.label_title.setText(QCoreApplication.translate("OutputFilesStep", u"Additional output files", None))
+        self.checkBox_TP_exp.setText(QCoreApplication.translate("OutputFilesStep", u"Export the true positive (TP) events", None))
+        self.label_6.setText(QCoreApplication.translate("OutputFilesStep", u"The detected events that match the expert scoring. The file is named with the suffix TP.", None))
+        self.checkBox_FPFN_exp.setText(QCoreApplication.translate("OutputFilesStep", u"Export the false negative (FN) and false positive (FP) events", None))
+        self.label_7.setText(QCoreApplication.translate("OutputFilesStep", u"The expert events missed and the false detections. The file is named with the suffix FNFP.", None))
     # retranslateUi
 

@@ -6,7 +6,7 @@
     "item_author": "Karine Lacourse",
     "item_description": "Compare 2 sets of events (experts and detections) to evaluate the performance of detections. ",
     "tool_params": {
-        "tool_version": "2.5.1",
+        "tool_version": "2.5.2",
         "tool_label": "Evaluate Detected Events",
         "tool_category": "3-Postprocessing",
         "asset_directory": "",
@@ -20,25 +20,25 @@
             },
             {
                 "name": "PSG Input Files",
-                "description": "<div>Add the PSG files you want to perform the analysis on.<br><br>The PSG file and the accessory file must share the same filename and folder.<br><br>Open your files:<br> <strong>.edf</strong> : .tsv file is mandatory.<br> <strong>.sts</strong> : .sig file is mandatory.<br> <strong>.eeg</strong> for CEAMS user : NATUS subject folder is mandatory.</div>",
+                "description": "Add the PSG files. They must be scored in sleep stages.",
                 "custom_step_name": "InputFilesStepCmpPSG",
                 "show_index": true
             },
             {
                 "name": "Expert annotation",
-                "description": "Select for each PSG file the expert events as gold standard.\n\nStart by selecting one PSG or multiple files (with the ctrl key pressed), then select an event group or name.\n\nBe aware that the files must still be highlighted in the GUI to apply the 'Select All' option.",
+                "description": "Select, for each PSG file, the expert events used as the gold standard.",
                 "custom_step_name": "ExpertAnnotSel",
                 "show_index": true
             },
             {
                 "name": "Detector annotation",
-                "description": "Select for each PSG file the detection events to evaluate.\n\nStart by selecting one PSG or multiple files (with the ctrl key pressed), then select an event group or name.\n\nBe aware that the files must still be highlighted in the GUI to apply the 'Select All' option.",
+                "description": "Select, for each PSG file, the detections to compare with the expert events.",
                 "custom_step_name": "DetectorAnnotSel",
                 "show_index": true
             },
             {
                 "name": "Output File",
-                "description": "Define the output parameters.",
+                "description": "Choose the sleep stages to compare, the Jaccard index threshold and the suffix of the output file.",
                 "custom_step_name": "OutputFilesStep",
                 "show_index": true
             }
