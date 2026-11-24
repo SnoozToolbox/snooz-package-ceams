@@ -4,6 +4,8 @@
     TODO CLASS DESCRIPTION
 """
 
+import os
+
 from qtpy import QtWidgets
 
 from CEAMSTools.ConvertXMLCompumedics.InputFiles.Ui_InputFiles import Ui_InputFiles
@@ -85,17 +87,21 @@ class InputFiles(BaseStepView, Ui_InputFiles, QtWidgets.QWidget):
             'Open .XML files', 
             None, 
             '.XML files (*.xml *.XML)')
-        self._files = files
-        if files != '':
+        # Cancel keeps the files already chosen
+        if files:
+            self._files = files
             self.fill_file_table()
             
 
     def clear_slot(self):
-        self.tableWidget_files.clearContents()
+        self.tableWidget_files.setRowCount(0)
         self._files = []
 
 
     def fill_file_table(self):
         self.tableWidget_files.setRowCount(len(self._files))
         for row, filename in enumerate(self._files):
-            self.tableWidget_files.setItem(row, 0, QtWidgets.QTableWidgetItem(filename))        
+            # The name of the file, its whole path in the tooltip
+            item = QtWidgets.QTableWidgetItem(os.path.basename(filename))
+            item.setToolTip(filename)
+            self.tableWidget_files.setItem(row, 0, item)        
