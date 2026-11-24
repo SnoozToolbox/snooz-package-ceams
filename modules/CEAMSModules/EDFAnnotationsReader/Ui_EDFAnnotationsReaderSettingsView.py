@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file ''
+## Form generated from reading UI file 'Ui_EDFAnnotationsReaderSettingsView.ui'
 ##
 ## Created by: Qt User Interface Compiler version 6.8.2
 ##
@@ -15,31 +15,41 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QFont, QFontDatabase, QGradient, QIcon,
     QImage, QKeySequence, QLinearGradient, QPainter,
     QPalette, QPixmap, QRadialGradient, QTransform)
-from PySide6.QtWidgets import (QAbstractItemView, QAbstractScrollArea, QApplication, QHBoxLayout,
-    QHeaderView, QPushButton, QSizePolicy, QSpacerItem,
-    QSplitter, QTableWidget, QTableWidgetItem, QVBoxLayout,
-    QWidget)
+from PySide6.QtWidgets import (QAbstractItemView, QAbstractScrollArea, QApplication, QFrame,
+    QHBoxLayout, QHeaderView, QLabel, QPushButton,
+    QSizePolicy, QSpacerItem, QTableWidget, QTableWidgetItem,
+    QVBoxLayout, QWidget)
 import themes_rc
 
 class Ui_EDFAnnotationsReaderSettingsView(object):
     def setupUi(self, EDFAnnotationsReaderSettingsView):
         if not EDFAnnotationsReaderSettingsView.objectName():
             EDFAnnotationsReaderSettingsView.setObjectName(u"EDFAnnotationsReaderSettingsView")
-        EDFAnnotationsReaderSettingsView.resize(607, 420)
-        self.verticalLayout_4 = QVBoxLayout(EDFAnnotationsReaderSettingsView)
-        self.verticalLayout_4.setObjectName(u"verticalLayout_4")
-        self.verticalLayout_3 = QVBoxLayout()
-        self.verticalLayout_3.setObjectName(u"verticalLayout_3")
-        self.splitter = QSplitter(EDFAnnotationsReaderSettingsView)
-        self.splitter.setObjectName(u"splitter")
-        self.splitter.setOrientation(Qt.Horizontal)
-        self.splitter.setHandleWidth(30)
-        self.layoutWidget = QWidget(self.splitter)
-        self.layoutWidget.setObjectName(u"layoutWidget")
-        self.verticalLayout = QVBoxLayout(self.layoutWidget)
+        EDFAnnotationsReaderSettingsView.resize(900, 700)
+        self.verticalLayout = QVBoxLayout(EDFAnnotationsReaderSettingsView)
+        self.verticalLayout.setSpacing(16)
         self.verticalLayout.setObjectName(u"verticalLayout")
-        self.verticalLayout.setContentsMargins(0, 0, 0, 0)
-        self.tableWidget_files = QTableWidget(self.layoutWidget)
+        self.verticalLayout.setContentsMargins(19, 12, 19, 12)
+        self.files_cards_layout = QHBoxLayout()
+        self.files_cards_layout.setSpacing(16)
+        self.files_cards_layout.setObjectName(u"files_cards_layout")
+        self.annot_files_card = QFrame(EDFAnnotationsReaderSettingsView)
+        self.annot_files_card.setObjectName(u"annot_files_card")
+        self.annot_files_card.setFrameShape(QFrame.Shape.StyledPanel)
+        self.annot_files_card.setFrameShadow(QFrame.Shadow.Raised)
+        self.annot_files_card_layout = QVBoxLayout(self.annot_files_card)
+        self.annot_files_card_layout.setSpacing(10)
+        self.annot_files_card_layout.setObjectName(u"annot_files_card_layout")
+        self.annot_files_card_layout.setContentsMargins(10, 10, 10, 10)
+        self.annot_files_title_label = QLabel(self.annot_files_card)
+        self.annot_files_title_label.setObjectName(u"annot_files_title_label")
+        font = QFont()
+        font.setBold(True)
+        self.annot_files_title_label.setFont(font)
+
+        self.annot_files_card_layout.addWidget(self.annot_files_title_label)
+
+        self.tableWidget_files = QTableWidget(self.annot_files_card)
         self.tableWidget_files.setObjectName(u"tableWidget_files")
         self.tableWidget_files.setVerticalScrollBarPolicy(Qt.ScrollBarAsNeeded)
         self.tableWidget_files.setHorizontalScrollBarPolicy(Qt.ScrollBarAsNeeded)
@@ -51,87 +61,92 @@ class Ui_EDFAnnotationsReaderSettingsView(object):
         self.tableWidget_files.setHorizontalScrollMode(QAbstractItemView.ScrollPerItem)
         self.tableWidget_files.setWordWrap(True)
 
-        self.verticalLayout.addWidget(self.tableWidget_files)
+        self.annot_files_card_layout.addWidget(self.tableWidget_files)
 
-        self.horizontalLayout = QHBoxLayout()
-        self.horizontalLayout.setObjectName(u"horizontalLayout")
-        self.horizontalSpacer = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+        self.annot_files_buttons_layout = QHBoxLayout()
+        self.annot_files_buttons_layout.setSpacing(8)
+        self.annot_files_buttons_layout.setObjectName(u"annot_files_buttons_layout")
+        self.annot_files_buttons_layout_spacer = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
 
-        self.horizontalLayout.addItem(self.horizontalSpacer)
+        self.annot_files_buttons_layout.addItem(self.annot_files_buttons_layout_spacer)
 
-        self.pushButton_choose = QPushButton(self.layoutWidget)
+        self.pushButton_choose = QPushButton(self.annot_files_card)
         self.pushButton_choose.setObjectName(u"pushButton_choose")
-        self.pushButton_choose.setMaximumSize(QSize(16777215, 16777215))
 
-        self.horizontalLayout.addWidget(self.pushButton_choose)
+        self.annot_files_buttons_layout.addWidget(self.pushButton_choose)
 
-        self.horizontalSpacer_3 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+        self.annot_files_buttons_layout.setStretch(0, 1)
 
-        self.horizontalLayout.addItem(self.horizontalSpacer_3)
+        self.annot_files_card_layout.addLayout(self.annot_files_buttons_layout)
 
 
-        self.verticalLayout.addLayout(self.horizontalLayout)
+        self.files_cards_layout.addWidget(self.annot_files_card)
 
-        self.splitter.addWidget(self.layoutWidget)
-        self.layoutWidget1 = QWidget(self.splitter)
-        self.layoutWidget1.setObjectName(u"layoutWidget1")
-        self.verticalLayout_2 = QVBoxLayout(self.layoutWidget1)
-        self.verticalLayout_2.setObjectName(u"verticalLayout_2")
-        self.verticalLayout_2.setContentsMargins(0, 0, 0, 0)
-        self.tableWidget_psg_files = QTableWidget(self.layoutWidget1)
+        self.psg_files_card = QFrame(EDFAnnotationsReaderSettingsView)
+        self.psg_files_card.setObjectName(u"psg_files_card")
+        self.psg_files_card.setFrameShape(QFrame.Shape.StyledPanel)
+        self.psg_files_card.setFrameShadow(QFrame.Shadow.Raised)
+        self.psg_files_card_layout = QVBoxLayout(self.psg_files_card)
+        self.psg_files_card_layout.setSpacing(10)
+        self.psg_files_card_layout.setObjectName(u"psg_files_card_layout")
+        self.psg_files_card_layout.setContentsMargins(10, 10, 10, 10)
+        self.psg_files_title_label = QLabel(self.psg_files_card)
+        self.psg_files_title_label.setObjectName(u"psg_files_title_label")
+        self.psg_files_title_label.setFont(font)
+
+        self.psg_files_card_layout.addWidget(self.psg_files_title_label)
+
+        self.tableWidget_psg_files = QTableWidget(self.psg_files_card)
         self.tableWidget_psg_files.setObjectName(u"tableWidget_psg_files")
         self.tableWidget_psg_files.setEditTriggers(QAbstractItemView.NoEditTriggers)
 
-        self.verticalLayout_2.addWidget(self.tableWidget_psg_files)
+        self.psg_files_card_layout.addWidget(self.tableWidget_psg_files)
 
-        self.horizontalLayout_2 = QHBoxLayout()
-        self.horizontalLayout_2.setObjectName(u"horizontalLayout_2")
-        self.horizontalSpacer_4 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+        self.psg_files_buttons_layout = QHBoxLayout()
+        self.psg_files_buttons_layout.setSpacing(8)
+        self.psg_files_buttons_layout.setObjectName(u"psg_files_buttons_layout")
+        self.psg_files_buttons_layout_spacer = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
 
-        self.horizontalLayout_2.addItem(self.horizontalSpacer_4)
+        self.psg_files_buttons_layout.addItem(self.psg_files_buttons_layout_spacer)
 
-        self.pushButton_choose_psg = QPushButton(self.layoutWidget1)
+        self.pushButton_choose_psg = QPushButton(self.psg_files_card)
         self.pushButton_choose_psg.setObjectName(u"pushButton_choose_psg")
 
-        self.horizontalLayout_2.addWidget(self.pushButton_choose_psg)
+        self.psg_files_buttons_layout.addWidget(self.pushButton_choose_psg)
 
-        self.horizontalSpacer_2 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+        self.psg_files_buttons_layout.setStretch(0, 1)
 
-        self.horizontalLayout_2.addItem(self.horizontalSpacer_2)
+        self.psg_files_card_layout.addLayout(self.psg_files_buttons_layout)
 
 
-        self.verticalLayout_2.addLayout(self.horizontalLayout_2)
+        self.files_cards_layout.addWidget(self.psg_files_card)
 
-        self.splitter.addWidget(self.layoutWidget1)
+        self.files_cards_layout.setStretch(0, 1)
+        self.files_cards_layout.setStretch(1, 1)
 
-        self.verticalLayout_3.addWidget(self.splitter)
+        self.verticalLayout.addLayout(self.files_cards_layout)
 
-        self.horizontalLayout_3 = QHBoxLayout()
-        self.horizontalLayout_3.setObjectName(u"horizontalLayout_3")
-        self.horizontalSpacer_5 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+        self.clear_layout = QHBoxLayout()
+        self.clear_layout.setSpacing(8)
+        self.clear_layout.setObjectName(u"clear_layout")
+        self.order_help_label = QLabel(EDFAnnotationsReaderSettingsView)
+        self.order_help_label.setObjectName(u"order_help_label")
+        font1 = QFont()
+        font1.setPointSize(10)
+        self.order_help_label.setFont(font1)
+        self.order_help_label.setWordWrap(True)
+        self.order_help_label.setProperty(u"variant", u"help")
 
-        self.horizontalLayout_3.addItem(self.horizontalSpacer_5)
+        self.clear_layout.addWidget(self.order_help_label)
 
         self.pushButton_clear = QPushButton(EDFAnnotationsReaderSettingsView)
         self.pushButton_clear.setObjectName(u"pushButton_clear")
-        self.pushButton_clear.setMinimumSize(QSize(100, 0))
-        self.pushButton_clear.setMaximumSize(QSize(100, 16777215))
 
-        self.horizontalLayout_3.addWidget(self.pushButton_clear)
+        self.clear_layout.addWidget(self.pushButton_clear)
 
-        self.horizontalSpacer_6 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+        self.clear_layout.setStretch(0, 1)
 
-        self.horizontalLayout_3.addItem(self.horizontalSpacer_6)
-
-
-        self.verticalLayout_3.addLayout(self.horizontalLayout_3)
-
-
-        self.verticalLayout_4.addLayout(self.verticalLayout_3)
-
-        self.verticalSpacer = QSpacerItem(20, 20, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Fixed)
-
-        self.verticalLayout_4.addItem(self.verticalSpacer)
+        self.verticalLayout.addLayout(self.clear_layout)
 
 
         self.retranslateUi(EDFAnnotationsReaderSettingsView)
@@ -144,8 +159,17 @@ class Ui_EDFAnnotationsReaderSettingsView(object):
 
     def retranslateUi(self, EDFAnnotationsReaderSettingsView):
         EDFAnnotationsReaderSettingsView.setWindowTitle("")
-        self.pushButton_choose.setText(QCoreApplication.translate("EDFAnnotationsReaderSettingsView", u"Choose Annotations files", None))
-        self.pushButton_choose_psg.setText(QCoreApplication.translate("EDFAnnotationsReaderSettingsView", u"Choose PSG files", None))
-        self.pushButton_clear.setText(QCoreApplication.translate("EDFAnnotationsReaderSettingsView", u"Clear All", None))
+#if QT_CONFIG(tooltip)
+        self.annot_files_title_label.setToolTip(QCoreApplication.translate("EDFAnnotationsReaderSettingsView", u"The EDF+ files with the annotations to import (EDF Annotations signal).", None))
+#endif // QT_CONFIG(tooltip)
+        self.annot_files_title_label.setText(QCoreApplication.translate("EDFAnnotationsReaderSettingsView", u"Annotation files", None))
+        self.pushButton_choose.setText(QCoreApplication.translate("EDFAnnotationsReaderSettingsView", u"Choose files", None))
+#if QT_CONFIG(tooltip)
+        self.psg_files_title_label.setToolTip(QCoreApplication.translate("EDFAnnotationsReaderSettingsView", u"The PSG signal file (EDF or EDF+) of each annotation file, in the same order. It gives the start time of the recording; the annotations are added to its accessory file (.tsv).", None))
+#endif // QT_CONFIG(tooltip)
+        self.psg_files_title_label.setText(QCoreApplication.translate("EDFAnnotationsReaderSettingsView", u"PSG files", None))
+        self.pushButton_choose_psg.setText(QCoreApplication.translate("EDFAnnotationsReaderSettingsView", u"Choose files", None))
+        self.order_help_label.setText(QCoreApplication.translate("EDFAnnotationsReaderSettingsView", u"Add one PSG file per annotation file, in the same order.", None))
+        self.pushButton_clear.setText(QCoreApplication.translate("EDFAnnotationsReaderSettingsView", u"Clear all", None))
     # retranslateUi
 

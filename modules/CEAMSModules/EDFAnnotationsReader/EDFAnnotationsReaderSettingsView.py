@@ -98,7 +98,8 @@ class EDFAnnotationsReaderSettingsView(BaseSettingsView, Ui_EDFAnnotationsReader
             'Open .edf files', 
             None, 
             '.EDF files (*.edf *.EDF)')
-        if files != '':
+        # Cancel keeps the files already chosen
+        if files:
             self._annot_files = files
             self.fill_annot_table()
 
@@ -109,15 +110,16 @@ class EDFAnnotationsReaderSettingsView(BaseSettingsView, Ui_EDFAnnotationsReader
             'Open .edf files', 
             None, 
             '.EDF files (*.edf *.EDF)')
-        if files != '':
+        # Cancel keeps the files already chosen
+        if files:
             self._psg_files = files
             self.fill_psg_table()
             
 
     # Called when the user click on "Clear" in the SettingsView
     def clear_slot(self):
-        self.tableWidget_files.clearContents()
-        self.tableWidget_psg_files.clearContents()
+        self.tableWidget_files.setRowCount(0)
+        self.tableWidget_psg_files.setRowCount(0)
         self._annot_files = []
         self._psg_files = []
 
@@ -127,7 +129,9 @@ class EDFAnnotationsReaderSettingsView(BaseSettingsView, Ui_EDFAnnotationsReader
         for row, filename in enumerate(self._psg_files):
             # extract the basename of the filename
             basename = os.path.basename(filename)
-            self.tableWidget_psg_files.setItem(row, 0, QtWidgets.QTableWidgetItem(basename))    
+            item = QtWidgets.QTableWidgetItem(basename)
+            item.setToolTip(filename)
+            self.tableWidget_psg_files.setItem(row, 0, item)    
 
 
     def fill_annot_table(self):
@@ -135,4 +139,6 @@ class EDFAnnotationsReaderSettingsView(BaseSettingsView, Ui_EDFAnnotationsReader
         for row, filename in enumerate(self._annot_files):
             # extract the basename of the filename
             basename = os.path.basename(filename)
-            self.tableWidget_files.setItem(row, 0, QtWidgets.QTableWidgetItem(basename))         
+            item = QtWidgets.QTableWidgetItem(basename)
+            item.setToolTip(filename)
+            self.tableWidget_files.setItem(row, 0, item)         

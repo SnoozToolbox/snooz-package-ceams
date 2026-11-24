@@ -9,7 +9,7 @@
         "tool_author": "CEAMS",
         "tool_url": "",
         "tool_description": "To import the annotations from the EDF+ format.",
-        "tool_version": "2.1.1",
+        "tool_version": "2.1.2",
         "package_name": "CEAMSTools",
         "steps": [
             {
@@ -20,7 +20,7 @@
             },
             {
                 "name": "Input Files Step",
-                "description": "Add EDF+ files to import annotations and their PSG signals file.\n\nThe order of the EDF+ annotations files and their corresponding PSG signals file must be the same.",
+                "description": "Add the EDF+ annotation files, then the PSG signal file of each, in the same order.",
                 "module_id": "b2f4f23b-172a-4655-b976-d153f8e91110"
             }
         ]
