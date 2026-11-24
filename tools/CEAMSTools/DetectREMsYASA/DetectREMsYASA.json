@@ -9,7 +9,7 @@
         "tool_author": "Mohammad Hasan Azad",
         "tool_url": "",
         "tool_description": "This tool uses YASA REMs Detector function to detect Rapid Eye Movements",
-        "tool_version": "3.6.2",
+        "tool_version": "3.6.3",
         "package_name": "CEAMSTools",
         "steps": [
             {
@@ -35,40 +35,35 @@
             },
             {
                 "name": "Input Files",
-                "description": "<div>Start by adding your PSG files (.edf, .sts or .eeg) to run the REM detection.<br><br><strong>EDF:</strong> The .edf and .tsv files must have the same filename and be in the same folder.<br><br><strong>Stellate:</strong> The .sig and .sts files must have the same filename and be in the same folder.<br><br><em>For CEAMS users</em><br><strong>NATUS:</strong> The entire NATUS subject folder is required.<br><br>Select the <strong>EOG</strong> channels to run the REM detector.</div>",
+                "description": "Add the PSG files, then select the montage and the 2 EOG channels of each file.",
                 "custom_step_name": "InputFileStep",
                 "show_index": true
             },
             {
                 "name": "Detector Step",
-                "description": "fix all variables that can vary for the detector",
+                "description": "Define the REM events, the detection criteria, the sleep stages and the removal of the outliers.",
                 "custom_step_name": "DetectorStep",
                 "show_index": true,
                 "configs": {
-                    "label": "Optional settings and parameters definition:",
+                    "label": "Optional settings:",
                     "list": [
                         {
                             "name": "Hours and Cycles",
                             "description": "Define the maximum number of hours and cycles to report.",
                             "custom_step_name": "HoursCyclesStep"
-                        },
-                        {
-                            "name": "Parameters Description",
-                            "description": "Definition of the parameters used in the detector.",
-                            "custom_step_name": "ParametersDescription"
                         }
                     ]
                 }
             },
             {
                 "name": "Mini-Epoch Classification Step",
-                "description": "Define the mini-epoch events.",
+                "description": "Define the group, the names and the length of the phasic and tonic mini-epochs.",
                 "custom_step_name": "MiniEpochDefinition",
                 "show_index": true
             },
             {
                 "name": "Output File",
-                "description": "Define the output file settings for the REM detection results.",
+                "description": "Choose the file of the cohort report. The characteristics of each REM are saved next to it.",
                 "custom_step_name": "OutputFileStep",
                 "show_index": true
             }

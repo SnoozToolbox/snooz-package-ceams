@@ -15,8 +15,8 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QFont, QFontDatabase, QGradient, QIcon,
     QImage, QKeySequence, QLinearGradient, QPainter,
     QPalette, QPixmap, QRadialGradient, QTransform)
-from PySide6.QtWidgets import (QAbstractScrollArea, QApplication, QFrame, QLabel,
-    QLayout, QSizePolicy, QSpacerItem, QTextEdit,
+from PySide6.QtWidgets import (QApplication, QFrame, QGridLayout, QHBoxLayout,
+    QLabel, QPushButton, QSizePolicy, QSpacerItem,
     QVBoxLayout, QWidget)
 import themes_rc
 
@@ -24,177 +24,473 @@ class Ui_IntroStepYASA(object):
     def setupUi(self, IntroStepYASA):
         if not IntroStepYASA.objectName():
             IntroStepYASA.setObjectName(u"IntroStepYASA")
-        IntroStepYASA.resize(925, 646)
-        self.verticalLayout_4 = QVBoxLayout(IntroStepYASA)
-        self.verticalLayout_4.setObjectName(u"verticalLayout_4")
-        self.label_2 = QLabel(IntroStepYASA)
-        self.label_2.setObjectName(u"label_2")
-        self.label_2.setMinimumSize(QSize(0, 0))
-        self.label_2.setMaximumSize(QSize(16777215, 140))
-        font = QFont()
-        font.setBold(False)
-        font.setItalic(False)
-        self.label_2.setFont(font)
-        self.label_2.setTextFormat(Qt.TextFormat.AutoText)
-        self.label_2.setScaledContents(False)
-        self.label_2.setAlignment(Qt.AlignmentFlag.AlignJustify|Qt.AlignmentFlag.AlignVCenter)
-        self.label_2.setWordWrap(True)
-
-        self.verticalLayout_4.addWidget(self.label_2)
-
-        self.verticalLayout_3 = QVBoxLayout()
-        self.verticalLayout_3.setObjectName(u"verticalLayout_3")
-        self.verticalLayout_3.setSizeConstraint(QLayout.SizeConstraint.SetMaximumSize)
-        self.label = QLabel(IntroStepYASA)
-        self.label.setObjectName(u"label")
-        self.label.setMinimumSize(QSize(0, 20))
-        self.label.setMaximumSize(QSize(16777215, 20))
-        self.label.setFont(font)
-        self.label.setAlignment(Qt.AlignmentFlag.AlignLeading|Qt.AlignmentFlag.AlignLeft|Qt.AlignmentFlag.AlignVCenter)
-
-        self.verticalLayout_3.addWidget(self.label)
-
-        self.textEdit = QTextEdit(IntroStepYASA)
-        self.textEdit.setObjectName(u"textEdit")
-        sizePolicy = QSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.textEdit.sizePolicy().hasHeightForWidth())
-        self.textEdit.setSizePolicy(sizePolicy)
-        self.textEdit.setMinimumSize(QSize(0, 0))
-        self.textEdit.setMaximumSize(QSize(16777215, 140))
-        self.textEdit.setLayoutDirection(Qt.LayoutDirection.LeftToRight)
-        self.textEdit.setStyleSheet(u"")
-        self.textEdit.setFrameShape(QFrame.Shape.NoFrame)
-        self.textEdit.setFrameShadow(QFrame.Shadow.Plain)
-        self.textEdit.setLineWidth(0)
-        self.textEdit.setSizeAdjustPolicy(QAbstractScrollArea.SizeAdjustPolicy.AdjustIgnored)
-        self.textEdit.setReadOnly(True)
-
-        self.verticalLayout_3.addWidget(self.textEdit)
-
-
-        self.verticalLayout_4.addLayout(self.verticalLayout_3)
-
-        self.verticalLayout_2 = QVBoxLayout()
-        self.verticalLayout_2.setObjectName(u"verticalLayout_2")
-        self.verticalLayout_2.setSizeConstraint(QLayout.SizeConstraint.SetMaximumSize)
-        self.label_4 = QLabel(IntroStepYASA)
-        self.label_4.setObjectName(u"label_4")
-        self.label_4.setMaximumSize(QSize(16777215, 20))
-        self.label_4.setSizeIncrement(QSize(0, 0))
-        self.label_4.setFont(font)
-        self.label_4.setFrameShadow(QFrame.Shadow.Plain)
-        self.label_4.setLineWidth(0)
-        self.label_4.setAlignment(Qt.AlignmentFlag.AlignLeading|Qt.AlignmentFlag.AlignLeft|Qt.AlignmentFlag.AlignVCenter)
-
-        self.verticalLayout_2.addWidget(self.label_4)
-
-        self.textEdit_2 = QTextEdit(IntroStepYASA)
-        self.textEdit_2.setObjectName(u"textEdit_2")
-        self.textEdit_2.setMinimumSize(QSize(0, 0))
-        self.textEdit_2.setMaximumSize(QSize(16777215, 16777215))
-        self.textEdit_2.setFrameShape(QFrame.Shape.NoFrame)
-        self.textEdit_2.setFrameShadow(QFrame.Shadow.Plain)
-        self.textEdit_2.setLineWidth(0)
-        self.textEdit_2.setSizeAdjustPolicy(QAbstractScrollArea.SizeAdjustPolicy.AdjustIgnored)
-        self.textEdit_2.setReadOnly(True)
-
-        self.verticalLayout_2.addWidget(self.textEdit_2)
-
-
-        self.verticalLayout_4.addLayout(self.verticalLayout_2)
-
-        self.verticalLayout = QVBoxLayout()
+        IntroStepYASA.resize(900, 700)
+        self.verticalLayout = QVBoxLayout(IntroStepYASA)
         self.verticalLayout.setObjectName(u"verticalLayout")
-        self.verticalLayout.setSizeConstraint(QLayout.SizeConstraint.SetDefaultConstraint)
-        self.label_3 = QLabel(IntroStepYASA)
-        self.label_3.setObjectName(u"label_3")
-        sizePolicy1 = QSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Fixed)
-        sizePolicy1.setHorizontalStretch(0)
-        sizePolicy1.setVerticalStretch(0)
-        sizePolicy1.setHeightForWidth(self.label_3.sizePolicy().hasHeightForWidth())
-        self.label_3.setSizePolicy(sizePolicy1)
-        self.label_3.setMaximumSize(QSize(16777215, 20))
+        self.verticalLayout.setContentsMargins(19, 12, 19, 12)
+        self.content_row = QHBoxLayout()
+        self.content_row.setObjectName(u"content_row")
+        self.content_row.setContentsMargins(0, 0, 0, 0)
+        self.content_widget = QWidget(IntroStepYASA)
+        self.content_widget.setObjectName(u"content_widget")
+        self.content_widget.setMaximumSize(QSize(800, 16777215))
+        self.content_layout = QVBoxLayout(self.content_widget)
+        self.content_layout.setSpacing(16)
+        self.content_layout.setObjectName(u"content_layout")
+        self.content_layout.setContentsMargins(0, 0, 0, 0)
+        self.header_layout = QVBoxLayout()
+        self.header_layout.setSpacing(6)
+        self.header_layout.setObjectName(u"header_layout")
+        self.title_label = QLabel(self.content_widget)
+        self.title_label.setObjectName(u"title_label")
+        font = QFont()
+        font.setPointSize(18)
+        font.setBold(True)
+        self.title_label.setFont(font)
 
-        self.verticalLayout.addWidget(self.label_3)
+        self.header_layout.addWidget(self.title_label)
 
-        self.textEdit_3 = QTextEdit(IntroStepYASA)
-        self.textEdit_3.setObjectName(u"textEdit_3")
-        self.textEdit_3.setMaximumSize(QSize(16777215, 105))
-        self.textEdit_3.setFrameShape(QFrame.Shape.NoFrame)
-        self.textEdit_3.setLineWidth(0)
-        self.textEdit_3.setSizeAdjustPolicy(QAbstractScrollArea.SizeAdjustPolicy.AdjustIgnored)
-        self.textEdit_3.setReadOnly(True)
+        self.subtitle_label = QLabel(self.content_widget)
+        self.subtitle_label.setObjectName(u"subtitle_label")
+        self.subtitle_label.setWordWrap(True)
+        self.subtitle_label.setProperty(u"variant", u"help")
 
-        self.verticalLayout.addWidget(self.textEdit_3)
+        self.header_layout.addWidget(self.subtitle_label)
 
 
-        self.verticalLayout_4.addLayout(self.verticalLayout)
+        self.content_layout.addLayout(self.header_layout)
 
-        self.verticalSpacer_2 = QSpacerItem(715, 10, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Ignored)
+        self.before_start_info = QFrame(self.content_widget)
+        self.before_start_info.setObjectName(u"before_start_info")
+        self.before_start_info.setFrameShape(QFrame.Shape.NoFrame)
+        self.before_start_info.setProperty(u"variant", u"info")
+        self.before_start_info_layout = QHBoxLayout(self.before_start_info)
+        self.before_start_info_layout.setObjectName(u"before_start_info_layout")
+        self.before_start_info_layout.setContentsMargins(14, 10, 14, 10)
+        self.before_start_info_label = QLabel(self.before_start_info)
+        self.before_start_info_label.setObjectName(u"before_start_info_label")
+        self.before_start_info_label.setTextFormat(Qt.TextFormat.RichText)
+        self.before_start_info_label.setWordWrap(True)
 
-        self.verticalLayout_4.addItem(self.verticalSpacer_2)
+        self.before_start_info_layout.addWidget(self.before_start_info_label)
+
+
+        self.content_layout.addWidget(self.before_start_info)
+
+        self.steps_section_layout = QVBoxLayout()
+        self.steps_section_layout.setSpacing(8)
+        self.steps_section_layout.setObjectName(u"steps_section_layout")
+        self.steps_title_label = QLabel(self.content_widget)
+        self.steps_title_label.setObjectName(u"steps_title_label")
+        font1 = QFont()
+        font1.setPointSize(15)
+        font1.setBold(True)
+        self.steps_title_label.setFont(font1)
+
+        self.steps_section_layout.addWidget(self.steps_title_label)
+
+        self.steps_card = QFrame(self.content_widget)
+        self.steps_card.setObjectName(u"steps_card")
+        self.steps_card.setFrameShape(QFrame.Shape.StyledPanel)
+        self.steps_card.setFrameShadow(QFrame.Shadow.Raised)
+        self.steps_card_layout = QVBoxLayout(self.steps_card)
+        self.steps_card_layout.setSpacing(10)
+        self.steps_card_layout.setObjectName(u"steps_card_layout")
+        self.steps_card_layout.setContentsMargins(10, 10, 10, 10)
+        self.steps_grid = QGridLayout()
+        self.steps_grid.setObjectName(u"steps_grid")
+        self.steps_grid.setHorizontalSpacing(12)
+        self.steps_grid.setVerticalSpacing(10)
+        self.step_1_number_label = QLabel(self.steps_card)
+        self.step_1_number_label.setObjectName(u"step_1_number_label")
+        font2 = QFont()
+        font2.setPointSize(10)
+        self.step_1_number_label.setFont(font2)
+        self.step_1_number_label.setProperty(u"variant", u"step_number")
+        self.step_1_number_label.setMinimumSize(QSize(24, 24))
+        self.step_1_number_label.setMaximumSize(QSize(24, 24))
+        self.step_1_number_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+
+        self.steps_grid.addWidget(self.step_1_number_label, 0, 0, 1, 1, Qt.AlignmentFlag.AlignTop)
+
+        self.step_1_name_label = QLabel(self.steps_card)
+        self.step_1_name_label.setObjectName(u"step_1_name_label")
+        font3 = QFont()
+        font3.setBold(True)
+        self.step_1_name_label.setFont(font3)
+        self.step_1_name_label.setAlignment(Qt.AlignmentFlag.AlignLeading|Qt.AlignmentFlag.AlignLeft|Qt.AlignmentFlag.AlignTop)
+
+        self.steps_grid.addWidget(self.step_1_name_label, 0, 1, 1, 1)
+
+        self.steps_gap = QSpacerItem(16, 20, QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Minimum)
+
+        self.steps_grid.addItem(self.steps_gap, 0, 2, 1, 1)
+
+        self.step_1_label = QLabel(self.steps_card)
+        self.step_1_label.setObjectName(u"step_1_label")
+        self.step_1_label.setWordWrap(True)
+        self.step_1_label.setProperty(u"variant", u"help")
+        self.step_1_label.setAlignment(Qt.AlignmentFlag.AlignLeading|Qt.AlignmentFlag.AlignLeft|Qt.AlignmentFlag.AlignTop)
+
+        self.steps_grid.addWidget(self.step_1_label, 0, 3, 1, 1)
+
+        self.step_line_2 = QFrame(self.steps_card)
+        self.step_line_2.setObjectName(u"step_line_2")
+        self.step_line_2.setFrameShape(QFrame.Shape.HLine)
+        self.step_line_2.setFrameShadow(QFrame.Shadow.Plain)
+
+        self.steps_grid.addWidget(self.step_line_2, 1, 0, 1, 4)
+
+        self.step_2_number_label = QLabel(self.steps_card)
+        self.step_2_number_label.setObjectName(u"step_2_number_label")
+        self.step_2_number_label.setFont(font2)
+        self.step_2_number_label.setProperty(u"variant", u"step_number")
+        self.step_2_number_label.setMinimumSize(QSize(24, 24))
+        self.step_2_number_label.setMaximumSize(QSize(24, 24))
+        self.step_2_number_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+
+        self.steps_grid.addWidget(self.step_2_number_label, 2, 0, 1, 1, Qt.AlignmentFlag.AlignTop)
+
+        self.step_2_name_label = QLabel(self.steps_card)
+        self.step_2_name_label.setObjectName(u"step_2_name_label")
+        self.step_2_name_label.setFont(font3)
+        self.step_2_name_label.setAlignment(Qt.AlignmentFlag.AlignLeading|Qt.AlignmentFlag.AlignLeft|Qt.AlignmentFlag.AlignTop)
+
+        self.steps_grid.addWidget(self.step_2_name_label, 2, 1, 1, 1)
+
+        self.step_2_label = QLabel(self.steps_card)
+        self.step_2_label.setObjectName(u"step_2_label")
+        self.step_2_label.setWordWrap(True)
+        self.step_2_label.setProperty(u"variant", u"help")
+        self.step_2_label.setAlignment(Qt.AlignmentFlag.AlignLeading|Qt.AlignmentFlag.AlignLeft|Qt.AlignmentFlag.AlignTop)
+
+        self.steps_grid.addWidget(self.step_2_label, 2, 3, 1, 1)
+
+        self.step_line_3 = QFrame(self.steps_card)
+        self.step_line_3.setObjectName(u"step_line_3")
+        self.step_line_3.setFrameShape(QFrame.Shape.HLine)
+        self.step_line_3.setFrameShadow(QFrame.Shadow.Plain)
+
+        self.steps_grid.addWidget(self.step_line_3, 3, 0, 1, 4)
+
+        self.step_3_number_label = QLabel(self.steps_card)
+        self.step_3_number_label.setObjectName(u"step_3_number_label")
+        self.step_3_number_label.setFont(font2)
+        self.step_3_number_label.setProperty(u"variant", u"step_number")
+        self.step_3_number_label.setMinimumSize(QSize(24, 24))
+        self.step_3_number_label.setMaximumSize(QSize(24, 24))
+        self.step_3_number_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+
+        self.steps_grid.addWidget(self.step_3_number_label, 4, 0, 1, 1, Qt.AlignmentFlag.AlignTop)
+
+        self.step_3_name_label = QLabel(self.steps_card)
+        self.step_3_name_label.setObjectName(u"step_3_name_label")
+        self.step_3_name_label.setFont(font3)
+        self.step_3_name_label.setAlignment(Qt.AlignmentFlag.AlignLeading|Qt.AlignmentFlag.AlignLeft|Qt.AlignmentFlag.AlignTop)
+
+        self.steps_grid.addWidget(self.step_3_name_label, 4, 1, 1, 1)
+
+        self.step_3_label = QLabel(self.steps_card)
+        self.step_3_label.setObjectName(u"step_3_label")
+        self.step_3_label.setWordWrap(True)
+        self.step_3_label.setProperty(u"variant", u"help")
+        self.step_3_label.setAlignment(Qt.AlignmentFlag.AlignLeading|Qt.AlignmentFlag.AlignLeft|Qt.AlignmentFlag.AlignTop)
+
+        self.steps_grid.addWidget(self.step_3_label, 4, 3, 1, 1)
+
+        self.step_line_4 = QFrame(self.steps_card)
+        self.step_line_4.setObjectName(u"step_line_4")
+        self.step_line_4.setFrameShape(QFrame.Shape.HLine)
+        self.step_line_4.setFrameShadow(QFrame.Shadow.Plain)
+
+        self.steps_grid.addWidget(self.step_line_4, 5, 0, 1, 4)
+
+        self.step_4_number_label = QLabel(self.steps_card)
+        self.step_4_number_label.setObjectName(u"step_4_number_label")
+        self.step_4_number_label.setFont(font2)
+        self.step_4_number_label.setProperty(u"variant", u"step_number")
+        self.step_4_number_label.setMinimumSize(QSize(24, 24))
+        self.step_4_number_label.setMaximumSize(QSize(24, 24))
+        self.step_4_number_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+
+        self.steps_grid.addWidget(self.step_4_number_label, 6, 0, 1, 1, Qt.AlignmentFlag.AlignTop)
+
+        self.step_4_name_label = QLabel(self.steps_card)
+        self.step_4_name_label.setObjectName(u"step_4_name_label")
+        self.step_4_name_label.setFont(font3)
+        self.step_4_name_label.setAlignment(Qt.AlignmentFlag.AlignLeading|Qt.AlignmentFlag.AlignLeft|Qt.AlignmentFlag.AlignTop)
+
+        self.steps_grid.addWidget(self.step_4_name_label, 6, 1, 1, 1)
+
+        self.step_4_label = QLabel(self.steps_card)
+        self.step_4_label.setObjectName(u"step_4_label")
+        self.step_4_label.setWordWrap(True)
+        self.step_4_label.setProperty(u"variant", u"help")
+        self.step_4_label.setAlignment(Qt.AlignmentFlag.AlignLeading|Qt.AlignmentFlag.AlignLeft|Qt.AlignmentFlag.AlignTop)
+
+        self.steps_grid.addWidget(self.step_4_label, 6, 3, 1, 1)
+
+        self.steps_grid.setColumnStretch(3, 1)
+
+        self.steps_card_layout.addLayout(self.steps_grid)
+
+
+        self.steps_section_layout.addWidget(self.steps_card)
+
+
+        self.content_layout.addLayout(self.steps_section_layout)
+
+        self.stages_section_layout = QVBoxLayout()
+        self.stages_section_layout.setSpacing(8)
+        self.stages_section_layout.setObjectName(u"stages_section_layout")
+        self.stages_title_label = QLabel(self.content_widget)
+        self.stages_title_label.setObjectName(u"stages_title_label")
+        self.stages_title_label.setFont(font1)
+
+        self.stages_section_layout.addWidget(self.stages_title_label)
+
+        self.stages_info_card = QFrame(self.content_widget)
+        self.stages_info_card.setObjectName(u"stages_info_card")
+        self.stages_info_card.setFrameShape(QFrame.Shape.StyledPanel)
+        self.stages_info_card.setFrameShadow(QFrame.Shadow.Raised)
+        self.stages_info_card_layout = QVBoxLayout(self.stages_info_card)
+        self.stages_info_card_layout.setSpacing(10)
+        self.stages_info_card_layout.setObjectName(u"stages_info_card_layout")
+        self.stages_info_card_layout.setContentsMargins(10, 10, 10, 10)
+        self.stages_info_label = QLabel(self.stages_info_card)
+        self.stages_info_label.setObjectName(u"stages_info_label")
+        self.stages_info_label.setTextFormat(Qt.TextFormat.RichText)
+        self.stages_info_label.setWordWrap(True)
+        self.stages_info_label.setProperty(u"variant", u"help")
+
+        self.stages_info_card_layout.addWidget(self.stages_info_label)
+
+        self.stages_suggestion_label = QLabel(self.stages_info_card)
+        self.stages_suggestion_label.setObjectName(u"stages_suggestion_label")
+        self.stages_suggestion_label.setFont(font2)
+        self.stages_suggestion_label.setTextFormat(Qt.TextFormat.RichText)
+        self.stages_suggestion_label.setWordWrap(True)
+        self.stages_suggestion_label.setProperty(u"variant", u"help")
+
+        self.stages_info_card_layout.addWidget(self.stages_suggestion_label)
+
+
+        self.stages_section_layout.addWidget(self.stages_info_card)
+
+
+        self.content_layout.addLayout(self.stages_section_layout)
+
+        self.files_section_layout = QVBoxLayout()
+        self.files_section_layout.setSpacing(8)
+        self.files_section_layout.setObjectName(u"files_section_layout")
+        self.files_title_label = QLabel(self.content_widget)
+        self.files_title_label.setObjectName(u"files_title_label")
+        self.files_title_label.setFont(font1)
+
+        self.files_section_layout.addWidget(self.files_title_label)
+
+        self.files_card = QFrame(self.content_widget)
+        self.files_card.setObjectName(u"files_card")
+        self.files_card.setFrameShape(QFrame.Shape.StyledPanel)
+        self.files_card.setFrameShadow(QFrame.Shadow.Raised)
+        self.files_card_layout = QVBoxLayout(self.files_card)
+        self.files_card_layout.setSpacing(10)
+        self.files_card_layout.setObjectName(u"files_card_layout")
+        self.files_card_layout.setContentsMargins(10, 10, 10, 10)
+        self.files_grid = QGridLayout()
+        self.files_grid.setObjectName(u"files_grid")
+        self.files_grid.setHorizontalSpacing(32)
+        self.files_grid.setVerticalSpacing(6)
+        self.file_1_name_label = QLabel(self.files_card)
+        self.file_1_name_label.setObjectName(u"file_1_name_label")
+        self.file_1_name_label.setFont(font3)
+
+        self.files_grid.addWidget(self.file_1_name_label, 0, 0, 1, 1)
+
+        self.file_1_label = QLabel(self.files_card)
+        self.file_1_label.setObjectName(u"file_1_label")
+        self.file_1_label.setWordWrap(True)
+
+        self.files_grid.addWidget(self.file_1_label, 0, 1, 1, 1)
+
+        self.file_2_name_label = QLabel(self.files_card)
+        self.file_2_name_label.setObjectName(u"file_2_name_label")
+        self.file_2_name_label.setFont(font3)
+
+        self.files_grid.addWidget(self.file_2_name_label, 1, 0, 1, 1)
+
+        self.file_2_label = QLabel(self.files_card)
+        self.file_2_label.setObjectName(u"file_2_label")
+        self.file_2_label.setWordWrap(True)
+
+        self.files_grid.addWidget(self.file_2_label, 1, 1, 1, 1)
+
+        self.file_3_name_label = QLabel(self.files_card)
+        self.file_3_name_label.setObjectName(u"file_3_name_label")
+        self.file_3_name_label.setFont(font3)
+
+        self.files_grid.addWidget(self.file_3_name_label, 2, 0, 1, 1)
+
+        self.file_3_label = QLabel(self.files_card)
+        self.file_3_label.setObjectName(u"file_3_label")
+        self.file_3_label.setTextFormat(Qt.TextFormat.RichText)
+        self.file_3_label.setWordWrap(True)
+
+        self.files_grid.addWidget(self.file_3_label, 2, 1, 1, 1)
+
+        self.files_grid.setColumnStretch(1, 1)
+
+        self.files_card_layout.addLayout(self.files_grid)
+
+
+        self.files_section_layout.addWidget(self.files_card)
+
+
+        self.content_layout.addLayout(self.files_section_layout)
+
+        self.methods_section_layout = QVBoxLayout()
+        self.methods_section_layout.setSpacing(2)
+        self.methods_section_layout.setObjectName(u"methods_section_layout")
+        self.methods_buttons_layout = QHBoxLayout()
+        self.methods_buttons_layout.setSpacing(0)
+        self.methods_buttons_layout.setObjectName(u"methods_buttons_layout")
+        self.methods_show_button = QPushButton(self.content_widget)
+        self.methods_show_button.setObjectName(u"methods_show_button")
+        self.methods_show_button.setFocusPolicy(Qt.FocusPolicy.TabFocus)
+        self.methods_show_button.setFlat(True)
+        self.methods_show_button.setProperty(u"variant", u"link")
+
+        self.methods_buttons_layout.addWidget(self.methods_show_button)
+
+        self.methods_hide_button = QPushButton(self.content_widget)
+        self.methods_hide_button.setObjectName(u"methods_hide_button")
+        self.methods_hide_button.setFocusPolicy(Qt.FocusPolicy.TabFocus)
+        self.methods_hide_button.setVisible(False)
+        self.methods_hide_button.setFlat(True)
+        self.methods_hide_button.setProperty(u"variant", u"link")
+
+        self.methods_buttons_layout.addWidget(self.methods_hide_button)
+
+        self.methods_buttons_spacer = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+
+        self.methods_buttons_layout.addItem(self.methods_buttons_spacer)
+
+
+        self.methods_section_layout.addLayout(self.methods_buttons_layout)
+
+        self.methods_note_label = QLabel(self.content_widget)
+        self.methods_note_label.setObjectName(u"methods_note_label")
+        self.methods_note_label.setFont(font2)
+        self.methods_note_label.setWordWrap(True)
+        self.methods_note_label.setProperty(u"variant", u"help")
+
+        self.methods_section_layout.addWidget(self.methods_note_label)
+
+        self.methods_widget = QWidget(self.content_widget)
+        self.methods_widget.setObjectName(u"methods_widget")
+        self.methods_widget.setVisible(False)
+        self.methods_layout = QVBoxLayout(self.methods_widget)
+        self.methods_layout.setSpacing(10)
+        self.methods_layout.setObjectName(u"methods_layout")
+        self.methods_layout.setContentsMargins(0, 6, 0, 0)
+        self.methods_label = QLabel(self.methods_widget)
+        self.methods_label.setObjectName(u"methods_label")
+        self.methods_label.setTextFormat(Qt.TextFormat.RichText)
+        self.methods_label.setWordWrap(True)
+        self.methods_label.setOpenExternalLinks(True)
+        self.methods_label.setProperty(u"variant", u"help")
+
+        self.methods_layout.addWidget(self.methods_label)
+
+        self.references_layout = QVBoxLayout()
+        self.references_layout.setSpacing(8)
+        self.references_layout.setObjectName(u"references_layout")
+        self.references_layout.setContentsMargins(0, 6, 0, 0)
+        self.references_line = QFrame(self.methods_widget)
+        self.references_line.setObjectName(u"references_line")
+        self.references_line.setFrameShape(QFrame.Shape.HLine)
+        self.references_line.setFrameShadow(QFrame.Shadow.Plain)
+
+        self.references_layout.addWidget(self.references_line)
+
+        self.references_label = QLabel(self.methods_widget)
+        self.references_label.setObjectName(u"references_label")
+        self.references_label.setFont(font2)
+        self.references_label.setTextFormat(Qt.TextFormat.RichText)
+        self.references_label.setWordWrap(True)
+        self.references_label.setOpenExternalLinks(True)
+        self.references_label.setProperty(u"variant", u"help")
+
+        self.references_layout.addWidget(self.references_label)
+
+
+        self.methods_layout.addLayout(self.references_layout)
+
+
+        self.methods_section_layout.addWidget(self.methods_widget)
+
+
+        self.content_layout.addLayout(self.methods_section_layout)
+
+
+        self.content_row.addWidget(self.content_widget)
+
+        self.content_spacer = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+
+        self.content_row.addItem(self.content_spacer)
+
+        self.content_row.setStretch(0, 1)
+
+        self.verticalLayout.addLayout(self.content_row)
+
+        self.verticalSpacer = QSpacerItem(40, 20, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
+
+        self.verticalLayout.addItem(self.verticalSpacer)
 
 
         self.retranslateUi(IntroStepYASA)
+        self.methods_show_button.clicked.connect(self.methods_widget.show)
+        self.methods_show_button.clicked.connect(self.methods_hide_button.show)
+        self.methods_show_button.clicked.connect(self.methods_show_button.hide)
+        self.methods_hide_button.clicked.connect(self.methods_widget.hide)
+        self.methods_hide_button.clicked.connect(self.methods_show_button.show)
+        self.methods_hide_button.clicked.connect(self.methods_hide_button.hide)
 
         QMetaObject.connectSlotsByName(IntroStepYASA)
     # setupUi
 
     def retranslateUi(self, IntroStepYASA):
-        IntroStepYASA.setWindowTitle(QCoreApplication.translate("IntroStepYASA", u"Form", None))
-        self.label_2.setText(QCoreApplication.translate("IntroStepYASA", u"<html><head/><body><p><span style=\" font-weight:600;\">YASA Rapid Eye Movements Detector</span></p><p>This tool uses the Yet Another Spindle Algorithm (<span style=\" font-weight:700;\">YASA</span>) rapid eye movement (<span style=\" font-weight:700;\">REM</span>) detection algorithm to identify REM events. It also classifies the detected REMs into phasic and tonic mini-epochs.</p></body></html>", None))
-        self.label.setText(QCoreApplication.translate("IntroStepYASA", u"<html><head/><body><p><span style=\" font-size:12pt; font-weight:600;\">Input</span></p></body></html>", None))
-        self.textEdit.setHtml(QCoreApplication.translate("IntroStepYASA", u"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
-"<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset=\"utf-8\" /><style type=\"text/css\">\n"
-"p, li { white-space: pre-wrap; }\n"
-"hr { height: 1px; border-width: 0; }\n"
-"li.unchecked::marker { content: \"\\2610\"; }\n"
-"li.checked::marker { content: \"\\2612\"; }\n"
-"</style></head><body style=\" font-size:12pt; font-weight:400; font-style:normal;\">\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">PSG files including the header and event annotations, are required:</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">   - European Data Format (EDF) : The .edf and .tsv files must have the exact same filename and be stored in the same directory.</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-i"
-                        "ndent:0; text-indent:0px;\">   - Stellate : The .sig and .sts files must have the exact same filename and be stored in the same directory.</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">   - NATUS (<span style=\" font-style:italic;\">for CEAMS users</span>) :  The entire NATUS subject folder is required.</p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-weight:700;\">NOTE:</span> Annotation files are not required for the functionality of this tool. However, if provided, they must include sleep staging. The REMs report is only generated when an annotation file is supplied. Without one, the tool performs REMs detection solely based on the algorithm's detection criteria, and de"
-                        "tections may occur in any sleep stage.</p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-weight:700;\">Suggestion:</span> If you do not have annotation files, we highly recommend using the &quot;<span style=\" font-weight:700;\">Score Sleep Stages with YASA</span>&quot; tool first to generate an annotation file, and then running this tool for more reliable REMs detection.</p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Channels:</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; "
-                        "-qt-block-indent:0; text-indent:0px;\">This tool requires the selection of <span style=\" font-weight:600;\">2</span> <span style=\" font-weight:600;\">EOG</span> <span style=\" font-weight:600;\">channels</span> per recording for REMs detection.</p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p></body></html>", None))
-        self.label_4.setText(QCoreApplication.translate("IntroStepYASA", u"<html><head/><body><p><span style=\" font-size:12pt; font-weight:600;\">Output</span></p></body></html>", None))
-        self.textEdit_2.setHtml(QCoreApplication.translate("IntroStepYASA", u"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
-"<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset=\"utf-8\" /><style type=\"text/css\">\n"
-"p, li { white-space: pre-wrap; }\n"
-"hr { height: 1px; border-width: 0; }\n"
-"li.unchecked::marker { content: \"\\2610\"; }\n"
-"li.checked::marker { content: \"\\2612\"; }\n"
-"</style></head><body style=\" font-size:12pt; font-weight:400; font-style:normal;\">\n"
-"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-weight:700;\">REMs Events<br /></span>Detected REM events are added to the annotations files (.tsv, .sts or .ent) depending on the format used. If the annotations file already includes the event group to be added, the existing entries will be removed before the new ones are inserted.</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-inden"
-                        "t:0px;\">Each events is defined by :<br />   1. group : The group where the events are added (i.e. REM).<br />   2. name : The name of the event (i.e. YASA_REM)<br />   3. start_sec : The onset of the event in second. <br />   4. duration_sec : The duration of the event in second.<br />   5. channels : The list of channels on which the event occurs.<br /></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-weight:700;\">REMs characteristics</span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Characteristics for each REM event have been saved in a separate folder for further analysis.</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /><span style=\" font-weight:700;\">REMs Cohort Report</span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; mar"
-                        "gin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Averaged REM characteristics and REM density are reported per sleep cycle and per hour in a cohort report.</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-weight:700; color:#ff0000;\">NOTE:</span><span style=\" color:#ff0000;\"> Please define the </span><span style=\" font-weight:700; color:#ff0000;\">sleep cycle</span><span style=\" color:#ff0000;\"> configuration you wish to use for the analysis using the blue panel on the left.</span></p></body></html>", None))
-        self.label_3.setText(QCoreApplication.translate("IntroStepYASA", u"<html><head/><body><p><span style=\" font-size:12pt; font-weight:600;\">References</span></p></body></html>", None))
-        self.textEdit_3.setHtml(QCoreApplication.translate("IntroStepYASA", u"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
-"<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset=\"utf-8\" /><style type=\"text/css\">\n"
-"p, li { white-space: pre-wrap; }\n"
-"hr { height: 1px; border-width: 0; }\n"
-"li.unchecked::marker { content: \"\\2610\"; }\n"
-"li.checked::marker { content: \"\\2612\"; }\n"
-"</style></head><body style=\" font-size:12pt; font-weight:400; font-style:normal;\">\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\"\">[1] Yetton, B. D., et al. (2016). Automatic detection of rapid eye movements (REMs): A machine learning approach.     </span><span style=\" font-style:italic;\">Journal of neuroscience methods</span><span style=\"\">,     </span><span style=\" font-style:italic;\">259</span><span style=\"\">, 72\u201382.</span><span style=\" font-size:10pt;\">  </span></p>\n"
-"<p style=\" margin-top:12px; margin-bottom:12px"
-                        "; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\"\">[2] Agarwal, R., et al. (2005). Detection of rapid-eye movements in sleep studies.     </span><span style=\" font-style:italic;\">IEEE Transactions on biomedical engineering</span><span style=\"\">,     </span><span style=\" font-style:italic;\">52</span><span style=\"\">(8), 1390\u20131396.</span></p></body></html>", None))
+        IntroStepYASA.setWindowTitle("")
+        self.title_label.setText(QCoreApplication.translate("IntroStepYASA", u"Detect REM events with YASA", None))
+        self.subtitle_label.setText(QCoreApplication.translate("IntroStepYASA", u"Identifies the rapid eye movements (REMs) of your polysomnography (PSG) files with the REM detection of YASA (Yet Another Spindle Algorithm) [1], and classifies the REM sleep into phasic and tonic mini-epochs.", None))
+        self.before_start_info_label.setText(QCoreApplication.translate("IntroStepYASA", u"<b>Before you start</b><br/>Define the sleep cycle configuration to use for the report: <b>Sleep Cycles</b>, in the left panel. In Input Files, select <b>2 EOG channels</b> per recording.", None))
+        self.steps_title_label.setText(QCoreApplication.translate("IntroStepYASA", u"What you will do", None))
+        self.step_1_number_label.setText(QCoreApplication.translate("IntroStepYASA", u"1", None))
+        self.step_1_name_label.setText(QCoreApplication.translate("IntroStepYASA", u"Input Files", None))
+        self.step_1_label.setText(QCoreApplication.translate("IntroStepYASA", u"Add the PSG files, then define the montage and select the 2 EOG channels of each file.", None))
+        self.step_2_number_label.setText(QCoreApplication.translate("IntroStepYASA", u"2", None))
+        self.step_2_name_label.setText(QCoreApplication.translate("IntroStepYASA", u"Detector Step", None))
+        self.step_2_label.setText(QCoreApplication.translate("IntroStepYASA", u"Define the group and name of the REM events, the detection criteria, the sleep stages (scored or not) and the removal of the outliers.", None))
+        self.step_3_number_label.setText(QCoreApplication.translate("IntroStepYASA", u"3", None))
+        self.step_3_name_label.setText(QCoreApplication.translate("IntroStepYASA", u"Mini-Epoch Classification Step", None))
+        self.step_3_label.setText(QCoreApplication.translate("IntroStepYASA", u"Define the group, the names and the length of the phasic and tonic mini-epochs.", None))
+        self.step_4_number_label.setText(QCoreApplication.translate("IntroStepYASA", u"4", None))
+        self.step_4_name_label.setText(QCoreApplication.translate("IntroStepYASA", u"Output File", None))
+        self.step_4_label.setText(QCoreApplication.translate("IntroStepYASA", u"The REM events and the mini-epochs are added to the accessory file (.tsv, .sts or .ent). Choose the file of the cohort report: the characteristics of each REM are saved next to it.", None))
+        self.stages_title_label.setText(QCoreApplication.translate("IntroStepYASA", u"Sleep stages", None))
+        self.stages_info_label.setText(QCoreApplication.translate("IntroStepYASA", u"Annotation files are not required. If provided, they must include the sleep stages: REMs are then detected in the R epochs only and the REM report is generated (<b>Scored</b>, in Detector Step). Without sleep stages, REMs are detected in any sleep stage, with the detection criteria only.", None))
+        self.stages_suggestion_label.setText(QCoreApplication.translate("IntroStepYASA", u"Without annotation files, run <b>Score Sleep Stages with YASA</b> first: the REM detection is more reliable.", None))
+        self.files_title_label.setText(QCoreApplication.translate("IntroStepYASA", u"Accepted files", None))
+        self.file_1_name_label.setText(QCoreApplication.translate("IntroStepYASA", u"EDF", None))
+        self.file_1_label.setText(QCoreApplication.translate("IntroStepYASA", u"The .edf and .tsv files have the same filename and are in the same directory.", None))
+        self.file_2_name_label.setText(QCoreApplication.translate("IntroStepYASA", u"Stellate", None))
+        self.file_2_label.setText(QCoreApplication.translate("IntroStepYASA", u"The .sig and .sts files have the same filename and are in the same directory.", None))
+        self.file_3_name_label.setText(QCoreApplication.translate("IntroStepYASA", u"NATUS", None))
+        self.file_3_label.setText(QCoreApplication.translate("IntroStepYASA", u"The entire NATUS subject folder is required <i>(for CEAMS users)</i>.", None))
+        self.methods_show_button.setText(QCoreApplication.translate("IntroStepYASA", u"\u203a Methods and references", None))
+        self.methods_hide_button.setText(QCoreApplication.translate("IntroStepYASA", u"\u2304 Methods and references", None))
+        self.methods_note_label.setText(QCoreApplication.translate("IntroStepYASA", u"The details of each setting are shown in its own step.", None))
+        self.methods_label.setText(QCoreApplication.translate("IntroStepYASA", u"<b>REM detection of YASA [1]:</b> based on the methods of Yetton et al. (2016) [2] and Agarwal et al. (2005) [3]. The LOC and ROC signals are filtered in the REM frequency band, and the REMs are detected by an amplitude threshold on the negative product of the two signals. The details are in <b>Algorithm's Details</b>, in the left panel.<br/><br/><b>Phasic and tonic mini-epochs:</b> the REM sleep epochs are divided into mini-epochs. A mini-epoch is phasic when it holds at least a third of a detected REM, tonic otherwise.<br/><br/>Documentation of YASA: <a href=\"https://raphaelvallat.com/yasa/\">raphaelvallat.com/yasa</a>.", None))
+        self.references_label.setText(QCoreApplication.translate("IntroStepYASA", u"[1] Vallat, R., &amp; Walker, M. P. (2021). An open-source, high-performance tool for automated sleep staging. <i>eLife</i>, <i>10</i>, Article e70092. <a href=\"https://doi.org/10.7554/eLife.70092\">https://doi.org/10.7554/eLife.70092</a><br/>[2] Yetton, B. D., Niknazar, M., Duggan, K. A., McDevitt, E. A., Whitehurst, L. N., Sattari, N., &amp; Mednick, S. C. (2016). Automatic detection of rapid eye movements (REMs): A machine learning approach. <i>Journal of Neuroscience Methods</i>, <i>259</i>, 72\u201382. <a href=\"https://doi.org/10.1016/j.jneumeth.2015.11.015\">https://doi.org/10.1016/j.jneumeth.2015.11.015</a><br/>[3] Agarwal, R., Takeuchi, T., Laroche, S., &amp; Gotman, J. (2005). Detection of rapid-eye movements in sleep studies. <i>IEEE Transactions on Biomedical Engineering</i>, <i>52</i>(8), 1390\u20131396. <a href=\"https://doi.org/10.1109/TBME.2005.851512\">https://doi.org/10.1109/TBME.2005.851512</a>", None))
     # retranslateUi
 
