@@ -6,7 +6,7 @@
     "item_author": "",
     "item_description": "",
     "tool_params": {
-        "tool_version": "2.3.0",
+        "tool_version": "2.3.1",
         "tool_label": "Report Sleep Bouts",
         "tool_category": "2-Processing",
         "asset_directory": "",
@@ -20,12 +20,12 @@
             },
             {
                 "name": "Input Files",
-                "description": "<div>Add the PSG files you want to perform the analysis on.<br><br>The PSG file and the accessory file must share the same filename and folder.<br><br>Open your files:<br> <strong>.edf</strong> : .tsv file is mandatory.<br> <strong>.sts</strong> : .sig file is mandatory.<br> <strong>.eeg</strong> for CEAMS user : NATUS subject folder is mandatory.</div>",
+                "description": "Add the PSG files to analyze.",
                 "module_id": "0a402e3d-7266-40fa-b439-6a42a9fbfe2f"
             },
             {
                 "name": "Output File",
-                "description": "Select the output file. If it already exist, results will be added at the end of it.",
+                "description": "Choose the output file and the unit of the durations (seconds or epochs). The results are added at the end of an existing file.",
                 "module_id": "19cc8da0-b11c-4b4a-8b35-dfeaa01e0a5f"
             }
         ]

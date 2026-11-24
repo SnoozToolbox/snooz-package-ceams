@@ -6,13 +6,93 @@ See the file LICENCE for full license details.
 """
     Settings viewer of the Intro plugin
 """
-import base64
-
-from qtpy import QtWidgets
-from qtpy.QtGui import QPixmap
+from qtpy import QtCore, QtGui, QtWidgets
 
 from CEAMSTools.SleepBouts.IntroStep.Ui_IntroStep import Ui_IntroStep
 from commons.BaseStepView import BaseStepView
+
+# Height of the illustration of the sleep bouts (pixels); it takes the width of its card
+IMAGE_HEIGHT = 96
+# The sleep stages of the example (one box per epoch) and its bouts: (first box, last box, name)
+STAGES = ["W", "W", "W", "N1", "N2", "N2", "N3", "R", "R", "N1", "W"]
+BOUTS_ABOVE = [(4, 6, "N2–N3"), (7, 8, "REM")]
+BOUTS_BELOW = [(4, 8, "N2–N3–REM")]
+
+
+def draw_sleep_bouts(painter, width, height, palette, font):
+    """ Draw the illustration of the sleep bouts in a width x height area, in the colors of the theme
+        (palette): the epochs of the example in boxes, the stages of the bouts on a light band of the
+        link color (darker for R), each bout under a bracket of the link color.
+    """
+    painter.setRenderHint(QtGui.QPainter.RenderHint.Antialiasing)
+    small = QtGui.QFont(font)
+    small.setPixelSize(13)
+    painter.setFont(small)
+    text_height = QtGui.QFontMetrics(small).height()
+
+    text = palette.color(QtGui.QPalette.ColorRole.Text)
+    muted = QtGui.QColor(text)
+    muted.setAlpha(150)
+    link = palette.color(QtGui.QPalette.ColorRole.Link)
+    nrem_band = QtGui.QColor(link)
+    nrem_band.setAlpha(40)
+    rem_band = QtGui.QColor(link)
+    rem_band.setAlpha(90)
+
+    box_width = min(56.0, (width - 4.0) / len(STAGES))
+    box_height = 28.0
+    left = (width - box_width * len(STAGES)) / 2
+    top = (height - box_height) / 2
+    center = QtCore.Qt.AlignmentFlag.AlignCenter
+
+    for index, stage in enumerate(STAGES):
+        box = QtCore.QRectF(left + index * box_width, top, box_width, box_height)
+        band = nrem_band if stage in ("N2", "N3") else rem_band if stage == "R" else None
+        if band is not None:
+            painter.fillRect(box, band)
+        painter.setPen(QtGui.QPen(muted, 1))
+        painter.drawRect(box)
+        painter.setPen(text)
+        painter.drawText(box, center, stage)
+
+    def bracket(first, last, name, above):
+        x1 = left + first * box_width + 3
+        x2 = left + (last + 1) * box_width - 3
+        y = top - 9 if above else top + box_height + 9
+        tick = 5 if above else -5  # towards the boxes
+        painter.setPen(QtGui.QPen(link, 1.5))
+        painter.drawLine(QtCore.QPointF(x1, y), QtCore.QPointF(x2, y))
+        painter.drawLine(QtCore.QPointF(x1, y), QtCore.QPointF(x1, y + tick))
+        painter.drawLine(QtCore.QPointF(x2, y), QtCore.QPointF(x2, y + tick))
+        text_top = y - text_height - 2 if above else y + 2
+        painter.setPen(text)
+        painter.drawText(QtCore.QRectF(x1 - 40, text_top, x2 - x1 + 80, text_height), center, name)
+
+    for first, last, name in BOUTS_ABOVE:
+        bracket(first, last, name, above=True)
+    for first, last, name in BOUTS_BELOW:
+        bracket(first, last, name, above=False)
+
+
+class SleepBoutsDrawing(QtCore.QObject):
+    """ Paints the illustration of the sleep bouts on its label, at the width of the label, when the
+        label is painted: sharp on every screen and in the colors of the theme. The label has no
+        picture, so the page does not put it in a picture card (made for pictures on a white background).
+    """
+    def __init__(self, label):
+        super().__init__(label)
+        label.setMinimumHeight(IMAGE_HEIGHT)
+        label.setMaximumHeight(IMAGE_HEIGHT)
+        label.installEventFilter(self)
+
+    def eventFilter(self, label, event):
+        if event.type() == QtCore.QEvent.Type.Paint:
+            painter = QtGui.QPainter(label)
+            draw_sleep_bouts(painter, label.width(), label.height(), label.palette(), label.font())
+            painter.end()
+            return True
+        return super().eventFilter(label, event)
+
 
 class IntroStep( BaseStepView,  Ui_IntroStep, QtWidgets.QWidget):
     """
@@ -23,60 +103,20 @@ class IntroStep( BaseStepView,  Ui_IntroStep, QtWidgets.QWidget):
 
         # init UI
         self.setupUi(self)
-        self._load_embedded_image()
-
-        # If necessary, init the context. The context is a memory space shared by 
-        # all steps of a tool. It is used to share and notice other steps whenever
-        # the value in it changes. It's very useful when the parameter within a step
-        # must have an impact in another step.
-        #self._context_manager["context_AnnotIntroStep"] = {"the_data_I_want_to_share":"some_data"}
-        
-    def _load_embedded_image(self):
-        """Load the embedded base64 image data into label_5."""
-        from .art_image_data import SLEEP_BOUTS_IMAGE_BASE64
-        
-        image_bytes = base64.b64decode(SLEEP_BOUTS_IMAGE_BASE64)
-        pixmap = QPixmap()
-        pixmap.loadFromData(image_bytes)
-        self.label_5.setPixmap(pixmap)
+        # The illustration of the sleep bouts, painted on label_5
+        self._bouts_drawing = SleepBoutsDrawing(self.label_5)
 
     def load_settings(self):
-        # Load settings is called after the constructor of all steps has been executed.
-        # From this point on, you can assume that all context has been set correctly.
-        # It is a good place to do all ping calls that will request the 
-        # underlying process to get the value of a module.
-
-        # You need to look into your process.json file to know the ID of the node
-        # you are interest in, this is just an example value:
-        #identifier = "ea6060df-a4da-4ec1-a75c-399ece7a3c1b" 
-        #self._somevalue_topic = identifier + ".some_input" # Change some_input for the name of the input your are looking for.
-        #self._pub_sub_manager.publish(self, self._somevalue_topic, 'ping')
         pass
 
     def on_topic_update(self, topic, message, sender):
-        # Whenever a value is updated within the context, all steps receives a 
-        # self._context_manager.topic message and can then act on it.
-        #if topic == self._context_manager.topic:
-
-            # The message will be the KEY of the value that's been updated inside the context.
-            # If it's the one you are looking for, we can then take the updated value and use it.
-            #if message == "context_some_other_step":
-                #updated_value = self._context_manager["context_some_other_step"]
         pass
 
     def on_topic_response(self, topic, message, sender):
-        # This will be called as a response to ping request.
-        #if topic == self._somevalue_topic:
-        #    self._somevalue = message
         pass
 
     def on_apply_settings(self):
         pass
 
     def on_validate_settings(self):
-        # Validate that all input were set correctly by the user.
-        # If everything is correct, return True.
-        # If not, display an error message to the user and return False.
-        # This is called just before the apply settings function.
-        # Returning False will prevent the process from executing.
         return True
