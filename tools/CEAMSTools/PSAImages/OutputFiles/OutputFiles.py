@@ -8,9 +8,11 @@ See the file LICENCE for full license details.
     Read a saved pipeline to update the UI.
 """
 import base64
-from qtpy.QtGui import QPixmap
 
+from matplotlib import font_manager
 from qtpy import QtWidgets
+from qtpy.QtCore import Qt
+from qtpy.QtGui import QFont, QFontDatabase, QPixmap
 
 from commons.BaseStepView import BaseStepView
 from widgets.WarningDialog import WarningDialog
@@ -28,6 +30,7 @@ class OutputFiles(BaseStepView, Ui_OutputFiles, QtWidgets.QWidget):
 
         # init UI
         self.setupUi(self)
+        self._populate_font_choices()
         self._load_embedded_image()
 
         # Connect the log scale checkbox to the options slot
@@ -77,6 +80,14 @@ class OutputFiles(BaseStepView, Ui_OutputFiles, QtWidgets.QWidget):
             'figure_height': 6,
             'output_folder': ''
         }
+
+    def _populate_font_choices(self):
+        matplotlib_families = {name.casefold() for name in font_manager.fontManager.get_font_names()}
+        for family in QFontDatabase.families():
+            if family.casefold() in matplotlib_families:
+                self.fontComboBox.addItem(family)
+                self.fontComboBox.setItemData(self.fontComboBox.count() - 1, QFont(family), Qt.FontRole)
+        self.fontComboBox.setCurrentText("Arial")
 
     def _load_embedded_image(self):
         """Load the embedded base64 image data into label_7."""
@@ -151,6 +162,10 @@ class OutputFiles(BaseStepView, Ui_OutputFiles, QtWidgets.QWidget):
         # Make sure that the output folder is set
         if self.lineEdit_output.text() == "":
             WarningDialog("Make sure to set the output folder in the step '3-Output Files'.")
+            return False
+
+        if self.fontComboBox.count() == 0:
+            WarningDialog("No font family is available in both Qt and Matplotlib. Install a supported font and restart Snooz.")
             return False
 
         return True
@@ -247,35 +262,9 @@ class OutputFiles(BaseStepView, Ui_OutputFiles, QtWidgets.QWidget):
             self.radioButton_report_level.setChecked(True)
             self.update_layout_states()
         
-        # Build sleep stage selection list based on checked checkboxes
-        sleep_stages = []
-        if self.checkBox_Wake.isChecked():
-            sleep_stages.append('W')
-        if self.checkBox_N1.isChecked():
-            sleep_stages.append('N1')
-        if self.checkBox_N2.isChecked():
-            sleep_stages.append('N2')
-        if self.checkBox_N3.isChecked():
-            sleep_stages.append('N3')
-        if self.checkBox_REM.isChecked():
-            sleep_stages.append('R')
-        if self.checkBox_Unscored.isChecked():
-            sleep_stages.append('Unscored')
-        if self.checkBox_All.isChecked():
-            sleep_stages.append('All')
-        
-        # Add special combined labels and remove individual stages
-        if self.checkBox_N2.isChecked() and self.checkBox_N3.isChecked():
-            sleep_stages.append('N2N3')
-            # Remove individual N2 and N3 when N2N3 is present
-            sleep_stages = [stage for stage in sleep_stages if stage not in ['N2', 'N3']]
-        
-        if self.checkBox_N1.isChecked() and self.checkBox_N2.isChecked() and self.checkBox_N3.isChecked():
-            sleep_stages.append('NREM')
-            # Remove individual N1, N2, N3 when NREM is present
-            sleep_stages = [stage for stage in sleep_stages if stage not in ['N1', 'N2', 'N3', 'N2N3']]
-        
-        self.pics_param["sleep_stage_selection"] = sleep_stages
+        self.pics_param["sleep_stage_selection"] = [
+            stage for stage, checkbox in self._stage_checkboxes().items() if checkbox.isChecked()
+        ]
 
         self.pics_param["output_folder"] = self.lineEdit_output.text()
         
@@ -304,6 +293,25 @@ class OutputFiles(BaseStepView, Ui_OutputFiles, QtWidgets.QWidget):
             self.spinBox_clock_hour.setEnabled(False)
             self.spinBox_sleep_cycle.setEnabled(False)
 
+    def _stage_checkboxes(self):
+        return {
+            'W': self.checkBox_Wake,
+            'N1': self.checkBox_N1,
+            'N2': self.checkBox_N2,
+            'N3': self.checkBox_N3,
+            'N2N3': self.checkBox_N2N3,
+            'NREM': self.checkBox_NREM,
+            'R': self.checkBox_REM,
+            'Unscored': self.checkBox_Unscored,
+            'All': self.checkBox_All,
+        }
+
+    def _set_sleep_stage_selection(self, stages):
+        if not stages or stages == [False]:
+            stages = ['All']
+        for stage, checkbox in self._stage_checkboxes().items():
+            checkbox.setChecked(stage in stages)
+
     # Function to set the UI according to the settings self.pics_param loaded
     def init_ui_from_pics_param(self):
         self.checkBox_cohort_avg.setChecked(self.pics_param.get("cohort_avg", False))
@@ -311,30 +319,7 @@ class OutputFiles(BaseStepView, Ui_OutputFiles, QtWidgets.QWidget):
         self.checkBox_group_avg.setChecked(self.pics_param.get("group_avg", False))
         self.checkBox_group_sel.setChecked(self.pics_param.get("group_sel", False))
         
-        # Set sleep stage checkboxes based on the list
-        sleep_stages = self.pics_param.get("sleep_stage_selection", ['All'])
-        
-        # If no sleep stages are selected or empty list, default to "All"
-        if not sleep_stages or sleep_stages == [False] or sleep_stages == False:
-            self.checkBox_All.setChecked(True)
-            self.checkBox_Wake.setChecked(False)
-            self.checkBox_N1.setChecked(False)
-            self.checkBox_N2.setChecked(False)
-            self.checkBox_N3.setChecked(False)
-            self.checkBox_REM.setChecked(False)
-            self.checkBox_Unscored.setChecked(False)
-        else:
-            # Handle combined labels by setting individual checkboxes
-            has_n2n3 = 'N2N3' in sleep_stages
-            has_nrem = 'NREM' in sleep_stages
-            
-            self.checkBox_Wake.setChecked('W' in sleep_stages)
-            self.checkBox_N1.setChecked('N1' in sleep_stages or has_nrem)
-            self.checkBox_N2.setChecked('N2' in sleep_stages or has_n2n3 or has_nrem)
-            self.checkBox_N3.setChecked('N3' in sleep_stages or has_n2n3 or has_nrem)
-            self.checkBox_REM.setChecked('R' in sleep_stages)
-            self.checkBox_Unscored.setChecked('Unscored' in sleep_stages)
-            self.checkBox_All.setChecked('All' in sleep_stages)
+        self._set_sleep_stage_selection(self.pics_param.get("sleep_stage_selection"))
 
         if self.pics_param.get("activity_var") == "total":
             self.radioButton_total.setChecked(True)
@@ -414,14 +399,7 @@ class OutputFiles(BaseStepView, Ui_OutputFiles, QtWidgets.QWidget):
         self.checkBox_group_avg.setChecked(False)
         self.checkBox_group_sel.setChecked(False)
         
-        # Set default sleep stage to "All"
-        self.checkBox_All.setChecked(True)
-        self.checkBox_Wake.setChecked(False)
-        self.checkBox_N1.setChecked(False)
-        self.checkBox_N2.setChecked(False)
-        self.checkBox_N3.setChecked(False)
-        self.checkBox_REM.setChecked(False)
-        self.checkBox_Unscored.setChecked(False)
+        self._set_sleep_stage_selection(['All'])
         
         # Set default radio buttons
         self.radioButton_total.setChecked(True)

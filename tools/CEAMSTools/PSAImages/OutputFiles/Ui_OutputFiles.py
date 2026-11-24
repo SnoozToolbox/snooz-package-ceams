@@ -15,11 +15,13 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QFont, QFontDatabase, QGradient, QIcon,
     QImage, QKeySequence, QLinearGradient, QPainter,
     QPalette, QPixmap, QRadialGradient, QTransform)
-from PySide6.QtWidgets import (QApplication, QButtonGroup, QCheckBox, QDoubleSpinBox,
-    QFontComboBox, QFrame, QGridLayout, QHBoxLayout,
-    QLabel, QLayout, QLineEdit, QPushButton,
-    QRadioButton, QSizePolicy, QSpacerItem, QSpinBox,
-    QTextEdit, QVBoxLayout, QWidget)
+from PySide6.QtWidgets import (QApplication, QButtonGroup, QCheckBox, QComboBox,
+    QFrame, QGridLayout, QHBoxLayout, QLabel,
+    QLayout, QLineEdit, QPushButton, QRadioButton,
+    QSizePolicy, QSpacerItem, QSpinBox, QTextEdit,
+    QVBoxLayout, QWidget)
+
+from CEAMSTools.PSAImages.OutputFiles.DecimalSpinBox import DecimalSpinBox
 import themes_rc
 
 class Ui_OutputFiles(object):
@@ -221,6 +223,16 @@ class Ui_OutputFiles(object):
 
         self.horizontalLayout_4.addWidget(self.checkBox_N3)
 
+        self.checkBox_N2N3 = QCheckBox(OutputFiles)
+        self.checkBox_N2N3.setObjectName(u"checkBox_N2N3")
+
+        self.horizontalLayout_4.addWidget(self.checkBox_N2N3)
+
+        self.checkBox_NREM = QCheckBox(OutputFiles)
+        self.checkBox_NREM.setObjectName(u"checkBox_NREM")
+
+        self.horizontalLayout_4.addWidget(self.checkBox_NREM)
+
         self.checkBox_REM = QCheckBox(OutputFiles)
         self.checkBox_REM.setObjectName(u"checkBox_REM")
 
@@ -367,11 +379,11 @@ class Ui_OutputFiles(object):
 
         self.horizontalLayout_14.addWidget(self.label_25)
 
-        self.doubleSpinBox_xmin = QDoubleSpinBox(OutputFiles)
+        self.doubleSpinBox_xmin = DecimalSpinBox(OutputFiles)
         self.doubleSpinBox_xmin.setObjectName(u"doubleSpinBox_xmin")
         self.doubleSpinBox_xmin.setEnabled(False)
-        self.doubleSpinBox_xmin.setMinimum(-5.000000000000000)
-        self.doubleSpinBox_xmin.setMaximum(5.000000000000000)
+        self.doubleSpinBox_xmin.setMinimum(-100.000000000000000)
+        self.doubleSpinBox_xmin.setMaximum(10000.000000000000000)
         self.doubleSpinBox_xmin.setSingleStep(0.500000000000000)
 
         self.horizontalLayout_14.addWidget(self.doubleSpinBox_xmin)
@@ -382,11 +394,11 @@ class Ui_OutputFiles(object):
 
         self.horizontalLayout_14.addWidget(self.label_26)
 
-        self.doubleSpinBox_xmax = QDoubleSpinBox(OutputFiles)
+        self.doubleSpinBox_xmax = DecimalSpinBox(OutputFiles)
         self.doubleSpinBox_xmax.setObjectName(u"doubleSpinBox_xmax")
         self.doubleSpinBox_xmax.setEnabled(False)
-        self.doubleSpinBox_xmax.setMinimum(-5.000000000000000)
-        self.doubleSpinBox_xmax.setMaximum(5.000000000000000)
+        self.doubleSpinBox_xmax.setMinimum(0.000000000000000)
+        self.doubleSpinBox_xmax.setMaximum(100000.000000000000000)
         self.doubleSpinBox_xmax.setSingleStep(0.500000000000000)
 
         self.horizontalLayout_14.addWidget(self.doubleSpinBox_xmax)
@@ -397,11 +409,12 @@ class Ui_OutputFiles(object):
 
         self.horizontalLayout_14.addWidget(self.label_27)
 
-        self.doubleSpinBox_ymin = QDoubleSpinBox(OutputFiles)
+        self.doubleSpinBox_ymin = DecimalSpinBox(OutputFiles)
         self.doubleSpinBox_ymin.setObjectName(u"doubleSpinBox_ymin")
         self.doubleSpinBox_ymin.setEnabled(False)
-        self.doubleSpinBox_ymin.setMinimum(-500.000000000000000)
-        self.doubleSpinBox_ymin.setMaximum(500.000000000000000)
+        self.doubleSpinBox_ymin.setDecimals(5)
+        self.doubleSpinBox_ymin.setMinimum(-10.000000000000000)
+        self.doubleSpinBox_ymin.setMaximum(1000.000000000000000)
         self.doubleSpinBox_ymin.setSingleStep(50.000000000000000)
 
         self.horizontalLayout_14.addWidget(self.doubleSpinBox_ymin)
@@ -412,11 +425,11 @@ class Ui_OutputFiles(object):
 
         self.horizontalLayout_14.addWidget(self.label_28)
 
-        self.doubleSpinBox_ymax = QDoubleSpinBox(OutputFiles)
+        self.doubleSpinBox_ymax = DecimalSpinBox(OutputFiles)
         self.doubleSpinBox_ymax.setObjectName(u"doubleSpinBox_ymax")
         self.doubleSpinBox_ymax.setEnabled(False)
-        self.doubleSpinBox_ymax.setMinimum(-500.000000000000000)
-        self.doubleSpinBox_ymax.setMaximum(500.000000000000000)
+        self.doubleSpinBox_ymax.setMinimum(0.000000000000000)
+        self.doubleSpinBox_ymax.setMaximum(100000000000000000000.000000000000000)
         self.doubleSpinBox_ymax.setSingleStep(50.000000000000000)
 
         self.horizontalLayout_14.addWidget(self.doubleSpinBox_ymax)
@@ -488,8 +501,9 @@ class Ui_OutputFiles(object):
 
         self.horizontalLayout_disp.addWidget(self.label_13)
 
-        self.fontComboBox = QFontComboBox(OutputFiles)
+        self.fontComboBox = QComboBox(OutputFiles)
         self.fontComboBox.setObjectName(u"fontComboBox")
+        self.fontComboBox.setEditable(False)
 
         self.horizontalLayout_disp.addWidget(self.fontComboBox)
 
@@ -524,6 +538,7 @@ class Ui_OutputFiles(object):
 
         self.spinBox_figwidth = QSpinBox(OutputFiles)
         self.spinBox_figwidth.setObjectName(u"spinBox_figwidth")
+        self.spinBox_figwidth.setMinimum(1)
         self.spinBox_figwidth.setValue(8)
 
         self.horizontalLayout_disp.addWidget(self.spinBox_figwidth)
@@ -535,6 +550,7 @@ class Ui_OutputFiles(object):
 
         self.spinBox_figheight = QSpinBox(OutputFiles)
         self.spinBox_figheight.setObjectName(u"spinBox_figheight")
+        self.spinBox_figheight.setMinimum(1)
         self.spinBox_figheight.setValue(6)
 
         self.horizontalLayout_disp.addWidget(self.spinBox_figheight)
@@ -639,11 +655,13 @@ class Ui_OutputFiles(object):
 "li.unchecked::marker { content: \"\\2610\"; }\n"
 "li.checked::marker { content: \"\\2612\"; }\n"
 "</style></head><body style=\" font-size:12pt; font-weight:400; font-style:normal;\">\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Note: When N2 and N3 stages are selected together, the generated figure displays only the EEG spectral power data corresponding to the &quot;N2N3&quot; column of the report. Similarly, when N1, N2, and N3 stages are all selected, the figure presents only the data from the &quot;NREM&quot; column.</p></body></html>", None))
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Each selected stage is plotted separately. Select N2N3 or NREM to plot the corresponding combined data from the report, with or without the individual stages.</p></body></html>", None))
         self.checkBox_Wake.setText(QCoreApplication.translate("OutputFiles", u"Wake", None))
         self.checkBox_N1.setText(QCoreApplication.translate("OutputFiles", u"N1", None))
         self.checkBox_N2.setText(QCoreApplication.translate("OutputFiles", u"N2", None))
         self.checkBox_N3.setText(QCoreApplication.translate("OutputFiles", u"N3", None))
+        self.checkBox_N2N3.setText(QCoreApplication.translate("OutputFiles", u"N2N3", None))
+        self.checkBox_NREM.setText(QCoreApplication.translate("OutputFiles", u"NREM", None))
         self.checkBox_REM.setText(QCoreApplication.translate("OutputFiles", u"R", None))
         self.checkBox_Unscored.setText(QCoreApplication.translate("OutputFiles", u"Unscored", None))
         self.checkBox_All.setText(QCoreApplication.translate("OutputFiles", u"All", None))
@@ -663,6 +681,9 @@ class Ui_OutputFiles(object):
         self.label_25.setText(QCoreApplication.translate("OutputFiles", u"x-min:", None))
         self.label_26.setText(QCoreApplication.translate("OutputFiles", u"x-max:", None))
         self.label_27.setText(QCoreApplication.translate("OutputFiles", u"y-min:", None))
+#if QT_CONFIG(tooltip)
+        self.doubleSpinBox_ymin.setToolTip(QCoreApplication.translate("OutputFiles", u"Enter a positive value for a logarithmic Y axis, for example 0.00001 or 0,00001.", None))
+#endif // QT_CONFIG(tooltip)
         self.label_28.setText(QCoreApplication.translate("OutputFiles", u"y-max:", None))
         self.radioButton_all.setText(QCoreApplication.translate("OutputFiles", u"Display all the EEG spectral power curves on the picture.", None))
         self.radioButton_mean.setText(QCoreApplication.translate("OutputFiles", u"MEAN : Display only the mean of EEG spectral power curve", None))
@@ -672,10 +693,19 @@ class Ui_OutputFiles(object):
         self.checkBox_log_x.setText(QCoreApplication.translate("OutputFiles", u"Logarithmic Scale-X axis", None))
         self.checkBox_legend.setText(QCoreApplication.translate("OutputFiles", u"Show Legend", None))
         self.label_13.setText(QCoreApplication.translate("OutputFiles", u"Font", None))
+#if QT_CONFIG(tooltip)
+        self.fontComboBox.setToolTip(QCoreApplication.translate("OutputFiles", u"Only font families available in both Qt and Matplotlib are listed. If a saved font is unavailable, select another font for the PDF.", None))
+#endif // QT_CONFIG(tooltip)
         self.label_FontSize.setText(QCoreApplication.translate("OutputFiles", u"Font Size", None))
         self.label_14.setText(QCoreApplication.translate("OutputFiles", u"Figure Size (inch):", None))
         self.label_16.setText(QCoreApplication.translate("OutputFiles", u"Width", None))
+#if QT_CONFIG(tooltip)
+        self.spinBox_figwidth.setToolTip(QCoreApplication.translate("OutputFiles", u"PDF page width in inches. Increase it if the labels or legend do not fit.", None))
+#endif // QT_CONFIG(tooltip)
         self.label_15.setText(QCoreApplication.translate("OutputFiles", u"Height", None))
+#if QT_CONFIG(tooltip)
+        self.spinBox_figheight.setToolTip(QCoreApplication.translate("OutputFiles", u"PDF page height in inches. Increase it if the labels or legend do not fit.", None))
+#endif // QT_CONFIG(tooltip)
         self.label_4.setText(QCoreApplication.translate("OutputFiles", u"<html><head/><body><p><span style=\" font-weight:600;\">Ouput folder to save pictures</span></p></body></html>", None))
         self.lineEdit_output.setPlaceholderText(QCoreApplication.translate("OutputFiles", u"Select the folder where the pictures will be saved.", None))
         self.pushButton_choose.setText(QCoreApplication.translate("OutputFiles", u"Choose", None))
