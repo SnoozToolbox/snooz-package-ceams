@@ -22,7 +22,6 @@ class Ui_ExtendEventsResultsView(object):
     def setupUi(self, ExtendEventsResultsView):
         if not ExtendEventsResultsView.objectName():
             ExtendEventsResultsView.setObjectName(u"ExtendEventsResultsView")
-        ExtendEventsResultsView.setStyleSheet(u"font: 12pt \"Roboto\";")
         ExtendEventsResultsView.resize(483, 360)
         self.verticalLayout = QVBoxLayout(ExtendEventsResultsView)
         self.verticalLayout.setObjectName(u"verticalLayout")

@@ -24,7 +24,6 @@ class Ui_PSACompilationFOOOFSettingsView(object):
         if not PSACompilationFOOOFSettingsView.objectName():
             PSACompilationFOOOFSettingsView.setObjectName(u"PSACompilationFOOOFSettingsView")
         PSACompilationFOOOFSettingsView.resize(711, 530)
-        PSACompilationFOOOFSettingsView.setStyleSheet(u"font: 12pt \"Roboto\";")
         self.verticalLayout = QVBoxLayout(PSACompilationFOOOFSettingsView)
         self.verticalLayout.setObjectName(u"verticalLayout")
         self.subject_info_horizontalLayout = QHBoxLayout()

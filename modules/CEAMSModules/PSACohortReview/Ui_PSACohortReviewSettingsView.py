@@ -26,7 +26,6 @@ class Ui_PSACohortReviewSettingsView(object):
         if not PSACohortReviewSettingsView.objectName():
             PSACohortReviewSettingsView.setObjectName(u"PSACohortReviewSettingsView")
         PSACohortReviewSettingsView.resize(929, 800)
-        PSACohortReviewSettingsView.setStyleSheet(u"font: 12pt \"Roboto\";")
         self.horizontalLayout_3 = QHBoxLayout(PSACohortReviewSettingsView)
         self.horizontalLayout_3.setObjectName(u"horizontalLayout_3")
         self.splitter = QSplitter(PSACohortReviewSettingsView)

@@ -25,7 +25,6 @@ class Ui_IntroStep(object):
         if not IntroStep.objectName():
             IntroStep.setObjectName(u"IntroStep")
         IntroStep.resize(1022, 740)
-        IntroStep.setStyleSheet(u"font: 12pt \"Roboto\";")
         self.horizontalLayout_2 = QHBoxLayout(IntroStep)
         self.horizontalLayout_2.setObjectName(u"horizontalLayout_2")
         self.verticalLayout_4 = QVBoxLayout()
@@ -115,11 +114,11 @@ class Ui_IntroStep(object):
 "hr { height: 1px; border-width: 0; }\n"
 "li.unchecked::marker { content: \"\\2610\"; }\n"
 "li.checked::marker { content: \"\\2612\"; }\n"
-"</style></head><body style=\" font-family:'Roboto'; font-size:12pt; font-weight:400; font-style:normal;\">\n"
+"</style></head><body style=\" font-size:12pt; font-weight:400; font-style:normal;\">\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Sleep bouts are defined as continuous periods of three sleep stage combinations : <br /></p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">   1. Continuous period of N2 and N3 stages</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">   2. Continuo"
-                        "us period of N2, N3 and REM stages</p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">   2. Continuous period of N2, N3 an"
+                        "d REM stages</p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">   3. Continuous period of REM stage alone</p></body></html>", None))
         self.label_5.setText("")
         self.textEdit_3.setHtml(QCoreApplication.translate("IntroStep", u"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
@@ -128,17 +127,17 @@ class Ui_IntroStep(object):
 "hr { height: 1px; border-width: 0; }\n"
 "li.unchecked::marker { content: \"\\2610\"; }\n"
 "li.checked::marker { content: \"\\2612\"; }\n"
-"</style></head><body style=\" font-family:'Roboto'; font-size:12pt; font-weight:400; font-style:normal;\">\n"
+"</style></head><body style=\" font-size:12pt; font-weight:400; font-style:normal;\">\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" text-decoration: underline;\">1 - Input Files :</span></p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Add the PSG files to analyze.</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Roboto-Regular';\">"
-                        "- European Data Format (EDF) : The .edf and .tsv files must have the exact same filename and be stored in the same directory.</span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Roboto-Regular';\">- Stellate : The .sig and .sts files must have the exact same filename and be stored in the same directory.</span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Roboto-Regular';\">- NATUS (</span><span style=\" font-family:'Roboto-Regular'; font-style:italic;\">for CEAMS users</span><span style=\" font-family:'Roboto-Regular';\">) : </span><span style=\" font-family:'MS Shell Dlg 2';\"> The entire NATUS subject folder is required.</span></p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p"
-                        ">\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\"\">- European Data Format (EDF) : The .edf and .tsv fil"
+                        "es must have the exact same filename and be stored in the same directory.</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\"\">- Stellate : The .sig and .sts files must have the exact same filename and be stored in the same directory.</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\"\">- NATUS (</span><span style=\" font-style:italic;\">for CEAMS users</span><span style=\"\">) : </span><span style=\"\"> The entire NATUS subject folder is required.</span></p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" text-decoration: underline;\">2 - Output file :</span> </p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">The output is a TSV (Tab Separated Values) file containing one row per recording, including the ten longest sleep bouts, </p>\n"
+""
+                        "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">The output is a TSV (Tab Separated Values) file containing one row per recording, including the ten longest sleep bouts, </p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">as well as the mean and standard deviation of both the ten longest and all sleep bouts for each combination. </p></body></html>", None))
     # retranslateUi
 

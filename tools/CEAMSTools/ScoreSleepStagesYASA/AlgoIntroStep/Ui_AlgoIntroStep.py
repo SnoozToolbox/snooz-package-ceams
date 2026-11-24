@@ -24,7 +24,6 @@ class Ui_AlgoIntroStep(object):
         if not AlgoIntroStep.objectName():
             AlgoIntroStep.setObjectName(u"AlgoIntroStep")
         AlgoIntroStep.resize(766, 367)
-        AlgoIntroStep.setStyleSheet(u"font: 12pt \"Roboto\";")
         self.verticalLayout_5 = QVBoxLayout(AlgoIntroStep)
         self.verticalLayout_5.setObjectName(u"verticalLayout_5")
         self.verticalLayout = QVBoxLayout()
@@ -149,10 +148,10 @@ class Ui_AlgoIntroStep(object):
 "hr { height: 1px; border-width: 0; }\n"
 "li.unchecked::marker { content: \"\\2610\"; }\n"
 "li.checked::marker { content: \"\\2612\"; }\n"
-"</style></head><body style=\" font-family:'Roboto'; font-size:12pt; font-weight:400; font-style:normal;\">\n"
+"</style></head><body style=\" font-size:12pt; font-weight:400; font-style:normal;\">\n"
 "<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">This tool <span style=\" font-weight:700;\">classifies sleep stages</span> from PSG recordings using 30-second epochs.</p>\n"
-"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Sleep stages can be classified based on a single EEG electrode, preferably central ones (C3, C4).<br />Including one EOG and one EMG channel can improve "
-                        "classification accuracy.<br /><span style=\" font-weight:700;\">In Snooz, you can select up to four high-priority EEG channels</span>, <br />allowing the tool to determine the most confident classification for each. </p>\n"
+"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Sleep stages can be classified based on a single EEG electrode, preferably central ones (C3, C4).<br />Including one EOG and one EMG channel can improve classification accurac"
+                        "y.<br /><span style=\" font-weight:700;\">In Snooz, you can select up to four high-priority EEG channels</span>, <br />allowing the tool to determine the most confident classification for each. </p>\n"
 "<p align=\"justify\" style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">NOTE: Based on the internal analysis of Snooz, configurations combining central channels <br />with one frontal and one occipital channel typically demonstrate marginally better performance.</p></body></html>", None))
         self.label_3.setText(QCoreApplication.translate("AlgoIntroStep", u"<html><head/><body><p><span style=\" font-weight:600;\">Algorithm Details</span></p></body></html>", None))
         self.label_4.setHtml(QCoreApplication.translate("AlgoIntroStep", u"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
@@ -161,17 +160,17 @@ class Ui_AlgoIntroStep(object):
 "hr { height: 1px; border-width: 0; }\n"
 "li.unchecked::marker { content: \"\\2610\"; }\n"
 "li.checked::marker { content: \"\\2612\"; }\n"
-"</style></head><body style=\" font-family:'Roboto'; font-size:12pt; font-weight:400; font-style:normal;\">\n"
+"</style></head><body style=\" font-size:12pt; font-weight:400; font-style:normal;\">\n"
 "<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">The sleep staging algorithm, YASA, is an open-source tool that has been trained,<br />using over 30,000 hours of polysomnographic (PSG) sleep data across diverse populations. </p>\n"
-"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-style:italic;\">-Data processing:</span><br />The algorithm uses a central E"
-                        "EG channel, along with EOG, and EMG channels.<br />These signals are downsampled to 100 Hz and bandpassed-filtered between 0.4 Hz and 30 Hz. </p>\n"
+"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-style:italic;\">-Data processing:</span><br />The algorithm uses a central EEG channel, along with"
+                        " EOG, and EMG channels.<br />These signals are downsampled to 100 Hz and bandpassed-filtered between 0.4 Hz and 30 Hz. </p>\n"
 "<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-style:italic;\">-Feature Extraction:</span><br />The algorithm extracts a set of time and frequency domain features from the EEG signal, and optionaly from the EOG and EMG signals. <br />These features are calculated for each 30-second epoch of raw data. </p>\n"
 "<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-style:italic;\">-Smoothing and Normalization:</span><br />The algorithm uses a smoothing approach across all the aformentioned features to incorporate contextual infromation.<br />All the smoothed features are then z-scored across each night. </p>\n"
-"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-"
-                        "right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-style:italic;\">-Machine Learning Classification:</span><br />A lightGBM classifier, a tree-based gradient-boosting classifier, is used. </p>\n"
+"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-i"
+                        "ndent:0; text-indent:0px;\"><span style=\" font-style:italic;\">-Machine Learning Classification:</span><br />A lightGBM classifier, a tree-based gradient-boosting classifier, is used. </p>\n"
 "<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-style:italic;\">-Performance Evaluation:</span><br />The algorithm's performance is evaluated using standardized guidelines,including accuracy, Cohen's kappa, Matthews correlation coefficient, confusion matrices, and F1-scores. </p>\n"
-"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" text-decoration: underline;\">Reference</span>: <br />Vallat, Raphael, and Matthew P. Walker. \u201cAn open-source, high-performance tool for automated sleep staging.\u201d Elife 10 (2021). <br />doi: https://doi.org/10.7554/eLife.70092 (Documentation: <a href=\"https://raphaelvallat.com/ya"
-                        "sa/\"><span style=\" text-decoration: underline; color:#0000ff;\">https://raphaelvallat.com/yasa/)</span></a></p></body></html>", None))
+"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" text-decoration: underline;\">Reference</span>: <br />Vallat, Raphael, and Matthew P. Walker. \u201cAn open-source, high-performance tool for automated sleep staging.\u201d Elife 10 (2021). <br />doi: https://doi.org/10.7554/eLife.70092 (Documentation: <a href=\"https://raphaelvallat.com/yasa/\"><span style=\" t"
+                        "ext-decoration: underline; color:#0000ff;\">https://raphaelvallat.com/yasa/)</span></a></p></body></html>", None))
         self.label_5.setText(QCoreApplication.translate("AlgoIntroStep", u"<html><head/><body><p><span style=\" font-weight:600;\">Output</span></p></body></html>", None))
         self.label_6.setHtml(QCoreApplication.translate("AlgoIntroStep", u"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset=\"utf-8\" /><style type=\"text/css\">\n"
@@ -179,7 +178,7 @@ class Ui_AlgoIntroStep(object):
 "hr { height: 1px; border-width: 0; }\n"
 "li.unchecked::marker { content: \"\\2610\"; }\n"
 "li.checked::marker { content: \"\\2612\"; }\n"
-"</style></head><body style=\" font-family:'Roboto'; font-size:12pt; font-weight:400; font-style:normal;\">\n"
+"</style></head><body style=\" font-size:12pt; font-weight:400; font-style:normal;\">\n"
 "<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">The YASA sleep scoring tool is compatible with different input files including, EDF, NATUS, and STS.<br />NOTE: For proper functionality with discontinuous files, the tool requires at least one EEG channel along with one EOG or EMG channel.<br />The output of the automatic scoring algorithm is an accessory file that saves the predicted sleep stages.</p></body></html>", None))
     # retranslateUi
 

@@ -33,8 +33,6 @@ class Ui_AnnotationsSelection(object):
         self.label = QLabel(AnnotationsSelection)
         self.label.setObjectName(u"label")
         font = QFont()
-        font.setFamilies([u"Roboto"])
-        font.setPointSize(12)
         font.setBold(False)
         font.setItalic(False)
         self.label.setFont(font)
@@ -110,7 +108,6 @@ class Ui_AnnotationsSelection(object):
 
     def retranslateUi(self, AnnotationsSelection):
         AnnotationsSelection.setWindowTitle(QCoreApplication.translate("AnnotationsSelection", u"Form", None))
-        AnnotationsSelection.setStyleSheet(QCoreApplication.translate("AnnotationsSelection", u"font: 12pt \"Roboto\";", None))
         self.label.setText(QCoreApplication.translate("AnnotationsSelection", u"PSG Files", None))
         self.label_2.setText(QCoreApplication.translate("AnnotationsSelection", u"Events", None))
         self.select_all_checkBox.setText(QCoreApplication.translate("AnnotationsSelection", u"Select All", None))

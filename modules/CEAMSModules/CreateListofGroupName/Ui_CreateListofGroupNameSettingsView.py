@@ -23,7 +23,6 @@ class Ui_CreateListofGroupNameSettingsView(object):
     def setupUi(self, CreateListofGroupNameSettingsView):
         if not CreateListofGroupNameSettingsView.objectName():
             CreateListofGroupNameSettingsView.setObjectName(u"CreateListofGroupNameSettingsView")
-        CreateListofGroupNameSettingsView.setStyleSheet(u"font: 12pt \"Roboto\";")
         CreateListofGroupNameSettingsView.resize(711, 333)
         self.verticalLayout = QVBoxLayout(CreateListofGroupNameSettingsView)
         self.verticalLayout.setObjectName(u"verticalLayout")

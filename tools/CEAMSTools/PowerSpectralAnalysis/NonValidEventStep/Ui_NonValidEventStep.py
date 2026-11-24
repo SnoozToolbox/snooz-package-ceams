@@ -33,8 +33,6 @@ class Ui_NonValidEventStep(object):
         self.label = QLabel(NonValidEventStep)
         self.label.setObjectName(u"label")
         font = QFont()
-        font.setFamilies([u"Roboto"])
-        font.setPointSize(12)
         font.setBold(False)
         font.setItalic(False)
         self.label.setFont(font)
@@ -116,7 +114,6 @@ class Ui_NonValidEventStep(object):
 
     def retranslateUi(self, NonValidEventStep):
         NonValidEventStep.setWindowTitle(QCoreApplication.translate("NonValidEventStep", u"Form", None))
-        NonValidEventStep.setStyleSheet(QCoreApplication.translate("NonValidEventStep", u"font: 12pt \"Roboto\";", None))
         self.label.setText(QCoreApplication.translate("NonValidEventStep", u"PSG Files", None))
         self.label_2.setText(QCoreApplication.translate("NonValidEventStep", u"Events", None))
         self.select_all_checkBox.setText(QCoreApplication.translate("NonValidEventStep", u"Select All", None))

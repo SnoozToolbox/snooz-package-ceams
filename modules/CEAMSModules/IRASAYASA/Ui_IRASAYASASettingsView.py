@@ -25,7 +25,6 @@ class Ui_IRASAYASASettingsView(object):
         if not IRASAYASASettingsView.objectName():
             IRASAYASASettingsView.setObjectName(u"IRASAYASASettingsView")
         IRASAYASASettingsView.resize(711, 333)
-        IRASAYASASettingsView.setStyleSheet(u"font: 12pt \"Roboto\";")
         self.verticalLayout = QVBoxLayout(IRASAYASASettingsView)
         self.verticalLayout.setObjectName(u"verticalLayout")
         self.signals_horizontalLayout = QHBoxLayout()

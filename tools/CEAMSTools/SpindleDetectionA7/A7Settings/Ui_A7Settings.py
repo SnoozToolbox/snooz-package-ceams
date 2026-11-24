@@ -31,8 +31,6 @@ class Ui_A7Settings(object):
         self.label_6 = QLabel(A7Settings)
         self.label_6.setObjectName(u"label_6")
         font = QFont()
-        font.setFamilies([u"Roboto"])
-        font.setPointSize(12)
         font.setBold(False)
         font.setItalic(False)
         self.label_6.setFont(font)
@@ -305,7 +303,6 @@ class Ui_A7Settings(object):
 
     def retranslateUi(self, A7Settings):
         A7Settings.setWindowTitle("")
-        A7Settings.setStyleSheet(QCoreApplication.translate("A7Settings", u"font: 12pt \"Roboto\";", None))
         self.label_6.setText(QCoreApplication.translate("A7Settings", u"<html><head/><body><p><span style=\" font-weight:600;\">Spindle detector that emulates human scoring.</span></p></body></html>", None))
         self.textEdit.setHtml(QCoreApplication.translate("A7Settings", u"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset=\"utf-8\" /><style type=\"text/css\">\n"
@@ -313,13 +310,13 @@ class Ui_A7Settings(object):
 "hr { height: 1px; border-width: 0; }\n"
 "li.unchecked::marker { content: \"\\2610\"; }\n"
 "li.checked::marker { content: \"\\2612\"; }\n"
-"</style></head><body style=\" font-family:'Roboto'; font-size:12pt; font-weight:400; font-style:normal;\">\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Computes the absolute power (mean square) in the sigma band, the relative sigma power based on the power spectral density (PSD), and the covariance and correlation between the sigma-filtered and unfiltered EEG signals over sliding windows (0.3 s length with a 0.1 s step). It then detects a spindle if the 4 features extracted from EEG exceed their respective threshold (1.25 \u03bcV2, 1.6 \u00d7 STD, 1.3"
-                        " \u00d7 STD and 69%).<br /><span style=\" font-weight:700;\">Note:</span> These thresholds are set for the default sigma band (11-16 Hz)</p>\n"
+"</style></head><body style=\" font-size:12pt; font-weight:400; font-style:normal;\">\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Computes the absolute power (mean square) in the sigma band, the relative sigma power based on the power spectral density (PSD), and the covariance and correlation between the sigma-filtered and unfiltered EEG signals over sliding windows (0.3 s length with a 0.1 s step). It then detects a spindle if the 4 features extracted from EEG exceed their respective threshold (1.25 \u03bcV2, 1.6 \u00d7 STD, 1.3 \u00d7 STD and 69%).<"
+                        "br /><span style=\" font-weight:700;\">Note:</span> These thresholds are set for the default sigma band (11-16 Hz)</p>\n"
 "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; line-height:135%;\"><span style=\" text-decoration: underline;\">Reference</span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; line-height:135%;\">[1] Lacourse, K., Delfrate, J., Beaudry, J., Peppard, P., Warby, S.C., 2019. A sleep spindle detection algorithm that emulates human expert spindle scoring. Journal of Neuroscience Methods 316, 3\u201311. <a href=\"https://doi.org/10.1016/j.jneumeth.2018.08.014\"><span style=\" text-decoration: underline; color:#0000ff;\">https://doi.org/10.1016/j.jneumeth.2018.08.014<"
-                        "/span></a> </p></body></html>", None))
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; line-height:135%;\">[1] Lacourse, K., Delfrate, J., Beaudry, J., Peppard, P., Warby, S.C., 2019. A sleep spindle detection algorithm that emulates human expert spindle scoring. Journal of Neuroscience Methods 316, 3\u201311. <a href=\"https://doi.org/10.1016/j.jneumeth.2018.08.014\"><span style=\" text-decoration: underline; color:#0000ff;\">https://doi.org/10.1016/j.jneumeth.2018.08.014</span></a> </p></body>"
+                        "</html>", None))
         self.label_15.setText(QCoreApplication.translate("A7Settings", u"<html><head/><body><p><span style=\" font-weight:700;\">Sigma Band Settings</span></p></body></html>", None))
         self.label_3.setText(QCoreApplication.translate("A7Settings", u"Name", None))
 #if QT_CONFIG(tooltip)
@@ -340,7 +337,7 @@ class Ui_A7Settings(object):
 "hr { height: 1px; border-width: 0; }\n"
 "li.unchecked::marker { content: \"\\2610\"; }\n"
 "li.checked::marker { content: \"\\2612\"; }\n"
-"</style></head><body style=\" font-family:'Roboto'; font-size:12pt; font-weight:400; font-style:normal;\">\n"
+"</style></head><body style=\" font-size:12pt; font-weight:400; font-style:normal;\">\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-weight:700;\">Warning:</span> The spindle detection thresholds are pre-set and validated specifically for the sigma frequency band (11-16 Hz). If you change the frequency band from the default values, you may need to adjust the threshold values to ensure accurate spindle detection.</p></body></html>", None))
         self.label_5.setText(QCoreApplication.translate("A7Settings", u"<html><head/><body><p><span style=\" font-weight:600;\">Thresholds</span></p></body></html>", None))
         self.label_8.setText(QCoreApplication.translate("A7Settings", u"Sigma Covariance", None))
@@ -357,7 +354,7 @@ class Ui_A7Settings(object):
 "hr { height: 1px; border-width: 0; }\n"
 "li.unchecked::marker { content: \"\\2610\"; }\n"
 "li.checked::marker { content: \"\\2612\"; }\n"
-"</style></head><body style=\" font-family:'Roboto'; font-size:12pt; font-weight:400; font-style:normal;\">\n"
+"</style></head><body style=\" font-size:12pt; font-weight:400; font-style:normal;\">\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">log10( mean squared sigma power )</p></body></html>", None))
         self.textEdit_5.setHtml(QCoreApplication.translate("A7Settings", u"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset=\"utf-8\" /><style type=\"text/css\">\n"
@@ -365,7 +362,7 @@ class Ui_A7Settings(object):
 "hr { height: 1px; border-width: 0; }\n"
 "li.unchecked::marker { content: \"\\2610\"; }\n"
 "li.checked::marker { content: \"\\2612\"; }\n"
-"</style></head><body style=\" font-family:'Roboto'; font-size:12pt; font-weight:400; font-style:normal;\">\n"
+"</style></head><body style=\" font-size:12pt; font-weight:400; font-style:normal;\">\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">z-score( log10( PSD:sigma band Hz/PSD:4.5-30Hz ) )</p></body></html>", None))
         self.textEdit_3.setHtml(QCoreApplication.translate("A7Settings", u"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset=\"utf-8\" /><style type=\"text/css\">\n"
@@ -373,7 +370,7 @@ class Ui_A7Settings(object):
 "hr { height: 1px; border-width: 0; }\n"
 "li.unchecked::marker { content: \"\\2610\"; }\n"
 "li.checked::marker { content: \"\\2612\"; }\n"
-"</style></head><body style=\" font-family:'Roboto'; font-size:12pt; font-weight:400; font-style:normal;\">\n"
+"</style></head><body style=\" font-size:12pt; font-weight:400; font-style:normal;\">\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">z-score( log10( cov( EEG:0.3-30Hz, EEG:sigma band Hz ) ) )</p></body></html>", None))
         self.textEdit_4.setHtml(QCoreApplication.translate("A7Settings", u"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset=\"utf-8\" /><style type=\"text/css\">\n"
@@ -381,7 +378,7 @@ class Ui_A7Settings(object):
 "hr { height: 1px; border-width: 0; }\n"
 "li.unchecked::marker { content: \"\\2610\"; }\n"
 "li.checked::marker { content: \"\\2612\"; }\n"
-"</style></head><body style=\" font-family:'Roboto'; font-size:12pt; font-weight:400; font-style:normal;\">\n"
+"</style></head><body style=\" font-size:12pt; font-weight:400; font-style:normal;\">\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" text-decoration: underline;\">cov ( EEG:0.3-30Hz, EEG:sigma band Hz )  </span></p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">std(EEG:0.3-30Hz) * std(EEG:sigma band Hz)</p></body></html>", None))
     # retranslateUi

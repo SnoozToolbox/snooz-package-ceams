@@ -60,7 +60,6 @@ class Ui_FileErrorDialog(object):
 
     def retranslateUi(self, FileErrorDialog):
         FileErrorDialog.setWindowTitle(QCoreApplication.translate("FileErrorDialog", u"Dialog", None))
-        FileErrorDialog.setStyleSheet(QCoreApplication.translate("FileErrorDialog", u"font: 12pt \"Roboto\";", None))
         self.label.setText(QCoreApplication.translate("FileErrorDialog", u"ERROR: could not complete the command in these files:", None))
         self.ok_pushbutton.setText(QCoreApplication.translate("FileErrorDialog", u"Ok", None))
     # retranslateUi

@@ -25,7 +25,6 @@ class Ui_PersistentNoiseStep(object):
         if not PersistentNoiseStep.objectName():
             PersistentNoiseStep.setObjectName(u"PersistentNoiseStep")
         PersistentNoiseStep.resize(1109, 683)
-        PersistentNoiseStep.setStyleSheet(u"font: 12pt \"Roboto\";")
         self.verticalLayout_2 = QVBoxLayout(PersistentNoiseStep)
         self.verticalLayout_2.setObjectName(u"verticalLayout_2")
         self.imageWidget = QWidget(PersistentNoiseStep)
@@ -51,8 +50,6 @@ class Ui_PersistentNoiseStep(object):
         self.label_9.setMinimumSize(QSize(0, 20))
         self.label_9.setMaximumSize(QSize(16777215, 30))
         font = QFont()
-        font.setFamilies([u"Roboto"])
-        font.setPointSize(12)
         font.setBold(False)
         font.setItalic(False)
         self.label_9.setFont(font)
@@ -254,11 +251,11 @@ class Ui_PersistentNoiseStep(object):
 "hr { height: 1px; border-width: 0; }\n"
 "li.unchecked::marker { content: \"\\2610\"; }\n"
 "li.checked::marker { content: \"\\2612\"; }\n"
-"</style></head><body style=\" font-family:'Roboto'; font-size:12pt; font-weight:400; font-style:normal;\">\n"
+"</style></head><body style=\" font-size:12pt; font-weight:400; font-style:normal;\">\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Identification of segments with outlier high-frequency power via spectral power analysis (Welch's method). </p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">High-frequency band power (&gt;25 Hz) is computed by integrating the power spectral density estimated using Welch's method, as recommended in [1].</p>\n"
-"<p style=\" m"
-                        "argin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Power is calculated using 6-s windows with a 3-s step size.</p>\n"
+"<p style=\" margin-top:0px; margin-"
+                        "bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Power is calculated using 6-s windows with a 3-s step size.</p>\n"
 "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" text-decoration: underline;\">Reference</span></p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"> [1] Cox, R. &amp; Fell, J. Analyzing human sleep EEG: A methodological primer with code implementation. Sleep Medicine Reviews, 54, 101353 (2020).</p></body></html>", None))
@@ -300,22 +297,22 @@ class Ui_PersistentNoiseStep(object):
 "hr { height: 1px; border-width: 0; }\n"
 "li.unchecked::marker { content: \"\\2610\"; }\n"
 "li.checked::marker { content: \"\\2612\"; }\n"
-"</style></head><body style=\" font-family:'Roboto'; font-size:12pt; font-weight:400; font-style:normal;\">\n"
+"</style></head><body style=\" font-size:12pt; font-weight:400; font-style:normal;\">\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" text-decoration: underline;\">A) Fixed threshold</span> (mean + X SD)</p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">The power is log10-transformed to reduce skewness and improve normality. </p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-in"
-                        "dent:0px;\">Because the power distribution is often right-skewed due to artifacts, it is modeled using a three-component Gaussian Mixture Model (GMM). The distribution is estimated from all selected derivations for the recording, so excluding a derivation with poor signal quality can change the threshold applied to the remaining derivations. The threshold is defined as the mean of the main Gaussian component plus a user-defined multiple of its standard deviation (SD).</p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Because th"
+                        "e power distribution is often right-skewed due to artifacts, it is modeled using a three-component Gaussian Mixture Model (GMM). The distribution is estimated from all selected derivations for the recording, so excluding a derivation with poor signal quality can change the threshold applied to the remaining derivations. The threshold is defined as the mean of the main Gaussian component plus a user-defined multiple of its standard deviation (SD).</p>\n"
 "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">A segment is flagged when: log10(25-64 Hz power) &gt; mean + threshold x SD</p>\n"
 "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
-"<p style=\" margi"
-                        "n-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" text-decoration: underline;\">B) Power ratio threshold </span>(relative power)</p>\n"
+"<p style=\" margin-top:0px; margin-bott"
+                        "om:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" text-decoration: underline;\">B) Power ratio threshold </span>(relative power)</p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"> High-frequency noise can be masked by strong low-frequency activity and may therefore be non-disturbing. </p>\n"
 "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">A segment is flagged when: (25-64 Hz power) / (1-64 Hz power) &gt; threshold</p>\n"
 "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-l"
-                        "eft:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">A segment is classified as an artifact only when both thresholds are exceeded.</p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:"
+                        "0px; -qt-block-indent:0; text-indent:0px;\">A segment is classified as an artifact only when both thresholds are exceeded.</p>\n"
 "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">To reduce false positives, particularly during low-amplitude REM sleep, first increase the power ratio threshold. This requires a greater proportion of signal power in the 25-64 Hz frequency band before a segment is classified as an artifact.</p></body></html>", None))
     # retranslateUi

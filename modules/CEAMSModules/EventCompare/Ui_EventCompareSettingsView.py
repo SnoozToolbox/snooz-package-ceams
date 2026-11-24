@@ -29,7 +29,6 @@ class Ui_EventCompareSettingsView(object):
         self.label_5 = QLabel(EventCompareSettingsView)
         self.label_5.setObjectName(u"label_5")
         font = QFont()
-        font.setPointSize(12)
         font.setBold(True)
         self.label_5.setFont(font)
 

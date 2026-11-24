@@ -30,9 +30,6 @@ class Ui_DialogAddChan(object):
         self.verticalLayout.setObjectName(u"verticalLayout")
         self.label_2 = QLabel(DialogAddChan)
         self.label_2.setObjectName(u"label_2")
-        font = QFont()
-        font.setPointSize(12)
-        self.label_2.setFont(font)
 
         self.verticalLayout.addWidget(self.label_2)
 
@@ -47,7 +44,6 @@ class Ui_DialogAddChan(object):
         self.horizontalLayout.setObjectName(u"horizontalLayout")
         self.label = QLabel(DialogAddChan)
         self.label.setObjectName(u"label")
-        self.label.setFont(font)
 
         self.horizontalLayout.addWidget(self.label)
 
@@ -57,7 +53,6 @@ class Ui_DialogAddChan(object):
 
         self.blank_checkBox = QCheckBox(DialogAddChan)
         self.blank_checkBox.setObjectName(u"blank_checkBox")
-        self.blank_checkBox.setFont(font)
 
         self.horizontalLayout.addWidget(self.blank_checkBox)
 
@@ -68,13 +63,11 @@ class Ui_DialogAddChan(object):
         self.horizontalLayout_2.setObjectName(u"horizontalLayout_2")
         self.cancel = QPushButton(DialogAddChan)
         self.cancel.setObjectName(u"cancel")
-        self.cancel.setFont(font)
 
         self.horizontalLayout_2.addWidget(self.cancel)
 
         self.ok = QPushButton(DialogAddChan)
         self.ok.setObjectName(u"ok")
-        self.ok.setFont(font)
 
         self.horizontalLayout_2.addWidget(self.ok)
 

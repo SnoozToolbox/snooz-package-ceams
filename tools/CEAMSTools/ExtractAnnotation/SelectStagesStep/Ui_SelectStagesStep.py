@@ -33,8 +33,6 @@ class Ui_SelectStagesStep(object):
         self.label = QLabel(SelectStagesStep)
         self.label.setObjectName(u"label")
         font = QFont()
-        font.setFamilies([u"Roboto"])
-        font.setPointSize(12)
         font.setBold(False)
         font.setItalic(False)
         self.label.setFont(font)
@@ -110,7 +108,6 @@ class Ui_SelectStagesStep(object):
 
     def retranslateUi(self, SelectStagesStep):
         SelectStagesStep.setWindowTitle(QCoreApplication.translate("SelectStagesStep", u"Form", None))
-        SelectStagesStep.setStyleSheet(QCoreApplication.translate("SelectStagesStep", u"font: 12pt \"Roboto\";", None))
         self.label.setText(QCoreApplication.translate("SelectStagesStep", u"PSG Files", None))
         self.label_2.setText(QCoreApplication.translate("SelectStagesStep", u"Events", None))
         self.select_all_checkBox.setText(QCoreApplication.translate("SelectStagesStep", u"Select All", None))

@@ -33,6 +33,5 @@ class Ui_InputFilesConStep(object):
 
     def retranslateUi(self, InputFilesConStep):
         InputFilesConStep.setWindowTitle("")
-        InputFilesConStep.setStyleSheet(QCoreApplication.translate("InputFilesConStep", u"font: 12pt \"Roboto\";", None))
     # retranslateUi
 

@@ -23,7 +23,6 @@ class Ui_YasaSleepStagingSettingsView(object):
     def setupUi(self, YasaSleepStagingSettingsView):
         if not YasaSleepStagingSettingsView.objectName():
             YasaSleepStagingSettingsView.setObjectName(u"YasaSleepStagingSettingsView")
-        YasaSleepStagingSettingsView.setStyleSheet(u"font: 12pt \"Roboto\";")
         YasaSleepStagingSettingsView.resize(711, 333)
         self.verticalLayout = QVBoxLayout(YasaSleepStagingSettingsView)
         self.verticalLayout.setObjectName(u"verticalLayout")

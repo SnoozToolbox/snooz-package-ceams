@@ -163,7 +163,7 @@
           </widget>
          </item>
          <item row="4" column="1">
-          <widget class="QComboBoxLive" name="behavior_comboBox">
+          <widget class="QComboBox" name="behavior_comboBox">
            <property name="toolTip">
             <string>Select how to combine events : union (all events), union without concurrent events (events merge) or intersection (concurrent events only).</string>
            </property>
@@ -310,13 +310,6 @@
    </item>
   </layout>
  </widget>
- <customwidgets>
-  <customwidget>
-   <class>QComboBoxLive</class>
-   <extends>QComboBox</extends>
-   <header>widgets.QComboBoxLive</header>
-  </customwidget>
- </customwidgets>
  <resources/>
  <connections>
   <connection>

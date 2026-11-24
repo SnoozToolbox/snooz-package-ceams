@@ -6,7 +6,7 @@
     "item_author": "",
     "item_description": "Detect artifacts.",
     "tool_params": {
-        "tool_version": "2.8.0",
+        "tool_version": "2.8.2",
         "tool_label": "Detect EEG Artifacts",
         "tool_category": "1-Preprocessing",
         "asset_directory": "",
@@ -87,12 +87,12 @@
     "dependencies": [
         {
             "package_name": "CEAMSTools",
-            "package_version": "7.5.0",
+            "package_version": "7.6.0",
             "deleteable": false
         },
         {
             "package_name": "CEAMSModules",
-            "package_version": "7.5.0"
+            "package_version": "7.6.0"
         }
     ],
     "process_params": {

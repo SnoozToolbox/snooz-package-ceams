@@ -25,7 +25,6 @@ class Ui_DisplaySettings(object):
         if not DisplaySettings.objectName():
             DisplaySettings.setObjectName(u"DisplaySettings")
         DisplaySettings.resize(788, 671)
-        DisplaySettings.setStyleSheet(u"font: 12pt \"Roboto\";")
         self.verticalLayout_7 = QVBoxLayout(DisplaySettings)
         self.verticalLayout_7.setObjectName(u"verticalLayout_7")
         self.label_16 = QLabel(DisplaySettings)

@@ -19,9 +19,6 @@
   <property name="windowTitle">
    <string/>
   </property>
-  <property name="styleSheet">
-   <string notr="true">font: 12pt &quot;Roboto&quot;;</string>
-  </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
     <widget class="QLabel" name="label_4">
@@ -49,7 +46,7 @@
    <item>
     <widget class="QLabel" name="label_9">
      <property name="text">
-      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-family:'Roboto-Regular'; font-weight:700;&quot;&gt;General definition&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-family:'Roboto-Regular'; text-decoration: underline;&quot;&gt;Tonic REM&lt;/span&gt;&lt;span style=&quot; font-family:'Roboto-Regular';&quot;&gt; corresponds to more stable REM activity with minimal eye movements and lower physiological variability.&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-family:'Roboto-Regular'; text-decoration: underline;&quot;&gt;Phasic REM&lt;/span&gt;&lt;span style=&quot; font-family:'Roboto-Regular';&quot;&gt; is characterized by bursts of rapid eye movements, transient muscle activity, and increased neural and autonomic&lt;br/&gt;activation. This separation enables more detailed investigation of REM sleep dynamics and related biomarkers.&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;General definition&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; text-decoration: underline;&quot;&gt;Tonic REM&lt;/span&gt;&lt;span style=&quot;&quot;&gt; corresponds to more stable REM activity with minimal eye movements and lower physiological variability.&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; text-decoration: underline;&quot;&gt;Phasic REM&lt;/span&gt;&lt;span style=&quot;&quot;&gt; is characterized by bursts of rapid eye movements, transient muscle activity, and increased neural and autonomic&lt;br/&gt;activation. This separation enables more detailed investigation of REM sleep dynamics and related biomarkers.&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
      </property>
     </widget>
    </item>

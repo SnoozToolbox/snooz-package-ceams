@@ -7,6 +7,8 @@ See the file LICENCE for full license details.
 """
 import os
 import re
+from io import BytesIO
+
 import pandas as pd
 import numpy as np
 import matplotlib
@@ -50,14 +52,14 @@ class PSAPicsGenerator(SciNode):
         - 'display': str, display mode ('all', 'mean', 'mean_std')
         - 'force_axis': bool or [xmin, xmax, ymin, ymax]
         - 'output_folder': str, path to save figures
-        - 'freq_range': [float, float], frequency range to display
+        - 'freq_range': [float, float], optional range; defaults to the plotted band edges
         - 'log_scale_y': bool, use log scale for y-axis
         - 'log_scale_x': bool, use log scale for x-axis
         - 'show_legend': bool, show legend on plots (default: True)
         - 'font': str, font family for all text (default: 'Arial')
         - 'fontsize': int, font size for axis labels and legend (default: 12)
-        - 'figure_width': float, figure width in inches (default: 6)
-        - 'figure_height': float, figure height in inches (default: 8)
+        - 'figure_width': positive float, PDF page width in inches (default: 8)
+        - 'figure_height': positive float, PDF page height in inches (default: 6)
         - 'sleep_stage_selection': list of str, sleep stages to include
         - 'activity_var': str, variable for activity ('total', 'clock_h', 'stage_h', 'cyc')
         - 'hour': int, hour for 'clock_h' and 'stage_h' variables
@@ -83,12 +85,11 @@ class PSAPicsGenerator(SciNode):
 
         # Output plugs
         
-        # Properties of the module
-        # Default frequency range for PSA plots (typical for sleep EEG)
-        self.default_freq_range = [0.5, 30]
-
-        # Associate a linestyle to each sleep stages
-        self.linestyles = ['-', '--', '-.', ':','dotted'] # 5 different linestyles for distinguishing stages when colors are the same
+        # Distinguish all nine stage selections even when they share a color.
+        self.linestyles = [
+            '-', '--', '-.', ':', (0, (6, 2)), (0, (1, 4)),
+            (0, (4, 2, 1, 2, 1, 2)), (0, (6, 2, 3, 2)), (0, (3, 5)),
+        ]
 
         self._is_master = False 
     
@@ -166,14 +167,22 @@ class PSAPicsGenerator(SciNode):
             raise NodeInputException(self.identifier, "colors_param", \
                 f"PSAPicsGenerator : dict is expected for colors_param and it is {type(colors_param)}")
 
+        size_error = "Figure width and height must be finite numbers greater than zero."
+        try:
+            width = float(pics_param.get("figure_width", 8))
+            height = float(pics_param.get("figure_height", 6))
+        except (TypeError, ValueError, OverflowError) as error:
+            raise NodeInputException(self.identifier, "pics_param", size_error) from error
+        if not (np.isfinite(width) and np.isfinite(height) and width > 0 and height > 0):
+            raise NodeInputException(self.identifier, "pics_param", size_error)
+        self.figsize = (width, height)
+
         # Dict to keep the PSA data per channel
         psa_data_per_chan = {} # the key is the channel label and the value is the PSA data
         # the key is the group label and the value is the PSA data
         psa_data_cohort = {}
         report_category_mode = None
         annotation_categories = set()
-        # To display the pictures
-        self.figsize = (pics_param.get("figure_width", 8), pics_param.get("figure_height", 6)) # in inches
         for file_name in filenames.keys():
             file_group_name = file_group[file_name]
             
@@ -249,7 +258,7 @@ class PSAPicsGenerator(SciNode):
                         fig_save = False
                     
                     # Only call plotting function if we need to save group figure
-                    if fig_save:
+                    if fig_save and psa_data_ch_sel is not None and not psa_data_ch_sel.empty:
                         self._save_group_chan_fig_psa(psa_data_ch_sel, \
                             pics_param, file_name, chan_label, fig_save, colors_param['group_sel'])
                         self._log_manager.log(self.identifier, \
@@ -320,13 +329,13 @@ class PSAPicsGenerator(SciNode):
             
                 # psa_data : dict of list of DataFrames
                 #   keys are the subject group and values are the full DataFrames for the current channel or ROI
-                self._save_cohort_chan_fig_psa(psa_data, \
-                    pics_param, ch, colors_param['cohort']) # n_cats is useless
+                if psa_data:
+                    self._save_cohort_chan_fig_psa(psa_data, pics_param, ch, colors_param['cohort'])
 
         # **********************************************
         # One figure for the cohort : one picture for all channels
         # **********************************************
-        if pics_param['cohort_avg']:
+        if pics_param['cohort_avg'] and psa_data_cohort:
             self._save_cohort_chan_fig_psa(psa_data_cohort, \
                 pics_param, '', colors_param['cohort']) # n_cats is useless
 
@@ -524,9 +533,7 @@ class PSAPicsGenerator(SciNode):
             
         if 'group' in fig_save:
             # Initialize the figure and canvas for plotting
-            fig = Figure()
-            fig.set_size_inches(self.figsize)
-            fig.clear()
+            fig = Figure(figsize=self.figsize, layout="constrained")
             ax = fig.add_subplot()
 
         if isinstance(chan_label, str):
@@ -546,11 +553,12 @@ class PSAPicsGenerator(SciNode):
             print(f"Channel labels: {chan_label}")
             print(f"Colors available: {len(colors)} colors")
             
-        # Get frequency range from parameters
-        freq_range = pics_param.get('freq_range', self.default_freq_range)
         log_scale_y = pics_param.get('log_scale_y', False)
         log_scale_x = pics_param.get('log_scale_x', False)
         sleep_stage_selection = pics_param.get('sleep_stage_selection', ['All'])
+        freq_range, centers = self._frequency_extent(psa_data_all_chan, pics_param, log_scale_x)
+        mean_grid = self._freq_grid(freq_range, centers, 100, log_scale_x)
+        individual_grid = self._freq_grid(freq_range, centers, 200, log_scale_x)
 
         # Build activity variable string for filename
         if pics_param['activity_var'] == 'total':
@@ -584,7 +592,7 @@ class PSAPicsGenerator(SciNode):
                     # Check if we should compute mean across groups
                     if 'mean' in pics_param['display']:
                         # Use common frequency grid spanning full range
-                        common_freq = self._freq_grid(freq_range, 100, log_scale_x)
+                        common_freq = mean_grid
                         
                         # Collect data from all groups for mean/std calculation
                         for stage in sleep_stage_selection:
@@ -593,17 +601,12 @@ class PSAPicsGenerator(SciNode):
                             for filename_val in unique_filenames:
                                 psa_data_for_file = psa_data_cur_chan[psa_data_cur_chan['filename'] == filename_val]
                                 
-                                freq_low = psa_data_for_file['freq_low_Hz'].values
-                                
                                 stage_col = self._activity_column(pics_param, stage)
                                 
                                 if stage_col in psa_data_for_file.columns:
-                                    power_data = psa_data_for_file[stage_col].values
-                                    
-                                    # Interpolate to common grid (no masking, interpolate full data)
-                                    if len(power_data) > 0 and len(freq_low) > 0:
-                                        interp_power = np.interp(common_freq, freq_low, power_data, left=np.nan, right=np.nan)
-                                        group_power_data.append(interp_power)
+                                    group_power_data.append(
+                                        self._interpolate_power(common_freq, psa_data_for_file, stage_col)
+                                    )
                             
                             # Compute mean and std across groups
                             if group_power_data and len(group_power_data) > 0:
@@ -652,12 +655,10 @@ class PSAPicsGenerator(SciNode):
                         expanded_colors = self._expand_colors(colors, total_items)
                         
                         # Use common frequency grid for all groups
-                        common_freq = self._freq_grid(freq_range, 200, log_scale_x)
+                        common_freq = individual_grid
                         
                         for filename_idx, filename_val in enumerate(unique_filenames):
                             psa_data_for_file = psa_data_cur_chan[psa_data_cur_chan['filename'] == filename_val]
-                            
-                            freq_low = psa_data_for_file['freq_low_Hz'].values
                             
                             # Get power columns (stage-specific activity) based on stage selection
                             # Store (column_name, stage) so legend labels can name each stage.
@@ -672,11 +673,9 @@ class PSAPicsGenerator(SciNode):
                                 for stage_idx, (stage_col, stage_name) in enumerate(power_columns):
                                     color_idx = (i_chan * len(unique_filenames) + filename_idx) % len(expanded_colors)
                                     linestyle_idx = stage_idx % len(self.linestyles)
-                                    power_data = psa_data_for_file[stage_col].values
-                                    
                                     # Interpolate to common grid for consistent axis coverage
-                                    if len(power_data) > 0 and len(freq_low) > 0:
-                                        interp_power = np.interp(common_freq, freq_low, power_data, left=np.nan, right=np.nan)
+                                    if not psa_data_for_file.empty:
+                                        interp_power = self._interpolate_power(common_freq, psa_data_for_file, stage_col)
                                         
                                         if fig_save:
                                             # Extract filename without extension for label
@@ -699,9 +698,7 @@ class PSAPicsGenerator(SciNode):
                                                        linewidth=2, linestyle=self.linestyles[linestyle_idx])
                 else:
                     # Single filename - use interpolation for consistency
-                    common_freq = self._freq_grid(freq_range, 200, log_scale_x)
-                    
-                    freq_low = psa_data_cur_chan['freq_low_Hz'].values
+                    common_freq = individual_grid
                     
                     # Get power columns (stage-specific activity) based on stage selection
                     power_columns = []
@@ -714,40 +711,29 @@ class PSAPicsGenerator(SciNode):
                     if power_columns:
                         for stage_idx, (stage_col, stage_name) in enumerate(power_columns):
                             linestyle_idx = stage_idx % len(self.linestyles)
-                            power_data = psa_data_cur_chan[stage_col].values
-                            
-                            # Interpolate to common grid for consistent axis coverage
-                            if len(power_data) > 0 and len(freq_low) > 0:
-                                interp_power = np.interp(common_freq, freq_low, power_data, left=np.nan, right=np.nan)
-                                
-                                if fig_save:
-                                    label_name = f'{chan_label[i_chan]} - {stage_name}'
-                                    if label_name not in legend_labels:
-                                        ax.plot(common_freq, interp_power, color=colors[i_chan], 
-                                               label=label_name, linewidth=2, linestyle=self.linestyles[linestyle_idx])
-                                        legend_labels[label_name] = True
-                                    else:
-                                        ax.plot(common_freq, interp_power, color=colors[i_chan], 
-                                               linewidth=2, linestyle=self.linestyles[linestyle_idx])
+                            interp_power = self._interpolate_power(common_freq, psa_data_cur_chan, stage_col)
+                            label_name = f'{chan_label[i_chan]} - {stage_name}'
+                            if label_name not in legend_labels:
+                                ax.plot(common_freq, interp_power, color=colors[i_chan],
+                                       label=label_name, linewidth=2, linestyle=self.linestyles[linestyle_idx])
+                                legend_labels[label_name] = True
+                            else:
+                                ax.plot(common_freq, interp_power, color=colors[i_chan],
+                                       linewidth=2, linestyle=self.linestyles[linestyle_idx])
                     else:
                         # Fallback
                         numeric_cols = psa_data_cur_chan.select_dtypes(include=[np.number]).columns
                         power_cols = [col for col in numeric_cols if col not in ['freq_low_Hz', 'freq_high_Hz']]
                         
                         if power_cols:
-                            power_data = psa_data_cur_chan[power_cols[0]].values
-                            
-                            # Interpolate to common grid
-                            if len(power_data) > 0 and len(freq_low) > 0:
-                                interp_power = np.interp(common_freq, freq_low, power_data, left=np.nan, right=np.nan)
-                                
-                                if fig_save:
-                                    if f'{chan_label[i_chan]}' not in legend_labels:
-                                        ax.plot(common_freq, interp_power, color=colors[i_chan], 
-                                               label=f'{chan_label[i_chan]}', linewidth=2)
-                                        legend_labels[f'{chan_label[i_chan]}'] = True
-                                    else:
-                                        ax.plot(common_freq, interp_power, color=colors[i_chan], linewidth=2)
+                            interp_power = self._interpolate_power(common_freq, psa_data_cur_chan, power_cols[0])
+                            label_name = chan_label[i_chan]
+                            if label_name not in legend_labels:
+                                ax.plot(common_freq, interp_power, color=colors[i_chan],
+                                       label=label_name, linewidth=2)
+                                legend_labels[label_name] = True
+                            else:
+                                ax.plot(common_freq, interp_power, color=colors[i_chan], linewidth=2)
 
         # If the function is used to generate pictures
         if fig_save:
@@ -802,10 +788,7 @@ class PSAPicsGenerator(SciNode):
                 if show_legend:
                     legend = ax.legend(loc='upper right', prop={'family': font_family, 'size': label_fontsize})
                 
-                try:
-                    fig.savefig(fig_name)
-                except:
-                    raise NodeRuntimeException(self.identifier, "filenames", f"Error while saving figure {fig_name}, make sure it is not open")
+                self._save_pdf(fig, fig_name)
                 if DEBUG:
                     print(f"{fig_name} is saved")
                 fig.clf()
@@ -845,17 +828,22 @@ class PSAPicsGenerator(SciNode):
         fig_name = f"{pics_param['output_folder']}/cohort_psa_{pics_param['display']}_{activity_str}{chan_suffix}.pdf"
 
         # Create the figure
-        fig = Figure()
-        fig.set_size_inches(self.figsize)
-        fig.clear() # reset the hold on
+        fig = Figure(figsize=self.figsize, layout="constrained")
         ax = fig.add_subplot()
         legend_labels = {}
 
-        # Get frequency range from parameters
-        freq_range = pics_param.get('freq_range', self.default_freq_range)
         log_scale_y = pics_param.get('log_scale_y', False)
         log_scale_x = pics_param.get('log_scale_x', False)
         sleep_stage_selection = pics_param.get('sleep_stage_selection', ['All'])
+        frames = (
+            frame
+            for entries in psa_data.values()
+            for entry in entries
+            for frame in (entry if isinstance(entry, list) else [entry])
+        )
+        freq_range, centers = self._frequency_extent(frames, pics_param, log_scale_x)
+        mean_grid = self._freq_grid(freq_range, centers, 100, log_scale_x)
+        individual_grid = self._freq_grid(freq_range, centers, 200, log_scale_x)
 
         # Create the unique list of keys of psa_data
         group_list = list(psa_data.keys())
@@ -890,8 +878,8 @@ class PSAPicsGenerator(SciNode):
                 for filename_val in all_filenames:
                     # Process each sleep stage for this subject
                     for stage_idx, stage in enumerate(sleep_stage_selection):
-                        stage_freq_data = []
-                        stage_power_data = []
+                        interpolated_power = []
+                        stage_col = self._activity_column(pics_param, stage)
                         
                         # Collect data from all channels for this subject
                         for channel_list in psa_data[cohort_group]:
@@ -899,38 +887,13 @@ class PSAPicsGenerator(SciNode):
                                 if chan_df is not None and len(chan_df) > 0 and 'filename' in chan_df.columns:
                                     subject_df = chan_df[chan_df['filename'] == filename_val]
                                     
-                                    if len(subject_df) > 0:
-                                        freq_low = subject_df['freq_low_Hz'].values
-                                        
-                                        stage_col = self._activity_column(pics_param, stage)
-                                        
-                                        if stage_col in subject_df.columns:
-                                            power_data = subject_df[stage_col].values
-                                            
-                                            # Store full data without filtering
-                                            stage_freq_data.append(freq_low)
-                                            stage_power_data.append(power_data)
-                        
-                        # Process this stage's data for this subject
-                        if stage_power_data and len(stage_power_data) > 0:
-                            # Interpolate all channels to common frequency grid spanning full range
-                            common_freq = self._freq_grid(freq_range, 100, log_scale_x)
-                            
-                            interpolated_power = []
-                            for i, power_data in enumerate(stage_power_data):
-                                freq_data = stage_freq_data[i]
-                                if len(power_data) > 0 and len(freq_data) > 0:
-                                    interp_power = np.interp(common_freq, freq_data, power_data, left=np.nan, right=np.nan)
-                                    interpolated_power.append(interp_power)
-                            
+                                    if not subject_df.empty and stage_col in subject_df.columns:
+                                        interpolated_power.append(
+                                            self._interpolate_power(mean_grid, subject_df, stage_col)
+                                        )
 
-                            if interpolated_power:
-                                freq_to_plot = common_freq
-                                group_avg_power = np.nanmean(interpolated_power, axis=0)
-                            else:
-                                continue
-                            
-
+                        if interpolated_power:
+                            group_avg_power = np.nanmean(interpolated_power, axis=0)
                             # Store subject average for later cohort statistics
                             stage_name = stage
                             if 'mean' in pics_param['display']:
@@ -944,7 +907,7 @@ class PSAPicsGenerator(SciNode):
                                     signal_to_plot_grp[cohort_group][f'stage_{stage_name}'] = group_avg_power.reshape(-1,1)
                             else:
                                 # Display individual subject's channel-averaged PSA trace
-                                ax.plot(freq_to_plot, group_avg_power, color=colors[i_grp], 
+                                ax.plot(mean_grid, group_avg_power, color=colors[i_grp],
                                        linestyle=self.linestyles[stage_idx % len(self.linestyles)], 
                                        alpha=0.7, linewidth=1.5)
                                 
@@ -978,24 +941,14 @@ class PSAPicsGenerator(SciNode):
                             else:
                                 psa_data_file = psa_data_subject
                             
-                            # Get frequency bands and power data from Snooz format
-                            freq_low = psa_data_file['freq_low_Hz'].values
-                            
-                            # Filter frequency range
-                            freq_mask = (freq_low >= freq_range[0]) & (freq_low <= freq_range[1])
-                            freq_filtered = freq_low[freq_mask]
-                            
                             # Get power columns for each sleep stage
                             for stage_idx, stage in enumerate(sleep_stage_selection):
                                 stage_col = self._activity_column(pics_param, stage)
                                 
                                 if stage_col in psa_data_file.columns:
-                                    power_data = psa_data_file[stage_col].values
-                                    
                                     if 'mean' in pics_param['display']:
                                         # Interpolate to common grid for accumulation
-                                        common_freq = self._freq_grid(freq_range, 100, log_scale_x)
-                                        interp_power = np.interp(common_freq, freq_low, power_data, left=np.nan, right=np.nan)
+                                        interp_power = self._interpolate_power(mean_grid, psa_data_file, stage_col)
                                         
                                         if cohort_group in signal_to_plot_grp.keys():
                                             if f'stage_{stage}' in signal_to_plot_grp[cohort_group].keys():
@@ -1007,8 +960,8 @@ class PSAPicsGenerator(SciNode):
                                             signal_to_plot_grp[cohort_group][f'stage_{stage}'] = interp_power.reshape(-1,1)
                                     else:
                                         # Display all - use interpolation for consistent axis coverage
-                                        common_freq = self._freq_grid(freq_range, 200, log_scale_x)
-                                        interp_power = np.interp(common_freq, freq_low, power_data, left=np.nan, right=np.nan)
+                                        common_freq = individual_grid
+                                        interp_power = self._interpolate_power(common_freq, psa_data_file, stage_col)
                                         
                                         if f'stage_{stage}-{cohort_group}' not in legend_labels:
                                             legend_labels[f'stage_{stage}-{cohort_group}'] = True
@@ -1029,10 +982,7 @@ class PSAPicsGenerator(SciNode):
                         # Compute the standard deviation
                         signal_to_plot_std = np.nanstd(signal_to_plot_grp[cohort_group][f'stage_{stage}'], axis=1)
                         
-                        # Create frequency array (assuming all subjects have same frequency grid)
-                        # We need to get the frequency array from the data
-                        # Create frequency array matching the interpolated grid used above
-                        freq_array = self._freq_grid(freq_range, len(signal_to_plot_mean), log_scale_x)
+                        freq_array = mean_grid
                         
                         # Plot the channels with a specific linestyle and the stages with a specific color
                         ax.plot(freq_array, signal_to_plot_mean, color=colors[i_grp],
@@ -1078,35 +1028,93 @@ class PSAPicsGenerator(SciNode):
         if show_legend:
             legend = ax.legend(loc="upper right", prop={'family': font_family, 'size': label_fontsize})
 
-        try:
-            fig.savefig(fig_name)
-        except:
-            raise NodeRuntimeException(self.identifier, "filenames", f"Error while saving figure {fig_name}, make sure it is not open")
+        self._save_pdf(fig, fig_name)
         if DEBUG:
             print(f"{fig_name} is saved...")
         fig.clf()
 
-    def _freq_grid(self, freq_range, n_points, log_scale_x=False):
-        """
-        Build a frequency sampling grid spanning freq_range.
+    def _save_pdf(self, fig, fig_name):
+        page = fig.bbox_inches.frozen()
+        bounds = None
 
-        Uses a logarithmic grid when log_scale_x is True so interpolated
-        traces align with a log-scaled x-axis.
-        """
-        fmin = float(freq_range[0])
-        fmax = float(freq_range[1])
+        def capture_bounds(event):
+            nonlocal bounds
+            bounds = fig.get_tightbbox(event.renderer)
+
+        # Measure with the PDF renderer before opening or overwriting the destination.
+        with BytesIO() as pdf:
+            callback_id = fig.canvas.mpl_connect("draw_event", capture_bounds)
+            try:
+                fig.savefig(pdf, format="pdf", bbox_inches=page)
+            finally:
+                fig.canvas.mpl_disconnect(callback_id)
+
+            if bounds is None:
+                raise NodeRuntimeException(self.identifier, "pics_param",
+                                           f"Could not verify the PDF layout for {fig_name}.")
+            tolerance = 1e-6  # inches
+            if (not np.isfinite(bounds.extents).all()
+                    or bounds.x0 < -tolerance or bounds.y0 < -tolerance
+                    or bounds.x1 > page.width + tolerance or bounds.y1 > page.height + tolerance):
+                # NodeRuntimeException so the user sees a pop-up dialog instead of a log entry.
+                raise NodeRuntimeException(
+                    self.identifier, "pics_param",
+                    f"The labels, tick marks or legend do not fit on the PDF page for "
+                    f"{os.path.basename(fig_name)}. Increase the figure width or height, "
+                    "or reduce the font size."
+                )
+            try:
+                with open(fig_name, "wb") as output:
+                    output.write(pdf.getbuffer())
+            except OSError as error:
+                raise NodeRuntimeException(self.identifier, "filenames",
+                                           f"Could not save figure {fig_name}: {error}") from error
+
+    def _frequency_extent(self, frames, pics_param, log_scale_x):
+        """Resolve the axis range from band edges and collect interpolation points."""
+        band_edges = pd.concat(
+            [frame[['freq_low_Hz', 'freq_high_Hz']] for frame in frames
+             if frame is not None and not frame.empty],
+            ignore_index=True,
+        )
+        low, high = band_edges.to_numpy(dtype=float).T
+        if not (np.isfinite(low).all() and np.isfinite(high).all()) or np.any(low >= high):
+            raise NodeRuntimeException(self.identifier, "filenames",
+                                       "Spectral band edges must be finite and increasing.")
+        centers = np.unique((low + high) / 2)
+
+        fmin, fmax = map(float, pics_param.get('freq_range', (low.min(), high.max())))
+        if not (np.isfinite(fmin) and np.isfinite(fmax) and fmin < fmax):
+            raise NodeInputException(self.identifier, "pics_param",
+                                     "freq_range must contain two finite, increasing bounds.")
+        if log_scale_x and fmin <= 0:
+            if fmax <= 0:
+                raise NodeInputException(self.identifier, "pics_param",
+                                         "A logarithmic frequency axis requires a positive upper bound.")
+            positive_centers = centers[(centers > 0) & (centers < fmax)]
+            fmin = positive_centers[0] if positive_centers.size else fmax / 10
+        return (fmin, fmax), centers
+
+    @staticmethod
+    def _freq_grid(freq_range, centers, n_points, log_scale_x):
+        fmin, fmax = freq_range
         if log_scale_x:
-            fmin = self._positive_freq_min(fmin)
-            if fmax <= fmin:
-                fmax = fmin * 10.0
-            return np.logspace(np.log10(fmin), np.log10(fmax), n_points)
-        return np.linspace(fmin, fmax, n_points)
+            grid = np.geomspace(fmin, fmax, n_points)
+        else:
+            grid = np.linspace(fmin, fmax, n_points)
+        # Keep the exact band centers, including the first and last measured points.
+        grid = grid[(grid >= centers[0]) & (grid <= centers[-1])]
+        in_range = centers[(centers >= fmin) & (centers <= fmax)]
+        return np.union1d(grid, in_range)
 
-    def _positive_freq_min(self, fmin):
-        """Return a strictly positive lower frequency bound for log x-scale."""
-        if fmin is None or fmin <= 0:
-            return max(self.default_freq_range[0], 1e-3)
-        return float(fmin)
+    @staticmethod
+    def _interpolate_power(grid, frame, column):
+        low = frame['freq_low_Hz'].to_numpy(dtype=float)
+        high = frame['freq_high_Hz'].to_numpy(dtype=float)
+        centers = (low + high) / 2
+        order = np.argsort(centers)
+        return np.interp(grid, centers[order], frame[column].to_numpy()[order],
+                         left=np.nan, right=np.nan)
 
     def _apply_axis_scales(self, ax, pics_param, freq_range, log_scale_x, log_scale_y,
                            font_family, label_fontsize):
@@ -1114,18 +1122,14 @@ class PSAPicsGenerator(SciNode):
         if pics_param['force_axis']:
             xmin, xmax, ymin, ymax = pics_param['force_axis']
             if log_scale_x:
-                xmin = self._positive_freq_min(xmin)
+                if xmin <= 0:
+                    xmin = freq_range[0]
                 if xmax <= xmin:
                     xmax = xmin * 10.0
             ax.set_xlim(xmin, xmax)
             ax.set_ylim(ymin, ymax)
         else:
-            xmin, xmax = float(freq_range[0]), float(freq_range[1])
-            if log_scale_x:
-                xmin = self._positive_freq_min(xmin)
-                if xmax <= xmin:
-                    xmax = xmin * 10.0
-            ax.set_xlim(xmin, xmax)
+            ax.set_xlim(*freq_range)
 
         if log_scale_x:
             ax.set_xscale('log')

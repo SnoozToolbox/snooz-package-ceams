@@ -22,7 +22,6 @@ class Ui_PSAPicsGeneratorResultsView(object):
     def setupUi(self, PSAPicsGeneratorResultsView):
         if not PSAPicsGeneratorResultsView.objectName():
             PSAPicsGeneratorResultsView.setObjectName(u"PSAPicsGeneratorResultsView")
-        PSAPicsGeneratorResultsView.setStyleSheet(u"font: 12pt \"Roboto\";")
         PSAPicsGeneratorResultsView.resize(483, 360)
         self.verticalLayout = QVBoxLayout(PSAPicsGeneratorResultsView)
         self.verticalLayout.setObjectName(u"verticalLayout")

@@ -25,7 +25,6 @@ class Ui_DominoConverterSettingsView(object):
         if not DominoConverterSettingsView.objectName():
             DominoConverterSettingsView.setObjectName(u"DominoConverterSettingsView")
         DominoConverterSettingsView.resize(764, 616)
-        DominoConverterSettingsView.setStyleSheet(u"font: 12pt \"Roboto\";")
         self.horizontalLayout_4 = QHBoxLayout(DominoConverterSettingsView)
         self.horizontalLayout_4.setObjectName(u"horizontalLayout_4")
         self.verticalLayout_3 = QVBoxLayout()
@@ -181,12 +180,12 @@ class Ui_DominoConverterSettingsView(object):
 "hr { height: 1px; border-width: 0; }\n"
 "li.unchecked::marker { content: \"\\2610\"; }\n"
 "li.checked::marker { content: \"\\2612\"; }\n"
-"</style></head><body style=\" font-family:'Roboto'; font-size:12pt; font-weight:400; font-style:normal;\">\n"
+"</style></head><body style=\" font-size:12pt; font-weight:400; font-style:normal;\">\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">recording			filename			warning</p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">patient_xxxx		Flow Events		Success</p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">patient_xxxx		Sleep profile		Success</p>\n"
-"<p style=\" margin-top:0px; margin-b"
-                        "ottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">patient_xxxx		Average Frequency Value 	2 columns format but no Rate</p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left"
+                        ":0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">patient_xxxx		Average Frequency Value 	2 columns format but no Rate</p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">patient_xxxx		CAP			empty</p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">patient_xxxx		Spindle  K			Success</p></body></html>", None))
     # retranslateUi

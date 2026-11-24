@@ -25,7 +25,6 @@ class Ui_TSVValidatorMasterSettingsView(object):
         if not TSVValidatorMasterSettingsView.objectName():
             TSVValidatorMasterSettingsView.setObjectName(u"TSVValidatorMasterSettingsView")
         TSVValidatorMasterSettingsView.resize(711, 333)
-        TSVValidatorMasterSettingsView.setStyleSheet(u"font: 12pt \"Roboto\";")
         self.verticalLayout = QVBoxLayout(TSVValidatorMasterSettingsView)
         self.verticalLayout.setObjectName(u"verticalLayout")
         self.listWidget = QListWidget(TSVValidatorMasterSettingsView)

@@ -25,7 +25,6 @@ class Ui_OutputFileStep(object):
         if not OutputFileStep.objectName():
             OutputFileStep.setObjectName(u"OutputFileStep")
         OutputFileStep.resize(747, 590)
-        OutputFileStep.setStyleSheet(u"font: 12pt \"Roboto\";")
         self.verticalLayout = QVBoxLayout(OutputFileStep)
         self.verticalLayout.setSpacing(25)
         self.verticalLayout.setObjectName(u"verticalLayout")

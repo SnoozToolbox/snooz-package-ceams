@@ -22,7 +22,6 @@ class Ui_AECConnectivityResultsView(object):
     def setupUi(self, AECConnectivityResultsView):
         if not AECConnectivityResultsView.objectName():
             AECConnectivityResultsView.setObjectName(u"AECConnectivityResultsView")
-        AECConnectivityResultsView.setStyleSheet(u"font: 12pt \"Roboto\";")
         AECConnectivityResultsView.resize(483, 360)
         self.verticalLayout = QVBoxLayout(AECConnectivityResultsView)
         self.verticalLayout.setObjectName(u"verticalLayout")

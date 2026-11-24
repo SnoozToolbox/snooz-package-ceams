@@ -35,10 +35,6 @@ class Ui_CsvReaderMasterSettingsView(object):
         self.horizontalLayout.setObjectName(u"horizontalLayout")
         self.label = QLabel(CsvReaderMasterSettingsView)
         self.label.setObjectName(u"label")
-        font = QFont()
-        font.setPointSize(12)
-        font.setBold(True)
-        self.label.setFont(font)
         self.label.setLayoutDirection(Qt.LayoutDirection.LeftToRight)
         self.label.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
@@ -74,7 +70,6 @@ class Ui_CsvReaderMasterSettingsView(object):
         self.verticalLayout_2.setObjectName(u"verticalLayout_2")
         self.label_7 = QLabel(CsvReaderMasterSettingsView)
         self.label_7.setObjectName(u"label_7")
-        self.label_7.setFont(font)
         self.label_7.setLayoutDirection(Qt.LayoutDirection.LeftToRight)
         self.label_7.setAlignment(Qt.AlignmentFlag.AlignCenter)
 

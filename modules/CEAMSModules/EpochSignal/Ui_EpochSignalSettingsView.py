@@ -24,7 +24,6 @@ class Ui_EpochSignalSettingsView(object):
         if not EpochSignalSettingsView.objectName():
             EpochSignalSettingsView.setObjectName(u"EpochSignalSettingsView")
         EpochSignalSettingsView.resize(711, 333)
-        EpochSignalSettingsView.setStyleSheet(u"font: 12pt \"Roboto\";")
         self.verticalLayout = QVBoxLayout(EpochSignalSettingsView)
         self.verticalLayout.setObjectName(u"verticalLayout")
         self.epoch_length_sec_horizontalLayout = QHBoxLayout()

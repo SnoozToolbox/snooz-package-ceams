@@ -22,7 +22,6 @@ class Ui_CreateDictResultsView(object):
     def setupUi(self, CreateDictResultsView):
         if not CreateDictResultsView.objectName():
             CreateDictResultsView.setObjectName(u"CreateDictResultsView")
-        CreateDictResultsView.setStyleSheet(u"font: 12pt \"Roboto\";")
         CreateDictResultsView.resize(483, 360)
         self.verticalLayout = QVBoxLayout(CreateDictResultsView)
         self.verticalLayout.setObjectName(u"verticalLayout")

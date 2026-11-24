@@ -26,7 +26,6 @@ class Ui_DetectionsCohortReviewSettingsView(object):
         if not DetectionsCohortReviewSettingsView.objectName():
             DetectionsCohortReviewSettingsView.setObjectName(u"DetectionsCohortReviewSettingsView")
         DetectionsCohortReviewSettingsView.resize(929, 800)
-        DetectionsCohortReviewSettingsView.setStyleSheet(u"font: 12pt \"Roboto\";")
         self.horizontalLayout_3 = QHBoxLayout(DetectionsCohortReviewSettingsView)
         self.horizontalLayout_3.setObjectName(u"horizontalLayout_3")
         self.splitter = QSplitter(DetectionsCohortReviewSettingsView)

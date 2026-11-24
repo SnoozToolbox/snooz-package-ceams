@@ -113,7 +113,9 @@ class SlowWaveClassifierResultsView( Ui_SlowWaveClassifierResultsView, QtWidgets
             # Add title
             title = QtWidgets.QLabel(f'SSW category #{i}')
             title.setAlignment(QtCore.Qt.AlignHCenter)
-            title.setFont(QtGui.QFont('SansSerif', 10))
+            font = QtGui.QFont()
+            font.setPixelSize(13)  # 10pt on Windows and Linux
+            title.setFont(font)
             self.tables_layout.addWidget(title)
             # Add table
             data = self._extract_wanted_data(classification_data, c)

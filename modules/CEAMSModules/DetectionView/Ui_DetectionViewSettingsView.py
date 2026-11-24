@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file ''
+## Form generated from reading UI file 'Ui_DetectionViewSettingsView.ui'
 ##
 ## Created by: Qt User Interface Compiler version 6.8.2
 ##
@@ -15,12 +15,9 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QFont, QFontDatabase, QGradient, QIcon,
     QImage, QKeySequence, QLinearGradient, QPainter,
     QPalette, QPixmap, QRadialGradient, QTransform)
-from PySide6.QtWidgets import (QApplication, QGridLayout, QHBoxLayout, QLabel,
-    QPushButton, QSizePolicy, QSpacerItem, QVBoxLayout,
-    QWidget)
-
-from widgets.QComboBoxLive import QComboBoxLive
-from widgets.QLineEditLive import QLineEditLive
+from PySide6.QtWidgets import (QApplication, QComboBox, QGridLayout, QHBoxLayout,
+    QLabel, QLineEdit, QPushButton, QSizePolicy,
+    QSpacerItem, QVBoxLayout, QWidget)
 
 class Ui_DetectionViewSettingsView(object):
     def setupUi(self, DetectionViewSettingsView):
@@ -57,7 +54,7 @@ class Ui_DetectionViewSettingsView(object):
 
         self.gridLayout.addWidget(self.time_label, 0, 0, 1, 1)
 
-        self.time_lineedit = QLineEditLive(DetectionViewSettingsView)
+        self.time_lineedit = QLineEdit(DetectionViewSettingsView)
         self.time_lineedit.setObjectName(u"time_lineedit")
 
         self.gridLayout.addWidget(self.time_lineedit, 0, 1, 1, 2)
@@ -69,7 +66,7 @@ class Ui_DetectionViewSettingsView(object):
 
         self.gridLayout.addWidget(self.win_show_label, 1, 0, 1, 1)
 
-        self.win_show_lineedit = QLineEditLive(DetectionViewSettingsView)
+        self.win_show_lineedit = QLineEdit(DetectionViewSettingsView)
         self.win_show_lineedit.setObjectName(u"win_show_lineedit")
 
         self.gridLayout.addWidget(self.win_show_lineedit, 1, 1, 1, 2)
@@ -80,7 +77,7 @@ class Ui_DetectionViewSettingsView(object):
 
         self.gridLayout.addWidget(self.event_label, 2, 0, 1, 1)
 
-        self.event_lineEdit = QLineEditLive(DetectionViewSettingsView)
+        self.event_lineEdit = QLineEdit(DetectionViewSettingsView)
         self.event_lineEdit.setObjectName(u"event_lineEdit")
 
         self.gridLayout.addWidget(self.event_lineEdit, 2, 1, 1, 2)
@@ -91,7 +88,7 @@ class Ui_DetectionViewSettingsView(object):
 
         self.gridLayout.addWidget(self.chan_label, 3, 0, 1, 1)
 
-        self.channel_lineedit = QLineEditLive(DetectionViewSettingsView)
+        self.channel_lineedit = QLineEdit(DetectionViewSettingsView)
         self.channel_lineedit.setObjectName(u"channel_lineedit")
 
         self.gridLayout.addWidget(self.channel_lineedit, 3, 1, 1, 2)
@@ -103,7 +100,7 @@ class Ui_DetectionViewSettingsView(object):
 
         self.gridLayout.addWidget(self.windet_step_label, 4, 0, 1, 1)
 
-        self.windet_step_lineedit = QLineEditLive(DetectionViewSettingsView)
+        self.windet_step_lineedit = QLineEdit(DetectionViewSettingsView)
         self.windet_step_lineedit.setObjectName(u"windet_step_lineedit")
 
         self.gridLayout.addWidget(self.windet_step_lineedit, 4, 1, 1, 2)
@@ -115,12 +112,12 @@ class Ui_DetectionViewSettingsView(object):
 
         self.gridLayout.addWidget(self.thresh_label, 5, 0, 1, 1)
 
-        self.thresh_lineedit = QLineEditLive(DetectionViewSettingsView)
+        self.thresh_lineedit = QLineEdit(DetectionViewSettingsView)
         self.thresh_lineedit.setObjectName(u"thresh_lineedit")
 
         self.gridLayout.addWidget(self.thresh_lineedit, 5, 1, 1, 1)
 
-        self.threshUnit_comboBox = QComboBoxLive(DetectionViewSettingsView)
+        self.threshUnit_comboBox = QComboBox(DetectionViewSettingsView)
         self.threshUnit_comboBox.addItem("")
         self.threshUnit_comboBox.addItem("")
         self.threshUnit_comboBox.addItem("")
@@ -146,7 +143,7 @@ class Ui_DetectionViewSettingsView(object):
 
         self.horizontalLayout_2.addWidget(self.label)
 
-        self.filename_lineedit = QLineEditLive(DetectionViewSettingsView)
+        self.filename_lineedit = QLineEdit(DetectionViewSettingsView)
         self.filename_lineedit.setObjectName(u"filename_lineedit")
 
         self.horizontalLayout_2.addWidget(self.filename_lineedit)

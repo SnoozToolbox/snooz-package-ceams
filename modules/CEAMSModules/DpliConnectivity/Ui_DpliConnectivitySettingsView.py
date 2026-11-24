@@ -23,18 +23,21 @@ class Ui_DpliConnectivitySettingsView(object):
         if not DpliConnectivitySettingsView.objectName():
             DpliConnectivitySettingsView.setObjectName(u"DpliConnectivitySettingsView")
         DpliConnectivitySettingsView.resize(711, 333)
-        DpliConnectivitySettingsView.setStyleSheet(u"font: 10pt \"Roboto-Regular\";")
         self.verticalLayout = QVBoxLayout(DpliConnectivitySettingsView)
         self.verticalLayout.setObjectName(u"verticalLayout")
         self.signals_horizontalLayout = QHBoxLayout()
         self.signals_horizontalLayout.setObjectName(u"signals_horizontalLayout")
         self.epochs_label = QLabel(DpliConnectivitySettingsView)
         self.epochs_label.setObjectName(u"epochs_label")
+        font = QFont()
+        font.setPointSize(10)
+        self.epochs_label.setFont(font)
 
         self.signals_horizontalLayout.addWidget(self.epochs_label)
 
         self.epochs_lineedit = QLineEdit(DpliConnectivitySettingsView)
         self.epochs_lineedit.setObjectName(u"epochs_lineedit")
+        self.epochs_lineedit.setFont(font)
 
         self.signals_horizontalLayout.addWidget(self.epochs_lineedit)
 
@@ -45,11 +48,13 @@ class Ui_DpliConnectivitySettingsView(object):
         self.events_horizontalLayout.setObjectName(u"events_horizontalLayout")
         self.events_label = QLabel(DpliConnectivitySettingsView)
         self.events_label.setObjectName(u"events_label")
+        self.events_label.setFont(font)
 
         self.events_horizontalLayout.addWidget(self.events_label)
 
         self.events_lineedit = QLineEdit(DpliConnectivitySettingsView)
         self.events_lineedit.setObjectName(u"events_lineedit")
+        self.events_lineedit.setFont(font)
 
         self.events_horizontalLayout.addWidget(self.events_lineedit)
 
@@ -60,11 +65,13 @@ class Ui_DpliConnectivitySettingsView(object):
         self.num_surr_horizontalLayout.setObjectName(u"num_surr_horizontalLayout")
         self.num_surr_label = QLabel(DpliConnectivitySettingsView)
         self.num_surr_label.setObjectName(u"num_surr_label")
+        self.num_surr_label.setFont(font)
 
         self.num_surr_horizontalLayout.addWidget(self.num_surr_label)
 
         self.num_surr_lineedit = QLineEdit(DpliConnectivitySettingsView)
         self.num_surr_lineedit.setObjectName(u"num_surr_lineedit")
+        self.num_surr_lineedit.setFont(font)
 
         self.num_surr_horizontalLayout.addWidget(self.num_surr_lineedit)
 
@@ -75,11 +82,13 @@ class Ui_DpliConnectivitySettingsView(object):
         self.p_value_horizontalLayout.setObjectName(u"p_value_horizontalLayout")
         self.p_value_label = QLabel(DpliConnectivitySettingsView)
         self.p_value_label.setObjectName(u"p_value_label")
+        self.p_value_label.setFont(font)
 
         self.p_value_horizontalLayout.addWidget(self.p_value_label)
 
         self.p_value_lineedit = QLineEdit(DpliConnectivitySettingsView)
         self.p_value_lineedit.setObjectName(u"p_value_lineedit")
+        self.p_value_lineedit.setFont(font)
 
         self.p_value_horizontalLayout.addWidget(self.p_value_lineedit)
 

@@ -173,7 +173,6 @@ class Ui_OutputFileStep(object):
 
     def retranslateUi(self, OutputFileStep):
         OutputFileStep.setWindowTitle("")
-        OutputFileStep.setStyleSheet(QCoreApplication.translate("OutputFileStep", u"font: 12pt \"Roboto\";", None))
         self.label_16.setText(QCoreApplication.translate("OutputFileStep", u"<html><head/><body><p><span style=\" font-weight:700;\">Outputs</span></p></body></html>", None))
         self.label_15.setText(QCoreApplication.translate("OutputFileStep", u"Four outputs can be generated:", None))
         self.label_6.setText(QCoreApplication.translate("OutputFileStep", u"<html><head/><body><p><span style=\" font-weight:700;\">1- Cohort-level report </span>(.tsv)</p></body></html>", None))

@@ -31,8 +31,6 @@ class Ui_SSWCOutputFiles(object):
         self.label_10 = QLabel(SSWCOutputFiles)
         self.label_10.setObjectName(u"label_10")
         font = QFont()
-        font.setFamilies([u"Roboto"])
-        font.setPointSize(12)
         font.setBold(False)
         font.setItalic(False)
         self.label_10.setFont(font)
@@ -203,7 +201,6 @@ class Ui_SSWCOutputFiles(object):
 
     def retranslateUi(self, SSWCOutputFiles):
         SSWCOutputFiles.setWindowTitle(QCoreApplication.translate("SSWCOutputFiles", u"Form", None))
-        SSWCOutputFiles.setStyleSheet(QCoreApplication.translate("SSWCOutputFiles", u"font: 12pt \"Roboto\";", None))
         self.label_10.setText(QCoreApplication.translate("SSWCOutputFiles", u"<html><head/><body><p><span style=\" font-weight:600;\">Output folder</span></p></body></html>", None))
         self.choose_pushButton.setText(QCoreApplication.translate("SSWCOutputFiles", u"Choose", None))
         self.foldername_lineEdit.setText("")

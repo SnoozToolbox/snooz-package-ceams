@@ -22,7 +22,6 @@ class Ui_SignalStatsResultsView(object):
     def setupUi(self, SignalStatsResultsView):
         if not SignalStatsResultsView.objectName():
             SignalStatsResultsView.setObjectName(u"SignalStatsResultsView")
-        SignalStatsResultsView.setStyleSheet(u"font: 12pt \"Roboto\";")
         SignalStatsResultsView.resize(483, 360)
         self.verticalLayout = QVBoxLayout(SignalStatsResultsView)
         self.verticalLayout.setObjectName(u"verticalLayout")

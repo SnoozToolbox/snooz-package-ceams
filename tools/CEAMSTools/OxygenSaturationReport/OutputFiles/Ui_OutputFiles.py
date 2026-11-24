@@ -26,7 +26,6 @@ class Ui_OutputFiles(object):
         if not OutputFiles.objectName():
             OutputFiles.setObjectName(u"OutputFiles")
         OutputFiles.resize(991, 688)
-        OutputFiles.setStyleSheet(u"font: 12pt \"Roboto\";")
         self.verticalLayout = QVBoxLayout(OutputFiles)
         self.verticalLayout.setObjectName(u"verticalLayout")
         self.textEdit = QTextEdit(OutputFiles)
@@ -91,8 +90,6 @@ class Ui_OutputFiles(object):
         self.label_5 = QLabel(OutputFiles)
         self.label_5.setObjectName(u"label_5")
         font = QFont()
-        font.setFamilies([u"Roboto"])
-        font.setPointSize(12)
         font.setBold(False)
         font.setItalic(False)
         self.label_5.setFont(font)
@@ -171,25 +168,25 @@ class Ui_OutputFiles(object):
 "hr { height: 1px; border-width: 0; }\n"
 "li.unchecked::marker { content: \"\\2610\"; }\n"
 "li.checked::marker { content: \"\\2612\"; }\n"
-"</style></head><body style=\" font-family:'Roboto'; font-size:12pt; font-weight:400; font-style:normal;\">\n"
+"</style></head><body style=\" font-size:12pt; font-weight:400; font-style:normal;\">\n"
 "<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-weight:700;\">Cohort Oxygen Saturation Report</span></p>\n"
-"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">The oxygen saturation is analyzed during the sleep period, defined as the interval from the first epoch scored as sleep (N1, N2, N3, or R) to the final awakening (including the last epoch scored as s"
-                        "leep).</p>\n"
-"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Automatic artifact detection is applied to the oximeter channel: segments longer than 5 s marked as artifacts are excluded from the analysis, while shorter segments are interpolated.</p>\n"
+"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">The oxygen saturation is analyzed during the sleep period, defined as the interval from the first epoch scored as sleep (N1, N2, N3, or R) to the final awakening (including the last epoch scored as sleep).</p>\n"
+"<p styl"
+                        "e=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Automatic artifact detection is applied to the oximeter channel: segments longer than 5 s marked as artifacts are excluded from the analysis, while shorter segments are interpolated.</p>\n"
 "<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">The report contains three main categories of metrics:</p>\n"
 "<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-weight:700;\">1. Oxygen Saturation Variables</span></p>\n"
 "<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">- Minimum, maximum, mean, and variability (standard deviation) of saturation values<br />- Percentage of time spent below clinically relevant saturation thresholds (96 % to 60 %)</p>\n"
-""
-                        "<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Metrics are computed for the entire sleep period and stratified by sleep thirds, halves, sleep cycles, and sleep stages (W, N1, N2, N3, REM, NREM, N2\u2013N3, and total sleep).</p>\n"
+"<p style=\" margin-t"
+                        "op:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Metrics are computed for the entire sleep period and stratified by sleep thirds, halves, sleep cycles, and sleep stages (W, N1, N2, N3, REM, NREM, N2\u2013N3, and total sleep).</p>\n"
 "<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-weight:700;\">2. Oxygen Desaturation Variables</span></p>\n"
 "<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">- Total number of events<br />- Index (ODI, events per hour)<br />- Severity (sum of areas under desaturation events, in percent\u00b7sec, over the sleep period)<br />- Percentage of sleep time spent in desaturation<br />- Average and median desaturation characteristics: Duration (s), Area (% s), Slope (% / s) and Drop (%).</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-l"
-                        "eft:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-weight:700;\">3. Oxygen Recovery Variables</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-righ"
+                        "t:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-weight:700;\">3. Oxygen Recovery Variables</span></p>\n"
 "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-weight:700;\"><br /></p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">- Total number of events<br />- Index (events per hour)<br />- Severity (sum of areas under recovery events, in percent\u00b7sec, over the sleep period)<br />- Percentage of sleep time spent in recovery<br />- Average and median recovery characteristics: Duration (s), Area (% s), Slope (% / s) and Amplitude (%).</p>\n"
 "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:"
-                        "0; text-indent:0px;\">The <span style=\" font-weight:700;\">Total Severity </span>corresponds to the sum of the individual desaturation and recovery areas in percent*sec over the valid sleep period (sec).</p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\""
+                        ">The <span style=\" font-weight:700;\">Total Severity </span>corresponds to the sum of the individual desaturation and recovery areas in percent*sec over the valid sleep period (sec).</p>\n"
 "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">All metrics are stored in the Cohort Oxygen Saturation Report, with one line per recording. </p></body></html>", None))
         self.lineEdit_filename.setText("")

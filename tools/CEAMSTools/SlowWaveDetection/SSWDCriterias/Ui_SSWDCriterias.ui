@@ -16,9 +16,6 @@
   <property name="toolTip">
    <string/>
   </property>
-  <property name="styleSheet">
-   <string notr="true">font: 12pt &quot;Roboto&quot;;</string>
-  </property>
   <layout class="QVBoxLayout" name="verticalLayout_9">
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout_6">
@@ -30,8 +27,6 @@
           <widget class="QLabel" name="label_16">
            <property name="font">
             <font>
-             <family>Roboto</family>
-             <pointsize>12</pointsize>
              <italic>false</italic>
              <bold>false</bold>
             </font>
@@ -161,8 +156,6 @@
           <widget class="QLabel" name="label_19">
            <property name="font">
             <font>
-             <family>Roboto</family>
-             <pointsize>12</pointsize>
              <italic>false</italic>
              <bold>false</bold>
             </font>
@@ -182,8 +175,6 @@
                 <widget class="QRadioButton" name="radioButton_sleep_stages">
                  <property name="font">
                   <font>
-                   <family>Roboto</family>
-                   <pointsize>12</pointsize>
                    <italic>false</italic>
                    <bold>false</bold>
                   </font>
@@ -382,8 +373,6 @@
           <widget class="QLabel" name="label_5">
            <property name="font">
             <font>
-             <family>Roboto</family>
-             <pointsize>12</pointsize>
              <italic>false</italic>
              <bold>false</bold>
             </font>
@@ -546,8 +535,6 @@
                  </property>
                  <property name="font">
                   <font>
-                   <family>Roboto</family>
-                   <pointsize>12</pointsize>
                    <italic>false</italic>
                    <bold>false</bold>
                   </font>

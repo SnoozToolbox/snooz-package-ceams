@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file ''
+## Form generated from reading UI file 'Ui_EventCombineSettingsView.ui'
 ##
 ## Created by: Qt User Interface Compiler version 6.8.2
 ##
@@ -15,11 +15,9 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QFont, QFontDatabase, QGradient, QIcon,
     QImage, QKeySequence, QLinearGradient, QPainter,
     QPalette, QPixmap, QRadialGradient, QTransform)
-from PySide6.QtWidgets import (QApplication, QCheckBox, QFrame, QGridLayout,
-    QHBoxLayout, QLabel, QLineEdit, QSizePolicy,
-    QSpacerItem, QVBoxLayout, QWidget)
-
-from widgets.QComboBoxLive import QComboBoxLive
+from PySide6.QtWidgets import (QApplication, QCheckBox, QComboBox, QFrame,
+    QGridLayout, QHBoxLayout, QLabel, QLineEdit,
+    QSizePolicy, QSpacerItem, QVBoxLayout, QWidget)
 
 class Ui_EventCombineSettingsView(object):
     def setupUi(self, EventCombineSettingsView):
@@ -117,7 +115,7 @@ class Ui_EventCombineSettingsView(object):
 
         self.gridLayout.addWidget(self.label_3, 4, 0, 1, 1)
 
-        self.behavior_comboBox = QComboBoxLive(EventCombineSettingsView)
+        self.behavior_comboBox = QComboBox(EventCombineSettingsView)
         self.behavior_comboBox.addItem("")
         self.behavior_comboBox.addItem("")
         self.behavior_comboBox.addItem("")

@@ -60,7 +60,7 @@
           </widget>
          </item>
          <item row="0" column="1" colspan="2">
-          <widget class="QLineEditLive" name="time_lineedit">
+          <widget class="QLineEdit" name="time_lineedit">
            <property name="toolTip">
             <string>Time elapsed since the beginning of the recording (ex. 01:10:5.5)</string>
            </property>
@@ -80,7 +80,7 @@
           </widget>
          </item>
          <item row="1" column="1" colspan="2">
-          <widget class="QLineEditLive" name="win_show_lineedit">
+          <widget class="QLineEdit" name="win_show_lineedit">
            <property name="toolTip">
             <string>Window length to display in second.</string>
            </property>
@@ -100,7 +100,7 @@
           </widget>
          </item>
          <item row="2" column="1" colspan="2">
-          <widget class="QLineEditLive" name="event_lineEdit"/>
+          <widget class="QLineEdit" name="event_lineEdit"/>
          </item>
          <item row="3" column="0">
           <widget class="QLabel" name="chan_label">
@@ -113,7 +113,7 @@
           </widget>
          </item>
          <item row="3" column="1" colspan="2">
-          <widget class="QLineEditLive" name="channel_lineedit">
+          <widget class="QLineEdit" name="channel_lineedit">
            <property name="toolTip">
             <string>Single channel label to display (ex. EEG C3)</string>
            </property>
@@ -139,7 +139,7 @@
           </widget>
          </item>
          <item row="4" column="1" colspan="2">
-          <widget class="QLineEditLive" name="windet_step_lineedit">
+          <widget class="QLineEdit" name="windet_step_lineedit">
            <property name="text">
             <string/>
            </property>
@@ -159,7 +159,7 @@
           </widget>
          </item>
          <item row="5" column="1">
-          <widget class="QLineEditLive" name="thresh_lineedit">
+          <widget class="QLineEdit" name="thresh_lineedit">
            <property name="toolTip">
             <string>Threshold used to detect events.</string>
            </property>
@@ -169,7 +169,7 @@
           </widget>
          </item>
          <item row="5" column="2">
-          <widget class="QComboBoxLive" name="threshUnit_comboBox">
+          <widget class="QComboBox" name="threshUnit_comboBox">
            <property name="toolTip">
             <string>Select threshold unit : fixed (as µV²), x times the baseline median or x times the baseline standard deviation.</string>
            </property>
@@ -216,7 +216,7 @@
             </widget>
            </item>
            <item>
-            <widget class="QLineEditLive" name="filename_lineedit">
+            <widget class="QLineEdit" name="filename_lineedit">
              <property name="toolTip">
               <string>Python filename to save the detection information and signal to display.</string>
              </property>
@@ -258,18 +258,6 @@
    </item>
   </layout>
  </widget>
- <customwidgets>
-  <customwidget>
-   <class>QLineEditLive</class>
-   <extends>QLineEdit</extends>
-   <header>widgets.QLineEditLive</header>
-  </customwidget>
-  <customwidget>
-   <class>QComboBoxLive</class>
-   <extends>QComboBox</extends>
-   <header>widgets.QComboBoxLive</header>
-  </customwidget>
- </customwidgets>
  <resources/>
  <connections>
   <connection>

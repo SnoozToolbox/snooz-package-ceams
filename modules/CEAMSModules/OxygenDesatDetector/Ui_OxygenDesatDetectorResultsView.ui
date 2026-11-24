@@ -65,7 +65,7 @@
           </widget>
          </item>
          <item>
-          <widget class="QLineEditLive" name="time_lineedit">
+          <widget class="QLineEdit" name="time_lineedit">
            <property name="enabled">
             <bool>true</bool>
            </property>
@@ -178,13 +178,6 @@ Press enter to display the detection window.</string>
    </item>
   </layout>
  </widget>
- <customwidgets>
-  <customwidget>
-   <class>QLineEditLive</class>
-   <extends>QLineEdit</extends>
-   <header>widgets.QLineEditLive</header>
-  </customwidget>
- </customwidgets>
  <resources/>
  <connections>
   <connection>

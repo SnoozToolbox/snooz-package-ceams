@@ -26,7 +26,6 @@ class Ui_ConnectivitySettings(object):
         if not ConnectivitySettings.objectName():
             ConnectivitySettings.setObjectName(u"ConnectivitySettings")
         ConnectivitySettings.resize(877, 850)
-        ConnectivitySettings.setStyleSheet(u"font: 12pt \"Roboto\";")
         self.verticalLayout = QVBoxLayout(ConnectivitySettings)
         self.verticalLayout.setSpacing(25)
         self.verticalLayout.setObjectName(u"verticalLayout")
@@ -334,10 +333,10 @@ class Ui_ConnectivitySettings(object):
 "hr { height: 1px; border-width: 0; }\n"
 "li.unchecked::marker { content: \"\\2610\"; }\n"
 "li.checked::marker { content: \"\\2612\"; }\n"
-"</style></head><body style=\" font-family:'Roboto'; font-size:12pt; font-weight:400; font-style:normal;\">\n"
+"</style></head><body style=\" font-size:12pt; font-weight:400; font-style:normal;\">\n"
 "<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Network Properties computes key graph metrics to characterize the network\u2019s efficiency, integration, segregation, and small-world organization.</p>\n"
-"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">The output includes five global measures: average shortest path length, clustering coefficient, global efficiency, small-wo"
-                        "rldness (clustering/path ratio), and modularity.</p>\n"
+"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">The output includes five global measures: average shortest path length, clustering coefficient, global efficiency, small-worldness (clustering/pa"
+                        "th ratio), and modularity.</p>\n"
 "<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">This analysis runs only when the number of channels is greater than 32. Connectivity can be thresholded using either a minimum spanning tree or a custom threshold.</p>\n"
 "<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-weight:700;\">minimally_spanning_tree</span>: finds the smallest threshold that keeps the network fully connected (recommended).<br /><span style=\" font-weight:700;\">custom_threshold</span> : retains the top X % of strongest edges (value between 0 and 1).</p></body></html>", None))
         self.select_mode_label.setText(QCoreApplication.translate("ConnectivitySettings", u"<html><head/><body><p>Select threshold mode, and threshold value if threshold mode is set to custom threshold.</p></body></html>", None))

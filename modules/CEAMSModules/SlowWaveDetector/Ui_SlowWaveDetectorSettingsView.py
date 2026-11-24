@@ -26,7 +26,6 @@ class Ui_SlowWaveDetectorSettingsView(object):
         if not SlowWaveDetectorSettingsView.objectName():
             SlowWaveDetectorSettingsView.setObjectName(u"SlowWaveDetectorSettingsView")
         SlowWaveDetectorSettingsView.resize(574, 390)
-        SlowWaveDetectorSettingsView.setStyleSheet(u"font: 12pt \"Roboto\";")
         self.gridLayout_2 = QGridLayout(SlowWaveDetectorSettingsView)
         self.gridLayout_2.setObjectName(u"gridLayout_2")
         self.verticalLayout = QVBoxLayout()
@@ -34,8 +33,6 @@ class Ui_SlowWaveDetectorSettingsView(object):
         self.label_5 = QLabel(SlowWaveDetectorSettingsView)
         self.label_5.setObjectName(u"label_5")
         font = QFont()
-        font.setFamilies([u"Roboto"])
-        font.setPointSize(12)
         font.setBold(False)
         font.setItalic(False)
         self.label_5.setFont(font)
@@ -112,7 +109,6 @@ class Ui_SlowWaveDetectorSettingsView(object):
 
         self.label_6 = QLabel(SlowWaveDetectorSettingsView)
         self.label_6.setObjectName(u"label_6")
-        self.label_6.setMinimumSize(QSize(130, 0))
         self.label_6.setAlignment(Qt.AlignRight|Qt.AlignTrailing|Qt.AlignVCenter)
 
         self.gridLayout.addWidget(self.label_6, 7, 1, 1, 1)

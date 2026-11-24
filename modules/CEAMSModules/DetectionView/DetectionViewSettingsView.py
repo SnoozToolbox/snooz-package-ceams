@@ -24,14 +24,18 @@ class DetectionViewSettingsView( BaseSettingsView,  Ui_DetectionViewSettingsView
 
         # init UI
         self.setupUi(self)
-        self.time_lineedit.init(self._parent_node.identifier, 'time_elapsed', self._pub_sub_manager)
-        self.win_show_lineedit.init(self._parent_node.identifier, 'win_len_show', self._pub_sub_manager)
-        self.event_lineEdit.init(self._parent_node.identifier, 'event_name', self._pub_sub_manager)
-        self.channel_lineedit.init(self._parent_node.identifier, 'channel', self._pub_sub_manager)
-        self.windet_step_lineedit.init(self._parent_node.identifier, 'win_step_sec', self._pub_sub_manager)
-        self.thresh_lineedit.init(self._parent_node.identifier, 'threshold', self._pub_sub_manager)
-        self.threshUnit_comboBox.init(self._parent_node.identifier, 'threshold_unit', self._pub_sub_manager)
-        self.filename_lineedit.init(self._parent_node.identifier, 'filename', self._pub_sub_manager)
+        self._settings = {
+            f'{parent_node.identifier}.time_elapsed': self.time_lineedit,
+            f'{parent_node.identifier}.win_len_show': self.win_show_lineedit,
+            f'{parent_node.identifier}.event_name': self.event_lineEdit,
+            f'{parent_node.identifier}.channel': self.channel_lineedit,
+            f'{parent_node.identifier}.win_step_sec': self.windet_step_lineedit,
+            f'{parent_node.identifier}.threshold': self.thresh_lineedit,
+            f'{parent_node.identifier}.threshold_unit': self.threshUnit_comboBox,
+            f'{parent_node.identifier}.filename': self.filename_lineedit,
+        }
+        for topic in self._settings:
+            self._pub_sub_manager.subscribe(self, topic)
 
     def on_choose(self):
         filename, _ = QtWidgets.QFileDialog.getSaveFileName(
@@ -43,7 +47,28 @@ class DetectionViewSettingsView( BaseSettingsView,  Ui_DetectionViewSettingsView
             self.filename_lineedit.setText(filename)
 
     def load_settings(self):
-        pass
+        for topic in self._settings:
+            self._pub_sub_manager.publish(self, topic, 'ping')
 
     def on_apply_settings(self):
+        for topic, widget in self._settings.items():
+            if isinstance(widget, QtWidgets.QComboBox):
+                value = widget.currentText()
+            else:
+                value = widget.text()
+            self._pub_sub_manager.publish(self, topic, value)
+
+    def on_topic_update(self, topic, message, sender):
         pass
+
+    def on_topic_response(self, topic, message, sender):
+        widget = self._settings[topic]
+        if isinstance(widget, QtWidgets.QComboBox):
+            widget.setCurrentText(str(message))
+        else:
+            widget.setText(str(message))
+
+    def __del__(self):
+        if self._pub_sub_manager is not None:
+            for topic in self._settings:
+                self._pub_sub_manager.unsubscribe(self, topic)

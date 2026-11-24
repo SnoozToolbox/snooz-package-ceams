@@ -45,8 +45,6 @@ class Ui_FlatlineStep(object):
         self.label_6.setObjectName(u"label_6")
         self.label_6.setMaximumSize(QSize(16777215, 30))
         font = QFont()
-        font.setFamilies([u"Roboto"])
-        font.setPointSize(12)
         font.setBold(False)
         font.setItalic(False)
         self.label_6.setFont(font)
@@ -134,8 +132,6 @@ class Ui_FlatlineStep(object):
         self.label = QLabel(FlatlineStep)
         self.label.setObjectName(u"label")
         font1 = QFont()
-        font1.setFamilies([u"Roboto"])
-        font1.setPointSize(12)
         font1.setBold(False)
         font1.setItalic(False)
         font1.setStyleStrategy(QFont.PreferAntialias)
@@ -192,7 +188,6 @@ class Ui_FlatlineStep(object):
 
     def retranslateUi(self, FlatlineStep):
         FlatlineStep.setWindowTitle(QCoreApplication.translate("FlatlineStep", u"Form", None))
-        FlatlineStep.setStyleSheet(QCoreApplication.translate("FlatlineStep", u"font: 12pt \"Roboto\";", None))
         self.label_2.setText("")
         self.label_6.setText(QCoreApplication.translate("FlatlineStep", u"<html><head/><body><p><span style=\" font-weight:600;\">Flatline : Segments of low power, flatlined signal.</span></p></body></html>", None))
         self.label_7.setText(QCoreApplication.translate("FlatlineStep", u"Identification of low power via spectral power analysis (Welch's method).", None))
@@ -202,11 +197,11 @@ class Ui_FlatlineStep(object):
 "hr { height: 1px; border-width: 0; }\n"
 "li.unchecked::marker { content: \"\\2610\"; }\n"
 "li.checked::marker { content: \"\\2612\"; }\n"
-"</style></head><body style=\" font-family:'Roboto'; font-size:12pt; font-weight:400; font-style:normal;\">\n"
+"</style></head><body style=\" font-size:12pt; font-weight:400; font-style:normal;\">\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Band power in the 1-64 Hz range is computed by integrating the power spectral density estimated using Welch's method, as recommended in [1]. </p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Power is calculated using 6-s windows with a 3-s step size. </p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; m"
-                        "argin-right:0px; -qt-block-indent:0; text-indent:0px;\">Segments where the broadband power falls below a user-defined threshold are flagged as flatlines.</p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-b"
+                        "lock-indent:0; text-indent:0px;\">Segments where the broadband power falls below a user-defined threshold are flagged as flatlines.</p>\n"
 "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" text-decoration: underline;\">Reference</span></p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">[1] Cox, R. &amp; Fell, J. Analyzing human sleep EEG: A methodological primer with code implementation. Sleep Medicine Reviews54, 101353 (2020).</p></body></html>", None))
@@ -242,10 +237,10 @@ class Ui_FlatlineStep(object):
 "hr { height: 1px; border-width: 0; }\n"
 "li.unchecked::marker { content: \"\\2610\"; }\n"
 "li.checked::marker { content: \"\\2612\"; }\n"
-"</style></head><body style=\" font-family:'Roboto'; font-size:12pt; font-weight:400; font-style:normal;\">\n"
+"</style></head><body style=\" font-size:12pt; font-weight:400; font-style:normal;\">\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">To reduce the number of false positives, especially for low amplitude signals in the R stage, lower the threshold as low as you want.</p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Setting the value to 0.01 reduces the number of false positives.</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margi"
-                        "n-right:0px; -qt-block-indent:0; text-indent:0px;\">It is also possible to deactivate the detector.</p></body></html>", None))
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block"
+                        "-indent:0; text-indent:0px;\">It is also possible to deactivate the detector.</p></body></html>", None))
     # retranslateUi
 

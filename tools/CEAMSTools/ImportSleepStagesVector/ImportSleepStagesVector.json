@@ -9,7 +9,7 @@
         "tool_author": "CIUSSS-NIM",
         "tool_url": "",
         "tool_description": "To import sleep stages files into Snooz.",
-        "tool_version": "2.3.0",
+        "tool_version": "2.3.1",
         "package_name": "CEAMSTools",
         "steps": [
             {
@@ -35,11 +35,11 @@
     "dependencies": [
         {
             "package_name": "CEAMSModules",
-            "package_version": "7.5.0"
+            "package_version": "7.6.0"
         },
         {
             "package_name": "CEAMSTools",
-            "package_version": "7.5.0",
+            "package_version": "7.6.0",
             "deleteable": false
         }
     ],

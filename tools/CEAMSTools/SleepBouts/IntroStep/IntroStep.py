@@ -7,16 +7,12 @@ See the file LICENCE for full license details.
     Settings viewer of the Intro plugin
 """
 import base64
-import os
 
 from qtpy import QtWidgets
-from qtpy.QtCore import QUrl
 from qtpy.QtGui import QPixmap
-from qtpy.QtWebEngineWidgets import QWebEngineView
 
 from CEAMSTools.SleepBouts.IntroStep.Ui_IntroStep import Ui_IntroStep
 from commons.BaseStepView import BaseStepView
-import config
 
 class IntroStep( BaseStepView,  Ui_IntroStep, QtWidgets.QWidget):
     """

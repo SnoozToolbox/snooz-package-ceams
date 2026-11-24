@@ -2,9 +2,6 @@
 <ui version="4.0">
  <class>{{ step_class }}</class>
  <widget class="QWidget" name="{{ step_class }}">
-  <property name="styleSheet">
-   <string notr="true">font: 12pt &quot;Roboto&quot;;</string>
-  </property>
   <property name="geometry">
    <rect>
     <x>0</x>

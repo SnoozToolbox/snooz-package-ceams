@@ -16,9 +16,6 @@
   <property name="toolTip">
    <string/>
   </property>
-  <property name="styleSheet">
-   <string notr="true">font: 12pt &quot;Roboto&quot;;</string>
-  </property>
   <layout class="QVBoxLayout" name="verticalLayout_2">
    <item>
     <layout class="QVBoxLayout" name="verticalLayout">
@@ -49,7 +46,7 @@ p, li { white-space: pre-wrap; }
 hr { height: 1px; border-width: 0; }
 li.unchecked::marker { content: &quot;\2610&quot;; }
 li.checked::marker { content: &quot;\2612&quot;; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Roboto'; font-size:12pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-size:12pt; font-weight:400; font-style:normal;&quot;&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Sampling Rate&lt;/span&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;The EEG signals are downsampled to 256 Hz (if higher) to reduce the processing time.&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Note : Noise &amp;gt; 128 Hz will not be detected because a 128 Hz low pass filter is applied before downsampling.&lt;/p&gt;
@@ -98,8 +95,6 @@ li.checked::marker { content: &quot;\2612&quot;; }
         <widget class="QCheckBox" name="notch_checkBox">
          <property name="font">
           <font>
-           <family>Roboto</family>
-           <pointsize>12</pointsize>
            <italic>false</italic>
            <bold>false</bold>
           </font>
@@ -187,8 +182,6 @@ li.checked::marker { content: &quot;\2612&quot;; }
          </property>
          <property name="font">
           <font>
-           <family>Roboto</family>
-           <pointsize>12</pointsize>
            <italic>false</italic>
            <bold>false</bold>
           </font>

@@ -26,7 +26,6 @@ class Ui_PSAPicsGeneratorSettingsView(object):
         if not PSAPicsGeneratorSettingsView.objectName():
             PSAPicsGeneratorSettingsView.setObjectName(u"PSAPicsGeneratorSettingsView")
         PSAPicsGeneratorSettingsView.resize(929, 800)
-        PSAPicsGeneratorSettingsView.setStyleSheet(u"font: 12pt \"Roboto\";")
         self.horizontalLayout_3 = QHBoxLayout(PSAPicsGeneratorSettingsView)
         self.horizontalLayout_3.setObjectName(u"horizontalLayout_3")
         self.splitter = QSplitter(PSAPicsGeneratorSettingsView)

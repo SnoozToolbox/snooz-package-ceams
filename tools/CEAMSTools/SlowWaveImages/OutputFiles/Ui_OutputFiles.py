@@ -15,10 +15,12 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QFont, QFontDatabase, QGradient, QIcon,
     QImage, QKeySequence, QLinearGradient, QPainter,
     QPalette, QPixmap, QRadialGradient, QTransform)
-from PySide6.QtWidgets import (QApplication, QButtonGroup, QCheckBox, QDoubleSpinBox,
-    QFrame, QGridLayout, QHBoxLayout, QLabel,
-    QLineEdit, QPushButton, QRadioButton, QSizePolicy,
-    QSpacerItem, QVBoxLayout, QWidget)
+from PySide6.QtWidgets import (QApplication, QButtonGroup, QCheckBox, QFrame,
+    QGridLayout, QHBoxLayout, QLabel, QLineEdit,
+    QPushButton, QRadioButton, QSizePolicy, QSpacerItem,
+    QVBoxLayout, QWidget)
+
+from CEAMSTools.SlowWaveImages.OutputFiles.DecimalSpinBox import DecimalSpinBox
 import themes_rc
 
 class Ui_OutputFiles(object):
@@ -26,7 +28,6 @@ class Ui_OutputFiles(object):
         if not OutputFiles.objectName():
             OutputFiles.setObjectName(u"OutputFiles")
         OutputFiles.resize(1273, 923)
-        OutputFiles.setStyleSheet(u"font: 12pt \"Roboto\";")
         self.verticalLayout_6 = QVBoxLayout(OutputFiles)
         self.verticalLayout_6.setObjectName(u"verticalLayout_6")
         self.verticalLayout_5 = QVBoxLayout()
@@ -39,8 +40,6 @@ class Ui_OutputFiles(object):
         sizePolicy.setHeightForWidth(self.checkBox_enable_subject.sizePolicy().hasHeightForWidth())
         self.checkBox_enable_subject.setSizePolicy(sizePolicy)
         font = QFont()
-        font.setFamilies([u"Roboto"])
-        font.setPointSize(12)
         font.setBold(False)
         font.setItalic(False)
         self.checkBox_enable_subject.setFont(font)
@@ -318,11 +317,12 @@ class Ui_OutputFiles(object):
 
         self.horizontalLayout_5.addWidget(self.label_13)
 
-        self.doubleSpinBox_xmin = QDoubleSpinBox(OutputFiles)
+        self.doubleSpinBox_xmin = DecimalSpinBox(OutputFiles)
         self.doubleSpinBox_xmin.setObjectName(u"doubleSpinBox_xmin")
         self.doubleSpinBox_xmin.setEnabled(False)
-        self.doubleSpinBox_xmin.setMinimum(-5.000000000000000)
-        self.doubleSpinBox_xmin.setMaximum(5.000000000000000)
+        self.doubleSpinBox_xmin.setDecimals(2)
+        self.doubleSpinBox_xmin.setMinimum(-10.000000000000000)
+        self.doubleSpinBox_xmin.setMaximum(10.000000000000000)
         self.doubleSpinBox_xmin.setSingleStep(0.500000000000000)
 
         self.horizontalLayout_5.addWidget(self.doubleSpinBox_xmin)
@@ -333,11 +333,12 @@ class Ui_OutputFiles(object):
 
         self.horizontalLayout_5.addWidget(self.label_14)
 
-        self.doubleSpinBox_xmax = QDoubleSpinBox(OutputFiles)
+        self.doubleSpinBox_xmax = DecimalSpinBox(OutputFiles)
         self.doubleSpinBox_xmax.setObjectName(u"doubleSpinBox_xmax")
         self.doubleSpinBox_xmax.setEnabled(False)
-        self.doubleSpinBox_xmax.setMinimum(-5.000000000000000)
-        self.doubleSpinBox_xmax.setMaximum(5.000000000000000)
+        self.doubleSpinBox_xmax.setDecimals(2)
+        self.doubleSpinBox_xmax.setMinimum(-10.000000000000000)
+        self.doubleSpinBox_xmax.setMaximum(10.000000000000000)
         self.doubleSpinBox_xmax.setSingleStep(0.500000000000000)
 
         self.horizontalLayout_5.addWidget(self.doubleSpinBox_xmax)
@@ -348,9 +349,10 @@ class Ui_OutputFiles(object):
 
         self.horizontalLayout_5.addWidget(self.label_15)
 
-        self.doubleSpinBox_ymin = QDoubleSpinBox(OutputFiles)
+        self.doubleSpinBox_ymin = DecimalSpinBox(OutputFiles)
         self.doubleSpinBox_ymin.setObjectName(u"doubleSpinBox_ymin")
         self.doubleSpinBox_ymin.setEnabled(False)
+        self.doubleSpinBox_ymin.setDecimals(0)
         self.doubleSpinBox_ymin.setMinimum(-500.000000000000000)
         self.doubleSpinBox_ymin.setMaximum(500.000000000000000)
         self.doubleSpinBox_ymin.setSingleStep(50.000000000000000)
@@ -363,9 +365,10 @@ class Ui_OutputFiles(object):
 
         self.horizontalLayout_5.addWidget(self.label_16)
 
-        self.doubleSpinBox_ymax = QDoubleSpinBox(OutputFiles)
+        self.doubleSpinBox_ymax = DecimalSpinBox(OutputFiles)
         self.doubleSpinBox_ymax.setObjectName(u"doubleSpinBox_ymax")
         self.doubleSpinBox_ymax.setEnabled(False)
+        self.doubleSpinBox_ymax.setDecimals(0)
         self.doubleSpinBox_ymax.setMinimum(-500.000000000000000)
         self.doubleSpinBox_ymax.setMaximum(500.000000000000000)
         self.doubleSpinBox_ymax.setSingleStep(50.000000000000000)

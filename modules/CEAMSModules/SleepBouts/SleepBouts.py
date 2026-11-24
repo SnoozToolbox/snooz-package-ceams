@@ -162,7 +162,7 @@ class SleepBouts(SciNode):
             bouts_df = pd.DataFrame(columns=fieldnames)
         
             # Add the data to the data frame
-            bouts_df['filename'] = [input_filename]
+            bouts_df['filename'] = [os.path.basename(input_filename)]
             bouts_df[n2_n3_names] = n2_n3
             bouts_df[n2_n3_rem_names] = n2_n3_rem
             bouts_df[rem_names] = rem
@@ -211,7 +211,7 @@ class SleepBouts(SciNode):
     def _get_doc(self,N_COLUMNS):
         general_dict = \
         {
-            'filename' : 'PSG filename',
+            'filename' : 'PSG filename without the directory path (including extension)',
         }
         N2_N3 = {}
         for i_column in range(N_COLUMNS):
