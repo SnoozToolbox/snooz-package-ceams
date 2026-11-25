@@ -75,48 +75,10 @@ def _decade_label(exponent):
     return "10", str(exponent).replace("-", "−")
 
 
-def _place_label(text_size, curves, own, x_of, y_of, plot, above):
-    """ The rectangle of the direct label of a curve, near the curve at low frequencies, where the stages
-        differ most: above and to the right of it (above), or below and to the left of it, at the first
-        frequency where the label stays 4 px away from every curve and inside the plot. None if there is
-        none. """
-    width, height = text_size.width(), text_size.height()
-    # Further frequencies for the narrow figures (small windows): the label must stay inside the plot
-    frequencies = (2.5, 3.5, 4.5, 5.5, 6.5, 8.5, 1.5) if above else (3.5, 4.5, 2.5, 5.5, 6.5, 8.5, 10.5, 12.5, 1.5)
-
-    def curve_y(values, x):
-        for index in range(len(FREQUENCIES) - 1):
-            x1, x2 = x_of(FREQUENCIES[index]), x_of(FREQUENCIES[index + 1])
-            if x1 <= x <= x2:
-                ratio = (x - x1) / (x2 - x1)
-                return y_of(values[index] + ratio * (values[index + 1] - values[index]))
-        return None
-
-    for frequency in frequencies:
-        x = x_of(frequency)
-        y = curve_y(own, x)
-        rect = QtCore.QRectF(x + 5, y - 5 - height, width, height) if above else \
-            QtCore.QRectF(x - 5 - width, y + 5, width, height)
-        if not plot.adjusted(4, 4, -4, -4).contains(rect):
-            continue
-        clear = True
-        step = 1.0
-        sample = rect.left() - 4
-        while clear and sample <= rect.right() + 4:
-            for values in curves:
-                value = curve_y(values, sample)
-                if value is not None and rect.top() - 4 < value < rect.bottom() + 4:
-                    clear = False
-            sample += step
-        if clear:
-            return rect
-    return None
-
-
 def draw_spectra(painter, width, height, palette, font):
     """ Draw the example spectra in a width x height area, in the colors of the theme (palette): a panel
-        per channel, the power of N2 and N3 (a color each) on a log scale shared by the panels, the
-        legend at the top right and the name of each stage next to its line. """
+        per channel, the power of N2 and N3 (a color each) on a log scale shared by the panels, and the
+        legend of the stages at the top right. """
     painter.setRenderHint(QtGui.QPainter.RenderHint.Antialiasing)
     painter.setRenderHint(QtGui.QPainter.RenderHint.TextAntialiasing)
     theme = "dark" if palette.color(QtGui.QPalette.ColorRole.Base).lightness() < 128 else "light"
@@ -129,15 +91,12 @@ def draw_spectra(painter, width, height, palette, font):
     small = QtGui.QFont(font)
     small.setPixelSize(13)
     small.setBold(False)
-    strong = QtGui.QFont(small)
-    strong.setWeight(QtGui.QFont.Weight.DemiBold)
     title = QtGui.QFont(font)
     title.setPixelSize(15)
     title.setWeight(QtGui.QFont.Weight.DemiBold)
     superscript = QtGui.QFont(small)
     superscript.setPixelSize(10)
     small_metrics = QtGui.QFontMetricsF(small)
-    strong_metrics = QtGui.QFontMetricsF(strong)
     title_metrics = QtGui.QFontMetricsF(title)
     superscript_metrics = QtGui.QFontMetricsF(superscript)
     text_height = small_metrics.height()
@@ -221,16 +180,6 @@ def draw_spectra(painter, width, height, palette, font):
             painter.setBrush(QtCore.Qt.BrushStyle.NoBrush)
             painter.drawPath(path)
         painter.restore()
-
-        # The name of each stage next to its line: N3 above its line, N2 below its line
-        painter.setFont(strong)
-        painter.setPen(text)
-        for stage in STAGES:
-            size = strong_metrics.size(0, stage)
-            rect = _place_label(size, [curves[s] for s in STAGES], curves[stage], x_of, y_of, plot,
-                                above=stage == "N3")
-            if rect is not None:
-                painter.drawText(rect, center, stage)
 
         # The title of the panel: the channel
         painter.setFont(title)
