@@ -81,7 +81,8 @@ def _place_label(text_size, curves, own, x_of, y_of, plot, above):
         frequency where the label stays 4 px away from every curve and inside the plot. None if there is
         none. """
     width, height = text_size.width(), text_size.height()
-    frequencies = (2.5, 3.5, 4.5, 5.5, 6.5, 1.5) if above else (3.5, 4.5, 2.5, 5.5, 6.5, 1.5)
+    # Further frequencies for the narrow figures (small windows): the label must stay inside the plot
+    frequencies = (2.5, 3.5, 4.5, 5.5, 6.5, 8.5, 1.5) if above else (3.5, 4.5, 2.5, 5.5, 6.5, 8.5, 10.5, 12.5, 1.5)
 
     def curve_y(values, x):
         for index in range(len(FREQUENCIES) - 1):
@@ -251,7 +252,7 @@ def draw_spectra(painter, width, height, palette, font):
                          left_center, stage)
         x += key_length + key_gap + advance + item_gap
 
-    # The titles of the axes: the frequency under the panels, the power (turned) left of the decades
+    # The titles of the axes: the frequency under the panels, the log power (turned) left of the decades
     painter.setFont(small)
     painter.setPen(muted)
     painter.drawText(QtCore.QRectF(panels[0], plot_bottom + 5 + text_height + 4, panels[-1] + plot_width - panels[0],
@@ -260,7 +261,7 @@ def draw_spectra(painter, width, height, palette, font):
     painter.translate(0, (plot_top + plot_bottom) / 2)
     painter.rotate(-90)
     painter.drawText(QtCore.QRectF(-(plot_bottom - plot_top) / 2, 0, plot_bottom - plot_top, text_height), center,
-                     "Power (µV²/Hz)")
+                     "Log power (µV²/Hz)")
     painter.restore()
 
 
