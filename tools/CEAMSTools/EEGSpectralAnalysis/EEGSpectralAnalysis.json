@@ -20,19 +20,19 @@
             },
             {
                 "name": "Input Files",
-                "description": "<div>Add the PSG files you want to perform the analysis on.<br><br>The PSG file and the accessory file must share the same filename and folder.<br><br>Open your files:<br> <strong>.edf</strong> : .tsv file is optional.<br> <strong>.sts</strong> : .sig file is mandatory.<br> <strong>.eeg</strong> for CEAMS user : NATUS subject folder is mandatory<br> <br><br>Select the montage and channels</div><br>Use scored PSG recordings and EEG channels sampled above 124 Hz (e.g., 125 Hz).",
+                "description": "Add the scored PSG files, then select the montage and the EEG channels (sampled above 124 Hz) of each file.",
                 "custom_step_name": "InputFilesStep",
                 "show_index": true
             },
             {
                 "name": "Spectral Settings",
-                "description": "Set the frequency range and the analysis windows.",
+                "description": "Set the frequency range and the FFT windows of the Welch method.",
                 "custom_step_name": "SpectralSettings",
                 "show_index": true
             },
             {
                 "name": "Output File",
-                "description": "Choose the TSV report for all selected recordings.",
+                "description": "Choose the report file for all the selected recordings.",
                 "custom_step_name": "Outputfiles",
                 "show_index": true
             }
