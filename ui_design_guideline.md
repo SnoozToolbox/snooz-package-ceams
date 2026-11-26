@@ -227,6 +227,12 @@ A page of lists (files, events, channels, reports):
 - **Page title:** the name of the step, as written in the json file of the tool (the steps column).
 - **Subtitle:** what the step is for.
 - **Callouts:** a title of a few words, then one sentence.
+- **Names from the interface in quotation marks:** the name of a step, a section, a field, a check box, an option, a button, a list or a column, written as on the page: In "Events from selection", the changes apply to the selected recording. Not the technical identifiers of a file (group, start_sec), nor everyday words (the suffix, the PSG files).
+- **Sentences:** short. No colon or semicolon in the middle of a sentence. A definition is a sentence of its own. Lists, cases and the columns of a file are bullet points (`• ...<br/>`) after a short sentence that ends with a period. A long About block has small bold subheadings (`<b>Reading the stages</b><br/>`).
+- **Files:** name the kind of file (the PSG file, the sleep stage file, the accessory file). Never a bare "file" when the tool has several kinds of files.
+- **One place for each text:** a callout or an About block is on one page, the step where it applies. An important warning (the orange callout) can stay on the introduction too.
+- **Examples:** explain a setting with a worked example (a path before and after, a file name with its suffix), and check it against the code.
+- **Introduction:** only what is needed to use the tool and understand how it works. File examples, long lists and column-by-column details go to the documentation of the tool, and the page points to it (the documentation of the tool, "Read more!" below).
 - **Step description** (`description` of the step in the json file of the tool, shown in the steps column, left of the pages): what the user does in the step, in one or two short sentences (30 words at most), with the meaning of the step's row in What you will do.
   - Plain text: no blank lines, lists, HTML layout or file formats (the accepted files are in the introduction, the details on the page).
   - No "Click", "i.e." or "your study"; no "To define..." (write "Define..."). Start with a capital letter, end with a period.
