@@ -6,7 +6,7 @@
     "item_author": "CEAMS",
     "item_description": "Tool to remove and rename annotations.",
     "tool_params": {
-        "tool_version": "2.4.1",
+        "tool_version": "2.4.2",
         "tool_label": "Edit Annotations",
         "tool_category": "1-Preprocessing",
         "asset_directory": "",
@@ -20,13 +20,13 @@
             },
             {
                 "name": "Input Files",
-                "description": "<div>Start by adding your PSG files (.edf, .sts or .eeg) to edit the annotations.<br><br><strong>EDF:</strong> The .edf and .tsv files must have the same filename and be in the same folder.<br><br><strong>Stellate:</strong> The .sig and .sts files must have the same filename and be in the same folder.<br><br><em>For CEAMS users</em><br><strong>NATUS:</strong> The entire NATUS subject folder is required.<br><br>Select the <strong>EOG</strong> channels to run the REM detector.</div>",
+                "description": "Add the PSG files whose annotations you want to edit.",
                 "custom_step_name": "InputFileAnnotStep",
                 "show_index": true
             },
             {
                 "name": "Remove or edit",
-                "description": "Uncheck annotations to remove and edit annotations to rename.",
+                "description": "Uncheck the annotations to remove and edit the labels to rename, for one recording or for the cohort.",
                 "custom_step_name": "EditorStep",
                 "show_index": true
             }

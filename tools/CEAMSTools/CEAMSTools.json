@@ -79,7 +79,7 @@
         {
             "item_name": "EditAnnotations",
             "item_type": "tool",
-            "item_version": "2.4.1",
+            "item_version": "2.4.2",
             "item_hooks": [
                 {
                     "endpoint_name": "menu_endpoint",
