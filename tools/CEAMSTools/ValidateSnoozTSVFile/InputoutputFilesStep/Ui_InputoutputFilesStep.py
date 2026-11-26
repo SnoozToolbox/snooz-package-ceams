@@ -24,95 +24,119 @@ class Ui_InputoutputFilesStep(object):
     def setupUi(self, InputoutputFilesStep):
         if not InputoutputFilesStep.objectName():
             InputoutputFilesStep.setObjectName(u"InputoutputFilesStep")
-        InputoutputFilesStep.resize(1005, 689)
+        InputoutputFilesStep.resize(900, 700)
         self.verticalLayout = QVBoxLayout(InputoutputFilesStep)
-        self.verticalLayout.setSpacing(25)
+        self.verticalLayout.setSpacing(16)
         self.verticalLayout.setObjectName(u"verticalLayout")
-        self.horizontalLayout = QHBoxLayout()
-        self.horizontalLayout.setObjectName(u"horizontalLayout")
-        self.frame = QFrame(InputoutputFilesStep)
-        self.frame.setObjectName(u"frame")
-        self.frame.setFrameShape(QFrame.Shape.NoFrame)
-        self.frame.setFrameShadow(QFrame.Shadow.Raised)
-        self.frame.setLineWidth(0)
-        self.verticalLayout_3 = QVBoxLayout(self.frame)
-        self.verticalLayout_3.setObjectName(u"verticalLayout_3")
-        self.label_2 = QLabel(self.frame)
-        self.label_2.setObjectName(u"label_2")
+        self.verticalLayout.setContentsMargins(19, 12, 19, 12)
+        self.header_layout = QVBoxLayout()
+        self.header_layout.setSpacing(6)
+        self.header_layout.setObjectName(u"header_layout")
+        self.title_label = QLabel(InputoutputFilesStep)
+        self.title_label.setObjectName(u"title_label")
+        font = QFont()
+        font.setPointSize(18)
+        font.setBold(True)
+        self.title_label.setFont(font)
 
-        self.verticalLayout_3.addWidget(self.label_2)
+        self.header_layout.addWidget(self.title_label)
 
-        self.listWidget = QListWidget(self.frame)
+        self.subtitle_label = QLabel(InputoutputFilesStep)
+        self.subtitle_label.setObjectName(u"subtitle_label")
+        self.subtitle_label.setWordWrap(True)
+        self.subtitle_label.setProperty(u"variant", u"help")
+
+        self.header_layout.addWidget(self.subtitle_label)
+
+
+        self.verticalLayout.addLayout(self.header_layout)
+
+        self.tsv_files_card = QFrame(InputoutputFilesStep)
+        self.tsv_files_card.setObjectName(u"tsv_files_card")
+        self.tsv_files_card.setFrameShape(QFrame.Shape.StyledPanel)
+        self.tsv_files_card.setFrameShadow(QFrame.Shadow.Raised)
+        self.tsv_files_card_layout = QVBoxLayout(self.tsv_files_card)
+        self.tsv_files_card_layout.setSpacing(10)
+        self.tsv_files_card_layout.setObjectName(u"tsv_files_card_layout")
+        self.tsv_files_card_layout.setContentsMargins(10, 10, 10, 10)
+        self.tsv_files_title_label = QLabel(self.tsv_files_card)
+        self.tsv_files_title_label.setObjectName(u"tsv_files_title_label")
+        font1 = QFont()
+        font1.setBold(True)
+        self.tsv_files_title_label.setFont(font1)
+
+        self.tsv_files_card_layout.addWidget(self.tsv_files_title_label)
+
+        self.listWidget = QListWidget(self.tsv_files_card)
         self.listWidget.setObjectName(u"listWidget")
         self.listWidget.setFrameShape(QFrame.Shape.NoFrame)
         self.listWidget.setLineWidth(0)
 
-        self.verticalLayout_3.addWidget(self.listWidget)
+        self.tsv_files_card_layout.addWidget(self.listWidget)
 
-        self.frame_3 = QFrame(self.frame)
-        self.frame_3.setObjectName(u"frame_3")
-        self.frame_3.setFrameShape(QFrame.Shape.NoFrame)
-        self.frame_3.setFrameShadow(QFrame.Shadow.Raised)
-        self.frame_3.setLineWidth(0)
-        self.horizontalLayout_4 = QHBoxLayout(self.frame_3)
-        self.horizontalLayout_4.setObjectName(u"horizontalLayout_4")
-        self.pushButton_2 = QPushButton(self.frame_3)
-        self.pushButton_2.setObjectName(u"pushButton_2")
+        self.tsv_files_buttons_layout = QHBoxLayout()
+        self.tsv_files_buttons_layout.setSpacing(8)
+        self.tsv_files_buttons_layout.setObjectName(u"tsv_files_buttons_layout")
+        self.tsv_files_buttons_layout_spacer = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
 
-        self.horizontalLayout_4.addWidget(self.pushButton_2)
+        self.tsv_files_buttons_layout.addItem(self.tsv_files_buttons_layout_spacer)
 
-        self.pushButton = QPushButton(self.frame_3)
+        self.pushButton = QPushButton(self.tsv_files_card)
         self.pushButton.setObjectName(u"pushButton")
 
-        self.horizontalLayout_4.addWidget(self.pushButton)
+        self.tsv_files_buttons_layout.addWidget(self.pushButton)
+
+        self.pushButton_2 = QPushButton(self.tsv_files_card)
+        self.pushButton_2.setObjectName(u"pushButton_2")
+
+        self.tsv_files_buttons_layout.addWidget(self.pushButton_2)
+
+        self.tsv_files_buttons_layout.setStretch(0, 1)
+
+        self.tsv_files_card_layout.addLayout(self.tsv_files_buttons_layout)
 
 
-        self.verticalLayout_3.addWidget(self.frame_3)
+        self.verticalLayout.addWidget(self.tsv_files_card)
 
-
-        self.horizontalLayout.addWidget(self.frame)
-
-        self.frame_2 = QFrame(InputoutputFilesStep)
-        self.frame_2.setObjectName(u"frame_2")
-        self.frame_2.setFrameShape(QFrame.Shape.NoFrame)
-        self.frame_2.setFrameShadow(QFrame.Shadow.Raised)
-        self.frame_2.setLineWidth(0)
-        self.verticalLayout_2 = QVBoxLayout(self.frame_2)
-        self.verticalLayout_2.setObjectName(u"verticalLayout_2")
-        self.label = QLabel(self.frame_2)
+        self.reports_card = QFrame(InputoutputFilesStep)
+        self.reports_card.setObjectName(u"reports_card")
+        self.reports_card.setFrameShape(QFrame.Shape.StyledPanel)
+        self.reports_card.setFrameShadow(QFrame.Shadow.Raised)
+        self.reports_card_layout = QVBoxLayout(self.reports_card)
+        self.reports_card_layout.setSpacing(10)
+        self.reports_card_layout.setObjectName(u"reports_card_layout")
+        self.reports_card_layout.setContentsMargins(10, 10, 10, 10)
+        self.label = QLabel(self.reports_card)
         self.label.setObjectName(u"label")
+        self.label.setFont(font1)
 
-        self.verticalLayout_2.addWidget(self.label)
+        self.reports_card_layout.addWidget(self.label)
 
-        self.frame_4 = QFrame(self.frame_2)
-        self.frame_4.setObjectName(u"frame_4")
-        self.frame_4.setFrameShape(QFrame.Shape.NoFrame)
-        self.frame_4.setFrameShadow(QFrame.Shadow.Raised)
-        self.frame_4.setLineWidth(0)
-        self.horizontalLayout_5 = QHBoxLayout(self.frame_4)
-        self.horizontalLayout_5.setObjectName(u"horizontalLayout_5")
-        self.lineEdit = QLineEdit(self.frame_4)
+        self.reports_help_label = QLabel(self.reports_card)
+        self.reports_help_label.setObjectName(u"reports_help_label")
+        self.reports_help_label.setWordWrap(True)
+        self.reports_help_label.setProperty(u"variant", u"help")
+
+        self.reports_card_layout.addWidget(self.reports_help_label)
+
+        self.reports_layout = QHBoxLayout()
+        self.reports_layout.setSpacing(8)
+        self.reports_layout.setObjectName(u"reports_layout")
+        self.lineEdit = QLineEdit(self.reports_card)
         self.lineEdit.setObjectName(u"lineEdit")
 
-        self.horizontalLayout_5.addWidget(self.lineEdit)
+        self.reports_layout.addWidget(self.lineEdit)
 
-        self.pushButton_3 = QPushButton(self.frame_4)
+        self.pushButton_3 = QPushButton(self.reports_card)
         self.pushButton_3.setObjectName(u"pushButton_3")
 
-        self.horizontalLayout_5.addWidget(self.pushButton_3)
+        self.reports_layout.addWidget(self.pushButton_3)
 
 
-        self.verticalLayout_2.addWidget(self.frame_4)
-
-        self.verticalSpacer = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
-
-        self.verticalLayout_2.addItem(self.verticalSpacer)
+        self.reports_card_layout.addLayout(self.reports_layout)
 
 
-        self.horizontalLayout.addWidget(self.frame_2)
-
-
-        self.verticalLayout.addLayout(self.horizontalLayout)
+        self.verticalLayout.addWidget(self.reports_card)
 
 
         self.retranslateUi(InputoutputFilesStep)
@@ -122,10 +146,16 @@ class Ui_InputoutputFilesStep(object):
 
     def retranslateUi(self, InputoutputFilesStep):
         InputoutputFilesStep.setWindowTitle("")
-        self.label_2.setText(QCoreApplication.translate("InputoutputFilesStep", u"<html><head/><body><p>Load TSV files</p></body></html>", None))
-        self.pushButton_2.setText(QCoreApplication.translate("InputoutputFilesStep", u"Clear", None))
-        self.pushButton.setText(QCoreApplication.translate("InputoutputFilesStep", u"Add", None))
-        self.label.setText(QCoreApplication.translate("InputoutputFilesStep", u"<html><head/><body><p>Path for TSV files validation reports:</p></body></html>", None))
+        self.title_label.setText(QCoreApplication.translate("InputoutputFilesStep", u"Input/Output Files", None))
+        self.subtitle_label.setText(QCoreApplication.translate("InputoutputFilesStep", u"Add the annotation files to validate, then choose the folder of the validation reports.", None))
+#if QT_CONFIG(tooltip)
+        self.tsv_files_title_label.setToolTip(QCoreApplication.translate("InputoutputFilesStep", u"The Snooz annotation files (.tsv) to validate.", None))
+#endif // QT_CONFIG(tooltip)
+        self.tsv_files_title_label.setText(QCoreApplication.translate("InputoutputFilesStep", u"Annotation files", None))
+        self.pushButton.setText(QCoreApplication.translate("InputoutputFilesStep", u"Add files", None))
+        self.pushButton_2.setText(QCoreApplication.translate("InputoutputFilesStep", u"Clear all", None))
+        self.label.setText(QCoreApplication.translate("InputoutputFilesStep", u"Reports folder", None))
+        self.reports_help_label.setText(QCoreApplication.translate("InputoutputFilesStep", u"One validation report per annotation file: &lt;name&gt;_validation_log.txt.", None))
         self.pushButton_3.setText(QCoreApplication.translate("InputoutputFilesStep", u"Choose", None))
     # retranslateUi
 

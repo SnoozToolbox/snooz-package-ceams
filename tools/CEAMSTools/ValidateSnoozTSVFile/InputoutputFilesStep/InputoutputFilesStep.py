@@ -34,7 +34,7 @@ class InputoutputFilesStep(BaseStepView, Ui_InputoutputFilesStep, QtWidgets.QWid
         self.pushButton_2.clicked.connect(self.listWidget.clear)
         self.pushButton_2.clicked.connect(self.clear_list_slot)
 
-        self.lineEdit.setPlaceholderText(QCoreApplication.translate("OutputFiles", u"Select a folder where the validation reports are supposed to be saved", None))
+        self.lineEdit.setPlaceholderText(QCoreApplication.translate("InputoutputFilesStep", u"Choose the folder of the validation reports.", None))
         # Connect the browse push button to the on_choose function
         self.pushButton_3.clicked.connect(self.on_choose)
         # Subscribe to the proper topics to send/get data from the node
