@@ -27,6 +27,9 @@ class StadeSelection( BaseStepView,  Ui_StadeSelection, QtWidgets.QWidget):
     #  when the StadeSelection is being inherited. I.e. ArtifactSelection Step
     event_group = 'stage'                                           # The group label to add
     context_event_sel_def = ContextConstants.context_stage_check_model # The key of the context
+    # The title and the subtitle of the page (the steps share the form)
+    page_title = "Stage Annotation Selection"
+    page_subtitle = "Check the annotation names that are sleep stages. They get the group stage."
 
     """
         StadeSelection
@@ -38,6 +41,8 @@ class StadeSelection( BaseStepView,  Ui_StadeSelection, QtWidgets.QWidget):
 
         # init UI
         self.setupUi(self)
+        self.title_label.setText(self.page_title)
+        self.subtitle_label.setText(self.page_subtitle)
 
         # Model of events checked (selected for sleep stages)
         self.files_check_event_model = self.create_empty_files_model()
@@ -245,7 +250,10 @@ class StadeSelection( BaseStepView,  Ui_StadeSelection, QtWidgets.QWidget):
         # Need to extract info from the proxy model since only the visible group has been selected all
         # How many rows available at the file_model pointer
         file_index = self.file_listview.currentIndex()
-        proxy_index = self.event_proxy_model.mapFromSource(self.find_checkable_index(file_index))
+        checkable_index = self.find_checkable_index(file_index)
+        if not isinstance(checkable_index, QtCore.QModelIndex):
+            return  # No file selected
+        proxy_index = self.event_proxy_model.mapFromSource(checkable_index)
         self.set_check_state_file_via_proxy(proxy_index, self.select_all_checkBox.checkState())
         self._context_manager[self.context_event_sel_def] = self.files_check_event_model
 

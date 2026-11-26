@@ -23,7 +23,7 @@
         {
             "item_name": "ConvertEDFbrowser",
             "item_type": "tool",
-            "item_version": "2.3.1",
+            "item_version": "2.3.2",
             "item_hooks": [
                 {
                     "endpoint_name": "menu_endpoint",

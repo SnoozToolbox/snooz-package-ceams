@@ -15,4 +15,6 @@ class ArtifactSelection(StadeSelection):
     """
     event_group = 'art_snooz'
     context_event_sel_def = ContextConstants.context_artifact_check_model
+    page_title = "Artifact Selection"
+    page_subtitle = "Check the annotation names that are artifacts. They get the group art_snooz."
 
