@@ -283,7 +283,6 @@ class Ui_OutputFileStep(object):
 
         self.about_averages_label = QLabel(self.content_widget)
         self.about_averages_label.setObjectName(u"about_averages_label")
-        self.about_averages_label.setTextFormat(Qt.TextFormat.RichText)
         self.about_averages_label.setWordWrap(True)
         self.about_averages_label.setProperty(u"variant", u"help")
 
@@ -339,12 +338,12 @@ class Ui_OutputFileStep(object):
         self.filename_lineEdit.setText("")
         self.choose_pushButton.setText(QCoreApplication.translate("OutputFileStep", u"Choose", None))
         self.label_2.setText(QCoreApplication.translate("OutputFileStep", u"A .tsv file (tab separated values). The suffix _clean or _transposed is added to the filename.", None))
-        self.overwrite_warning_label.setText(QCoreApplication.translate("OutputFileStep", u"<b>The files are overwritten</b><br/>The output files are replaced if they exist. To put several cohort reports together, add them all in step <b>1 - Input Files</b>.", None))
+        self.overwrite_warning_label.setText(QCoreApplication.translate("OutputFileStep", u"<b>The files are overwritten</b><br/>The output files are replaced if they exist. To put several cohort reports together, add them all in step 1, \"Input Files\".", None))
         self.about_averages_title_label.setText(QCoreApplication.translate("OutputFileStep", u"About the averages", None))
         self.label_5.setText(QCoreApplication.translate("OutputFileStep", u"\u2022 <b>Total:</b> the average over the whole recording.", None))
         self.label_7.setText(QCoreApplication.translate("OutputFileStep", u"\u2022 <b>Distribution per clock hour:</b> the average for each clock hour.", None))
         self.label_6.setText(QCoreApplication.translate("OutputFileStep", u"\u2022 <b>Distribution per hour spent in each sleep stage:</b> the average for each hour spent in each sleep stage.", None))
         self.label_9.setText(QCoreApplication.translate("OutputFileStep", u"\u2022 <b>Distribution per sleep cycle:</b> the average for each sleep cycle.", None))
-        self.about_averages_label.setText(QCoreApplication.translate("OutputFileStep", u"The number of hours and cycles and their starting point are those of the detection tool (its <b>Hours and Cycles</b> settings). In the transposed report, the channel label is added to the variable name: total_spindle_count of the channel EEG C3 becomes total_spindle_count_EEG C3.", None))
+        self.about_averages_label.setText(QCoreApplication.translate("OutputFileStep", u"The number of hours and cycles and their starting point are those of the detection tool (its \"Hours and Cycles\" settings). In the transposed report, the channel label is added to the variable name: total_spindle_count of the channel EEG C3 becomes total_spindle_count_EEG C3.", None))
     # retranslateUi
 

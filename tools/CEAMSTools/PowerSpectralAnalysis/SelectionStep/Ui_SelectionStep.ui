@@ -359,7 +359,7 @@
                   </font>
                  </property>
                  <property name="text">
-                  <string>From sleep onset to the last asleep stage. Useful to analyse complete sleep cycles only (incomplete cycles are excluded in Common settings › Sleep Cycles).</string>
+                  <string>From sleep onset to the last asleep stage. Useful to analyse complete sleep cycles only (incomplete cycles are excluded in "Common settings" › "Sleep Cycles").</string>
                  </property>
                  <property name="wordWrap">
                   <bool>true</bool>

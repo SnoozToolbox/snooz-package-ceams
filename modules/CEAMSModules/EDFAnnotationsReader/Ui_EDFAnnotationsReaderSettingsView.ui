@@ -66,7 +66,7 @@
            </font>
           </property>
           <property name="toolTip">
-           <string>The EDF+ files with the annotations to import (EDF Annotations signal).</string>
+           <string>The EDF+ files with the annotations to import ("EDF Annotations" signal).</string>
           </property>
           <property name="text">
            <string>Annotation files</string>

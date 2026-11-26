@@ -258,7 +258,7 @@ class Ui_IntroStep(object):
         IntroStep.setWindowTitle("")
         self.title_label.setText(QCoreApplication.translate("IntroStep", u"Review Detections for the Cohort", None))
         self.subtitle_label.setText(QCoreApplication.translate("IntroStep", u"Explores, cleans and transposes the detailed events cohort reports of the spindle and slow wave detection tools: rename or remove channels, average channels into regions of interest, and get one subject per row.", None))
-        self.before_info_label.setText(QCoreApplication.translate("IntroStep", u"<b>Before you start</b><br/>The detailed events cohort report is written by the detection tool only when its cohort report option is checked, in its step <b>4 - Output Files</b>.", None))
+        self.before_info_label.setText(QCoreApplication.translate("IntroStep", u"<b>Before you start</b><br/>The detailed events cohort report is written by the detection tool only when its cohort report option is checked, in its step 4, \"Output Files\".", None))
         self.steps_title_label.setText(QCoreApplication.translate("IntroStep", u"What you will do", None))
         self.step_1_number_label.setText(QCoreApplication.translate("IntroStep", u"1", None))
         self.step_1_name_label.setText(QCoreApplication.translate("IntroStep", u"Input Files", None))
@@ -268,8 +268,8 @@ class Ui_IntroStep(object):
         self.step_2_label.setText(QCoreApplication.translate("IntroStep", u"Export the clean report (selected and renamed channels) and the transposed report (one subject per row), and choose the output file.", None))
         self.files_title_label.setText(QCoreApplication.translate("IntroStep", u"Accepted files", None))
         self.file_1_name_label.setText(QCoreApplication.translate("IntroStep", u"Spindles", None))
-        self.file_1_label.setText(QCoreApplication.translate("IntroStep", u"The detailed report for the cohort of Detect Spindles with A7, with Martin or with SUMO (.tsv).", None))
+        self.file_1_label.setText(QCoreApplication.translate("IntroStep", u"The detailed report for the cohort of \"Detect Spindles with A7\", \"Detect Spindles with Martin\" or \"Detect Spindles with SUMO\" (.tsv).", None))
         self.file_2_name_label.setText(QCoreApplication.translate("IntroStep", u"Slow waves", None))
-        self.file_2_label.setText(QCoreApplication.translate("IntroStep", u"The detailed report for the cohort of Detect Slow Waves (.tsv).", None))
+        self.file_2_label.setText(QCoreApplication.translate("IntroStep", u"The detailed report for the cohort of \"Detect Slow Waves\" (.tsv).", None))
     # retranslateUi
 

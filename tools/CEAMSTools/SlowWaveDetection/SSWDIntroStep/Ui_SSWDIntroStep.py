@@ -448,7 +448,7 @@ class Ui_SSWDIntroStep(object):
         self.subtitle_label.setText(QCoreApplication.translate("SSWDIntroStep", u"Detects the slow waves of your polysomnography (PSG) files in the sleep stages you choose, or in the whole recording without sleep stages, and exports their characteristics.", None))
         self.slow_wave_image.setText("")
         self.slow_wave_caption_label.setText(QCoreApplication.translate("SSWDIntroStep", u"Simulated EEG of N2 sleep with a slow wave (1 Hz).", None))
-        self.common_settings_info_label.setText(QCoreApplication.translate("SSWDIntroStep", u"<b>Before you start</b><br/>Define the sleep cycle configuration to use for the analysis: <b>Common settings \u203a Sleep Cycles</b>, in the left panel.", None))
+        self.common_settings_info_label.setText(QCoreApplication.translate("SSWDIntroStep", u"<b>Before you start</b><br/>Define the sleep cycle configuration to use for the analysis: \"Common settings\" \u203a \"Sleep Cycles\", in the left panel.", None))
         self.steps_title_label.setText(QCoreApplication.translate("SSWDIntroStep", u"What you will do", None))
         self.step_1_number_label.setText(QCoreApplication.translate("SSWDIntroStep", u"1", None))
         self.step_1_name_label.setText(QCoreApplication.translate("SSWDIntroStep", u"Input Files", None))
@@ -461,7 +461,7 @@ class Ui_SSWDIntroStep(object):
         self.step_3_label.setText(QCoreApplication.translate("SSWDIntroStep", u"Define the group and name of the slow wave events and the criteria of the detection. Then, choose the sleep stages in which slow waves are detected, or the whole recording when it has no sleep stages.", None))
         self.step_4_number_label.setText(QCoreApplication.translate("SSWDIntroStep", u"4", None))
         self.step_4_name_label.setText(QCoreApplication.translate("SSWDIntroStep", u"Output Files", None))
-        self.step_4_label.setText(QCoreApplication.translate("SSWDIntroStep", u"The slow wave events are added to the accessory file (.tsv, .sts or .ent). Optionally, export the characteristics of the slow waves: one file per recording and a detailed report for the cohort. The tool Classify Slow Waves needs these outputs.", None))
+        self.step_4_label.setText(QCoreApplication.translate("SSWDIntroStep", u"The slow wave events are added to the accessory file (.tsv, .sts or .ent). Optionally, export the characteristics of the slow waves: one file per recording and a detailed report for the cohort. The tool \"Classify Slow Waves\" needs these outputs.", None))
         self.files_title_label.setText(QCoreApplication.translate("SSWDIntroStep", u"Accepted files", None))
         self.file_1_name_label.setText(QCoreApplication.translate("SSWDIntroStep", u"EDF", None))
         self.file_1_label.setText(QCoreApplication.translate("SSWDIntroStep", u"The .edf and .tsv files have the same filename and are in the same directory.", None))
@@ -472,7 +472,7 @@ class Ui_SSWDIntroStep(object):
         self.methods_show_button.setText(QCoreApplication.translate("SSWDIntroStep", u"\u203a Methods and references", None))
         self.methods_hide_button.setText(QCoreApplication.translate("SSWDIntroStep", u"\u2304 Methods and references", None))
         self.methods_note_label.setText(QCoreApplication.translate("SSWDIntroStep", u"The details of each setting are shown in its own step.", None))
-        self.methods_label.setText(QCoreApplication.translate("SSWDIntroStep", u"<b>Slow wave detector [1]:</b> inspired by Bouchard et al. (2021). The EEG is band-pass filtered (0.16\u20134 Hz by default) and each wave from a zero crossing (positive to negative) to the next one is a slow wave when its peak-to-peak amplitude, its negative amplitude and the durations of its negative and positive parts meet the criteria (step Detection Criteria). The characteristics of each slow wave include its transition frequency, from the negative to the positive peak, used to classify the slow waves afterwards.", None))
+        self.methods_label.setText(QCoreApplication.translate("SSWDIntroStep", u"<b>Slow wave detector [1]:</b> inspired by Bouchard et al. (2021). The EEG is band-pass filtered (0.16\u20134 Hz by default) and each wave from a zero crossing (positive to negative) to the next one is a slow wave when its peak-to-peak amplitude, its negative amplitude and the durations of its negative and positive parts meet the criteria (step \"Detection Criteria\"). The characteristics of each slow wave include its transition frequency, from the negative to the positive peak, used to classify the slow waves afterwards.", None))
         self.references_label.setText(QCoreApplication.translate("SSWDIntroStep", u"[1] Bouchard, M., Lina, J.-M., Gaudreault, P.-O., Lafreni\u00e8re, A., Dub\u00e9, J., Gosselin, N., &amp; Carrier, J. (2021). Sleeping at the switch. <i>eLife</i>, <i>10</i>, Article e64337. <a href=\"https://doi.org/10.7554/eLife.64337\">https://doi.org/10.7554/eLife.64337</a>", None))
     # retranslateUi
 

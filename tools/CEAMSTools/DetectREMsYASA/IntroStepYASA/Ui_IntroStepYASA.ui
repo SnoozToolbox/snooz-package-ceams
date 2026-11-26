@@ -121,7 +121,7 @@
            <item>
             <widget class="QLabel" name="before_start_info_label">
              <property name="text">
-              <string>&lt;b&gt;Before you start&lt;/b&gt;&lt;br/&gt;Define the sleep cycle configuration to use for the report: &lt;b&gt;Sleep Cycles&lt;/b&gt;, in the left panel. In Input Files, select &lt;b&gt;2 EOG channels&lt;/b&gt; per recording.</string>
+              <string>&lt;b&gt;Before you start&lt;/b&gt;&lt;br/&gt;Define the sleep cycle configuration to use for the report: "Sleep Cycles", in the left panel. In "Input Files", select &lt;b&gt;2 EOG channels&lt;/b&gt; per recording.</string>
              </property>
              <property name="textFormat">
               <enum>Qt::TextFormat::RichText</enum>
@@ -526,10 +526,7 @@
              <item>
               <widget class="QLabel" name="stages_info_label">
                <property name="text">
-                <string>Annotation files are not required. If provided, they must include the sleep stages: REMs are then detected in the R epochs only and the REM report is generated (&lt;b&gt;Scored&lt;/b&gt;, in Detector Step). Without sleep stages, REMs are detected in any sleep stage, with the detection criteria only.</string>
-               </property>
-               <property name="textFormat">
-                <enum>Qt::TextFormat::RichText</enum>
+                <string>Annotation files are not required. If provided, they must include the sleep stages: REMs are then detected in the R epochs only and the REM report is generated ("Scored", in "Detector Step"). Without sleep stages, REMs are detected in any sleep stage, with the detection criteria only.</string>
                </property>
                <property name="wordWrap">
                 <bool>true</bool>
@@ -547,10 +544,7 @@
                 </font>
                </property>
                <property name="text">
-                <string>Without annotation files, run &lt;b&gt;Score Sleep Stages with YASA&lt;/b&gt; first: the REM detection is more reliable.</string>
-               </property>
-               <property name="textFormat">
-                <enum>Qt::TextFormat::RichText</enum>
+                <string>Without annotation files, run "Score Sleep Stages with YASA" first: the REM detection is more reliable.</string>
                </property>
                <property name="wordWrap">
                 <bool>true</bool>
@@ -793,7 +787,7 @@
              <item>
               <widget class="QLabel" name="methods_label">
                <property name="text">
-                <string>&lt;b&gt;REM detection of YASA [1]:&lt;/b&gt; based on the methods of Yetton et al. (2016) [2] and Agarwal et al. (2005) [3]. The LOC and ROC signals are filtered in the REM frequency band, and the REMs are detected by an amplitude threshold on the negative product of the two signals. The details are in &lt;b&gt;Algorithm's Details&lt;/b&gt;, in the left panel.&lt;br/&gt;&lt;br/&gt;&lt;b&gt;Phasic and tonic mini-epochs:&lt;/b&gt; the REM sleep epochs are divided into mini-epochs. A mini-epoch is phasic when it holds at least a third of a detected REM, tonic otherwise.&lt;br/&gt;&lt;br/&gt;Documentation of YASA: &lt;a href="https://raphaelvallat.com/yasa/"&gt;raphaelvallat.com/yasa&lt;/a&gt;.</string>
+                <string>&lt;b&gt;REM detection of YASA [1]:&lt;/b&gt; based on the methods of Yetton et al. (2016) [2] and Agarwal et al. (2005) [3]. The LOC and ROC signals are filtered in the REM frequency band, and the REMs are detected by an amplitude threshold on the negative product of the two signals. The details are in "Algorithm's Details", in the left panel.&lt;br/&gt;&lt;br/&gt;&lt;b&gt;Phasic and tonic mini-epochs:&lt;/b&gt; the REM sleep epochs are divided into mini-epochs. A mini-epoch is phasic when it holds at least a third of a detected REM, tonic otherwise.&lt;br/&gt;&lt;br/&gt;Documentation of YASA: &lt;a href="https://raphaelvallat.com/yasa/"&gt;raphaelvallat.com/yasa&lt;/a&gt;.</string>
                </property>
                <property name="textFormat">
                 <enum>Qt::TextFormat::RichText</enum>

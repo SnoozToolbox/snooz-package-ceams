@@ -307,7 +307,7 @@ class Ui_OutputFiles(object):
         self.lineEdit_filename.setText("")
         self.lineEdit_filename.setPlaceholderText(QCoreApplication.translate("OutputFiles", u"Select a .tsv file", None))
         self.pushButton_browse.setText(QCoreApplication.translate("OutputFiles", u"Browse", None))
-        self.label_4.setText(QCoreApplication.translate("OutputFiles", u"A .tsv file: one line per recording. The number of sleep cycles reported is set in <b>Hours and Cycles</b>, under Optional settings in the left panel.", None))
+        self.label_4.setText(QCoreApplication.translate("OutputFiles", u"A .tsv file: one line per recording. The number of sleep cycles reported is set in \"Hours and Cycles\", under \"Optional settings\" in the left panel.", None))
         self.append_warning_label.setText(QCoreApplication.translate("OutputFiles", u"<b>The data are appended</b><br/>New recordings are added at the end of the report, so the file is modified each time the tool is run.", None))
         self.label.setText(QCoreApplication.translate("OutputFiles", u"Optional outputs", None))
         self.checkBox_writeEvts.setText(QCoreApplication.translate("OutputFiles", u"Write the detected events in the accessory file", None))

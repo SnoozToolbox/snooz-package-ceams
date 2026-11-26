@@ -217,10 +217,7 @@
                 </font>
                </property>
                <property name="text">
-                <string>The slow wave details are appended at the end of the cohort report if it exists. The number of hours and cycles reported is set in &lt;b&gt;Hours and Cycles&lt;/b&gt;, under Optional settings in the left panel.</string>
-               </property>
-               <property name="textFormat">
-                <enum>Qt::TextFormat::RichText</enum>
+                <string>The slow wave details are appended at the end of the cohort report if it exists. The number of hours and cycles reported is set in "Hours and Cycles", under "Optional settings" in the left panel.</string>
                </property>
                <property name="wordWrap">
                 <bool>true</bool>
@@ -355,7 +352,7 @@
            <item>
             <widget class="QLabel" name="textEdit_3_label">
              <property name="text">
-              <string>&lt;b&gt;Sleep stages&lt;/b&gt;&lt;br/&gt;When both files are exported, the sleep stages selected for the detection are also saved, one file per recording, in a new folder named "slow_wave_sleep_stages" at the cohort report level (recordings with sleep stages only). They are used to compute the slow wave density per division of the night. The tool Classify Slow Waves needs the three outputs.</string>
+              <string>&lt;b&gt;Sleep stages&lt;/b&gt;&lt;br/&gt;When both files are exported, the sleep stages selected for the detection are also saved, one file per recording, in a new folder named "slow_wave_sleep_stages" at the cohort report level (recordings with sleep stages only). They are used to compute the slow wave density per division of the night. The tool "Classify Slow Waves" needs the three outputs.</string>
              </property>
              <property name="textFormat">
               <enum>Qt::TextFormat::RichText</enum>

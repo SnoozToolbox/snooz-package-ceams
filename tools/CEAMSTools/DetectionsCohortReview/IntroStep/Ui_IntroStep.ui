@@ -121,7 +121,7 @@
            <item>
             <widget class="QLabel" name="before_info_label">
              <property name="text">
-              <string>&lt;b&gt;Before you start&lt;/b&gt;&lt;br/&gt;The detailed events cohort report is written by the detection tool only when its cohort report option is checked, in its step &lt;b&gt;4 - Output Files&lt;/b&gt;.</string>
+              <string>&lt;b&gt;Before you start&lt;/b&gt;&lt;br/&gt;The detailed events cohort report is written by the detection tool only when its cohort report option is checked, in its step 4, "Output Files".</string>
              </property>
              <property name="textFormat">
               <enum>Qt::TextFormat::RichText</enum>
@@ -407,7 +407,7 @@
                <item row="0" column="1">
                 <widget class="QLabel" name="file_1_label">
                  <property name="text">
-                  <string>The detailed report for the cohort of Detect Spindles with A7, with Martin or with SUMO (.tsv).</string>
+                  <string>The detailed report for the cohort of "Detect Spindles with A7", "Detect Spindles with Martin" or "Detect Spindles with SUMO" (.tsv).</string>
                  </property>
                  <property name="wordWrap">
                   <bool>true</bool>
@@ -432,7 +432,7 @@
                <item row="1" column="1">
                 <widget class="QLabel" name="file_2_label">
                  <property name="text">
-                  <string>The detailed report for the cohort of Detect Slow Waves (.tsv).</string>
+                  <string>The detailed report for the cohort of "Detect Slow Waves" (.tsv).</string>
                  </property>
                  <property name="wordWrap">
                   <bool>true</bool>

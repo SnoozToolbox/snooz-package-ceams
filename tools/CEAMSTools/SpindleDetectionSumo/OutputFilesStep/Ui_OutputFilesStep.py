@@ -124,7 +124,6 @@ class Ui_OutputFilesStep(object):
         font2 = QFont()
         font2.setPointSize(10)
         self.label_8.setFont(font2)
-        self.label_8.setTextFormat(Qt.TextFormat.RichText)
         self.label_8.setWordWrap(True)
         self.label_8.setProperty(u"variant", u"help")
 
@@ -257,7 +256,7 @@ class Ui_OutputFilesStep(object):
         self.cohort_file_label.setText(QCoreApplication.translate("OutputFilesStep", u"Filename", None))
         self.cohort_lineedit.setPlaceholderText(QCoreApplication.translate("OutputFilesStep", u"Select a .tsv file", None))
         self.pushButton_cohort.setText(QCoreApplication.translate("OutputFilesStep", u"Choose", None))
-        self.label_8.setText(QCoreApplication.translate("OutputFilesStep", u"The spindle details are appended at the end of the cohort report if it exists. The number of hours and cycles reported is set in <b>Hours and Cycles</b>, under Optional settings in the left panel.", None))
+        self.label_8.setText(QCoreApplication.translate("OutputFilesStep", u"The spindle details are appended at the end of the cohort report if it exists. The number of hours and cycles reported is set in \"Hours and Cycles\", under \"Optional settings\" in the left panel.", None))
         self.checkBox_spindle_file.setText(QCoreApplication.translate("OutputFilesStep", u"Characteristics of each spindle", None))
         self.spindles_label.setText(QCoreApplication.translate("OutputFilesStep", u"One file per recording.", None))
         self.label_7.setText(QCoreApplication.translate("OutputFilesStep", u"Files are saved in a new folder named \"spindles_characteristics\" at the cohort report level. Without cohort report, the file is saved in the same folder as the PSG file.", None))

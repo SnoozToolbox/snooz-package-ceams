@@ -411,7 +411,7 @@ class Ui_SleepReportDoc(object):
         SleepReportDoc.setWindowTitle("")
         self.title_label.setText(QCoreApplication.translate("SleepReportDoc", u"Report Sleep Variables", None))
         self.subtitle_label.setText(QCoreApplication.translate("SleepReportDoc", u"Generates three types of reports from your polysomnography (PSG) files: the sleep report, the events reports and the temporal links reports.", None))
-        self.common_settings_info_label.setText(QCoreApplication.translate("SleepReportDoc", u"<b>Before you start</b><br/>Define the sleep cycle configuration to use for the analysis: <b>Common settings \u203a Sleep Cycles</b>, in the left panel.", None))
+        self.common_settings_info_label.setText(QCoreApplication.translate("SleepReportDoc", u"<b>Before you start</b><br/>Define the sleep cycle configuration to use for the analysis: \"Common settings\" \u203a \"Sleep Cycles\", in the left panel.", None))
         self.steps_title_label.setText(QCoreApplication.translate("SleepReportDoc", u"What you will do", None))
         self.step_1_number_label.setText(QCoreApplication.translate("SleepReportDoc", u"1", None))
         self.step_1_name_label.setText(QCoreApplication.translate("SleepReportDoc", u"Input Files", None))

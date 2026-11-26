@@ -178,7 +178,6 @@ class Ui_Outputfiles(object):
         self.limits_help_label = QLabel(self.distribution_card)
         self.limits_help_label.setObjectName(u"limits_help_label")
         self.limits_help_label.setFont(font2)
-        self.limits_help_label.setTextFormat(Qt.TextFormat.RichText)
         self.limits_help_label.setWordWrap(True)
         self.limits_help_label.setProperty(u"variant", u"help")
 
@@ -262,7 +261,6 @@ class Ui_Outputfiles(object):
 
         self.about_averages_label = QLabel(self.content_widget)
         self.about_averages_label.setObjectName(u"about_averages_label")
-        self.about_averages_label.setTextFormat(Qt.TextFormat.RichText)
         self.about_averages_label.setWordWrap(True)
         self.about_averages_label.setProperty(u"variant", u"help")
 
@@ -314,7 +312,7 @@ class Ui_Outputfiles(object):
 #endif // QT_CONFIG(tooltip)
         self.cycle_checkBox.setText(QCoreApplication.translate("Outputfiles", u"Distribution per sleep cycle", None))
         self.cycle_help_label.setText(QCoreApplication.translate("Outputfiles", u"Average power for each sleep cycle, from cycle 1. Empty when the cycle does not exist.", None))
-        self.limits_help_label.setText(QCoreApplication.translate("Outputfiles", u"The number of hours and cycles reported is set in <b>Hours and Cycles</b>, under Optional settings in the left panel.", None))
+        self.limits_help_label.setText(QCoreApplication.translate("Outputfiles", u"The number of hours and cycles reported is set in \"Hours and Cycles\", under \"Optional settings\" in the left panel.", None))
         self.label_4.setText(QCoreApplication.translate("Outputfiles", u"Output file", None))
         self.label_3.setText(QCoreApplication.translate("Outputfiles", u"Filename", None))
         self.filename_lineEdit.setInputMask("")
@@ -324,6 +322,6 @@ class Ui_Outputfiles(object):
         self.filename_help_label.setText(QCoreApplication.translate("Outputfiles", u"A .tsv file (tab separated values): one line per subject, channel and frequency band.", None))
         self.append_warning_label.setText(QCoreApplication.translate("Outputfiles", u"<b>The data are appended</b><br/>Spectral data are appended to the output file, so the file is modified each time the tool is run.", None))
         self.about_averages_title_label.setText(QCoreApplication.translate("Outputfiles", u"About the averages", None))
-        self.about_averages_label.setText(QCoreApplication.translate("Outputfiles", u"The averages include only the valid FFT windows: the clean windows of the selected stages or periods. When <i>Analyse power in sleep cycles only</i> is checked in step 4, the analysis starts at the sleep onset and the gaps between the cycles are not analysed. Otherwise the whole recording is analysed, even before the sleep onset and after the last asleep epoch.", None))
+        self.about_averages_label.setText(QCoreApplication.translate("Outputfiles", u"The averages include only the valid FFT windows: the clean windows of the selected stages or periods. When \"Analyse power in sleep cycles only\" is checked in step 4, the analysis starts at the sleep onset and the gaps between the cycles are not analysed. Otherwise the whole recording is analysed, even before the sleep onset and after the last asleep epoch.", None))
     # retranslateUi
 

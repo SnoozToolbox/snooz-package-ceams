@@ -442,6 +442,6 @@ class Ui_SpectralSettings(object):
         self.label_12.setText(QCoreApplication.translate("SpectralSettings", u"Models the oscillatory peaks and the background activity using parametric fitting.", None))
         self.bands_warning_label.setText(QCoreApplication.translate("SpectralSettings", u"<b>Frequency limits</b><br/>The last frequency must be at most half the sampling rate of the channels (<b>FS / 2</b>). The zero frequency is not supported by IRASA.", None))
         self.about_resolution_title_label.setText(QCoreApplication.translate("SpectralSettings", u"About the frequency resolution", None))
-        self.about_resolution_label.setText(QCoreApplication.translate("SpectralSettings", u"The frequency bin resolution is 1 / window length (s): 0.2 Hz with 5 s windows, 0.25 Hz with 4 s windows. The width of the mini bands must be a multiple of it: 0.2 Hz or 1 Hz with 5 s windows; 0.25 Hz, 0.5 Hz or 1 Hz with 4 s windows. IRASA and FOOOF are described in the documentation of the tool: Read more! below.", None))
+        self.about_resolution_label.setText(QCoreApplication.translate("SpectralSettings", u"The frequency bin resolution is 1 / window length (s): 0.2 Hz with 5 s windows, 0.25 Hz with 4 s windows. The width of the mini bands must be a multiple of it: 0.2 Hz or 1 Hz with 5 s windows; 0.25 Hz, 0.5 Hz or 1 Hz with 4 s windows. IRASA and FOOOF are described in the documentation of the tool: \"Read more!\" below.", None))
     # retranslateUi
 

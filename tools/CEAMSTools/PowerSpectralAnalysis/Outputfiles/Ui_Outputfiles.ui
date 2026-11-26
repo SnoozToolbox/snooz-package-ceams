@@ -343,10 +343,7 @@
               </font>
              </property>
              <property name="text">
-              <string>The number of hours and cycles reported is set in &lt;b&gt;Hours and Cycles&lt;/b&gt;, under Optional settings in the left panel.</string>
-             </property>
-             <property name="textFormat">
-              <enum>Qt::TextFormat::RichText</enum>
+              <string>The number of hours and cycles reported is set in "Hours and Cycles", under "Optional settings" in the left panel.</string>
              </property>
              <property name="wordWrap">
               <bool>true</bool>
@@ -510,10 +507,7 @@
           <item>
            <widget class="QLabel" name="about_averages_label">
             <property name="text">
-             <string>The averages include only the valid FFT windows: the clean windows of the selected stages or periods. When &lt;i&gt;Analyse power in sleep cycles only&lt;/i&gt; is checked in step 4, the analysis starts at the sleep onset and the gaps between the cycles are not analysed. Otherwise the whole recording is analysed, even before the sleep onset and after the last asleep epoch.</string>
-            </property>
-            <property name="textFormat">
-             <enum>Qt::TextFormat::RichText</enum>
+             <string>The averages include only the valid FFT windows: the clean windows of the selected stages or periods. When "Analyse power in sleep cycles only" is checked in step 4, the analysis starts at the sleep onset and the gaps between the cycles are not analysed. Otherwise the whole recording is analysed, even before the sleep onset and after the last asleep epoch.</string>
             </property>
             <property name="wordWrap">
              <bool>true</bool>

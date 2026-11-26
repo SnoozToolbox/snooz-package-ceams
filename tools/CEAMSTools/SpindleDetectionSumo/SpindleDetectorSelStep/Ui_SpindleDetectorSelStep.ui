@@ -803,10 +803,7 @@
                 </font>
                </property>
                <property name="text">
-                <string>The group and name of &lt;b&gt;Spindle events&lt;/b&gt; are used.</string>
-               </property>
-               <property name="textFormat">
-                <enum>Qt::TextFormat::RichText</enum>
+                <string>The group and name of "Spindle events" are used.</string>
                </property>
                <property name="wordWrap">
                 <bool>true</bool>

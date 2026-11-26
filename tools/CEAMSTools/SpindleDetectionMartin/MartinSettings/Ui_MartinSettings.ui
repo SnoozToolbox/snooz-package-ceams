@@ -375,7 +375,7 @@
                     </font>
                    </property>
                    <property name="text">
-                    <string>Turns on the detection in the sleep cycles only (Detection Settings). Otherwise, one threshold per channel for the whole recording.</string>
+                    <string>Turns on the detection in the sleep cycles only ("Detection Settings"). Otherwise, one threshold per channel for the whole recording.</string>
                    </property>
                    <property name="wordWrap">
                     <bool>true</bool>

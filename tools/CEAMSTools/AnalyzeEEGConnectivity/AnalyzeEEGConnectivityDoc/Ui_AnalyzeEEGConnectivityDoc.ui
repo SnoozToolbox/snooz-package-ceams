@@ -121,7 +121,7 @@
            <item>
             <widget class="QLabel" name="before_info_label">
              <property name="text">
-              <string>&lt;b&gt;Before you start&lt;/b&gt;&lt;br/&gt;Mark the non-brain channels, the noisy channels and the noisy epochs with the app &lt;b&gt;Inspect EEG channels&lt;/b&gt;. The connectivity is computed on brain EEG channels only: the channels marked with the group &lt;i&gt;art_inspector&lt;/i&gt; and the name &lt;i&gt;art_channel&lt;/i&gt; or &lt;i&gt;non_brain&lt;/i&gt; are excluded automatically. At least 2 brain EEG channels are required.</string>
+              <string>&lt;b&gt;Before you start&lt;/b&gt;&lt;br/&gt;Mark the non-brain channels, the noisy channels and the noisy epochs with the app "Inspect EEG channels". The connectivity is computed on brain EEG channels only: the channels marked with the group &lt;i&gt;art_inspector&lt;/i&gt; and the name &lt;i&gt;art_channel&lt;/i&gt; or &lt;i&gt;non_brain&lt;/i&gt; are excluded automatically. At least 2 brain EEG channels are required.</string>
              </property>
              <property name="textFormat">
               <enum>Qt::TextFormat::RichText</enum>

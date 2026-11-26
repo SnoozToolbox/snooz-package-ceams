@@ -313,7 +313,7 @@ class Ui_TemporalLinkStep(object):
 #endif // QT_CONFIG(tooltip)
         self.label.setText(QCoreApplication.translate("TemporalLinkStep", u"Analysis window", None))
         self.label_2.setText(QCoreApplication.translate("TemporalLinkStep", u"s", None))
-        self.label_3.setText(QCoreApplication.translate("TemporalLinkStep", u"Check the pairs of events reports to link (added in Events Report).", None))
+        self.label_3.setText(QCoreApplication.translate("TemporalLinkStep", u"Check the pairs of events reports to link (added in \"Events Report\").", None))
 #if QT_CONFIG(tooltip)
         self.apply_to_all_pushbutton.setToolTip(QCoreApplication.translate("TemporalLinkStep", u"Applies the pairs checked for this file to all the files, replacing their previous selections.", None))
 #endif // QT_CONFIG(tooltip)

@@ -52,7 +52,6 @@ class Ui_SpindleDetectorSelStep(object):
 
         self.subtitle_label = QLabel(self.content_widget)
         self.subtitle_label.setObjectName(u"subtitle_label")
-        self.subtitle_label.setTextFormat(Qt.TextFormat.RichText)
         self.subtitle_label.setWordWrap(True)
         self.subtitle_label.setProperty(u"variant", u"help")
 
@@ -365,7 +364,6 @@ class Ui_SpindleDetectorSelStep(object):
         self.label_11 = QLabel(self.detection_card)
         self.label_11.setObjectName(u"label_11")
         self.label_11.setFont(font2)
-        self.label_11.setTextFormat(Qt.TextFormat.RichText)
         self.label_11.setWordWrap(True)
         self.label_11.setProperty(u"variant", u"help")
 
@@ -410,7 +408,7 @@ class Ui_SpindleDetectorSelStep(object):
     def retranslateUi(self, SpindleDetectorSelStep):
         SpindleDetectorSelStep.setWindowTitle("")
         self.title_label.setText(QCoreApplication.translate("SpindleDetectorSelStep", u"Detection Settings", None))
-        self.subtitle_label.setText(QCoreApplication.translate("SpindleDetectorSelStep", u"Define which spindles are kept and in which sleep stages and cycles they are detected. The threshold of the detector is in <b>Martin</b>, under Algorithm Settings in the left panel.", None))
+        self.subtitle_label.setText(QCoreApplication.translate("SpindleDetectorSelStep", u"Define which spindles are kept and in which sleep stages and cycles they are detected. The threshold of the detector is in \"Martin\", under \"Algorithm Settings\" in the left panel.", None))
         self.label_5.setText(QCoreApplication.translate("SpindleDetectorSelStep", u"Spindle duration", None))
         self.label_3.setText(QCoreApplication.translate("SpindleDetectorSelStep", u"Minimum duration", None))
         self.min_length_lineEdit.setText(QCoreApplication.translate("SpindleDetectorSelStep", u"0.3", None))
@@ -435,6 +433,6 @@ class Ui_SpindleDetectorSelStep(object):
         self.radioButton_detect_spindle.setText(QCoreApplication.translate("SpindleDetectorSelStep", u"Detect spindles", None))
         self.radioButto_analyse_spindle.setText(QCoreApplication.translate("SpindleDetectorSelStep", u"Analyze the spindles already detected", None))
         self.analyse_help_label.setText(QCoreApplication.translate("SpindleDetectorSelStep", u"Does not detect spindles: analyzes the spindles previously detected and saved in the accessory file.", None))
-        self.label_11.setText(QCoreApplication.translate("SpindleDetectorSelStep", u"The event group and name defined in <b>Martin</b> (left panel) are used.", None))
+        self.label_11.setText(QCoreApplication.translate("SpindleDetectorSelStep", u"The event group and name defined in \"Martin\" (left panel) are used.", None))
     # retranslateUi
 

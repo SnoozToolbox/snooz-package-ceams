@@ -315,7 +315,7 @@ class Ui_MartinSettings(object):
         self.threshold_lineEdit.setText(QCoreApplication.translate("MartinSettings", u"95", None))
         self.threshold_help_label.setText(QCoreApplication.translate("MartinSettings", u"A spindle is detected when the RMS exceeds this percentile of the RMS values (default: 95).", None))
         self.threshold_cycle_checkBox.setText(QCoreApplication.translate("MartinSettings", u"Compute the threshold for each sleep cycle", None))
-        self.threshold_cycle_help_label.setText(QCoreApplication.translate("MartinSettings", u"Turns on the detection in the sleep cycles only (Detection Settings). Otherwise, one threshold per channel for the whole recording.", None))
+        self.threshold_cycle_help_label.setText(QCoreApplication.translate("MartinSettings", u"Turns on the detection in the sleep cycles only (\"Detection Settings\"). Otherwise, one threshold per channel for the whole recording.", None))
 #if QT_CONFIG(tooltip)
         self.precise_checkBox.setToolTip(QCoreApplication.translate("MartinSettings", u"The RMS is computed on a sliding window (at each sample) before the onset and after the end of each event to refine its onset and duration. A detected event keeps its length or becomes longer, never shorter.", None))
 #endif // QT_CONFIG(tooltip)

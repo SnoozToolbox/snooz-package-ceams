@@ -85,10 +85,7 @@
           <item>
            <widget class="QLabel" name="subtitle_label">
             <property name="text">
-             <string>Define which spindles are kept and in which sleep stages and cycles they are detected. The threshold of the detector is in &lt;b&gt;Martin&lt;/b&gt;, under Algorithm Settings in the left panel.</string>
-            </property>
-            <property name="textFormat">
-             <enum>Qt::TextFormat::RichText</enum>
+             <string>Define which spindles are kept and in which sleep stages and cycles they are detected. The threshold of the detector is in "Martin", under "Algorithm Settings" in the left panel.</string>
             </property>
             <property name="wordWrap">
              <bool>true</bool>
@@ -661,10 +658,7 @@
                 </font>
                </property>
                <property name="text">
-                <string>The event group and name defined in &lt;b&gt;Martin&lt;/b&gt; (left panel) are used.</string>
-               </property>
-               <property name="textFormat">
-                <enum>Qt::TextFormat::RichText</enum>
+                <string>The event group and name defined in "Martin" (left panel) are used.</string>
                </property>
                <property name="wordWrap">
                 <bool>true</bool>

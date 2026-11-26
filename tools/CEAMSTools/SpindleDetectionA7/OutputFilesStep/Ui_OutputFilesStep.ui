@@ -217,10 +217,7 @@
                 </font>
                </property>
                <property name="text">
-                <string>The spindle details are appended at the end of the cohort report if it exists. The number of hours and cycles reported is set in &lt;b&gt;Hours and Cycles&lt;/b&gt;, under Optional settings in the left panel.</string>
-               </property>
-               <property name="textFormat">
-                <enum>Qt::TextFormat::RichText</enum>
+                <string>The spindle details are appended at the end of the cohort report if it exists. The number of hours and cycles reported is set in "Hours and Cycles", under "Optional settings" in the left panel.</string>
                </property>
                <property name="wordWrap">
                 <bool>true</bool>

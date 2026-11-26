@@ -128,7 +128,6 @@ class Ui_OutputFileStep(object):
         font2 = QFont()
         font2.setPointSize(10)
         self.cohort_help_label.setFont(font2)
-        self.cohort_help_label.setTextFormat(Qt.TextFormat.RichText)
         self.cohort_help_label.setWordWrap(True)
         self.cohort_help_label.setProperty(u"variant", u"help")
 
@@ -206,7 +205,7 @@ class Ui_OutputFileStep(object):
         self.label_3.setText(QCoreApplication.translate("OutputFileStep", u"Filename", None))
         self.lineEdit_CohortFilename.setPlaceholderText(QCoreApplication.translate("OutputFileStep", u"Select a .tsv file", None))
         self.pushButton_CohortFilename.setText(QCoreApplication.translate("OutputFileStep", u"Browse", None))
-        self.cohort_help_label.setText(QCoreApplication.translate("OutputFileStep", u"The characteristics of each REM are saved in a folder named \"rems_characteristics\", next to this file. The report needs scored sleep stages (<b>Detector Step</b>); the number of hours and cycles reported is set in <b>Hours and Cycles</b>, in the left panel.", None))
+        self.cohort_help_label.setText(QCoreApplication.translate("OutputFileStep", u"The characteristics of each REM are saved in a folder named \"rems_characteristics\", next to this file. The report needs scored sleep stages (\"Detector Step\"); the number of hours and cycles reported is set in \"Hours and Cycles\", in the left panel.", None))
         self.label_4.setText(QCoreApplication.translate("OutputFileStep", u"About the REM characteristics", None))
         self.label_6.setText(QCoreApplication.translate("OutputFileStep", u"<b>For each REM</b><br/>\u2022 events file: the REM events in the Snooz annotation format<br/>\u2022 summary file: start, peak and end times, duration, absolute amplitude of LOC and ROC at the peak of the REM (\u00b5V), absolute rise and fall slopes of LOC and ROC (\u00b5V/s)", None))
         self.label_2.setText(QCoreApplication.translate("OutputFileStep", u"<b>For the cohort</b><br/>\u2022 REM count<br/>\u2022 duration of the REMs (s)<br/>\u2022 amplitude of the REMs: difference between the peak and the trough of LOC \u2212 ROC<br/>\u2022 density of the REMs per sleep cycle and per hour<br/>\u2022 variability of the densities<br/>\u2022 percentage of phasic and tonic REM sleep<br/>\u2022 peak-to-peak energy (\u00b5V\u00b2)<br/>\u2022 peak-to-peak activity index<br/>The averages are reported:<br/>&nbsp;&nbsp;\u2013 total (all night)<br/>&nbsp;&nbsp;\u2013 per sleep cycle<br/>&nbsp;&nbsp;\u2013 per clock hour<br/>&nbsp;&nbsp;\u2013 per hour spent in each stage", None))

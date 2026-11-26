@@ -121,7 +121,7 @@
            <item>
             <widget class="QLabel" name="common_settings_info_label">
              <property name="text">
-              <string>&lt;b&gt;Before you start&lt;/b&gt;&lt;br/&gt;Define the sleep cycle configuration to use for the analysis: &lt;b&gt;Common settings › Sleep Cycles&lt;/b&gt;, in the left panel.</string>
+              <string>&lt;b&gt;Before you start&lt;/b&gt;&lt;br/&gt;Define the sleep cycle configuration to use for the analysis: "Common settings" › "Sleep Cycles", in the left panel.</string>
              </property>
              <property name="textFormat">
               <enum>Qt::TextFormat::RichText</enum>
@@ -922,7 +922,7 @@
              <item>
               <widget class="QLabel" name="methods_label">
                <property name="text">
-                <string>&lt;b&gt;Standard spectrum (Welch [1]):&lt;/b&gt; the signal is divided into short windows, a Fast Fourier Transform (FFT) is applied to each window and the periodograms are averaged. The frequency bin resolution is 1 / window length (s): 0.2 Hz with 5 s windows. The power of a few bins is averaged to estimate the power in a frequency band, up to half the sampling rate.&lt;br/&gt;&lt;br/&gt;&lt;b&gt;Periodic and aperiodic decomposition:&lt;/b&gt; IRASA [2] and FOOOF [3] separate the oscillatory (periodic) and the fractal (aperiodic) components of the spectrum. They are described in the documentation of the tool (Read more! below).</string>
+                <string>&lt;b&gt;Standard spectrum (Welch [1]):&lt;/b&gt; the signal is divided into short windows, a Fast Fourier Transform (FFT) is applied to each window and the periodograms are averaged. The frequency bin resolution is 1 / window length (s): 0.2 Hz with 5 s windows. The power of a few bins is averaged to estimate the power in a frequency band, up to half the sampling rate.&lt;br/&gt;&lt;br/&gt;&lt;b&gt;Periodic and aperiodic decomposition:&lt;/b&gt; IRASA [2] and FOOOF [3] separate the oscillatory (periodic) and the fractal (aperiodic) components of the spectrum. They are described in the documentation of the tool ("Read more!" below).</string>
                </property>
                <property name="textFormat">
                 <enum>Qt::TextFormat::RichText</enum>

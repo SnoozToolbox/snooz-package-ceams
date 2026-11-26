@@ -326,7 +326,7 @@ class Ui_SelectionStep(object):
         self.in_cycle_checkBox.setToolTip(QCoreApplication.translate("SelectionStep", u"Check to perform the power spectral analysis only on the signal included in the sleep cycles i.e. from sleep onset to the last asleep stage.", None))
 #endif // QT_CONFIG(tooltip)
         self.in_cycle_checkBox.setText(QCoreApplication.translate("SelectionStep", u"Analyse power in sleep cycles only", None))
-        self.textEdit.setText(QCoreApplication.translate("SelectionStep", u"From sleep onset to the last asleep stage. Useful to analyse complete sleep cycles only (incomplete cycles are excluded in Common settings \u203a Sleep Cycles).", None))
+        self.textEdit.setText(QCoreApplication.translate("SelectionStep", u"From sleep onset to the last asleep stage. Useful to analyse complete sleep cycles only (incomplete cycles are excluded in \"Common settings\" \u203a \"Sleep Cycles\").", None))
 #if QT_CONFIG(tooltip)
         self.excl_nremp_checkBox.setToolTip(QCoreApplication.translate("SelectionStep", u"Check to exclude NREM periods from the power spectral analysis.", None))
 #endif // QT_CONFIG(tooltip)

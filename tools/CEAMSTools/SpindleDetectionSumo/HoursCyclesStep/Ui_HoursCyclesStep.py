@@ -155,7 +155,7 @@ class Ui_HoursCyclesStep(object):
     def retranslateUi(self, HoursCyclesStep):
         HoursCyclesStep.setWindowTitle("")
         self.title_label.setText(QCoreApplication.translate("HoursCyclesStep", u"Hours and Cycles", None))
-        self.subtitle_label.setText(QCoreApplication.translate("HoursCyclesStep", u"The maximum number of sleep cycles and hours to analyze in the reports (step Output Files).", None))
+        self.subtitle_label.setText(QCoreApplication.translate("HoursCyclesStep", u"The maximum number of sleep cycles and hours to analyze in the reports (step \"Output Files\").", None))
         self.label_2.setText(QCoreApplication.translate("HoursCyclesStep", u"Maximum number of sleep cycles", None))
         self.label.setText(QCoreApplication.translate("HoursCyclesStep", u"Maximum number of hours", None))
         self.limits_help_label.setText(QCoreApplication.translate("HoursCyclesStep", u"The cycles and the hours after these numbers are not reported.", None))

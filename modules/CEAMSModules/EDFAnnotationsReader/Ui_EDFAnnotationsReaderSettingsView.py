@@ -160,7 +160,7 @@ class Ui_EDFAnnotationsReaderSettingsView(object):
     def retranslateUi(self, EDFAnnotationsReaderSettingsView):
         EDFAnnotationsReaderSettingsView.setWindowTitle("")
 #if QT_CONFIG(tooltip)
-        self.annot_files_title_label.setToolTip(QCoreApplication.translate("EDFAnnotationsReaderSettingsView", u"The EDF+ files with the annotations to import (EDF Annotations signal).", None))
+        self.annot_files_title_label.setToolTip(QCoreApplication.translate("EDFAnnotationsReaderSettingsView", u"The EDF+ files with the annotations to import (\"EDF Annotations\" signal).", None))
 #endif // QT_CONFIG(tooltip)
         self.annot_files_title_label.setText(QCoreApplication.translate("EDFAnnotationsReaderSettingsView", u"Annotation files", None))
         self.pushButton_choose.setText(QCoreApplication.translate("EDFAnnotationsReaderSettingsView", u"Choose files", None))

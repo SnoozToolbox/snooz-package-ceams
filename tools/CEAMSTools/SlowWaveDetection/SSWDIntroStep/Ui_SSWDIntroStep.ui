@@ -173,7 +173,7 @@
            <item>
             <widget class="QLabel" name="common_settings_info_label">
              <property name="text">
-              <string>&lt;b&gt;Before you start&lt;/b&gt;&lt;br/&gt;Define the sleep cycle configuration to use for the analysis: &lt;b&gt;Common settings › Sleep Cycles&lt;/b&gt;, in the left panel.</string>
+              <string>&lt;b&gt;Before you start&lt;/b&gt;&lt;br/&gt;Define the sleep cycle configuration to use for the analysis: "Common settings" › "Sleep Cycles", in the left panel.</string>
              </property>
              <property name="textFormat">
               <enum>Qt::TextFormat::RichText</enum>
@@ -513,7 +513,7 @@
                <item row="6" column="3">
                 <widget class="QLabel" name="step_4_label">
                  <property name="text">
-                  <string>The slow wave events are added to the accessory file (.tsv, .sts or .ent). Optionally, export the characteristics of the slow waves: one file per recording and a detailed report for the cohort. The tool Classify Slow Waves needs these outputs.</string>
+                  <string>The slow wave events are added to the accessory file (.tsv, .sts or .ent). Optionally, export the characteristics of the slow waves: one file per recording and a detailed report for the cohort. The tool "Classify Slow Waves" needs these outputs.</string>
                  </property>
                  <property name="wordWrap">
                   <bool>true</bool>
@@ -761,7 +761,7 @@
              <item>
               <widget class="QLabel" name="methods_label">
                <property name="text">
-                <string>&lt;b&gt;Slow wave detector [1]:&lt;/b&gt; inspired by Bouchard et al. (2021). The EEG is band-pass filtered (0.16–4 Hz by default) and each wave from a zero crossing (positive to negative) to the next one is a slow wave when its peak-to-peak amplitude, its negative amplitude and the durations of its negative and positive parts meet the criteria (step Detection Criteria). The characteristics of each slow wave include its transition frequency, from the negative to the positive peak, used to classify the slow waves afterwards.</string>
+                <string>&lt;b&gt;Slow wave detector [1]:&lt;/b&gt; inspired by Bouchard et al. (2021). The EEG is band-pass filtered (0.16–4 Hz by default) and each wave from a zero crossing (positive to negative) to the next one is a slow wave when its peak-to-peak amplitude, its negative amplitude and the durations of its negative and positive parts meet the criteria (step "Detection Criteria"). The characteristics of each slow wave include its transition frequency, from the negative to the positive peak, used to classify the slow waves afterwards.</string>
                </property>
                <property name="textFormat">
                 <enum>Qt::TextFormat::RichText</enum>

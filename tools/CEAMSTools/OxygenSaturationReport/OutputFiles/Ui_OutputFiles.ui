@@ -178,7 +178,7 @@
               </font>
              </property>
              <property name="text">
-              <string>A .tsv file: one line per recording. The number of sleep cycles reported is set in &lt;b&gt;Hours and Cycles&lt;/b&gt;, under Optional settings in the left panel.</string>
+              <string>A .tsv file: one line per recording. The number of sleep cycles reported is set in "Hours and Cycles", under "Optional settings" in the left panel.</string>
              </property>
              <property name="textFormat">
               <enum>Qt::TextFormat::RichText</enum>

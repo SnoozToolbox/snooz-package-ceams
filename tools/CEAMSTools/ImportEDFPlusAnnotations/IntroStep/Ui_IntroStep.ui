@@ -85,7 +85,7 @@
           <item>
            <widget class="QLabel" name="subtitle_label">
             <property name="text">
-             <string>Imports the annotations of EDF+ files (their EDF Annotations signal) into the Snooz accessory file (.tsv) of your PSG files.</string>
+             <string>Imports the annotations of EDF+ files (their "EDF Annotations" signal) into the Snooz accessory file (.tsv) of your PSG files.</string>
             </property>
             <property name="wordWrap">
              <bool>true</bool>
@@ -296,7 +296,7 @@
                <item row="0" column="1">
                 <widget class="QLabel" name="file_1_label">
                  <property name="text">
-                  <string>EDF+ files with an EDF Annotations signal.</string>
+                  <string>EDF+ files with an "EDF Annotations" signal.</string>
                  </property>
                  <property name="wordWrap">
                   <bool>true</bool>

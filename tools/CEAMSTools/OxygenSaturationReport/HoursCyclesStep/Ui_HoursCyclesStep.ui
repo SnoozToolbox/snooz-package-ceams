@@ -85,7 +85,7 @@
           <item>
            <widget class="QLabel" name="subtitle_label">
             <property name="text">
-             <string>The maximum number of sleep cycles to analyze in the reports (step Output Files).</string>
+             <string>The maximum number of sleep cycles to analyze in the reports (step "Output Files").</string>
             </property>
             <property name="wordWrap">
              <bool>true</bool>

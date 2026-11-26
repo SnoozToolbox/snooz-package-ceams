@@ -432,7 +432,6 @@ class Ui_SpindleDetectorSelStep(object):
         self.events_note_label = QLabel(self.detection_card)
         self.events_note_label.setObjectName(u"events_note_label")
         self.events_note_label.setFont(font2)
-        self.events_note_label.setTextFormat(Qt.TextFormat.RichText)
         self.events_note_label.setWordWrap(True)
         self.events_note_label.setProperty(u"variant", u"help")
 
@@ -513,6 +512,6 @@ class Ui_SpindleDetectorSelStep(object):
         self.radioButton_detect_spindle.setText(QCoreApplication.translate("SpindleDetectorSelStep", u"Detect spindles", None))
         self.radioButto_analyse_spindle.setText(QCoreApplication.translate("SpindleDetectorSelStep", u"Analyze the spindles already detected", None))
         self.analyse_help_label.setText(QCoreApplication.translate("SpindleDetectorSelStep", u"Does not detect spindles: analyzes the spindles previously detected and saved in the accessory file.", None))
-        self.events_note_label.setText(QCoreApplication.translate("SpindleDetectorSelStep", u"The group and name of <b>Spindle events</b> are used.", None))
+        self.events_note_label.setText(QCoreApplication.translate("SpindleDetectorSelStep", u"The group and name of \"Spindle events\" are used.", None))
     # retranslateUi
 

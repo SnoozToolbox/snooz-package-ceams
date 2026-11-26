@@ -692,7 +692,7 @@
           <item>
            <widget class="QLabel" name="about_resolution_label">
             <property name="text">
-             <string>The frequency bin resolution is 1 / window length (s): 0.2 Hz with 5 s windows, 0.25 Hz with 4 s windows. The width of the mini bands must be a multiple of it: 0.2 Hz or 1 Hz with 5 s windows; 0.25 Hz, 0.5 Hz or 1 Hz with 4 s windows. IRASA and FOOOF are described in the documentation of the tool: Read more! below.</string>
+             <string>The frequency bin resolution is 1 / window length (s): 0.2 Hz with 5 s windows, 0.25 Hz with 4 s windows. The width of the mini bands must be a multiple of it: 0.2 Hz or 1 Hz with 5 s windows; 0.25 Hz, 0.5 Hz or 1 Hz with 4 s windows. IRASA and FOOOF are described in the documentation of the tool: "Read more!" below.</string>
             </property>
             <property name="wordWrap">
              <bool>true</bool>

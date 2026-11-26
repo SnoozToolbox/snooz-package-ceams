@@ -179,7 +179,7 @@
            <item>
             <widget class="QLabel" name="common_settings_info_label">
              <property name="text">
-              <string>&lt;b&gt;Before you start&lt;/b&gt;&lt;br/&gt;Define the sleep cycle configuration to use for the analysis: &lt;b&gt;Common settings › Sleep Cycles&lt;/b&gt;, in the left panel.</string>
+              <string>&lt;b&gt;Before you start&lt;/b&gt;&lt;br/&gt;Define the sleep cycle configuration to use for the analysis: "Common settings" › "Sleep Cycles", in the left panel.</string>
              </property>
              <property name="textFormat">
               <enum>Qt::TextFormat::RichText</enum>
@@ -767,7 +767,7 @@
              <item>
               <widget class="QLabel" name="methods_label">
                <property name="text">
-                <string>&lt;b&gt;Spindle:&lt;/b&gt; "a train of distinct waves with frequency 11–16 Hz (most commonly 12–14 Hz) with a duration ≥0.5 s, usually maximal in amplitude using central derivations" [1].&lt;br/&gt;&lt;br/&gt;&lt;b&gt;A7 algorithm [2]:&lt;/b&gt; detects spindles on specific sleep stages, with the algorithms from Lacourse et al. (2019). Over sliding windows, it computes four features of the EEG in the sigma band and detects a spindle when they exceed their thresholds. The features and their thresholds are in &lt;b&gt;A7 Settings&lt;/b&gt;, under Algorithm Settings in the left panel.</string>
+                <string>&lt;b&gt;Spindle:&lt;/b&gt; "a train of distinct waves with frequency 11–16 Hz (most commonly 12–14 Hz) with a duration ≥0.5 s, usually maximal in amplitude using central derivations" [1].&lt;br/&gt;&lt;br/&gt;&lt;b&gt;A7 algorithm [2]:&lt;/b&gt; detects spindles on specific sleep stages, with the algorithms from Lacourse et al. (2019). Over sliding windows, it computes four features of the EEG in the sigma band and detects a spindle when they exceed their thresholds. The features and their thresholds are in "A7 Settings", under "Algorithm Settings" in the left panel.</string>
                </property>
                <property name="textFormat">
                 <enum>Qt::TextFormat::RichText</enum>

@@ -422,7 +422,7 @@ class Ui_IntroStep(object):
         IntroStep.setWindowTitle("")
         self.title_label.setText(QCoreApplication.translate("IntroStep", u"Report Oxygen Saturation", None))
         self.subtitle_label.setText(QCoreApplication.translate("IntroStep", u"Analyzes the oxygen saturation of your polysomnography (PSG) files, detects the oxygen desaturations and exports a report for the cohort.", None))
-        self.common_settings_info_label.setText(QCoreApplication.translate("IntroStep", u"<b>Before you start</b><br/>The PSG files must be scored: the oxygen saturation is analyzed during the sleep period. Define the sleep cycle configuration to use for the analysis: <b>Common settings \u203a Sleep Cycles</b>, in the left panel.", None))
+        self.common_settings_info_label.setText(QCoreApplication.translate("IntroStep", u"<b>Before you start</b><br/>The PSG files must be scored: the oxygen saturation is analyzed during the sleep period. Define the sleep cycle configuration to use for the analysis: \"Common settings\" \u203a \"Sleep Cycles\", in the left panel.", None))
         self.steps_title_label.setText(QCoreApplication.translate("IntroStep", u"What you will do", None))
         self.step_1_number_label.setText(QCoreApplication.translate("IntroStep", u"1", None))
         self.step_1_name_label.setText(QCoreApplication.translate("IntroStep", u"Input Files", None))

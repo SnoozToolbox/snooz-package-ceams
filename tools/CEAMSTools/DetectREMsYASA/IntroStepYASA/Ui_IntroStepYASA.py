@@ -259,7 +259,6 @@ class Ui_IntroStepYASA(object):
         self.stages_info_card_layout.setContentsMargins(10, 10, 10, 10)
         self.stages_info_label = QLabel(self.stages_info_card)
         self.stages_info_label.setObjectName(u"stages_info_label")
-        self.stages_info_label.setTextFormat(Qt.TextFormat.RichText)
         self.stages_info_label.setWordWrap(True)
         self.stages_info_label.setProperty(u"variant", u"help")
 
@@ -268,7 +267,6 @@ class Ui_IntroStepYASA(object):
         self.stages_suggestion_label = QLabel(self.stages_info_card)
         self.stages_suggestion_label.setObjectName(u"stages_suggestion_label")
         self.stages_suggestion_label.setFont(font2)
-        self.stages_suggestion_label.setTextFormat(Qt.TextFormat.RichText)
         self.stages_suggestion_label.setWordWrap(True)
         self.stages_suggestion_label.setProperty(u"variant", u"help")
 
@@ -463,7 +461,7 @@ class Ui_IntroStepYASA(object):
         IntroStepYASA.setWindowTitle("")
         self.title_label.setText(QCoreApplication.translate("IntroStepYASA", u"Detect REM events with YASA", None))
         self.subtitle_label.setText(QCoreApplication.translate("IntroStepYASA", u"Identifies the rapid eye movements (REMs) of your polysomnography (PSG) files with the REM detection of YASA (Yet Another Spindle Algorithm) [1], and classifies the REM sleep into phasic and tonic mini-epochs.", None))
-        self.before_start_info_label.setText(QCoreApplication.translate("IntroStepYASA", u"<b>Before you start</b><br/>Define the sleep cycle configuration to use for the report: <b>Sleep Cycles</b>, in the left panel. In Input Files, select <b>2 EOG channels</b> per recording.", None))
+        self.before_start_info_label.setText(QCoreApplication.translate("IntroStepYASA", u"<b>Before you start</b><br/>Define the sleep cycle configuration to use for the report: \"Sleep Cycles\", in the left panel. In \"Input Files\", select <b>2 EOG channels</b> per recording.", None))
         self.steps_title_label.setText(QCoreApplication.translate("IntroStepYASA", u"What you will do", None))
         self.step_1_number_label.setText(QCoreApplication.translate("IntroStepYASA", u"1", None))
         self.step_1_name_label.setText(QCoreApplication.translate("IntroStepYASA", u"Input Files", None))
@@ -478,8 +476,8 @@ class Ui_IntroStepYASA(object):
         self.step_4_name_label.setText(QCoreApplication.translate("IntroStepYASA", u"Output File", None))
         self.step_4_label.setText(QCoreApplication.translate("IntroStepYASA", u"The REM events and the mini-epochs are added to the accessory file (.tsv, .sts or .ent). Choose the file of the cohort report: the characteristics of each REM are saved next to it.", None))
         self.stages_title_label.setText(QCoreApplication.translate("IntroStepYASA", u"Sleep stages", None))
-        self.stages_info_label.setText(QCoreApplication.translate("IntroStepYASA", u"Annotation files are not required. If provided, they must include the sleep stages: REMs are then detected in the R epochs only and the REM report is generated (<b>Scored</b>, in Detector Step). Without sleep stages, REMs are detected in any sleep stage, with the detection criteria only.", None))
-        self.stages_suggestion_label.setText(QCoreApplication.translate("IntroStepYASA", u"Without annotation files, run <b>Score Sleep Stages with YASA</b> first: the REM detection is more reliable.", None))
+        self.stages_info_label.setText(QCoreApplication.translate("IntroStepYASA", u"Annotation files are not required. If provided, they must include the sleep stages: REMs are then detected in the R epochs only and the REM report is generated (\"Scored\", in \"Detector Step\"). Without sleep stages, REMs are detected in any sleep stage, with the detection criteria only.", None))
+        self.stages_suggestion_label.setText(QCoreApplication.translate("IntroStepYASA", u"Without annotation files, run \"Score Sleep Stages with YASA\" first: the REM detection is more reliable.", None))
         self.files_title_label.setText(QCoreApplication.translate("IntroStepYASA", u"Accepted files", None))
         self.file_1_name_label.setText(QCoreApplication.translate("IntroStepYASA", u"EDF", None))
         self.file_1_label.setText(QCoreApplication.translate("IntroStepYASA", u"The .edf and .tsv files have the same filename and are in the same directory.", None))
@@ -490,7 +488,7 @@ class Ui_IntroStepYASA(object):
         self.methods_show_button.setText(QCoreApplication.translate("IntroStepYASA", u"\u203a Methods and references", None))
         self.methods_hide_button.setText(QCoreApplication.translate("IntroStepYASA", u"\u2304 Methods and references", None))
         self.methods_note_label.setText(QCoreApplication.translate("IntroStepYASA", u"The details of each setting are shown in its own step.", None))
-        self.methods_label.setText(QCoreApplication.translate("IntroStepYASA", u"<b>REM detection of YASA [1]:</b> based on the methods of Yetton et al. (2016) [2] and Agarwal et al. (2005) [3]. The LOC and ROC signals are filtered in the REM frequency band, and the REMs are detected by an amplitude threshold on the negative product of the two signals. The details are in <b>Algorithm's Details</b>, in the left panel.<br/><br/><b>Phasic and tonic mini-epochs:</b> the REM sleep epochs are divided into mini-epochs. A mini-epoch is phasic when it holds at least a third of a detected REM, tonic otherwise.<br/><br/>Documentation of YASA: <a href=\"https://raphaelvallat.com/yasa/\">raphaelvallat.com/yasa</a>.", None))
+        self.methods_label.setText(QCoreApplication.translate("IntroStepYASA", u"<b>REM detection of YASA [1]:</b> based on the methods of Yetton et al. (2016) [2] and Agarwal et al. (2005) [3]. The LOC and ROC signals are filtered in the REM frequency band, and the REMs are detected by an amplitude threshold on the negative product of the two signals. The details are in \"Algorithm's Details\", in the left panel.<br/><br/><b>Phasic and tonic mini-epochs:</b> the REM sleep epochs are divided into mini-epochs. A mini-epoch is phasic when it holds at least a third of a detected REM, tonic otherwise.<br/><br/>Documentation of YASA: <a href=\"https://raphaelvallat.com/yasa/\">raphaelvallat.com/yasa</a>.", None))
         self.references_label.setText(QCoreApplication.translate("IntroStepYASA", u"[1] Vallat, R., &amp; Walker, M. P. (2021). An open-source, high-performance tool for automated sleep staging. <i>eLife</i>, <i>10</i>, Article e70092. <a href=\"https://doi.org/10.7554/eLife.70092\">https://doi.org/10.7554/eLife.70092</a><br/>[2] Yetton, B. D., Niknazar, M., Duggan, K. A., McDevitt, E. A., Whitehurst, L. N., Sattari, N., &amp; Mednick, S. C. (2016). Automatic detection of rapid eye movements (REMs): A machine learning approach. <i>Journal of Neuroscience Methods</i>, <i>259</i>, 72\u201382. <a href=\"https://doi.org/10.1016/j.jneumeth.2015.11.015\">https://doi.org/10.1016/j.jneumeth.2015.11.015</a><br/>[3] Agarwal, R., Takeuchi, T., Laroche, S., &amp; Gotman, J. (2005). Detection of rapid-eye movements in sleep studies. <i>IEEE Transactions on Biomedical Engineering</i>, <i>52</i>(8), 1390\u20131396. <a href=\"https://doi.org/10.1109/TBME.2005.851512\">https://doi.org/10.1109/TBME.2005.851512</a>", None))
     # retranslateUi
 

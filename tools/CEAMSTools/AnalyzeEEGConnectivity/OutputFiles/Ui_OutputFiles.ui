@@ -348,7 +348,7 @@
              <item row="4" column="1">
               <widget class="QLabel" name="output_3_label">
                <property name="text">
-                <string>&lt;i&gt;&amp;lt;Filename&amp;gt;_&amp;lt;measure&amp;gt;_contopomap.png&lt;/i&gt;&lt;br/&gt;The connections between the channels on a head-shaped layout (see About the head connectivity plot).&lt;br/&gt;&lt;b&gt;Saved:&lt;/b&gt; only when at least 4 EEG channels are found in a standard montage.</string>
+                <string>&lt;i&gt;&amp;lt;Filename&amp;gt;_&amp;lt;measure&amp;gt;_contopomap.png&lt;/i&gt;&lt;br/&gt;The connections between the channels on a head-shaped layout (see "About the head connectivity plot").&lt;br/&gt;&lt;b&gt;Saved:&lt;/b&gt; only when at least 4 EEG channels are found in a standard montage.</string>
                </property>
                <property name="textFormat">
                 <enum>Qt::TextFormat::RichText</enum>

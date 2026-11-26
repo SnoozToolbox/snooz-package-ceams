@@ -222,10 +222,7 @@
               </font>
              </property>
              <property name="text">
-              <string>The characteristics of each REM are saved in a folder named "rems_characteristics", next to this file. The report needs scored sleep stages (&lt;b&gt;Detector Step&lt;/b&gt;); the number of hours and cycles reported is set in &lt;b&gt;Hours and Cycles&lt;/b&gt;, in the left panel.</string>
-             </property>
-             <property name="textFormat">
-              <enum>Qt::TextFormat::RichText</enum>
+              <string>The characteristics of each REM are saved in a folder named "rems_characteristics", next to this file. The report needs scored sleep stages ("Detector Step"); the number of hours and cycles reported is set in "Hours and Cycles", in the left panel.</string>
              </property>
              <property name="wordWrap">
               <bool>true</bool>

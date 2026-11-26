@@ -173,7 +173,7 @@
            <item>
             <widget class="QLabel" name="common_settings_info_label">
              <property name="text">
-              <string>&lt;b&gt;Before you start&lt;/b&gt;&lt;br/&gt;Define the sleep cycle configuration to use for the analysis: &lt;b&gt;Common settings › Sleep Cycles&lt;/b&gt;, in the left panel.</string>
+              <string>&lt;b&gt;Before you start&lt;/b&gt;&lt;br/&gt;Define the sleep cycle configuration to use for the analysis: "Common settings" › "Sleep Cycles", in the left panel.</string>
              </property>
              <property name="textFormat">
               <enum>Qt::TextFormat::RichText</enum>
@@ -371,7 +371,7 @@
                <item row="2" column="3">
                 <widget class="QLabel" name="step_2_label">
                  <property name="text">
-                  <string>Select the events that disable the spindle detection, such as artefacts already detected and saved in the accessory file. For a better detection, detect the artefacts first (tool Detect EEG Artifacts).</string>
+                  <string>Select the events that disable the spindle detection, such as artefacts already detected and saved in the accessory file. For a better detection, detect the artefacts first (tool "Detect EEG Artifacts").</string>
                  </property>
                  <property name="wordWrap">
                   <bool>true</bool>

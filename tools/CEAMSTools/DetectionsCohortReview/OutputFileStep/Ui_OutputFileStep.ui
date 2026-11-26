@@ -448,7 +448,7 @@
            <item>
             <widget class="QLabel" name="overwrite_warning_label">
              <property name="text">
-              <string>&lt;b&gt;The files are overwritten&lt;/b&gt;&lt;br/&gt;The output files are replaced if they exist. To put several cohort reports together, add them all in step &lt;b&gt;1 - Input Files&lt;/b&gt;.</string>
+              <string>&lt;b&gt;The files are overwritten&lt;/b&gt;&lt;br/&gt;The output files are replaced if they exist. To put several cohort reports together, add them all in step 1, "Input Files".</string>
              </property>
              <property name="textFormat">
               <enum>Qt::TextFormat::RichText</enum>
@@ -545,10 +545,7 @@
           <item>
            <widget class="QLabel" name="about_averages_label">
             <property name="text">
-             <string>The number of hours and cycles and their starting point are those of the detection tool (its &lt;b&gt;Hours and Cycles&lt;/b&gt; settings). In the transposed report, the channel label is added to the variable name: total_spindle_count of the channel EEG C3 becomes total_spindle_count_EEG C3.</string>
-            </property>
-            <property name="textFormat">
-             <enum>Qt::TextFormat::RichText</enum>
+             <string>The number of hours and cycles and their starting point are those of the detection tool (its "Hours and Cycles" settings). In the transposed report, the channel label is added to the variable name: total_spindle_count of the channel EEG C3 becomes total_spindle_count_EEG C3.</string>
             </property>
             <property name="wordWrap">
              <bool>true</bool>

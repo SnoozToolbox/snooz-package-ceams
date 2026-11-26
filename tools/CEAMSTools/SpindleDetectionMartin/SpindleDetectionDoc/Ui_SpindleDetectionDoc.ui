@@ -179,7 +179,7 @@
            <item>
             <widget class="QLabel" name="common_settings_info_label">
              <property name="text">
-              <string>&lt;b&gt;Before you start&lt;/b&gt;&lt;br/&gt;Define the sleep cycle configuration to use for the analysis: &lt;b&gt;Common settings › Sleep Cycles&lt;/b&gt;, in the left panel.</string>
+              <string>&lt;b&gt;Before you start&lt;/b&gt;&lt;br/&gt;Define the sleep cycle configuration to use for the analysis: "Common settings" › "Sleep Cycles", in the left panel.</string>
              </property>
              <property name="textFormat">
               <enum>Qt::TextFormat::RichText</enum>
@@ -767,7 +767,7 @@
              <item>
               <widget class="QLabel" name="methods_label">
                <property name="text">
-                <string>&lt;b&gt;Spindle:&lt;/b&gt; "a train of distinct waves with frequency 11–16 Hz (most commonly 12–14 Hz) with a duration ≥0.5 s, usually maximal in amplitude using central derivations" [1].&lt;br/&gt;&lt;br/&gt;&lt;b&gt;Martin algorithm [2]:&lt;/b&gt; detects spindles on specific sleep stages, with the algorithm from Martin et al. (2013), also named a4. It band-pass filters the EEG in the sigma band, computes the root mean square (RMS) over sliding windows and detects a spindle when the RMS exceeds a threshold, a percentile of the RMS values. The threshold is in &lt;b&gt;Martin&lt;/b&gt;, under Algorithm Settings in the left panel.</string>
+                <string>&lt;b&gt;Spindle:&lt;/b&gt; "a train of distinct waves with frequency 11–16 Hz (most commonly 12–14 Hz) with a duration ≥0.5 s, usually maximal in amplitude using central derivations" [1].&lt;br/&gt;&lt;br/&gt;&lt;b&gt;Martin algorithm [2]:&lt;/b&gt; detects spindles on specific sleep stages, with the algorithm from Martin et al. (2013), also named a4. It band-pass filters the EEG in the sigma band, computes the root mean square (RMS) over sliding windows and detects a spindle when the RMS exceeds a threshold, a percentile of the RMS values. The threshold is in "Martin", under "Algorithm Settings" in the left panel.</string>
                </property>
                <property name="textFormat">
                 <enum>Qt::TextFormat::RichText</enum>

@@ -304,10 +304,7 @@
               </font>
              </property>
              <property name="text">
-              <string>The number of sleep cycles reported is set in &lt;b&gt;Hours and Cycles&lt;/b&gt;, under Optional settings in the left panel.</string>
-             </property>
-             <property name="textFormat">
-              <enum>Qt::TextFormat::RichText</enum>
+              <string>The number of sleep cycles reported is set in "Hours and Cycles", under "Optional settings" in the left panel.</string>
              </property>
              <property name="wordWrap">
               <bool>true</bool>
@@ -364,7 +361,7 @@
              <item>
               <widget class="QLabel" name="events_list_label">
                <property name="text">
-                <string>Added in Events Report: the events by sleep stage, sleep cycle, and thirds and halves of the night.</string>
+                <string>Added in "Events Report": the events by sleep stage, sleep cycle, and thirds and halves of the night.</string>
                </property>
                <property name="wordWrap">
                 <bool>true</bool>
@@ -426,7 +423,7 @@
              <item>
               <widget class="QLabel" name="links_list_label">
                <property name="text">
-                <string>Checked in Temporal Links: the links between the events of two reports.</string>
+                <string>Checked in "Temporal Links": the links between the events of two reports.</string>
                </property>
                <property name="wordWrap">
                 <bool>true</bool>
