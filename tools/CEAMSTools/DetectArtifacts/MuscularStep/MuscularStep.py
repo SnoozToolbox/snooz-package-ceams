@@ -9,13 +9,13 @@ See the file LICENCE for full license details.
 
 from qtpy import QtWidgets
 from qtpy import QtCore
-from qtpy.QtGui import QRegularExpressionValidator, QPixmap# To validate what the user enters in the interface
+from qtpy.QtGui import QRegularExpressionValidator# To validate what the user enters in the interface
 from qtpy.QtCore import QRegularExpression # To validate what the user enters in the interface
-import base64
 
 from CEAMSTools.DetectArtifacts.MuscularStep.Ui_MuscularStep import Ui_MuscularStep
 from CEAMSTools.DetectArtifacts.DetectorsStep.DetectorsStep import DetectorsStep
 from CEAMSTools.DetectArtifacts.SleepStageSelStep.SleepStageSelStep import SleepStageSelStep
+from CEAMSTools.DetectArtifacts.artifact_drawing import ArtifactDrawing
 from commons.BaseStepView import BaseStepView
 
 class MuscularStep( BaseStepView,  Ui_MuscularStep, QtWidgets.QWidget):
@@ -73,13 +73,8 @@ class MuscularStep( BaseStepView,  Ui_MuscularStep, QtWidgets.QWidget):
     # Called when the settingsView is opened by the user
     # The node asks to the publisher the settings
     def _load_embedded_image(self):
-        """Load the embedded base64 image data into picture_label."""
-        from .art_image_data import MUSCULAR_IMAGE_BASE64
-        
-        image_bytes = base64.b64decode(MUSCULAR_IMAGE_BASE64)
-        pixmap = QPixmap()
-        pixmap.loadFromData(image_bytes)
-        self.picture_label.setPixmap(pixmap)
+        """The illustration of the artifact (simulated EEG), drawn on picture_label."""
+        self._artifact_drawing = ArtifactDrawing(self.picture_label, "muscle")
 
     def load_settings(self):
         # Ask for the settings to the publisher to display on the SettingsView

@@ -3,7 +3,7 @@
 ################################################################################
 ## Form generated from reading UI file 'Ui_DetectorsStep.ui'
 ##
-## Created by: Qt User Interface Compiler version 6.8.2
+## Created by: Qt User Interface Compiler version 6.10.0
 ##
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
@@ -15,44 +15,75 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QFont, QFontDatabase, QGradient, QIcon,
     QImage, QKeySequence, QLinearGradient, QPainter,
     QPalette, QPixmap, QRadialGradient, QTransform)
-from PySide6.QtWidgets import (QAbstractScrollArea, QApplication, QButtonGroup, QCheckBox,
-    QFrame, QHBoxLayout, QLabel, QLineEdit,
-    QRadioButton, QSizePolicy, QSpacerItem, QTextEdit,
-    QVBoxLayout, QWidget)
+from PySide6.QtWidgets import (QApplication, QButtonGroup, QCheckBox, QFrame,
+    QGridLayout, QHBoxLayout, QLabel, QLineEdit,
+    QRadioButton, QSizePolicy, QSpacerItem, QVBoxLayout,
+    QWidget)
 import themes_rc
 
 class Ui_DetectorsStep(object):
     def setupUi(self, DetectorsStep):
         if not DetectorsStep.objectName():
             DetectorsStep.setObjectName(u"DetectorsStep")
-        DetectorsStep.resize(1065, 794)
-        self.verticalLayout_5 = QVBoxLayout(DetectorsStep)
-        self.verticalLayout_5.setObjectName(u"verticalLayout_5")
-        self.label_3 = QLabel(DetectorsStep)
-        self.label_3.setObjectName(u"label_3")
+        DetectorsStep.resize(900, 700)
+        self.verticalLayout = QVBoxLayout(DetectorsStep)
+        self.verticalLayout.setObjectName(u"verticalLayout")
+        self.verticalLayout.setContentsMargins(19, 12, 19, 12)
+        self.content_row = QHBoxLayout()
+        self.content_row.setObjectName(u"content_row")
+        self.content_row.setContentsMargins(0, 0, 0, 0)
+        self.content_widget = QWidget(DetectorsStep)
+        self.content_widget.setObjectName(u"content_widget")
+        self.content_widget.setMaximumSize(QSize(800, 16777215))
+        self.content_layout = QVBoxLayout(self.content_widget)
+        self.content_layout.setSpacing(16)
+        self.content_layout.setObjectName(u"content_layout")
+        self.content_layout.setContentsMargins(0, 0, 0, 0)
+        self.header_layout = QVBoxLayout()
+        self.header_layout.setSpacing(6)
+        self.header_layout.setObjectName(u"header_layout")
+        self.title_label = QLabel(self.content_widget)
+        self.title_label.setObjectName(u"title_label")
         font = QFont()
-        font.setBold(False)
-        font.setItalic(False)
-        self.label_3.setFont(font)
+        font.setPointSize(18)
+        font.setBold(True)
+        self.title_label.setFont(font)
 
-        self.verticalLayout_5.addWidget(self.label_3)
+        self.header_layout.addWidget(self.title_label)
 
-        self.label_7 = QLabel(DetectorsStep)
-        self.label_7.setObjectName(u"label_7")
+        self.subtitle_label = QLabel(self.content_widget)
+        self.subtitle_label.setObjectName(u"subtitle_label")
+        self.subtitle_label.setWordWrap(True)
+        self.subtitle_label.setProperty(u"variant", u"help")
 
-        self.verticalLayout_5.addWidget(self.label_7)
+        self.header_layout.addWidget(self.subtitle_label)
 
-        self.label_8 = QLabel(DetectorsStep)
-        self.label_8.setObjectName(u"label_8")
 
-        self.verticalLayout_5.addWidget(self.label_8)
+        self.content_layout.addLayout(self.header_layout)
 
-        self.verticalLayout_3 = QVBoxLayout()
-        self.verticalLayout_3.setSpacing(0)
-        self.verticalLayout_3.setObjectName(u"verticalLayout_3")
-        self.horizontalLayout_2 = QHBoxLayout()
-        self.horizontalLayout_2.setObjectName(u"horizontalLayout_2")
-        self.common_radioButton = QRadioButton(DetectorsStep)
+        self.events_card = QFrame(self.content_widget)
+        self.events_card.setObjectName(u"events_card")
+        self.events_card.setFrameShape(QFrame.Shape.StyledPanel)
+        self.events_card.setFrameShadow(QFrame.Shadow.Raised)
+        self.events_card_layout = QVBoxLayout(self.events_card)
+        self.events_card_layout.setSpacing(10)
+        self.events_card_layout.setObjectName(u"events_card_layout")
+        self.events_card_layout.setContentsMargins(10, 10, 10, 10)
+        self.label_3 = QLabel(self.events_card)
+        self.label_3.setObjectName(u"label_3")
+        font1 = QFont()
+        font1.setBold(True)
+        self.label_3.setFont(font1)
+
+        self.events_card_layout.addWidget(self.label_3)
+
+        self.events_layout = QVBoxLayout()
+        self.events_layout.setSpacing(8)
+        self.events_layout.setObjectName(u"events_layout")
+        self.events_layout_1_layout = QVBoxLayout()
+        self.events_layout_1_layout.setSpacing(2)
+        self.events_layout_1_layout.setObjectName(u"events_layout_1_layout")
+        self.common_radioButton = QRadioButton(self.events_card)
         self.buttonGroup = QButtonGroup(DetectorsStep)
         self.buttonGroup.setObjectName(u"buttonGroup")
         self.buttonGroup.addButton(self.common_radioButton)
@@ -61,138 +92,233 @@ class Ui_DetectorsStep(object):
         self.common_radioButton.setMaximumSize(QSize(250, 16777215))
         self.common_radioButton.setChecked(True)
 
-        self.horizontalLayout_2.addWidget(self.common_radioButton)
+        self.events_layout_1_layout.addWidget(self.common_radioButton)
 
-        self.label_4 = QLabel(DetectorsStep)
+        self.common_fields_layout = QHBoxLayout()
+        self.common_fields_layout.setObjectName(u"common_fields_layout")
+        self.common_fields_layout.setContentsMargins(26, 0, 0, 0)
+        self.common_grid = QGridLayout()
+        self.common_grid.setObjectName(u"common_grid")
+        self.common_grid.setHorizontalSpacing(12)
+        self.common_grid.setVerticalSpacing(10)
+        self.label_4 = QLabel(self.events_card)
         self.label_4.setObjectName(u"label_4")
-        self.label_4.setMinimumSize(QSize(50, 0))
 
-        self.horizontalLayout_2.addWidget(self.label_4)
+        self.common_grid.addWidget(self.label_4, 0, 0, 1, 1)
 
-        self.unique_group_lineEdit = QLineEdit(DetectorsStep)
+        self.unique_group_lineEdit = QLineEdit(self.events_card)
         self.unique_group_lineEdit.setObjectName(u"unique_group_lineEdit")
         self.unique_group_lineEdit.setMinimumSize(QSize(150, 0))
         self.unique_group_lineEdit.setMaximumSize(QSize(250, 16777215))
         self.unique_group_lineEdit.setAlignment(Qt.AlignmentFlag.AlignLeading|Qt.AlignmentFlag.AlignLeft|Qt.AlignmentFlag.AlignVCenter)
 
-        self.horizontalLayout_2.addWidget(self.unique_group_lineEdit)
+        self.common_grid.addWidget(self.unique_group_lineEdit, 0, 1, 1, 1)
 
-        self.horizontalSpacer = QSpacerItem(10, 20, QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Minimum)
-
-        self.horizontalLayout_2.addItem(self.horizontalSpacer)
-
-        self.label_5 = QLabel(DetectorsStep)
+        self.label_5 = QLabel(self.events_card)
         self.label_5.setObjectName(u"label_5")
-        self.label_5.setMinimumSize(QSize(50, 0))
 
-        self.horizontalLayout_2.addWidget(self.label_5)
+        self.common_grid.addWidget(self.label_5, 1, 0, 1, 1)
 
-        self.unique_name_lineEdit = QLineEdit(DetectorsStep)
+        self.unique_name_lineEdit = QLineEdit(self.events_card)
         self.unique_name_lineEdit.setObjectName(u"unique_name_lineEdit")
         self.unique_name_lineEdit.setMinimumSize(QSize(150, 0))
         self.unique_name_lineEdit.setMaximumSize(QSize(250, 16777215))
 
-        self.horizontalLayout_2.addWidget(self.unique_name_lineEdit)
+        self.common_grid.addWidget(self.unique_name_lineEdit, 1, 1, 1, 1)
 
-        self.horizontalSpacer_2 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+        self.common_grid_spacer = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
 
-        self.horizontalLayout_2.addItem(self.horizontalSpacer_2)
+        self.common_grid.addItem(self.common_grid_spacer, 0, 3, 1, 1)
 
 
-        self.verticalLayout_3.addLayout(self.horizontalLayout_2)
+        self.common_fields_layout.addLayout(self.common_grid)
 
-        self.horizontalLayout_3 = QHBoxLayout()
-        self.horizontalLayout_3.setObjectName(u"horizontalLayout_3")
-        self.specific_radioButton = QRadioButton(DetectorsStep)
+
+        self.events_layout_1_layout.addLayout(self.common_fields_layout)
+
+
+        self.events_layout.addLayout(self.events_layout_1_layout)
+
+        self.events_layout_line_1 = QFrame(self.events_card)
+        self.events_layout_line_1.setObjectName(u"events_layout_line_1")
+        self.events_layout_line_1.setFrameShape(QFrame.Shape.HLine)
+        self.events_layout_line_1.setFrameShadow(QFrame.Shadow.Plain)
+
+        self.events_layout.addWidget(self.events_layout_line_1)
+
+        self.events_layout_2_layout = QVBoxLayout()
+        self.events_layout_2_layout.setSpacing(2)
+        self.events_layout_2_layout.setObjectName(u"events_layout_2_layout")
+        self.specific_radioButton = QRadioButton(self.events_card)
         self.buttonGroup.addButton(self.specific_radioButton)
         self.specific_radioButton.setObjectName(u"specific_radioButton")
         self.specific_radioButton.setMinimumSize(QSize(250, 0))
         self.specific_radioButton.setMaximumSize(QSize(250, 16777215))
 
-        self.horizontalLayout_3.addWidget(self.specific_radioButton)
+        self.events_layout_2_layout.addWidget(self.specific_radioButton)
 
-        self.specific_name_label = QLabel(DetectorsStep)
+        self.specific_name_label = QLabel(self.events_card)
         self.specific_name_label.setObjectName(u"specific_name_label")
-        self.specific_name_label.setEnabled(False)
-        self.specific_name_label.setMaximumSize(QSize(16777215, 16777215))
+        font2 = QFont()
+        font2.setPointSize(10)
+        self.specific_name_label.setFont(font2)
+        self.specific_name_label.setWordWrap(True)
+        self.specific_name_label.setIndent(26)
+        self.specific_name_label.setProperty(u"variant", u"help")
 
-        self.horizontalLayout_3.addWidget(self.specific_name_label)
-
-        self.horizontalSpacer_6 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
-
-        self.horizontalLayout_3.addItem(self.horizontalSpacer_6)
-
-
-        self.verticalLayout_3.addLayout(self.horizontalLayout_3)
+        self.events_layout_2_layout.addWidget(self.specific_name_label)
 
 
-        self.verticalLayout_5.addLayout(self.verticalLayout_3)
+        self.events_layout.addLayout(self.events_layout_2_layout)
 
-        self.verticalSpacer_3 = QSpacerItem(20, 20, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Minimum)
 
-        self.verticalLayout_5.addItem(self.verticalSpacer_3)
+        self.events_card_layout.addLayout(self.events_layout)
 
-        self.verticalLayout_2 = QVBoxLayout()
-        self.verticalLayout_2.setObjectName(u"verticalLayout_2")
-        self.label_6 = QLabel(DetectorsStep)
+        self.label_7 = QLabel(self.events_card)
+        self.label_7.setObjectName(u"label_7")
+        self.label_7.setFont(font2)
+        self.label_7.setWordWrap(True)
+        self.label_7.setProperty(u"variant", u"help")
+
+        self.events_card_layout.addWidget(self.label_7)
+
+
+        self.content_layout.addWidget(self.events_card)
+
+        self.detectors_card = QFrame(self.content_widget)
+        self.detectors_card.setObjectName(u"detectors_card")
+        self.detectors_card.setFrameShape(QFrame.Shape.StyledPanel)
+        self.detectors_card.setFrameShadow(QFrame.Shadow.Raised)
+        self.detectors_card_layout = QVBoxLayout(self.detectors_card)
+        self.detectors_card_layout.setSpacing(10)
+        self.detectors_card_layout.setObjectName(u"detectors_card_layout")
+        self.detectors_card_layout.setContentsMargins(10, 10, 10, 10)
+        self.label_6 = QLabel(self.detectors_card)
         self.label_6.setObjectName(u"label_6")
+        self.label_6.setFont(font1)
 
-        self.verticalLayout_2.addWidget(self.label_6)
+        self.detectors_card_layout.addWidget(self.label_6)
 
-        self.label_2 = QLabel(DetectorsStep)
+        self.label_2 = QLabel(self.detectors_card)
         self.label_2.setObjectName(u"label_2")
-        self.label_2.setFont(font)
+        self.label_2.setWordWrap(True)
+        self.label_2.setProperty(u"variant", u"help")
 
-        self.verticalLayout_2.addWidget(self.label_2)
+        self.detectors_card_layout.addWidget(self.label_2)
 
-        self.flatline_checkBox = QCheckBox(DetectorsStep)
+        self.detectors_layout = QVBoxLayout()
+        self.detectors_layout.setSpacing(8)
+        self.detectors_layout.setObjectName(u"detectors_layout")
+        self.detectors_layout_1_layout = QVBoxLayout()
+        self.detectors_layout_1_layout.setSpacing(2)
+        self.detectors_layout_1_layout.setObjectName(u"detectors_layout_1_layout")
+        self.flatline_checkBox = QCheckBox(self.detectors_card)
         self.flatline_checkBox.setObjectName(u"flatline_checkBox")
         self.flatline_checkBox.setChecked(False)
 
-        self.verticalLayout_2.addWidget(self.flatline_checkBox)
+        self.detectors_layout_1_layout.addWidget(self.flatline_checkBox)
 
-        self.highfreq_checkBox = QCheckBox(DetectorsStep)
+        self.flatline_checkBox_help_label = QLabel(self.detectors_card)
+        self.flatline_checkBox_help_label.setObjectName(u"flatline_checkBox_help_label")
+        self.flatline_checkBox_help_label.setFont(font2)
+        self.flatline_checkBox_help_label.setWordWrap(True)
+        self.flatline_checkBox_help_label.setIndent(26)
+        self.flatline_checkBox_help_label.setProperty(u"variant", u"help")
+
+        self.detectors_layout_1_layout.addWidget(self.flatline_checkBox_help_label)
+
+
+        self.detectors_layout.addLayout(self.detectors_layout_1_layout)
+
+        self.detectors_layout_line_1 = QFrame(self.detectors_card)
+        self.detectors_layout_line_1.setObjectName(u"detectors_layout_line_1")
+        self.detectors_layout_line_1.setFrameShape(QFrame.Shape.HLine)
+        self.detectors_layout_line_1.setFrameShadow(QFrame.Shadow.Plain)
+
+        self.detectors_layout.addWidget(self.detectors_layout_line_1)
+
+        self.detectors_layout_2_layout = QVBoxLayout()
+        self.detectors_layout_2_layout.setSpacing(2)
+        self.detectors_layout_2_layout.setObjectName(u"detectors_layout_2_layout")
+        self.highfreq_checkBox = QCheckBox(self.detectors_card)
         self.highfreq_checkBox.setObjectName(u"highfreq_checkBox")
         self.highfreq_checkBox.setChecked(True)
 
-        self.verticalLayout_2.addWidget(self.highfreq_checkBox)
+        self.detectors_layout_2_layout.addWidget(self.highfreq_checkBox)
 
-        self.persistent_checkBox = QCheckBox(DetectorsStep)
+        self.highfreq_checkBox_help_label = QLabel(self.detectors_card)
+        self.highfreq_checkBox_help_label.setObjectName(u"highfreq_checkBox_help_label")
+        self.highfreq_checkBox_help_label.setFont(font2)
+        self.highfreq_checkBox_help_label.setWordWrap(True)
+        self.highfreq_checkBox_help_label.setIndent(26)
+        self.highfreq_checkBox_help_label.setProperty(u"variant", u"help")
+
+        self.detectors_layout_2_layout.addWidget(self.highfreq_checkBox_help_label)
+
+
+        self.detectors_layout.addLayout(self.detectors_layout_2_layout)
+
+        self.detectors_layout_line_2 = QFrame(self.detectors_card)
+        self.detectors_layout_line_2.setObjectName(u"detectors_layout_line_2")
+        self.detectors_layout_line_2.setFrameShape(QFrame.Shape.HLine)
+        self.detectors_layout_line_2.setFrameShadow(QFrame.Shadow.Plain)
+
+        self.detectors_layout.addWidget(self.detectors_layout_line_2)
+
+        self.detectors_layout_3_layout = QVBoxLayout()
+        self.detectors_layout_3_layout.setSpacing(2)
+        self.detectors_layout_3_layout.setObjectName(u"detectors_layout_3_layout")
+        self.persistent_checkBox = QCheckBox(self.detectors_card)
         self.persistent_checkBox.setObjectName(u"persistent_checkBox")
         self.persistent_checkBox.setChecked(True)
 
-        self.verticalLayout_2.addWidget(self.persistent_checkBox)
+        self.detectors_layout_3_layout.addWidget(self.persistent_checkBox)
 
-        self.powerline_checkBox = QCheckBox(DetectorsStep)
+        self.persistent_checkBox_help_label = QLabel(self.detectors_card)
+        self.persistent_checkBox_help_label.setObjectName(u"persistent_checkBox_help_label")
+        self.persistent_checkBox_help_label.setFont(font2)
+        self.persistent_checkBox_help_label.setWordWrap(True)
+        self.persistent_checkBox_help_label.setIndent(26)
+        self.persistent_checkBox_help_label.setProperty(u"variant", u"help")
+
+        self.detectors_layout_3_layout.addWidget(self.persistent_checkBox_help_label)
+
+
+        self.detectors_layout.addLayout(self.detectors_layout_3_layout)
+
+        self.detectors_layout_line_3 = QFrame(self.detectors_card)
+        self.detectors_layout_line_3.setObjectName(u"detectors_layout_line_3")
+        self.detectors_layout_line_3.setFrameShape(QFrame.Shape.HLine)
+        self.detectors_layout_line_3.setFrameShadow(QFrame.Shadow.Plain)
+
+        self.detectors_layout.addWidget(self.detectors_layout_line_3)
+
+        self.detectors_layout_4_layout = QVBoxLayout()
+        self.detectors_layout_4_layout.setSpacing(2)
+        self.detectors_layout_4_layout.setObjectName(u"detectors_layout_4_layout")
+        self.powerline_checkBox = QCheckBox(self.detectors_card)
         self.powerline_checkBox.setObjectName(u"powerline_checkBox")
         self.powerline_checkBox.setChecked(True)
 
-        self.verticalLayout_2.addWidget(self.powerline_checkBox)
+        self.detectors_layout_4_layout.addWidget(self.powerline_checkBox)
 
-        self.verticalLayout = QVBoxLayout()
-        self.verticalLayout.setObjectName(u"verticalLayout")
-        self.horizontalLayout_5 = QHBoxLayout()
-        self.horizontalLayout_5.setObjectName(u"horizontalLayout_5")
-        self.horizontalSpacer_5 = QSpacerItem(40, 20, QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Minimum)
+        self.powerline_checkBox_help_layout = QVBoxLayout()
+        self.powerline_checkBox_help_layout.setSpacing(2)
+        self.powerline_checkBox_help_layout.setObjectName(u"powerline_checkBox_help_layout")
+        self.powerline_checkBox_help_label = QLabel(self.detectors_card)
+        self.powerline_checkBox_help_label.setObjectName(u"powerline_checkBox_help_label")
+        self.powerline_checkBox_help_label.setFont(font2)
+        self.powerline_checkBox_help_label.setWordWrap(True)
+        self.powerline_checkBox_help_label.setIndent(26)
+        self.powerline_checkBox_help_label.setProperty(u"variant", u"help")
 
-        self.horizontalLayout_5.addItem(self.horizontalSpacer_5)
+        self.powerline_checkBox_help_layout.addWidget(self.powerline_checkBox_help_label)
 
-        self.label = QLabel(DetectorsStep)
-        self.label.setObjectName(u"label")
-        self.label.setFont(font)
-
-        self.horizontalLayout_5.addWidget(self.label)
-
-
-        self.verticalLayout.addLayout(self.horizontalLayout_5)
-
-        self.horizontalLayout = QHBoxLayout()
-        self.horizontalLayout.setObjectName(u"horizontalLayout")
-        self.horizontalSpacer_4 = QSpacerItem(40, 20, QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Minimum)
-
-        self.horizontalLayout.addItem(self.horizontalSpacer_4)
-
-        self.radioButton_60Hz = QRadioButton(DetectorsStep)
+        self.powerline_frequency_layout = QHBoxLayout()
+        self.powerline_frequency_layout.setSpacing(22)
+        self.powerline_frequency_layout.setObjectName(u"powerline_frequency_layout")
+        self.powerline_frequency_layout.setContentsMargins(26, 4, 0, 0)
+        self.radioButton_60Hz = QRadioButton(self.detectors_card)
         self.buttonGroup_2 = QButtonGroup(DetectorsStep)
         self.buttonGroup_2.setObjectName(u"buttonGroup_2")
         self.buttonGroup_2.addButton(self.radioButton_60Hz)
@@ -200,63 +326,133 @@ class Ui_DetectorsStep(object):
         self.radioButton_60Hz.setMaximumSize(QSize(150, 16777215))
         self.radioButton_60Hz.setChecked(True)
 
-        self.horizontalLayout.addWidget(self.radioButton_60Hz)
+        self.powerline_frequency_layout.addWidget(self.radioButton_60Hz)
 
-        self.radioButton_50Hz = QRadioButton(DetectorsStep)
+        self.radioButton_50Hz = QRadioButton(self.detectors_card)
         self.buttonGroup_2.addButton(self.radioButton_50Hz)
         self.radioButton_50Hz.setObjectName(u"radioButton_50Hz")
         self.radioButton_50Hz.setMaximumSize(QSize(150, 16777215))
 
-        self.horizontalLayout.addWidget(self.radioButton_50Hz)
+        self.powerline_frequency_layout.addWidget(self.radioButton_50Hz)
 
-        self.horizontalSpacer_3 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+        self.powerline_spacer = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
 
-        self.horizontalLayout.addItem(self.horizontalSpacer_3)
-
-
-        self.verticalLayout.addLayout(self.horizontalLayout)
+        self.powerline_frequency_layout.addItem(self.powerline_spacer)
 
 
-        self.verticalLayout_2.addLayout(self.verticalLayout)
+        self.powerline_checkBox_help_layout.addLayout(self.powerline_frequency_layout)
 
-        self.bslvar_checkBox = QCheckBox(DetectorsStep)
+        self.label = QLabel(self.detectors_card)
+        self.label.setObjectName(u"label")
+        self.label.setFont(font2)
+        self.label.setWordWrap(True)
+        self.label.setIndent(26)
+        self.label.setProperty(u"variant", u"help")
+
+        self.powerline_checkBox_help_layout.addWidget(self.label)
+
+
+        self.detectors_layout_4_layout.addLayout(self.powerline_checkBox_help_layout)
+
+
+        self.detectors_layout.addLayout(self.detectors_layout_4_layout)
+
+        self.detectors_layout_line_4 = QFrame(self.detectors_card)
+        self.detectors_layout_line_4.setObjectName(u"detectors_layout_line_4")
+        self.detectors_layout_line_4.setFrameShape(QFrame.Shape.HLine)
+        self.detectors_layout_line_4.setFrameShadow(QFrame.Shadow.Plain)
+
+        self.detectors_layout.addWidget(self.detectors_layout_line_4)
+
+        self.detectors_layout_5_layout = QVBoxLayout()
+        self.detectors_layout_5_layout.setSpacing(2)
+        self.detectors_layout_5_layout.setObjectName(u"detectors_layout_5_layout")
+        self.bslvar_checkBox = QCheckBox(self.detectors_card)
         self.bslvar_checkBox.setObjectName(u"bslvar_checkBox")
         self.bslvar_checkBox.setChecked(True)
 
-        self.verticalLayout_2.addWidget(self.bslvar_checkBox)
+        self.detectors_layout_5_layout.addWidget(self.bslvar_checkBox)
 
-        self.muscle_checkBox = QCheckBox(DetectorsStep)
+        self.bslvar_checkBox_help_label = QLabel(self.detectors_card)
+        self.bslvar_checkBox_help_label.setObjectName(u"bslvar_checkBox_help_label")
+        self.bslvar_checkBox_help_label.setFont(font2)
+        self.bslvar_checkBox_help_label.setWordWrap(True)
+        self.bslvar_checkBox_help_label.setIndent(26)
+        self.bslvar_checkBox_help_label.setProperty(u"variant", u"help")
+
+        self.detectors_layout_5_layout.addWidget(self.bslvar_checkBox_help_label)
+
+
+        self.detectors_layout.addLayout(self.detectors_layout_5_layout)
+
+        self.detectors_layout_line_5 = QFrame(self.detectors_card)
+        self.detectors_layout_line_5.setObjectName(u"detectors_layout_line_5")
+        self.detectors_layout_line_5.setFrameShape(QFrame.Shape.HLine)
+        self.detectors_layout_line_5.setFrameShadow(QFrame.Shadow.Plain)
+
+        self.detectors_layout.addWidget(self.detectors_layout_line_5)
+
+        self.detectors_layout_6_layout = QVBoxLayout()
+        self.detectors_layout_6_layout.setSpacing(2)
+        self.detectors_layout_6_layout.setObjectName(u"detectors_layout_6_layout")
+        self.muscle_checkBox = QCheckBox(self.detectors_card)
         self.muscle_checkBox.setObjectName(u"muscle_checkBox")
         self.muscle_checkBox.setChecked(True)
 
-        self.verticalLayout_2.addWidget(self.muscle_checkBox)
+        self.detectors_layout_6_layout.addWidget(self.muscle_checkBox)
+
+        self.muscle_checkBox_help_label = QLabel(self.detectors_card)
+        self.muscle_checkBox_help_label.setObjectName(u"muscle_checkBox_help_label")
+        self.muscle_checkBox_help_label.setFont(font2)
+        self.muscle_checkBox_help_label.setWordWrap(True)
+        self.muscle_checkBox_help_label.setIndent(26)
+        self.muscle_checkBox_help_label.setProperty(u"variant", u"help")
+
+        self.detectors_layout_6_layout.addWidget(self.muscle_checkBox_help_label)
 
 
-        self.verticalLayout_5.addLayout(self.verticalLayout_2)
+        self.detectors_layout.addLayout(self.detectors_layout_6_layout)
 
-        self.verticalSpacer = QSpacerItem(20, 20, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Minimum)
 
-        self.verticalLayout_5.addItem(self.verticalSpacer)
+        self.detectors_card_layout.addLayout(self.detectors_layout)
 
-        self.textEdit = QTextEdit(DetectorsStep)
-        self.textEdit.setObjectName(u"textEdit")
-        sizePolicy = QSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.textEdit.sizePolicy().hasHeightForWidth())
-        self.textEdit.setSizePolicy(sizePolicy)
-        self.textEdit.setMinimumSize(QSize(0, 0))
-        self.textEdit.setMaximumSize(QSize(16777215, 16777215))
-        self.textEdit.setFrameShape(QFrame.Shape.VLine)
-        self.textEdit.setLineWidth(0)
-        self.textEdit.setSizeAdjustPolicy(QAbstractScrollArea.SizeAdjustPolicy.AdjustToContents)
-        self.textEdit.setReadOnly(True)
 
-        self.verticalLayout_5.addWidget(self.textEdit)
+        self.content_layout.addWidget(self.detectors_card)
 
-        self.verticalSpacer_2 = QSpacerItem(20, 5, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Preferred)
+        self.about_tuning_layout = QVBoxLayout()
+        self.about_tuning_layout.setSpacing(6)
+        self.about_tuning_layout.setObjectName(u"about_tuning_layout")
+        self.about_tuning_title_label = QLabel(self.content_widget)
+        self.about_tuning_title_label.setObjectName(u"about_tuning_title_label")
+        self.about_tuning_title_label.setFont(font1)
 
-        self.verticalLayout_5.addItem(self.verticalSpacer_2)
+        self.about_tuning_layout.addWidget(self.about_tuning_title_label)
+
+        self.about_tuning_label = QLabel(self.content_widget)
+        self.about_tuning_label.setObjectName(u"about_tuning_label")
+        self.about_tuning_label.setTextFormat(Qt.TextFormat.RichText)
+        self.about_tuning_label.setWordWrap(True)
+        self.about_tuning_label.setProperty(u"variant", u"help")
+
+        self.about_tuning_layout.addWidget(self.about_tuning_label)
+
+
+        self.content_layout.addLayout(self.about_tuning_layout)
+
+
+        self.content_row.addWidget(self.content_widget)
+
+        self.content_spacer = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+
+        self.content_row.addItem(self.content_spacer)
+
+        self.content_row.setStretch(0, 1)
+
+        self.verticalLayout.addLayout(self.content_row)
+
+        self.verticalSpacer = QSpacerItem(40, 20, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
+
+        self.verticalLayout.addItem(self.verticalSpacer)
 
 
         self.retranslateUi(DetectorsStep)
@@ -273,54 +469,41 @@ class Ui_DetectorsStep(object):
 
     def retranslateUi(self, DetectorsStep):
         DetectorsStep.setWindowTitle("")
-        self.label_3.setText(QCoreApplication.translate("DetectorsStep", u"<html><head/><body><p><span style=\" font-weight:600;\">Artifact Event Labels</span></p></body></html>", None))
-        self.label_7.setText(QCoreApplication.translate("DetectorsStep", u"The default label reflects the selected sleep stages and the chosen set of default values.", None))
-        self.label_8.setText(QCoreApplication.translate("DetectorsStep", u"Edit the group and name to reflect your changes if any.", None))
+        self.title_label.setText(QCoreApplication.translate("DetectorsStep", u"Detectors Settings", None))
+        self.subtitle_label.setText(QCoreApplication.translate("DetectorsStep", u"Choose the group and name of the artifact events, then check the detectors to run. The thresholds of each detector are in its own page, under \"Detectors Settings\" in the left panel.", None))
+        self.label_3.setText(QCoreApplication.translate("DetectorsStep", u"Artifact events", None))
         self.common_radioButton.setText(QCoreApplication.translate("DetectorsStep", u"Common to all the detectors", None))
-        self.label_4.setText(QCoreApplication.translate("DetectorsStep", u"Group", None))
 #if QT_CONFIG(tooltip)
-        self.unique_group_lineEdit.setToolTip(QCoreApplication.translate("DetectorsStep", u"Write the common artifact event name to use for all the detectors.", None))
+        self.label_4.setToolTip(QCoreApplication.translate("DetectorsStep", u"The group of the artifact events of all the detectors in the accessory file. Use letters, digits, spaces, hyphens or underscores (64 at most).", None))
 #endif // QT_CONFIG(tooltip)
+        self.label_4.setText(QCoreApplication.translate("DetectorsStep", u"Group", None))
         self.unique_group_lineEdit.setText(QCoreApplication.translate("DetectorsStep", u"art_snooz_NREM_set1", None))
+#if QT_CONFIG(tooltip)
+        self.label_5.setToolTip(QCoreApplication.translate("DetectorsStep", u"The name of the artifact events of all the detectors in the accessory file. Use letters, digits, spaces, hyphens or underscores (64 at most).", None))
+#endif // QT_CONFIG(tooltip)
         self.label_5.setText(QCoreApplication.translate("DetectorsStep", u"Name", None))
         self.unique_name_lineEdit.setText(QCoreApplication.translate("DetectorsStep", u"art_snooz_NREM_set1", None))
         self.specific_radioButton.setText(QCoreApplication.translate("DetectorsStep", u"Specific to each detector", None))
-        self.specific_name_label.setText(QCoreApplication.translate("DetectorsStep", u"Group and name are defined in the settings page of each detector.", None))
-        self.label_6.setText(QCoreApplication.translate("DetectorsStep", u"<html><head/><body><p><span style=\" font-weight:600;\">Artifact Detectors</span></p></body></html>", None))
-        self.label_2.setText(QCoreApplication.translate("DetectorsStep", u"Check the artifact detectors to run:", None))
-        self.flatline_checkBox.setText(QCoreApplication.translate("DetectorsStep", u"Flatline : Segments of low power, flatlined signal.", None))
-        self.highfreq_checkBox.setText(QCoreApplication.translate("DetectorsStep", u"High Frequency burst : Segments with a burst of high frequency power (>25 Hz).", None))
-        self.persistent_checkBox.setText(QCoreApplication.translate("DetectorsStep", u"Persistent Noise : Segments with high frequency noise (>25 Hz).", None))
-        self.powerline_checkBox.setText(QCoreApplication.translate("DetectorsStep", u"Power Line Contamination : Segments corrupted by 50 or 60 Hz power.", None))
-        self.label.setText(QCoreApplication.translate("DetectorsStep", u"Power line contamination is turned off when a notch filter is applied", None))
+        self.specific_name_label.setText(QCoreApplication.translate("DetectorsStep", u"The group and name are defined in the page of each detector.", None))
+        self.label_7.setText(QCoreApplication.translate("DetectorsStep", u"The default group and name give the set of default thresholds and the selected stages, for example art_snooz_set1_NREM. Edit them when you change the thresholds.", None))
+        self.label_6.setText(QCoreApplication.translate("DetectorsStep", u"Detectors", None))
+        self.label_2.setText(QCoreApplication.translate("DetectorsStep", u"Check the detectors to run.", None))
+        self.flatline_checkBox.setText(QCoreApplication.translate("DetectorsStep", u"Flatline", None))
+        self.flatline_checkBox_help_label.setText(QCoreApplication.translate("DetectorsStep", u"Segments of low power, where the signal is nearly flat.", None))
+        self.highfreq_checkBox.setText(QCoreApplication.translate("DetectorsStep", u"High frequency burst", None))
+        self.highfreq_checkBox_help_label.setText(QCoreApplication.translate("DetectorsStep", u"Short bursts of power above 25\u00a0Hz.", None))
+        self.persistent_checkBox.setText(QCoreApplication.translate("DetectorsStep", u"Persistent noise", None))
+        self.persistent_checkBox_help_label.setText(QCoreApplication.translate("DetectorsStep", u"Lasting noise above 25\u00a0Hz.", None))
+        self.powerline_checkBox.setText(QCoreApplication.translate("DetectorsStep", u"Power line contamination", None))
+        self.powerline_checkBox_help_label.setText(QCoreApplication.translate("DetectorsStep", u"Power at 50 or 60\u00a0Hz.", None))
         self.radioButton_60Hz.setText(QCoreApplication.translate("DetectorsStep", u"60 Hz", None))
         self.radioButton_50Hz.setText(QCoreApplication.translate("DetectorsStep", u"50 Hz", None))
-        self.bslvar_checkBox.setText(QCoreApplication.translate("DetectorsStep", u"Baseline Variation (Breathing, Sweat) : Segments with high power in the low frequency band (<0.4 Hz).", None))
-        self.muscle_checkBox.setText(QCoreApplication.translate("DetectorsStep", u"Muscle Artifact : Segments with burst of activity in the frequency band 20.25-32 Hz.", None))
-        self.textEdit.setHtml(QCoreApplication.translate("DetectorsStep", u"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
-"<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset=\"utf-8\" /><style type=\"text/css\">\n"
-"p, li { white-space: pre-wrap; }\n"
-"hr { height: 1px; border-width: 0; }\n"
-"li.unchecked::marker { content: \"\\2610\"; }\n"
-"li.checked::marker { content: \"\\2612\"; }\n"
-"</style></head><body style=\" font-size:12pt; font-weight:400; font-style:normal;\">\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">The thresholds of each detector can be modified in the &quot;Detectors Settings&quot; configuration pages.</p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">    To make a detector more pr"
-                        "ecise : </p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">        - Flatline detector : decrease the threshold</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">        - All other detectors : increase the thresholds</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">        - You could start by increasing the fixed thresholds based on the main gaussian distrbution.</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">          I.e. increase the thresholds from 4 X SD to 5 X SD.</p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:"
-                        "0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">    To make a detector more sensitive : </p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">        - Flatline detector : increase the threshold</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">        - All other detectors : decrease the thresholds</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">        - You could start by decreasing the fixed thresholds based on the main gaussian distrbution.</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">          I.e. decrease the thresholds from 4 X SD to 3 X SD, except for the baseline variation which the minimum value should be 3.5.</p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; "
-                        "margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">For more information see the  &quot;Detectors Settings&quot; configuration page for each specific detector. </p></body></html>", None))
+        self.label.setText(QCoreApplication.translate("DetectorsStep", u"Turned off when a notch filter is applied in \"Filter EEG signals\".", None))
+        self.bslvar_checkBox.setText(QCoreApplication.translate("DetectorsStep", u"Baseline variation", None))
+        self.bslvar_checkBox_help_label.setText(QCoreApplication.translate("DetectorsStep", u"Power below 0.4\u00a0Hz, from breathing or sweat.", None))
+        self.muscle_checkBox.setText(QCoreApplication.translate("DetectorsStep", u"Muscle artifact", None))
+        self.muscle_checkBox_help_label.setText(QCoreApplication.translate("DetectorsStep", u"Bursts of activity between 20.25 and 32\u00a0Hz.", None))
+        self.about_tuning_title_label.setText(QCoreApplication.translate("DetectorsStep", u"About the thresholds", None))
+        self.about_tuning_label.setText(QCoreApplication.translate("DetectorsStep", u"<b>To detect fewer artifacts</b> (more precise)<br/>\u2022 Flatline. Lower the threshold.<br/>\u2022 The other detectors. Raise the thresholds. Start with the fixed thresholds, for example from 4 to 5 \u00d7 SD.<br/><br/><b>To detect more artifacts</b> (more sensitive)<br/>\u2022 Flatline. Raise the threshold.<br/>\u2022 The other detectors. Lower the thresholds. Start with the fixed thresholds, for example from 4 to 3 \u00d7 SD. Keep the baseline variation at 3.5 \u00d7 SD or more.", None))
     # retranslateUi
 

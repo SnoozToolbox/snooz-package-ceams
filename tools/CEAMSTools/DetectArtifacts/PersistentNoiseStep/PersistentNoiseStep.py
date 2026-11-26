@@ -9,13 +9,13 @@ See the file LICENCE for full license details.
 
 from qtpy import QtWidgets
 from qtpy import QtCore
-from qtpy.QtGui import QRegularExpressionValidator, QPixmap
+from qtpy.QtGui import QRegularExpressionValidator
 from qtpy.QtCore import QRegularExpression
-import base64
 
 from CEAMSTools.DetectArtifacts.PersistentNoiseStep.Ui_PersistentNoiseStep import Ui_PersistentNoiseStep
 from CEAMSTools.DetectArtifacts.SleepStageSelStep.SleepStageSelStep import SleepStageSelStep
 from CEAMSTools.DetectArtifacts.DetectorsStep.DetectorsStep import DetectorsStep
+from CEAMSTools.DetectArtifacts.artifact_drawing import ArtifactDrawing
 from commons.BaseStepView import BaseStepView
 
 class PersistentNoiseStep( BaseStepView,  Ui_PersistentNoiseStep, QtWidgets.QWidget):
@@ -53,13 +53,8 @@ class PersistentNoiseStep( BaseStepView,  Ui_PersistentNoiseStep, QtWidgets.QWid
         self.thresh_B_value = [0.1, 0.1]
 
     def _load_embedded_image(self):
-        """Load the embedded base64 image data into label_10."""
-        from .art_image_data import PERSISTENT_NOISE_IMAGE_BASE64
-        
-        image_bytes = base64.b64decode(PERSISTENT_NOISE_IMAGE_BASE64)
-        pixmap = QPixmap()
-        pixmap.loadFromData(image_bytes)
-        self.label_10.setPixmap(pixmap)
+        """The illustration of the artifact (simulated EEG), drawn on label_10."""
+        self._artifact_drawing = ArtifactDrawing(self.label_10, "persistent_noise")
 
     # Called when the settingsView is opened by the user
     # The node asks to the publisher the settings

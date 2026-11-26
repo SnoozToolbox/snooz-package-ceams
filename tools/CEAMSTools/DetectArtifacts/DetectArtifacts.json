@@ -6,7 +6,7 @@
     "item_author": "",
     "item_description": "Detect artifacts.",
     "tool_params": {
-        "tool_version": "2.8.2",
+        "tool_version": "2.8.3",
         "tool_label": "Detect EEG Artifacts",
         "tool_category": "1-Preprocessing",
         "asset_directory": "",
@@ -20,63 +20,63 @@
             },
             {
                 "name": "Input Files",
-                "description":"Add your files, select .edf, .sts or .eeg files.\n\nFor accepted PSG formats, click 'Read more!' below.\n\nSelect the montage and channels for artifact detection.\n\nAliases are required to distinguish EEG from EMG channels.\n\nEMG is only used to improve muscle-artifact detection (one EMG channel is enough).\n\nIf no EMG channel is available, simply enter 'NA' in the EMG Alias.",
+                "description":"Add the PSG files and select their channels, then fill the EEG and EMG aliases. Write NA in the EMG alias when there is no EMG channel.",
                 "custom_step_name": "InputFilesArtStep",
                 "show_index": true
             },
             {
                 "name": "Filter EEG signals",
-                "description": "Define the filter settings of your analysis.",
+                "description": "Choose the bandpass filter and the power line notch filter applied before the detection.",
                 "custom_step_name": "FilterSignalsStep",
                 "show_index": true
             },
             {
                 "name": "Non valid events",
-                "description": "Select events already excluded from the analysis (such as bad channel or bad epochs).\n\nStart by selecting one PSG or multiple files (with the ctrl key pressed), then select an event group or name.\n\nBe aware that the files must still be highlighted in the GUI to apply the 'Select All' option.",
+                "description": "Select the events already excluded from the analysis, such as bad channels or bad epochs.",
                 "custom_step_name": "ArtifactSelStep",
                 "show_index": true
             },
             {
                 "name": "Stage Selection",
-                "description": "Select specific sleep stages for the artifact detection.",
+                "description": "Select the sleep stages in which artifacts are detected, and a set of default thresholds.",
                 "custom_step_name": "SleepStageSelStep",
                 "show_index": true
             },
             {
                 "name": "Detectors Settings",
-                "description": "Select the detectors to run.",
+                "description": "Check the detectors to run and choose the group and name of the artifact events.",
                 "custom_step_name": "DetectorsStep",
                 "configs": {
                     "label": "Detectors Settings:",
                     "list": [
                         {
                             "name": "Flatline",
-                            "description": "Define settings for the flatline detection.",
+                            "description": "The group, name and threshold of the flatline detector.",
                             "custom_step_name": "FlatlineStep"
                         },
                         {
                             "name": "High Frequency Burst",
-                            "description": "Define settings for the high frequency burst detector.",
+                            "description": "The group, name and thresholds of the high frequency burst detector.",
                             "custom_step_name": "HighFreqBurstStep"
                         },
                         {
                             "name": "Persistent Noise",
-                            "description": "Define settings for the persistent noise detector.",
+                            "description": "The group, name and thresholds of the persistent noise detector.",
                             "custom_step_name": "PersistentNoiseStep"
                         },
                         {
                             "name": "Power Line Contamination",
-                            "description": "Define settings for the power line contamination detector.",
+                            "description": "The group, name and thresholds of the power line contamination detector.",
                             "custom_step_name": "PowerLineStep"
                         },
                         {
                             "name": "Baseline Variation",
-                            "description": "Define settings for the baseline variation detection.",
+                            "description": "The group, name and threshold of the baseline variation detector.",
                             "custom_step_name": "BslVarStep"
                         },
                         {
                             "name": "Muscular Artifact",
-                            "description": "Define settings for the muscular Artifact detection.",
+                            "description": "The group, names and thresholds of the muscle artifact detector.",
                             "custom_step_name": "MuscularStep"
                         }
                     ]

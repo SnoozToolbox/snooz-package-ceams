@@ -15,171 +15,438 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QFont, QFontDatabase, QGradient, QIcon,
     QImage, QKeySequence, QLinearGradient, QPainter,
     QPalette, QPixmap, QRadialGradient, QTransform)
-from PySide6.QtWidgets import (QAbstractScrollArea, QApplication, QButtonGroup, QCheckBox,
-    QFrame, QGridLayout, QHBoxLayout, QLabel,
-    QRadioButton, QSizePolicy, QSpacerItem, QTextEdit,
-    QVBoxLayout, QWidget)
+from PySide6.QtWidgets import (QApplication, QButtonGroup, QCheckBox, QFrame,
+    QGridLayout, QHBoxLayout, QLabel, QRadioButton,
+    QSizePolicy, QSpacerItem, QVBoxLayout, QWidget)
 import themes_rc
 
 class Ui_SleepStageSelStep(object):
     def setupUi(self, SleepStageSelStep):
         if not SleepStageSelStep.objectName():
             SleepStageSelStep.setObjectName(u"SleepStageSelStep")
-        SleepStageSelStep.resize(812, 840)
+        SleepStageSelStep.resize(900, 700)
         self.verticalLayout = QVBoxLayout(SleepStageSelStep)
         self.verticalLayout.setObjectName(u"verticalLayout")
-        self.label_7 = QLabel(SleepStageSelStep)
+        self.verticalLayout.setContentsMargins(19, 12, 19, 12)
+        self.content_row = QHBoxLayout()
+        self.content_row.setObjectName(u"content_row")
+        self.content_row.setContentsMargins(0, 0, 0, 0)
+        self.content_widget = QWidget(SleepStageSelStep)
+        self.content_widget.setObjectName(u"content_widget")
+        self.content_widget.setMaximumSize(QSize(800, 16777215))
+        self.content_layout = QVBoxLayout(self.content_widget)
+        self.content_layout.setSpacing(16)
+        self.content_layout.setObjectName(u"content_layout")
+        self.content_layout.setContentsMargins(0, 0, 0, 0)
+        self.header_layout = QVBoxLayout()
+        self.header_layout.setSpacing(6)
+        self.header_layout.setObjectName(u"header_layout")
+        self.title_label = QLabel(self.content_widget)
+        self.title_label.setObjectName(u"title_label")
+        font = QFont()
+        font.setPointSize(18)
+        font.setBold(True)
+        self.title_label.setFont(font)
+
+        self.header_layout.addWidget(self.title_label)
+
+        self.subtitle_label = QLabel(self.content_widget)
+        self.subtitle_label.setObjectName(u"subtitle_label")
+        self.subtitle_label.setWordWrap(True)
+        self.subtitle_label.setProperty(u"variant", u"help")
+
+        self.header_layout.addWidget(self.subtitle_label)
+
+
+        self.content_layout.addLayout(self.header_layout)
+
+        self.stages_card = QFrame(self.content_widget)
+        self.stages_card.setObjectName(u"stages_card")
+        self.stages_card.setFrameShape(QFrame.Shape.StyledPanel)
+        self.stages_card.setFrameShadow(QFrame.Shadow.Raised)
+        self.stages_card_layout = QVBoxLayout(self.stages_card)
+        self.stages_card_layout.setSpacing(10)
+        self.stages_card_layout.setObjectName(u"stages_card_layout")
+        self.stages_card_layout.setContentsMargins(10, 10, 10, 10)
+        self.label_7 = QLabel(self.stages_card)
         self.label_7.setObjectName(u"label_7")
-        sizePolicy = QSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Fixed)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.label_7.sizePolicy().hasHeightForWidth())
-        self.label_7.setSizePolicy(sizePolicy)
+        font1 = QFont()
+        font1.setBold(True)
+        self.label_7.setFont(font1)
 
-        self.verticalLayout.addWidget(self.label_7)
+        self.stages_card_layout.addWidget(self.label_7)
 
-        self.textEdit = QTextEdit(SleepStageSelStep)
-        self.textEdit.setObjectName(u"textEdit")
-        sizePolicy1 = QSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
-        sizePolicy1.setHorizontalStretch(0)
-        sizePolicy1.setVerticalStretch(0)
-        sizePolicy1.setHeightForWidth(self.textEdit.sizePolicy().hasHeightForWidth())
-        self.textEdit.setSizePolicy(sizePolicy1)
-        self.textEdit.setMinimumSize(QSize(0, 0))
-        self.textEdit.setMaximumSize(QSize(16777215, 16777215))
-        self.textEdit.setFrameShape(QFrame.Shape.Panel)
-        self.textEdit.setLineWidth(0)
-        self.textEdit.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
-        self.textEdit.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
-        self.textEdit.setSizeAdjustPolicy(QAbstractScrollArea.SizeAdjustPolicy.AdjustIgnored)
-        self.textEdit.setReadOnly(True)
+        self.stages_help_label = QLabel(self.stages_card)
+        self.stages_help_label.setObjectName(u"stages_help_label")
+        self.stages_help_label.setWordWrap(True)
+        self.stages_help_label.setProperty(u"variant", u"help")
 
-        self.verticalLayout.addWidget(self.textEdit)
+        self.stages_card_layout.addWidget(self.stages_help_label)
 
-        self.horizontalLayout_4 = QHBoxLayout()
-        self.horizontalLayout_4.setObjectName(u"horizontalLayout_4")
-        self.gridLayout = QGridLayout()
-        self.gridLayout.setObjectName(u"gridLayout")
-        self.checkBox_1 = QCheckBox(SleepStageSelStep)
+        self.stages_layout = QHBoxLayout()
+        self.stages_layout.setSpacing(22)
+        self.stages_layout.setObjectName(u"stages_layout")
+        self.checkBox_1 = QCheckBox(self.stages_card)
         self.checkBox_1.setObjectName(u"checkBox_1")
         self.checkBox_1.setChecked(True)
 
-        self.gridLayout.addWidget(self.checkBox_1, 0, 0, 1, 1)
+        self.stages_layout.addWidget(self.checkBox_1)
 
-        self.checkBox_2 = QCheckBox(SleepStageSelStep)
+        self.checkBox_2 = QCheckBox(self.stages_card)
         self.checkBox_2.setObjectName(u"checkBox_2")
         self.checkBox_2.setChecked(True)
 
-        self.gridLayout.addWidget(self.checkBox_2, 0, 1, 1, 2)
+        self.stages_layout.addWidget(self.checkBox_2)
 
-        self.checkBox_3 = QCheckBox(SleepStageSelStep)
+        self.checkBox_3 = QCheckBox(self.stages_card)
         self.checkBox_3.setObjectName(u"checkBox_3")
         self.checkBox_3.setChecked(True)
 
-        self.gridLayout.addWidget(self.checkBox_3, 0, 3, 1, 1)
+        self.stages_layout.addWidget(self.checkBox_3)
 
-        self.checkBox_5 = QCheckBox(SleepStageSelStep)
+        self.checkBox_5 = QCheckBox(self.stages_card)
         self.checkBox_5.setObjectName(u"checkBox_5")
         self.checkBox_5.setChecked(False)
 
-        self.gridLayout.addWidget(self.checkBox_5, 0, 4, 1, 1)
+        self.stages_layout.addWidget(self.checkBox_5)
 
-        self.checkBox_9 = QCheckBox(SleepStageSelStep)
-        self.checkBox_9.setObjectName(u"checkBox_9")
-
-        self.gridLayout.addWidget(self.checkBox_9, 1, 0, 1, 2)
-
-        self.checkBox_0 = QCheckBox(SleepStageSelStep)
+        self.checkBox_0 = QCheckBox(self.stages_card)
         self.checkBox_0.setObjectName(u"checkBox_0")
 
-        self.gridLayout.addWidget(self.checkBox_0, 1, 2, 1, 2)
+        self.stages_layout.addWidget(self.checkBox_0)
+
+        self.stages_spacer = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+
+        self.stages_layout.addItem(self.stages_spacer)
 
 
-        self.horizontalLayout_4.addLayout(self.gridLayout)
+        self.stages_card_layout.addLayout(self.stages_layout)
 
-        self.horizontalSpacer = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+        self.checkBox_9 = QCheckBox(self.stages_card)
+        self.checkBox_9.setObjectName(u"checkBox_9")
 
-        self.horizontalLayout_4.addItem(self.horizontalSpacer)
+        self.stages_card_layout.addWidget(self.checkBox_9)
+
+        self.unscored_help_label = QLabel(self.stages_card)
+        self.unscored_help_label.setObjectName(u"unscored_help_label")
+        font2 = QFont()
+        font2.setPointSize(10)
+        self.unscored_help_label.setFont(font2)
+        self.unscored_help_label.setWordWrap(True)
+        self.unscored_help_label.setIndent(26)
+        self.unscored_help_label.setProperty(u"variant", u"help")
+
+        self.stages_card_layout.addWidget(self.unscored_help_label)
 
 
-        self.verticalLayout.addLayout(self.horizontalLayout_4)
+        self.content_layout.addWidget(self.stages_card)
 
-        self.verticalSpacer = QSpacerItem(20, 20, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Fixed)
+        self.stages_info = QFrame(self.content_widget)
+        self.stages_info.setObjectName(u"stages_info")
+        self.stages_info.setFrameShape(QFrame.Shape.NoFrame)
+        self.stages_info.setProperty(u"variant", u"info")
+        self.stages_info_layout = QHBoxLayout(self.stages_info)
+        self.stages_info_layout.setObjectName(u"stages_info_layout")
+        self.stages_info_layout.setContentsMargins(14, 10, 14, 10)
+        self.stages_info_label = QLabel(self.stages_info)
+        self.stages_info_label.setObjectName(u"stages_info_label")
+        self.stages_info_label.setTextFormat(Qt.TextFormat.RichText)
+        self.stages_info_label.setWordWrap(True)
 
-        self.verticalLayout.addItem(self.verticalSpacer)
+        self.stages_info_layout.addWidget(self.stages_info_label)
 
-        self.label = QLabel(SleepStageSelStep)
+
+        self.content_layout.addWidget(self.stages_info)
+
+        self.sets_card = QFrame(self.content_widget)
+        self.sets_card.setObjectName(u"sets_card")
+        self.sets_card.setFrameShape(QFrame.Shape.StyledPanel)
+        self.sets_card.setFrameShadow(QFrame.Shadow.Raised)
+        self.sets_card_layout = QVBoxLayout(self.sets_card)
+        self.sets_card_layout.setSpacing(10)
+        self.sets_card_layout.setObjectName(u"sets_card_layout")
+        self.sets_card_layout.setContentsMargins(10, 10, 10, 10)
+        self.label = QLabel(self.sets_card)
         self.label.setObjectName(u"label")
-        sizePolicy.setHeightForWidth(self.label.sizePolicy().hasHeightForWidth())
-        self.label.setSizePolicy(sizePolicy)
-        font = QFont()
-        font.setBold(False)
-        font.setItalic(False)
-        self.label.setFont(font)
+        self.label.setFont(font1)
 
-        self.verticalLayout.addWidget(self.label)
+        self.sets_card_layout.addWidget(self.label)
 
-        self.label_3 = QLabel(SleepStageSelStep)
-        self.label_3.setObjectName(u"label_3")
-        sizePolicy.setHeightForWidth(self.label_3.sizePolicy().hasHeightForWidth())
-        self.label_3.setSizePolicy(sizePolicy)
-
-        self.verticalLayout.addWidget(self.label_3)
-
-        self.label_4 = QLabel(SleepStageSelStep)
-        self.label_4.setObjectName(u"label_4")
-        sizePolicy.setHeightForWidth(self.label_4.sizePolicy().hasHeightForWidth())
-        self.label_4.setSizePolicy(sizePolicy)
-
-        self.verticalLayout.addWidget(self.label_4)
-
-        self.label_5 = QLabel(SleepStageSelStep)
-        self.label_5.setObjectName(u"label_5")
-
-        self.verticalLayout.addWidget(self.label_5)
-
-        self.radioButton_set1 = QRadioButton(SleepStageSelStep)
+        self.sets_layout = QVBoxLayout()
+        self.sets_layout.setSpacing(8)
+        self.sets_layout.setObjectName(u"sets_layout")
+        self.sets_layout_1_layout = QVBoxLayout()
+        self.sets_layout_1_layout.setSpacing(2)
+        self.sets_layout_1_layout.setObjectName(u"sets_layout_1_layout")
+        self.radioButton_set1 = QRadioButton(self.sets_card)
         self.Theshold_sets = QButtonGroup(SleepStageSelStep)
         self.Theshold_sets.setObjectName(u"Theshold_sets")
         self.Theshold_sets.addButton(self.radioButton_set1)
         self.radioButton_set1.setObjectName(u"radioButton_set1")
         self.radioButton_set1.setChecked(True)
 
-        self.verticalLayout.addWidget(self.radioButton_set1)
+        self.sets_layout_1_layout.addWidget(self.radioButton_set1)
 
-        self.textEdit1 = QTextEdit(SleepStageSelStep)
-        self.textEdit1.setObjectName(u"textEdit1")
-        sizePolicy1.setHeightForWidth(self.textEdit1.sizePolicy().hasHeightForWidth())
-        self.textEdit1.setSizePolicy(sizePolicy1)
-        self.textEdit1.setMaximumSize(QSize(16777215, 160))
-        self.textEdit1.setFrameShape(QFrame.Shape.NoFrame)
-        self.textEdit1.setLineWidth(0)
-        self.textEdit1.setSizeAdjustPolicy(QAbstractScrollArea.SizeAdjustPolicy.AdjustIgnored)
-        self.textEdit1.setReadOnly(True)
+        self.set1_help_label = QLabel(self.sets_card)
+        self.set1_help_label.setObjectName(u"set1_help_label")
+        self.set1_help_label.setFont(font2)
+        self.set1_help_label.setWordWrap(True)
+        self.set1_help_label.setIndent(26)
+        self.set1_help_label.setProperty(u"variant", u"help")
 
-        self.verticalLayout.addWidget(self.textEdit1)
+        self.sets_layout_1_layout.addWidget(self.set1_help_label)
 
-        self.radioButton_set2 = QRadioButton(SleepStageSelStep)
+
+        self.sets_layout.addLayout(self.sets_layout_1_layout)
+
+        self.sets_layout_line_1 = QFrame(self.sets_card)
+        self.sets_layout_line_1.setObjectName(u"sets_layout_line_1")
+        self.sets_layout_line_1.setFrameShape(QFrame.Shape.HLine)
+        self.sets_layout_line_1.setFrameShadow(QFrame.Shadow.Plain)
+
+        self.sets_layout.addWidget(self.sets_layout_line_1)
+
+        self.sets_layout_2_layout = QVBoxLayout()
+        self.sets_layout_2_layout.setSpacing(2)
+        self.sets_layout_2_layout.setObjectName(u"sets_layout_2_layout")
+        self.radioButton_set2 = QRadioButton(self.sets_card)
         self.Theshold_sets.addButton(self.radioButton_set2)
         self.radioButton_set2.setObjectName(u"radioButton_set2")
 
-        self.verticalLayout.addWidget(self.radioButton_set2)
+        self.sets_layout_2_layout.addWidget(self.radioButton_set2)
 
-        self.textEdit_2 = QTextEdit(SleepStageSelStep)
-        self.textEdit_2.setObjectName(u"textEdit_2")
-        sizePolicy1.setHeightForWidth(self.textEdit_2.sizePolicy().hasHeightForWidth())
-        self.textEdit_2.setSizePolicy(sizePolicy1)
-        self.textEdit_2.setMaximumSize(QSize(16777215, 160))
-        self.textEdit_2.setFrameShape(QFrame.Shape.NoFrame)
-        self.textEdit_2.setSizeAdjustPolicy(QAbstractScrollArea.SizeAdjustPolicy.AdjustIgnored)
-        self.textEdit_2.setReadOnly(True)
+        self.set2_help_label = QLabel(self.sets_card)
+        self.set2_help_label.setObjectName(u"set2_help_label")
+        self.set2_help_label.setFont(font2)
+        self.set2_help_label.setWordWrap(True)
+        self.set2_help_label.setIndent(26)
+        self.set2_help_label.setProperty(u"variant", u"help")
 
-        self.verticalLayout.addWidget(self.textEdit_2)
+        self.sets_layout_2_layout.addWidget(self.set2_help_label)
 
-        self.label_2 = QLabel(SleepStageSelStep)
-        self.label_2.setObjectName(u"label_2")
 
-        self.verticalLayout.addWidget(self.label_2)
+        self.sets_layout.addLayout(self.sets_layout_2_layout)
+
+
+        self.sets_card_layout.addLayout(self.sets_layout)
+
+        self.label_5 = QLabel(self.sets_card)
+        self.label_5.setObjectName(u"label_5")
+        self.label_5.setFont(font2)
+        self.label_5.setWordWrap(True)
+        self.label_5.setProperty(u"variant", u"help")
+
+        self.sets_card_layout.addWidget(self.label_5)
+
+        self.sets_table = QGridLayout()
+        self.sets_table.setObjectName(u"sets_table")
+        self.sets_table.setHorizontalSpacing(20)
+        self.sets_table.setVerticalSpacing(6)
+        self.sets_table_header_0 = QLabel(self.sets_card)
+        self.sets_table_header_0.setObjectName(u"sets_table_header_0")
+        self.sets_table_header_0.setTextFormat(Qt.TextFormat.RichText)
+        self.sets_table_header_0.setWordWrap(True)
+        self.sets_table_header_0.setAlignment(Qt.AlignmentFlag.AlignLeading|Qt.AlignmentFlag.AlignLeft|Qt.AlignmentFlag.AlignTop)
+
+        self.sets_table.addWidget(self.sets_table_header_0, 0, 0, 1, 1)
+
+        self.sets_table_header_1 = QLabel(self.sets_card)
+        self.sets_table_header_1.setObjectName(u"sets_table_header_1")
+        self.sets_table_header_1.setTextFormat(Qt.TextFormat.RichText)
+        self.sets_table_header_1.setWordWrap(True)
+        self.sets_table_header_1.setAlignment(Qt.AlignmentFlag.AlignLeading|Qt.AlignmentFlag.AlignLeft|Qt.AlignmentFlag.AlignTop)
+
+        self.sets_table.addWidget(self.sets_table_header_1, 0, 1, 1, 1)
+
+        self.sets_table_header_2 = QLabel(self.sets_card)
+        self.sets_table_header_2.setObjectName(u"sets_table_header_2")
+        self.sets_table_header_2.setTextFormat(Qt.TextFormat.RichText)
+        self.sets_table_header_2.setWordWrap(True)
+        self.sets_table_header_2.setAlignment(Qt.AlignmentFlag.AlignLeading|Qt.AlignmentFlag.AlignLeft|Qt.AlignmentFlag.AlignTop)
+
+        self.sets_table.addWidget(self.sets_table_header_2, 0, 2, 1, 1)
+
+        self.sets_table_line = QFrame(self.sets_card)
+        self.sets_table_line.setObjectName(u"sets_table_line")
+        self.sets_table_line.setFrameShape(QFrame.Shape.HLine)
+        self.sets_table_line.setFrameShadow(QFrame.Shadow.Plain)
+
+        self.sets_table.addWidget(self.sets_table_line, 1, 0, 1, 3)
+
+        self.sets_table_1_0 = QLabel(self.sets_card)
+        self.sets_table_1_0.setObjectName(u"sets_table_1_0")
+        self.sets_table_1_0.setWordWrap(True)
+        self.sets_table_1_0.setProperty(u"variant", u"help")
+        self.sets_table_1_0.setAlignment(Qt.AlignmentFlag.AlignLeading|Qt.AlignmentFlag.AlignLeft|Qt.AlignmentFlag.AlignTop)
+
+        self.sets_table.addWidget(self.sets_table_1_0, 2, 0, 1, 1)
+
+        self.sets_table_1_1 = QLabel(self.sets_card)
+        self.sets_table_1_1.setObjectName(u"sets_table_1_1")
+        self.sets_table_1_1.setWordWrap(True)
+        self.sets_table_1_1.setProperty(u"variant", u"help")
+        self.sets_table_1_1.setAlignment(Qt.AlignmentFlag.AlignLeading|Qt.AlignmentFlag.AlignLeft|Qt.AlignmentFlag.AlignTop)
+
+        self.sets_table.addWidget(self.sets_table_1_1, 2, 1, 1, 1)
+
+        self.sets_table_1_2 = QLabel(self.sets_card)
+        self.sets_table_1_2.setObjectName(u"sets_table_1_2")
+        self.sets_table_1_2.setWordWrap(True)
+        self.sets_table_1_2.setProperty(u"variant", u"help")
+        self.sets_table_1_2.setAlignment(Qt.AlignmentFlag.AlignLeading|Qt.AlignmentFlag.AlignLeft|Qt.AlignmentFlag.AlignTop)
+
+        self.sets_table.addWidget(self.sets_table_1_2, 2, 2, 1, 1)
+
+        self.sets_table_2_0 = QLabel(self.sets_card)
+        self.sets_table_2_0.setObjectName(u"sets_table_2_0")
+        self.sets_table_2_0.setWordWrap(True)
+        self.sets_table_2_0.setProperty(u"variant", u"help")
+        self.sets_table_2_0.setAlignment(Qt.AlignmentFlag.AlignLeading|Qt.AlignmentFlag.AlignLeft|Qt.AlignmentFlag.AlignTop)
+
+        self.sets_table.addWidget(self.sets_table_2_0, 3, 0, 1, 1)
+
+        self.sets_table_2_1 = QLabel(self.sets_card)
+        self.sets_table_2_1.setObjectName(u"sets_table_2_1")
+        self.sets_table_2_1.setWordWrap(True)
+        self.sets_table_2_1.setProperty(u"variant", u"help")
+        self.sets_table_2_1.setAlignment(Qt.AlignmentFlag.AlignLeading|Qt.AlignmentFlag.AlignLeft|Qt.AlignmentFlag.AlignTop)
+
+        self.sets_table.addWidget(self.sets_table_2_1, 3, 1, 1, 1)
+
+        self.sets_table_2_2 = QLabel(self.sets_card)
+        self.sets_table_2_2.setObjectName(u"sets_table_2_2")
+        self.sets_table_2_2.setWordWrap(True)
+        self.sets_table_2_2.setProperty(u"variant", u"help")
+        self.sets_table_2_2.setAlignment(Qt.AlignmentFlag.AlignLeading|Qt.AlignmentFlag.AlignLeft|Qt.AlignmentFlag.AlignTop)
+
+        self.sets_table.addWidget(self.sets_table_2_2, 3, 2, 1, 1)
+
+        self.sets_table_3_0 = QLabel(self.sets_card)
+        self.sets_table_3_0.setObjectName(u"sets_table_3_0")
+        self.sets_table_3_0.setWordWrap(True)
+        self.sets_table_3_0.setProperty(u"variant", u"help")
+        self.sets_table_3_0.setAlignment(Qt.AlignmentFlag.AlignLeading|Qt.AlignmentFlag.AlignLeft|Qt.AlignmentFlag.AlignTop)
+
+        self.sets_table.addWidget(self.sets_table_3_0, 4, 0, 1, 1)
+
+        self.sets_table_3_1 = QLabel(self.sets_card)
+        self.sets_table_3_1.setObjectName(u"sets_table_3_1")
+        self.sets_table_3_1.setWordWrap(True)
+        self.sets_table_3_1.setProperty(u"variant", u"help")
+        self.sets_table_3_1.setAlignment(Qt.AlignmentFlag.AlignLeading|Qt.AlignmentFlag.AlignLeft|Qt.AlignmentFlag.AlignTop)
+
+        self.sets_table.addWidget(self.sets_table_3_1, 4, 1, 1, 1)
+
+        self.sets_table_3_2 = QLabel(self.sets_card)
+        self.sets_table_3_2.setObjectName(u"sets_table_3_2")
+        self.sets_table_3_2.setWordWrap(True)
+        self.sets_table_3_2.setProperty(u"variant", u"help")
+        self.sets_table_3_2.setAlignment(Qt.AlignmentFlag.AlignLeading|Qt.AlignmentFlag.AlignLeft|Qt.AlignmentFlag.AlignTop)
+
+        self.sets_table.addWidget(self.sets_table_3_2, 4, 2, 1, 1)
+
+        self.sets_table_4_0 = QLabel(self.sets_card)
+        self.sets_table_4_0.setObjectName(u"sets_table_4_0")
+        self.sets_table_4_0.setWordWrap(True)
+        self.sets_table_4_0.setProperty(u"variant", u"help")
+        self.sets_table_4_0.setAlignment(Qt.AlignmentFlag.AlignLeading|Qt.AlignmentFlag.AlignLeft|Qt.AlignmentFlag.AlignTop)
+
+        self.sets_table.addWidget(self.sets_table_4_0, 5, 0, 1, 1)
+
+        self.sets_table_4_1 = QLabel(self.sets_card)
+        self.sets_table_4_1.setObjectName(u"sets_table_4_1")
+        self.sets_table_4_1.setWordWrap(True)
+        self.sets_table_4_1.setProperty(u"variant", u"help")
+        self.sets_table_4_1.setAlignment(Qt.AlignmentFlag.AlignLeading|Qt.AlignmentFlag.AlignLeft|Qt.AlignmentFlag.AlignTop)
+
+        self.sets_table.addWidget(self.sets_table_4_1, 5, 1, 1, 1)
+
+        self.sets_table_4_2 = QLabel(self.sets_card)
+        self.sets_table_4_2.setObjectName(u"sets_table_4_2")
+        self.sets_table_4_2.setWordWrap(True)
+        self.sets_table_4_2.setProperty(u"variant", u"help")
+        self.sets_table_4_2.setAlignment(Qt.AlignmentFlag.AlignLeading|Qt.AlignmentFlag.AlignLeft|Qt.AlignmentFlag.AlignTop)
+
+        self.sets_table.addWidget(self.sets_table_4_2, 5, 2, 1, 1)
+
+        self.sets_table_5_0 = QLabel(self.sets_card)
+        self.sets_table_5_0.setObjectName(u"sets_table_5_0")
+        self.sets_table_5_0.setWordWrap(True)
+        self.sets_table_5_0.setProperty(u"variant", u"help")
+        self.sets_table_5_0.setAlignment(Qt.AlignmentFlag.AlignLeading|Qt.AlignmentFlag.AlignLeft|Qt.AlignmentFlag.AlignTop)
+
+        self.sets_table.addWidget(self.sets_table_5_0, 6, 0, 1, 1)
+
+        self.sets_table_5_1 = QLabel(self.sets_card)
+        self.sets_table_5_1.setObjectName(u"sets_table_5_1")
+        self.sets_table_5_1.setWordWrap(True)
+        self.sets_table_5_1.setProperty(u"variant", u"help")
+        self.sets_table_5_1.setAlignment(Qt.AlignmentFlag.AlignLeading|Qt.AlignmentFlag.AlignLeft|Qt.AlignmentFlag.AlignTop)
+
+        self.sets_table.addWidget(self.sets_table_5_1, 6, 1, 1, 1)
+
+        self.sets_table_5_2 = QLabel(self.sets_card)
+        self.sets_table_5_2.setObjectName(u"sets_table_5_2")
+        self.sets_table_5_2.setWordWrap(True)
+        self.sets_table_5_2.setProperty(u"variant", u"help")
+        self.sets_table_5_2.setAlignment(Qt.AlignmentFlag.AlignLeading|Qt.AlignmentFlag.AlignLeft|Qt.AlignmentFlag.AlignTop)
+
+        self.sets_table.addWidget(self.sets_table_5_2, 6, 2, 1, 1)
+
+        self.sets_table_6_0 = QLabel(self.sets_card)
+        self.sets_table_6_0.setObjectName(u"sets_table_6_0")
+        self.sets_table_6_0.setWordWrap(True)
+        self.sets_table_6_0.setProperty(u"variant", u"help")
+        self.sets_table_6_0.setAlignment(Qt.AlignmentFlag.AlignLeading|Qt.AlignmentFlag.AlignLeft|Qt.AlignmentFlag.AlignTop)
+
+        self.sets_table.addWidget(self.sets_table_6_0, 7, 0, 1, 1)
+
+        self.sets_table_6_1 = QLabel(self.sets_card)
+        self.sets_table_6_1.setObjectName(u"sets_table_6_1")
+        self.sets_table_6_1.setWordWrap(True)
+        self.sets_table_6_1.setProperty(u"variant", u"help")
+        self.sets_table_6_1.setAlignment(Qt.AlignmentFlag.AlignLeading|Qt.AlignmentFlag.AlignLeft|Qt.AlignmentFlag.AlignTop)
+
+        self.sets_table.addWidget(self.sets_table_6_1, 7, 1, 1, 1)
+
+        self.sets_table_6_2 = QLabel(self.sets_card)
+        self.sets_table_6_2.setObjectName(u"sets_table_6_2")
+        self.sets_table_6_2.setWordWrap(True)
+        self.sets_table_6_2.setProperty(u"variant", u"help")
+        self.sets_table_6_2.setAlignment(Qt.AlignmentFlag.AlignLeading|Qt.AlignmentFlag.AlignLeft|Qt.AlignmentFlag.AlignTop)
+
+        self.sets_table.addWidget(self.sets_table_6_2, 7, 2, 1, 1)
+
+        self.sets_table.setColumnStretch(1, 1)
+        self.sets_table.setColumnStretch(2, 1)
+
+        self.sets_card_layout.addLayout(self.sets_table)
+
+        self.sets_note_label = QLabel(self.sets_card)
+        self.sets_note_label.setObjectName(u"sets_note_label")
+        self.sets_note_label.setFont(font2)
+        self.sets_note_label.setWordWrap(True)
+        self.sets_note_label.setProperty(u"variant", u"help")
+
+        self.sets_card_layout.addWidget(self.sets_note_label)
+
+
+        self.content_layout.addWidget(self.sets_card)
+
+
+        self.content_row.addWidget(self.content_widget)
+
+        self.content_spacer = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+
+        self.content_row.addItem(self.content_spacer)
+
+        self.content_row.setStretch(0, 1)
+
+        self.verticalLayout.addLayout(self.content_row)
+
+        self.verticalSpacer = QSpacerItem(40, 20, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
+
+        self.verticalLayout.addItem(self.verticalSpacer)
 
 
         self.retranslateUi(SleepStageSelStep)
@@ -197,70 +464,45 @@ class Ui_SleepStageSelStep(object):
 
     def retranslateUi(self, SleepStageSelStep):
         SleepStageSelStep.setWindowTitle("")
-        self.label_7.setText(QCoreApplication.translate("SleepStageSelStep", u"<html><head/><body><p><span style=\" font-weight:600;\">Sleep Stage Selection</span></p></body></html>", None))
-        self.textEdit.setHtml(QCoreApplication.translate("SleepStageSelStep", u"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
-"<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset=\"utf-8\" /><style type=\"text/css\">\n"
-"p, li { white-space: pre-wrap; }\n"
-"hr { height: 1px; border-width: 0; }\n"
-"li.unchecked::marker { content: \"\\2610\"; }\n"
-"li.checked::marker { content: \"\\2612\"; }\n"
-"</style></head><body style=\" font-size:12pt; font-weight:400; font-style:normal;\">\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Select the sleep stages in which you want to detect artifacts.</p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Artifact detection performs better when similar sleep stages are selected,"
-                        " as the power distribution can be modeled more accurately. </p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Some detectors use a 3-component Gaussian Mixture Model (GMM) to estimate the standard deviation of non-corrupted data, </p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">which is then used to define the threshold value.</p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">* We recommend running artifact detection separately for NREM, REM, and Awake stages.</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">* Make sur to have different an"
-                        "notation group or name to avoid confusion.</p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Please select &quot;Unscored&quot; if your data does not include sleep stages.</p></body></html>", None))
+        self.title_label.setText(QCoreApplication.translate("SleepStageSelStep", u"Stage Selection", None))
+        self.subtitle_label.setText(QCoreApplication.translate("SleepStageSelStep", u"Select the sleep stages in which artifacts are detected, then a set of default thresholds.", None))
+        self.label_7.setText(QCoreApplication.translate("SleepStageSelStep", u"Sleep stages", None))
+        self.stages_help_label.setText(QCoreApplication.translate("SleepStageSelStep", u"Select the stages in which artifacts are detected.", None))
         self.checkBox_1.setText(QCoreApplication.translate("SleepStageSelStep", u"N1", None))
         self.checkBox_2.setText(QCoreApplication.translate("SleepStageSelStep", u"N2", None))
         self.checkBox_3.setText(QCoreApplication.translate("SleepStageSelStep", u"N3", None))
         self.checkBox_5.setText(QCoreApplication.translate("SleepStageSelStep", u"R", None))
-        self.checkBox_9.setText(QCoreApplication.translate("SleepStageSelStep", u"Unscored", None))
         self.checkBox_0.setText(QCoreApplication.translate("SleepStageSelStep", u"Awake", None))
-        self.label.setText(QCoreApplication.translate("SleepStageSelStep", u"<html><head/><body><p><span style=\" font-weight:700;\">Default threshold values</span></p></body></html>", None))
-        self.label_3.setText(QCoreApplication.translate("SleepStageSelStep", u"Threshold values for the different algorithms can be edited in \"Step 5 \u2013 Detector Settings\".", None))
-        self.label_4.setText(QCoreApplication.translate("SleepStageSelStep", u"However, two sets of default values are also available.", None))
-        self.label_5.setText(QCoreApplication.translate("SleepStageSelStep", u"Clicking any of the radio buttons below will automatically apply the corresponding default values to all detectors.", None))
-        self.radioButton_set1.setText(QCoreApplication.translate("SleepStageSelStep", u"Set 1 : is intended for NREM sleep stages and can also be used for Awake or Unscored stages.", None))
-        self.textEdit1.setHtml(QCoreApplication.translate("SleepStageSelStep", u"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
-"<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset=\"utf-8\" /><style type=\"text/css\">\n"
-"p, li { white-space: pre-wrap; }\n"
-"hr { height: 1px; border-width: 0; }\n"
-"li.unchecked::marker { content: \"\\2610\"; }\n"
-"li.checked::marker { content: \"\\2612\"; }\n"
-"</style></head><body style=\" font-size:12pt; font-weight:400; font-style:normal;\">\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Default values for detection in NREM (Set 1)</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">    <span style=\" font-weight:700;\">Flatline</span> : 		A=<span style=\" font-weight:700;\">0.25</span> \u00b5V<span style=\" vertical-align:super;\">2</span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -q"
-                        "t-block-indent:0; text-indent:0px;\">    <span style=\" font-weight:700;\">High Frequency Burst </span>: 	A=<span style=\" font-weight:700;\">4</span> SD; 		B=<span style=\" font-weight:700;\">8</span> BSL MED, 	C=<span style=\" font-weight:700;\">0.1</span> Ratio</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">    <span style=\" font-weight:700;\">Persistent Noise</span> : 		A=<span style=\" font-weight:700;\">4</span> SD; 		B=<span style=\" font-weight:700;\">0.1</span> Ratio</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">    <span style=\" font-weight:700;\">Power Line Contamination</span> : 	A=<span style=\" font-weight:700;\">0</span> SD; 		B=<span style=\" font-weight:700;\">0.1</span> Ratio</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">    <span style=\" font-we"
-                        "ight:700;\">Baseline Variation</span> : 	A=<span style=\" font-weight:700;\">4</span> STD</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">    <span style=\" font-weight:700;\">Muscular</span> : 		A=<span style=\" font-weight:700;\">8</span> BSL MED, 	B=<span style=\" font-weight:700;\">5 </span>BSL MED, 	C=<span style=\" font-weight:700;\">5</span> BSL MED</p></body></html>", None))
-        self.radioButton_set2.setText(QCoreApplication.translate("SleepStageSelStep", u"Set 2 : is more sensitive and intended for REM sleep stages.", None))
-        self.textEdit_2.setHtml(QCoreApplication.translate("SleepStageSelStep", u"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
-"<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset=\"utf-8\" /><style type=\"text/css\">\n"
-"p, li { white-space: pre-wrap; }\n"
-"hr { height: 1px; border-width: 0; }\n"
-"li.unchecked::marker { content: \"\\2610\"; }\n"
-"li.checked::marker { content: \"\\2612\"; }\n"
-"</style></head><body style=\" font-size:12pt; font-weight:400; font-style:normal;\">\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">The default values for detection in REM (Set 2)</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">    <span style=\" font-weight:700;\">Flatline</span> : 		A=0.25 \u00b5V<span style=\" vertical-align:super;\">2</span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"> "
-                        "   <span style=\" font-weight:700;\">High Frequency Burst</span> : 	A=<span style=\" font-weight:700; color:#ff0000;\">3</span> SD; 		B=<span style=\" font-weight:700; color:#ff0000;\">6</span> BSL MED, 	C=0.1 Ratio</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">    <span style=\" font-weight:700;\">Persistent Noise</span> : 		A=<span style=\" font-weight:700; color:#ff0000;\">2</span> SD; 		B=0.1 Ratio</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">    <span style=\" font-weight:700;\">Power Line Contamination</span> : 	A=0 SD; 		B=0.1 Ratio</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">    <span style=\" font-weight:700;\">Baseline Variation</span> : 	A=<span style=\" font-weight:700; color:#ff0000;\">2.5</span> STD</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:"
-                        "0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">    <span style=\" font-weight:700;\">Muscular</span> : 		A=<span style=\" font-weight:700; color:#ff0000;\">4</span> BSL MED, 	B=<span style=\" font-weight:700; color:#ff0000;\">3</span> BSL MED, 	C=<span style=\" font-weight:700; color:#ff0000;\">3</span> BSL MED</p></body></html>", None))
-        self.label_2.setText("")
+        self.checkBox_9.setText(QCoreApplication.translate("SleepStageSelStep", u"Unscored", None))
+        self.unscored_help_label.setText(QCoreApplication.translate("SleepStageSelStep", u"Select \"Unscored\" when the recordings have no sleep stages. The detection then runs on any EEG recording.", None))
+        self.stages_info_label.setText(QCoreApplication.translate("SleepStageSelStep", u"<b>Run the detection once per kind of stage</b><br/>The detection works better when the selected stages are alike, because several thresholds depend on their power distribution. Run the tool separately for NREM, REM and Awake, with a different group or name each time.", None))
+        self.label.setText(QCoreApplication.translate("SleepStageSelStep", u"Default thresholds", None))
+        self.radioButton_set1.setText(QCoreApplication.translate("SleepStageSelStep", u"Set 1, for NREM sleep", None))
+        self.set1_help_label.setText(QCoreApplication.translate("SleepStageSelStep", u"Also for the Awake or Unscored stages.", None))
+        self.radioButton_set2.setText(QCoreApplication.translate("SleepStageSelStep", u"Set 2, for REM sleep", None))
+        self.set2_help_label.setText(QCoreApplication.translate("SleepStageSelStep", u"More sensitive.", None))
+        self.label_5.setText(QCoreApplication.translate("SleepStageSelStep", u"Choosing a set gives its values to all the detectors. You can then edit them in the page of each detector.", None))
+        self.sets_table_header_0.setText(QCoreApplication.translate("SleepStageSelStep", u"<b>Detector</b>", None))
+        self.sets_table_header_1.setText(QCoreApplication.translate("SleepStageSelStep", u"<b>Set 1</b>", None))
+        self.sets_table_header_2.setText(QCoreApplication.translate("SleepStageSelStep", u"<b>Set 2</b>", None))
+        self.sets_table_1_0.setText(QCoreApplication.translate("SleepStageSelStep", u"Flatline", None))
+        self.sets_table_1_1.setText(QCoreApplication.translate("SleepStageSelStep", u"0.25 \u00b5V\u00b2", None))
+        self.sets_table_1_2.setText(QCoreApplication.translate("SleepStageSelStep", u"0.25 \u00b5V\u00b2", None))
+        self.sets_table_2_0.setText(QCoreApplication.translate("SleepStageSelStep", u"High frequency burst", None))
+        self.sets_table_2_1.setText(QCoreApplication.translate("SleepStageSelStep", u"A 4 \u00d7 SD, B 8 \u00d7 median, C 0.1", None))
+        self.sets_table_2_2.setText(QCoreApplication.translate("SleepStageSelStep", u"A 3 \u00d7 SD, B 6 \u00d7 median, C 0.1", None))
+        self.sets_table_3_0.setText(QCoreApplication.translate("SleepStageSelStep", u"Persistent noise", None))
+        self.sets_table_3_1.setText(QCoreApplication.translate("SleepStageSelStep", u"A 4 \u00d7 SD, B 0.1", None))
+        self.sets_table_3_2.setText(QCoreApplication.translate("SleepStageSelStep", u"A 2 \u00d7 SD, B 0.1", None))
+        self.sets_table_4_0.setText(QCoreApplication.translate("SleepStageSelStep", u"Power line contamination", None))
+        self.sets_table_4_1.setText(QCoreApplication.translate("SleepStageSelStep", u"A 0 \u00d7 SD, B 0.1", None))
+        self.sets_table_4_2.setText(QCoreApplication.translate("SleepStageSelStep", u"A 0 \u00d7 SD, B 0.1", None))
+        self.sets_table_5_0.setText(QCoreApplication.translate("SleepStageSelStep", u"Baseline variation", None))
+        self.sets_table_5_1.setText(QCoreApplication.translate("SleepStageSelStep", u"4 \u00d7 SD", None))
+        self.sets_table_5_2.setText(QCoreApplication.translate("SleepStageSelStep", u"2.5 \u00d7 SD", None))
+        self.sets_table_6_0.setText(QCoreApplication.translate("SleepStageSelStep", u"Muscle artifact", None))
+        self.sets_table_6_1.setText(QCoreApplication.translate("SleepStageSelStep", u"A 8, B 5, C 5 \u00d7 median", None))
+        self.sets_table_6_2.setText(QCoreApplication.translate("SleepStageSelStep", u"A 4, B 3, C 3 \u00d7 median", None))
+        self.sets_note_label.setText(QCoreApplication.translate("SleepStageSelStep", u"SD is the standard deviation of the main Gaussian component of the power distribution, median the median power of the baseline.", None))
     # retranslateUi
 

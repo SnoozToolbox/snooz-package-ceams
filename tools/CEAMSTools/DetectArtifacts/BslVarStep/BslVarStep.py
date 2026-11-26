@@ -9,13 +9,13 @@ See the file LICENCE for full license details.
 
 from qtpy import QtWidgets
 from qtpy import QtCore
-from qtpy.QtGui import QRegularExpressionValidator, QPixmap
+from qtpy.QtGui import QRegularExpressionValidator
 from qtpy.QtCore import QRegularExpression
-import base64
 
 from CEAMSTools.DetectArtifacts.BslVarStep.Ui_BslVarStep import Ui_BslVarStep
 from CEAMSTools.DetectArtifacts.DetectorsStep.DetectorsStep import DetectorsStep
 from CEAMSTools.DetectArtifacts.SleepStageSelStep.SleepStageSelStep import SleepStageSelStep
+from CEAMSTools.DetectArtifacts.artifact_drawing import ArtifactDrawing
 from commons.BaseStepView import BaseStepView
 
 class BslVarStep( BaseStepView,  Ui_BslVarStep, QtWidgets.QWidget):
@@ -53,13 +53,8 @@ class BslVarStep( BaseStepView,  Ui_BslVarStep, QtWidgets.QWidget):
         self.threshold_value = [4, 2.5] # STD of the main gaussian from 3 components
 
     def _load_embedded_image(self):
-        """Load the embedded base64 image data into label_7."""
-        from .art_image_data import BSL_VAR_IMAGE_BASE64
-        
-        image_bytes = base64.b64decode(BSL_VAR_IMAGE_BASE64)
-        pixmap = QPixmap()
-        pixmap.loadFromData(image_bytes)
-        self.label_7.setPixmap(pixmap)
+        """The illustration of the artifact (simulated EEG), drawn on label_7."""
+        self._artifact_drawing = ArtifactDrawing(self.label_7, "baseline_variation")
 
     # Called when the settingsView is opened by the user
     # The node asks to the publisher the settings

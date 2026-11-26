@@ -9,12 +9,12 @@ See the file LICENCE for full license details.
 
 from qtpy import QtWidgets
 from qtpy import QtCore
-from qtpy.QtGui import QRegularExpressionValidator, QPixmap
+from qtpy.QtGui import QRegularExpressionValidator
 from qtpy.QtCore import QRegularExpression
-import base64
 
 from CEAMSTools.DetectArtifacts.FlatlineStep.Ui_FlatlineStep import Ui_FlatlineStep
 from CEAMSTools.DetectArtifacts.DetectorsStep.DetectorsStep import DetectorsStep
+from CEAMSTools.DetectArtifacts.artifact_drawing import ArtifactDrawing
 from commons.BaseStepView import BaseStepView
 
 class FlatlineStep( BaseStepView,  Ui_FlatlineStep, QtWidgets.QWidget):
@@ -54,13 +54,8 @@ class FlatlineStep( BaseStepView,  Ui_FlatlineStep, QtWidgets.QWidget):
         self._pub_sub_manager.subscribe(self, self._context_manager.topic)
 
     def _load_embedded_image(self):
-        """Load the embedded base64 image data into label_2."""
-        from .art_image_data import FLATLINED_IMAGE_BASE64
-        
-        image_bytes = base64.b64decode(FLATLINED_IMAGE_BASE64)
-        pixmap = QPixmap()
-        pixmap.loadFromData(image_bytes)
-        self.label_2.setPixmap(pixmap)
+        """The illustration of the artifact (simulated EEG), drawn on label_2."""
+        self._artifact_drawing = ArtifactDrawing(self.label_2, "flatline")
 
     # Called when the settingsView is opened by the user
     # The node asks to the publisher the settings
