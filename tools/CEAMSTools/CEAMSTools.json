@@ -135,7 +135,7 @@
         {
             "item_name": "ImportTextAnnotations",
             "item_type": "tool",
-            "item_version": "2.3.2",
+            "item_version": "2.3.3",
             "item_hooks": [
                 {
                     "endpoint_name": "menu_endpoint",
