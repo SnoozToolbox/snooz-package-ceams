@@ -109,18 +109,18 @@ class EditPathsInSnoozWorkspaceSettingStep(BaseStepView, Ui_EditPathsInSnoozWork
     def on_validate_settings(self):
 
         if not self.my_SnoozWorkspacePathEditorSettingsView.files_model or self.my_SnoozWorkspacePathEditorSettingsView.files_model.rowCount() == 0:
-            WarningDialog(f"You need to select at least one Snooz workspace in step '1 - Setting Step.")
+            WarningDialog(f"You need to select at least one Snooz workspace in step '1 - Edit Paths'.")
             return False
         if self.my_SnoozWorkspacePathEditorSettingsView.files_model.rowCount() >= 1:
             selected_indexes = self.my_SnoozWorkspacePathEditorSettingsView.Files_listView.selectedIndexes()
             if not selected_indexes:
-                WarningDialog("You need to select at least one Snooz workspace to modify its path in step '1 - Setting Step'.")
+                WarningDialog("You need to select at least one Snooz workspace to modify its path in step '1 - Edit Paths'.")
                 return False
         if len(self.my_SnoozWorkspacePathEditorSettingsView.Suffix_lineEdit.text())==0:
-            WarningDialog(f"You need to define a suffix for the new Snooz workspaces in step '1 - Setting Step.")
+            WarningDialog(f"You need to define a suffix for the new Snooz workspaces in step '1 - Edit Paths'.")
             return False
         if len(self.my_SnoozWorkspacePathEditorSettingsView.New_files_lineEdit.text())==0:
-            WarningDialog(f"You need to define a destination to save the new Snooz workspaces in step '1 - Setting Step.")
+            WarningDialog(f"You need to define a destination to save the new Snooz workspaces in step '1 - Edit Paths'.")
             return False        
         if self.my_SnoozWorkspacePathEditorSettingsView.validate_all_paths():
             if WarningDialogWithButtons.show_warning(f"Some file paths do not exist. Please verify.\nDetails:\n{json.dumps(self.my_SnoozWorkspacePathEditorSettingsView.validate_all_paths(), indent=2)}"):

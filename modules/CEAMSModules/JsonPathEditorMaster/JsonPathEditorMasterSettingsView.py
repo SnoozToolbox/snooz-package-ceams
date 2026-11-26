@@ -50,7 +50,7 @@ class JsonPathEditorMasterSettingsView(BaseSettingsView, Ui_JsonPathEditorMaster
         self.selectAll_shortcut.activated.connect(self.select_all_items)
         self.Files_listView.setSelectionMode(QtWidgets.QAbstractItemView.ExtendedSelection)
 
-        self.New_files_lineEdit.setPlaceholderText("Choose the folder that you want to save the new JSON files")
+        self.New_files_lineEdit.setPlaceholderText("Choose the folder of the new workspaces.")
         self.Choose_pushButton.clicked.connect(self.select_save_folder)
 
         self.editable_model = None
