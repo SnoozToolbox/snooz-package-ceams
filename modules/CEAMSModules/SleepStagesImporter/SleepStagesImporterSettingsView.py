@@ -5,6 +5,8 @@ See the file LICENCE for full license details.
     Settings viewer of the SleepStagesImporter plugin
 """
 
+import os
+
 from qtpy import QtCore, QtWidgets
 
 from CEAMSModules.SleepStagesImporter.Ui_SleepStagesImporterSettingsView import Ui_SleepStagesImporterSettingsView
@@ -97,20 +99,22 @@ class SleepStagesImporterSettingsView(BaseSettingsView, Ui_SleepStagesImporterSe
             'Open text files', 
             None, 
             'CSV Files (*.csv *.CSV);;Text Files (*.txt *.TXT);;TSV Files (*.tsv *.TSV);;All Files (*)')
-        self._files = files
-        if files != '':
+        # Cancel keeps the files already chosen
+        if files:
+            self._files = files
             self.fill_table_files()
-            
+
 
     def clear_slot(self):
-        self.tableWidget_files.clearContents()
+        self.tableWidget_files.setRowCount(0)
         self._files = []
-            
-        
+
+
     def fill_table_files(self):
         self.tableWidget_files.setRowCount(len(self._files))
         for row, filename in enumerate(self._files):
-            item = QtWidgets.QTableWidgetItem(filename)
+            # The name of the file, its whole path in the tooltip
+            item = QtWidgets.QTableWidgetItem(os.path.basename(filename))
             item.setToolTip(filename)
             self.tableWidget_files.setItem(row, 0, item)
 

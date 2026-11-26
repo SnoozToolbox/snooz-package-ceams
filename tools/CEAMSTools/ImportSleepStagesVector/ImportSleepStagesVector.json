@@ -9,7 +9,7 @@
         "tool_author": "CIUSSS-NIM",
         "tool_url": "",
         "tool_description": "To import sleep stages files into Snooz.",
-        "tool_version": "2.3.1",
+        "tool_version": "2.3.2",
         "package_name": "CEAMSTools",
         "steps": [
             {
@@ -20,13 +20,13 @@
             },
             {
                 "name": "Input PSG Files",
-                "description": "Select the PSG files to import the sleep staging.",
+                "description": "Add the PSG files that receive the sleep stages.",
                 "module_id": "ec9f6ff4-1c38-49f9-ad10-fccb841b8dfb",
                 "show_index": true
             },
             {
                 "name": "Input Stages Files",
-                "description": "Select the sleep stages files to import.",
+                "description": "Add one sleep stage file per PSG file, then set how Snooz finds it by name, how to read it and its stage labels.",
                 "module_id": "4f765733-3f3c-4334-a703-2c5fc31fad50",
                 "show_index": true
             }
