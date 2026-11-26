@@ -6,7 +6,7 @@
     "item_author": "Karine Lacourse",
     "item_description": "To extract annotations from EDF(.tsv), Natus(.ent) or Stellate(.sts) and write them in a .tsv file.",
     "tool_params": {
-        "tool_version": "2.4.1",
+        "tool_version": "2.4.2",
         "tool_label": "Extract Snooz Annotations",
         "tool_category": "1-Preprocessing",
         "asset_directory": "",
@@ -20,25 +20,25 @@
             },
             {
                 "name": "Input Files",
-                "description": "<div>Start by adding your PSG files (.edf, .sts or .eeg) to extract annotations.<br><br><strong>EDF:</strong> The .edf and .tsv files must have the same filename and be in the same folder.<br><br><strong>Stellate:</strong> The .sig and .sts files must have the same filename and be in the same folder.<br><br><em>For CEAMS users</em><br><strong>NATUS:</strong> The entire NATUS subject folder is required.</div>",
+                "description": "Add the PSG files to extract the annotations from.",
                 "custom_step_name": "InputFiles",
                 "show_index": true
             },
             {
                 "name": "Select Annotations",
-                "description": "Select the annotations to save in the output tsv file.\n\nStart by selecting one or more PSG files, then check the annotations.",
+                "description": "Check the annotations to save in the output file, for each PSG file.",
                 "custom_step_name": "SelectEventsStep",
                 "show_index": true
             },
             {
                 "name": "Select Stages",
-                "description": "Select the sleep stages to save in the output tsv file.",
+                "description": "Check the sleep stages to save in the output file, for each PSG file.",
                 "custom_step_name": "SelectStagesStep",
                 "show_index": true
             },
             {
                 "name": "Output Files",
-                "description": "Define your output file preferences.",
+                "description": "Choose the suffix of the output files and whether to add the time elapsed.",
                 "custom_step_name": "OutputFiles",
                 "show_index": true
             }
