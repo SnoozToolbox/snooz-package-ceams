@@ -6,7 +6,7 @@
     "item_author": "Karine Lacourse",
     "item_description": "To convert the DOMINO ASCII accessory files (without stages) to Snooz accessory tsv file.",
     "tool_params": {
-        "tool_version": "2.2.1",
+        "tool_version": "2.2.2",
         "tool_label": "Convert Annotations from DOMINOScreen",
         "tool_category": "1-Preprocessing",
         "asset_directory": "",
@@ -20,7 +20,7 @@
             },
             {
                 "name": "Input Folders",
-                "description": "Select the folders to convert.",
+                "description": "Add the recording folders to convert, then choose the log file of the conversion.",
                 "module_id": "f2492f99-7965-4c48-9aec-7970891415f1"
             }
         ]

@@ -15,8 +15,8 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QFont, QFontDatabase, QGradient, QIcon,
     QImage, QKeySequence, QLinearGradient, QPainter,
     QPalette, QPixmap, QRadialGradient, QTransform)
-from PySide6.QtWidgets import (QApplication, QFrame, QHBoxLayout, QLabel,
-    QSizePolicy, QSpacerItem, QTextEdit, QVBoxLayout,
+from PySide6.QtWidgets import (QApplication, QFrame, QGridLayout, QHBoxLayout,
+    QLabel, QSizePolicy, QSpacerItem, QVBoxLayout,
     QWidget)
 import themes_rc
 
@@ -24,59 +24,227 @@ class Ui_IntroStep(object):
     def setupUi(self, IntroStep):
         if not IntroStep.objectName():
             IntroStep.setObjectName(u"IntroStep")
-        IntroStep.resize(1006, 981)
+        IntroStep.resize(900, 700)
         self.verticalLayout = QVBoxLayout(IntroStep)
         self.verticalLayout.setObjectName(u"verticalLayout")
-        self.label = QLabel(IntroStep)
-        self.label.setObjectName(u"label")
+        self.verticalLayout.setContentsMargins(19, 12, 19, 12)
+        self.content_row = QHBoxLayout()
+        self.content_row.setObjectName(u"content_row")
+        self.content_row.setContentsMargins(0, 0, 0, 0)
+        self.content_widget = QWidget(IntroStep)
+        self.content_widget.setObjectName(u"content_widget")
+        self.content_widget.setMaximumSize(QSize(800, 16777215))
+        self.content_layout = QVBoxLayout(self.content_widget)
+        self.content_layout.setSpacing(16)
+        self.content_layout.setObjectName(u"content_layout")
+        self.content_layout.setContentsMargins(0, 0, 0, 0)
+        self.header_layout = QVBoxLayout()
+        self.header_layout.setSpacing(6)
+        self.header_layout.setObjectName(u"header_layout")
+        self.title_label = QLabel(self.content_widget)
+        self.title_label.setObjectName(u"title_label")
         font = QFont()
-        font.setBold(False)
-        font.setItalic(False)
-        self.label.setFont(font)
+        font.setPointSize(18)
+        font.setBold(True)
+        self.title_label.setFont(font)
 
-        self.verticalLayout.addWidget(self.label)
+        self.header_layout.addWidget(self.title_label)
 
-        self.horizontalLayout = QHBoxLayout()
-        self.horizontalLayout.setObjectName(u"horizontalLayout")
-        self.textEdit = QTextEdit(IntroStep)
-        self.textEdit.setObjectName(u"textEdit")
-        sizePolicy = QSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.textEdit.sizePolicy().hasHeightForWidth())
-        self.textEdit.setSizePolicy(sizePolicy)
-        self.textEdit.setMinimumSize(QSize(400, 0))
-        self.textEdit.setFrameShape(QFrame.Shape.NoFrame)
-        self.textEdit.setFrameShadow(QFrame.Shadow.Plain)
-        self.textEdit.setLineWidth(0)
-        self.textEdit.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
-        self.textEdit.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
-        self.textEdit.setLineWrapMode(QTextEdit.LineWrapMode.WidgetWidth)
-        self.textEdit.setReadOnly(True)
+        self.subtitle_label = QLabel(self.content_widget)
+        self.subtitle_label.setObjectName(u"subtitle_label")
+        self.subtitle_label.setWordWrap(True)
+        self.subtitle_label.setProperty(u"variant", u"help")
 
-        self.horizontalLayout.addWidget(self.textEdit)
-
-        self.horizontalSpacer = QSpacerItem(40, 20, QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Minimum)
-
-        self.horizontalLayout.addItem(self.horizontalSpacer)
-
-        self.textEdit_2 = QTextEdit(IntroStep)
-        self.textEdit_2.setObjectName(u"textEdit_2")
-        sizePolicy.setHeightForWidth(self.textEdit_2.sizePolicy().hasHeightForWidth())
-        self.textEdit_2.setSizePolicy(sizePolicy)
-        self.textEdit_2.setMinimumSize(QSize(400, 0))
-        self.textEdit_2.setFrameShape(QFrame.Shape.NoFrame)
-        self.textEdit_2.setFrameShadow(QFrame.Shadow.Plain)
-        self.textEdit_2.setLineWidth(0)
-        self.textEdit_2.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
-        self.textEdit_2.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
-        self.textEdit_2.setLineWrapMode(QTextEdit.LineWrapMode.WidgetWidth)
-        self.textEdit_2.setReadOnly(True)
-
-        self.horizontalLayout.addWidget(self.textEdit_2)
+        self.header_layout.addWidget(self.subtitle_label)
 
 
-        self.verticalLayout.addLayout(self.horizontalLayout)
+        self.content_layout.addLayout(self.header_layout)
+
+        self.steps_section_layout = QVBoxLayout()
+        self.steps_section_layout.setSpacing(8)
+        self.steps_section_layout.setObjectName(u"steps_section_layout")
+        self.steps_title_label = QLabel(self.content_widget)
+        self.steps_title_label.setObjectName(u"steps_title_label")
+        font1 = QFont()
+        font1.setPointSize(15)
+        font1.setBold(True)
+        self.steps_title_label.setFont(font1)
+
+        self.steps_section_layout.addWidget(self.steps_title_label)
+
+        self.steps_card = QFrame(self.content_widget)
+        self.steps_card.setObjectName(u"steps_card")
+        self.steps_card.setFrameShape(QFrame.Shape.StyledPanel)
+        self.steps_card.setFrameShadow(QFrame.Shadow.Raised)
+        self.steps_card_layout = QVBoxLayout(self.steps_card)
+        self.steps_card_layout.setSpacing(10)
+        self.steps_card_layout.setObjectName(u"steps_card_layout")
+        self.steps_card_layout.setContentsMargins(10, 10, 10, 10)
+        self.steps_grid = QGridLayout()
+        self.steps_grid.setObjectName(u"steps_grid")
+        self.steps_grid.setHorizontalSpacing(12)
+        self.steps_grid.setVerticalSpacing(10)
+        self.step_1_number_label = QLabel(self.steps_card)
+        self.step_1_number_label.setObjectName(u"step_1_number_label")
+        font2 = QFont()
+        font2.setPointSize(10)
+        self.step_1_number_label.setFont(font2)
+        self.step_1_number_label.setProperty(u"variant", u"step_number")
+        self.step_1_number_label.setMinimumSize(QSize(24, 24))
+        self.step_1_number_label.setMaximumSize(QSize(24, 24))
+        self.step_1_number_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+
+        self.steps_grid.addWidget(self.step_1_number_label, 0, 0, 1, 1, Qt.AlignmentFlag.AlignTop)
+
+        self.step_1_name_label = QLabel(self.steps_card)
+        self.step_1_name_label.setObjectName(u"step_1_name_label")
+        font3 = QFont()
+        font3.setBold(True)
+        self.step_1_name_label.setFont(font3)
+        self.step_1_name_label.setAlignment(Qt.AlignmentFlag.AlignLeading|Qt.AlignmentFlag.AlignLeft|Qt.AlignmentFlag.AlignTop)
+
+        self.steps_grid.addWidget(self.step_1_name_label, 0, 1, 1, 1)
+
+        self.steps_gap = QSpacerItem(16, 20, QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Minimum)
+
+        self.steps_grid.addItem(self.steps_gap, 0, 2, 1, 1)
+
+        self.step_1_label = QLabel(self.steps_card)
+        self.step_1_label.setObjectName(u"step_1_label")
+        self.step_1_label.setWordWrap(True)
+        self.step_1_label.setProperty(u"variant", u"help")
+        self.step_1_label.setAlignment(Qt.AlignmentFlag.AlignLeading|Qt.AlignmentFlag.AlignLeft|Qt.AlignmentFlag.AlignTop)
+
+        self.steps_grid.addWidget(self.step_1_label, 0, 3, 1, 1)
+
+        self.steps_grid.setColumnStretch(3, 1)
+
+        self.steps_card_layout.addLayout(self.steps_grid)
+
+
+        self.steps_section_layout.addWidget(self.steps_card)
+
+
+        self.content_layout.addLayout(self.steps_section_layout)
+
+        self.files_section_layout = QVBoxLayout()
+        self.files_section_layout.setSpacing(8)
+        self.files_section_layout.setObjectName(u"files_section_layout")
+        self.files_title_label = QLabel(self.content_widget)
+        self.files_title_label.setObjectName(u"files_title_label")
+        self.files_title_label.setFont(font1)
+
+        self.files_section_layout.addWidget(self.files_title_label)
+
+        self.files_card = QFrame(self.content_widget)
+        self.files_card.setObjectName(u"files_card")
+        self.files_card.setFrameShape(QFrame.Shape.StyledPanel)
+        self.files_card.setFrameShadow(QFrame.Shadow.Raised)
+        self.files_card_layout = QVBoxLayout(self.files_card)
+        self.files_card_layout.setSpacing(10)
+        self.files_card_layout.setObjectName(u"files_card_layout")
+        self.files_card_layout.setContentsMargins(10, 10, 10, 10)
+        self.files_grid = QGridLayout()
+        self.files_grid.setObjectName(u"files_grid")
+        self.files_grid.setHorizontalSpacing(32)
+        self.files_grid.setVerticalSpacing(6)
+        self.file_1_name_label = QLabel(self.files_card)
+        self.file_1_name_label.setObjectName(u"file_1_name_label")
+        self.file_1_name_label.setFont(font3)
+
+        self.files_grid.addWidget(self.file_1_name_label, 0, 0, 1, 1)
+
+        self.file_1_label = QLabel(self.files_card)
+        self.file_1_label.setObjectName(u"file_1_label")
+        self.file_1_label.setWordWrap(True)
+
+        self.files_grid.addWidget(self.file_1_label, 0, 1, 1, 1)
+
+        self.file_2_name_label = QLabel(self.files_card)
+        self.file_2_name_label.setObjectName(u"file_2_name_label")
+        self.file_2_name_label.setFont(font3)
+
+        self.files_grid.addWidget(self.file_2_name_label, 1, 0, 1, 1)
+
+        self.file_2_label = QLabel(self.files_card)
+        self.file_2_label.setObjectName(u"file_2_label")
+        self.file_2_label.setWordWrap(True)
+
+        self.files_grid.addWidget(self.file_2_label, 1, 1, 1, 1)
+
+        self.file_3_name_label = QLabel(self.files_card)
+        self.file_3_name_label.setObjectName(u"file_3_name_label")
+        self.file_3_name_label.setFont(font3)
+
+        self.files_grid.addWidget(self.file_3_name_label, 2, 0, 1, 1)
+
+        self.file_3_label = QLabel(self.files_card)
+        self.file_3_label.setObjectName(u"file_3_label")
+        self.file_3_label.setWordWrap(True)
+
+        self.files_grid.addWidget(self.file_3_label, 2, 1, 1, 1)
+
+        self.files_grid.setColumnStretch(1, 1)
+
+        self.files_card_layout.addLayout(self.files_grid)
+
+
+        self.files_section_layout.addWidget(self.files_card)
+
+
+        self.content_layout.addLayout(self.files_section_layout)
+
+        self.replace_warning = QFrame(self.content_widget)
+        self.replace_warning.setObjectName(u"replace_warning")
+        self.replace_warning.setFrameShape(QFrame.Shape.NoFrame)
+        self.replace_warning.setProperty(u"variant", u"warning")
+        self.replace_warning_layout = QHBoxLayout(self.replace_warning)
+        self.replace_warning_layout.setObjectName(u"replace_warning_layout")
+        self.replace_warning_layout.setContentsMargins(14, 10, 14, 10)
+        self.replace_warning_label = QLabel(self.replace_warning)
+        self.replace_warning_label.setObjectName(u"replace_warning_label")
+        self.replace_warning_label.setTextFormat(Qt.TextFormat.RichText)
+        self.replace_warning_label.setWordWrap(True)
+
+        self.replace_warning_layout.addWidget(self.replace_warning_label)
+
+
+        self.content_layout.addWidget(self.replace_warning)
+
+        self.about_conversion_layout = QVBoxLayout()
+        self.about_conversion_layout.setSpacing(6)
+        self.about_conversion_layout.setObjectName(u"about_conversion_layout")
+        self.about_conversion_title_label = QLabel(self.content_widget)
+        self.about_conversion_title_label.setObjectName(u"about_conversion_title_label")
+        self.about_conversion_title_label.setFont(font3)
+
+        self.about_conversion_layout.addWidget(self.about_conversion_title_label)
+
+        self.about_conversion_label = QLabel(self.content_widget)
+        self.about_conversion_label.setObjectName(u"about_conversion_label")
+        self.about_conversion_label.setTextFormat(Qt.TextFormat.RichText)
+        self.about_conversion_label.setWordWrap(True)
+        self.about_conversion_label.setProperty(u"variant", u"help")
+
+        self.about_conversion_layout.addWidget(self.about_conversion_label)
+
+
+        self.content_layout.addLayout(self.about_conversion_layout)
+
+
+        self.content_row.addWidget(self.content_widget)
+
+        self.content_spacer = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+
+        self.content_row.addItem(self.content_spacer)
+
+        self.content_row.setStretch(0, 1)
+
+        self.verticalLayout.addLayout(self.content_row)
+
+        self.verticalSpacer = QSpacerItem(40, 20, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
+
+        self.verticalLayout.addItem(self.verticalSpacer)
 
 
         self.retranslateUi(IntroStep)
@@ -86,202 +254,21 @@ class Ui_IntroStep(object):
 
     def retranslateUi(self, IntroStep):
         IntroStep.setWindowTitle("")
-        self.label.setText(QCoreApplication.translate("IntroStep", u"<html><head/><body><p><span style=\" font-weight:600;\">DOMINOscreen Converter</span></p></body></html>", None))
-        self.textEdit.setHtml(QCoreApplication.translate("IntroStep", u"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
-"<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset=\"utf-8\" /><style type=\"text/css\">\n"
-"p, li { white-space: pre-wrap; }\n"
-"hr { height: 1px; border-width: 0; }\n"
-"li.unchecked::marker { content: \"\\2610\"; }\n"
-"li.checked::marker { content: \"\\2612\"; }\n"
-"</style></head><body style=\" font-size:12pt; font-weight:400; font-style:normal;\">\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">To convert the DOMINO ASCII accessory files </p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">(without sleep stages) to the Snooz accessory .tsv file.</p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-weight:600;\"><br /></p>\n"
-"<p style=\""
-                        " margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-weight:600;\">Supported Formats</span> : </p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"> - Sleep profile</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">	Example : </p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">	---------------------------------</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">	Signal ID: SchlafProfil\\profil</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">	Start Time: 08/03/2016 0:14:00</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
-                        "right:0px; -qt-block-indent:0; text-indent:0px;\">	Unit: </p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">	Signal Type: Discret</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">	Events list: N4,N3,N2,N1,REM,Wake,Movement</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">	Rate: 30 s</p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">	00:14:00,000; Wake</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">	00:14:30,000; Wake</p>\n"
-"<p style=\" margin-top:0px; margin-"
-                        "bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">	00:15:00,000; Wake</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">	...</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"> - Annotations from the expert</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">	Example : </p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">	---------------------------------	</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">	Signal ID: FlowD\\flow</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">	Start Time: 08/03/2016 0:14:00</p>\n"
-""
-                        "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">	Unit: s</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">	Signal Type: Impuls</p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">	00:22:48,246-00:23:00,246; 12;Hypopnea</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">	00:40:04,219-00:40:19,219; 15;Obstructive Apnea</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">	00:54:16,219-00:55:26,219; 70;Obstructive Apnea</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; marg"
-                        "in-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">	01:36:57,630-01:37:16,870; 19;Flow Limitation</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">	...</p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-weight:600;\">Unsupported format</span> :</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"> - Recorded or computed values </p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">	Example : </p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-inden"
-                        "t:0px;\">	---------------------------------</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">	Signal ID: SchlafFFT\\AFV</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">	Start Time: 17/11/2010 23:57:00</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">	Unit: Hz</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">	Signal Type: Analog</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">	</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">	23:57:00,000; 11</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-bl"
-                        "ock-indent:0; text-indent:0px;\">	23:57:01,000; 11</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">	23:57:02,000; 12</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">	23:57:03,000; 14</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">	...</p></body></html>", None))
-        self.textEdit_2.setHtml(QCoreApplication.translate("IntroStep", u"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
-"<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset=\"utf-8\" /><style type=\"text/css\">\n"
-"p, li { white-space: pre-wrap; }\n"
-"hr { height: 1px; border-width: 0; }\n"
-"li.unchecked::marker { content: \"\\2610\"; }\n"
-"li.checked::marker { content: \"\\2612\"; }\n"
-"</style></head><body style=\" font-size:12pt; font-weight:400; font-style:normal;\">\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" text-decoration: underline;\">Examples of supported accessory files</span> :</p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
-"<table border=\"0\" style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px;\" cellspacing=\"2\" cellpadding=\"0\">\n"
-"<tr>\n"
-"<td width=\"259"
-                        "\">\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">	Cardiac Events</p></td></tr>\n"
-"<tr>\n"
-"<td>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">	Classification Arousals</p></td></tr>\n"
-"<tr>\n"
-"<td>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">	Classification PTT</p></td></tr>\n"
-"<tr>\n"
-"<td>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">	Classification Systolic</p></td></tr>\n"
-"<tr>\n"
-"<td>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">	Effort DC Events</p></td></tr>\n"
-"<tr>\n"
-"<td>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">	Effort"
-                        " Int Events</p></td></tr>\n"
-"<tr>\n"
-"<td>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">	Flow Events</p></td></tr>\n"
-"<tr>\n"
-"<td>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">	Phase Angle Events</p></td></tr>\n"
-"<tr>\n"
-"<td>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">	PLM Events</p></td></tr>\n"
-"<tr>\n"
-"<td>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">	Sleep profile</p></td></tr>\n"
-"<tr>\n"
-"<td>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">	Snore Events</p></td></tr>\n"
-"<tr>\n"
-"<td>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"
-                        "\">	Spindle\u00a0 K</p></td></tr>\n"
-"<tr>\n"
-"<td>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">	SpO2 Events</p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p></td></tr></table>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" text-decoration: underline;\">Examples of unsupported accessory files</span> : </p>\n"
-"<p align=\"center\" style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
-"<table border=\"0\" style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px;\" cellspacing=\"2\" cellpadding=\"0\">\n"
-"<tr>\n"
-"<td width=\"259\">\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-r"
-                        "ight:0px; -qt-block-indent:0; text-indent:0px;\">	Systolic PTT</p></td></tr>\n"
-"<tr>\n"
-"<td>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">	Act</p></td></tr>\n"
-"<tr>\n"
-"<td>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">	Alpha+Beta FFT</p></td></tr>\n"
-"<tr>\n"
-"<td>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">	Average Frequency Value</p></td></tr>\n"
-"<tr>\n"
-"<td>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">	BF</p></td></tr>\n"
-"<tr>\n"
-"<td>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">	Delta FFT</p></td></tr>\n"
-"<tr>\n"
-"<td>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px"
-                        "; -qt-block-indent:0; text-indent:0px;\">	Diastolic</p></td></tr>\n"
-"<tr>\n"
-"<td>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">	Diastolic PTT</p></td></tr>\n"
-"<tr>\n"
-"<td>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">	Generic</p></td></tr>\n"
-"<tr>\n"
-"<td>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">	Heart Rate</p></td></tr>\n"
-"<tr>\n"
-"<td>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">	HRV HF</p></td></tr>\n"
-"<tr>\n"
-"<td>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">	HRV LF</p></td></tr>\n"
-"<tr>\n"
-"<td>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0"
-                        "; text-indent:0px;\">	Integral EMG</p></td></tr>\n"
-"<tr>\n"
-"<td>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">	Light</p></td></tr>\n"
-"<tr>\n"
-"<td>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">	MAP</p></td></tr>\n"
-"<tr>\n"
-"<td>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">	Markers</p></td></tr>\n"
-"<tr>\n"
-"<td>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">	Obstruction</p></td></tr>\n"
-"<tr>\n"
-"<td>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">	Phase Angle</p></td></tr>\n"
-"<tr>\n"
-"<td>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">	"
-                        "Position</p></td></tr>\n"
-"<tr>\n"
-"<td>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">	PTT Raw</p></td></tr>\n"
-"<tr>\n"
-"<td>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">	Sigma FFT</p></td></tr>\n"
-"<tr>\n"
-"<td>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">	Sleep Profile Reliability</p></td></tr>\n"
-"<tr>\n"
-"<td>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">	SpO2</p></td></tr>\n"
-"<tr>\n"
-"<td>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">	SVB</p></td></tr>\n"
-"<tr>\n"
-"<td>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">	Systolic</p></t"
-                        "d></tr></table></body></html>", None))
+        self.title_label.setText(QCoreApplication.translate("IntroStep", u"Convert Annotations from DOMINOScreen", None))
+        self.subtitle_label.setText(QCoreApplication.translate("IntroStep", u"Converts the ASCII annotation files exported from DOMINO to one Snooz annotation file (.tsv) per recording folder, named after the EDF file of the folder.", None))
+        self.steps_title_label.setText(QCoreApplication.translate("IntroStep", u"What you will do", None))
+        self.step_1_number_label.setText(QCoreApplication.translate("IntroStep", u"1", None))
+        self.step_1_name_label.setText(QCoreApplication.translate("IntroStep", u"Input Folders", None))
+        self.step_1_label.setText(QCoreApplication.translate("IntroStep", u"Add the recording folders to convert, then choose the log file of the conversion.", None))
+        self.files_title_label.setText(QCoreApplication.translate("IntroStep", u"Accepted files", None))
+        self.file_1_name_label.setText(QCoreApplication.translate("IntroStep", u"Folders", None))
+        self.file_1_label.setText(QCoreApplication.translate("IntroStep", u"One folder per recording, with its EDF file and all the ASCII files exported from DOMINO (ANALYSIS DATA - WITHOUT SLEEP PROFILE).", None))
+        self.file_2_name_label.setText(QCoreApplication.translate("IntroStep", u"EDF file", None))
+        self.file_2_label.setText(QCoreApplication.translate("IntroStep", u"The PSG file of the recording. The Snooz annotation file gets its name. When a folder has several EDF files, Snooz uses the first one. A folder without an EDF file is skipped.", None))
+        self.file_3_name_label.setText(QCoreApplication.translate("IntroStep", u"DOMINO files", None))
+        self.file_3_label.setText(QCoreApplication.translate("IntroStep", u"The sleep profile and the event files exported from DOMINO, as ASCII files (.txt). DOMINO files in another format are skipped and listed in the log file.", None))
+        self.replace_warning_label.setText(QCoreApplication.translate("IntroStep", u"<b>Existing .tsv files are replaced</b><br/>In each folder, the .tsv file named after the EDF file is replaced by the new Snooz annotation file.", None))
+        self.about_conversion_title_label.setText(QCoreApplication.translate("IntroStep", u"About the conversion", None))
+        self.about_conversion_label.setText(QCoreApplication.translate("IntroStep", u"Snooz converts two formats of DOMINO files.<br/>\u2022 The sleep profile (2 columns, the time and the stage) gives the sleep stages, in the group stage.<br/>\u2022 The annotations from the expert (3 columns, the start and end times, the duration and the name) keep their names. Their group is the end of the \"Signal ID\", for example flow.<br/>The times become seconds from the \"Start Time\" of the DOMINO file. Snooz skips the other DOMINO files, and the log file gives the reason.<br/><br/>The documentation of the tool (\"Read more!\" below) shows examples of DOMINO files, the conversion of each column and the lists of the files converted and skipped.", None))
     # retranslateUi
 
