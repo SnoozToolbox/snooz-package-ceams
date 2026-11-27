@@ -6,7 +6,7 @@
     "item_author": "Karine Lacourse",
     "item_description": "To clean and transpose the EEG Spectral report.",
     "tool_params": {
-        "tool_version": "2.6.1",
+        "tool_version": "2.6.2",
         "tool_label": "Review Power for the cohort",
         "tool_category": "3-Postprocessing",
         "asset_directory": "",
@@ -20,19 +20,19 @@
             },
             {
                 "name": "Input Files",
-                "description": "Add your EEG Spectral Power reports.\n\nThe channel label is editable by double-clicking on the name.",
+                "description": "Add your EEG spectral power reports. Double-click a channel label to edit it.",
                 "custom_step_name": "InputFiles",
                 "show_index": true
             },
             {
                 "name": "Frequency Band",
-                "description": "<div>Define the frequency band.<br><br>For <strong>absolute power</strong>, num-start(Hz) and num-end(Hz) must be initialized and den-start(Hz) and den-end(Hz) should be left as NaN (not a number).<br><br>For <strong>relative power</strong>, both the numerator and denominator of the frequency band must be initialized.</div>",
+                "description": "Define the frequency bands. Fill only the numerator for absolute power, or the numerator and the denominator for relative power.",
                 "custom_step_name": "FrequencyBand",
                 "show_index": true
             },
             {
                 "name": "Output File",
-                "description": "Define the output file.",
+                "description": "Choose the reports to export and define the output file.",
                 "custom_step_name": "OutputFileStep",
                 "show_index": true
             }

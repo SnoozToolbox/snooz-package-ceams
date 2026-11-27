@@ -667,7 +667,7 @@
         {
             "item_name": "PSACohortReview",
             "item_type": "module",
-            "item_version": "2.6.1",
+            "item_version": "2.6.2",
             "item_hooks": [
                 {
                     "endpoint_name": "module_endpoint",
