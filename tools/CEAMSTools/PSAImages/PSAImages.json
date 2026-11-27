@@ -5,7 +5,7 @@
     "item_url": "https://snooz-toolbox-documentation.readthedocs.io/latest/user_guide/tools/Postprocessing/Visualize_EEG_Spectral_Power.html",
     "item_author": "Mohammad Hasan Azad",
     "tool_params": {
-        "tool_version": "2.2.0",
+        "tool_version": "2.2.1",
         "tool_label": "Visualize EEG Spectral Power",
         "tool_category": "Postprocessing",
         "tool_author": "Mohammad Hasan Azad",
@@ -21,19 +21,19 @@
             },
             {
                 "name": "Input Files",
-                "description": "Load your EEG spectral reports generated from the <strong>Analyze EEG Spectral Power</strong> tool.",
+                "description": "Add your EEG spectral power reports written by \"Analyze EEG Spectral Power\". Then select the channels and the regions of interest (ROIs) to display.",
                 "custom_step_name": "InputFiles",
                 "show_index": true
             },
             {
                 "name": "Group Definition",
-                "description": "Assign a group for each file.\n\nAny group label is accepted.\n\nThe number of groups is unlimited.",
+                "description": "Assign a group to each report file. Any group label is accepted, and the number of groups is unlimited.",
                 "custom_step_name": "GroupDefinition",
                 "show_index": true
             },
             {
                 "name": "Output Files",
-                "description": "Display Settings \nDefine the parameters to generate the pictures.",
+                "description": "Define the pictures to generate and the output folder. Optionally, change the colors in \"Colors\".",
                 "custom_step_name": "OutputFiles",
                 "show_index": true,
                 "configs": {
@@ -41,7 +41,7 @@
                     "list": [
                         {
                             "name": "Colors",
-                            "description": "Define the colors desired.",
+                            "description": "Define the colors of the pictures.",
                             "custom_step_name": "DisplaySettings"
                         }
                     ]

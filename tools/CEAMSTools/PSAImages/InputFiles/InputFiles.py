@@ -43,7 +43,11 @@ class InputFiles(BaseStepView, Ui_InputFiles, QtWidgets.QWidget):
         else:
             # To extract the SettingsView and add it to our Layout in the preset
             self.my_SettingsView = module.create_settings_view()
-            self.verticalLayout_2.addWidget(self.my_SettingsView)   
+            self.verticalLayout.addWidget(self.my_SettingsView)
+            # The page title of the step is above the view: no top margin, the gap is the spacing of the page
+            # (margins read once the view is in the page: a view without parent gets the margins of a window)
+            margins = self.my_SettingsView.layout().contentsMargins()
+            self.my_SettingsView.layout().setContentsMargins(margins.left(), 0, margins.right(), margins.bottom())
             self.my_SettingsView.filenames_updated_signal.connect(self.filenames_modified_slot)
         
 

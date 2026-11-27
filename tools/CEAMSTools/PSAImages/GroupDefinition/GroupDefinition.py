@@ -27,13 +27,8 @@ class GroupDefinition(BaseStepView, Ui_GroupDefinition, QtWidgets.QWidget):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
-        # init UI
+        # init UI (the texts of the page are in the form)
         self.setupUi(self)
-        # Adapt the text labels - the UI was copied from SWImages
-        self.label.setText("Spectral Report - Group")
-        self.label_2.setText("Pattern to filter the files list")
-        self.lineEdit_search.setPlaceholderText("Search File")
-        self.label_3.setText("Group Label to apply to selected files")
 
         # Key is the filename and the value is the group label
         self.group_dict = {}

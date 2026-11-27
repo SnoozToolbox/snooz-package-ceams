@@ -7,12 +7,11 @@ See the file LICENCE for full license details.
     Read the UI to send messages to the node of the PSA images generator plugin.
     Read a saved pipeline to update the UI.
 """
-import base64
 
 from matplotlib import font_manager
 from qtpy import QtWidgets
 from qtpy.QtCore import Qt
-from qtpy.QtGui import QFont, QFontDatabase, QPixmap
+from qtpy.QtGui import QFont, QFontDatabase
 
 from commons.BaseStepView import BaseStepView
 from widgets.WarningDialog import WarningDialog
@@ -31,7 +30,6 @@ class OutputFiles(BaseStepView, Ui_OutputFiles, QtWidgets.QWidget):
         # init UI
         self.setupUi(self)
         self._populate_font_choices()
-        self._load_embedded_image()
 
         # Connect the log scale checkbox to the options slot
         if hasattr(self, 'checkBox_log_y'):
@@ -88,19 +86,6 @@ class OutputFiles(BaseStepView, Ui_OutputFiles, QtWidgets.QWidget):
                 self.fontComboBox.addItem(family)
                 self.fontComboBox.setItemData(self.fontComboBox.count() - 1, QFont(family), Qt.FontRole)
         self.fontComboBox.setCurrentText("Arial")
-
-    def _load_embedded_image(self):
-        """Load the embedded base64 image data into label_7."""
-        try:
-            from .art_image_data import PSA_SIGNAL_CURVE_IMAGE_BASE64
-            
-            image_bytes = base64.b64decode(PSA_SIGNAL_CURVE_IMAGE_BASE64)
-            pixmap = QPixmap()
-            pixmap.loadFromData(image_bytes)
-            self.label_7.setPixmap(pixmap)
-        except ImportError:
-            # If art_image_data doesn't exist yet, skip image loading
-            pass
 
     def load_settings(self):
         # Load settings is called after the constructor of all steps has been executed.
@@ -431,15 +416,15 @@ class OutputFiles(BaseStepView, Ui_OutputFiles, QtWidgets.QWidget):
                 self.checkBox_group_avg.setChecked(False)
                 self.checkBox_group_sel.setChecked(False)
                 # Disable subject layout, enable cohort layout
-                self.set_layout_enabled(self.verticalLayout, False)
-                self.set_layout_enabled(self.verticalLayout_2, True)
+                self.set_layout_enabled(self.group_options_layout, False)
+                self.set_layout_enabled(self.cohort_options_layout, True)
             elif self.radioButton_report_level.isChecked():
                 # Uncheck cohort checkboxes before disabling
                 self.checkBox_cohort_avg.setChecked(False)
                 self.checkBox_cohort_sel.setChecked(False)
                 # Enable subject layout, disable cohort layout
-                self.set_layout_enabled(self.verticalLayout, True)
-                self.set_layout_enabled(self.verticalLayout_2, False)
+                self.set_layout_enabled(self.group_options_layout, True)
+                self.set_layout_enabled(self.cohort_options_layout, False)
 
     def set_layout_enabled(self, layout, enabled):
         """Enable or disable all widgets in a layout"""
