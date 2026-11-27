@@ -6,7 +6,7 @@
     "item_author": "",
     "item_description": "",
     "tool_params": {
-        "tool_version": "2.4.2",
+        "tool_version": "2.4.3",
         "tool_label": "Classify Slow Waves",
         "tool_category": "3-Postprocessing",
         "asset_directory": "",
@@ -20,24 +20,24 @@
             },
             {
                 "name": "Input Files",
-                "description": "Select all the files that contain the slow wave characteristics you want to classify.",
+                "description": "Add the slow wave characteristics files, the slow wave cohort report and the sleep stages files written by \"Detect Slow Waves\".",
                 "custom_step_name": "InputFiles"
             },
             {
-                "name": "Classification Criterias",
-                "description": "Select the criterias that will be used to classify sleep slow waves.",
+                "name": "Classification Criteria",
+                "description": "Classify the slow waves automatically, or set the number of categories.",
                 "module_id": "d59d94d1-11dc-4e06-9716-f749a3647843"
             },
             {
                 "name": "Output Files",
-                "description": "Select the output folder that will contain the classification data.",
+                "description": "Choose the output folder and the number of segments of the night for the cohort report.",
                 "custom_step_name": "SSWCOutputFiles",
                 "configs": {
                     "label": "Optional settings:",
                     "list": [
                         {
                             "name": "Hours and Cycles",
-                            "description": "Define the maximum number of hours and cycles to report.",
+                            "description": "Define the maximum number of sleep cycles in the cohort report.",
                             "custom_step_name": "HoursCyclesStep"
                         }
                     ]
