@@ -4,7 +4,7 @@
     "item_url": "https://snooz-toolbox-documentation.readthedocs.io/latest/user_guide/tools/Preprocessing/Rename_files.html#rename-files",
     "item_api_version": "3.0.0",
     "tool_params": {
-        "tool_version": "2.1.1",
+        "tool_version": "2.1.2",
         "tool_label": "Rename Files",
         "tool_category": "1-Preprocessing",
         "tool_author": "CEAMS",
@@ -20,7 +20,7 @@
             },
             {
                 "name": "Input Files",
-                "description": "Select the files you want to rename and specify the renaming rules.",
+                "description": "Add the files to rename, define the renaming rules, then choose whether to keep the original files.",
                 "module_id": "98900a7a-d9aa-437a-964f-22b8da2ae1f0"
             }
         ]

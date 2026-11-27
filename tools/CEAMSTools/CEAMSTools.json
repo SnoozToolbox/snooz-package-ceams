@@ -163,7 +163,7 @@
         {
             "item_name": "RenameFiles",
             "item_type": "tool",
-            "item_version": "2.1.1",
+            "item_version": "2.1.2",
             "item_hooks": [
                 {
                     "endpoint_name": "menu_endpoint",
